@@ -1,18 +1,28 @@
-<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.i582.vlangidea</id>
-    <name>vlang-idea</name>
-    <vendor>i582</vendor>
+    <id>org.vlang</id>
+    <name>Vlang</name>
+    <vendor>Petr Makhnev</vendor>
+
+    <description><![CDATA[
+Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
+    ]]></description>
 
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.i582.vlangidea.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.i582.vlangidea.services.MyProjectService"/>
-    </extensions>
+        <fileType name="vlang"
+                  implementationClass="org.vlang.lang.VlangFileType"
+                  fieldName="INSTANCE"
+                  language="vlang"
+                  extensions="v"/>
 
-    <applicationListeners>
-        <listener class="com.github.i582.vlangidea.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </applicationListeners>
+        <lang.parserDefinition language="vlang"
+                               implementationClass="org.vlang.lang.VlangParserDefinition"/>
+
+        <lang.commenter language="vlang" implementationClass="org.vlang.lang.VlangCommenter"/>
+
+        <lang.syntaxHighlighterFactory language="vlang"
+                                       implementationClass="org.vlang.lang.VlangSyntaxHighlighterFactory"/>
+    </extensions>
 </idea-plugin>
