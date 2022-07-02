@@ -217,7 +217,7 @@ Statement ::=
 //  | GotoStatement
 //  | FallthroughStatement
 //  Block
-//  | IfStatement
+  | IfStatement
 //  | SwitchStatement
 //  | SelectStatement
 //  | ForStatement
@@ -228,8 +228,8 @@ private StatementRecover ::= !('!' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | 
 
 SimpleStatement ::=
 //    ShortVarDeclaration
-//  | IncDecStatement
-  (LeftHandExprList /*[AssignmentStatement | SendStatement]*/) {pin(".*")=LeftHandExprList}
+  IncDecStatement
+  | (LeftHandExprList AssignmentStatement? /*| SendStatement*/) {pin(".*")=LeftHandExprList}
 
 private TopLevelDeclaration ::= !<<eof>> TopDeclaration semi {pin=1 recoverWhile=TopLevelDeclarationRecover}
 private TopDeclaration ::=
@@ -373,6 +373,7 @@ private MaxGroup ::=
   OperandName
 //  | BuiltinCallExpr
   | CallExpr
+  | IfExpression
 //  | TypeAssertionExpr
 //  | SelectorExpr
 //  | IndexOrSliceExpr
@@ -402,18 +403,20 @@ ArgumentList ::= '(' [ ExpressionArgList '...'? ','? ] ')' {pin=1}
 //  stubClass="org.vlang.lang.stubs.GoLabelDefinitionStub" // todo: remove when you'll have some spare time
 //}
 //left SendStatement ::= '<-' Expression {pin=1 methods=[getSendExpression]}
-//left AssignmentStatement ::= assign_op ExpressionList {pin=1}
-//IncDecStatement ::= Expression ('++' | '--') {pin=2}
-//assign_op ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '&=' | '&^='
-//IfStatement ::= if Condition Block ElseStatement?
-//ElseStatement ::= else (IfStatement | Block)
+left AssignmentStatement ::= assign_op ExpressionList {pin=1}
+IncDecStatement ::= Expression ('++' | '--') {pin=2}
+assign_op ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '&=' | '&^='
+IfExpression ::= if Condition Block ElseExpression?
+ElseExpression ::= else (IfExpression | Block)
+IfStatement ::= if Condition Block ElseStatement?
+ElseStatement ::= else (IfStatement | Block)
 //SwitchStatement ::= SwitchStart (TypeSwitchStatement | ExprSwitchStatement)
 //SwitchStart ::= switch
 //left ExprSwitchStatement ::= Condition '{' ExprCaseClause* '}' {pin=2 extends=SwitchStatement}
 //
-//private Condition ::= <<enterMode "BLOCK?">> SimpleStatementOpt Expression? <<exitModeSafe "BLOCK?">>
-//private SimpleStatementOpt ::= [SimpleStatement ';'?] // todo: remove ?
-//
+private Condition ::= SimpleStatementOpt Expression?
+private SimpleStatementOpt ::= [SimpleStatement ';'?] // todo: remove ?
+
 //ExprCaseClause ::= !'}' ExprSwitchCase ':' Statements? {pin=1 implements="org.vlang.lang.psi.GoCaseClause"}
 //private ExprSwitchCase ::= case ExpressionList | default {pin(".*")=1}
 //left TypeSwitchStatement ::= (TypeSwitchGuard | SimpleStatement ';'? TypeSwitchGuard) '{' ( TypeCaseClause )* '}' {pin=1 extends=SwitchStatement}
