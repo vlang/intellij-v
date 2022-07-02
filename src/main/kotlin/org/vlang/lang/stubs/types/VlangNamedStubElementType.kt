@@ -5,12 +5,11 @@ import com.intellij.openapi.util.text.StringUtil
 import com.intellij.psi.stubs.IndexSink
 import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.stubs.StubIndexKey
-import org.jetbrains.annotations.NonNls
 import org.vlang.lang.psi.VlangNamedElement
 import org.vlang.lang.stubs.VlangFileStub
 import org.vlang.lang.stubs.VlangNamedStub
 
-abstract class VlangNamedStubElementType<S : VlangNamedStub<T>, T : VlangNamedElement>(debugName: @NonNls String) :
+abstract class VlangNamedStubElementType<S : VlangNamedStub<T>, T : VlangNamedElement>(debugName: String) :
     VlangStubElementType<S, T>(debugName) {
 
     override fun shouldCreateStub(node: ASTNode): Boolean {
@@ -26,7 +25,7 @@ abstract class VlangNamedStubElementType<S : VlangNamedStub<T>, T : VlangNamedEl
             var parent: StubElement<*>? = stub.parentStub
             while (parent != null) {
                 if (parent is VlangFileStub) {
-                    packageName = (parent as VlangFileStub).getPackageName()
+                    packageName = parent.getPackageName()
                     break
                 }
                 parent = parent.parentStub

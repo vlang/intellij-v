@@ -29,5 +29,13 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangFunctionIndex"/>
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangMethodIndex"/>
 
+        <annotator language="vlang" order="first" id="org.vlang.lang.annotator.VlangAnnotator"
+                   implementationClass="org.vlang.lang.annotator.VlangAnnotator"/>
+
+        <localInspection language="vlang" groupName="Vlang plugin" shortName="KphpUndefinedClassInspection"
+                         displayName="Undefined function"
+                         enabledByDefault="true" level="ERROR"
+                         implementationClass="org.vlang.lang.inspections.VlangUndefinedFunctionInspection"/>
+
     </extensions>
 </idea-plugin>

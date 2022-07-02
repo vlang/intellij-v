@@ -6,13 +6,12 @@ import com.intellij.psi.PsiElementResolveResult
 import com.intellij.psi.ResolveResult
 import com.intellij.util.ArrayUtil
 import org.vlang.lang.psi.VlangFile
-import org.vlang.lang.psi.VlangFunctionDeclaration
 import org.vlang.lang.psi.VlangReferenceExpressionBase
 
 class VlangReference(o: VlangReferenceExpressionBase) :
-    VlangReferenceBase<VlangReferenceExpressionBase?>(o,
-    TextRange.from(o.getIdentifier().startOffsetInParent, o.getIdentifier().textLength)
-) {
+    VlangReferenceBase<VlangReferenceExpressionBase>(
+        o, TextRange.from(o.getIdentifier().startOffsetInParent, o.getIdentifier().textLength)
+    ) {
     override fun isReferenceTo(element: PsiElement): Boolean {
         return true
     }

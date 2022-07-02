@@ -4,7 +4,7 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiPolyVariantReferenceBase
 import org.vlang.lang.psi.VlangReferenceExpressionBase
 
-abstract class VlangReferenceBase<T : VlangReferenceExpressionBase?>(element: T, range: TextRange?) :
+abstract class VlangReferenceBase<T : VlangReferenceExpressionBase>(element: T, range: TextRange?) :
     PsiPolyVariantReferenceBase<T>(element, range) {
 
 //    protected fun processDirectory(
