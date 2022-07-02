@@ -6,6 +6,8 @@ import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.elementType
+import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.VlangFunctionDeclaration
 import org.vlang.lang.psi.VlangReferenceExpression
 
@@ -22,6 +24,10 @@ class VlangAnnotator : Annotator {
             if (func != null) {
                 holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES)
             }
+        }
+
+        if (element.elementType == VlangTypes.TYPE_REFERENCE_EXPRESSION) {
+            holder.textAttributes(element, JavaHighlightingColors.TYPE_PARAMETER_NAME_ATTRIBUTES)
         }
     }
 
