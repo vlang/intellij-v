@@ -6,7 +6,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.vlang.lang.psi.VlangPsiTreeUtil;
 import org.vlang.lang.psi.VlangReceiver;
+import org.vlang.lang.psi.VlangType;
 import org.vlang.lang.psi.VlangVisitor;
 
 import static org.vlang.lang.VlangTypes.*;
@@ -28,6 +30,18 @@ public class VlangReceiverImpl extends VlangSimpleNamedElementImpl implements Vl
   }
 
   @Override
+  @Nullable
+  public VlangType getType() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangType.class);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getComma() {
+    return findChildByType(COMMA);
+  }
+
+  @Override
   @NotNull
   public PsiElement getLparen() {
     return notNullChild(findChildByType(LPAREN));
@@ -40,9 +54,9 @@ public class VlangReceiverImpl extends VlangSimpleNamedElementImpl implements Vl
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getIdentifier() {
-    return notNullChild(findChildByType(IDENTIFIER));
+    return findChildByType(IDENTIFIER);
   }
 
 }

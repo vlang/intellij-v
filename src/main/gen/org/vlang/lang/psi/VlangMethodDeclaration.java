@@ -5,10 +5,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.vlang.lang.psi.impl.VlangReference;
 import org.vlang.lang.stubs.VlangMethodDeclarationStub;
 
-public interface VlangMethodDeclaration extends VlangFunctionOrMethodDeclaration, VlangReferenceExpressionBase, StubBasedPsiElement<VlangMethodDeclarationStub> {
+public interface VlangMethodDeclaration extends VlangFunctionOrMethodDeclaration, StubBasedPsiElement<VlangMethodDeclarationStub> {
 
   @Nullable
   VlangBlock getBlock();
@@ -20,9 +19,6 @@ public interface VlangMethodDeclaration extends VlangFunctionOrMethodDeclaration
   VlangSignature getSignature();
 
   @NotNull
-  VlangSymbolVisibility getSymbolVisibility();
-
-  @Nullable
   PsiElement getFunc();
 
   @Nullable
@@ -31,8 +27,5 @@ public interface VlangMethodDeclaration extends VlangFunctionOrMethodDeclaration
   //WARNING: getReceiverType(...) is skipped
   //matching getReceiverType(VlangMethodDeclaration, ...)
   //methods are not found in VlangPsiImplUtil
-
-  @NotNull
-  VlangReference getReference();
 
 }

@@ -5,10 +5,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.vlang.lang.psi.impl.VlangReference;
 import org.vlang.lang.stubs.VlangFunctionDeclarationStub;
 
-public interface VlangFunctionDeclaration extends VlangFunctionOrMethodDeclaration, VlangReferenceExpressionBase, StubBasedPsiElement<VlangFunctionDeclarationStub> {
+public interface VlangFunctionDeclaration extends VlangFunctionOrMethodDeclaration, StubBasedPsiElement<VlangFunctionDeclarationStub> {
 
   @Nullable
   VlangBlock getBlock();
@@ -24,8 +23,5 @@ public interface VlangFunctionDeclaration extends VlangFunctionOrMethodDeclarati
 
   @Nullable
   PsiElement getIdentifier();
-
-  @NotNull
-  VlangReference getReference();
 
 }

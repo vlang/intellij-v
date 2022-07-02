@@ -63,10 +63,4 @@ public class VlangFunctionDeclarationImpl extends VlangFunctionOrMethodDeclarati
     return findChildByType(IDENTIFIER);
   }
 
-  @Override
-  @NotNull
-  public VlangReference getReference() {
-    return VlangPsiImplUtil.getReference(this);
-  }
-
 }

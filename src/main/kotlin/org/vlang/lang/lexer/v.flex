@@ -166,9 +166,9 @@ ESCAPES = [abfnrtv]
 "import"                                  { return IMPORT ; }
 "as"                                      { return AS ; }
 
-//"range"                                   { return RANGE; }
+"in"                                      { return IN; }
 "type"                                    { return TYPE_; }
-"var"                                     { return VAR; }
+"mut"                                     { return MUT; }
 
 {IDENT}                                   { yybegin(MAYBE_SEMICOLON); return IDENTIFIER; }
 

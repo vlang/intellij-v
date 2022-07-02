@@ -21,6 +21,8 @@ public interface VlangTypes {
   IElementType CONDITIONAL_EXPR = new VlangCompositeElementType("CONDITIONAL_EXPR");
   IElementType ELSE_STATEMENT = new VlangCompositeElementType("ELSE_STATEMENT");
   IElementType EXPRESSION = new VlangCompositeElementType("EXPRESSION");
+  IElementType FOR_CLAUSE = new VlangCompositeElementType("FOR_CLAUSE");
+  IElementType FOR_STATEMENT = new VlangCompositeElementType("FOR_STATEMENT");
   IElementType FUNCTION_DECLARATION = VlangElementTypeFactory.stubFactory("FUNCTION_DECLARATION");
   IElementType IF_STATEMENT = new VlangCompositeElementType("IF_STATEMENT");
   IElementType IMPORT_ALIAS = new VlangCompositeElementType("IMPORT_ALIAS");
@@ -39,20 +41,24 @@ public interface VlangTypes {
   IElementType PARAM_DEFINITION = new VlangCompositeElementType("PARAM_DEFINITION");
   IElementType PARENTHESES_EXPR = new VlangCompositeElementType("PARENTHESES_EXPR");
   IElementType PAR_TYPE = new VlangCompositeElementType("PAR_TYPE");
+  IElementType RANGE_CLAUSE = new VlangCompositeElementType("RANGE_CLAUSE");
   IElementType RECEIVER = new VlangCompositeElementType("RECEIVER");
   IElementType REFERENCE_EXPRESSION = new VlangCompositeElementType("REFERENCE_EXPRESSION");
   IElementType RESULT = new VlangCompositeElementType("RESULT");
   IElementType RETURN_STATEMENT = new VlangCompositeElementType("RETURN_STATEMENT");
   IElementType SELECTIVE_IMPORT_LIST = new VlangCompositeElementType("SELECTIVE_IMPORT_LIST");
+  IElementType SHORT_VAR_DECLARATION = new VlangCompositeElementType("SHORT_VAR_DECLARATION");
   IElementType SIGNATURE = new VlangCompositeElementType("SIGNATURE");
   IElementType SIMPLE_STATEMENT = new VlangCompositeElementType("SIMPLE_STATEMENT");
   IElementType STATEMENT = new VlangCompositeElementType("STATEMENT");
   IElementType STRING_LITERAL = new VlangCompositeElementType("STRING_LITERAL");
+  IElementType SYMBOL_MUTABILITY = new VlangCompositeElementType("SYMBOL_MUTABILITY");
   IElementType SYMBOL_VISIBILITY = new VlangCompositeElementType("SYMBOL_VISIBILITY");
   IElementType TYPE = new VlangCompositeElementType("TYPE");
   IElementType TYPE_LIST = new VlangCompositeElementType("TYPE_LIST");
   IElementType TYPE_REFERENCE_EXPRESSION = new VlangCompositeElementType("TYPE_REFERENCE_EXPRESSION");
   IElementType UNARY_EXPR = new VlangCompositeElementType("UNARY_EXPR");
+  IElementType VAR_DEFINITION = new VlangCompositeElementType("VAR_DEFINITION");
 
   IElementType AS = new VlangTokenType("as");
   IElementType ASSIGN = new VlangTokenType("=");
@@ -93,6 +99,7 @@ public interface VlangTypes {
   IElementType IDENTIFIER = new VlangTokenType("identifier");
   IElementType IF = new VlangTokenType("if");
   IElementType IMPORT = new VlangTokenType("import");
+  IElementType IN = new VlangTokenType("in");
   IElementType INT = new VlangTokenType("int");
   IElementType INTERFACE = new VlangTokenType("interface");
   IElementType LBRACE = new VlangTokenType("{");
@@ -106,6 +113,7 @@ public interface VlangTypes {
   IElementType MINUS_MINUS = new VlangTokenType("--");
   IElementType MUL = new VlangTokenType("*");
   IElementType MUL_ASSIGN = new VlangTokenType("*=");
+  IElementType MUT = new VlangTokenType("mut");
   IElementType NOT = new VlangTokenType("!");
   IElementType NOT_EQ = new VlangTokenType("!=");
   IElementType OCT = new VlangTokenType("oct");
@@ -169,6 +177,12 @@ public interface VlangTypes {
       else if (type == ELSE_STATEMENT) {
         return new VlangElseStatementImpl(node);
       }
+      else if (type == FOR_CLAUSE) {
+        return new VlangForClauseImpl(node);
+      }
+      else if (type == FOR_STATEMENT) {
+        return new VlangForStatementImpl(node);
+      }
       else if (type == FUNCTION_DECLARATION) {
         return new VlangFunctionDeclarationImpl(node);
       }
@@ -223,6 +237,9 @@ public interface VlangTypes {
       else if (type == PAR_TYPE) {
         return new VlangParTypeImpl(node);
       }
+      else if (type == RANGE_CLAUSE) {
+        return new VlangRangeClauseImpl(node);
+      }
       else if (type == RECEIVER) {
         return new VlangReceiverImpl(node);
       }
@@ -238,6 +255,9 @@ public interface VlangTypes {
       else if (type == SELECTIVE_IMPORT_LIST) {
         return new VlangSelectiveImportListImpl(node);
       }
+      else if (type == SHORT_VAR_DECLARATION) {
+        return new VlangShortVarDeclarationImpl(node);
+      }
       else if (type == SIGNATURE) {
         return new VlangSignatureImpl(node);
       }
@@ -246,6 +266,9 @@ public interface VlangTypes {
       }
       else if (type == STRING_LITERAL) {
         return new VlangStringLiteralImpl(node);
+      }
+      else if (type == SYMBOL_MUTABILITY) {
+        return new VlangSymbolMutabilityImpl(node);
       }
       else if (type == SYMBOL_VISIBILITY) {
         return new VlangSymbolVisibilityImpl(node);
@@ -261,6 +284,9 @@ public interface VlangTypes {
       }
       else if (type == UNARY_EXPR) {
         return new VlangUnaryExprImpl(node);
+      }
+      else if (type == VAR_DEFINITION) {
+        return new VlangVarDefinitionImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

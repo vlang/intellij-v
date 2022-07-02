@@ -46,9 +46,16 @@ public class VlangVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitForClause(@NotNull VlangForClause o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitForStatement(@NotNull VlangForStatement o) {
+    visitStatement(o);
+  }
+
   public void visitFunctionDeclaration(@NotNull VlangFunctionDeclaration o) {
     visitFunctionOrMethodDeclaration(o);
-    // visitReferenceExpressionBase(o);
   }
 
   public void visitIfStatement(@NotNull VlangIfStatement o) {
@@ -85,7 +92,6 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitMethodDeclaration(@NotNull VlangMethodDeclaration o) {
     visitFunctionOrMethodDeclaration(o);
-    // visitReferenceExpressionBase(o);
   }
 
   public void visitMulExpr(@NotNull VlangMulExpr o) {
@@ -120,6 +126,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitRangeClause(@NotNull VlangRangeClause o) {
+    visitShortVarDeclaration(o);
+  }
+
   public void visitReceiver(@NotNull VlangReceiver o) {
     visitNamedElement(o);
   }
@@ -141,6 +151,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitShortVarDeclaration(@NotNull VlangShortVarDeclaration o) {
+    visitCompositeElement(o);
+  }
+
   public void visitSignature(@NotNull VlangSignature o) {
     visitCompositeElement(o);
   }
@@ -155,6 +169,10 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitStringLiteral(@NotNull VlangStringLiteral o) {
     visitExpression(o);
+  }
+
+  public void visitSymbolMutability(@NotNull VlangSymbolMutability o) {
+    visitCompositeElement(o);
   }
 
   public void visitSymbolVisibility(@NotNull VlangSymbolVisibility o) {
@@ -175,6 +193,10 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitUnaryExpr(@NotNull VlangUnaryExpr o) {
     visitExpression(o);
+  }
+
+  public void visitVarDefinition(@NotNull VlangVarDefinition o) {
+    visitNamedElement(o);
   }
 
   public void visitAssignOp(@NotNull VlangAssignOp o) {

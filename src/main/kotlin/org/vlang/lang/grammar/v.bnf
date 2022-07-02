@@ -80,9 +80,9 @@
   implements(".*ReferenceExpression|FieldName")="org.vlang.lang.psi.VlangReferenceExpressionBase"
 
   extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
-  extends("ImportSpec|ParamDefinition|Receiver")="org.vlang.lang.psi.impl.VlangSimpleNamedElementImpl"
-  extends("(Method)Spec|(Var|Const|(Anonymous)?Field|Label)Definition")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
-  extends("PackageClause|(Const|Var)Spec")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
+  extends("ImportSpec|ParamDefinition|Receiver|(Var|Const)Definition")="org.vlang.lang.psi.impl.VlangSimpleNamedElementImpl"
+  extends("(Method)Spec|((Anonymous)?Field|Label)Definition")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
+  extends("PackageClause")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
   elementTypeFactory("PackageClause|(Function|Method)Declaration")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
   pin(".*Statement")=1
   extends(".*Statement")=Statement
@@ -211,7 +211,7 @@ private StatementWithSemi ::= Statement (semi|&'}') { pin=1 recoverWhile=Stateme
 Statement ::=
 //    ConstDeclaration
 //  | TypeDeclaration
-//  | VarDeclaration
+//  VarDeclaration
 //  | LabeledStatement
   SimpleStatement
 //  | GoStatement
@@ -224,15 +224,15 @@ Statement ::=
   | IfStatement
 //  | SwitchStatement
 //  | SelectStatement
-//  | ForStatement
+  | ForStatement
 //  | DeferStatement {methods=[processDeclarations]}
 
 
-private StatementRecover ::= !('!' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | pub | go | goto | hex | identifier | if | int | interface | map | oct | return | select | string | raw_string | struct | switch | var)
+private StatementRecover ::= !('!' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | pub | mut | go | goto | hex | identifier | if | int | interface | map | oct | return | select | string | raw_string | struct | switch | var)
 
 SimpleStatement ::=
-//    ShortVarDeclaration
-  IncDecStatement
+  ShortVarDeclaration
+  | IncDecStatement
   | (LeftHandExprList AssignmentStatement? /*| SendStatement*/) {pin(".*")=LeftHandExprList}
 
 private TopLevelDeclaration ::= !<<eof>> TopDeclaration semi {pin=1 recoverWhile=TopLevelDeclarationRecover}
@@ -280,16 +280,19 @@ private ExpressionListRecover ::= !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' 
 //VarSpec ::= VarDefinitionList ( Type [ '=' ExpressionList ] | '=' ExpressionList ) {
 //  pin(".*")=1
 //  methods=[processDeclarations deleteDefinition getRightExpressionsList]
-//  stubClass="org.vlang.lang.stubs.GoVarSpecStub"
+////  stubClass="org.vlang.lang.stubs.GoVarSpecStub"
 //}
-//private VarDefinitionList ::= VarDefinition ( ',' VarDefinition )*
-//VarDefinition ::= identifier {
-//  methods=[getGoTypeInner getReference getValue]
+private VarDefinitionList ::= VarDefinition ( ',' VarDefinition )*
+VarDefinition ::= SymbolMutability identifier {
+  pin=2
+  methods=[getGoTypeInner getReference getValue]
 //  stubClass="org.vlang.lang.stubs.GoVarDefinitionStub"
-//}
-//
-//ShortVarDeclaration ::= VarDefinitionList ':=' ExpressionList {pin=2 extends=VarSpec}
-//
+}
+
+ShortVarDeclaration ::= VarDefinitionList ':=' ExpressionList {pin=2}
+
+SymbolMutability ::= mut?
+
 SymbolVisibility ::= pub?
 
 FunctionDeclaration ::= SymbolVisibility func identifier Signature BlockWithConsume? {
@@ -427,11 +430,11 @@ private SimpleStatementOpt ::= [SimpleStatement ';'?] // todo: remove ?
 //private TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
 TypeList ::= Type ( ',' Type )* ','?
 TypeListNoPin ::= Type ( ',' Type )* ','? {elementType=TypeList}
-//ForStatement ::= for <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) <<exitModeSafe "BLOCK?">> {pin(".*")="for|ForOrRangeClause"}
-//private ForOrRangeClause ::= (ForClause | RangeClause)
-//ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement? {methods=[processDeclarations]}
-//RangeClause ::= range Expression | ExpressionsOrVariables range Expression {pin(".*")=1 extends=VarSpec methods=[getRangeExpression getLeftExpressionsList getRightExpressionsList]}
-//private ExpressionsOrVariables ::= ExpressionList '=' | VarDefinitionList ':='
+ForStatement ::= for (ForOrRangeClause Block | Block | Expression Block) {pin(".*")="for|ForOrRangeClause"}
+private ForOrRangeClause ::= (ForClause | RangeClause)
+ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement? {methods=[processDeclarations]}
+RangeClause ::= in Expression | VarDefinitionList in Expression {pin(".*")=2 extends=ShortVarDeclaration methods=[getRangeExpression getLeftExpressionsList getRightExpressionsList]}
+
 //GoStatement ::= go Expression
 //SelectStatement ::= select '{' CommClause* '}'
 //CommClause ::= CommCase ':' Statements? {pin=1}

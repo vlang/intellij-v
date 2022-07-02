@@ -53,26 +53,14 @@ public class VlangMethodDeclarationImpl extends VlangFunctionOrMethodDeclaration
 
   @Override
   @NotNull
-  public VlangSymbolVisibility getSymbolVisibility() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangSymbolVisibility.class));
-  }
-
-  @Override
-  @Nullable
   public PsiElement getFunc() {
-    return findChildByType(FUNC);
+    return notNullChild(findChildByType(FUNC));
   }
 
   @Override
   @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);
-  }
-
-  @Override
-  @NotNull
-  public VlangReference getReference() {
-    return VlangPsiImplUtil.getReference(this);
   }
 
 }

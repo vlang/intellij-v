@@ -7,13 +7,19 @@ import org.jetbrains.annotations.Nullable;
 
 public interface VlangReceiver extends VlangNamedElement {
 
+  @Nullable
+  VlangType getType();
+
+  @Nullable
+  PsiElement getComma();
+
   @NotNull
   PsiElement getLparen();
 
   @Nullable
   PsiElement getRparen();
 
-  @NotNull
+  @Nullable
   PsiElement getIdentifier();
 
   //WARNING: getGoTypeInner(...) is skipped

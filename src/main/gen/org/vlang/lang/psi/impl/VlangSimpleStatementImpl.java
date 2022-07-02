@@ -32,6 +32,12 @@ public class VlangSimpleStatementImpl extends VlangStatementImpl implements Vlan
 
   @Override
   @Nullable
+  public VlangShortVarDeclaration getShortVarDeclaration() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangShortVarDeclaration.class);
+  }
+
+  @Override
+  @Nullable
   public VlangStatement getStatement() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangStatement.class);
   }
