@@ -143,6 +143,7 @@ ESCAPES = [abfnrtv]
 
 "default"                                 { return DEFAULT; }
 "package"                                 { return PACKAGE; }
+"pub"                                     { return PUB; }
 "fn"                                      { return FUNC; }
 "interface"                               { return INTERFACE; }
 "select"                                  { return SELECT; }
@@ -162,7 +163,8 @@ ESCAPES = [abfnrtv]
 
 "if"                                      { return IF ; }
 "for"                                     { return FOR ; }
-//"import"                                  { return IMPORT ; }
+"import"                                  { return IMPORT ; }
+"as"                                      { return AS ; }
 
 //"range"                                   { return RANGE; }
 "type"                                    { return TYPE_; }

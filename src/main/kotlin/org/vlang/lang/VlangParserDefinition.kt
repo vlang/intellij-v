@@ -49,8 +49,8 @@ class VlangParserDefinition : ParserDefinition {
         val NUMBERS = TokenSet.create(INT, FLOAT, FLOATI, DECIMALI, FLOATI) // todo: HEX, OCT,
 
         val KEYWORDS = TokenSet.create(
-            BREAK, CASE, /*CHAN*/ CONST, CONTINUE, DEFAULT, DEFER, ELSE, FALLTHROUGH, FOR, FUNC, GO, GOTO, IF, /*IMPORT*/
-            INTERFACE, MAP, PACKAGE, /*RANGE*/ RETURN, SELECT, STRUCT, SWITCH, TYPE_, VAR
+            BREAK, CASE, /*CHAN*/ CONST, CONTINUE, DEFAULT, DEFER, ELSE, FALLTHROUGH, FOR, FUNC, GO, GOTO, IF, IMPORT,
+            INTERFACE, MAP, PACKAGE, /*RANGE*/ RETURN, SELECT, STRUCT, SWITCH, TYPE_, VAR, PUB, AS
         )
         val OPERATORS = TokenSet.create(
             EQ,
