@@ -16,6 +16,9 @@ public interface VlangTypes {
   IElementType ARGUMENT_LIST = new VlangCompositeElementType("ARGUMENT_LIST");
   IElementType ASSIGNMENT_STATEMENT = new VlangCompositeElementType("ASSIGNMENT_STATEMENT");
   IElementType ASSIGN_OP = new VlangCompositeElementType("ASSIGN_OP");
+  IElementType ATTRIBUTE = new VlangCompositeElementType("ATTRIBUTE");
+  IElementType ATTRIBUTES = new VlangCompositeElementType("ATTRIBUTES");
+  IElementType ATTRIBUTE_EXPRESSION = new VlangCompositeElementType("ATTRIBUTE_EXPRESSION");
   IElementType BLOCK = new VlangCompositeElementType("BLOCK");
   IElementType CALL_EXPR = new VlangCompositeElementType("CALL_EXPR");
   IElementType CONDITIONAL_EXPR = new VlangCompositeElementType("CONDITIONAL_EXPR");
@@ -24,6 +27,7 @@ public interface VlangTypes {
   IElementType FOR_CLAUSE = new VlangCompositeElementType("FOR_CLAUSE");
   IElementType FOR_STATEMENT = new VlangCompositeElementType("FOR_STATEMENT");
   IElementType FUNCTION_DECLARATION = VlangElementTypeFactory.stubFactory("FUNCTION_DECLARATION");
+  IElementType IF_ATTRIBUTE = new VlangCompositeElementType("IF_ATTRIBUTE");
   IElementType IF_STATEMENT = new VlangCompositeElementType("IF_STATEMENT");
   IElementType IMPORT_ALIAS = new VlangCompositeElementType("IMPORT_ALIAS");
   IElementType IMPORT_DECLARATION = new VlangCompositeElementType("IMPORT_DECLARATION");
@@ -41,6 +45,7 @@ public interface VlangTypes {
   IElementType PARAM_DEFINITION = new VlangCompositeElementType("PARAM_DEFINITION");
   IElementType PARENTHESES_EXPR = new VlangCompositeElementType("PARENTHESES_EXPR");
   IElementType PAR_TYPE = new VlangCompositeElementType("PAR_TYPE");
+  IElementType PLAIN_ATTRIBUTE = new VlangCompositeElementType("PLAIN_ATTRIBUTE");
   IElementType RANGE_CLAUSE = new VlangCompositeElementType("RANGE_CLAUSE");
   IElementType RECEIVER = new VlangCompositeElementType("RECEIVER");
   IElementType REFERENCE_EXPRESSION = new VlangCompositeElementType("REFERENCE_EXPRESSION");
@@ -165,6 +170,15 @@ public interface VlangTypes {
       else if (type == ASSIGN_OP) {
         return new VlangAssignOpImpl(node);
       }
+      else if (type == ATTRIBUTE) {
+        return new VlangAttributeImpl(node);
+      }
+      else if (type == ATTRIBUTES) {
+        return new VlangAttributesImpl(node);
+      }
+      else if (type == ATTRIBUTE_EXPRESSION) {
+        return new VlangAttributeExpressionImpl(node);
+      }
       else if (type == BLOCK) {
         return new VlangBlockImpl(node);
       }
@@ -185,6 +199,9 @@ public interface VlangTypes {
       }
       else if (type == FUNCTION_DECLARATION) {
         return new VlangFunctionDeclarationImpl(node);
+      }
+      else if (type == IF_ATTRIBUTE) {
+        return new VlangIfAttributeImpl(node);
       }
       else if (type == IF_STATEMENT) {
         return new VlangIfStatementImpl(node);
@@ -236,6 +253,9 @@ public interface VlangTypes {
       }
       else if (type == PAR_TYPE) {
         return new VlangParTypeImpl(node);
+      }
+      else if (type == PLAIN_ATTRIBUTE) {
+        return new VlangPlainAttributeImpl(node);
       }
       else if (type == RANGE_CLAUSE) {
         return new VlangRangeClauseImpl(node);

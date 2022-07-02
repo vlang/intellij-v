@@ -35,6 +35,12 @@ public class VlangFunctionDeclarationImpl extends VlangFunctionOrMethodDeclarati
 
   @Override
   @Nullable
+  public VlangAttributes getAttributes() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangAttributes.class);
+  }
+
+  @Override
+  @Nullable
   public VlangBlock getBlock() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangBlock.class);
   }
@@ -46,21 +52,27 @@ public class VlangFunctionDeclarationImpl extends VlangFunctionOrMethodDeclarati
   }
 
   @Override
-  @NotNull
+  @Nullable
   public VlangSymbolVisibility getSymbolVisibility() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangSymbolVisibility.class));
+    return VlangPsiTreeUtil.getChildOfType(this, VlangSymbolVisibility.class);
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getFunc() {
-    return notNullChild(findChildByType(FUNC));
+    return findChildByType(FUNC);
   }
 
   @Override
   @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);
+  }
+
+  @Override
+  @NotNull
+  public String getName() {
+    return VlangPsiImplUtil.getName(this);
   }
 
 }

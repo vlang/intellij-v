@@ -10,18 +10,24 @@ import org.vlang.lang.stubs.VlangFunctionDeclarationStub;
 public interface VlangFunctionDeclaration extends VlangFunctionOrMethodDeclaration, StubBasedPsiElement<VlangFunctionDeclarationStub> {
 
   @Nullable
+  VlangAttributes getAttributes();
+
+  @Nullable
   VlangBlock getBlock();
 
   @Nullable
   VlangSignature getSignature();
 
-  @NotNull
+  @Nullable
   VlangSymbolVisibility getSymbolVisibility();
 
-  @NotNull
+  @Nullable
   PsiElement getFunc();
 
   @Nullable
   PsiElement getIdentifier();
+
+  @NotNull
+  String getName();
 
 }

@@ -93,7 +93,7 @@
   generateTokenAccessors=true
 }
 
-File ::= PackageClause semi ImportList TopLevelDeclaration* {pin(".*")=1}
+File ::= ImportList TopLevelDeclaration* {pin(".*")=1}
 ImportList ::= (ImportDeclaration semi)* {
   methods=[addImport]
 }
@@ -295,9 +295,10 @@ SymbolMutability ::= mut?
 
 SymbolVisibility ::= pub?
 
-FunctionDeclaration ::= SymbolVisibility func identifier Signature BlockWithConsume? {
-  pin=2
+FunctionDeclaration ::= Attributes? SymbolVisibility func identifier Signature BlockWithConsume? {
+  pin=1
   stubClass="org.vlang.lang.stubs.VlangFunctionDeclarationStub"
+  methods=[getName]
 }
 MethodDeclaration ::= func Receiver identifier Signature BlockWithConsume? {
   pin=1
@@ -310,6 +311,16 @@ Receiver ::= '(' (identifier ReceiverTail | ReceiverTail) ')' {
 //  stubClass="org.vlang.lang.stubs.GoReceiverStub"
 }
 private ReceiverTail ::= Type ','?
+
+Attributes ::= Attribute (semi Attribute)* '<NL>'? {pin=1}
+
+Attribute ::= '[' AttributeExpression ']' {pin=1}
+
+AttributeExpression ::= IfAttribute | PlainAttribute
+
+IfAttribute ::= if identifier {pin=1}
+
+PlainAttribute ::= identifier [':' StringLiteral]
 
 Literal ::=
     int

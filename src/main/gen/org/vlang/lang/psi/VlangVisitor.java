@@ -22,6 +22,18 @@ public class VlangVisitor extends PsiElementVisitor {
     visitStatement(o);
   }
 
+  public void visitAttribute(@NotNull VlangAttribute o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitAttributeExpression(@NotNull VlangAttributeExpression o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitAttributes(@NotNull VlangAttributes o) {
+    visitCompositeElement(o);
+  }
+
   public void visitBinaryExpr(@NotNull VlangBinaryExpr o) {
     visitExpression(o);
   }
@@ -56,6 +68,10 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitFunctionDeclaration(@NotNull VlangFunctionDeclaration o) {
     visitFunctionOrMethodDeclaration(o);
+  }
+
+  public void visitIfAttribute(@NotNull VlangIfAttribute o) {
+    visitCompositeElement(o);
   }
 
   public void visitIfStatement(@NotNull VlangIfStatement o) {
@@ -124,6 +140,10 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitParenthesesExpr(@NotNull VlangParenthesesExpr o) {
     visitExpression(o);
+  }
+
+  public void visitPlainAttribute(@NotNull VlangPlainAttribute o) {
+    visitCompositeElement(o);
   }
 
   public void visitRangeClause(@NotNull VlangRangeClause o) {
