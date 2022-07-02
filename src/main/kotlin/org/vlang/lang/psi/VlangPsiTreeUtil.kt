@@ -119,6 +119,11 @@ object VlangPsiTreeUtil {
         return PsiTreeUtil.getChildrenOfTypeAsList(element, aClass)
     }
 
+    @JvmStatic
+    fun <T : PsiElement?> getChildOfType(element: PsiElement?, aClass: Class<T>): T? {
+        return PsiTreeUtil.getChildOfType(element, aClass)
+    }
+
     private fun findNotWhiteSpaceElementAtOffset(file: VlangFile, offset: Int, forward: Boolean): PsiElement? {
         var element = file.findElementAt(offset)
         while (element is PsiWhiteSpace) {

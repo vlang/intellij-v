@@ -21,10 +21,6 @@ open class VlangCompositeElementImpl(node: ASTNode) : ASTWrapperPsiElement(node)
         return processDeclarationsDefault(this, processor, state, lastParent, place)
     }
 
-    override fun shouldGoDeeper(): Boolean {
-        return true
-    }
-
     companion object {
         fun processDeclarationsDefault(
             o: VlangCompositeElement,
@@ -34,7 +30,7 @@ open class VlangCompositeElementImpl(node: ASTNode) : ASTWrapperPsiElement(node)
             place: PsiElement
         ): Boolean {
 //            if (o is GoLeftHandExprList || o is GoExpression) return true
-            if (!o.shouldGoDeeper()) return processor.execute(o, state)
+//            if (!o.shouldGoDeeper()) return processor.execute(o, state)
             if (!processor.execute(o, state)) return false
 //            if ((o is GoSwitchStatement ||
 //                        o is GoIfStatement ||

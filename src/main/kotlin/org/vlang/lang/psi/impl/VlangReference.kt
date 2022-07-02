@@ -5,6 +5,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementResolveResult
 import com.intellij.psi.ResolveResult
 import com.intellij.util.ArrayUtil
+import org.vlang.lang.psi.VlangFile
 import org.vlang.lang.psi.VlangFunctionDeclaration
 import org.vlang.lang.psi.VlangReferenceExpressionBase
 
@@ -20,11 +21,13 @@ class VlangReference(o: VlangReferenceExpressionBase) :
         get() = myElement?.getIdentifier()
 
     override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
-        return myElement?.containingFile?.children?.filter {
-            it is VlangFunctionDeclaration && it.nameIdentifier?.text == identifier?.text
+        val file = myElement?.containingFile as? VlangFile ?: return emptyArray()
+
+        return file.getFunctions().filter {
+            it.nameIdentifier?.text == identifier?.text
         }
-            ?.map { PsiElementResolveResult(it) }
-            ?.toTypedArray() ?: emptyArray()
+            .map { PsiElementResolveResult(it) }
+            .toTypedArray()
     }
 
     override fun getVariants() = ArrayUtil.EMPTY_OBJECT_ARRAY

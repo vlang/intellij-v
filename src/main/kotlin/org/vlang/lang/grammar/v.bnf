@@ -75,14 +75,15 @@
   implements("(Type|Import)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")="org.vlang.lang.psi.VlangNamedElement"
   implements("FunctionLit")="org.vlang.lang.psi.GoSignatureOwner"
   implements("MethodSpec")="org.vlang.lang.psi.GoNamedSignatureOwner"
-  implements("(Function|Method)Declaration")="org.vlang.lang.psi.VlangNamedElement"
-  extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangNamedElementImpl"
+  implements("(Function|Method)Declaration")="org.vlang.lang.psi.VlangFunctionOrMethodDeclaration"
 //  implements("(Const|Type|Var)Declaration")="org.vlang.lang.psi.GoTopLevelDeclaration"
   implements(".*ReferenceExpression|FieldName")="org.vlang.lang.psi.VlangReferenceExpressionBase"
-//  extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.GoFunctionOrMethodDeclarationImpl<?>"
-  extends("(Type|Import|Method)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")="org.vlang.lang.psi.impl.VlangNamedElementImpl"
-//  extends("PackageClause|Parameters|Signature|ParameterDeclaration|Result|Type|(Const|Var|Import)Spec")="org.vlang.lang.psi.impl.GoStubbedElementImpl<?>"
-//  elementTypeFactory("PackageClause|(Function|Method|Parameter)Declaration|(Type|Import|Method|Const|Var)Spec|RangeClause|RecvStatement|ShortVarDeclaration|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver|Parameters|Signature|Result|.*Type|TypeList.*")='org.vlang.lang.stubs.GoElementTypeFactory.stubFactory'
+
+  extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
+  extends("ImportSpec|ParamDefinition|Receiver")="org.vlang.lang.psi.impl.VlangSimpleNamedElementImpl"
+  extends("(Method)Spec|(Var|Const|(Anonymous)?Field|Label)Definition")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
+  extends("PackageClause|(Const|Var)Spec")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
+  elementTypeFactory("PackageClause|(Function|Method)Declaration")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
   pin(".*Statement")=1
   extends(".*Statement")=Statement
   extends(".*Type|TypeList")=Type
@@ -98,7 +99,10 @@ ImportList ::= (ImportDeclaration semi)* {
 }
 private semi ::= '<NL>' | ';' | <<eof>>
 
-PackageClause ::= package identifier {pin=1 methods=[getName] /*stubClass="org.vlang.lang.stubs.GoPackageClauseStub"*/}
+PackageClause ::= package identifier {pin=1
+  methods=[getName]
+  stubClass="org.vlang.lang.stubs.VlangPackageClauseStub"
+}
 
 ImportDeclaration ::= import ImportSpec {
   pin(".*")=1
@@ -237,7 +241,7 @@ private TopDeclaration ::=
 //  | TypeDeclaration
 //  | VarDeclaration
   FunctionDeclaration
-//  | MethodDeclaration
+  | MethodDeclaration
 private TopLevelDeclarationRecover ::= !(';' |'type' | const | func | pub | var)
 //
 //ConstDeclaration ::= const ( ConstSpec | '(' ConstSpecs? ')' ) {pin(".*")=1 methods=[addSpec deleteSpec]}
@@ -290,20 +294,20 @@ SymbolVisibility ::= pub?
 
 FunctionDeclaration ::= SymbolVisibility func identifier Signature BlockWithConsume? {
   pin=2
-//  stubClass="org.vlang.lang.stubs.GoFunctionDeclarationStub"
+  stubClass="org.vlang.lang.stubs.VlangFunctionDeclarationStub"
 }
-//MethodDeclaration ::= func Receiver identifier Signature BlockWithConsume? {
-//  pin=1
-//  stubClass="org.vlang.lang.stubs.GoMethodDeclarationStub"
-//  methods=[getReceiverType]
-//}
-//Receiver ::= '(' (identifier ReceiverTail | ReceiverTail) ')' {
-//  methods=[getGoTypeInner]
-//  pin=1
+MethodDeclaration ::= func Receiver identifier Signature BlockWithConsume? {
+  pin=1
+  stubClass="org.vlang.lang.stubs.VlangMethodDeclarationStub"
+  methods=[getReceiverType]
+}
+Receiver ::= '(' (identifier ReceiverTail | ReceiverTail) ')' {
+  methods=[getGoTypeInner]
+  pin=1
 //  stubClass="org.vlang.lang.stubs.GoReceiverStub"
-//}
-//private ReceiverTail ::= Type ','?
-//
+}
+private ReceiverTail ::= Type ','?
+
 Literal ::=
     int
   | float
@@ -373,7 +377,6 @@ private MaxGroup ::=
   OperandName
 //  | BuiltinCallExpr
   | CallExpr
-  | IfExpression
 //  | TypeAssertionExpr
 //  | SelectorExpr
 //  | IndexOrSliceExpr
@@ -406,8 +409,6 @@ ArgumentList ::= '(' [ ExpressionArgList '...'? ','? ] ')' {pin=1}
 left AssignmentStatement ::= assign_op ExpressionList {pin=1}
 IncDecStatement ::= Expression ('++' | '--') {pin=2}
 assign_op ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '&=' | '&^='
-IfExpression ::= if Condition Block ElseExpression?
-ElseExpression ::= else (IfExpression | Block)
 IfStatement ::= if Condition Block ElseStatement?
 ElseStatement ::= else (IfStatement | Block)
 //SwitchStatement ::= SwitchStart (TypeSwitchStatement | ExprSwitchStatement)
