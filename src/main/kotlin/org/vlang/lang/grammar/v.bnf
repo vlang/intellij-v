@@ -262,15 +262,18 @@ Statement ::=
   | AssertStatement
   | CFlagStatement
   | CIncludeStatement
+  | LanguageInjectionStatement
   | DeferStatement {methods=[processDeclarations]}
 
 
-private StatementRecover ::= !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | struct | switch | var | unsafe | assert | match | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG)
+private StatementRecover ::= !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | struct | switch | var | unsafe | assert | match | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG | LANGUAGE_INJECTION)
 
 SimpleStatement ::=
   ShortVarDeclaration
   | IncDecStatement
   | (LeftHandExprList AssignmentStatement? /*| SendStatement*/) {pin(".*")=LeftHandExprList}
+
+LanguageInjectionStatement ::= LANGUAGE_INJECTION {pin=1}
 
 CIncludeStatement ::= C_INCLUDE StringLiteral {pin=1}
 CFlagStatement ::= C_FLAG C_FLAG_VALUE {pin=1}
@@ -289,10 +292,11 @@ private TopDeclaration ::=
   | CompileTimeIfStatement
   | CIncludeStatement
   | CFlagStatement
+  | LanguageInjectionStatement
 
-private TopLevelDeclarationRecover ::= !(';' | type | const | fn | pub | BUILTIN_GLOBAL | var | struct | enum | interface | import | C_INCLUDE | C_FLAG | IF_COMPILE_TIME | '[')
+private TopLevelDeclarationRecover ::= !(';' | type | const | fn | pub | BUILTIN_GLOBAL | var | struct | enum | interface | import | C_INCLUDE | C_FLAG | IF_COMPILE_TIME | LANGUAGE_INJECTION | '[')
 
-ConstDeclaration ::= const ( ConstSpec | '(' ConstSpecs? ')' ) {pin(".*")=1 methods=[addSpec deleteSpec]}
+ConstDeclaration ::= SymbolVisibility const ( ConstSpec | '(' ConstSpecs? ')' ) {pin(".*")=2 methods=[addSpec deleteSpec]}
 private ConstSpecs ::= ConstSpec (semi ConstSpec)* semi? {pin=1}
 ConstSpec ::= ConstDefinitionList [ ('=' ExpressionList | Type '=' ExpressionList) ] {
   pin(".*")=1
@@ -378,6 +382,7 @@ Literal ::=
   | decimali
   | hex
   | oct
+  | bin
   | StringLiteral
   | char
 

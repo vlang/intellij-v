@@ -70,6 +70,7 @@ public interface VlangTypes {
   IElementType INTERFACE_TYPE = new VlangCompositeElementType("INTERFACE_TYPE");
   IElementType IN_EXPRESSION = new VlangCompositeElementType("IN_EXPRESSION");
   IElementType LABEL_REF = new VlangCompositeElementType("LABEL_REF");
+  IElementType LANGUAGE_INJECTION_STATEMENT = new VlangCompositeElementType("LANGUAGE_INJECTION_STATEMENT");
   IElementType LEFT_HAND_EXPR_LIST = new VlangCompositeElementType("LEFT_HAND_EXPR_LIST");
   IElementType LITERAL = new VlangCompositeElementType("LITERAL");
   IElementType MATCH_ARM = new VlangCompositeElementType("MATCH_ARM");
@@ -118,6 +119,7 @@ public interface VlangTypes {
   IElementType AS = new VlangTokenType("as");
   IElementType ASSERT = new VlangTokenType("assert");
   IElementType ASSIGN = new VlangTokenType("=");
+  IElementType BIN = new VlangTokenType("bin");
   IElementType BIT_AND = new VlangTokenType("&");
   IElementType BIT_AND_ASSIGN = new VlangTokenType("&=");
   IElementType BIT_CLEAR = new VlangTokenType("&^");
@@ -165,6 +167,7 @@ public interface VlangTypes {
   IElementType IN = new VlangTokenType("in");
   IElementType INT = new VlangTokenType("int");
   IElementType INTERFACE = new VlangTokenType("interface");
+  IElementType LANGUAGE_INJECTION = new VlangTokenType("LANGUAGE_INJECTION");
   IElementType LBRACE = new VlangTokenType("{");
   IElementType LBRACK = new VlangTokenType("[");
   IElementType LESS = new VlangTokenType("<");
@@ -389,6 +392,9 @@ public interface VlangTypes {
       }
       else if (type == LABEL_REF) {
         return new VlangLabelRefImpl(node);
+      }
+      else if (type == LANGUAGE_INJECTION_STATEMENT) {
+        return new VlangLanguageInjectionStatementImpl(node);
       }
       else if (type == LEFT_HAND_EXPR_LIST) {
         return new VlangLeftHandExprListImpl(node);

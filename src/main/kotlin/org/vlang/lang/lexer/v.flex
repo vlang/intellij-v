@@ -26,21 +26,24 @@ NL = \n
 WS = [ \t\f]
 
 LINE_COMMENT = "//" [^\r\n]*
+LANGUAGE_INJECTION_COMMENT = "#" [^\r\n]*
 MULTILINE_COMMENT = "/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?
 
 LETTER = [:letter:] | "_"
 DIGIT =  [:digit:]
 
-HEX_DIGIT = [0-9A-Fa-f]
-INT_DIGIT = [0-9]
-OCT_DIGIT = [0-7]
+HEX_DIGIT = [0-9A-Fa-f_]
+INT_DIGIT = [0-9_]
+OCT_DIGIT = [0-7_]
+BIN_DIGIT = [0-1_]
 
 NUM_INT = "0" | ([1-9] {INT_DIGIT}*)
 NUM_HEX = ("0x" | "0X") {HEX_DIGIT}+
-NUM_OCT = "0" {OCT_DIGIT}+
+NUM_OCT = "0o" {OCT_DIGIT}+
+NUM_BIN = "0b" {BIN_DIGIT}+
 
-FLOAT_EXPONENT = [eE] [+-]? {DIGIT}+
-NUM_FLOAT = ( ( ({DIGIT}+ "." {DIGIT}*) | ({DIGIT}* "." {DIGIT}+) ) {FLOAT_EXPONENT}?) | ({DIGIT}+ {FLOAT_EXPONENT})
+FLOAT_EXPONENT = [eE] [+-]? {INT_DIGIT}+
+NUM_FLOAT = ( ( ({INT_DIGIT}+ "." {INT_DIGIT}*) | ({INT_DIGIT}* "." {INT_DIGIT}+) ) {FLOAT_EXPONENT}?) | ({INT_DIGIT}+ {FLOAT_EXPONENT})
 
 IDENT = {LETTER} ({LETTER} | {DIGIT} )*
 SPECIAL_IDENT = ("JS." | "C.") {LETTER} ({LETTER} | {DIGIT} | "." )*
@@ -195,12 +198,15 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 
 "__global"                                { return BUILTIN_GLOBAL; }
 
+{LANGUAGE_INJECTION_COMMENT}              { yybegin(MAYBE_SEMICOLON); return LANGUAGE_INJECTION; }
+
 {SPECIAL_IDENT}                           { yybegin(MAYBE_SEMICOLON); return IDENTIFIER; }
 {IDENT}                                   { yybegin(MAYBE_SEMICOLON); return IDENTIFIER; }
 
 {NUM_FLOAT}"i"                            { yybegin(MAYBE_SEMICOLON); return FLOATI; }
 {NUM_FLOAT}                               { yybegin(MAYBE_SEMICOLON); return FLOAT; }
 {DIGIT}+"i"                               { yybegin(MAYBE_SEMICOLON); return DECIMALI; }
+{NUM_BIN}                                 { yybegin(MAYBE_SEMICOLON); return BIN; }
 {NUM_OCT}                                 { yybegin(MAYBE_SEMICOLON); return OCT; }
 {NUM_HEX}                                 { yybegin(MAYBE_SEMICOLON); return HEX; }
 {NUM_INT}                                 { yybegin(MAYBE_SEMICOLON); return INT; }
