@@ -46,12 +46,12 @@ class VlangParserDefinition : ParserDefinition {
 
         val COMMENTS = TokenSet.create(LINE_COMMENT, MULTILINE_COMMENT)
         val STRING_LITERALS = TokenSet.create(STRING, RAW_STRING, CHAR)
-        val NUMBERS = TokenSet.create(INT, FLOAT, FLOATI, DECIMALI, FLOATI) // todo: HEX, OCT,
+        val NUMBERS = TokenSet.create(INT, FLOAT, FLOATI, DECIMALI, FLOATI, HEX, OCT)
 
         val KEYWORDS = TokenSet.create(
             BREAK, CASE, /*CHAN*/ CONST, CONTINUE, DEFAULT, DEFER, ELSE, FALLTHROUGH, FOR, FN, GO, GOTO, IF, IMPORT,
             INTERFACE, MODULE, IN, RETURN, SELECT, STRUCT, SWITCH, TYPE_, PUB, AS, MUT, IF_COMPILE_TIME, ELSE_COMPILE_TIME,
-            UNSAFE, BUILTIN_GLOBAL, ASSERT
+            UNSAFE, BUILTIN_GLOBAL, ASSERT, ENUM
         )
         val OPERATORS = TokenSet.create(
             EQ,

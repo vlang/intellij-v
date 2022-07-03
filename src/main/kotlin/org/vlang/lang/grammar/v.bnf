@@ -149,6 +149,10 @@ private TypeLit ::=
 
 ArrayOrSliceType ::= '[' ('...'|Expression?) ']' Type {pin=1}
 
+EnumDeclaration ::= Attributes? SymbolVisibility? enum identifier '{' EnumFields '}' {pin=3}
+EnumFields ::= EnumFieldDeclaration (semi EnumFieldDeclaration)* semi?
+EnumFieldDeclaration ::= identifier ('=' Expression)? {pin=1}
+
 StructDeclaration ::= SymbolVisibility? StructType
 
 StructType ::= struct identifier? '{' Fields? '}' {pin=1}
@@ -160,8 +164,8 @@ DefaultFieldValue ::= '=' Expression
 private Fields ::= FieldsModifiers? FieldDeclaration? (semi Fields)* semi? {pin=1}
 FieldDeclaration ::= (FieldDefinitionList Type | AnonymousFieldDefinition) DefaultFieldValue? Attribute? Tag?
 Tag ::= StringLiteral
-private FieldDefinitionList ::= FieldDefinition (',' FieldDefinition)*
-FieldDefinition ::= identifier {
+private FieldDefinitionList ::= FieldName (',' FieldName)*
+FieldName ::= identifier {
 //  stubClass="org.vlang.lang.stubs.GoFieldDefinitionStub"
 }
 
@@ -270,9 +274,10 @@ private TopDeclaration ::=
   | FunctionDeclaration
   | MethodDeclaration
   | StructDeclaration
+  | EnumDeclaration
   | GlobalVariableDeclaration
 
-private TopLevelDeclarationRecover ::= !(';' | type | const | fn | pub | BUILTIN_GLOBAL | var | struct | '[')
+private TopLevelDeclarationRecover ::= !(';' | type | const | fn | pub | BUILTIN_GLOBAL | var | struct | enum | '[')
 
 ConstDeclaration ::= const ( ConstSpec | '(' ConstSpecs? ')' ) {pin(".*")=1 methods=[addSpec deleteSpec]}
 private ConstSpecs ::= ConstSpec (semi ConstSpec)* semi? {pin=1}
@@ -298,7 +303,7 @@ private ExpressionOrLiteralTypeExpr ::= Expression /*| LiteralTypeExpr*/
 
 private ExpressionList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &')'))* {pin(".*")=1}
 private ExpressionWithRecover ::= Expression {recoverWhile=ExpressionListRecover}
-private ExpressionListRecover ::= !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | struct | switch | var | unsafe | assert)
+private ExpressionListRecover ::= !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | struct | enum | switch | var | unsafe | assert)
 
 //TypeDeclaration ::= 'type' ( TypeSpec | '(' TypeSpecs? ')' ) {pin(".*")=1}
 //private TypeSpecs ::= TypeSpec (semi TypeSpec)* semi? {pin=1}
@@ -350,14 +355,11 @@ Receiver ::= '(' (SymbolMutability identifier ReceiverTail | ReceiverTail) ')' {
 private ReceiverTail ::= Type ','?
 
 Attributes ::= Attribute (semi Attribute)* semi? {pin=1}
-
 Attribute ::= '[' AttributeExpression (';' AttributeExpression)* ']' {pin=1}
-
 AttributeExpression ::= IfAttribute | PlainAttribute
 
 IfAttribute ::= if identifier {pin=1}
-
-PlainAttribute ::= (identifier | unsafe) (':' StringLiteral)?
+PlainAttribute ::= (identifier | unsafe | int | string) (':' StringLiteral)?
 
 Literal ::=
     int
@@ -374,7 +376,6 @@ StringLiteral ::= string | raw_string {
   methods = [isValidHost updateText createLiteralTextEscaper getDecodedText]
 }
 OperandName ::= ReferenceExpression (QualifiedReferenceExpression)* {elementType=ReferenceExpression}
-
 left QualifiedReferenceExpression ::= '.' identifier {elementType=ReferenceExpression}
 ReferenceExpression ::= identifier { methods=[getReference getQualifier resolve getReadWriteAccess] extends=Expression}
 //

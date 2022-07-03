@@ -166,6 +166,7 @@ ESCAPES = [abfnrtv]
 //"chan"                                    { return CHAN; }
 
 "struct"                                  { return STRUCT; }
+"enum"                                    { return ENUM; }
 "else"                                    { return ELSE; }
 "goto"                                    { return GOTO; }
 "switch"                                  { return SWITCH; }

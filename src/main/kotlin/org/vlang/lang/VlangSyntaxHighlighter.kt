@@ -11,7 +11,6 @@ class VlangSyntaxHighlighter : SyntaxHighlighterBase() {
 
     override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> {
         val attr = when {
-            tokenType == VlangTypes.PLAIN_ATTRIBUTE -> JavaHighlightingColors.ANNOTATION_NAME_ATTRIBUTES
             VlangParserDefinition.COMMENTS.contains(tokenType) -> JavaHighlightingColors.LINE_COMMENT
             VlangParserDefinition.STRING_LITERALS.contains(tokenType) -> JavaHighlightingColors.STRING
             VlangParserDefinition.NUMBERS.contains(tokenType) -> JavaHighlightingColors.NUMBER

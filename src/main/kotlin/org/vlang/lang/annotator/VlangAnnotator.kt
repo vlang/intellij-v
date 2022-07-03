@@ -8,8 +8,7 @@ import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
 import org.vlang.lang.VlangTypes
-import org.vlang.lang.psi.VlangFunctionDeclaration
-import org.vlang.lang.psi.VlangReferenceExpression
+import org.vlang.lang.psi.*
 
 class VlangAnnotator : Annotator {
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
@@ -28,6 +27,18 @@ class VlangAnnotator : Annotator {
 
         if (element.elementType == VlangTypes.TYPE_REFERENCE_EXPRESSION) {
             holder.textAttributes(element, JavaHighlightingColors.TYPE_PARAMETER_NAME_ATTRIBUTES)
+        }
+
+        if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangPlainAttribute) {
+            holder.textAttributes(element, JavaHighlightingColors.ANNOTATION_NAME_ATTRIBUTES)
+        }
+
+        if (element is VlangFieldName) {
+            holder.textAttributes(element, JavaHighlightingColors.INSTANCE_FIELD_ATTRIBUTES)
+        }
+
+        if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangEnumFieldDeclaration) {
+            holder.textAttributes(element, JavaHighlightingColors.ENUM_NAME_ATTRIBUTES)
         }
     }
 

@@ -38,14 +38,17 @@ public interface VlangTypes {
   IElementType DEFAULT_FIELD_VALUE = new VlangCompositeElementType("DEFAULT_FIELD_VALUE");
   IElementType DEFER_STATEMENT = new VlangCompositeElementType("DEFER_STATEMENT");
   IElementType ELSE_STATEMENT = new VlangCompositeElementType("ELSE_STATEMENT");
+  IElementType ENUM_DECLARATION = new VlangCompositeElementType("ENUM_DECLARATION");
+  IElementType ENUM_FIELDS = new VlangCompositeElementType("ENUM_FIELDS");
+  IElementType ENUM_FIELD_DECLARATION = new VlangCompositeElementType("ENUM_FIELD_DECLARATION");
   IElementType ERROR_PROPAGATION = new VlangCompositeElementType("ERROR_PROPAGATION");
   IElementType EXPRESSION = new VlangCompositeElementType("EXPRESSION");
   IElementType FIELDS_MODIFIERS = new VlangCompositeElementType("FIELDS_MODIFIERS");
   IElementType FIELD_DECLARATION = new VlangCompositeElementType("FIELD_DECLARATION");
-  IElementType FIELD_DEFINITION = new VlangCompositeElementType("FIELD_DEFINITION");
   IElementType FIELD_INITIALIZATION = new VlangCompositeElementType("FIELD_INITIALIZATION");
   IElementType FIELD_INITIALIZATION_KEY_VALUE_LIST = new VlangCompositeElementType("FIELD_INITIALIZATION_KEY_VALUE_LIST");
   IElementType FIELD_MODIFIER = new VlangCompositeElementType("FIELD_MODIFIER");
+  IElementType FIELD_NAME = new VlangCompositeElementType("FIELD_NAME");
   IElementType FOR_CLAUSE = new VlangCompositeElementType("FOR_CLAUSE");
   IElementType FOR_STATEMENT = new VlangCompositeElementType("FOR_STATEMENT");
   IElementType FUNCTION_DECLARATION = VlangElementTypeFactory.stubFactory("FUNCTION_DECLARATION");
@@ -130,6 +133,7 @@ public interface VlangTypes {
   IElementType DOT = new VlangTokenType(".");
   IElementType ELSE = new VlangTokenType("else");
   IElementType ELSE_COMPILE_TIME = new VlangTokenType("ELSE_COMPILE_TIME");
+  IElementType ENUM = new VlangTokenType("enum");
   IElementType EQ = new VlangTokenType("==");
   IElementType FALLTHROUGH = new VlangTokenType("fallthrough");
   IElementType FLOAT = new VlangTokenType("float");
@@ -279,6 +283,15 @@ public interface VlangTypes {
       else if (type == ELSE_STATEMENT) {
         return new VlangElseStatementImpl(node);
       }
+      else if (type == ENUM_DECLARATION) {
+        return new VlangEnumDeclarationImpl(node);
+      }
+      else if (type == ENUM_FIELDS) {
+        return new VlangEnumFieldsImpl(node);
+      }
+      else if (type == ENUM_FIELD_DECLARATION) {
+        return new VlangEnumFieldDeclarationImpl(node);
+      }
       else if (type == ERROR_PROPAGATION) {
         return new VlangErrorPropagationImpl(node);
       }
@@ -288,9 +301,6 @@ public interface VlangTypes {
       else if (type == FIELD_DECLARATION) {
         return new VlangFieldDeclarationImpl(node);
       }
-      else if (type == FIELD_DEFINITION) {
-        return new VlangFieldDefinitionImpl(node);
-      }
       else if (type == FIELD_INITIALIZATION) {
         return new VlangFieldInitializationImpl(node);
       }
@@ -299,6 +309,9 @@ public interface VlangTypes {
       }
       else if (type == FIELD_MODIFIER) {
         return new VlangFieldModifierImpl(node);
+      }
+      else if (type == FIELD_NAME) {
+        return new VlangFieldNameImpl(node);
       }
       else if (type == FOR_CLAUSE) {
         return new VlangForClauseImpl(node);
