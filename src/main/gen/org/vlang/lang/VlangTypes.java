@@ -42,6 +42,7 @@ public interface VlangTypes {
   IElementType DEFER_STATEMENT = new VlangCompositeElementType("DEFER_STATEMENT");
   IElementType ELSE_STATEMENT = new VlangCompositeElementType("ELSE_STATEMENT");
   IElementType ENUM_DECLARATION = new VlangCompositeElementType("ENUM_DECLARATION");
+  IElementType ENUM_FETCH = new VlangCompositeElementType("ENUM_FETCH");
   IElementType ENUM_FIELDS = new VlangCompositeElementType("ENUM_FIELDS");
   IElementType ENUM_FIELD_DECLARATION = new VlangCompositeElementType("ENUM_FIELD_DECLARATION");
   IElementType ERROR_PROPAGATION = new VlangCompositeElementType("ERROR_PROPAGATION");
@@ -311,6 +312,9 @@ public interface VlangTypes {
       }
       else if (type == ENUM_DECLARATION) {
         return new VlangEnumDeclarationImpl(node);
+      }
+      else if (type == ENUM_FETCH) {
+        return new VlangEnumFetchImpl(node);
       }
       else if (type == ENUM_FIELDS) {
         return new VlangEnumFieldsImpl(node);

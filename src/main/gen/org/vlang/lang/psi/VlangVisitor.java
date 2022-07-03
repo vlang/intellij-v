@@ -130,6 +130,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitEnumFetch(@NotNull VlangEnumFetch o) {
+    visitExpression(o);
+  }
+
   public void visitEnumFieldDeclaration(@NotNull VlangEnumFieldDeclaration o) {
     visitCompositeElement(o);
   }
