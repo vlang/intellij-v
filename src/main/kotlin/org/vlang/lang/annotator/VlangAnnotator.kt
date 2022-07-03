@@ -13,7 +13,7 @@ import org.vlang.lang.psi.*
 class VlangAnnotator : Annotator {
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
         if (element is VlangFunctionDeclaration) {
-            val ident = element.getIdentifier() ?: return
+            val ident = element.getIdentifier()
             holder.textAttributes(ident, JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES)
         }
 
@@ -35,6 +35,10 @@ class VlangAnnotator : Annotator {
 
         if (element is VlangFieldName) {
             holder.textAttributes(element, JavaHighlightingColors.INSTANCE_FIELD_ATTRIBUTES)
+        }
+
+        if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangInterfaceMethodDeclaration) {
+            holder.textAttributes(element, JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES)
         }
 
         if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangEnumFieldDeclaration) {

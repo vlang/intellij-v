@@ -127,12 +127,12 @@ ImportAlias ::= identifier {pin(".*")=2}
 
 Type ::= TypeName
   | TypeLit
-  | ParType {
+//  | ParType {
 //  stubClass="org.vlang.lang.stubs.GoTypeStub"
-  methods=[getUnderlyingType shouldGoDeeper]
-  }
+//  methods=[getUnderlyingType shouldGoDeeper]
+//  }
 
-ParType ::= '(' Type ')' {methods=[getActualType]}
+//ParType ::= '(' Type ')' {methods=[getActualType]}
 private TypeName ::= TypeReferenceExpression (QualifiedTypeReferenceExpression)*
 TypeReferenceExpression ::= identifier { methods=[getReference getQualifier resolve resolveType] }
 left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
@@ -153,15 +153,15 @@ EnumDeclaration ::= Attributes? SymbolVisibility? enum identifier '{' EnumFields
 EnumFields ::= EnumFieldDeclaration (semi EnumFieldDeclaration)* semi?
 EnumFieldDeclaration ::= identifier ('=' Expression)? {pin=1}
 
-StructDeclaration ::= SymbolVisibility? StructType
+StructDeclaration ::= Attributes? SymbolVisibility? StructType
 
 StructType ::= struct identifier? '{' Fields? '}' {pin=1}
 
-FieldsModifiers ::= FieldModifier (FieldModifier)* ':' {pin=1}
-FieldModifier ::= mut | pub | BUILTIN_GLOBAL
+MemberModifiers ::= MemberModifier (MemberModifier)* ':' {pin=1}
+MemberModifier ::= mut | pub | BUILTIN_GLOBAL
 
 DefaultFieldValue ::= '=' Expression
-private Fields ::= FieldsModifiers? FieldDeclaration? (semi Fields)* semi? {pin=1}
+private Fields ::= MemberModifiers? FieldDeclaration? (semi Fields)* semi? {pin=1}
 FieldDeclaration ::= (FieldDefinitionList Type | AnonymousFieldDefinition) DefaultFieldValue? Attribute? Tag?
 Tag ::= StringLiteral
 private FieldDefinitionList ::= FieldName (',' FieldName)*
@@ -210,15 +210,19 @@ ParamDefinition ::= SymbolMutability identifier {
   methods = [isVariadic]
 }
 
-//InterfaceType ::= interface '{' MethodSpecs? '}' {
-//  pin(".*")=1
-//  methods=[getMethods getBaseTypesReferences]
-//}
-//private MethodSpecs ::= MethodSpec (semi MethodSpec)* semi? {pin=1}
-//MethodSpec ::= TypeName &(!'(') | identifier Signature {
-//  stubClass="org.vlang.lang.stubs.GoMethodSpecStub"
-//  methods=[getGoTypeInner getName]
-//}
+InterfaceDeclaration ::= Attributes? SymbolVisibility? InterfaceType
+
+InterfaceType ::= interface identifier? '{' InterfaceMembers? '}' {pin=1}
+
+private InterfaceMembers ::= MemberModifiers? (InterfaceFieldDeclaration | InterfaceMethodDeclaration | AnonymousInterfaceDefinition)? (semi InterfaceMembers)* semi? {pin=1}
+InterfaceFieldDeclaration ::= (FieldDefinitionList Type) Attribute? Tag?
+InterfaceMethodDeclaration ::= identifier Signature Attribute? Tag?
+
+AnonymousInterfaceDefinition ::= Type {
+//  stubClass="org.vlang.lang.stubs.GoAnonymousFieldDefinitionStub"
+  methods=[getIdentifier getName getTypeReferenceExpression getGoTypeInner]
+}
+
 //
 //MapType ::= map '[' Type ']' Type {
 //  pin=1
@@ -275,9 +279,10 @@ private TopDeclaration ::=
   | MethodDeclaration
   | StructDeclaration
   | EnumDeclaration
+  | InterfaceDeclaration
   | GlobalVariableDeclaration
 
-private TopLevelDeclarationRecover ::= !(';' | type | const | fn | pub | BUILTIN_GLOBAL | var | struct | enum | '[')
+private TopLevelDeclarationRecover ::= !(';' | type | const | fn | pub | BUILTIN_GLOBAL | var | struct | enum | interface | '[')
 
 ConstDeclaration ::= const ( ConstSpec | '(' ConstSpecs? ')' ) {pin(".*")=1 methods=[addSpec deleteSpec]}
 private ConstSpecs ::= ConstSpec (semi ConstSpec)* semi? {pin=1}
@@ -333,14 +338,11 @@ SymbolMutability ::= mut?
 
 SymbolVisibility ::= (pub | BUILTIN_GLOBAL)?
 
-FunctionDeclaration ::= Attributes? SymbolVisibility fn FunctionName Signature BlockWithConsume? {
+FunctionDeclaration ::= Attributes? SymbolVisibility fn identifier Signature BlockWithConsume? {
   pin=4
   stubClass="org.vlang.lang.stubs.VlangFunctionDeclarationStub"
-  methods=[getName getIdentifier]
+  methods=[getName]
 }
-
-private FunctionName ::= FunctionNamePart ('.' FunctionNamePart)*
-FunctionNamePart ::= identifier
 
 MethodDeclaration ::= Attributes? SymbolVisibility fn Receiver identifier Signature BlockWithConsume? {
   pin=5

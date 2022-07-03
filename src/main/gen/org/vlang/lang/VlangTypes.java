@@ -14,6 +14,7 @@ public interface VlangTypes {
   IElementType ADD_EXPR = new VlangCompositeElementType("ADD_EXPR");
   IElementType AND_EXPR = new VlangCompositeElementType("AND_EXPR");
   IElementType ANONYMOUS_FIELD_DEFINITION = new VlangCompositeElementType("ANONYMOUS_FIELD_DEFINITION");
+  IElementType ANONYMOUS_INTERFACE_DEFINITION = new VlangCompositeElementType("ANONYMOUS_INTERFACE_DEFINITION");
   IElementType ARGUMENT_LIST = new VlangCompositeElementType("ARGUMENT_LIST");
   IElementType ARRAY_CREATION = new VlangCompositeElementType("ARRAY_CREATION");
   IElementType ARRAY_CREATION_LIST = new VlangCompositeElementType("ARRAY_CREATION_LIST");
@@ -43,16 +44,13 @@ public interface VlangTypes {
   IElementType ENUM_FIELD_DECLARATION = new VlangCompositeElementType("ENUM_FIELD_DECLARATION");
   IElementType ERROR_PROPAGATION = new VlangCompositeElementType("ERROR_PROPAGATION");
   IElementType EXPRESSION = new VlangCompositeElementType("EXPRESSION");
-  IElementType FIELDS_MODIFIERS = new VlangCompositeElementType("FIELDS_MODIFIERS");
   IElementType FIELD_DECLARATION = new VlangCompositeElementType("FIELD_DECLARATION");
   IElementType FIELD_INITIALIZATION = new VlangCompositeElementType("FIELD_INITIALIZATION");
   IElementType FIELD_INITIALIZATION_KEY_VALUE_LIST = new VlangCompositeElementType("FIELD_INITIALIZATION_KEY_VALUE_LIST");
-  IElementType FIELD_MODIFIER = new VlangCompositeElementType("FIELD_MODIFIER");
   IElementType FIELD_NAME = new VlangCompositeElementType("FIELD_NAME");
   IElementType FOR_CLAUSE = new VlangCompositeElementType("FOR_CLAUSE");
   IElementType FOR_STATEMENT = new VlangCompositeElementType("FOR_STATEMENT");
   IElementType FUNCTION_DECLARATION = VlangElementTypeFactory.stubFactory("FUNCTION_DECLARATION");
-  IElementType FUNCTION_NAME_PART = new VlangCompositeElementType("FUNCTION_NAME_PART");
   IElementType GLOBAL_VARIABLE_DECLARATION = new VlangCompositeElementType("GLOBAL_VARIABLE_DECLARATION");
   IElementType GO_STATEMENT = new VlangCompositeElementType("GO_STATEMENT");
   IElementType IF_ATTRIBUTE = new VlangCompositeElementType("IF_ATTRIBUTE");
@@ -64,6 +62,10 @@ public interface VlangTypes {
   IElementType IMPORT_SPEC = new VlangCompositeElementType("IMPORT_SPEC");
   IElementType INC_DEC_STATEMENT = new VlangCompositeElementType("INC_DEC_STATEMENT");
   IElementType INDEX_OR_SLICE_EXPR = new VlangCompositeElementType("INDEX_OR_SLICE_EXPR");
+  IElementType INTERFACE_DECLARATION = new VlangCompositeElementType("INTERFACE_DECLARATION");
+  IElementType INTERFACE_FIELD_DECLARATION = new VlangCompositeElementType("INTERFACE_FIELD_DECLARATION");
+  IElementType INTERFACE_METHOD_DECLARATION = new VlangCompositeElementType("INTERFACE_METHOD_DECLARATION");
+  IElementType INTERFACE_TYPE = new VlangCompositeElementType("INTERFACE_TYPE");
   IElementType IN_EXPRESSION = new VlangCompositeElementType("IN_EXPRESSION");
   IElementType LABEL_REF = new VlangCompositeElementType("LABEL_REF");
   IElementType LEFT_HAND_EXPR_LIST = new VlangCompositeElementType("LEFT_HAND_EXPR_LIST");
@@ -72,6 +74,8 @@ public interface VlangTypes {
   IElementType MATCH_ARMS = new VlangCompositeElementType("MATCH_ARMS");
   IElementType MATCH_ELSE_ARM_CLAUSE = new VlangCompositeElementType("MATCH_ELSE_ARM_CLAUSE");
   IElementType MATCH_EXPRESSION = new VlangCompositeElementType("MATCH_EXPRESSION");
+  IElementType MEMBER_MODIFIER = new VlangCompositeElementType("MEMBER_MODIFIER");
+  IElementType MEMBER_MODIFIERS = new VlangCompositeElementType("MEMBER_MODIFIERS");
   IElementType METHOD_DECLARATION = VlangElementTypeFactory.stubFactory("METHOD_DECLARATION");
   IElementType MODULE_CLAUSE = VlangElementTypeFactory.stubFactory("MODULE_CLAUSE");
   IElementType MUL_EXPR = new VlangCompositeElementType("MUL_EXPR");
@@ -81,7 +85,6 @@ public interface VlangTypes {
   IElementType PARAMETER_DECLARATION = new VlangCompositeElementType("PARAMETER_DECLARATION");
   IElementType PARAM_DEFINITION = new VlangCompositeElementType("PARAM_DEFINITION");
   IElementType PARENTHESES_EXPR = new VlangCompositeElementType("PARENTHESES_EXPR");
-  IElementType PAR_TYPE = new VlangCompositeElementType("PAR_TYPE");
   IElementType PLAIN_ATTRIBUTE = new VlangCompositeElementType("PLAIN_ATTRIBUTE");
   IElementType POINTER_TYPE = new VlangCompositeElementType("POINTER_TYPE");
   IElementType RANGE_CLAUSE = new VlangCompositeElementType("RANGE_CLAUSE");
@@ -217,6 +220,9 @@ public interface VlangTypes {
       else if (type == ANONYMOUS_FIELD_DEFINITION) {
         return new VlangAnonymousFieldDefinitionImpl(node);
       }
+      else if (type == ANONYMOUS_INTERFACE_DEFINITION) {
+        return new VlangAnonymousInterfaceDefinitionImpl(node);
+      }
       else if (type == ARGUMENT_LIST) {
         return new VlangArgumentListImpl(node);
       }
@@ -301,9 +307,6 @@ public interface VlangTypes {
       else if (type == ERROR_PROPAGATION) {
         return new VlangErrorPropagationImpl(node);
       }
-      else if (type == FIELDS_MODIFIERS) {
-        return new VlangFieldsModifiersImpl(node);
-      }
       else if (type == FIELD_DECLARATION) {
         return new VlangFieldDeclarationImpl(node);
       }
@@ -312,9 +315,6 @@ public interface VlangTypes {
       }
       else if (type == FIELD_INITIALIZATION_KEY_VALUE_LIST) {
         return new VlangFieldInitializationKeyValueListImpl(node);
-      }
-      else if (type == FIELD_MODIFIER) {
-        return new VlangFieldModifierImpl(node);
       }
       else if (type == FIELD_NAME) {
         return new VlangFieldNameImpl(node);
@@ -327,9 +327,6 @@ public interface VlangTypes {
       }
       else if (type == FUNCTION_DECLARATION) {
         return new VlangFunctionDeclarationImpl(node);
-      }
-      else if (type == FUNCTION_NAME_PART) {
-        return new VlangFunctionNamePartImpl(node);
       }
       else if (type == GLOBAL_VARIABLE_DECLARATION) {
         return new VlangGlobalVariableDeclarationImpl(node);
@@ -364,6 +361,18 @@ public interface VlangTypes {
       else if (type == INDEX_OR_SLICE_EXPR) {
         return new VlangIndexOrSliceExprImpl(node);
       }
+      else if (type == INTERFACE_DECLARATION) {
+        return new VlangInterfaceDeclarationImpl(node);
+      }
+      else if (type == INTERFACE_FIELD_DECLARATION) {
+        return new VlangInterfaceFieldDeclarationImpl(node);
+      }
+      else if (type == INTERFACE_METHOD_DECLARATION) {
+        return new VlangInterfaceMethodDeclarationImpl(node);
+      }
+      else if (type == INTERFACE_TYPE) {
+        return new VlangInterfaceTypeImpl(node);
+      }
       else if (type == IN_EXPRESSION) {
         return new VlangInExpressionImpl(node);
       }
@@ -387,6 +396,12 @@ public interface VlangTypes {
       }
       else if (type == MATCH_EXPRESSION) {
         return new VlangMatchExpressionImpl(node);
+      }
+      else if (type == MEMBER_MODIFIER) {
+        return new VlangMemberModifierImpl(node);
+      }
+      else if (type == MEMBER_MODIFIERS) {
+        return new VlangMemberModifiersImpl(node);
       }
       else if (type == METHOD_DECLARATION) {
         return new VlangMethodDeclarationImpl(node);
@@ -414,9 +429,6 @@ public interface VlangTypes {
       }
       else if (type == PARENTHESES_EXPR) {
         return new VlangParenthesesExprImpl(node);
-      }
-      else if (type == PAR_TYPE) {
-        return new VlangParTypeImpl(node);
       }
       else if (type == PLAIN_ATTRIBUTE) {
         return new VlangPlainAttributeImpl(node);

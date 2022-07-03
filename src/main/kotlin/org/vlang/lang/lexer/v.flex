@@ -43,6 +43,7 @@ FLOAT_EXPONENT = [eE] [+-]? {DIGIT}+
 NUM_FLOAT = ( ( ({DIGIT}+ "." {DIGIT}*) | ({DIGIT}* "." {DIGIT}+) ) {FLOAT_EXPONENT}?) | ({DIGIT}+ {FLOAT_EXPONENT})
 
 IDENT = {LETTER} ({LETTER} | {DIGIT} )*
+SPECIAL_IDENT = ("JS." | "C.") {LETTER} ({LETTER} | {DIGIT} | "." )*
 
 STR_DOUBLE =   "\""
 STR_SINGLE =   "'"
@@ -184,6 +185,7 @@ ESCAPES = [abfnrtve] // TODO: need "e"?
 
 "__global"                                { return BUILTIN_GLOBAL; }
 
+{SPECIAL_IDENT}                           { yybegin(MAYBE_SEMICOLON); return IDENTIFIER; }
 {IDENT}                                   { yybegin(MAYBE_SEMICOLON); return IDENTIFIER; }
 
 {NUM_FLOAT}"i"                            { yybegin(MAYBE_SEMICOLON); return FLOATI; }

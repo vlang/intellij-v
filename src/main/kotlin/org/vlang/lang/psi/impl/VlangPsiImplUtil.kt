@@ -12,12 +12,7 @@ import org.vlang.lang.psi.VlangReferenceExpression
 object VlangPsiImplUtil {
     @JvmStatic
     fun getName(o: VlangFunctionDeclaration): String {
-        return o.getIdentifier()?.text ?: ""
-    }
-
-    @JvmStatic
-    fun getIdentifier(o: VlangFunctionDeclaration): PsiElement? {
-        return o.functionNamePartList.first()
+        return o.getIdentifier().text ?: ""
     }
 
     @JvmStatic
