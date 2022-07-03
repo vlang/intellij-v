@@ -15,6 +15,8 @@ public interface VlangTypes {
   IElementType AND_EXPR = new VlangCompositeElementType("AND_EXPR");
   IElementType ANONYMOUS_FIELD_DEFINITION = new VlangCompositeElementType("ANONYMOUS_FIELD_DEFINITION");
   IElementType ARGUMENT_LIST = new VlangCompositeElementType("ARGUMENT_LIST");
+  IElementType ARRAY_CREATION = new VlangCompositeElementType("ARRAY_CREATION");
+  IElementType ARRAY_CREATION_LIST = new VlangCompositeElementType("ARRAY_CREATION_LIST");
   IElementType ARRAY_OR_SLICE_TYPE = new VlangCompositeElementType("ARRAY_OR_SLICE_TYPE");
   IElementType ASSERT_STATEMENT = new VlangCompositeElementType("ASSERT_STATEMENT");
   IElementType ASSIGNMENT_STATEMENT = new VlangCompositeElementType("ASSIGNMENT_STATEMENT");
@@ -207,6 +209,12 @@ public interface VlangTypes {
       }
       else if (type == ARGUMENT_LIST) {
         return new VlangArgumentListImpl(node);
+      }
+      else if (type == ARRAY_CREATION) {
+        return new VlangArrayCreationImpl(node);
+      }
+      else if (type == ARRAY_CREATION_LIST) {
+        return new VlangArrayCreationListImpl(node);
       }
       else if (type == ARRAY_OR_SLICE_TYPE) {
         return new VlangArrayOrSliceTypeImpl(node);

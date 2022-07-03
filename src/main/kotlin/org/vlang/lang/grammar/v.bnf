@@ -74,7 +74,7 @@
   ]
 
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional)Expr")=BinaryExpr
-  extends(".*(Expr|Literal|Lit|OperandName)|StructInitialization|UnsafeExpression|CompileTimeIfExpression|IfExpression")=Expression
+  extends(".*(Expr|Literal|Lit|OperandName)|StructInitialization|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation")=Expression
 
   implements("(Type|Import)Spec|(Var|Const|Param|Field|Label)Definition|Receiver")="org.vlang.lang.psi.VlangNamedElement"
   implements("FunctionLit")="org.vlang.lang.psi.GoSignatureOwner"
@@ -408,6 +408,7 @@ Expression ::=
   | UnsafeExpression
   | IfExpression
   | CompileTimeIfExpression
+  | ArrayCreation
   | MaxGroup
   | ParenthesesExpr {methods=[getGoType] /*implements="org.vlang.lang.psi.GoTypeOwner"*/}
 
@@ -445,7 +446,10 @@ private RelOp ::= '==' | '!=' | '<' | '<=' | '>' | '>='
 private AddOp ::= '+' | '-' | '|' | '^'
 private MulOp ::= '*' | '/' | '%' | '<<' | '>>' | '&' | '&^'
 private UnaryOp ::= '+' | '-' | '!' | '^' | '*' | '&' | '<-'
-//
+
+ArrayCreation ::= '[' ArrayCreationList ']' {pin=1}
+ArrayCreationList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &']'))* {pin(".*")=1}
+
 //SelectorExpr ::= Expression '.' !('(' 'type') Expression
 IndexOrSliceExpr ::= Expression '[' (SliceExprBody | IndexExprBody) ']' {pin=2 methods = [getExpression getIndices]}
 private IndexExprBody ::= Expression SliceExprBodyInner?
