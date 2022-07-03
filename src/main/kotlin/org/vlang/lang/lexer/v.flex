@@ -22,7 +22,7 @@ import static org.vlang.lang.VlangParserDefinition.*;
 %function advance
 %type IElementType
 
-NL = \R
+NL = \n
 WS = [ \t\f]
 
 LINE_COMMENT = "//" [^\r\n]*
@@ -44,8 +44,9 @@ NUM_FLOAT = ( ( ({DIGIT}+ "." {DIGIT}*) | ({DIGIT}* "." {DIGIT}+) ) {FLOAT_EXPON
 
 IDENT = {LETTER} ({LETTER} | {DIGIT} )*
 
-STR =      "\""
-STRING = {STR} ( [^\"\\\n\r] | "\\" ("\\" | {STR} | {ESCAPES} | [0-8xuU] ) )* {STR}?
+STR =          "\"" | "'"
+STR_MODIFIER = "r" | "c"
+STRING = {STR_MODIFIER}? {STR} ( [^\"\\\n\r] | "\\" ("\\" | {STR} | {ESCAPES} | [0-8xuU] ) )* {STR}
 ESCAPES = [abfnrtv]
 
 %state MAYBE_SEMICOLON
@@ -61,14 +62,14 @@ ESCAPES = [abfnrtv]
 
 {STRING}                                  { yybegin(MAYBE_SEMICOLON); return STRING; }
 
-"'\\'"                                    { yybegin(MAYBE_SEMICOLON); return BAD_CHARACTER; }
-"'" [^\\] "'"?                            { yybegin(MAYBE_SEMICOLON); return CHAR; }
-"'" \n "'"?                               { yybegin(MAYBE_SEMICOLON); return CHAR; }
-"'\\" [abfnrtv\\\'] "'"?                  { yybegin(MAYBE_SEMICOLON); return CHAR; }
-"'\\"  {OCT_DIGIT} {3} "'"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
-"'\\x" {HEX_DIGIT} {2} "'"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
-"'\\u" {HEX_DIGIT} {4} "'"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
-"'\\U" {HEX_DIGIT} {8} "'"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
+//"'\\'"                                    { yybegin(MAYBE_SEMICOLON); return BAD_CHARACTER; }
+//"'" [^\\] "'"?                            { yybegin(MAYBE_SEMICOLON); return CHAR; }
+//"'" \n "'"?                               { yybegin(MAYBE_SEMICOLON); return CHAR; }
+//"'\\" [abfnrtv\\\'] "'"?                  { yybegin(MAYBE_SEMICOLON); return CHAR; }
+//"'\\"  {OCT_DIGIT} {3} "'"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
+//"'\\x" {HEX_DIGIT} {2} "'"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
+//"'\\u" {HEX_DIGIT} {4} "'"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
+//"'\\U" {HEX_DIGIT} {8} "'"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
 
 "`" [^`]* "`"?                            { yybegin(MAYBE_SEMICOLON); return RAW_STRING; }
 "..."                                     { return TRIPLE_DOT; }
@@ -92,6 +93,7 @@ ESCAPES = [abfnrtv]
 
 "!="                                      { return NOT_EQ; }
 "!"                                       { return NOT; }
+"?"                                       { return QUESTION; }
 
 "++"                                      { yybegin(MAYBE_SEMICOLON); return PLUS_PLUS; }
 "+="                                      { return PLUS_ASSIGN; }
@@ -136,15 +138,19 @@ ESCAPES = [abfnrtv]
 
 ":="                                      { return VAR_ASSIGN; }
 
+"$if"                                     { return IF_COMPILE_TIME ; }
+"$else"                                   { return ELSE_COMPILE_TIME ; }
+
 "break"                                   { yybegin(MAYBE_SEMICOLON); return BREAK; }
 "fallthrough"                             { yybegin(MAYBE_SEMICOLON); return FALLTHROUGH; }
 "return"                                  { yybegin(MAYBE_SEMICOLON); return RETURN ; }
 "continue"                                { yybegin(MAYBE_SEMICOLON); return CONTINUE ; }
 
+"unsafe"                                  { return UNSAFE; }
 "default"                                 { return DEFAULT; }
-"package"                                 { return PACKAGE; }
+"module"                                  { return MODULE; }
 "pub"                                     { return PUB; }
-"fn"                                      { return FUNC; }
+"fn"                                      { return FN; }
 "interface"                               { return INTERFACE; }
 "select"                                  { return SELECT; }
 

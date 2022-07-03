@@ -15,62 +15,57 @@ import static org.vlang.lang.VlangTypes.*;
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
 public class VlangParser implements PsiParser, LightPsiParser {
 
+  public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
+    create_token_set_(RANGE_CLAUSE, SHORT_VAR_DECLARATION),
+    create_token_set_(ARRAY_OR_SLICE_TYPE, PAR_TYPE, POINTER_TYPE, TYPE,
+      TYPE_LIST),
+    create_token_set_(ADD_EXPR, AND_EXPR, CALL_EXPR, CONDITIONAL_EXPR,
+      EXPRESSION, INDEX_OR_SLICE_EXPR, LITERAL, MUL_EXPR,
+      OR_EXPR, PARENTHESES_EXPR, REFERENCE_EXPRESSION, STRING_LITERAL,
+      UNARY_EXPR),
+    create_token_set_(ASSIGNMENT_STATEMENT, BREAK_STATEMENT, COMPILE_ELSE_STATEMENT, COMPILE_TIME_IF_STATEMENT,
+      CONTINUE_STATEMENT, DEFER_STATEMENT, ELSE_STATEMENT, FOR_STATEMENT,
+      GO_STATEMENT, IF_STATEMENT, INC_DEC_STATEMENT, RETURN_STATEMENT,
+      SIMPLE_STATEMENT, STATEMENT, UNSAGE_STATEMENT),
+  };
+
+  /* ********************************************************** */
+  // '[' ('...'|Expression?) ']' Type
+  public static boolean ArrayOrSliceType(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ArrayOrSliceType")) return false;
+    if (!nextTokenIs(b, LBRACK)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, ARRAY_OR_SLICE_TYPE, null);
+    r = consumeToken(b, LBRACK);
+    p = r; // pin = 1
+    r = r && report_error_(b, ArrayOrSliceType_1(b, l + 1));
+    r = p && report_error_(b, consumeToken(b, RBRACK)) && r;
+    r = p && Type(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // '...'|Expression?
+  private static boolean ArrayOrSliceType_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ArrayOrSliceType_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, TRIPLE_DOT);
+    if (!r) r = ArrayOrSliceType_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
   static boolean parse_root_(IElementType t, PsiBuilder b, int l) {
     return File(b, l + 1);
   }
 
-  /* ********************************************************** */
-  // '[' AttributeExpression ']'
-  public static boolean Attribute(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Attribute")) return false;
-    if (!nextTokenIs(b, LBRACK)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, ATTRIBUTE, null);
-    r = consumeToken(b, LBRACK);
-    p = r; // pin = 1
-    r = r && report_error_(b, AttributeExpression(b, l + 1));
-    r = p && consumeToken(b, RBRACK) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+  // Expression?
+  private static boolean ArrayOrSliceType_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ArrayOrSliceType_1_1")) return false;
+    Expression(b, l + 1, -1);
+    return true;
   }
-
-  /* ********************************************************** */
-  // IfAttribute | PlainAttribute
-  public static boolean AttributeExpression(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "AttributeExpression")) return false;
-    if (!nextTokenIs(b, "<attribute expression>", IDENTIFIER, IF)) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, ATTRIBUTE_EXPRESSION, "<attribute expression>");
-    r = IfAttribute(b, l + 1);
-    if (!r) r = PlainAttribute(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // Attribute (semi Attribute)* '<NL>'?
-  public static boolean Attributes(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Attributes")) return false;
-    if (!nextTokenIs(b, LBRACK)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, ATTRIBUTES, null);
-    r = Attribute(b, l + 1);
-    p = r; // pin = 1
-    r = r && report_error_(b, Attributes_1(b, l + 1));
-    r = p && Attributes_2(b, l + 1) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
-    create_token_set_(RANGE_CLAUSE, SHORT_VAR_DECLARATION),
-    create_token_set_(PAR_TYPE, TYPE, TYPE_LIST),
-    create_token_set_(ASSIGNMENT_STATEMENT, ELSE_STATEMENT, FOR_STATEMENT, IF_STATEMENT,
-      INC_DEC_STATEMENT, RETURN_STATEMENT, SIMPLE_STATEMENT, STATEMENT),
-    create_token_set_(ADD_EXPR, AND_EXPR, CALL_EXPR, CONDITIONAL_EXPR,
-      EXPRESSION, LITERAL, MUL_EXPR, OR_EXPR,
-      PARENTHESES_EXPR, REFERENCE_EXPRESSION, STRING_LITERAL, UNARY_EXPR),
-  };
 
   /* ********************************************************** */
   // '+' | '-' | '|' | '^'
@@ -133,6 +128,48 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // '[' AttributeExpression ']'
+  public static boolean Attribute(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Attribute")) return false;
+    if (!nextTokenIs(b, LBRACK)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, ATTRIBUTE, null);
+    r = consumeToken(b, LBRACK);
+    p = r; // pin = 1
+    r = r && report_error_(b, AttributeExpression(b, l + 1));
+    r = p && consumeToken(b, RBRACK) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
+  // IfAttribute | PlainAttribute
+  public static boolean AttributeExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AttributeExpression")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, ATTRIBUTE_EXPRESSION, "<attribute expression>");
+    r = IfAttribute(b, l + 1);
+    if (!r) r = PlainAttribute(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // Attribute (semi Attribute)* semi?
+  public static boolean Attributes(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Attributes")) return false;
+    if (!nextTokenIs(b, LBRACK)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, ATTRIBUTES, null);
+    r = Attribute(b, l + 1);
+    p = r; // pin = 1
+    r = r && report_error_(b, Attributes_1(b, l + 1));
+    r = p && Attributes_2(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
   // assign_op ExpressionList
   public static boolean AssignmentStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AssignmentStatement")) return false;
@@ -143,6 +180,38 @@ public class VlangParser implements PsiParser, LightPsiParser {
     r = r && ExpressionList(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
+  }
+
+  // semi?
+  private static boolean Attributes_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Attributes_2")) return false;
+    semi(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // '{' ('}' | Statements '}')
+  static boolean BlockInner(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BlockInner")) return false;
+    if (!nextTokenIs(b, LBRACE)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = consumeToken(b, LBRACE);
+    p = r; // pin = 1
+    r = r && BlockInner_1(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // '}' | Statements '}'
+  private static boolean BlockInner_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BlockInner_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, RBRACE);
+    if (!r) r = BlockInner_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
   }
 
   // (semi Attribute)*
@@ -167,50 +236,16 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // '<NL>'?
-  private static boolean Attributes_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Attributes_2")) return false;
-    consumeToken(b, SEMICOLON_SYNTHETIC);
-    return true;
-  }
-
-  /* ********************************************************** */
-  // ImportList TopLevelDeclaration*
-  static boolean File(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "File")) return false;
+  // Statements '}'
+  private static boolean BlockInner_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BlockInner_1_1")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
-    r = ImportList(b, l + 1);
+    r = Statements(b, l + 1);
     p = r; // pin = 1
-    r = r && File_1(b, l + 1);
+    r = r && consumeToken(b, RBRACE);
     exit_section_(b, l, m, r, p, null);
     return r || p;
-  }
-
-  // TopLevelDeclaration*
-  private static boolean File_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "File_1")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!TopLevelDeclaration(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "File_1", c)) break;
-    }
-    return true;
-  }
-
-  /* ********************************************************** */
-  // SimpleStatement? ';' Expression? ';' SimpleStatement?
-  public static boolean ForClause(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ForClause")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, FOR_CLAUSE, "<for clause>");
-    r = ForClause_0(b, l + 1);
-    r = r && consumeToken(b, SEMICOLON);
-    r = r && ForClause_2(b, l + 1);
-    r = r && consumeToken(b, SEMICOLON);
-    r = r && ForClause_4(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
   }
 
   /* ********************************************************** */
@@ -226,40 +261,36 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '{' ('}' | Statements /*| (<<withOff Statements "BLOCK?" "PAR">> | (!() Statements)) */'}')
-  static boolean BlockInner(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "BlockInner")) return false;
-    if (!nextTokenIs(b, LBRACE)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_);
-    r = consumeToken(b, LBRACE);
-    p = r; // pin = 1
-    r = r && BlockInner_1(b, l + 1);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  // '}' | Statements /*| (<<withOff Statements "BLOCK?" "PAR">> | (!() Statements)) */'}'
-  private static boolean BlockInner_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "BlockInner_1")) return false;
+  // break LabelRef?
+  public static boolean BreakStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BreakStatement")) return false;
+    if (!nextTokenIs(b, BREAK)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, RBRACE);
-    if (!r) r = BlockInner_1_1(b, l + 1);
-    exit_section_(b, m, null, r);
+    r = consumeToken(b, BREAK);
+    r = r && BreakStatement_1(b, l + 1);
+    exit_section_(b, m, BREAK_STATEMENT, r);
     return r;
   }
 
-  // Statements /*| (<<withOff Statements "BLOCK?" "PAR">> | (!() Statements)) */'}'
-  private static boolean BlockInner_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "BlockInner_1_1")) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_);
-    r = Statements(b, l + 1);
-    p = r; // pin = 1
-    r = r && consumeToken(b, RBRACE);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+  // LabelRef?
+  private static boolean BreakStatement_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BreakStatement_1")) return false;
+    LabelRef(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // ELSE_COMPILE_TIME (CompileTimeIfStatement | Block)
+  public static boolean CompileElseStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CompileElseStatement")) return false;
+    if (!nextTokenIs(b, ELSE_COMPILE_TIME)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ELSE_COMPILE_TIME);
+    r = r && CompileElseStatement_1(b, l + 1);
+    exit_section_(b, m, COMPILE_ELSE_STATEMENT, r);
+    return r;
   }
 
   /* ********************************************************** */
@@ -274,16 +305,75 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
+  // CompileTimeIfStatement | Block
+  private static boolean CompileElseStatement_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CompileElseStatement_1")) return false;
+    boolean r;
+    r = CompileTimeIfStatement(b, l + 1);
+    if (!r) r = Block(b, l + 1);
+    return r;
+  }
+
   /* ********************************************************** */
-  // SimpleStatementOpt Expression?
+  // IF_COMPILE_TIME Condition Block CompileElseStatement?
+  public static boolean CompileTimeIfStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CompileTimeIfStatement")) return false;
+    if (!nextTokenIs(b, IF_COMPILE_TIME)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, IF_COMPILE_TIME);
+    r = r && Condition(b, l + 1);
+    r = r && Block(b, l + 1);
+    r = r && CompileTimeIfStatement_3(b, l + 1);
+    exit_section_(b, m, COMPILE_TIME_IF_STATEMENT, r);
+    return r;
+  }
+
+  // CompileElseStatement?
+  private static boolean CompileTimeIfStatement_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CompileTimeIfStatement_3")) return false;
+    CompileElseStatement(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // SimpleStatementOpt Expression? ErrorPropagation?
   static boolean Condition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Condition")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = SimpleStatementOpt(b, l + 1);
     r = r && Condition_1(b, l + 1);
+    r = r && Condition_2(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  // ErrorPropagation?
+  private static boolean Condition_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Condition_2")) return false;
+    ErrorPropagation(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // continue LabelRef?
+  public static boolean ContinueStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ContinueStatement")) return false;
+    if (!nextTokenIs(b, CONTINUE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, CONTINUE);
+    r = r && ContinueStatement_1(b, l + 1);
+    exit_section_(b, m, CONTINUE_STATEMENT, r);
+    return r;
+  }
+
+  // LabelRef?
+  private static boolean ContinueStatement_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ContinueStatement_1")) return false;
+    LabelRef(b, l + 1);
+    return true;
   }
 
   // Expression?
@@ -294,17 +384,139 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // defer Block
+  public static boolean DeferStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "DeferStatement")) return false;
+    if (!nextTokenIs(b, DEFER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, DEFER);
+    r = r && Block(b, l + 1);
+    exit_section_(b, m, DEFER_STATEMENT, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // else (IfStatement | Block)
   public static boolean ElseStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ElseStatement")) return false;
     if (!nextTokenIs(b, ELSE)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, ELSE_STATEMENT, null);
+    boolean r;
+    Marker m = enter_section_(b);
     r = consumeToken(b, ELSE);
-    p = r; // pin = 1
     r = r && ElseStatement_1(b, l + 1);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+    exit_section_(b, m, ELSE_STATEMENT, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // '?'
+  public static boolean ErrorPropagation(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ErrorPropagation")) return false;
+    if (!nextTokenIs(b, QUESTION)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, QUESTION);
+    exit_section_(b, m, ERROR_PROPAGATION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | go | goto | hex | identifier | if | int | interface | map | oct | return | select | string | raw_string | struct | switch | var | unsafe)
+  static boolean ExpressionListRecover(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExpressionListRecover")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NOT_);
+    r = !ExpressionListRecover_0(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // '!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | go | goto | hex | identifier | if | int | interface | map | oct | return | select | string | raw_string | struct | switch | var | unsafe
+  private static boolean ExpressionListRecover_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExpressionListRecover_0")) return false;
+    boolean r;
+    r = consumeToken(b, NOT);
+    if (!r) r = consumeToken(b, QUESTION);
+    if (!r) r = consumeToken(b, NOT_EQ);
+    if (!r) r = consumeToken(b, REMAINDER);
+    if (!r) r = consumeToken(b, REMAINDER_ASSIGN);
+    if (!r) r = consumeToken(b, COND_AND);
+    if (!r) r = consumeToken(b, BIT_AND);
+    if (!r) r = consumeToken(b, BIT_AND_ASSIGN);
+    if (!r) r = consumeToken(b, BIT_CLEAR);
+    if (!r) r = consumeToken(b, BIT_CLEAR_ASSIGN);
+    if (!r) r = consumeToken(b, LPAREN);
+    if (!r) r = consumeToken(b, RPAREN);
+    if (!r) r = consumeToken(b, MUL);
+    if (!r) r = consumeToken(b, MUL_ASSIGN);
+    if (!r) r = consumeToken(b, PLUS);
+    if (!r) r = consumeToken(b, PLUS_PLUS);
+    if (!r) r = consumeToken(b, PLUS_ASSIGN);
+    if (!r) r = consumeToken(b, COMMA);
+    if (!r) r = consumeToken(b, MINUS);
+    if (!r) r = consumeToken(b, MINUS_MINUS);
+    if (!r) r = consumeToken(b, MINUS_ASSIGN);
+    if (!r) r = consumeToken(b, TRIPLE_DOT);
+    if (!r) r = consumeToken(b, QUOTIENT);
+    if (!r) r = consumeToken(b, QUOTIENT_ASSIGN);
+    if (!r) r = consumeToken(b, COLON);
+    if (!r) r = consumeToken(b, SEMICOLON);
+    if (!r) r = consumeToken(b, LESS);
+    if (!r) r = consumeToken(b, SEND_CHANNEL);
+    if (!r) r = consumeToken(b, SHIFT_LEFT);
+    if (!r) r = consumeToken(b, SHIFT_LEFT_ASSIGN);
+    if (!r) r = consumeToken(b, LESS_OR_EQUAL);
+    if (!r) r = consumeToken(b, SEMICOLON_SYNTHETIC);
+    if (!r) r = consumeToken(b, ASSIGN);
+    if (!r) r = consumeToken(b, EQ);
+    if (!r) r = consumeToken(b, GREATER);
+    if (!r) r = consumeToken(b, GREATER_OR_EQUAL);
+    if (!r) r = consumeToken(b, SHIFT_RIGHT);
+    if (!r) r = consumeToken(b, SHIFT_RIGHT_ASSIGN);
+    if (!r) r = consumeToken(b, LBRACK);
+    if (!r) r = consumeToken(b, RBRACK);
+    if (!r) r = consumeToken(b, BIT_XOR);
+    if (!r) r = consumeToken(b, BIT_XOR_ASSIGN);
+    if (!r) r = consumeToken(b, TYPE_);
+    if (!r) r = consumeToken(b, LBRACE);
+    if (!r) r = consumeToken(b, BIT_OR);
+    if (!r) r = consumeToken(b, BIT_OR_ASSIGN);
+    if (!r) r = consumeToken(b, COND_OR);
+    if (!r) r = consumeToken(b, RBRACE);
+    if (!r) r = consumeToken(b, BREAK);
+    if (!r) r = consumeToken(b, CASE);
+    if (!r) r = consumeToken(b, CHAN);
+    if (!r) r = consumeToken(b, CHAR);
+    if (!r) r = consumeToken(b, CONST);
+    if (!r) r = consumeToken(b, CONTINUE);
+    if (!r) r = consumeToken(b, DECIMALI);
+    if (!r) r = consumeToken(b, DEFAULT);
+    if (!r) r = consumeToken(b, DEFER);
+    if (!r) r = consumeToken(b, ELSE);
+    if (!r) r = consumeToken(b, FALLTHROUGH);
+    if (!r) r = consumeToken(b, FLOAT);
+    if (!r) r = consumeToken(b, FLOATI);
+    if (!r) r = consumeToken(b, FOR);
+    if (!r) r = consumeToken(b, FN);
+    if (!r) r = consumeToken(b, GO);
+    if (!r) r = consumeToken(b, GOTO);
+    if (!r) r = consumeToken(b, HEX);
+    if (!r) r = consumeToken(b, IDENTIFIER);
+    if (!r) r = consumeToken(b, IF);
+    if (!r) r = consumeToken(b, INT);
+    if (!r) r = consumeToken(b, INTERFACE);
+    if (!r) r = consumeToken(b, MAP);
+    if (!r) r = consumeToken(b, OCT);
+    if (!r) r = consumeToken(b, RETURN);
+    if (!r) r = consumeToken(b, SELECT);
+    if (!r) r = consumeToken(b, STRING);
+    if (!r) r = consumeToken(b, RAW_STRING);
+    if (!r) r = consumeToken(b, STRUCT);
+    if (!r) r = consumeToken(b, SWITCH);
+    if (!r) r = consumeToken(b, VAR);
+    if (!r) r = consumeToken(b, UNSAFE);
+    return r;
   }
 
   // IfStatement | Block
@@ -313,6 +525,19 @@ public class VlangParser implements PsiParser, LightPsiParser {
     boolean r;
     r = IfStatement(b, l + 1);
     if (!r) r = Block(b, l + 1);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // ModuleClause? ImportList? TopLevelDeclaration*
+  static boolean File(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "File")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = File_0(b, l + 1);
+    r = r && File_1(b, l + 1);
+    r = r && File_2(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -430,100 +655,18 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  /* ********************************************************** */
-  // !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex | identifier | if | int | interface | map | oct | return | select | string | raw_string | struct | switch | var)
-  static boolean ExpressionListRecover(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ExpressionListRecover")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NOT_);
-    r = !ExpressionListRecover_0(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
+  // ModuleClause?
+  private static boolean File_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "File_0")) return false;
+    ModuleClause(b, l + 1);
+    return true;
   }
 
-  // '!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex | identifier | if | int | interface | map | oct | return | select | string | raw_string | struct | switch | var
-  private static boolean ExpressionListRecover_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ExpressionListRecover_0")) return false;
-    boolean r;
-    r = consumeToken(b, NOT);
-    if (!r) r = consumeToken(b, NOT_EQ);
-    if (!r) r = consumeToken(b, REMAINDER);
-    if (!r) r = consumeToken(b, REMAINDER_ASSIGN);
-    if (!r) r = consumeToken(b, COND_AND);
-    if (!r) r = consumeToken(b, BIT_AND);
-    if (!r) r = consumeToken(b, BIT_AND_ASSIGN);
-    if (!r) r = consumeToken(b, BIT_CLEAR);
-    if (!r) r = consumeToken(b, BIT_CLEAR_ASSIGN);
-    if (!r) r = consumeToken(b, LPAREN);
-    if (!r) r = consumeToken(b, RPAREN);
-    if (!r) r = consumeToken(b, MUL);
-    if (!r) r = consumeToken(b, MUL_ASSIGN);
-    if (!r) r = consumeToken(b, PLUS);
-    if (!r) r = consumeToken(b, PLUS_PLUS);
-    if (!r) r = consumeToken(b, PLUS_ASSIGN);
-    if (!r) r = consumeToken(b, COMMA);
-    if (!r) r = consumeToken(b, MINUS);
-    if (!r) r = consumeToken(b, MINUS_MINUS);
-    if (!r) r = consumeToken(b, MINUS_ASSIGN);
-    if (!r) r = consumeToken(b, TRIPLE_DOT);
-    if (!r) r = consumeToken(b, QUOTIENT);
-    if (!r) r = consumeToken(b, QUOTIENT_ASSIGN);
-    if (!r) r = consumeToken(b, COLON);
-    if (!r) r = consumeToken(b, SEMICOLON);
-    if (!r) r = consumeToken(b, LESS);
-    if (!r) r = consumeToken(b, SEND_CHANNEL);
-    if (!r) r = consumeToken(b, SHIFT_LEFT);
-    if (!r) r = consumeToken(b, SHIFT_LEFT_ASSIGN);
-    if (!r) r = consumeToken(b, LESS_OR_EQUAL);
-    if (!r) r = consumeToken(b, SEMICOLON_SYNTHETIC);
-    if (!r) r = consumeToken(b, ASSIGN);
-    if (!r) r = consumeToken(b, EQ);
-    if (!r) r = consumeToken(b, GREATER);
-    if (!r) r = consumeToken(b, GREATER_OR_EQUAL);
-    if (!r) r = consumeToken(b, SHIFT_RIGHT);
-    if (!r) r = consumeToken(b, SHIFT_RIGHT_ASSIGN);
-    if (!r) r = consumeToken(b, LBRACK);
-    if (!r) r = consumeToken(b, RBRACK);
-    if (!r) r = consumeToken(b, BIT_XOR);
-    if (!r) r = consumeToken(b, BIT_XOR_ASSIGN);
-    if (!r) r = consumeToken(b, TYPE_);
-    if (!r) r = consumeToken(b, LBRACE);
-    if (!r) r = consumeToken(b, BIT_OR);
-    if (!r) r = consumeToken(b, BIT_OR_ASSIGN);
-    if (!r) r = consumeToken(b, COND_OR);
-    if (!r) r = consumeToken(b, RBRACE);
-    if (!r) r = consumeToken(b, BREAK);
-    if (!r) r = consumeToken(b, CASE);
-    if (!r) r = consumeToken(b, CHAN);
-    if (!r) r = consumeToken(b, CHAR);
-    if (!r) r = consumeToken(b, CONST);
-    if (!r) r = consumeToken(b, CONTINUE);
-    if (!r) r = consumeToken(b, DECIMALI);
-    if (!r) r = consumeToken(b, DEFAULT);
-    if (!r) r = consumeToken(b, DEFER);
-    if (!r) r = consumeToken(b, ELSE);
-    if (!r) r = consumeToken(b, FALLTHROUGH);
-    if (!r) r = consumeToken(b, FLOAT);
-    if (!r) r = consumeToken(b, FLOATI);
-    if (!r) r = consumeToken(b, FOR);
-    if (!r) r = consumeToken(b, FUNC);
-    if (!r) r = consumeToken(b, GO);
-    if (!r) r = consumeToken(b, GOTO);
-    if (!r) r = consumeToken(b, HEX);
-    if (!r) r = consumeToken(b, IDENTIFIER);
-    if (!r) r = consumeToken(b, IF);
-    if (!r) r = consumeToken(b, INT);
-    if (!r) r = consumeToken(b, INTERFACE);
-    if (!r) r = consumeToken(b, MAP);
-    if (!r) r = consumeToken(b, OCT);
-    if (!r) r = consumeToken(b, RETURN);
-    if (!r) r = consumeToken(b, SELECT);
-    if (!r) r = consumeToken(b, STRING);
-    if (!r) r = consumeToken(b, RAW_STRING);
-    if (!r) r = consumeToken(b, STRUCT);
-    if (!r) r = consumeToken(b, SWITCH);
-    if (!r) r = consumeToken(b, VAR);
-    return r;
+  // ImportList?
+  private static boolean File_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "File_1")) return false;
+    ImportList(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -592,31 +735,43 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // SimpleStatement?
-  private static boolean ForClause_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ForClause_0")) return false;
-    SimpleStatement(b, l + 1);
-    return true;
-  }
-
-  // Expression?
-  private static boolean ForClause_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ForClause_2")) return false;
-    Expression(b, l + 1, -1);
+  // TopLevelDeclaration*
+  private static boolean File_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "File_2")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!TopLevelDeclaration(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "File_2", c)) break;
+    }
     return true;
   }
 
   /* ********************************************************** */
-  // Attributes? SymbolVisibility func identifier Signature BlockWithConsume?
+  // SimpleStatement? ';' Expression? ';' SimpleStatement?
+  public static boolean ForClause(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ForClause")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, FOR_CLAUSE, "<for clause>");
+    r = ForClause_0(b, l + 1);
+    r = r && consumeToken(b, SEMICOLON);
+    r = r && ForClause_2(b, l + 1);
+    r = r && consumeToken(b, SEMICOLON);
+    r = r && ForClause_4(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // Attributes? SymbolVisibility fn identifier Signature BlockWithConsume?
   public static boolean FunctionDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionDeclaration")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, FUNCTION_DECLARATION, "<function declaration>");
     r = FunctionDeclaration_0(b, l + 1);
-    p = r; // pin = 1
-    r = r && report_error_(b, SymbolVisibility(b, l + 1));
-    r = p && report_error_(b, consumeTokens(b, -1, FUNC, IDENTIFIER)) && r;
-    r = p && report_error_(b, Signature(b, l + 1)) && r;
+    r = r && SymbolVisibility(b, l + 1);
+    r = r && consumeTokens(b, 1, FN, IDENTIFIER);
+    p = r; // pin = 3
+    r = r && report_error_(b, Signature(b, l + 1));
     r = p && FunctionDeclaration_5(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
@@ -633,6 +788,20 @@ public class VlangParser implements PsiParser, LightPsiParser {
   private static boolean FunctionDeclaration_5(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionDeclaration_5")) return false;
     BlockWithConsume(b, l + 1);
+    return true;
+  }
+
+  // SimpleStatement?
+  private static boolean ForClause_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ForClause_0")) return false;
+    SimpleStatement(b, l + 1);
+    return true;
+  }
+
+  // Expression?
+  private static boolean ForClause_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ForClause_2")) return false;
+    Expression(b, l + 1, -1);
     return true;
   }
 
@@ -703,6 +872,19 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // go Expression
+  public static boolean GoStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GoStatement")) return false;
+    if (!nextTokenIs(b, GO)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, GO);
+    r = r && Expression(b, l + 1, -1);
+    exit_section_(b, m, GO_STATEMENT, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // if identifier
   public static boolean IfAttribute(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IfAttribute")) return false;
@@ -716,56 +898,54 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // func Receiver identifier Signature BlockWithConsume?
-  public static boolean MethodDeclaration(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MethodDeclaration")) return false;
-    if (!nextTokenIs(b, FUNC)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, METHOD_DECLARATION, null);
-    r = consumeToken(b, FUNC);
-    p = r; // pin = 1
-    r = r && report_error_(b, Receiver(b, l + 1));
-    r = p && report_error_(b, consumeToken(b, IDENTIFIER)) && r;
-    r = p && report_error_(b, Signature(b, l + 1)) && r;
-    r = p && MethodDeclaration_4(b, l + 1) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  // BlockWithConsume?
-  private static boolean MethodDeclaration_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MethodDeclaration_4")) return false;
-    BlockWithConsume(b, l + 1);
-    return true;
-  }
-
-  /* ********************************************************** */
-  // identifier [':' StringLiteral]
-  public static boolean PlainAttribute(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "PlainAttribute")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, IDENTIFIER);
-    r = r && PlainAttribute_1(b, l + 1);
-    exit_section_(b, m, PLAIN_ATTRIBUTE, r);
-    return r;
-  }
-
-  /* ********************************************************** */
   // if Condition Block ElseStatement?
   public static boolean IfStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IfStatement")) return false;
     if (!nextTokenIs(b, IF)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, IF_STATEMENT, null);
+    boolean r;
+    Marker m = enter_section_(b);
     r = consumeToken(b, IF);
-    p = r; // pin = 1
-    r = r && report_error_(b, Condition(b, l + 1));
-    r = p && report_error_(b, Block(b, l + 1)) && r;
-    r = p && IfStatement_3(b, l + 1) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+    r = r && Condition(b, l + 1);
+    r = r && Block(b, l + 1);
+    r = r && IfStatement_3(b, l + 1);
+    exit_section_(b, m, IF_STATEMENT, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // (ImportDeclaration semi)+
+  public static boolean ImportList(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ImportList")) return false;
+    if (!nextTokenIs(b, IMPORT)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = ImportList_0(b, l + 1);
+    while (r) {
+      int c = current_position_(b);
+      if (!ImportList_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "ImportList", c)) break;
+    }
+    exit_section_(b, m, IMPORT_LIST, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // Expression SliceExprBodyInner?
+  static boolean IndexExprBody(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IndexExprBody")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Expression(b, l + 1, -1);
+    r = r && IndexExprBody_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // SliceExprBodyInner?
+  private static boolean IndexExprBody_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IndexExprBody_1")) return false;
+    SliceExprBodyInner(b, l + 1);
+    return true;
   }
 
   // ElseStatement?
@@ -802,17 +982,15 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (ImportDeclaration semi)*
-  public static boolean ImportList(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ImportList")) return false;
-    Marker m = enter_section_(b, l, _NONE_, IMPORT_LIST, "<import list>");
-    while (true) {
-      int c = current_position_(b);
-      if (!ImportList_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "ImportList", c)) break;
-    }
-    exit_section_(b, l, m, true, false, null);
-    return true;
+  // identifier
+  public static boolean LabelRef(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LabelRef")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, IDENTIFIER);
+    exit_section_(b, m, LABEL_REF, r);
+    return r;
   }
 
   // ImportDeclaration semi
@@ -920,6 +1098,44 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // fn Receiver identifier Signature BlockWithConsume?
+  public static boolean MethodDeclaration(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MethodDeclaration")) return false;
+    if (!nextTokenIs(b, FN)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, METHOD_DECLARATION, null);
+    r = consumeToken(b, FN);
+    p = r; // pin = 1
+    r = r && report_error_(b, Receiver(b, l + 1));
+    r = p && report_error_(b, consumeToken(b, IDENTIFIER)) && r;
+    r = p && report_error_(b, Signature(b, l + 1)) && r;
+    r = p && MethodDeclaration_4(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // BlockWithConsume?
+  private static boolean MethodDeclaration_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MethodDeclaration_4")) return false;
+    BlockWithConsume(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // module identifier semi
+  public static boolean ModuleClause(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ModuleClause")) return false;
+    if (!nextTokenIs(b, MODULE)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, MODULE_CLAUSE, null);
+    r = consumeTokens(b, 1, MODULE, IDENTIFIER);
+    p = r; // pin = 1
+    r = r && semi(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
   // ExpressionList
   public static boolean LeftHandExprList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LeftHandExprList")) return false;
@@ -930,22 +1146,35 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // [':' StringLiteral]
-  private static boolean PlainAttribute_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "PlainAttribute_1")) return false;
-    PlainAttribute_1_0(b, l + 1);
-    return true;
+  /* ********************************************************** */
+  // identifier | unsafe [':' StringLiteral]
+  public static boolean PlainAttribute(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PlainAttribute")) return false;
+    if (!nextTokenIs(b, "<plain attribute>", IDENTIFIER, UNSAFE)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, PLAIN_ATTRIBUTE, "<plain attribute>");
+    r = consumeToken(b, IDENTIFIER);
+    if (!r) r = PlainAttribute_1(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
   }
 
-  // ':' StringLiteral
-  private static boolean PlainAttribute_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "PlainAttribute_1_0")) return false;
+  // unsafe [':' StringLiteral]
+  private static boolean PlainAttribute_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PlainAttribute_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, COLON);
-    r = r && StringLiteral(b, l + 1);
+    r = consumeToken(b, UNSAFE);
+    r = r && PlainAttribute_1_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  // [':' StringLiteral]
+  private static boolean PlainAttribute_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PlainAttribute_1_1")) return false;
+    PlainAttribute_1_1_0(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -961,19 +1190,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, BIT_AND);
     if (!r) r = consumeToken(b, BIT_CLEAR);
     return r;
-  }
-
-  /* ********************************************************** */
-  // package identifier
-  public static boolean PackageClause(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "PackageClause")) return false;
-    if (!nextTokenIs(b, PACKAGE)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, PACKAGE_CLAUSE, null);
-    r = consumeTokens(b, 1, PACKAGE, IDENTIFIER);
-    p = r; // pin = 1
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
   }
 
   /* ********************************************************** */
@@ -1213,6 +1429,31 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
+  // ':' StringLiteral
+  private static boolean PlainAttribute_1_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PlainAttribute_1_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COLON);
+    r = r && StringLiteral(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // '&' Type
+  public static boolean PointerType(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PointerType")) return false;
+    if (!nextTokenIs(b, BIT_AND)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, POINTER_TYPE, null);
+    r = consumeToken(b, BIT_AND);
+    p = r; // pin = 1
+    r = r && Type(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
   /* ********************************************************** */
   // in Expression | VarDefinitionList in Expression
   public static boolean RangeClause(PsiBuilder b, int l) {
@@ -1274,6 +1515,19 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // return ExpressionList?
+  public static boolean ReturnStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ReturnStatement")) return false;
+    if (!nextTokenIs(b, RETURN)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, RETURN);
+    r = r && ReturnStatement_1(b, l + 1);
+    exit_section_(b, m, RETURN_STATEMENT, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // VarDefinitionList ':=' ExpressionList
   public static boolean ShortVarDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ShortVarDeclaration")) return false;
@@ -1301,18 +1555,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = SimpleStatement_2(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
-  }
-
-  // LeftHandExprList AssignmentStatement?
-  private static boolean SimpleStatement_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SimpleStatement_2")) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_);
-    r = LeftHandExprList(b, l + 1);
-    p = r; // pin = LeftHandExprList
-    r = r && SimpleStatement_2_1(b, l + 1);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
   }
 
   /* ********************************************************** */
@@ -1356,7 +1598,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // Type ','?
   static boolean ReceiverTail(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ReceiverTail")) return false;
-    if (!nextTokenIs(b, "", IDENTIFIER, LPAREN)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = Type(b, l + 1);
@@ -1402,7 +1643,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // '(' TypeListNoPin ')' | Type | Parameters
   public static boolean Result(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Result")) return false;
-    if (!nextTokenIs(b, "<result>", IDENTIFIER, LPAREN)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, RESULT, "<result>");
     r = Result_0(b, l + 1);
@@ -1424,16 +1664,14 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  /* ********************************************************** */
-  // return ExpressionList?
-  public static boolean ReturnStatement(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ReturnStatement")) return false;
-    if (!nextTokenIs(b, RETURN)) return false;
+  // LeftHandExprList AssignmentStatement?
+  private static boolean SimpleStatement_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SimpleStatement_2")) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, RETURN_STATEMENT, null);
-    r = consumeToken(b, RETURN);
-    p = r; // pin = 1
-    r = r && ReturnStatement_1(b, l + 1);
+    Marker m = enter_section_(b, l, _NONE_);
+    r = LeftHandExprList(b, l + 1);
+    p = r; // pin = LeftHandExprList
+    r = r && SimpleStatement_2_1(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -1510,6 +1748,40 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // &':' (':' Expression ':' Expression) | (':' Expression?)
+  static boolean SliceExprBody(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SliceExprBody")) return false;
+    if (!nextTokenIs(b, COLON)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = SliceExprBody_0(b, l + 1);
+    if (!r) r = SliceExprBody_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // &':' (':' Expression ':' Expression)
+  private static boolean SliceExprBody_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SliceExprBody_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = SliceExprBody_0_0(b, l + 1);
+    r = r && SliceExprBody_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // &':'
+  private static boolean SliceExprBody_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SliceExprBody_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _AND_);
+    r = consumeToken(b, COLON);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
   // [SimpleStatement ';'?]
   static boolean SimpleStatementOpt(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SimpleStatementOpt")) return false;
@@ -1535,67 +1807,80 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  /* ********************************************************** */
-  // mut?
-  public static boolean SymbolMutability(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SymbolMutability")) return false;
-    Marker m = enter_section_(b, l, _NONE_, SYMBOL_MUTABILITY, "<symbol mutability>");
-    consumeToken(b, MUT);
-    exit_section_(b, l, m, true, false, null);
+  // ':' Expression ':' Expression
+  private static boolean SliceExprBody_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SliceExprBody_0_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COLON);
+    r = r && Expression(b, l + 1, -1);
+    r = r && consumeToken(b, COLON);
+    r = r && Expression(b, l + 1, -1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ':' Expression?
+  private static boolean SliceExprBody_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SliceExprBody_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COLON);
+    r = r && SliceExprBody_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // Expression?
+  private static boolean SliceExprBody_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SliceExprBody_1_1")) return false;
+    Expression(b, l + 1, -1);
     return true;
   }
 
   /* ********************************************************** */
-  // FunctionDeclaration
-  //   | MethodDeclaration
-  static boolean TopDeclaration(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "TopDeclaration")) return false;
-    boolean r;
-    r = FunctionDeclaration(b, l + 1);
-    if (!r) r = MethodDeclaration(b, l + 1);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // SymbolMutability identifier
-  public static boolean VarDefinition(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "VarDefinition")) return false;
-    if (!nextTokenIs(b, "<var definition>", IDENTIFIER, MUT)) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, VAR_DEFINITION, "<var definition>");
-    r = SymbolMutability(b, l + 1);
-    r = r && consumeToken(b, IDENTIFIER);
-    exit_section_(b, l, m, r, false, null);
-    return r;
+  // SliceExprBody
+  static boolean SliceExprBodyInner(PsiBuilder b, int l) {
+    return SliceExprBody(b, l + 1);
   }
 
   /* ********************************************************** */
   // SimpleStatement
-  // //  | GoStatement
+  //   | GoStatement
   //   | ReturnStatement
-  // //  | BreakStatement
-  // //  | ContinueStatement
+  //   | BreakStatement
+  //   | ContinueStatement
   // //  | GotoStatement
   // //  | FallthroughStatement
-  // //  Block
+  //   | Block
+  //   | CompileTimeIfStatement
   //   | IfStatement
+  //   | UnsageStatement
   // //  | SwitchStatement
   // //  | SelectStatement
   //   | ForStatement
+  //   | DeferStatement
   public static boolean Statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Statement")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _COLLAPSE_, STATEMENT, "<statement>");
     r = SimpleStatement(b, l + 1);
+    if (!r) r = GoStatement(b, l + 1);
     if (!r) r = ReturnStatement(b, l + 1);
+    if (!r) r = BreakStatement(b, l + 1);
+    if (!r) r = ContinueStatement(b, l + 1);
+    if (!r) r = Block(b, l + 1);
+    if (!r) r = CompileTimeIfStatement(b, l + 1);
     if (!r) r = IfStatement(b, l + 1);
+    if (!r) r = UnsageStatement(b, l + 1);
     if (!r) r = ForStatement(b, l + 1);
+    if (!r) r = DeferStatement(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   /* ********************************************************** */
-  // !('!' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | pub | mut | go | goto | hex | identifier | if | int | interface | map | oct | return | select | string | raw_string | struct | switch | var)
+  // !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | go | goto | hex | identifier | if | int | interface | map | oct | return | select | string | raw_string | struct | switch | var | unsafe | IF_COMPILE_TIME | ELSE_COMPILE_TIME)
   static boolean StatementRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StatementRecover")) return false;
     boolean r;
@@ -1605,11 +1890,12 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // '!' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | pub | mut | go | goto | hex | identifier | if | int | interface | map | oct | return | select | string | raw_string | struct | switch | var
+  // '!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | go | goto | hex | identifier | if | int | interface | map | oct | return | select | string | raw_string | struct | switch | var | unsafe | IF_COMPILE_TIME | ELSE_COMPILE_TIME
   private static boolean StatementRecover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StatementRecover_0")) return false;
     boolean r;
     r = consumeToken(b, NOT);
+    if (!r) r = consumeToken(b, QUESTION);
     if (!r) r = consumeToken(b, BIT_AND);
     if (!r) r = consumeToken(b, LPAREN);
     if (!r) r = consumeToken(b, MUL);
@@ -1637,7 +1923,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, FLOAT);
     if (!r) r = consumeToken(b, FLOATI);
     if (!r) r = consumeToken(b, FOR);
-    if (!r) r = consumeToken(b, FUNC);
+    if (!r) r = consumeToken(b, FN);
     if (!r) r = consumeToken(b, PUB);
     if (!r) r = consumeToken(b, MUT);
     if (!r) r = consumeToken(b, GO);
@@ -1656,11 +1942,14 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, STRUCT);
     if (!r) r = consumeToken(b, SWITCH);
     if (!r) r = consumeToken(b, VAR);
+    if (!r) r = consumeToken(b, UNSAFE);
+    if (!r) r = consumeToken(b, IF_COMPILE_TIME);
+    if (!r) r = consumeToken(b, ELSE_COMPILE_TIME);
     return r;
   }
 
   /* ********************************************************** */
-  // Statement (semi|&'}')
+  // Statement (semi | &'}')
   static boolean StatementWithSemi(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StatementWithSemi")) return false;
     boolean r, p;
@@ -1672,7 +1961,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // semi|&'}'
+  // semi | &'}'
   private static boolean StatementWithSemi_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StatementWithSemi_1")) return false;
     boolean r;
@@ -1680,6 +1969,38 @@ public class VlangParser implements PsiParser, LightPsiParser {
     r = semi(b, l + 1);
     if (!r) r = StatementWithSemi_1_1(b, l + 1);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // mut?
+  public static boolean SymbolMutability(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SymbolMutability")) return false;
+    Marker m = enter_section_(b, l, _NONE_, SYMBOL_MUTABILITY, "<symbol mutability>");
+    consumeToken(b, MUT);
+    exit_section_(b, l, m, true, false, null);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // FunctionDeclaration
+  //   | MethodDeclaration
+  static boolean TopDeclaration(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TopDeclaration")) return false;
+    boolean r;
+    r = FunctionDeclaration(b, l + 1);
+    if (!r) r = MethodDeclaration(b, l + 1);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // !(';' |'type' | const | fn | pub | var | '[')
+  static boolean TopLevelDeclarationRecover(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TopLevelDeclarationRecover")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NOT_);
+    r = !TopLevelDeclarationRecover_0(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -1718,18 +2039,18 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  /* ********************************************************** */
-  // VarDefinition ( ',' VarDefinition )*
-  static boolean VarDefinitionList(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "VarDefinitionList")) return false;
-    if (!nextTokenIs(b, "", IDENTIFIER, MUT)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_);
-    r = VarDefinition(b, l + 1);
-    p = r; // pin = 1
-    r = r && VarDefinitionList_1(b, l + 1);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+  // ';' |'type' | const | fn | pub | var | '['
+  private static boolean TopLevelDeclarationRecover_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TopLevelDeclarationRecover_0")) return false;
+    boolean r;
+    r = consumeToken(b, SEMICOLON);
+    if (!r) r = consumeToken(b, TYPE_);
+    if (!r) r = consumeToken(b, CONST);
+    if (!r) r = consumeToken(b, FN);
+    if (!r) r = consumeToken(b, PUB);
+    if (!r) r = consumeToken(b, VAR);
+    if (!r) r = consumeToken(b, LBRACK);
+    return r;
   }
 
   /* ********************************************************** */
@@ -1742,15 +2063,19 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // ( ',' VarDefinition )*
-  private static boolean VarDefinitionList_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "VarDefinitionList_1")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!VarDefinitionList_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "VarDefinitionList_1", c)) break;
-    }
-    return true;
+  /* ********************************************************** */
+  // TypeName
+  //   | TypeLit
+  //   | ParType
+  public static boolean Type(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Type")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _COLLAPSE_, TYPE, "<type>");
+    r = TypeName(b, l + 1);
+    if (!r) r = TypeLit(b, l + 1);
+    if (!r) r = ParType(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
   }
 
   /* ********************************************************** */
@@ -1778,40 +2103,41 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !(';' |'type' | const | func | pub | var)
-  static boolean TopLevelDeclarationRecover(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "TopLevelDeclarationRecover")) return false;
+  // ArrayOrSliceType
+  // //  | StructType
+  //   | PointerType
+  static boolean TypeLit(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeLit")) return false;
+    if (!nextTokenIs(b, "", BIT_AND, LBRACK)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NOT_);
-    r = !TopLevelDeclarationRecover_0(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // ';' |'type' | const | func | pub | var
-  private static boolean TopLevelDeclarationRecover_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "TopLevelDeclarationRecover_0")) return false;
-    boolean r;
-    r = consumeToken(b, SEMICOLON);
-    if (!r) r = consumeToken(b, TYPE_);
-    if (!r) r = consumeToken(b, CONST);
-    if (!r) r = consumeToken(b, FUNC);
-    if (!r) r = consumeToken(b, PUB);
-    if (!r) r = consumeToken(b, VAR);
+    r = ArrayOrSliceType(b, l + 1);
+    if (!r) r = PointerType(b, l + 1);
     return r;
   }
 
   /* ********************************************************** */
-  // TypeName
-  // //  | TypeLit
-  //   | ParType
-  public static boolean Type(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Type")) return false;
-    if (!nextTokenIs(b, "<type>", IDENTIFIER, LPAREN)) return false;
+  // unsafe Block
+  public static boolean UnsageStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UnsageStatement")) return false;
+    if (!nextTokenIs(b, UNSAFE)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, UNSAGE_STATEMENT, null);
+    r = consumeToken(b, UNSAFE);
+    p = r; // pin = 1
+    r = r && Block(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
+  // SymbolMutability identifier
+  public static boolean VarDefinition(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "VarDefinition")) return false;
+    if (!nextTokenIs(b, "<var definition>", IDENTIFIER, MUT)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _COLLAPSE_, TYPE, "<type>");
-    r = TypeName(b, l + 1);
-    if (!r) r = ParType(b, l + 1);
+    Marker m = enter_section_(b, l, _NONE_, VAR_DEFINITION, "<var definition>");
+    r = SymbolMutability(b, l + 1);
+    r = r && consumeToken(b, IDENTIFIER);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -1820,7 +2146,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // Type ( ',' Type )* ','?
   public static boolean TypeList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeList")) return false;
-    if (!nextTokenIs(b, "<type list>", IDENTIFIER, LPAREN)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _COLLAPSE_, TYPE_LIST, "<type list>");
     r = Type(b, l + 1);
@@ -1865,7 +2190,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // Type ( ',' Type )* ','?
   public static boolean TypeListNoPin(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeListNoPin")) return false;
-    if (!nextTokenIs(b, "<type list no pin>", IDENTIFIER, LPAREN)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _COLLAPSE_, TYPE_LIST, "<type list no pin>");
     r = Type(b, l + 1);
@@ -1902,6 +2226,20 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "TypeListNoPin_2")) return false;
     consumeToken(b, COMMA);
     return true;
+  }
+
+  /* ********************************************************** */
+  // VarDefinition ( ',' VarDefinition )*
+  static boolean VarDefinitionList(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "VarDefinitionList")) return false;
+    if (!nextTokenIs(b, "", IDENTIFIER, MUT)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = VarDefinition(b, l + 1);
+    p = r; // pin = 1
+    r = r && VarDefinitionList_1(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -1951,21 +2289,94 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  public ASTNode parse(IElementType t, PsiBuilder b) {
-    parseLight(t, b);
-    return b.getTreeBuilt();
+  // ( ',' VarDefinition )*
+  private static boolean VarDefinitionList_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "VarDefinitionList_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!VarDefinitionList_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "VarDefinitionList_1", c)) break;
+    }
+    return true;
   }
 
-  public void parseLight(IElementType t, PsiBuilder b) {
+  /* ********************************************************** */
+  // Expression root: Expression
+  // Operator priority table:
+  // 0: BINARY(OrExpr)
+  // 1: BINARY(AndExpr)
+  // 2: BINARY(ConditionalExpr)
+  // 3: BINARY(AddExpr)
+  // 4: BINARY(MulExpr)
+  // 5: PREFIX(UnaryExpr)
+  // 6: ATOM(OperandName) POSTFIX(CallExpr) POSTFIX(IndexOrSliceExpr) ATOM(Literal)
+  // 7: ATOM(ParenthesesExpr)
+  public static boolean Expression(PsiBuilder b, int l, int g) {
+    if (!recursion_guard_(b, l, "Expression")) return false;
+    addVariant(b, "<expression>");
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, "<expression>");
+    r = UnaryExpr(b, l + 1);
+    if (!r) r = OperandName(b, l + 1);
+    if (!r) r = Literal(b, l + 1);
+    if (!r) r = ParenthesesExpr(b, l + 1);
+    p = r;
+    r = r && Expression_0(b, l + 1, g);
+    exit_section_(b, l, m, null, r, p, null);
+    return r || p;
+  }
+
+  public static boolean Expression_0(PsiBuilder b, int l, int g) {
+    if (!recursion_guard_(b, l, "Expression_0")) return false;
+    boolean r = true;
+    while (true) {
+      Marker m = enter_section_(b, l, _LEFT_, null);
+      if (g < 0 && consumeTokenSmart(b, COND_OR)) {
+        r = Expression(b, l, 0);
+        exit_section_(b, l, m, OR_EXPR, r, true, null);
+      }
+      else if (g < 1 && consumeTokenSmart(b, COND_AND)) {
+        r = Expression(b, l, 1);
+        exit_section_(b, l, m, AND_EXPR, r, true, null);
+      }
+      else if (g < 2 && RelOp(b, l + 1)) {
+        r = Expression(b, l, 2);
+        exit_section_(b, l, m, CONDITIONAL_EXPR, r, true, null);
+      }
+      else if (g < 3 && AddOp(b, l + 1)) {
+        r = Expression(b, l, 3);
+        exit_section_(b, l, m, ADD_EXPR, r, true, null);
+      }
+      else if (g < 4 && MulOp(b, l + 1)) {
+        r = Expression(b, l, 4);
+        exit_section_(b, l, m, MUL_EXPR, r, true, null);
+      }
+      else if (g < 6 && ArgumentList(b, l + 1)) {
+        r = true;
+        exit_section_(b, l, m, CALL_EXPR, r, true, null);
+      }
+      else if (g < 6 && IndexOrSliceExpr_0(b, l + 1)) {
+        r = true;
+        exit_section_(b, l, m, INDEX_OR_SLICE_EXPR, r, true, null);
+      }
+      else {
+        exit_section_(b, l, m, null, false, false, null);
+        break;
+      }
+    }
+    return r;
+  }
+
+  // '[' (SliceExprBody | IndexExprBody) ']'
+  private static boolean IndexOrSliceExpr_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IndexOrSliceExpr_0")) return false;
     boolean r;
-    b = adapt_builder_(t, b, this, EXTENDS_SETS_);
-    Marker m = enter_section_(b, 0, _COLLAPSE_, null);
-    r = parse_root_(t, b);
-    exit_section_(b, 0, m, t, r, true, TRUE_CONDITION);
-  }
-
-  protected boolean parse_root_(IElementType t, PsiBuilder b) {
-    return parse_root_(t, b, 0);
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, LBRACK);
+    r = r && IndexOrSliceExpr_0_1(b, l + 1);
+    r = r && consumeToken(b, RBRACK);
+    exit_section_(b, m, null, r);
+    return r;
   }
 
   // ',' VarDefinition
@@ -2015,67 +2426,18 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  /* ********************************************************** */
-  // Expression root: Expression
-  // Operator priority table:
-  // 0: BINARY(OrExpr)
-  // 1: BINARY(AndExpr)
-  // 2: BINARY(ConditionalExpr)
-  // 3: BINARY(AddExpr)
-  // 4: BINARY(MulExpr)
-  // 5: PREFIX(UnaryExpr)
-  // 6: ATOM(OperandName) POSTFIX(CallExpr) ATOM(Literal)
-  // 7: ATOM(ParenthesesExpr)
-  public static boolean Expression(PsiBuilder b, int l, int g) {
-    if (!recursion_guard_(b, l, "Expression")) return false;
-    addVariant(b, "<expression>");
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, "<expression>");
-    r = UnaryExpr(b, l + 1);
-    if (!r) r = OperandName(b, l + 1);
-    if (!r) r = Literal(b, l + 1);
-    if (!r) r = ParenthesesExpr(b, l + 1);
-    p = r;
-    r = r && Expression_0(b, l + 1, g);
-    exit_section_(b, l, m, null, r, p, null);
-    return r || p;
+  // SliceExprBody | IndexExprBody
+  private static boolean IndexOrSliceExpr_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IndexOrSliceExpr_0_1")) return false;
+    boolean r;
+    r = SliceExprBody(b, l + 1);
+    if (!r) r = IndexExprBody(b, l + 1);
+    return r;
   }
 
-  public static boolean Expression_0(PsiBuilder b, int l, int g) {
-    if (!recursion_guard_(b, l, "Expression_0")) return false;
-    boolean r = true;
-    while (true) {
-      Marker m = enter_section_(b, l, _LEFT_, null);
-      if (g < 0 && consumeTokenSmart(b, COND_OR)) {
-        r = Expression(b, l, 0);
-        exit_section_(b, l, m, OR_EXPR, r, true, null);
-      }
-      else if (g < 1 && consumeTokenSmart(b, COND_AND)) {
-        r = Expression(b, l, 1);
-        exit_section_(b, l, m, AND_EXPR, r, true, null);
-      }
-      else if (g < 2 && RelOp(b, l + 1)) {
-        r = Expression(b, l, 2);
-        exit_section_(b, l, m, CONDITIONAL_EXPR, r, true, null);
-      }
-      else if (g < 3 && AddOp(b, l + 1)) {
-        r = Expression(b, l, 3);
-        exit_section_(b, l, m, ADD_EXPR, r, true, null);
-      }
-      else if (g < 4 && MulOp(b, l + 1)) {
-        r = Expression(b, l, 4);
-        exit_section_(b, l, m, MUL_EXPR, r, true, null);
-      }
-      else if (g < 6 && ArgumentList(b, l + 1)) {
-        r = true;
-        exit_section_(b, l, m, CALL_EXPR, r, true, null);
-      }
-      else {
-        exit_section_(b, l, m, null, false, false, null);
-        break;
-      }
-    }
-    return r;
+  public ASTNode parse(IElementType t, PsiBuilder b) {
+    parseLight(t, b);
+    return b.getTreeBuilt();
   }
 
   public static boolean UnaryExpr(PsiBuilder b, int l) {
@@ -2106,6 +2468,18 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "OperandName_1")) return false;
     QualifiedReferenceExpression(b, l + 1);
     return true;
+  }
+
+  public void parseLight(IElementType t, PsiBuilder b) {
+    boolean r;
+    b = adapt_builder_(t, b, this, EXTENDS_SETS_);
+    Marker m = enter_section_(b, 0, _COLLAPSE_, null);
+    r = parse_root_(t, b);
+    exit_section_(b, 0, m, t, r, true, TRUE_CONDITION);
+  }
+
+  protected boolean parse_root_(IElementType t, PsiBuilder b) {
+    return parse_root_(t, b, 0);
   }
 
   // int

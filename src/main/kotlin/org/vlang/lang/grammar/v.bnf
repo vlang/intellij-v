@@ -30,6 +30,7 @@
     ASSIGN               =  '='
     NOT_EQ               =  '!='
     NOT                  =  '!'
+    QUESTION             =  '?'
     PLUS_PLUS            =  '++'
     PLUS_ASSIGN          =  '+='
     PLUS                 =  '+'
@@ -67,6 +68,8 @@
     SEMICOLON_SYNTHETIC  = '<NL>'
     TYPE_                = 'type'
     raw_string           = 'raw_string'
+//    IF_COMPILE_TIME      = '$if'
+//    ELSE_COMPILE_TIME    = '$else'
   ]
 
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional)Expr")=BinaryExpr
@@ -82,9 +85,9 @@
   extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
   extends("ImportSpec|ParamDefinition|Receiver|(Var|Const)Definition")="org.vlang.lang.psi.impl.VlangSimpleNamedElementImpl"
   extends("(Method)Spec|((Anonymous)?Field|Label)Definition")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
-  extends("PackageClause")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
-  elementTypeFactory("PackageClause|(Function|Method)Declaration")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
-  pin(".*Statement")=1
+  extends("ModuleClause")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
+  elementTypeFactory("ModuleClause|(Function|Method)Declaration")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
+//  pin(".*Statement")=1
   extends(".*Statement")=Statement
   extends(".*Type|TypeList")=Type
 
@@ -93,15 +96,17 @@
   generateTokenAccessors=true
 }
 
-File ::= ImportList TopLevelDeclaration* {pin(".*")=1}
-ImportList ::= (ImportDeclaration semi)* {
+File ::= ModuleClause? ImportList? TopLevelDeclaration*
+ImportList ::= (ImportDeclaration semi)+ {
   methods=[addImport]
 }
 private semi ::= '<NL>' | ';' | <<eof>>
 
-PackageClause ::= package identifier {pin=1
+ErrorPropagation ::= '?'
+
+ModuleClause ::= module identifier semi {pin=1
   methods=[getName]
-  stubClass="org.vlang.lang.stubs.VlangPackageClauseStub"
+  stubClass="org.vlang.lang.stubs.VlangModuleClauseStub"
 }
 
 ImportDeclaration ::= import ImportSpec {
@@ -120,7 +125,7 @@ SelectiveImportList ::= '{' identifier (',' identifier)* '}' {pin(".*")=2}
 ImportAlias ::= identifier {pin(".*")=2}
 
 Type ::= TypeName
-//  | TypeLit
+  | TypeLit
   | ParType {
 //  stubClass="org.vlang.lang.stubs.GoTypeStub"
   methods=[getUnderlyingType shouldGoDeeper]
@@ -130,18 +135,18 @@ ParType ::= '(' Type ')' {methods=[getActualType]}
 private TypeName ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
 TypeReferenceExpression ::= identifier { methods=[getReference getQualifier resolve resolveType] }
 left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
-//
-//private TypeLit ::=
-//    ArrayOrSliceType
+
+private TypeLit ::=
+    ArrayOrSliceType
 //  | StructType
-//  | PointerType
+  | PointerType
 //  | FunctionType
 //  | InterfaceType
 //  | MapType
 //  | ChannelType
-//
-//ArrayOrSliceType ::= '[' ('...'|Expression?) ']' Type {pin=1}
-//
+
+ArrayOrSliceType ::= '[' ('...'|Expression?) ']' Type {pin=1}
+
 //StructType ::= struct '{' Fields? '}' {pin=1}
 //private Fields ::= FieldDeclaration (semi FieldDeclaration)* semi? {pin=1}
 //FieldDeclaration ::= (FieldDefinitionList Type | AnonymousFieldDefinition) Tag?
@@ -156,9 +161,9 @@ left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeRefere
 //  methods=[getIdentifier getName getTypeReferenceExpression getGoTypeInner]
 //}
 //
-//PointerType ::= '*' Type {pin=1}
+PointerType ::= '&' Type {pin=1}
 //
-//FunctionType ::= func Signature {pin=1 implements="org.vlang.lang.psi.GoSignatureOwner"}
+//FunctionType ::= fn Signature {pin=1 implements="org.vlang.lang.psi.GoSignatureOwner"}
 Signature ::= Parameters Result? {
   pin=1
 //  stubClass="org.vlang.lang.stubs.GoSignatureStub"
@@ -204,31 +209,33 @@ ParamDefinition ::= identifier {
 //
 BlockWithConsume ::= /*<<consumeBlock>> |*/ BlockInner {elementType=Block}
 Block ::= BlockInner {methods=[processDeclarations]}
-private BlockInner ::= '{' ('}' | Statements /*| (<<withOff Statements "BLOCK?" "PAR">> | (!() Statements)) */'}') {pin(".*")=1}
+private BlockInner ::= '{' ('}' | Statements '}') {pin(".*")=1}
 private Statements ::= StatementWithSemi*
 
-private StatementWithSemi ::= Statement (semi|&'}') { pin=1 recoverWhile=StatementRecover }
+private StatementWithSemi ::= Statement (semi | &'}') { pin=1 recoverWhile=StatementRecover }
 Statement ::=
 //    ConstDeclaration
 //  | TypeDeclaration
 //  VarDeclaration
 //  | LabeledStatement
   SimpleStatement
-//  | GoStatement
+  | GoStatement
   | ReturnStatement
-//  | BreakStatement
-//  | ContinueStatement
+  | BreakStatement
+  | ContinueStatement
 //  | GotoStatement
 //  | FallthroughStatement
-//  Block
+  | Block
+  | CompileTimeIfStatement
   | IfStatement
+  | UnsafeStatement
 //  | SwitchStatement
 //  | SelectStatement
   | ForStatement
-//  | DeferStatement {methods=[processDeclarations]}
+  | DeferStatement {methods=[processDeclarations]}
 
 
-private StatementRecover ::= !('!' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | pub | mut | go | goto | hex | identifier | if | int | interface | map | oct | return | select | string | raw_string | struct | switch | var)
+private StatementRecover ::= !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | go | goto | hex | identifier | if | int | interface | map | oct | return | select | string | raw_string | struct | switch | var | unsafe | IF_COMPILE_TIME | ELSE_COMPILE_TIME)
 
 SimpleStatement ::=
   ShortVarDeclaration
@@ -242,7 +249,7 @@ private TopDeclaration ::=
 //  | VarDeclaration
   FunctionDeclaration
   | MethodDeclaration
-private TopLevelDeclarationRecover ::= !(';' |'type' | const | func | pub | var)
+private TopLevelDeclarationRecover ::= !(';' |'type' | const | fn | pub | var | '[')
 //
 //ConstDeclaration ::= const ( ConstSpec | '(' ConstSpecs? ')' ) {pin(".*")=1 methods=[addSpec deleteSpec]}
 //private ConstSpecs ::= ConstSpec (semi ConstSpec)* semi? {pin=1}
@@ -265,7 +272,7 @@ private ExpressionOrLiteralTypeExpr ::= Expression /*| LiteralTypeExpr*/
 
 private ExpressionList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &')'))* {pin(".*")=1}
 private ExpressionWithRecover ::= Expression {recoverWhile=ExpressionListRecover}
-private ExpressionListRecover ::= !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex | identifier | if | int | interface | map | oct | return | select | string | raw_string | struct | switch | var)
+private ExpressionListRecover ::= !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | go | goto | hex | identifier | if | int | interface | map | oct | return | select | string | raw_string | struct | switch | var | unsafe)
 
 //TypeDeclaration ::= 'type' ( TypeSpec | '(' TypeSpecs? ')' ) {pin(".*")=1}
 //private TypeSpecs ::= TypeSpec (semi TypeSpec)* semi? {pin=1}
@@ -295,12 +302,12 @@ SymbolMutability ::= mut?
 
 SymbolVisibility ::= pub?
 
-FunctionDeclaration ::= Attributes? SymbolVisibility func identifier Signature BlockWithConsume? {
-  pin=1
+FunctionDeclaration ::= Attributes? SymbolVisibility fn identifier Signature BlockWithConsume? {
+  pin=3
   stubClass="org.vlang.lang.stubs.VlangFunctionDeclarationStub"
   methods=[getName]
 }
-MethodDeclaration ::= func Receiver identifier Signature BlockWithConsume? {
+MethodDeclaration ::= fn Receiver identifier Signature BlockWithConsume? {
   pin=1
   stubClass="org.vlang.lang.stubs.VlangMethodDeclarationStub"
   methods=[getReceiverType]
@@ -312,7 +319,7 @@ Receiver ::= '(' (identifier ReceiverTail | ReceiverTail) ')' {
 }
 private ReceiverTail ::= Type ','?
 
-Attributes ::= Attribute (semi Attribute)* '<NL>'? {pin=1}
+Attributes ::= Attribute (semi Attribute)* semi? {pin=1}
 
 Attribute ::= '[' AttributeExpression ']' {pin=1}
 
@@ -320,7 +327,7 @@ AttributeExpression ::= IfAttribute | PlainAttribute
 
 IfAttribute ::= if identifier {pin=1}
 
-PlainAttribute ::= identifier [':' StringLiteral]
+PlainAttribute ::= identifier | unsafe [':' StringLiteral]
 
 Literal ::=
     int
@@ -356,7 +363,7 @@ ReferenceExpression ::= identifier { methods=[getReference getQualifier resolve 
 //FieldName ::= identifier { methods=[getReference getQualifier resolve] }
 //Value ::= Expression | LiteralValue
 //
-//FunctionLit ::= func Signature Block {pin=1 methods=[processDeclarations]}
+//FunctionLit ::= fn Signature Block {pin=1 methods=[processDeclarations]}
 //
 Expression ::=
     OrExpr
@@ -393,7 +400,7 @@ private MaxGroup ::=
   | CallExpr
 //  | TypeAssertionExpr
 //  | SelectorExpr
-//  | IndexOrSliceExpr
+  | IndexOrSliceExpr
   | Literal
 //  | FunctionLit
 //
@@ -403,17 +410,17 @@ private MulOp ::= '*' | '/' | '%' | '<<' | '>>' | '&' | '&^'
 private UnaryOp ::= '+' | '-' | '!' | '^' | '*' | '&' | '<-'
 //
 //SelectorExpr ::= Expression '.' !('(' 'type') Expression
-//IndexOrSliceExpr ::= Expression '[' <<enterMode "PAR">> (SliceExprBody | IndexExprBody) <<exitModeSafe "PAR">> ']' {pin=2 methods = [getExpression getIndices]}
-//private IndexExprBody ::= Expression SliceExprBodyInner?
-//private inner SliceExprBodyInner ::= SliceExprBody
-//private SliceExprBody ::= &':' (':' Expression ':' Expression) | (':' Expression?)
+IndexOrSliceExpr ::= Expression '[' (SliceExprBody | IndexExprBody) ']' {pin=2 methods = [getExpression getIndices]}
+private IndexExprBody ::= Expression SliceExprBodyInner?
+private inner SliceExprBodyInner ::= SliceExprBody
+private SliceExprBody ::= &':' (':' Expression ':' Expression) | (':' Expression?)
 //TypeAssertionExpr ::= Expression '.' '(' &(!'type') Type ')'
 CallExpr ::= Expression ArgumentList
 ArgumentList ::= '(' [ ExpressionArgList '...'? ','? ] ')' {pin=1}
 //ConversionExpr ::= &ConversionPredicate Type ConversionTail
 //private ConversionPredicate ::= ConversionStart | '(' ConversionStart
 //private ConversionTail ::= '(' Expression ','? ')' {pin=1}
-//private ConversionStart ::= '*' | '<-' | '[' | chan | func | interface | map | struct
+//private ConversionStart ::= '*' | '<-' | '[' | chan | fn | interface | map | struct
 //
 //LabeledStatement ::= LabelDefinition ':' Statement? {pin=2}
 //LabelDefinition ::= identifier {
@@ -425,11 +432,18 @@ IncDecStatement ::= Expression ('++' | '--') {pin=2}
 assign_op ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '&=' | '&^='
 IfStatement ::= if Condition Block ElseStatement?
 ElseStatement ::= else (IfStatement | Block)
+CompileTimeIfStatement ::= IF_COMPILE_TIME Condition Block CompileElseStatement?
+CompileElseStatement ::= ELSE_COMPILE_TIME (CompileTimeIfStatement | Block)
+
+private UnsafeExpression ::= unsafe UnsafeExpressionBlock {pin=1}
+private UnsafeExpressionBlock ::= Block
+UnsafeStatement ::= UnsafeExpression
+
 //SwitchStatement ::= SwitchStart (TypeSwitchStatement | ExprSwitchStatement)
 //SwitchStart ::= switch
 //left ExprSwitchStatement ::= Condition '{' ExprCaseClause* '}' {pin=2 extends=SwitchStatement}
 //
-private Condition ::= SimpleStatementOpt Expression?
+private Condition ::= SimpleStatementOpt Expression? ErrorPropagation?
 private SimpleStatementOpt ::= [SimpleStatement ';'?] // todo: remove ?
 
 //ExprCaseClause ::= !'}' ExprSwitchCase ':' Statements? {pin=1 implements="org.vlang.lang.psi.GoCaseClause"}
@@ -446,15 +460,15 @@ private ForOrRangeClause ::= (ForClause | RangeClause)
 ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement? {methods=[processDeclarations]}
 RangeClause ::= in Expression | VarDefinitionList in Expression {pin(".*")=2 extends=ShortVarDeclaration methods=[getRangeExpression getLeftExpressionsList getRightExpressionsList]}
 
-//GoStatement ::= go Expression
+GoStatement ::= go Expression
 //SelectStatement ::= select '{' CommClause* '}'
 //CommClause ::= CommCase ':' Statements? {pin=1}
 //CommCase ::= case ( Expression SendStatement | RecvStatement ) | default {pin(".*")="case"}
 //RecvStatement ::= ExpressionsOrVariables? Expression {pin=0 extends=VarSpec methods=[getRecvExpression getLeftExpressionsList getRightExpressionsList]}
 ReturnStatement ::= return ExpressionList?
-//LabelRef ::= identifier { methods=[getReference] }
-//BreakStatement ::= break LabelRef?
-//ContinueStatement ::= continue LabelRef?
+LabelRef ::= identifier { methods=[getReference] }
+BreakStatement ::= break LabelRef?
+ContinueStatement ::= continue LabelRef?
 //GotoStatement ::= goto LabelRef
 //FallthroughStatement ::= fallthrough
-//DeferStatement ::= defer Expression
+DeferStatement ::= defer Block

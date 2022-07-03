@@ -4,9 +4,9 @@ import com.intellij.psi.stubs.IStubElementType
 import com.intellij.psi.stubs.StubBase
 import com.intellij.psi.stubs.StubElement
 import com.intellij.util.io.StringRef
-import org.vlang.lang.psi.VlangPackageClause
+import org.vlang.lang.psi.VlangModuleClause
 
-class VlangPackageClauseStub : StubBase<VlangPackageClause> {
+class VlangModuleClauseStub : StubBase<VlangModuleClause> {
     val myName: String?
 
     constructor(parent: StubElement<*>, type: IStubElementType<*, *>, name: String) : super(parent, type) {

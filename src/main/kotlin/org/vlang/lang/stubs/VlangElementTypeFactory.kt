@@ -3,7 +3,7 @@ package org.vlang.lang.stubs
 import com.intellij.psi.stubs.IStubElementType
 import org.vlang.lang.stubs.types.VlangFunctionDeclarationStubElementType
 import org.vlang.lang.stubs.types.VlangMethodDeclarationStubElementType
-import org.vlang.lang.stubs.types.VlangPackageClauseStubElementType
+import org.vlang.lang.stubs.types.VlangModuleClauseStubElementType
 
 object VlangElementTypeFactory {
 //    private val TYPES: Map<String, Class<*>> = object : HashMap<String?, Class<*>?>() {
@@ -35,7 +35,7 @@ object VlangElementTypeFactory {
 //        if ("TYPE_SPEC" == name) return VlangTypeSpecStubElementType(name)
 //        if ("METHOD_SPEC" == name) return VlangMethodSpecStubElementType(name)
 //        if ("CONST_SPEC" == name) return VlangConstSpecStubElementType(name)
-        if ("PACKAGE_CLAUSE" == name) return VlangPackageClauseStubElementType.INSTANCE
+        if ("MODULE_CLAUSE" == name) return VlangModuleClauseStubElementType.INSTANCE
 //        if ("VAR_SPEC" == name) return VlangVarSpecStubElementType(name)
 //        if ("SHORT_VAR_DECLARATION" == name) return object : VlangVarSpecStubElementType(name) {
 //            fun createPsi(stub: VlangVarSpecStub): VlangVarSpec {

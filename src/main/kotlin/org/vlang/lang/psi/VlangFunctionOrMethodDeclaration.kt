@@ -7,5 +7,5 @@ interface VlangFunctionOrMethodDeclaration : /*: VlangTopLevelDeclaration, Vlang
 
     fun getSignature(): VlangSignature?
 
-    fun getFunc(): PsiElement
+    fun getFn(): PsiElement
 }

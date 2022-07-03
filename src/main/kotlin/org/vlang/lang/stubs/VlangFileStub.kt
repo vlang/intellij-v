@@ -5,8 +5,8 @@ import com.intellij.psi.stubs.StubElement
 import com.intellij.util.io.StringRef
 import org.vlang.lang.VlangFileElementType
 import org.vlang.lang.psi.VlangFile
-import org.vlang.lang.psi.VlangPackageClause
-import org.vlang.lang.stubs.types.VlangPackageClauseStubElementType
+import org.vlang.lang.psi.VlangModuleClause
+import org.vlang.lang.stubs.types.VlangModuleClauseStubElementType
 
 class VlangFileStub(file: VlangFile?, private val myBuildFlags: StringRef) : PsiFileStubImpl<VlangFile?>(file) {
     constructor(file: VlangFile) : this(file, StringRef.fromString(""))
@@ -17,12 +17,12 @@ class VlangFileStub(file: VlangFile?, private val myBuildFlags: StringRef) : Psi
         return myBuildFlags.string
     }
 
-    fun getPackageClauseStub(): StubElement<VlangPackageClause>? {
-        return findChildStubByType(VlangPackageClauseStubElementType.INSTANCE)
+    fun getPackageClauseStub(): StubElement<VlangModuleClause>? {
+        return findChildStubByType(VlangModuleClauseStubElementType.INSTANCE)
     }
 
     fun getPackageName(): String? {
         val stub = getPackageClauseStub()
-        return if (stub is VlangPackageClauseStub) stub.getName() else null
+        return if (stub is VlangModuleClauseStub) stub.getName() else null
     }
 }

@@ -6,7 +6,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.SyntaxTraverser
 import org.vlang.lang.psi.VlangFunctionDeclaration
 import org.vlang.lang.psi.VlangImportSpec
-import org.vlang.lang.psi.VlangPackageClause
+import org.vlang.lang.psi.VlangModuleClause
 import org.vlang.lang.psi.VlangReferenceExpression
 
 object VlangPsiImplUtil {
@@ -27,7 +27,7 @@ object VlangPsiImplUtil {
 
 
     @JvmStatic
-    fun getName(o: VlangPackageClause): String {
+    fun getName(o: VlangModuleClause): String {
         return o.firstChild.text
     }
 
