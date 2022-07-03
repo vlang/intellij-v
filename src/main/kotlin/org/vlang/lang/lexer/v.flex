@@ -49,7 +49,7 @@ STR_SINGLE =   "'"
 STR_MODIFIER = "r" | "c"
 STRING_DOUBLE = {STR_MODIFIER}? {STR_DOUBLE} ( [^\"\\\n\r] | "\\" ("\\" | {STR_DOUBLE} | {ESCAPES} | [0-8xuU] ) )* {STR_DOUBLE}
 STRING_SINGLE = {STR_MODIFIER}? {STR_SINGLE} ( [^\'\\\n\r] | "\\" ("\\" | {STR_SINGLE} | {ESCAPES} | [0-8xuU] ) )* {STR_SINGLE}
-ESCAPES = [abfnrtv]
+ESCAPES = [abfnrtve] // TODO: need "e"?
 
 %state MAYBE_SEMICOLON
 
@@ -172,6 +172,7 @@ ESCAPES = [abfnrtv]
 "switch"                                  { return SWITCH; }
 "const"                                   { return CONST; }
 
+"match"                                   { return MATCH ; }
 "if"                                      { return IF ; }
 "for"                                     { return FOR ; }
 "import"                                  { return IMPORT ; }

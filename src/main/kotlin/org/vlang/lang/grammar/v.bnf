@@ -74,7 +74,7 @@
   ]
 
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional)Expr")=BinaryExpr
-  extends(".*(Expr|Literal|Lit|OperandName)|StructInitialization|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation")=Expression
+  extends(".*(Expr|Literal|Lit|OperandName)|StructInitialization|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|MatchExpression")=Expression
 
   implements("(Type|Import)Spec|(Var|Const|Param|Field|Label)Definition|Receiver")="org.vlang.lang.psi.VlangNamedElement"
   implements("FunctionLit")="org.vlang.lang.psi.GoSignatureOwner"
@@ -259,7 +259,7 @@ Statement ::=
   | DeferStatement {methods=[processDeclarations]}
 
 
-private StatementRecover ::= !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | struct | switch | var | unsafe | assert | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL)
+private StatementRecover ::= !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | struct | switch | var | unsafe | assert | match | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL)
 
 SimpleStatement ::=
   ShortVarDeclaration
@@ -303,7 +303,7 @@ private ExpressionOrLiteralTypeExpr ::= Expression /*| LiteralTypeExpr*/
 
 private ExpressionList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &')'))* {pin(".*")=1}
 private ExpressionWithRecover ::= Expression {recoverWhile=ExpressionListRecover}
-private ExpressionListRecover ::= !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | struct | enum | switch | var | unsafe | assert)
+private ExpressionListRecover ::= !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | struct | enum | switch | var | unsafe | assert | match)
 
 //TypeDeclaration ::= 'type' ( TypeSpec | '(' TypeSpecs? ')' ) {pin(".*")=1}
 //private TypeSpecs ::= TypeSpec (semi TypeSpec)* semi? {pin=1}
@@ -359,7 +359,7 @@ Attribute ::= '[' AttributeExpression (';' AttributeExpression)* ']' {pin=1}
 AttributeExpression ::= IfAttribute | PlainAttribute
 
 IfAttribute ::= if identifier {pin=1}
-PlainAttribute ::= (identifier | unsafe | int | string) (':' StringLiteral)?
+PlainAttribute ::= (identifier | unsafe | int | string) (':' identifier | StringLiteral)?
 
 Literal ::=
     int
@@ -407,9 +407,11 @@ Expression ::=
   | RangeExpr
   | StructInitialization
   | UnsafeExpression
+  | MatchExpression
   | IfExpression
   | CompileTimeIfExpression
   | ArrayCreation
+  | InExpression
   | MaxGroup
   | ParenthesesExpr {methods=[getGoType] /*implements="org.vlang.lang.psi.GoTypeOwner"*/}
 
@@ -448,7 +450,7 @@ private AddOp ::= '+' | '-' | '|' | '^'
 private MulOp ::= '*' | '/' | '%' | '<<' | '>>' | '&' | '&^'
 private UnaryOp ::= '+' | '-' | '!' | '^' | '*' | '&' | '<-'
 
-ArrayCreation ::= '[' ArrayCreationList ']' {pin=1}
+ArrayCreation ::= '[' ( ']' | ArrayCreationList ']') {pin=1}
 ArrayCreationList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &']'))* {pin(".*")=1}
 
 //SelectorExpr ::= Expression '.' !('(' 'type') Expression
@@ -473,6 +475,12 @@ left AssignmentStatement ::= assign_op ExpressionList {pin=1}
 IncDecStatement ::= Expression ('++' | '--') {pin=2}
 assign_op ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '&=' | '&^='
 
+MatchExpression ::= match Expression '{' MatchArms '}' {pin=1}
+MatchArms ::= (MatchArm | MatchElseArmClause)*
+MatchArm ::= Expression Block semi {pin=2}
+MatchElseArmClause ::= else Block semi {pin=1}
+
+InExpression ::= Expression in Expression {pin=2}
 
 IfExpression ::= if Condition Block ElseStatement? {pin=1}
 IfStatement ::= IfExpression

@@ -51,7 +51,7 @@ class VlangParserDefinition : ParserDefinition {
         val KEYWORDS = TokenSet.create(
             BREAK, CASE, /*CHAN*/ CONST, CONTINUE, DEFAULT, DEFER, ELSE, FALLTHROUGH, FOR, FN, GO, GOTO, IF, IMPORT,
             INTERFACE, MODULE, IN, RETURN, SELECT, STRUCT, SWITCH, TYPE_, PUB, AS, MUT, IF_COMPILE_TIME, ELSE_COMPILE_TIME,
-            UNSAFE, BUILTIN_GLOBAL, ASSERT, ENUM
+            UNSAFE, BUILTIN_GLOBAL, ASSERT, ENUM, MATCH
         )
         val OPERATORS = TokenSet.create(
             EQ,

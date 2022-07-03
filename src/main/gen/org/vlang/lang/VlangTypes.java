@@ -64,9 +64,14 @@ public interface VlangTypes {
   IElementType IMPORT_SPEC = new VlangCompositeElementType("IMPORT_SPEC");
   IElementType INC_DEC_STATEMENT = new VlangCompositeElementType("INC_DEC_STATEMENT");
   IElementType INDEX_OR_SLICE_EXPR = new VlangCompositeElementType("INDEX_OR_SLICE_EXPR");
+  IElementType IN_EXPRESSION = new VlangCompositeElementType("IN_EXPRESSION");
   IElementType LABEL_REF = new VlangCompositeElementType("LABEL_REF");
   IElementType LEFT_HAND_EXPR_LIST = new VlangCompositeElementType("LEFT_HAND_EXPR_LIST");
   IElementType LITERAL = new VlangCompositeElementType("LITERAL");
+  IElementType MATCH_ARM = new VlangCompositeElementType("MATCH_ARM");
+  IElementType MATCH_ARMS = new VlangCompositeElementType("MATCH_ARMS");
+  IElementType MATCH_ELSE_ARM_CLAUSE = new VlangCompositeElementType("MATCH_ELSE_ARM_CLAUSE");
+  IElementType MATCH_EXPRESSION = new VlangCompositeElementType("MATCH_EXPRESSION");
   IElementType METHOD_DECLARATION = VlangElementTypeFactory.stubFactory("METHOD_DECLARATION");
   IElementType MODULE_CLAUSE = VlangElementTypeFactory.stubFactory("MODULE_CLAUSE");
   IElementType MUL_EXPR = new VlangCompositeElementType("MUL_EXPR");
@@ -157,6 +162,7 @@ public interface VlangTypes {
   IElementType LESS = new VlangTokenType("<");
   IElementType LESS_OR_EQUAL = new VlangTokenType("<=");
   IElementType LPAREN = new VlangTokenType("(");
+  IElementType MATCH = new VlangTokenType("match");
   IElementType MINUS = new VlangTokenType("-");
   IElementType MINUS_ASSIGN = new VlangTokenType("-=");
   IElementType MINUS_MINUS = new VlangTokenType("--");
@@ -358,6 +364,9 @@ public interface VlangTypes {
       else if (type == INDEX_OR_SLICE_EXPR) {
         return new VlangIndexOrSliceExprImpl(node);
       }
+      else if (type == IN_EXPRESSION) {
+        return new VlangInExpressionImpl(node);
+      }
       else if (type == LABEL_REF) {
         return new VlangLabelRefImpl(node);
       }
@@ -366,6 +375,18 @@ public interface VlangTypes {
       }
       else if (type == LITERAL) {
         return new VlangLiteralImpl(node);
+      }
+      else if (type == MATCH_ARM) {
+        return new VlangMatchArmImpl(node);
+      }
+      else if (type == MATCH_ARMS) {
+        return new VlangMatchArmsImpl(node);
+      }
+      else if (type == MATCH_ELSE_ARM_CLAUSE) {
+        return new VlangMatchElseArmClauseImpl(node);
+      }
+      else if (type == MATCH_EXPRESSION) {
+        return new VlangMatchExpressionImpl(node);
       }
       else if (type == METHOD_DECLARATION) {
         return new VlangMethodDeclarationImpl(node);
