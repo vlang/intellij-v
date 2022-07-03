@@ -14,6 +14,9 @@ public interface VlangArrayCreation extends VlangExpression {
   PsiElement getLbrack();
 
   @Nullable
+  PsiElement getNot();
+
+  @Nullable
   PsiElement getRbrack();
 
 }

@@ -11,8 +11,7 @@ import org.vlang.lang.psi.VlangArrayCreationList;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
 import org.vlang.lang.psi.VlangVisitor;
 
-import static org.vlang.lang.VlangTypes.LBRACK;
-import static org.vlang.lang.VlangTypes.RBRACK;
+import static org.vlang.lang.VlangTypes.*;
 
 public class VlangArrayCreationImpl extends VlangExpressionImpl implements VlangArrayCreation {
 
@@ -41,6 +40,12 @@ public class VlangArrayCreationImpl extends VlangExpressionImpl implements Vlang
   @NotNull
   public PsiElement getLbrack() {
     return notNullChild(findChildByType(LBRACK));
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getNot() {
+    return findChildByType(NOT);
   }
 
   @Override

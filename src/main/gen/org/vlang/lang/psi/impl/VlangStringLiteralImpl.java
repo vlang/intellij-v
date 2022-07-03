@@ -9,8 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.VlangStringLiteral;
 import org.vlang.lang.psi.VlangVisitor;
 
-import static org.vlang.lang.VlangTypes.RAW_STRING;
-import static org.vlang.lang.VlangTypes.STRING;
+import static org.vlang.lang.VlangTypes.*;
 
 public class VlangStringLiteralImpl extends VlangExpressionImpl implements VlangStringLiteral {
 
@@ -27,6 +26,12 @@ public class VlangStringLiteralImpl extends VlangExpressionImpl implements Vlang
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof VlangVisitor) accept((VlangVisitor)visitor);
     else super.accept(visitor);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getChar() {
+    return findChildByType(CHAR);
   }
 
   @Override

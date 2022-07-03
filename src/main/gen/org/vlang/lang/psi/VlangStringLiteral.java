@@ -7,6 +7,9 @@ import org.jetbrains.annotations.Nullable;
 public interface VlangStringLiteral extends VlangExpression {
 
   @Nullable
+  PsiElement getChar();
+
+  @Nullable
   PsiElement getRawString();
 
   @Nullable

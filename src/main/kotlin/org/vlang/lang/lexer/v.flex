@@ -49,10 +49,10 @@ IDENT = {LETTER} ({LETTER} | {DIGIT} )*
 SPECIAL_IDENT = ("JS." | "C.") {LETTER} ({LETTER} | {DIGIT} | "." )*
 
 STR_DOUBLE =   "\""
-STR_SINGLE =   "'"
+CHAR_QUOTE =   "`"
 STR_MODIFIER = "r" | "c"
 STRING_DOUBLE = {STR_MODIFIER}? {STR_DOUBLE} ( [^\"\\\n\r] | "\\" ("\\" | {STR_DOUBLE} | {ESCAPES} | [0-8xuU] ) )* {STR_DOUBLE}
-STRING_SINGLE = {STR_MODIFIER}? {STR_SINGLE} ( [^\'\\\n\r] | "\\" ("\\" | {STR_SINGLE} | {ESCAPES} | [0-8xuU] ) )* {STR_SINGLE}
+CHAR = {CHAR_QUOTE} . {CHAR_QUOTE}
 ESCAPES = [abfnrtve] // TODO: need "e"?
 
 STR_ANGLE_OPEN =   "<"
@@ -74,7 +74,6 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 {MULTILINE_COMMENT}                       { return MULTILINE_COMMENT; }
 
 {STRING_DOUBLE}                           { yybegin(MAYBE_SEMICOLON); return STRING; }
-{STRING_SINGLE}                           { yybegin(MAYBE_SEMICOLON); return STRING; }
 
 //"'\\'"                                    { yybegin(MAYBE_SEMICOLON); return BAD_CHARACTER; }
 //"'" [^\\] "'"?                            { yybegin(MAYBE_SEMICOLON); return CHAR; }
@@ -85,7 +84,8 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 //"'\\u" {HEX_DIGIT} {4} "'"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
 //"'\\U" {HEX_DIGIT} {8} "'"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
 
-"`" [^`]* "`"?                            { yybegin(MAYBE_SEMICOLON); return RAW_STRING; }
+{STR_MODIFIER}? "'" [^']* "'"?            { yybegin(MAYBE_SEMICOLON); return RAW_STRING; }
+{CHAR}                                    { yybegin(MAYBE_SEMICOLON); return CHAR; }
 "..."                                     { return TRIPLE_DOT; }
 ".."                                      { return RANGE; }
 "."                                       { return DOT; }
@@ -107,8 +107,9 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 "="                                       { return ASSIGN; }
 
 "!="                                      { return NOT_EQ; }
-"!"                                       { return NOT; }
-"?"                                       { return QUESTION; }
+"!in"                                     { return NOT_IN; }
+"!"                                       { yybegin(MAYBE_SEMICOLON); return NOT; }
+"?"                                       { yybegin(MAYBE_SEMICOLON); return QUESTION; }
 
 "++"                                      { yybegin(MAYBE_SEMICOLON); return PLUS_PLUS; }
 "+="                                      { return PLUS_ASSIGN; }
