@@ -65,6 +65,7 @@
     VAR_ASSIGN           =  ':='
     TRIPLE_DOT           =  '...'
     DOT                  =  '.'
+    RANGE                =  '..'
     SEMICOLON_SYNTHETIC  = '<NL>'
     TYPE_                = 'type'
     raw_string           = 'raw_string'
@@ -73,9 +74,9 @@
   ]
 
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional)Expr")=BinaryExpr
-  extends(".*(Expr|Literal|Lit|OperandName)")=Expression
+  extends(".*(Expr|Literal|Lit|OperandName)|StructInitialization|UnsafeExpression|CompileTimeIfExpression|IfExpression")=Expression
 
-  implements("(Type|Import)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")="org.vlang.lang.psi.VlangNamedElement"
+  implements("(Type|Import)Spec|(Var|Const|Param|Field|Label)Definition|Receiver")="org.vlang.lang.psi.VlangNamedElement"
   implements("FunctionLit")="org.vlang.lang.psi.GoSignatureOwner"
   implements("MethodSpec")="org.vlang.lang.psi.GoNamedSignatureOwner"
   implements("(Function|Method)Declaration")="org.vlang.lang.psi.VlangFunctionOrMethodDeclaration"
@@ -83,8 +84,8 @@
   implements(".*ReferenceExpression|FieldName")="org.vlang.lang.psi.VlangReferenceExpressionBase"
 
   extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
-  extends("ImportSpec|ParamDefinition|Receiver|(Var|Const)Definition")="org.vlang.lang.psi.impl.VlangSimpleNamedElementImpl"
-  extends("(Method)Spec|((Anonymous)?Field|Label)Definition")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
+  extends("ImportSpec|ParamDefinition|Receiver|(Var|Const|Field|Label)Definition")="org.vlang.lang.psi.impl.VlangSimpleNamedElementImpl"
+  extends("(Method)Spec")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
   extends("ModuleClause")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
   elementTypeFactory("ModuleClause|(Function|Method)Declaration")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
 //  pin(".*Statement")=1
@@ -104,7 +105,7 @@ private semi ::= '<NL>' | ';' | <<eof>>
 
 ErrorPropagation ::= '?'
 
-ModuleClause ::= module identifier semi {pin=1
+ModuleClause ::= Attributes? module identifier semi {pin=2
   methods=[getName]
   stubClass="org.vlang.lang.stubs.VlangModuleClauseStub"
 }
@@ -138,8 +139,9 @@ left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeRefere
 
 private TypeLit ::=
     ArrayOrSliceType
-//  | StructType
+  | StructType
   | PointerType
+  | NullableType
 //  | FunctionType
 //  | InterfaceType
 //  | MapType
@@ -147,21 +149,33 @@ private TypeLit ::=
 
 ArrayOrSliceType ::= '[' ('...'|Expression?) ']' Type {pin=1}
 
-//StructType ::= struct '{' Fields? '}' {pin=1}
-//private Fields ::= FieldDeclaration (semi FieldDeclaration)* semi? {pin=1}
-//FieldDeclaration ::= (FieldDefinitionList Type | AnonymousFieldDefinition) Tag?
-//Tag ::= StringLiteral
-//private FieldDefinitionList ::= FieldDefinition (',' FieldDefinition)*
-//FieldDefinition ::= identifier {
+StructDeclaration ::= SymbolVisibility? StructType
+
+StructType ::= struct identifier? '{' Fields? '}' {pin=1}
+
+FieldsModifiers ::= FieldModifier (FieldModifier)* ':' {pin=1}
+FieldModifier ::= mut | pub | BUILTIN_GLOBAL
+
+DefaultFieldValue ::= '=' Expression
+private Fields ::= FieldsModifiers? FieldDeclaration? (semi Fields)* semi? {pin=1}
+FieldDeclaration ::= (FieldDefinitionList Type | AnonymousFieldDefinition) DefaultFieldValue? Attribute? Tag?
+Tag ::= StringLiteral
+private FieldDefinitionList ::= FieldDefinition (',' FieldDefinition)*
+FieldDefinition ::= identifier {
 //  stubClass="org.vlang.lang.stubs.GoFieldDefinitionStub"
-//}
-//
-//AnonymousFieldDefinition ::= Type {
+}
+
+AnonymousFieldDefinition ::= Type {
 //  stubClass="org.vlang.lang.stubs.GoAnonymousFieldDefinitionStub"
-//  methods=[getIdentifier getName getTypeReferenceExpression getGoTypeInner]
-//}
-//
+  methods=[getIdentifier getName getTypeReferenceExpression getGoTypeInner]
+}
+
+StructInitialization ::= Type '{' ( '}' | FieldInitialization (semi FieldInitialization)* semi? '}') {pin=3}
+FieldInitialization ::= identifier ':' Expression {pin=2}
+
+
 PointerType ::= '&' Type {pin=1}
+NullableType ::= '?' Type {pin=1}
 //
 //FunctionType ::= fn Signature {pin=1 implements="org.vlang.lang.psi.GoSignatureOwner"}
 Signature ::= Parameters Result? {
@@ -182,7 +196,7 @@ ParameterDeclaration ::= ParamDefinitionListNoPin? '...'? Type | Type { // todo:
   methods = [isVariadic]
 }
 private ParamDefinitionListNoPin ::= ParamDefinition &(!('.' | ')')) (',' ParamDefinition)* // todo
-ParamDefinition ::= identifier {
+ParamDefinition ::= SymbolMutability identifier {
 //  stubClass="org.vlang.lang.stubs.GoParamDefinitionStub"
   methods = [isVariadic]
 }
@@ -232,10 +246,11 @@ Statement ::=
 //  | SwitchStatement
 //  | SelectStatement
   | ForStatement
+  | AssertStatement
   | DeferStatement {methods=[processDeclarations]}
 
 
-private StatementRecover ::= !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | go | goto | hex | identifier | if | int | interface | map | oct | return | select | string | raw_string | struct | switch | var | unsafe | IF_COMPILE_TIME | ELSE_COMPILE_TIME)
+private StatementRecover ::= !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | struct | switch | var | unsafe | assert | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL)
 
 SimpleStatement ::=
   ShortVarDeclaration
@@ -249,7 +264,10 @@ private TopDeclaration ::=
 //  | VarDeclaration
   FunctionDeclaration
   | MethodDeclaration
-private TopLevelDeclarationRecover ::= !(';' |'type' | const | fn | pub | var | '[')
+  | StructDeclaration
+  | GlobalVariableDeclaration
+
+private TopLevelDeclarationRecover ::= !(';' | type | const | fn | pub | BUILTIN_GLOBAL | var | struct | '[')
 //
 //ConstDeclaration ::= const ( ConstSpec | '(' ConstSpecs? ')' ) {pin(".*")=1 methods=[addSpec deleteSpec]}
 //private ConstSpecs ::= ConstSpec (semi ConstSpec)* semi? {pin=1}
@@ -264,6 +282,9 @@ private TopLevelDeclarationRecover ::= !(';' |'type' | const | fn | pub | var | 
 //  methods=[getGoTypeInner getValue]
 //}
 //
+
+GlobalVariableDeclaration ::= Attributes? BUILTIN_GLOBAL identifier '=' Expression {pin=3}
+
 LeftHandExprList ::= ExpressionList
 private ExpressionArgList ::= ExpressionOrTypeWithRecover2 (',' (ExpressionOrTypeWithRecover2 | &')'))* {pin(".*")=1}
 private ExpressionOrTypeWithRecover2 ::= /*<<withOn "PAR" */ExpressionOrTypeWithRecover/*>>*/ | (!() ExpressionOrLiteralTypeExpr) {recoverWhile=ExpressionListRecover}
@@ -272,7 +293,7 @@ private ExpressionOrLiteralTypeExpr ::= Expression /*| LiteralTypeExpr*/
 
 private ExpressionList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &')'))* {pin(".*")=1}
 private ExpressionWithRecover ::= Expression {recoverWhile=ExpressionListRecover}
-private ExpressionListRecover ::= !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | go | goto | hex | identifier | if | int | interface | map | oct | return | select | string | raw_string | struct | switch | var | unsafe)
+private ExpressionListRecover ::= !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | struct | switch | var | unsafe | assert)
 
 //TypeDeclaration ::= 'type' ( TypeSpec | '(' TypeSpecs? ')' ) {pin(".*")=1}
 //private TypeSpecs ::= TypeSpec (semi TypeSpec)* semi? {pin=1}
@@ -300,19 +321,19 @@ ShortVarDeclaration ::= VarDefinitionList ':=' ExpressionList {pin=2}
 
 SymbolMutability ::= mut?
 
-SymbolVisibility ::= pub?
+SymbolVisibility ::= (pub | BUILTIN_GLOBAL)?
 
 FunctionDeclaration ::= Attributes? SymbolVisibility fn identifier Signature BlockWithConsume? {
-  pin=3
+  pin=4
   stubClass="org.vlang.lang.stubs.VlangFunctionDeclarationStub"
   methods=[getName]
 }
-MethodDeclaration ::= fn Receiver identifier Signature BlockWithConsume? {
-  pin=1
+MethodDeclaration ::= Attributes? SymbolVisibility fn Receiver identifier Signature BlockWithConsume? {
+  pin=5
   stubClass="org.vlang.lang.stubs.VlangMethodDeclarationStub"
   methods=[getReceiverType]
 }
-Receiver ::= '(' (identifier ReceiverTail | ReceiverTail) ')' {
+Receiver ::= '(' (SymbolMutability identifier ReceiverTail | ReceiverTail) ')' {
   methods=[getGoTypeInner]
   pin=1
 //  stubClass="org.vlang.lang.stubs.GoReceiverStub"
@@ -321,13 +342,13 @@ private ReceiverTail ::= Type ','?
 
 Attributes ::= Attribute (semi Attribute)* semi? {pin=1}
 
-Attribute ::= '[' AttributeExpression ']' {pin=1}
+Attribute ::= '[' AttributeExpression (';' AttributeExpression)* ']' {pin=1}
 
 AttributeExpression ::= IfAttribute | PlainAttribute
 
 IfAttribute ::= if identifier {pin=1}
 
-PlainAttribute ::= identifier | unsafe [':' StringLiteral]
+PlainAttribute ::= (identifier | unsafe) (':' StringLiteral)?
 
 Literal ::=
     int
@@ -373,6 +394,11 @@ Expression ::=
   | MulExpr
   | UnaryExpr
 //  | ConversionExpr
+  | RangeExpr
+  | StructInitialization
+  | UnsafeExpression
+  | IfExpression
+  | CompileTimeIfExpression
   | MaxGroup
   | ParenthesesExpr {methods=[getGoType] /*implements="org.vlang.lang.psi.GoTypeOwner"*/}
 
@@ -387,6 +413,8 @@ ConditionalExpr ::= Expression RelOp Expression
 AddExpr ::= Expression AddOp Expression
 MulExpr ::= Expression MulOp Expression
 ParenthesesExpr ::= '(' /*<<enterMode "PAR">>*/ Expression /*<<exitModeSafe "PAR">>*/')' {pin=1}
+
+RangeExpr ::= Expression '..' Expression {pin=2}
 
 //BuiltinCallExpr ::= ReferenceExpression <<isBuiltin>> BuiltinArgumentList {pin=2}
 //BuiltinArgumentList ::= '(' [ BuiltinArgsInner ','? ] ')' {pin=1 extends=ArgumentList}
@@ -430,13 +458,17 @@ ArgumentList ::= '(' [ ExpressionArgList '...'? ','? ] ')' {pin=1}
 left AssignmentStatement ::= assign_op ExpressionList {pin=1}
 IncDecStatement ::= Expression ('++' | '--') {pin=2}
 assign_op ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '&=' | '&^='
-IfStatement ::= if Condition Block ElseStatement?
-ElseStatement ::= else (IfStatement | Block)
-CompileTimeIfStatement ::= IF_COMPILE_TIME Condition Block CompileElseStatement?
-CompileElseStatement ::= ELSE_COMPILE_TIME (CompileTimeIfStatement | Block)
 
-private UnsafeExpression ::= unsafe UnsafeExpressionBlock {pin=1}
-private UnsafeExpressionBlock ::= Block
+
+IfExpression ::= if Condition Block ElseStatement?
+IfStatement ::= IfExpression
+ElseStatement ::= else (IfStatement | Block)
+
+CompileTimeIfExpression ::= IF_COMPILE_TIME Condition Block CompileElseStatement? {pin=1}
+CompileTimeIfStatement ::= CompileTimeIfExpression
+CompileElseStatement ::= ELSE_COMPILE_TIME (CompileTimeIfStatement | Block) {pin=1}
+
+UnsafeExpression ::= unsafe Block {pin=1}
 UnsafeStatement ::= UnsafeExpression
 
 //SwitchStatement ::= SwitchStart (TypeSwitchStatement | ExprSwitchStatement)
@@ -471,4 +503,5 @@ BreakStatement ::= break LabelRef?
 ContinueStatement ::= continue LabelRef?
 //GotoStatement ::= goto LabelRef
 //FallthroughStatement ::= fallthrough
+AssertStatement ::= assert Expression
 DeferStatement ::= defer Block

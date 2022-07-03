@@ -44,9 +44,11 @@ NUM_FLOAT = ( ( ({DIGIT}+ "." {DIGIT}*) | ({DIGIT}* "." {DIGIT}+) ) {FLOAT_EXPON
 
 IDENT = {LETTER} ({LETTER} | {DIGIT} )*
 
-STR =          "\"" | "'"
+STR_DOUBLE =   "\""
+STR_SINGLE =   "'"
 STR_MODIFIER = "r" | "c"
-STRING = {STR_MODIFIER}? {STR} ( [^\"\\\n\r] | "\\" ("\\" | {STR} | {ESCAPES} | [0-8xuU] ) )* {STR}
+STRING_DOUBLE = {STR_MODIFIER}? {STR_DOUBLE} ( [^\"\\\n\r] | "\\" ("\\" | {STR_DOUBLE} | {ESCAPES} | [0-8xuU] ) )* {STR_DOUBLE}
+STRING_SINGLE = {STR_MODIFIER}? {STR_SINGLE} ( [^\'\\\n\r] | "\\" ("\\" | {STR_SINGLE} | {ESCAPES} | [0-8xuU] ) )* {STR_SINGLE}
 ESCAPES = [abfnrtv]
 
 %state MAYBE_SEMICOLON
@@ -60,7 +62,8 @@ ESCAPES = [abfnrtv]
 {LINE_COMMENT}                            { return LINE_COMMENT; }
 {MULTILINE_COMMENT}                       { return MULTILINE_COMMENT; }
 
-{STRING}                                  { yybegin(MAYBE_SEMICOLON); return STRING; }
+{STRING_DOUBLE}                           { yybegin(MAYBE_SEMICOLON); return STRING; }
+{STRING_SINGLE}                           { yybegin(MAYBE_SEMICOLON); return STRING; }
 
 //"'\\'"                                    { yybegin(MAYBE_SEMICOLON); return BAD_CHARACTER; }
 //"'" [^\\] "'"?                            { yybegin(MAYBE_SEMICOLON); return CHAR; }
@@ -73,6 +76,7 @@ ESCAPES = [abfnrtv]
 
 "`" [^`]* "`"?                            { yybegin(MAYBE_SEMICOLON); return RAW_STRING; }
 "..."                                     { return TRIPLE_DOT; }
+".."                                      { return RANGE; }
 "."                                       { return DOT; }
 "|"                                       { return BIT_OR; }
 "{"                                       { return LBRACE; }
@@ -141,6 +145,7 @@ ESCAPES = [abfnrtv]
 "$if"                                     { return IF_COMPILE_TIME ; }
 "$else"                                   { return ELSE_COMPILE_TIME ; }
 
+"assert"                                  { return ASSERT; }
 "break"                                   { yybegin(MAYBE_SEMICOLON); return BREAK; }
 "fallthrough"                             { yybegin(MAYBE_SEMICOLON); return FALLTHROUGH; }
 "return"                                  { yybegin(MAYBE_SEMICOLON); return RETURN ; }
@@ -157,7 +162,6 @@ ESCAPES = [abfnrtv]
 "case"                                    { return CASE; }
 "defer"                                   { return DEFER; }
 "go"                                      { return GO; }
-"map"                                     { return MAP; }
 
 //"chan"                                    { return CHAN; }
 
@@ -175,6 +179,8 @@ ESCAPES = [abfnrtv]
 "in"                                      { return IN; }
 "type"                                    { return TYPE_; }
 "mut"                                     { return MUT; }
+
+"__global"                                { return BUILTIN_GLOBAL; }
 
 {IDENT}                                   { yybegin(MAYBE_SEMICOLON); return IDENTIFIER; }
 
