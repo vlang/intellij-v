@@ -298,6 +298,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitType(o);
   }
 
+  public void visitOrBlockExpr(@NotNull VlangOrBlockExpr o) {
+    visitBinaryExpr(o);
+  }
+
   public void visitOrExpr(@NotNull VlangOrExpr o) {
     visitBinaryExpr(o);
   }

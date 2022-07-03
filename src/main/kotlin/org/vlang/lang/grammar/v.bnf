@@ -73,7 +73,7 @@
 //    ELSE_COMPILE_TIME    = '$else'
   ]
 
-  extends("(Or|And|Add|Conversion|Mul|Selector|Conditional)Expr")=BinaryExpr
+  extends("(Or|And|Add|Conversion|Mul|Selector|Conditional|OrBlock)Expr")=BinaryExpr
   extends(".*(Expr|Literal|Lit|OperandName)|StructInitialization|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|MatchExpression|EnumFetch")=Expression
 
   implements("(Type|Import)Spec|(Var|Const|Param|Field|Label)Definition|Receiver")="org.vlang.lang.psi.VlangNamedElement"
@@ -412,7 +412,8 @@ ReferenceExpression ::= identifier { methods=[getReference getQualifier resolve 
 //FunctionLit ::= fn Signature Block {pin=1 methods=[processDeclarations]}
 //
 Expression ::=
-    OrExpr
+    OrBlockExpr
+  | OrExpr
   | AndExpr
   | ConditionalExpr
   | AddExpr
@@ -437,6 +438,7 @@ fake BinaryExpr ::= Expression+ {
 
 EnumFetch ::= '.' identifier {pin=2}
 
+OrBlockExpr ::= Expression or Block
 OrExpr ::= Expression '||' Expression
 AndExpr ::= Expression '&&' Expression
 UnaryExpr ::=  UnaryOp Expression {methods=[getOperator]}

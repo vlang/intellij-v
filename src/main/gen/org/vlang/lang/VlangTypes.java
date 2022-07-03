@@ -84,6 +84,7 @@ public interface VlangTypes {
   IElementType MODULE_CLAUSE = VlangElementTypeFactory.stubFactory("MODULE_CLAUSE");
   IElementType MUL_EXPR = new VlangCompositeElementType("MUL_EXPR");
   IElementType NULLABLE_TYPE = new VlangCompositeElementType("NULLABLE_TYPE");
+  IElementType OR_BLOCK_EXPR = new VlangCompositeElementType("OR_BLOCK_EXPR");
   IElementType OR_EXPR = new VlangCompositeElementType("OR_EXPR");
   IElementType PARAMETERS = new VlangCompositeElementType("PARAMETERS");
   IElementType PARAMETER_DECLARATION = new VlangCompositeElementType("PARAMETER_DECLARATION");
@@ -185,6 +186,7 @@ public interface VlangTypes {
   IElementType NOT = new VlangTokenType("!");
   IElementType NOT_EQ = new VlangTokenType("!=");
   IElementType OCT = new VlangTokenType("oct");
+  IElementType OR = new VlangTokenType("or");
   IElementType PLUS = new VlangTokenType("+");
   IElementType PLUS_ASSIGN = new VlangTokenType("+=");
   IElementType PLUS_PLUS = new VlangTokenType("++");
@@ -435,6 +437,9 @@ public interface VlangTypes {
       }
       else if (type == NULLABLE_TYPE) {
         return new VlangNullableTypeImpl(node);
+      }
+      else if (type == OR_BLOCK_EXPR) {
+        return new VlangOrBlockExprImpl(node);
       }
       else if (type == OR_EXPR) {
         return new VlangOrExprImpl(node);

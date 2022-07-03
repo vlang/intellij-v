@@ -186,6 +186,7 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 "switch"                                  { return SWITCH; }
 "const"                                   { return CONST; }
 
+"or"                                      { return OR ; }
 "match"                                   { return MATCH ; }
 "if"                                      { return IF ; }
 "for"                                     { return FOR ; }
