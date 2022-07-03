@@ -260,15 +260,20 @@ Statement ::=
 //  | SelectStatement
   | ForStatement
   | AssertStatement
+  | CFlagStatement
+  | CIncludeStatement
   | DeferStatement {methods=[processDeclarations]}
 
 
-private StatementRecover ::= !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | struct | switch | var | unsafe | assert | match | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL)
+private StatementRecover ::= !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | struct | switch | var | unsafe | assert | match | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG)
 
 SimpleStatement ::=
   ShortVarDeclaration
   | IncDecStatement
   | (LeftHandExprList AssignmentStatement? /*| SendStatement*/) {pin(".*")=LeftHandExprList}
+
+CIncludeStatement ::= C_INCLUDE StringLiteral {pin=1}
+CFlagStatement ::= C_FLAG C_FLAG_VALUE {pin=1}
 
 private TopLevelDeclaration ::= !<<eof>> TopDeclaration semi {pin=1 recoverWhile=TopLevelDeclarationRecover}
 private TopDeclaration ::=
@@ -281,8 +286,11 @@ private TopDeclaration ::=
   | EnumDeclaration
   | InterfaceDeclaration
   | GlobalVariableDeclaration
+  | CompileTimeIfStatement
+  | CIncludeStatement
+  | CFlagStatement
 
-private TopLevelDeclarationRecover ::= !(';' | type | const | fn | pub | BUILTIN_GLOBAL | var | struct | enum | interface | '[')
+private TopLevelDeclarationRecover ::= !(';' | type | const | fn | pub | BUILTIN_GLOBAL | var | struct | enum | interface | import | C_INCLUDE | C_FLAG | IF_COMPILE_TIME | '[')
 
 ConstDeclaration ::= const ( ConstSpec | '(' ConstSpecs? ')' ) {pin(".*")=1 methods=[addSpec deleteSpec]}
 private ConstSpecs ::= ConstSpec (semi ConstSpec)* semi? {pin=1}

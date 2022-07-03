@@ -36,6 +36,8 @@ public interface VlangTypes {
   IElementType CONST_DEFINITION = new VlangCompositeElementType("CONST_DEFINITION");
   IElementType CONST_SPEC = new VlangCompositeElementType("CONST_SPEC");
   IElementType CONTINUE_STATEMENT = new VlangCompositeElementType("CONTINUE_STATEMENT");
+  IElementType C_FLAG_STATEMENT = new VlangCompositeElementType("C_FLAG_STATEMENT");
+  IElementType C_INCLUDE_STATEMENT = new VlangCompositeElementType("C_INCLUDE_STATEMENT");
   IElementType DEFAULT_FIELD_VALUE = new VlangCompositeElementType("DEFAULT_FIELD_VALUE");
   IElementType DEFER_STATEMENT = new VlangCompositeElementType("DEFER_STATEMENT");
   IElementType ELSE_STATEMENT = new VlangCompositeElementType("ELSE_STATEMENT");
@@ -135,6 +137,9 @@ public interface VlangTypes {
   IElementType COND_OR = new VlangTokenType("||");
   IElementType CONST = new VlangTokenType("const");
   IElementType CONTINUE = new VlangTokenType("continue");
+  IElementType C_FLAG = new VlangTokenType("C_FLAG");
+  IElementType C_FLAG_VALUE = new VlangTokenType("C_FLAG_VALUE");
+  IElementType C_INCLUDE = new VlangTokenType("C_INCLUDE");
   IElementType DECIMALI = new VlangTokenType("decimali");
   IElementType DEFAULT = new VlangTokenType("default");
   IElementType DEFER = new VlangTokenType("defer");
@@ -285,6 +290,12 @@ public interface VlangTypes {
       }
       else if (type == CONTINUE_STATEMENT) {
         return new VlangContinueStatementImpl(node);
+      }
+      else if (type == C_FLAG_STATEMENT) {
+        return new VlangCFlagStatementImpl(node);
+      }
+      else if (type == C_INCLUDE_STATEMENT) {
+        return new VlangCIncludeStatementImpl(node);
       }
       else if (type == DEFAULT_FIELD_VALUE) {
         return new VlangDefaultFieldValueImpl(node);
