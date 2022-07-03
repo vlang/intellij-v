@@ -133,7 +133,7 @@ Type ::= TypeName
   }
 
 ParType ::= '(' Type ')' {methods=[getActualType]}
-private TypeName ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
+private TypeName ::= TypeReferenceExpression (QualifiedTypeReferenceExpression)*
 TypeReferenceExpression ::= identifier { methods=[getReference getQualifier resolve resolveType] }
 left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
 
@@ -170,8 +170,13 @@ AnonymousFieldDefinition ::= Type {
   methods=[getIdentifier getName getTypeReferenceExpression getGoTypeInner]
 }
 
-StructInitialization ::= Type '{' ( '}' | FieldInitialization (semi FieldInitialization)* semi? '}') {pin=3}
-FieldInitialization ::= identifier ':' Expression {pin=2}
+StructInitialization ::= Type '{' ( '}' | FieldInitialization '}') {pin=3}
+FieldInitialization ::= FieldInitializationKeyValueList /*| FieldInitializationValueList*/
+FieldInitializationKeyValueList ::= (FieldInitializationKeyValue semi)+ semi?
+private FieldInitializationKeyValue ::= Expression ':' Expression {pin=2}
+//FieldInitializationValueList ::= FieldInitializationValue (',' FieldInitializationValue)* ','?
+// see return if a > b { a } else { b }
+//private FieldInitializationValue ::= Expression {pin=1}
 
 
 PointerType ::= '&' Type {pin=1}
@@ -228,11 +233,11 @@ private Statements ::= StatementWithSemi*
 
 private StatementWithSemi ::= Statement (semi | &'}') { pin=1 recoverWhile=StatementRecover }
 Statement ::=
-//    ConstDeclaration
+  ConstDeclaration
 //  | TypeDeclaration
 //  VarDeclaration
 //  | LabeledStatement
-  SimpleStatement
+  | SimpleStatement
   | GoStatement
   | ReturnStatement
   | BreakStatement
@@ -259,29 +264,29 @@ SimpleStatement ::=
 
 private TopLevelDeclaration ::= !<<eof>> TopDeclaration semi {pin=1 recoverWhile=TopLevelDeclarationRecover}
 private TopDeclaration ::=
-//    ConstDeclaration
+  ConstDeclaration
 //  | TypeDeclaration
 //  | VarDeclaration
-  FunctionDeclaration
+  | FunctionDeclaration
   | MethodDeclaration
   | StructDeclaration
   | GlobalVariableDeclaration
 
 private TopLevelDeclarationRecover ::= !(';' | type | const | fn | pub | BUILTIN_GLOBAL | var | struct | '[')
-//
-//ConstDeclaration ::= const ( ConstSpec | '(' ConstSpecs? ')' ) {pin(".*")=1 methods=[addSpec deleteSpec]}
-//private ConstSpecs ::= ConstSpec (semi ConstSpec)* semi? {pin=1}
-//ConstSpec ::= ConstDefinitionList [ ('=' ExpressionList | Type '=' ExpressionList) ] {
-//  pin(".*")=1
+
+ConstDeclaration ::= const ( ConstSpec | '(' ConstSpecs? ')' ) {pin(".*")=1 methods=[addSpec deleteSpec]}
+private ConstSpecs ::= ConstSpec (semi ConstSpec)* semi? {pin=1}
+ConstSpec ::= ConstDefinitionList [ ('=' ExpressionList | Type '=' ExpressionList) ] {
+  pin(".*")=1
 //  stubClass="org.vlang.lang.stubs.GoConstSpecStub"
-//  methods=[deleteDefinition]
-//}
-//private ConstDefinitionList ::= ConstDefinition ( ',' ConstDefinition )*
-//ConstDefinition ::= identifier {
+  methods=[deleteDefinition]
+}
+private ConstDefinitionList ::= ConstDefinition ( ',' ConstDefinition )*
+ConstDefinition ::= identifier {
 //  stubClass="org.vlang.lang.stubs.GoConstDefinitionStub"
-//  methods=[getGoTypeInner getValue]
-//}
-//
+  methods=[getGoTypeInner getValue]
+}
+
 
 GlobalVariableDeclaration ::= Attributes? BUILTIN_GLOBAL identifier '=' Expression {pin=3}
 
@@ -323,11 +328,15 @@ SymbolMutability ::= mut?
 
 SymbolVisibility ::= (pub | BUILTIN_GLOBAL)?
 
-FunctionDeclaration ::= Attributes? SymbolVisibility fn identifier Signature BlockWithConsume? {
+FunctionDeclaration ::= Attributes? SymbolVisibility fn FunctionName Signature BlockWithConsume? {
   pin=4
   stubClass="org.vlang.lang.stubs.VlangFunctionDeclarationStub"
-  methods=[getName]
+  methods=[getName getIdentifier]
 }
+
+private FunctionName ::= FunctionNamePart ('.' FunctionNamePart)*
+FunctionNamePart ::= identifier
+
 MethodDeclaration ::= Attributes? SymbolVisibility fn Receiver identifier Signature BlockWithConsume? {
   pin=5
   stubClass="org.vlang.lang.stubs.VlangMethodDeclarationStub"
@@ -364,7 +373,7 @@ StringLiteral ::= string | raw_string {
 //  implements = "com.intellij.psi.PsiLanguageInjectionHost"
   methods = [isValidHost updateText createLiteralTextEscaper getDecodedText]
 }
-OperandName ::= ReferenceExpression QualifiedReferenceExpression? {elementType=ReferenceExpression}
+OperandName ::= ReferenceExpression (QualifiedReferenceExpression)* {elementType=ReferenceExpression}
 
 left QualifiedReferenceExpression ::= '.' identifier {elementType=ReferenceExpression}
 ReferenceExpression ::= identifier { methods=[getReference getQualifier resolve getReadWriteAccess] extends=Expression}
@@ -460,9 +469,9 @@ IncDecStatement ::= Expression ('++' | '--') {pin=2}
 assign_op ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '&=' | '&^='
 
 
-IfExpression ::= if Condition Block ElseStatement?
+IfExpression ::= if Condition Block ElseStatement? {pin=1}
 IfStatement ::= IfExpression
-ElseStatement ::= else (IfStatement | Block)
+ElseStatement ::= else (IfStatement | Block) {pin=1}
 
 CompileTimeIfExpression ::= IF_COMPILE_TIME Condition Block CompileElseStatement? {pin=1}
 CompileTimeIfStatement ::= CompileTimeIfExpression

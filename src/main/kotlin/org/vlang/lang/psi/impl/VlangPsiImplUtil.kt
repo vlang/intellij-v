@@ -16,6 +16,11 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getIdentifier(o: VlangFunctionDeclaration): PsiElement? {
+        return o.functionNamePartList.first()
+    }
+
+    @JvmStatic
     fun getReference(o: VlangReferenceExpression): VlangReference {
         return VlangReference(o)
     }
