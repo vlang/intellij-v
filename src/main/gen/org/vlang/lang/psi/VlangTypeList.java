@@ -5,9 +5,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public interface VlangTypeList extends VlangType {
+public interface VlangTypeList extends VlangTypeDecl {
 
   @NotNull
-  List<VlangType> getTypeList();
+  List<VlangTypeDecl> getTypeDeclList();
 
 }

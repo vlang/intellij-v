@@ -20,7 +20,9 @@
     LBRACE               =  '{'
     RBRACE               =  '}'
     LBRACK               =  '['
+    HASH_LBRACK          =  '#['
     RBRACK               =  ']'
+    RBRACK_EXP           =  ']!'
     LPAREN               =  '('
     RPAREN               =  ')'
     COLON                =  ':'
@@ -75,10 +77,10 @@
   ]
 
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional|OrBlock)Expr")=BinaryExpr
-  extends(".*(Expr|Literal|Lit|OperandName)|StructInitialization|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression")=Expression
+  extends(".*(Expr|Literal|Lit|OperandName)|StructInitialization|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|DotExpression")=Expression
 
   implements("(Type|Import)Spec|(Var|Const|Param|Field|Label)Definition|Receiver")="org.vlang.lang.psi.VlangNamedElement"
-  implements("FunctionLit")="org.vlang.lang.psi.GoSignatureOwner"
+//  implements("FunctionLit")="org.vlang.lang.psi.GoSignatureOwner"
   implements("MethodSpec")="org.vlang.lang.psi.GoNamedSignatureOwner"
   implements("(Function|Method)Declaration")="org.vlang.lang.psi.VlangFunctionOrMethodDeclaration"
 //  implements("(Const|Type|Var)Declaration")="org.vlang.lang.psi.GoTopLevelDeclaration"
@@ -91,7 +93,7 @@
   elementTypeFactory("ModuleClause|(Function|Method)Declaration")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
 //  pin(".*Statement")=1
   extends(".*Statement")=Statement
-  extends(".*Type|TypeList")=Type
+  extends(".*Type|TypeList")=TypeDecl
 
   pin('.*List(?:_\d.*)?')=1
 
@@ -126,7 +128,7 @@ SelectiveImportList ::= '{' identifier (',' identifier)* '}' {pin(".*")=2}
 
 ImportAlias ::= identifier {pin(".*")=2}
 
-Type ::= TypeName
+TypeDecl ::= TypeName
   | TypeLit
 //  | ParType {
 //  stubClass="org.vlang.lang.stubs.GoTypeStub"
@@ -143,12 +145,12 @@ private TypeLit ::=
   | StructType
   | PointerType
   | NullableType
-//  | FunctionType
+  | FunctionType
 //  | InterfaceType
 //  | MapType
 //  | ChannelType
 
-ArrayOrSliceType ::= '[' ('...'|Expression?) ']' Type {pin=1}
+ArrayOrSliceType ::= '[' ('...'|Expression?) ']' TypeDecl {pin=1}
 
 EnumDeclaration ::= Attributes? SymbolVisibility? enum identifier '{' EnumFields '}' {pin=3}
 EnumFields ::= EnumFieldDeclaration (semi EnumFieldDeclaration)* semi?
@@ -163,19 +165,19 @@ MemberModifier ::= mut | pub | BUILTIN_GLOBAL
 
 DefaultFieldValue ::= '=' Expression
 private Fields ::= MemberModifiers? FieldDeclaration? (semi Fields)* semi? {pin=1}
-FieldDeclaration ::= (FieldDefinitionList Type | AnonymousFieldDefinition) DefaultFieldValue? Attribute? Tag?
+FieldDeclaration ::= (FieldDefinitionList TypeDecl | AnonymousFieldDefinition) DefaultFieldValue? Attribute? Tag?
 Tag ::= StringLiteral
 private FieldDefinitionList ::= FieldName (',' FieldName)*
 FieldName ::= identifier {
 //  stubClass="org.vlang.lang.stubs.GoFieldDefinitionStub"
 }
 
-AnonymousFieldDefinition ::= Type {
+AnonymousFieldDefinition ::= TypeDecl {
 //  stubClass="org.vlang.lang.stubs.GoAnonymousFieldDefinitionStub"
   methods=[getIdentifier getName getTypeReferenceExpression getGoTypeInner]
 }
 
-StructInitialization ::= Type '{' ( '}' | FieldInitialization '}') {pin=3}
+StructInitialization ::= TypeDecl '{' ( '}' | FieldInitialization '}') {pin=3}
 FieldInitialization ::= FieldInitializationKeyValueList /*| FieldInitializationValueList*/
 FieldInitializationKeyValueList ::= (FieldInitializationKeyValue semi)+ semi?
 private FieldInitializationKeyValue ::= Expression ':' Expression {pin=2}
@@ -184,15 +186,16 @@ private FieldInitializationKeyValue ::= Expression ':' Expression {pin=2}
 //private FieldInitializationValue ::= Expression {pin=1}
 
 
-PointerType ::= '&' Type {pin=1}
-NullableType ::= '?' Type {pin=1}
-//
-//FunctionType ::= fn Signature {pin=1 implements="org.vlang.lang.psi.GoSignatureOwner"}
+PointerType ::= '&' TypeDecl {pin=1}
+NullableType ::= '?' TypeDecl {pin=1}
+
+FunctionType ::= fn Signature {pin=1 /*implements="org.vlang.lang.psi.GoSignatureOwner"*/}
+
 Signature ::= Parameters Result? {
   pin=1
 //  stubClass="org.vlang.lang.stubs.GoSignatureStub"
 }
-Result ::= '(' TypeListNoPin ')' | Type | Parameters { // todo: reorder and pin (
+Result ::= '(' TypeListNoPin ')' | TypeDecl | Parameters { // todo: reorder and pin (
   methods=[isVoid]
 //  stubClass="org.vlang.lang.stubs.GoResultStub"
 }
@@ -201,7 +204,7 @@ Parameters ::= '(' [ (ParameterList ','?| TypeListNoPin) ] ')' {
 //  stubClass="org.vlang.lang.stubs.GoParametersStub"
 }
 private ParameterList ::= ParameterDeclaration (',' (ParameterDeclaration | &')'))* {pin(".*")=1}
-ParameterDeclaration ::= ParamDefinitionListNoPin? '...'? Type | Type { // todo: use left rule
+ParameterDeclaration ::= ParamDefinitionListNoPin? '...'? TypeDecl | TypeDecl { // todo: use left rule
 //  stubClass="org.vlang.lang.stubs.GoParameterDeclarationStub"
   methods = [isVariadic]
 }
@@ -216,10 +219,10 @@ InterfaceDeclaration ::= Attributes? SymbolVisibility? InterfaceType
 InterfaceType ::= interface identifier? '{' InterfaceMembers? '}' {pin=1}
 
 private InterfaceMembers ::= MemberModifiers? (InterfaceFieldDeclaration | InterfaceMethodDeclaration | AnonymousInterfaceDefinition)? (semi InterfaceMembers)* semi? {pin=1}
-InterfaceFieldDeclaration ::= (FieldDefinitionList Type) Attribute? Tag?
+InterfaceFieldDeclaration ::= (FieldDefinitionList TypeDecl) Attribute? Tag?
 InterfaceMethodDeclaration ::= identifier Signature Attribute? Tag?
 
-AnonymousInterfaceDefinition ::= Type {
+AnonymousInterfaceDefinition ::= TypeDecl {
 //  stubClass="org.vlang.lang.stubs.GoAnonymousFieldDefinitionStub"
   methods=[getIdentifier getName getTypeReferenceExpression getGoTypeInner]
 }
@@ -264,6 +267,7 @@ Statement ::=
   | CFlagStatement
   | CIncludeStatement
   | LanguageInjectionStatement
+  | TypeStatement
   | DeferStatement {methods=[processDeclarations]}
 
 
@@ -273,6 +277,9 @@ SimpleStatement ::=
   ShortVarDeclaration
   | IncDecStatement
   | (LeftHandExprList AssignmentStatement? /*| SendStatement*/) {pin(".*")=LeftHandExprList}
+
+TypeStatement ::= 'type' identifier '=' TypeUnionList {pin=1}
+TypeUnionList ::= TypeDecl ('|' TypeDecl)* {pin=1}
 
 LanguageInjectionStatement ::= LANGUAGE_INJECTION {pin=1}
 
@@ -294,12 +301,13 @@ private TopDeclaration ::=
   | CIncludeStatement
   | CFlagStatement
   | LanguageInjectionStatement
+  | TypeStatement
 
-private TopLevelDeclarationRecover ::= !(';' | type | const | fn | pub | BUILTIN_GLOBAL | var | struct | enum | interface | import | C_INCLUDE | C_FLAG | IF_COMPILE_TIME | LANGUAGE_INJECTION | '[')
+private TopLevelDeclarationRecover ::= !(';' | 'type' | const | fn | pub | BUILTIN_GLOBAL | var | struct | enum | interface | import | C_INCLUDE | C_FLAG | IF_COMPILE_TIME | LANGUAGE_INJECTION | '[')
 
 ConstDeclaration ::= SymbolVisibility const ( ConstSpec | '(' ConstSpecs? ')' ) {pin(".*")=2 methods=[addSpec deleteSpec]}
 private ConstSpecs ::= ConstSpec (semi ConstSpec)* semi? {pin=1}
-ConstSpec ::= ConstDefinitionList [ ('=' ExpressionList | Type '=' ExpressionList) ] {
+ConstSpec ::= ConstDefinitionList [ ('=' ExpressionList | TypeDecl '=' ExpressionList) ] {
   pin(".*")=1
 //  stubClass="org.vlang.lang.stubs.GoConstSpecStub"
   methods=[deleteDefinition]
@@ -367,7 +375,7 @@ Receiver ::= '(' (SymbolMutability identifier ReceiverTail | ReceiverTail) ')' {
   pin=1
 //  stubClass="org.vlang.lang.stubs.GoReceiverStub"
 }
-private ReceiverTail ::= Type ','?
+private ReceiverTail ::= TypeDecl ','?
 
 Attributes ::= Attribute (semi Attribute)* semi? {pin=1}
 Attribute ::= '[' AttributeExpression (';' AttributeExpression)* ']' {pin=1}
@@ -391,6 +399,13 @@ StringLiteral ::= string | raw_string | char {
 //  implements = "com.intellij.psi.PsiLanguageInjectionHost"
   methods = [isValidHost updateText createLiteralTextEscaper getDecodedText]
 }
+
+DotExpression ::= Expression '.' MethodOrField {pin=1}
+
+private MethodOrField ::= MethodCall | FieldLookup
+FieldLookup ::= identifier
+MethodCall ::= identifier ArgumentList {pin=2}
+
 OperandName ::= ReferenceExpression (QualifiedReferenceExpression)* {elementType=ReferenceExpression}
 left QualifiedReferenceExpression ::= '.' identifier {elementType=ReferenceExpression}
 ReferenceExpression ::= identifier { methods=[getReference getQualifier resolve getReadWriteAccess] extends=Expression}
@@ -409,9 +424,9 @@ ReferenceExpression ::= identifier { methods=[getReference getQualifier resolve 
 //Key ::= (FieldName &':') | !() Expression // nullability hack for key without reference inside
 //FieldName ::= identifier { methods=[getReference getQualifier resolve] }
 //Value ::= Expression | LiteralValue
-//
-//FunctionLit ::= fn Signature Block {pin=1 methods=[processDeclarations]}
-//
+
+FunctionLit ::= fn Signature Block {pin=1 methods=[processDeclarations]}
+
 Expression ::=
     OrBlockExpr
   | OrExpr
@@ -433,6 +448,7 @@ Expression ::=
   | MaxGroup
   | EnumFetch
   | MutExpression
+  | DotExpression
   | ParenthesesExpr {methods=[getGoType] /*implements="org.vlang.lang.psi.GoTypeOwner"*/}
 
 fake BinaryExpr ::= Expression+ {
@@ -468,18 +484,18 @@ private MaxGroup ::=
 //  | SelectorExpr
   | IndexOrSliceExpr
   | Literal
-//  | FunctionLit
+  | FunctionLit
 //
 private RelOp ::= '==' | '!=' | '<' | '<=' | '>' | '>='
 private AddOp ::= '+' | '-' | '|' | '^'
 private MulOp ::= '*' | '/' | '%' | '<<' | '>>' | '&' | '&^'
-private UnaryOp ::= '+' | '-' | '!' | '^' | '*' | '&' | '<-'
+private UnaryOp ::= '+' | '-' | '!' | '^' | '*' | '&' | '&&' | '<-'
 
-ArrayCreation ::= '[' ( ']' '!'? | ArrayCreationList ']' '!'?) {pin=1}
+ArrayCreation ::= '[' ArrayCreationList? (']' '!'?) {pin=1}
 ArrayCreationList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &']'))* {pin(".*")=1}
 
 //SelectorExpr ::= Expression '.' !('(' 'type') Expression
-IndexOrSliceExpr ::= Expression '[' (SliceExprBody | IndexExprBody) ']' {pin=2 methods = [getExpression getIndices]}
+IndexOrSliceExpr ::= Expression ('[' | HASH_LBRACK) (SliceExprBody | IndexExprBody) ']' {pin=2 methods = [getExpression getIndices]}
 private IndexExprBody ::= Expression SliceExprBodyInner?
 private inner SliceExprBodyInner ::= SliceExprBody
 private SliceExprBody ::= &':' (':' Expression ':' Expression) | (':' Expression?)
@@ -500,9 +516,10 @@ left AssignmentStatement ::= assign_op ExpressionList {pin=1}
 IncDecStatement ::= Expression ('++' | '--') {pin=2}
 assign_op ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '&=' | '&^='
 
+private MatchExpressionList ::= Expression (',' Expression)* {pin(".*")=1}
 MatchExpression ::= match Expression '{' MatchArms '}' {pin=1}
 MatchArms ::= (MatchArm | MatchElseArmClause)*
-MatchArm ::= Expression Block semi {pin=2}
+MatchArm ::= MatchExpressionList Block semi {pin=2}
 MatchElseArmClause ::= else Block semi {pin=1}
 
 InExpression ::= Expression in Expression {pin=2}
@@ -533,8 +550,8 @@ private SimpleStatementOpt ::= [SimpleStatement ';'?] // todo: remove ?
 //TypeGuard ::= '(' 'type' ')' {pin=2}
 //TypeCaseClause ::= !'}' TypeSwitchCase ':' Statements? {pin=1 implements="org.vlang.lang.psi.GoCaseClause"}
 //private TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
-TypeList ::= Type ( ',' Type )* ','?
-TypeListNoPin ::= Type ( ',' Type )* ','? {elementType=TypeList}
+TypeList ::= TypeDecl ( ',' TypeDecl )* ','?
+TypeListNoPin ::= TypeDecl ( ',' TypeDecl )* ','? {elementType=TypeList}
 ForStatement ::= for (ForOrRangeClause Block | Block | Expression Block) {pin(".*")="for|ForOrRangeClause"}
 private ForOrRangeClause ::= (ForClause | RangeClause)
 ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement? {methods=[processDeclarations]}

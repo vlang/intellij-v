@@ -36,8 +36,8 @@ public class VlangParameterDeclarationImpl extends VlangCompositeElementImpl imp
 
   @Override
   @NotNull
-  public VlangType getType() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangType.class));
+  public VlangTypeDecl getTypeDecl() {
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class));
   }
 
   @Override

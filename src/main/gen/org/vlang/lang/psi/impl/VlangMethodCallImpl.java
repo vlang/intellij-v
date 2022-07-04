@@ -5,23 +5,21 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.vlang.lang.psi.VlangNullableType;
+import org.vlang.lang.psi.VlangArgumentList;
+import org.vlang.lang.psi.VlangMethodCall;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
-import org.vlang.lang.psi.VlangTypeDecl;
 import org.vlang.lang.psi.VlangVisitor;
 
-import static org.vlang.lang.VlangTypes.QUESTION;
+import static org.vlang.lang.VlangTypes.IDENTIFIER;
 
-public class VlangNullableTypeImpl extends VlangTypeDeclImpl implements VlangNullableType {
+public class VlangMethodCallImpl extends VlangCompositeElementImpl implements VlangMethodCall {
 
-  public VlangNullableTypeImpl(@NotNull ASTNode node) {
+  public VlangMethodCallImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitNullableType(this);
+    visitor.visitMethodCall(this);
   }
 
   @Override
@@ -31,15 +29,15 @@ public class VlangNullableTypeImpl extends VlangTypeDeclImpl implements VlangNul
   }
 
   @Override
-  @Nullable
-  public VlangTypeDecl getTypeDecl() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class);
+  @NotNull
+  public VlangArgumentList getArgumentList() {
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangArgumentList.class));
   }
 
   @Override
   @NotNull
-  public PsiElement getQuestion() {
-    return notNullChild(findChildByType(QUESTION));
+  public PsiElement getIdentifier() {
+    return notNullChild(findChildByType(IDENTIFIER));
   }
 
 }

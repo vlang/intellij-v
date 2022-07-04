@@ -5,10 +5,10 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface VlangPointerType extends VlangType {
+public interface VlangPointerType extends VlangTypeDecl {
 
   @Nullable
-  VlangType getType();
+  VlangTypeDecl getTypeDecl();
 
   @NotNull
   PsiElement getBitAnd();

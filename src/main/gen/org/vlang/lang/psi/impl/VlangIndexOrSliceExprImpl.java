@@ -13,8 +13,7 @@ import org.vlang.lang.psi.VlangVisitor;
 
 import java.util.List;
 
-import static org.vlang.lang.VlangTypes.LBRACK;
-import static org.vlang.lang.VlangTypes.RBRACK;
+import static org.vlang.lang.VlangTypes.*;
 
 public class VlangIndexOrSliceExprImpl extends VlangExpressionImpl implements VlangIndexOrSliceExpr {
 
@@ -40,9 +39,15 @@ public class VlangIndexOrSliceExprImpl extends VlangExpressionImpl implements Vl
   }
 
   @Override
-  @NotNull
+  @Nullable
+  public PsiElement getHashLbrack() {
+    return findChildByType(HASH_LBRACK);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getLbrack() {
-    return notNullChild(findChildByType(LBRACK));
+    return findChildByType(LBRACK);
   }
 
   @Override

@@ -5,13 +5,13 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
-import org.vlang.lang.psi.VlangType;
+import org.vlang.lang.psi.VlangTypeDecl;
 import org.vlang.lang.psi.VlangTypeList;
 import org.vlang.lang.psi.VlangVisitor;
 
 import java.util.List;
 
-public class VlangTypeListImpl extends VlangTypeImpl implements VlangTypeList {
+public class VlangTypeListImpl extends VlangTypeDeclImpl implements VlangTypeList {
 
   public VlangTypeListImpl(@NotNull ASTNode node) {
     super(node);
@@ -30,8 +30,8 @@ public class VlangTypeListImpl extends VlangTypeImpl implements VlangTypeList {
 
   @Override
   @NotNull
-  public List<VlangType> getTypeList() {
-    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangType.class);
+  public List<VlangTypeDecl> getTypeDeclList() {
+    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangTypeDecl.class);
   }
 
 }

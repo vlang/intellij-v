@@ -41,8 +41,24 @@ class VlangAnnotator : Annotator {
             holder.textAttributes(element, JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES)
         }
 
-        if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangEnumFieldDeclaration) {
+        if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangEnumDeclaration) {
             holder.textAttributes(element, JavaHighlightingColors.ENUM_NAME_ATTRIBUTES)
+        }
+
+        if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangStructDeclaration) {
+            holder.textAttributes(element, JavaHighlightingColors.CLASS_NAME_ATTRIBUTES)
+        }
+
+        if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangInterfaceDeclaration) {
+            holder.textAttributes(element, JavaHighlightingColors.INTERFACE_NAME_ATTRIBUTES)
+        }
+
+        if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangEnumFieldDeclaration) {
+            holder.textAttributes(element, JavaHighlightingColors.STATIC_FINAL_FIELD_ATTRIBUTES)
+        }
+
+        if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangStatement) {
+            holder.textAttributes(element, JavaHighlightingColors.INTERFACE_NAME_ATTRIBUTES)
         }
     }
 

@@ -3,7 +3,7 @@ package org.vlang.lang.psi;
 
 import org.jetbrains.annotations.Nullable;
 
-public interface VlangType extends VlangCompositeElement {
+public interface VlangTypeDecl extends VlangCompositeElement {
 
   @Nullable
   VlangTypeReferenceExpression getTypeReferenceExpression();

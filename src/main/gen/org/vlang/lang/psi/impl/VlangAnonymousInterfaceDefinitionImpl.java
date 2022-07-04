@@ -6,7 +6,7 @@ import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
 import org.vlang.lang.psi.VlangAnonymousInterfaceDefinition;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
-import org.vlang.lang.psi.VlangType;
+import org.vlang.lang.psi.VlangTypeDecl;
 import org.vlang.lang.psi.VlangVisitor;
 
 public class VlangAnonymousInterfaceDefinitionImpl extends VlangCompositeElementImpl implements VlangAnonymousInterfaceDefinition {
@@ -27,8 +27,8 @@ public class VlangAnonymousInterfaceDefinitionImpl extends VlangCompositeElement
 
   @Override
   @NotNull
-  public VlangType getType() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangType.class));
+  public VlangTypeDecl getTypeDecl() {
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class));
   }
 
 }

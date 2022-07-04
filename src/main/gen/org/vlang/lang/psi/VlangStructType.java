@@ -5,7 +5,7 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface VlangStructType extends VlangType {
+public interface VlangStructType extends VlangTypeDecl {
 
   @Nullable
   VlangFieldDeclaration getFieldDeclaration();

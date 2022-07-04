@@ -12,7 +12,10 @@ public interface VlangIndexOrSliceExpr extends VlangExpression {
   @NotNull
   List<VlangExpression> getExpressionList();
 
-  @NotNull
+  @Nullable
+  PsiElement getHashLbrack();
+
+  @Nullable
   PsiElement getLbrack();
 
   @Nullable

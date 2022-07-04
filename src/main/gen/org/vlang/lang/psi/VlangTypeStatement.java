@@ -5,12 +5,18 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface VlangNullableType extends VlangTypeDecl {
+public interface VlangTypeStatement extends VlangStatement {
 
   @Nullable
-  VlangTypeDecl getTypeDecl();
+  VlangTypeUnionList getTypeUnionList();
+
+  @Nullable
+  PsiElement getAssign();
 
   @NotNull
-  PsiElement getQuestion();
+  PsiElement getType_();
+
+  @Nullable
+  PsiElement getIdentifier();
 
 }

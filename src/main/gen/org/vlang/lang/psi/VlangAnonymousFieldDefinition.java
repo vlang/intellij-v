@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 public interface VlangAnonymousFieldDefinition extends VlangCompositeElement {
 
   @NotNull
-  VlangType getType();
+  VlangTypeDecl getTypeDecl();
 
   //WARNING: getIdentifier(...) is skipped
   //matching getIdentifier(VlangAnonymousFieldDefinition, ...)

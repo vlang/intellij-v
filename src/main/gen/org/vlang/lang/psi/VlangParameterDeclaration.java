@@ -13,7 +13,7 @@ public interface VlangParameterDeclaration extends VlangCompositeElement {
   List<VlangParamDefinition> getParamDefinitionList();
 
   @NotNull
-  VlangType getType();
+  VlangTypeDecl getTypeDecl();
 
   @Nullable
   PsiElement getTripleDot();

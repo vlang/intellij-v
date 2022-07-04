@@ -11,7 +11,7 @@ public interface VlangReceiver extends VlangNamedElement {
   VlangSymbolMutability getSymbolMutability();
 
   @Nullable
-  VlangType getType();
+  VlangTypeDecl getTypeDecl();
 
   @Nullable
   PsiElement getComma();

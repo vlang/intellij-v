@@ -8,17 +8,17 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.*;
 
-import static org.vlang.lang.VlangTypes.LPAREN;
-import static org.vlang.lang.VlangTypes.RPAREN;
+import static org.vlang.lang.VlangTypes.DOT;
 
-public class VlangResultImpl extends VlangCompositeElementImpl implements VlangResult {
+public class VlangDotExpressionImpl extends VlangExpressionImpl implements VlangDotExpression {
 
-  public VlangResultImpl(@NotNull ASTNode node) {
+  public VlangDotExpressionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
+  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitResult(this);
+    visitor.visitDotExpression(this);
   }
 
   @Override
@@ -28,27 +28,27 @@ public class VlangResultImpl extends VlangCompositeElementImpl implements VlangR
   }
 
   @Override
-  @Nullable
-  public VlangParameters getParameters() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangParameters.class);
+  @NotNull
+  public VlangExpression getExpression() {
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class));
   }
 
   @Override
   @Nullable
-  public VlangTypeDecl getTypeDecl() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class);
+  public VlangFieldLookup getFieldLookup() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangFieldLookup.class);
   }
 
   @Override
   @Nullable
-  public PsiElement getLparen() {
-    return findChildByType(LPAREN);
+  public VlangMethodCall getMethodCall() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangMethodCall.class);
   }
 
   @Override
   @Nullable
-  public PsiElement getRparen() {
-    return findChildByType(RPAREN);
+  public PsiElement getDot() {
+    return findChildByType(DOT);
   }
 
 }

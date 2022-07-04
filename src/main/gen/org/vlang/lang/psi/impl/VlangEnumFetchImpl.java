@@ -5,23 +5,21 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.vlang.lang.psi.VlangPointerType;
-import org.vlang.lang.psi.VlangPsiTreeUtil;
-import org.vlang.lang.psi.VlangTypeDecl;
+import org.vlang.lang.psi.VlangEnumFetch;
 import org.vlang.lang.psi.VlangVisitor;
 
-import static org.vlang.lang.VlangTypes.BIT_AND;
+import static org.vlang.lang.VlangTypes.DOT;
+import static org.vlang.lang.VlangTypes.IDENTIFIER;
 
-public class VlangPointerTypeImpl extends VlangTypeDeclImpl implements VlangPointerType {
+public class VlangEnumFetchImpl extends VlangExpressionImpl implements VlangEnumFetch {
 
-  public VlangPointerTypeImpl(@NotNull ASTNode node) {
+  public VlangEnumFetchImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitPointerType(this);
+    visitor.visitEnumFetch(this);
   }
 
   @Override
@@ -31,15 +29,15 @@ public class VlangPointerTypeImpl extends VlangTypeDeclImpl implements VlangPoin
   }
 
   @Override
-  @Nullable
-  public VlangTypeDecl getTypeDecl() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class);
+  @NotNull
+  public PsiElement getDot() {
+    return notNullChild(findChildByType(DOT));
   }
 
   @Override
   @NotNull
-  public PsiElement getBitAnd() {
-    return notNullChild(findChildByType(BIT_AND));
+  public PsiElement getIdentifier() {
+    return notNullChild(findChildByType(IDENTIFIER));
   }
 
 }

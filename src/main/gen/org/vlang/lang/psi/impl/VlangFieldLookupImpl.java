@@ -2,22 +2,22 @@
 package org.vlang.lang.psi.impl;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.vlang.lang.psi.VlangPsiTreeUtil;
-import org.vlang.lang.psi.VlangType;
-import org.vlang.lang.psi.VlangTypeReferenceExpression;
+import org.vlang.lang.psi.VlangFieldLookup;
 import org.vlang.lang.psi.VlangVisitor;
 
-public class VlangTypeImpl extends VlangCompositeElementImpl implements VlangType {
+import static org.vlang.lang.VlangTypes.IDENTIFIER;
 
-  public VlangTypeImpl(@NotNull ASTNode node) {
+public class VlangFieldLookupImpl extends VlangCompositeElementImpl implements VlangFieldLookup {
+
+  public VlangFieldLookupImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitType(this);
+    visitor.visitFieldLookup(this);
   }
 
   @Override
@@ -27,9 +27,9 @@ public class VlangTypeImpl extends VlangCompositeElementImpl implements VlangTyp
   }
 
   @Override
-  @Nullable
-  public VlangTypeReferenceExpression getTypeReferenceExpression() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeReferenceExpression.class);
+  @NotNull
+  public PsiElement getIdentifier() {
+    return notNullChild(findChildByType(IDENTIFIER));
   }
 
 }

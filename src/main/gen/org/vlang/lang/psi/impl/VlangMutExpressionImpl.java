@@ -6,19 +6,22 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.vlang.lang.psi.*;
+import org.vlang.lang.psi.VlangExpression;
+import org.vlang.lang.psi.VlangMutExpression;
+import org.vlang.lang.psi.VlangPsiTreeUtil;
+import org.vlang.lang.psi.VlangVisitor;
 
-import static org.vlang.lang.VlangTypes.*;
+import static org.vlang.lang.VlangTypes.MUT;
 
-public class VlangArrayOrSliceTypeImpl extends VlangTypeDeclImpl implements VlangArrayOrSliceType {
+public class VlangMutExpressionImpl extends VlangExpressionImpl implements VlangMutExpression {
 
-  public VlangArrayOrSliceTypeImpl(@NotNull ASTNode node) {
+  public VlangMutExpressionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitArrayOrSliceType(this);
+    visitor.visitMutExpression(this);
   }
 
   @Override
@@ -34,27 +37,9 @@ public class VlangArrayOrSliceTypeImpl extends VlangTypeDeclImpl implements Vlan
   }
 
   @Override
-  @Nullable
-  public VlangTypeDecl getTypeDecl() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class);
-  }
-
-  @Override
   @NotNull
-  public PsiElement getLbrack() {
-    return notNullChild(findChildByType(LBRACK));
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getRbrack() {
-    return findChildByType(RBRACK);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getTripleDot() {
-    return findChildByType(TRIPLE_DOT);
+  public PsiElement getMut() {
+    return notNullChild(findChildByType(MUT));
   }
 
 }

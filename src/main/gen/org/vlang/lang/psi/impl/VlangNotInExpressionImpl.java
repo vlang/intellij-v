@@ -5,22 +5,24 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.vlang.lang.psi.*;
+import org.vlang.lang.psi.VlangExpression;
+import org.vlang.lang.psi.VlangNotInExpression;
+import org.vlang.lang.psi.VlangPsiTreeUtil;
+import org.vlang.lang.psi.VlangVisitor;
 
 import java.util.List;
 
-import static org.vlang.lang.VlangTypes.SEMICOLON;
-import static org.vlang.lang.VlangTypes.SEMICOLON_SYNTHETIC;
+import static org.vlang.lang.VlangTypes.NOT_IN;
 
-public class VlangMatchArmImpl extends VlangCompositeElementImpl implements VlangMatchArm {
+public class VlangNotInExpressionImpl extends VlangExpressionImpl implements VlangNotInExpression {
 
-  public VlangMatchArmImpl(@NotNull ASTNode node) {
+  public VlangNotInExpressionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
+  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitMatchArm(this);
+    visitor.visitNotInExpression(this);
   }
 
   @Override
@@ -31,26 +33,14 @@ public class VlangMatchArmImpl extends VlangCompositeElementImpl implements Vlan
 
   @Override
   @NotNull
-  public VlangBlock getBlock() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangBlock.class));
-  }
-
-  @Override
-  @NotNull
   public List<VlangExpression> getExpressionList() {
     return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangExpression.class);
   }
 
   @Override
-  @Nullable
-  public PsiElement getSemicolon() {
-    return findChildByType(SEMICOLON);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getSemicolonSynthetic() {
-    return findChildByType(SEMICOLON_SYNTHETIC);
+  @NotNull
+  public PsiElement getNotIn() {
+    return notNullChild(findChildByType(NOT_IN));
   }
 
 }

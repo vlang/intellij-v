@@ -5,13 +5,13 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface VlangArrayOrSliceType extends VlangType {
+public interface VlangArrayOrSliceType extends VlangTypeDecl {
 
   @Nullable
   VlangExpression getExpression();
 
   @Nullable
-  VlangType getType();
+  VlangTypeDecl getTypeDecl();
 
   @NotNull
   PsiElement getLbrack();

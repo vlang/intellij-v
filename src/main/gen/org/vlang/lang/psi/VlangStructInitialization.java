@@ -11,7 +11,7 @@ public interface VlangStructInitialization extends VlangExpression {
   VlangFieldInitialization getFieldInitialization();
 
   @NotNull
-  VlangType getType();
+  VlangTypeDecl getTypeDecl();
 
   @NotNull
   PsiElement getLbrace();

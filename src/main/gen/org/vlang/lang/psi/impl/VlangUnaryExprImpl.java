@@ -50,6 +50,12 @@ public class VlangUnaryExprImpl extends VlangExpressionImpl implements VlangUnar
 
   @Override
   @Nullable
+  public PsiElement getCondAnd() {
+    return findChildByType(COND_AND);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getMinus() {
     return findChildByType(MINUS);
   }

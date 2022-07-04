@@ -5,12 +5,12 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface VlangNullableType extends VlangTypeDecl {
+public interface VlangMutExpression extends VlangExpression {
 
   @Nullable
-  VlangTypeDecl getTypeDecl();
+  VlangExpression getExpression();
 
   @NotNull
-  PsiElement getQuestion();
+  PsiElement getMut();
 
 }

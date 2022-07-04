@@ -16,7 +16,7 @@ public interface VlangConstSpec extends VlangCompositeElement {
   List<VlangExpression> getExpressionList();
 
   @Nullable
-  VlangType getType();
+  VlangTypeDecl getTypeDecl();
 
   @Nullable
   PsiElement getAssign();

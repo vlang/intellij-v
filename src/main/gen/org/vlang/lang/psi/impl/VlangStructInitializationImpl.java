@@ -36,8 +36,8 @@ public class VlangStructInitializationImpl extends VlangExpressionImpl implement
 
   @Override
   @NotNull
-  public VlangType getType() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangType.class));
+  public VlangTypeDecl getTypeDecl() {
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class));
   }
 
   @Override

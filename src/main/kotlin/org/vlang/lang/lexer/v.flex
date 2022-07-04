@@ -26,7 +26,7 @@ NL = \n
 WS = [ \t\f]
 
 LINE_COMMENT = "//" [^\r\n]*
-LANGUAGE_INJECTION_COMMENT = "#" [^\r\n]*
+LANGUAGE_INJECTION_COMMENT = {WS}* "#" [^\r\n]*
 MULTILINE_COMMENT = "/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?
 
 LETTER = [:letter:] | "_"
@@ -51,8 +51,8 @@ SPECIAL_IDENT = ("JS." | "C.") {LETTER} ({LETTER} | {DIGIT} | "." )*
 STR_DOUBLE =   "\""
 CHAR_QUOTE =   "`"
 STR_MODIFIER = "r" | "c"
-STRING_DOUBLE = {STR_MODIFIER}? {STR_DOUBLE} ( [^\"\\\n\r] | "\\" ("\\" | {STR_DOUBLE} | {ESCAPES} | [0-8xuU] ) )* {STR_DOUBLE}
-CHAR = {CHAR_QUOTE} . {CHAR_QUOTE}
+
+CHAR = {CHAR_QUOTE} [^`]{1} {CHAR_QUOTE}
 ESCAPES = [abfnrtve] // TODO: need "e"?
 
 STR_ANGLE_OPEN =   "<"
@@ -73,8 +73,6 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 {LINE_COMMENT}                            { return LINE_COMMENT; }
 {MULTILINE_COMMENT}                       { return MULTILINE_COMMENT; }
 
-{STRING_DOUBLE}                           { yybegin(MAYBE_SEMICOLON); return STRING; }
-
 //"'\\'"                                    { yybegin(MAYBE_SEMICOLON); return BAD_CHARACTER; }
 //"'" [^\\] "'"?                            { yybegin(MAYBE_SEMICOLON); return CHAR; }
 //"'" \n "'"?                               { yybegin(MAYBE_SEMICOLON); return CHAR; }
@@ -84,6 +82,7 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 //"'\\u" {HEX_DIGIT} {4} "'"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
 //"'\\U" {HEX_DIGIT} {8} "'"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
 
+{STR_MODIFIER}? "\"" [^\"]* "\""?            { yybegin(MAYBE_SEMICOLON); return RAW_STRING; }
 {STR_MODIFIER}? "'" [^']* "'"?            { yybegin(MAYBE_SEMICOLON); return RAW_STRING; }
 {CHAR}                                    { yybegin(MAYBE_SEMICOLON); return CHAR; }
 "..."                                     { return TRIPLE_DOT; }
@@ -92,6 +91,8 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 "|"                                       { return BIT_OR; }
 "{"                                       { return LBRACE; }
 "}"                                       { yybegin(MAYBE_SEMICOLON); return RBRACE; }
+
+"#["                                      { return HASH_LBRACK; }
 
 "["                                       { return LBRACK; }
 "]"                                       { yybegin(MAYBE_SEMICOLON); return RBRACK; }

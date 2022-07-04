@@ -40,6 +40,7 @@ public interface VlangTypes {
   IElementType C_INCLUDE_STATEMENT = new VlangCompositeElementType("C_INCLUDE_STATEMENT");
   IElementType DEFAULT_FIELD_VALUE = new VlangCompositeElementType("DEFAULT_FIELD_VALUE");
   IElementType DEFER_STATEMENT = new VlangCompositeElementType("DEFER_STATEMENT");
+  IElementType DOT_EXPRESSION = new VlangCompositeElementType("DOT_EXPRESSION");
   IElementType ELSE_STATEMENT = new VlangCompositeElementType("ELSE_STATEMENT");
   IElementType ENUM_DECLARATION = new VlangCompositeElementType("ENUM_DECLARATION");
   IElementType ENUM_FETCH = new VlangCompositeElementType("ENUM_FETCH");
@@ -50,10 +51,13 @@ public interface VlangTypes {
   IElementType FIELD_DECLARATION = new VlangCompositeElementType("FIELD_DECLARATION");
   IElementType FIELD_INITIALIZATION = new VlangCompositeElementType("FIELD_INITIALIZATION");
   IElementType FIELD_INITIALIZATION_KEY_VALUE_LIST = new VlangCompositeElementType("FIELD_INITIALIZATION_KEY_VALUE_LIST");
+  IElementType FIELD_LOOKUP = new VlangCompositeElementType("FIELD_LOOKUP");
   IElementType FIELD_NAME = new VlangCompositeElementType("FIELD_NAME");
   IElementType FOR_CLAUSE = new VlangCompositeElementType("FOR_CLAUSE");
   IElementType FOR_STATEMENT = new VlangCompositeElementType("FOR_STATEMENT");
   IElementType FUNCTION_DECLARATION = VlangElementTypeFactory.stubFactory("FUNCTION_DECLARATION");
+  IElementType FUNCTION_LIT = new VlangCompositeElementType("FUNCTION_LIT");
+  IElementType FUNCTION_TYPE = new VlangCompositeElementType("FUNCTION_TYPE");
   IElementType GLOBAL_VARIABLE_DECLARATION = new VlangCompositeElementType("GLOBAL_VARIABLE_DECLARATION");
   IElementType GO_STATEMENT = new VlangCompositeElementType("GO_STATEMENT");
   IElementType IF_ATTRIBUTE = new VlangCompositeElementType("IF_ATTRIBUTE");
@@ -80,6 +84,7 @@ public interface VlangTypes {
   IElementType MATCH_EXPRESSION = new VlangCompositeElementType("MATCH_EXPRESSION");
   IElementType MEMBER_MODIFIER = new VlangCompositeElementType("MEMBER_MODIFIER");
   IElementType MEMBER_MODIFIERS = new VlangCompositeElementType("MEMBER_MODIFIERS");
+  IElementType METHOD_CALL = new VlangCompositeElementType("METHOD_CALL");
   IElementType METHOD_DECLARATION = VlangElementTypeFactory.stubFactory("METHOD_DECLARATION");
   IElementType MODULE_CLAUSE = VlangElementTypeFactory.stubFactory("MODULE_CLAUSE");
   IElementType MUL_EXPR = new VlangCompositeElementType("MUL_EXPR");
@@ -112,9 +117,11 @@ public interface VlangTypes {
   IElementType SYMBOL_MUTABILITY = new VlangCompositeElementType("SYMBOL_MUTABILITY");
   IElementType SYMBOL_VISIBILITY = new VlangCompositeElementType("SYMBOL_VISIBILITY");
   IElementType TAG = new VlangCompositeElementType("TAG");
-  IElementType TYPE = new VlangCompositeElementType("TYPE");
+  IElementType TYPE_DECL = new VlangCompositeElementType("TYPE_DECL");
   IElementType TYPE_LIST = new VlangCompositeElementType("TYPE_LIST");
   IElementType TYPE_REFERENCE_EXPRESSION = new VlangCompositeElementType("TYPE_REFERENCE_EXPRESSION");
+  IElementType TYPE_STATEMENT = new VlangCompositeElementType("TYPE_STATEMENT");
+  IElementType TYPE_UNION_LIST = new VlangCompositeElementType("TYPE_UNION_LIST");
   IElementType UNARY_EXPR = new VlangCompositeElementType("UNARY_EXPR");
   IElementType UNSAFE_EXPRESSION = new VlangCompositeElementType("UNSAFE_EXPRESSION");
   IElementType UNSAFE_STATEMENT = new VlangCompositeElementType("UNSAFE_STATEMENT");
@@ -163,6 +170,7 @@ public interface VlangTypes {
   IElementType GOTO = new VlangTokenType("goto");
   IElementType GREATER = new VlangTokenType(">");
   IElementType GREATER_OR_EQUAL = new VlangTokenType(">=");
+  IElementType HASH_LBRACK = new VlangTokenType("#[");
   IElementType HEX = new VlangTokenType("hex");
   IElementType IDENTIFIER = new VlangTokenType("identifier");
   IElementType IF = new VlangTokenType("if");
@@ -201,6 +209,7 @@ public interface VlangTypes {
   IElementType RAW_STRING = new VlangTokenType("raw_string");
   IElementType RBRACE = new VlangTokenType("}");
   IElementType RBRACK = new VlangTokenType("]");
+  IElementType RBRACK_EXP = new VlangTokenType("]!");
   IElementType REMAINDER = new VlangTokenType("%");
   IElementType REMAINDER_ASSIGN = new VlangTokenType("%=");
   IElementType RETURN = new VlangTokenType("return");
@@ -312,6 +321,9 @@ public interface VlangTypes {
       else if (type == DEFER_STATEMENT) {
         return new VlangDeferStatementImpl(node);
       }
+      else if (type == DOT_EXPRESSION) {
+        return new VlangDotExpressionImpl(node);
+      }
       else if (type == ELSE_STATEMENT) {
         return new VlangElseStatementImpl(node);
       }
@@ -339,6 +351,9 @@ public interface VlangTypes {
       else if (type == FIELD_INITIALIZATION_KEY_VALUE_LIST) {
         return new VlangFieldInitializationKeyValueListImpl(node);
       }
+      else if (type == FIELD_LOOKUP) {
+        return new VlangFieldLookupImpl(node);
+      }
       else if (type == FIELD_NAME) {
         return new VlangFieldNameImpl(node);
       }
@@ -350,6 +365,12 @@ public interface VlangTypes {
       }
       else if (type == FUNCTION_DECLARATION) {
         return new VlangFunctionDeclarationImpl(node);
+      }
+      else if (type == FUNCTION_LIT) {
+        return new VlangFunctionLitImpl(node);
+      }
+      else if (type == FUNCTION_TYPE) {
+        return new VlangFunctionTypeImpl(node);
       }
       else if (type == GLOBAL_VARIABLE_DECLARATION) {
         return new VlangGlobalVariableDeclarationImpl(node);
@@ -428,6 +449,9 @@ public interface VlangTypes {
       }
       else if (type == MEMBER_MODIFIERS) {
         return new VlangMemberModifiersImpl(node);
+      }
+      else if (type == METHOD_CALL) {
+        return new VlangMethodCallImpl(node);
       }
       else if (type == METHOD_DECLARATION) {
         return new VlangMethodDeclarationImpl(node);
@@ -525,14 +549,20 @@ public interface VlangTypes {
       else if (type == TAG) {
         return new VlangTagImpl(node);
       }
-      else if (type == TYPE) {
-        return new VlangTypeImpl(node);
+      else if (type == TYPE_DECL) {
+        return new VlangTypeDeclImpl(node);
       }
       else if (type == TYPE_LIST) {
         return new VlangTypeListImpl(node);
       }
       else if (type == TYPE_REFERENCE_EXPRESSION) {
         return new VlangTypeReferenceExpressionImpl(node);
+      }
+      else if (type == TYPE_STATEMENT) {
+        return new VlangTypeStatementImpl(node);
+      }
+      else if (type == TYPE_UNION_LIST) {
+        return new VlangTypeUnionListImpl(node);
       }
       else if (type == UNARY_EXPR) {
         return new VlangUnaryExprImpl(node);

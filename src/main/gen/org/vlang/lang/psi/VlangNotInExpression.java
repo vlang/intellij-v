@@ -3,14 +3,15 @@ package org.vlang.lang.psi;
 
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public interface VlangNullableType extends VlangTypeDecl {
+import java.util.List;
 
-  @Nullable
-  VlangTypeDecl getTypeDecl();
+public interface VlangNotInExpression extends VlangExpression {
 
   @NotNull
-  PsiElement getQuestion();
+  List<VlangExpression> getExpressionList();
+
+  @NotNull
+  PsiElement getNotIn();
 
 }

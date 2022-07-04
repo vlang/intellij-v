@@ -3,14 +3,13 @@ package org.vlang.lang.psi;
 
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public interface VlangNullableType extends VlangTypeDecl {
-
-  @Nullable
-  VlangTypeDecl getTypeDecl();
+public interface VlangMethodCall extends VlangCompositeElement {
 
   @NotNull
-  PsiElement getQuestion();
+  VlangArgumentList getArgumentList();
+
+  @NotNull
+  PsiElement getIdentifier();
 
 }

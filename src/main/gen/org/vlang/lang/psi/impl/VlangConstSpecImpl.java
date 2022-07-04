@@ -42,8 +42,8 @@ public class VlangConstSpecImpl extends VlangCompositeElementImpl implements Vla
 
   @Override
   @Nullable
-  public VlangType getType() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangType.class);
+  public VlangTypeDecl getTypeDecl() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class);
   }
 
   @Override

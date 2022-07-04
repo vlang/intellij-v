@@ -10,7 +10,7 @@ public interface VlangResult extends VlangCompositeElement {
   VlangParameters getParameters();
 
   @Nullable
-  VlangType getType();
+  VlangTypeDecl getTypeDecl();
 
   @Nullable
   PsiElement getLparen();

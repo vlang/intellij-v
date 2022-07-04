@@ -4,19 +4,20 @@ package org.vlang.lang.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
-import org.vlang.lang.psi.VlangAnonymousFieldDefinition;
+import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
 import org.vlang.lang.psi.VlangTypeDecl;
+import org.vlang.lang.psi.VlangTypeReferenceExpression;
 import org.vlang.lang.psi.VlangVisitor;
 
-public class VlangAnonymousFieldDefinitionImpl extends VlangCompositeElementImpl implements VlangAnonymousFieldDefinition {
+public class VlangTypeDeclImpl extends VlangCompositeElementImpl implements VlangTypeDecl {
 
-  public VlangAnonymousFieldDefinitionImpl(@NotNull ASTNode node) {
+  public VlangTypeDeclImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitAnonymousFieldDefinition(this);
+    visitor.visitTypeDecl(this);
   }
 
   @Override
@@ -26,9 +27,9 @@ public class VlangAnonymousFieldDefinitionImpl extends VlangCompositeElementImpl
   }
 
   @Override
-  @NotNull
-  public VlangTypeDecl getTypeDecl() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class));
+  @Nullable
+  public VlangTypeReferenceExpression getTypeReferenceExpression() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeReferenceExpression.class);
   }
 
 }

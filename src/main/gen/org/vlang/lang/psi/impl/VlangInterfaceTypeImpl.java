@@ -10,7 +10,7 @@ import org.vlang.lang.psi.*;
 
 import static org.vlang.lang.VlangTypes.*;
 
-public class VlangInterfaceTypeImpl extends VlangTypeImpl implements VlangInterfaceType {
+public class VlangInterfaceTypeImpl extends VlangTypeDeclImpl implements VlangInterfaceType {
 
   public VlangInterfaceTypeImpl(@NotNull ASTNode node) {
     super(node);

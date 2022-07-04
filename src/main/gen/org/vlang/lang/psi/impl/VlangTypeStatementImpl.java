@@ -6,19 +6,22 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.vlang.lang.psi.*;
+import org.vlang.lang.psi.VlangPsiTreeUtil;
+import org.vlang.lang.psi.VlangTypeStatement;
+import org.vlang.lang.psi.VlangTypeUnionList;
+import org.vlang.lang.psi.VlangVisitor;
 
 import static org.vlang.lang.VlangTypes.*;
 
-public class VlangStructTypeImpl extends VlangTypeDeclImpl implements VlangStructType {
+public class VlangTypeStatementImpl extends VlangStatementImpl implements VlangTypeStatement {
 
-  public VlangStructTypeImpl(@NotNull ASTNode node) {
+  public VlangTypeStatementImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitStructType(this);
+    visitor.visitTypeStatement(this);
   }
 
   @Override
@@ -29,38 +32,26 @@ public class VlangStructTypeImpl extends VlangTypeDeclImpl implements VlangStruc
 
   @Override
   @Nullable
-  public VlangFieldDeclaration getFieldDeclaration() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangFieldDeclaration.class);
+  public VlangTypeUnionList getTypeUnionList() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeUnionList.class);
   }
 
   @Override
   @Nullable
-  public VlangMemberModifiers getMemberModifiers() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangMemberModifiers.class);
+  public PsiElement getAssign() {
+    return findChildByType(ASSIGN);
   }
 
   @Override
-  @Nullable
-  public PsiElement getLbrace() {
-    return findChildByType(LBRACE);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getRbrace() {
-    return findChildByType(RBRACE);
+  @NotNull
+  public PsiElement getType_() {
+    return notNullChild(findChildByType(TYPE_));
   }
 
   @Override
   @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getStruct() {
-    return notNullChild(findChildByType(STRUCT));
   }
 
 }
