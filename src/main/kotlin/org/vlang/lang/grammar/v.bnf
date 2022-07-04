@@ -466,7 +466,7 @@ AddExpr ::= Expression AddOp Expression
 MulExpr ::= Expression MulOp Expression
 ParenthesesExpr ::= '(' /*<<enterMode "PAR">>*/ Expression /*<<exitModeSafe "PAR">>*/')' {pin=1}
 
-RangeExpr ::= Expression ('..' | '...') Expression {pin=2}
+RangeExpr ::= Expression ('..' | '...') !']' Expression {pin=2}
 
 MutExpression ::= mut Expression
 
@@ -495,10 +495,10 @@ ArrayCreation ::= '[' ArrayCreationList? (']' '!'?) {pin=1}
 ArrayCreationList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &']'))* {pin(".*")=1}
 
 //SelectorExpr ::= Expression '.' !('(' 'type') Expression
-IndexOrSliceExpr ::= Expression ('[' | HASH_LBRACK) (SliceExprBody | IndexExprBody) ']' {pin=2 methods = [getExpression getIndices]}
+IndexOrSliceExpr ::= Expression ('[' | HASH_LBRACK) (SliceExprBody | IndexExprBody) '..'? ']' {pin=2 methods = [getExpression getIndices]}
 private IndexExprBody ::= Expression SliceExprBodyInner?
 private inner SliceExprBodyInner ::= SliceExprBody
-private SliceExprBody ::= &':' (':' Expression ':' Expression) | (':' Expression?)
+private SliceExprBody ::= &'..' '..' Expression
 //TypeAssertionExpr ::= Expression '.' '(' &(!'type') Type ')'
 CallExpr ::= Expression ArgumentList
 ArgumentList ::= '(' [ ExpressionArgList '...'? ','? ] ')' {pin=1}

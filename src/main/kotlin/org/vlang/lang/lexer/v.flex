@@ -26,7 +26,7 @@ NL = \n
 WS = [ \t\f]
 
 LINE_COMMENT = "//" [^\r\n]*
-LANGUAGE_INJECTION_COMMENT = {WS}* "#" [^\r\n]*
+LANGUAGE_INJECTION_COMMENT = [^\r\n]*
 MULTILINE_COMMENT = "/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?
 
 LETTER = [:letter:] | "_"
@@ -201,7 +201,8 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 
 "__global"                                { return BUILTIN_GLOBAL; }
 
-{LANGUAGE_INJECTION_COMMENT}              { yybegin(MAYBE_SEMICOLON); return LANGUAGE_INJECTION; }
+^"#" {LANGUAGE_INJECTION_COMMENT}         { yybegin(MAYBE_SEMICOLON); return LANGUAGE_INJECTION; }
+{WS}+ "#" {LANGUAGE_INJECTION_COMMENT}    { yybegin(MAYBE_SEMICOLON); return LANGUAGE_INJECTION; }
 
 {SPECIAL_IDENT}                           { yybegin(MAYBE_SEMICOLON); return IDENTIFIER; }
 {IDENT}                                   { yybegin(MAYBE_SEMICOLON); return IDENTIFIER; }
