@@ -5,6 +5,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.VlangExpression;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
 import org.vlang.lang.psi.VlangRangeExpr;
@@ -13,6 +14,7 @@ import org.vlang.lang.psi.VlangVisitor;
 import java.util.List;
 
 import static org.vlang.lang.VlangTypes.RANGE;
+import static org.vlang.lang.VlangTypes.TRIPLE_DOT;
 
 public class VlangRangeExprImpl extends VlangExpressionImpl implements VlangRangeExpr {
 
@@ -38,9 +40,15 @@ public class VlangRangeExprImpl extends VlangExpressionImpl implements VlangRang
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getRange() {
-    return notNullChild(findChildByType(RANGE));
+    return findChildByType(RANGE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getTripleDot() {
+    return findChildByType(TRIPLE_DOT);
   }
 
 }

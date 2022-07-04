@@ -449,7 +449,7 @@ AddExpr ::= Expression AddOp Expression
 MulExpr ::= Expression MulOp Expression
 ParenthesesExpr ::= '(' /*<<enterMode "PAR">>*/ Expression /*<<exitModeSafe "PAR">>*/')' {pin=1}
 
-RangeExpr ::= Expression '..' Expression {pin=2}
+RangeExpr ::= Expression ('..' | '...') Expression {pin=2}
 
 //BuiltinCallExpr ::= ReferenceExpression <<isBuiltin>> BuiltinArgumentList {pin=2}
 //BuiltinArgumentList ::= '(' [ BuiltinArgsInner ','? ] ')' {pin=1 extends=ArgumentList}

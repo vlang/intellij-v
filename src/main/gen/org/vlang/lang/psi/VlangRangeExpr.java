@@ -3,6 +3,7 @@ package org.vlang.lang.psi;
 
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -11,7 +12,10 @@ public interface VlangRangeExpr extends VlangExpression {
   @NotNull
   List<VlangExpression> getExpressionList();
 
-  @NotNull
+  @Nullable
   PsiElement getRange();
+
+  @Nullable
+  PsiElement getTripleDot();
 
 }

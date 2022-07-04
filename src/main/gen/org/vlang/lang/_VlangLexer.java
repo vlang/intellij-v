@@ -152,6 +152,15 @@ public class _VlangLexer implements FlexLexer, VlangTypes {
     "\14\13\1\154\3\1\4\13\1\146\1\115\112\1\1\264\1\13\1\274\1\275\1\276\1\277"+
     "\1\300\1\301\1\302\1\155\1\303\1\155\24\1\55\13\1\113\2\1\103\13\1\154\15"+
     "\13\1\153\150\13\1\16\25\1\41\13\1\153\36\1");
+  /**
+   * Translates DFA states to action switch labels.
+   */
+  private static final int [] ZZ_ACTION = zzUnpackAction();
+  /**
+   * Translates a state to a row index in the transition table
+   */
+  private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
+
   private static final String ZZ_ACTION_PACKED_0 =
     "\4\0\1\1\1\2\1\3\1\4\1\5\1\6\2\7"+
     "\1\1\2\10\2\7\1\11\1\12\2\7\2\1\4\7"+
@@ -176,9 +185,16 @@ public class _VlangLexer implements FlexLexer, VlangTypes {
     "\2\7\1\142\1\143\1\144\1\145\1\5\3\7\1\146"+
     "\1\7\1\147\1\150\1\151\2\7\1\152\2\7\1\153";
   /**
-   * Translates DFA states to action switch labels.
+   * The transition table of the DFA
    */
-  private static final int [] ZZ_ACTION = zzUnpackAction();
+  private static final int [] ZZ_TRANS = zzUnpackTrans();
+  /* error codes */
+  private static final int ZZ_UNKNOWN_ERROR = 0;
+  /**
+   * ZZ_ATTRIBUTE[aState] contains the attributes of state <code>aState</code>
+   */
+  private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
+
   private static final String ZZ_ROWMAP_PACKED_0 =
     "\0\0\0\110\0\220\0\330\0\u0120\0\u0168\0\u0120\0\u01b0"+
     "\0\u01f8\0\u0240\0\u0288\0\u02d0\0\u0318\0\u0360\0\u03a8\0\u03f0"+
@@ -213,10 +229,22 @@ public class _VlangLexer implements FlexLexer, VlangTypes {
     "\0\u2f40\0\u0288\0\u0288\0\u0288\0\u0288\0\u2f88\0\u2fd0\0\u3018"+
     "\0\u3060\0\u0288\0\u30a8\0\u0f78\0\u0288\0\u0288\0\u30f0\0\u3138"+
     "\0\u0288\0\u3180\0\u31c8\0\u0288";
+
   /**
-   * Translates a state to a row index in the transition table
+   * Translates characters to character classes
+   * Chosen bits are [11, 6, 4]
+   * Total runtime size is 14336 bytes
    */
-  private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
+  public static int ZZ_CMAP(int ch) {
+    return ZZ_CMAP_A[(ZZ_CMAP_Y[(ZZ_CMAP_Z[ch>>10]<<6)|((ch>>4)&0x3f)]<<4)|(ch&0xf)];
+  }
+
+  private static int [] zzUnpackAction() {
+    int [] result = new int[260];
+    int offset = 0;
+    offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
+    return result;
+  }
 
   private static int zzUnpackAction(String packed, int offset, int [] result) {
     int i = 0;       /* index in packed string  */
@@ -229,6 +257,7 @@ public class _VlangLexer implements FlexLexer, VlangTypes {
     }
     return j;
   }
+
   private static final String ZZ_TRANS_PACKED_0 =
     "\1\5\1\6\1\7\1\10\1\0\1\11\1\12\1\13"+
     "\1\14\1\15\1\13\3\16\1\17\2\13\1\20\1\21"+
@@ -533,12 +562,13 @@ public class _VlangLexer implements FlexLexer, VlangTypes {
     "\7\0\15\13\2\0\3\13\2\0\2\13\1\0\2\13"+
     "\2\0\2\13\17\0\2\13\5\0\5\13\1\0\3\13"+
     "\1\u0104\4\13";
-  /**
-   * The transition table of the DFA
-   */
-  private static final int [] ZZ_TRANS = zzUnpackTrans();
-  /* error codes */
-  private static final int ZZ_UNKNOWN_ERROR = 0;
+
+  private static int [] zzUnpackRowMap() {
+    int [] result = new int[260];
+    int offset = 0;
+    offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
+    return result;
+  }
 
   private static int zzUnpackRowMap(String packed, int offset, int [] result) {
     int i = 0;  /* index in packed string  */
@@ -550,8 +580,16 @@ public class _VlangLexer implements FlexLexer, VlangTypes {
     }
     return j;
   }
+
+  private static int [] zzUnpackTrans() {
+    int [] result = new int[12816];
+    int offset = 0;
+    offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
+    return result;
+  }
   private static final int ZZ_NO_MATCH = 1;
   private static final int ZZ_PUSHBACK_2BIG = 2;
+
   /* error messages for the codes above */
   private static final String[] ZZ_ERROR_MSG = {
     "Unknown internal scanner error",
@@ -571,6 +609,7 @@ public class _VlangLexer implements FlexLexer, VlangTypes {
     }
     return j;
   }
+
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
     "\4\0\1\11\1\1\1\11\30\1\6\11\1\1\2\11"+
     "\3\1\1\11\15\1\2\11\11\1\1\11\3\1\1\11"+
@@ -580,40 +619,6 @@ public class _VlangLexer implements FlexLexer, VlangTypes {
     "\10\1\1\11\1\0\4\1\1\0\5\1\2\11\1\1"+
     "\1\11\6\1\3\11\2\1\1\11\5\1\1\0\1\11"+
     "\10\1\1\11\1\0\22\1\1\0\24\1\1\11\42\1";
-  /**
-   * ZZ_ATTRIBUTE[aState] contains the attributes of state <code>aState</code>
-   */
-  private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
-
-  /**
-   * Translates characters to character classes
-   * Chosen bits are [11, 6, 4]
-   * Total runtime size is 14336 bytes
-   */
-  public static int ZZ_CMAP(int ch) {
-    return ZZ_CMAP_A[(ZZ_CMAP_Y[(ZZ_CMAP_Z[ch>>10]<<6)|((ch>>4)&0x3f)]<<4)|(ch&0xf)];
-  }
-
-  private static int [] zzUnpackAction() {
-    int [] result = new int[260];
-    int offset = 0;
-    offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
-    return result;
-  }
-
-  private static int [] zzUnpackRowMap() {
-    int [] result = new int[260];
-    int offset = 0;
-    offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
-    return result;
-  }
-
-  private static int [] zzUnpackTrans() {
-    int [] result = new int[12816];
-    int offset = 0;
-    offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
-    return result;
-  }
 
   private static int [] zzUnpackAttribute() {
     int [] result = new int[260];
