@@ -294,6 +294,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitBinaryExpr(o);
   }
 
+  public void visitMutExpression(@NotNull VlangMutExpression o) {
+    visitExpression(o);
+  }
+
   public void visitNotInExpression(@NotNull VlangNotInExpression o) {
     visitExpression(o);
   }

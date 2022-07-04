@@ -75,7 +75,7 @@
   ]
 
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional|OrBlock)Expr")=BinaryExpr
-  extends(".*(Expr|Literal|Lit|OperandName)|StructInitialization|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch")=Expression
+  extends(".*(Expr|Literal|Lit|OperandName)|StructInitialization|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression")=Expression
 
   implements("(Type|Import)Spec|(Var|Const|Param|Field|Label)Definition|Receiver")="org.vlang.lang.psi.VlangNamedElement"
   implements("FunctionLit")="org.vlang.lang.psi.GoSignatureOwner"
@@ -432,6 +432,7 @@ Expression ::=
   | NotInExpression
   | MaxGroup
   | EnumFetch
+  | MutExpression
   | ParenthesesExpr {methods=[getGoType] /*implements="org.vlang.lang.psi.GoTypeOwner"*/}
 
 fake BinaryExpr ::= Expression+ {
@@ -450,6 +451,8 @@ MulExpr ::= Expression MulOp Expression
 ParenthesesExpr ::= '(' /*<<enterMode "PAR">>*/ Expression /*<<exitModeSafe "PAR">>*/')' {pin=1}
 
 RangeExpr ::= Expression ('..' | '...') Expression {pin=2}
+
+MutExpression ::= mut Expression
 
 //BuiltinCallExpr ::= ReferenceExpression <<isBuiltin>> BuiltinArgumentList {pin=2}
 //BuiltinArgumentList ::= '(' [ BuiltinArgsInner ','? ] ')' {pin=1 extends=ArgumentList}

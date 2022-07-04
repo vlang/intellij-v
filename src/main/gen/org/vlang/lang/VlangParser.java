@@ -15,9 +15,23 @@ import static org.vlang.lang.VlangTypes.*;
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
 public class VlangParser implements PsiParser, LightPsiParser {
 
-  static boolean parse_root_(IElementType t, PsiBuilder b, int l) {
-    return File(b, l + 1);
-  }
+  public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
+    create_token_set_(RANGE_CLAUSE, SHORT_VAR_DECLARATION),
+    create_token_set_(ARRAY_OR_SLICE_TYPE, INTERFACE_TYPE, NULLABLE_TYPE, POINTER_TYPE,
+      STRUCT_TYPE, TYPE, TYPE_LIST),
+    create_token_set_(ASSERT_STATEMENT, ASSIGNMENT_STATEMENT, BREAK_STATEMENT, COMPILE_ELSE_STATEMENT,
+      COMPILE_TIME_IF_STATEMENT, CONTINUE_STATEMENT, C_FLAG_STATEMENT, C_INCLUDE_STATEMENT,
+      DEFER_STATEMENT, ELSE_STATEMENT, FOR_STATEMENT, GO_STATEMENT,
+      IF_STATEMENT, INC_DEC_STATEMENT, LANGUAGE_INJECTION_STATEMENT, RETURN_STATEMENT,
+      SIMPLE_STATEMENT, STATEMENT, UNSAFE_STATEMENT),
+    create_token_set_(ADD_EXPR, AND_EXPR, ARRAY_CREATION, CALL_EXPR,
+      COMPILE_TIME_IF_EXPRESSION, CONDITIONAL_EXPR, ENUM_FETCH, EXPRESSION,
+      IF_EXPRESSION, INDEX_OR_SLICE_EXPR, IN_EXPRESSION, LITERAL,
+      MATCH_EXPRESSION, MUL_EXPR, MUT_EXPRESSION, NOT_IN_EXPRESSION,
+      OR_BLOCK_EXPR, OR_EXPR, PARENTHESES_EXPR, RANGE_EXPR,
+      REFERENCE_EXPRESSION, STRING_LITERAL, STRUCT_INITIALIZATION, UNARY_EXPR,
+      UNSAFE_EXPRESSION),
+  };
 
   /* ********************************************************** */
   // ExpressionWithRecover (',' (ExpressionWithRecover | &']'))*
@@ -43,6 +57,10 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
+  static boolean parse_root_(IElementType t, PsiBuilder b, int l) {
+    return File(b, l + 1);
+  }
+
   // ',' (ExpressionWithRecover | &']')
   private static boolean ArrayCreationList_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ArrayCreationList_1_0")) return false;
@@ -54,23 +72,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
-
-  public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
-    create_token_set_(RANGE_CLAUSE, SHORT_VAR_DECLARATION),
-    create_token_set_(ARRAY_OR_SLICE_TYPE, INTERFACE_TYPE, NULLABLE_TYPE, POINTER_TYPE,
-      STRUCT_TYPE, TYPE, TYPE_LIST),
-    create_token_set_(ASSERT_STATEMENT, ASSIGNMENT_STATEMENT, BREAK_STATEMENT, COMPILE_ELSE_STATEMENT,
-      COMPILE_TIME_IF_STATEMENT, CONTINUE_STATEMENT, C_FLAG_STATEMENT, C_INCLUDE_STATEMENT,
-      DEFER_STATEMENT, ELSE_STATEMENT, FOR_STATEMENT, GO_STATEMENT,
-      IF_STATEMENT, INC_DEC_STATEMENT, LANGUAGE_INJECTION_STATEMENT, RETURN_STATEMENT,
-      SIMPLE_STATEMENT, STATEMENT, UNSAFE_STATEMENT),
-    create_token_set_(ADD_EXPR, AND_EXPR, ARRAY_CREATION, CALL_EXPR,
-      COMPILE_TIME_IF_EXPRESSION, CONDITIONAL_EXPR, ENUM_FETCH, EXPRESSION,
-      IF_EXPRESSION, INDEX_OR_SLICE_EXPR, IN_EXPRESSION, LITERAL,
-      MATCH_EXPRESSION, MUL_EXPR, NOT_IN_EXPRESSION, OR_BLOCK_EXPR,
-      OR_EXPR, PARENTHESES_EXPR, RANGE_EXPR, REFERENCE_EXPRESSION,
-      STRING_LITERAL, STRUCT_INITIALIZATION, UNARY_EXPR, UNSAFE_EXPRESSION),
-  };
 
   /* ********************************************************** */
   // '+' | '-' | '|' | '^'
@@ -3415,7 +3416,8 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // 15: BINARY(NotInExpression)
   // 16: ATOM(OperandName) POSTFIX(CallExpr) POSTFIX(IndexOrSliceExpr) ATOM(Literal)
   // 17: ATOM(EnumFetch)
-  // 18: ATOM(ParenthesesExpr)
+  // 18: PREFIX(MutExpression)
+  // 19: ATOM(ParenthesesExpr)
   public static boolean Expression(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "Expression")) return false;
     addVariant(b, "<expression>");
@@ -3431,6 +3433,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = OperandName(b, l + 1);
     if (!r) r = Literal(b, l + 1);
     if (!r) r = EnumFetch(b, l + 1);
+    if (!r) r = MutExpression(b, l + 1);
     if (!r) r = ParenthesesExpr(b, l + 1);
     p = r;
     r = r && Expression_0(b, l + 1, g);
@@ -3839,9 +3842,16 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  public ASTNode parse(IElementType t, PsiBuilder b) {
-    parseLight(t, b);
-    return b.getTreeBuilt();
+  public static boolean MutExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MutExpression")) return false;
+    if (!nextTokenIsSmart(b, MUT)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = consumeTokenSmart(b, MUT);
+    p = r;
+    r = p && Expression(b, l, 18);
+    exit_section_(b, l, m, MUT_EXPRESSION, r, p, null);
+    return r || p;
   }
 
   // '!'?
@@ -3922,6 +3932,11 @@ public class VlangParser implements PsiParser, LightPsiParser {
     r = SliceExprBody(b, l + 1);
     if (!r) r = IndexExprBody(b, l + 1);
     return r;
+  }
+
+  public ASTNode parse(IElementType t, PsiBuilder b) {
+    parseLight(t, b);
+    return b.getTreeBuilt();
   }
 
   public void parseLight(IElementType t, PsiBuilder b) {
