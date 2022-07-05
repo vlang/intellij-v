@@ -77,7 +77,7 @@
   ]
 
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional|OrBlock)Expr")=BinaryExpr
-  extends(".*(Expr|Literal|Lit|OperandName)|StructInitialization|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|DotExpression")=Expression
+  extends(".*(Expr|Literal|Lit|OperandName)|StructInitialization|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|DotExpression|IsExpression|NotIsExpression|AsExpression")=Expression
 
   implements("(Type|Import)Spec|(Var|Const|Param|Field|Label)Definition|Receiver")="org.vlang.lang.psi.VlangNamedElement"
 //  implements("FunctionLit")="org.vlang.lang.psi.GoSignatureOwner"
@@ -278,7 +278,7 @@ SimpleStatement ::=
   | IncDecStatement
   | (LeftHandExprList AssignmentStatement? /*| SendStatement*/) {pin(".*")=LeftHandExprList}
 
-TypeStatement ::= 'type' identifier '=' TypeUnionList {pin=1}
+TypeStatement ::= SymbolVisibility 'type' identifier '=' TypeUnionList {pin=2}
 TypeUnionList ::= TypeDecl ('|' TypeDecl)* {pin=1}
 
 LanguageInjectionStatement ::= LANGUAGE_INJECTION {pin=1}
@@ -445,6 +445,9 @@ Expression ::=
   | ArrayCreation
   | InExpression
   | NotInExpression
+  | IsExpression
+  | NotIsExpression
+  | AsExpression
   | MaxGroup
   | EnumFetch
   | MutExpression
@@ -524,6 +527,11 @@ MatchElseArmClause ::= else Block semi {pin=1}
 
 InExpression ::= Expression in Expression {pin=2}
 NotInExpression ::= Expression NOT_IN Expression {pin=2}
+
+IsExpression ::= Expression is Expression {pin=2}
+NotIsExpression ::= Expression NOT_IS Expression {pin=2}
+
+AsExpression ::= Expression as Expression {pin=2}
 
 IfExpression ::= if Condition Block ElseStatement? {pin=1}
 IfStatement ::= IfExpression

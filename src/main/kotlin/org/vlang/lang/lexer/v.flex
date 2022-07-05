@@ -108,7 +108,6 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 "="                                       { return ASSIGN; }
 
 "!="                                      { return NOT_EQ; }
-"!in"                                     { return NOT_IN; }
 "!"                                       { yybegin(MAYBE_SEMICOLON); return NOT; }
 "?"                                       { yybegin(MAYBE_SEMICOLON); return QUESTION; }
 
@@ -196,6 +195,7 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 "as"                                      { return AS ; }
 
 "in"                                      { return IN; }
+"is"                                      { return IS; }
 "type"                                    { return TYPE_; }
 "mut"                                     { return MUT; }
 
@@ -206,6 +206,9 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 
 {SPECIAL_IDENT}                           { yybegin(MAYBE_SEMICOLON); return IDENTIFIER; }
 {IDENT}                                   { yybegin(MAYBE_SEMICOLON); return IDENTIFIER; }
+
+"!" "in" {WS}+                            { return NOT_IN; }
+"!" "is" {WS}+                            { return NOT_IS; }
 
 {NUM_FLOAT}"i"                            { yybegin(MAYBE_SEMICOLON); return FLOATI; }
 {NUM_FLOAT}                               { yybegin(MAYBE_SEMICOLON); return FLOAT; }

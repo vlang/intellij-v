@@ -11,6 +11,7 @@ import org.vlang.lang.psi.*;
 import java.util.List;
 
 import static org.vlang.lang.VlangTypes.IN;
+import static org.vlang.lang.VlangTypes.NOT_IN;
 
 public class VlangRangeClauseImpl extends VlangShortVarDeclarationImpl implements VlangRangeClause {
 
@@ -42,9 +43,15 @@ public class VlangRangeClauseImpl extends VlangShortVarDeclarationImpl implement
   }
 
   @Override
-  @NotNull
+  @Nullable
+  public PsiElement getNotIn() {
+    return findChildByType(NOT_IN);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getIn() {
-    return notNullChild(findChildByType(IN));
+    return findChildByType(IN);
   }
 
 }

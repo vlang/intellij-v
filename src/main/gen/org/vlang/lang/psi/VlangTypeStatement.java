@@ -7,6 +7,9 @@ import org.jetbrains.annotations.Nullable;
 
 public interface VlangTypeStatement extends VlangStatement {
 
+  @NotNull
+  VlangSymbolVisibility getSymbolVisibility();
+
   @Nullable
   VlangTypeUnionList getTypeUnionList();
 

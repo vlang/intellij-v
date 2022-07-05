@@ -22,6 +22,7 @@ public interface VlangTypes {
   IElementType ASSERT_STATEMENT = new VlangCompositeElementType("ASSERT_STATEMENT");
   IElementType ASSIGNMENT_STATEMENT = new VlangCompositeElementType("ASSIGNMENT_STATEMENT");
   IElementType ASSIGN_OP = new VlangCompositeElementType("ASSIGN_OP");
+  IElementType AS_EXPRESSION = new VlangCompositeElementType("AS_EXPRESSION");
   IElementType ATTRIBUTE = new VlangCompositeElementType("ATTRIBUTE");
   IElementType ATTRIBUTES = new VlangCompositeElementType("ATTRIBUTES");
   IElementType ATTRIBUTE_EXPRESSION = new VlangCompositeElementType("ATTRIBUTE_EXPRESSION");
@@ -74,6 +75,7 @@ public interface VlangTypes {
   IElementType INTERFACE_METHOD_DECLARATION = new VlangCompositeElementType("INTERFACE_METHOD_DECLARATION");
   IElementType INTERFACE_TYPE = new VlangCompositeElementType("INTERFACE_TYPE");
   IElementType IN_EXPRESSION = new VlangCompositeElementType("IN_EXPRESSION");
+  IElementType IS_EXPRESSION = new VlangCompositeElementType("IS_EXPRESSION");
   IElementType LABEL_REF = new VlangCompositeElementType("LABEL_REF");
   IElementType LANGUAGE_INJECTION_STATEMENT = new VlangCompositeElementType("LANGUAGE_INJECTION_STATEMENT");
   IElementType LEFT_HAND_EXPR_LIST = new VlangCompositeElementType("LEFT_HAND_EXPR_LIST");
@@ -90,6 +92,7 @@ public interface VlangTypes {
   IElementType MUL_EXPR = new VlangCompositeElementType("MUL_EXPR");
   IElementType MUT_EXPRESSION = new VlangCompositeElementType("MUT_EXPRESSION");
   IElementType NOT_IN_EXPRESSION = new VlangCompositeElementType("NOT_IN_EXPRESSION");
+  IElementType NOT_IS_EXPRESSION = new VlangCompositeElementType("NOT_IS_EXPRESSION");
   IElementType NULLABLE_TYPE = new VlangCompositeElementType("NULLABLE_TYPE");
   IElementType OR_BLOCK_EXPR = new VlangCompositeElementType("OR_BLOCK_EXPR");
   IElementType OR_EXPR = new VlangCompositeElementType("OR_EXPR");
@@ -179,6 +182,7 @@ public interface VlangTypes {
   IElementType IN = new VlangTokenType("in");
   IElementType INT = new VlangTokenType("int");
   IElementType INTERFACE = new VlangTokenType("interface");
+  IElementType IS = new VlangTokenType("is");
   IElementType LANGUAGE_INJECTION = new VlangTokenType("LANGUAGE_INJECTION");
   IElementType LBRACE = new VlangTokenType("{");
   IElementType LBRACK = new VlangTokenType("[");
@@ -196,6 +200,7 @@ public interface VlangTypes {
   IElementType NOT = new VlangTokenType("!");
   IElementType NOT_EQ = new VlangTokenType("!=");
   IElementType NOT_IN = new VlangTokenType("NOT_IN");
+  IElementType NOT_IS = new VlangTokenType("NOT_IS");
   IElementType OCT = new VlangTokenType("oct");
   IElementType OR = new VlangTokenType("or");
   IElementType PLUS = new VlangTokenType("+");
@@ -266,6 +271,9 @@ public interface VlangTypes {
       }
       else if (type == ASSIGN_OP) {
         return new VlangAssignOpImpl(node);
+      }
+      else if (type == AS_EXPRESSION) {
+        return new VlangAsExpressionImpl(node);
       }
       else if (type == ATTRIBUTE) {
         return new VlangAttributeImpl(node);
@@ -420,6 +428,9 @@ public interface VlangTypes {
       else if (type == IN_EXPRESSION) {
         return new VlangInExpressionImpl(node);
       }
+      else if (type == IS_EXPRESSION) {
+        return new VlangIsExpressionImpl(node);
+      }
       else if (type == LABEL_REF) {
         return new VlangLabelRefImpl(node);
       }
@@ -467,6 +478,9 @@ public interface VlangTypes {
       }
       else if (type == NOT_IN_EXPRESSION) {
         return new VlangNotInExpressionImpl(node);
+      }
+      else if (type == NOT_IS_EXPRESSION) {
+        return new VlangNotIsExpressionImpl(node);
       }
       else if (type == NULLABLE_TYPE) {
         return new VlangNullableTypeImpl(node);

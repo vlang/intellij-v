@@ -6,10 +6,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.vlang.lang.psi.VlangPsiTreeUtil;
-import org.vlang.lang.psi.VlangTypeStatement;
-import org.vlang.lang.psi.VlangTypeUnionList;
-import org.vlang.lang.psi.VlangVisitor;
+import org.vlang.lang.psi.*;
 
 import static org.vlang.lang.VlangTypes.*;
 
@@ -28,6 +25,12 @@ public class VlangTypeStatementImpl extends VlangStatementImpl implements VlangT
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof VlangVisitor) accept((VlangVisitor)visitor);
     else super.accept(visitor);
+  }
+
+  @Override
+  @NotNull
+  public VlangSymbolVisibility getSymbolVisibility() {
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangSymbolVisibility.class));
   }
 
   @Override
