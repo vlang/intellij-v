@@ -8,17 +8,22 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
+import org.vlang.lang.stubs.VlangTypeAliasDeclarationStub;
 import org.vlang.lang.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class VlangTypeStatementImpl extends VlangStatementImpl implements VlangTypeStatement {
+public class VlangTypeAliasDeclarationImpl extends VlangNamedElementImpl<VlangTypeAliasDeclarationStub> implements VlangTypeAliasDeclaration {
 
-  public VlangTypeStatementImpl(@NotNull ASTNode node) {
+  public VlangTypeAliasDeclarationImpl(@NotNull VlangTypeAliasDeclarationStub stub, @NotNull IStubElementType<?, ?> type) {
+    super(stub, type);
+  }
+
+  public VlangTypeAliasDeclarationImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitTypeStatement(this);
+    visitor.visitTypeAliasDeclaration(this);
   }
 
   @Override
@@ -55,6 +60,12 @@ public class VlangTypeStatementImpl extends VlangStatementImpl implements VlangT
   @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);
+  }
+
+  @Override
+  @NotNull
+  public String getName() {
+    return VlangPsiImplUtil.getName(this);
   }
 
 }

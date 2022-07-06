@@ -8,8 +8,10 @@ import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.util.ArrayUtil
 import org.vlang.lang.psi.VlangCallExpr
 import org.vlang.lang.psi.VlangReferenceExpressionBase
+import org.vlang.lang.psi.VlangTypeDecl
 import org.vlang.lang.stubs.index.VlangFunctionIndex
 import org.vlang.lang.stubs.index.VlangStructIndex
+import org.vlang.lang.stubs.index.VlangTypeAliasIndex
 
 class VlangReference(private val el: VlangReferenceExpressionBase) :
     VlangReferenceBase<VlangReferenceExpressionBase>(
@@ -34,7 +36,10 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
                 VlangFunctionIndex.find(name, project, GlobalSearchScope.allScope(project), null)
             }
             else -> {
-                VlangStructIndex.find(name, project, GlobalSearchScope.allScope(project), null)
+                val structs = VlangStructIndex.find(name, project, GlobalSearchScope.allScope(project), null)
+                structs.ifEmpty {
+                    VlangTypeAliasIndex.find(name, project, GlobalSearchScope.allScope(project), null)
+                }
             }
         }
 

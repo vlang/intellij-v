@@ -13,6 +13,9 @@ public interface VlangStatement extends VlangCompositeElement {
   @Nullable
   VlangConstDeclaration getConstDeclaration();
 
+  @Nullable
+  VlangTypeAliasDeclaration getTypeAliasDeclaration();
+
   //WARNING: processDeclarations(...) is skipped
   //matching processDeclarations(VlangStatement, ...)
   //methods are not found in VlangPsiImplUtil

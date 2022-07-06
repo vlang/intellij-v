@@ -44,8 +44,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
       COMPILE_TIME_FOR_STATEMENT, COMPILE_TIME_IF_STATEMENT, CONTINUE_STATEMENT, C_FLAG_STATEMENT,
       C_INCLUDE_STATEMENT, DEFER_STATEMENT, ELSE_STATEMENT, FOR_STATEMENT,
       GO_STATEMENT, IF_STATEMENT, INC_DEC_STATEMENT, LANGUAGE_INJECTION_STATEMENT,
-      RETURN_STATEMENT, SIMPLE_STATEMENT, STATEMENT, TYPE_STATEMENT,
-      UNSAFE_STATEMENT),
+      RETURN_STATEMENT, SIMPLE_STATEMENT, STATEMENT, UNSAFE_STATEMENT),
     create_token_set_(ADD_EXPR, AND_EXPR, ARRAY_CREATION, AS_EXPRESSION,
       CALL_EXPR, COMPILE_TIME_IF_EXPRESSION, CONDITIONAL_EXPR, CONSTEXPR_IDENTIFIER_EXPRESSION,
       DOT_EXPRESSION, ENUM_FETCH, ERROR_PROPAGATION_EXPRESSION, EXPRESSION,
@@ -3166,7 +3165,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   //   | CFlagStatement
   //   | CIncludeStatement
   //   | LanguageInjectionStatement
-  //   | TypeStatement
+  //   | TypeAliasDeclaration
   //   | DeferStatement
   public static boolean Statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Statement")) return false;
@@ -3188,7 +3187,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = CFlagStatement(b, l + 1);
     if (!r) r = CIncludeStatement(b, l + 1);
     if (!r) r = LanguageInjectionStatement(b, l + 1);
-    if (!r) r = TypeStatement(b, l + 1);
+    if (!r) r = TypeAliasDeclaration(b, l + 1);
     if (!r) r = DeferStatement(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
@@ -3442,7 +3441,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   //   | CIncludeStatement
   //   | CFlagStatement
   //   | LanguageInjectionStatement
-  //   | TypeStatement
+  //   | TypeAliasDeclaration
   static boolean TopDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TopDeclaration")) return false;
     boolean r;
@@ -3458,7 +3457,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = CIncludeStatement(b, l + 1);
     if (!r) r = CFlagStatement(b, l + 1);
     if (!r) r = LanguageInjectionStatement(b, l + 1);
-    if (!r) r = TypeStatement(b, l + 1);
+    if (!r) r = TypeAliasDeclaration(b, l + 1);
     return r;
   }
 
@@ -3519,6 +3518,20 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, LANGUAGE_INJECTION);
     if (!r) r = consumeToken(b, LBRACK);
     return r;
+  }
+
+  /* ********************************************************** */
+  // SymbolVisibility 'type' identifier '=' TypeUnionList
+  public static boolean TypeAliasDeclaration(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeAliasDeclaration")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, TYPE_ALIAS_DECLARATION, "<type alias declaration>");
+    r = SymbolVisibility(b, l + 1);
+    r = r && consumeTokens(b, 1, TYPE_, IDENTIFIER, ASSIGN);
+    p = r; // pin = 2
+    r = r && TypeUnionList(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -3684,20 +3697,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, IDENTIFIER);
     exit_section_(b, m, TYPE_REFERENCE_EXPRESSION, r);
     return r;
-  }
-
-  /* ********************************************************** */
-  // SymbolVisibility 'type' identifier '=' TypeUnionList
-  public static boolean TypeStatement(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "TypeStatement")) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, TYPE_STATEMENT, "<type statement>");
-    r = SymbolVisibility(b, l + 1);
-    r = r && consumeTokens(b, 1, TYPE_, IDENTIFIER, ASSIGN);
-    p = r; // pin = 2
-    r = r && TypeUnionList(b, l + 1);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
   }
 
   /* ********************************************************** */

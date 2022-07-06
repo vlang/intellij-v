@@ -127,10 +127,10 @@ public interface VlangTypes {
   IElementType SYMBOL_MUTABILITY = new VlangCompositeElementType("SYMBOL_MUTABILITY");
   IElementType SYMBOL_VISIBILITY = new VlangCompositeElementType("SYMBOL_VISIBILITY");
   IElementType TAG = new VlangCompositeElementType("TAG");
+  IElementType TYPE_ALIAS_DECLARATION = VlangElementTypeFactory.stubFactory("TYPE_ALIAS_DECLARATION");
   IElementType TYPE_DECL = new VlangCompositeElementType("TYPE_DECL");
   IElementType TYPE_LIST = new VlangCompositeElementType("TYPE_LIST");
   IElementType TYPE_REFERENCE_EXPRESSION = new VlangCompositeElementType("TYPE_REFERENCE_EXPRESSION");
-  IElementType TYPE_STATEMENT = new VlangCompositeElementType("TYPE_STATEMENT");
   IElementType TYPE_UNION_LIST = new VlangCompositeElementType("TYPE_UNION_LIST");
   IElementType UNARY_EXPR = new VlangCompositeElementType("UNARY_EXPR");
   IElementType UNPACKING_EXPRESSION = new VlangCompositeElementType("UNPACKING_EXPRESSION");
@@ -594,6 +594,9 @@ public interface VlangTypes {
       else if (type == TAG) {
         return new VlangTagImpl(node);
       }
+      else if (type == TYPE_ALIAS_DECLARATION) {
+        return new VlangTypeAliasDeclarationImpl(node);
+      }
       else if (type == TYPE_DECL) {
         return new VlangTypeDeclImpl(node);
       }
@@ -602,9 +605,6 @@ public interface VlangTypes {
       }
       else if (type == TYPE_REFERENCE_EXPRESSION) {
         return new VlangTypeReferenceExpressionImpl(node);
-      }
-      else if (type == TYPE_STATEMENT) {
-        return new VlangTypeStatementImpl(node);
       }
       else if (type == TYPE_UNION_LIST) {
         return new VlangTypeUnionListImpl(node);

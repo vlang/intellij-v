@@ -78,7 +78,7 @@
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional|OrBlock)Expr")=BinaryExpr
   extends(".*(Expr|Literal|Lit|OperandName)|StructInitialization|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ErrorPropagationExpression|ConstexprIdentifierExpression")=Expression
 
-  implements("(Type|Import)Spec|(Var|Const|Param|Field|Label)Definition|(Struct)Declaration|Receiver")="org.vlang.lang.psi.VlangNamedElement"
+  implements("(Type|Import)Spec|(Var|Const|Param|Field|Label)Definition|(Struct|TypeAlias)Declaration|Receiver")="org.vlang.lang.psi.VlangNamedElement"
 //  implements("FunctionLit")="org.vlang.lang.psi.GoSignatureOwner"
 //  implements("MethodSpec")="org.vlang.lang.psi.GoNamedSignatureOwner"
   implements("(Function|Method)Declaration")="org.vlang.lang.psi.VlangFunctionOrMethodDeclaration"
@@ -90,9 +90,9 @@
 
   extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
   extends("ModuleClause")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
-  extends("StructDeclaration")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
+  extends("StructDeclaration|TypeAliasDeclaration")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
 
-  elementTypeFactory("ModuleClause|(Function|Method|Struct)Declaration")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
+  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias)Declaration")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
 
 //  pin(".*Statement")=1
   extends(".*Statement")=Statement
@@ -277,7 +277,7 @@ Statement ::=
   | CFlagStatement
   | CIncludeStatement
   | LanguageInjectionStatement
-  | TypeStatement
+  | TypeAliasDeclaration
   | DeferStatement {methods=[processDeclarations]}
 
 
@@ -288,7 +288,12 @@ SimpleStatement ::=
   | IncDecStatement
   | (LeftHandExprList AssignmentStatement? /*| SendStatement*/) {pin(".*")=LeftHandExprList}
 
-TypeStatement ::= SymbolVisibility 'type' identifier '=' TypeUnionList {pin=2}
+TypeAliasDeclaration ::= SymbolVisibility 'type' identifier '=' TypeUnionList {
+  pin=2
+  stubClass="org.vlang.lang.stubs.VlangTypeAliasDeclarationStub"
+  methods=[getName]
+}
+
 TypeUnionList ::= TypeDecl ('|' TypeDecl)* {pin=1}
 
 LanguageInjectionStatement ::= LANGUAGE_INJECTION {pin=1}
@@ -312,7 +317,7 @@ private TopDeclaration ::=
   | CIncludeStatement
   | CFlagStatement
   | LanguageInjectionStatement
-  | TypeStatement
+  | TypeAliasDeclaration
 
 private TopLevelDeclarationRecover ::= !(';' | 'type' | const | fn | pub | BUILTIN_GLOBAL | var | struct | enum | interface | import | C_INCLUDE | C_FLAG | FOR_COMPILE_TIME | IF_COMPILE_TIME | LANGUAGE_INJECTION | '[')
 

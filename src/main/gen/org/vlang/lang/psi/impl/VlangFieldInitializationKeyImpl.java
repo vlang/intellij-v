@@ -10,14 +10,14 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangStatementImpl extends VlangCompositeElementImpl implements VlangStatement {
+public class VlangFieldInitializationKeyImpl extends VlangCompositeElementImpl implements VlangFieldInitializationKey {
 
-  public VlangStatementImpl(@NotNull ASTNode node) {
+  public VlangFieldInitializationKeyImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitStatement(this);
+    visitor.visitFieldInitializationKey(this);
   }
 
   @Override
@@ -27,21 +27,9 @@ public class VlangStatementImpl extends VlangCompositeElementImpl implements Vla
   }
 
   @Override
-  @Nullable
-  public VlangBlock getBlock() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangBlock.class);
-  }
-
-  @Override
-  @Nullable
-  public VlangConstDeclaration getConstDeclaration() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangConstDeclaration.class);
-  }
-
-  @Override
-  @Nullable
-  public VlangTypeAliasDeclaration getTypeAliasDeclaration() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeAliasDeclaration.class);
+  @NotNull
+  public VlangExpression getExpression() {
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class));
   }
 
 }

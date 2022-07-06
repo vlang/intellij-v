@@ -25,6 +25,11 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getName(o: VlangTypeAliasDeclaration): String {
+        return o.getIdentifier()?.text ?: ""
+    }
+
+    @JvmStatic
     fun getIdentifier(o: VlangStructDeclaration): PsiElement? {
         return o.structType.getIdentifier()
     }

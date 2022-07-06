@@ -1,10 +1,7 @@
 package org.vlang.lang.stubs
 
 import com.intellij.psi.stubs.IStubElementType
-import org.vlang.lang.stubs.types.VlangFunctionDeclarationStubElementType
-import org.vlang.lang.stubs.types.VlangMethodDeclarationStubElementType
-import org.vlang.lang.stubs.types.VlangModuleClauseStubElementType
-import org.vlang.lang.stubs.types.VlangStructDeclarationStubElementType
+import org.vlang.lang.stubs.types.*
 
 object VlangElementTypeFactory {
 //    private val TYPES: Map<String, Class<*>> = object : HashMap<String?, Class<*>?>() {
@@ -31,6 +28,7 @@ object VlangElementTypeFactory {
         if ("FUNCTION_DECLARATION" == name) return VlangFunctionDeclarationStubElementType(name)
         if ("METHOD_DECLARATION" == name) return VlangMethodDeclarationStubElementType(name)
         if ("STRUCT_DECLARATION" == name) return VlangStructDeclarationStubElementType(name)
+        if ("TYPE_ALIAS_DECLARATION" == name) return VlangTypeAliasDeclarationStubElementType(name)
 //        if ("IMPORT_SPEC" == name) return VlangImportSpecStubElementType(name)
 //        if ("PARAM_DEFINITION" == name) return VlangParamDefinitionStubElementType(name)
 //        if ("RECEIVER" == name) return VlangReceiverStubElementType(name)
