@@ -1,19 +1,14 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi.impl;
 
+import java.util.List;
+import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.vlang.lang.psi.VlangMemberModifier;
-import org.vlang.lang.psi.VlangMemberModifiers;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
-import org.vlang.lang.psi.VlangVisitor;
-
-import java.util.List;
-
-import static org.vlang.lang.VlangTypes.COLON;
+import static org.vlang.lang.VlangTypes.*;
+import org.vlang.lang.psi.*;
 
 public class VlangMemberModifiersImpl extends VlangCompositeElementImpl implements VlangMemberModifiers {
 

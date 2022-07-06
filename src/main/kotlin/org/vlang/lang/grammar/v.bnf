@@ -322,10 +322,13 @@ ConstDefinition ::= identifier {
 GlobalVariableDeclaration ::= Attributes? BUILTIN_GLOBAL identifier '=' Expression {pin=3}
 
 LeftHandExprList ::= ExpressionList
-private ExpressionArgList ::= ExpressionOrTypeWithRecover2 (',' (ExpressionOrTypeWithRecover2 | &')'))* {pin(".*")=1}
-private ExpressionOrTypeWithRecover2 ::= /*<<withOn "PAR" */ExpressionOrTypeWithRecover/*>>*/ | (!() ExpressionOrLiteralTypeExpr) {recoverWhile=ExpressionListRecover}
-private ExpressionOrTypeWithRecover ::= ExpressionOrLiteralTypeExpr {recoverWhile=ExpressionListRecover}
-private ExpressionOrLiteralTypeExpr ::= Expression /*| LiteralTypeExpr*/
+private ExpressionArgList ::= NamedExpressionArgList | SimpleExpressionArgList
+
+private SimpleExpressionArgList ::= ExpressionOrTypeWithRecover (',' (ExpressionOrTypeWithRecover | &')'))* {pin(".*")=2}
+private ExpressionOrTypeWithRecover ::= Expression {recoverWhile=ExpressionListRecover}
+
+private NamedExpressionArgList ::= NamedArgumentExpr (semi (NamedArgumentExpr | &')'))* {pin(".*")=1}
+private NamedArgumentExpr ::= identifier ':' Expression {pin=2}
 
 private ExpressionList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &')'))* {pin(".*")=1}
 private ExpressionWithRecover ::= Expression {recoverWhile=ExpressionListRecover}
@@ -406,9 +409,8 @@ private MethodOrField ::= MethodCall | FieldLookup
 FieldLookup ::= identifier
 MethodCall ::= identifier ArgumentList {pin=2}
 
-OperandName ::= ReferenceExpression (QualifiedReferenceExpression)* {elementType=ReferenceExpression}
-left QualifiedReferenceExpression ::= '.' identifier {elementType=ReferenceExpression}
 ReferenceExpression ::= identifier { methods=[getReference getQualifier resolve getReadWriteAccess] extends=Expression}
+
 //
 //CompositeLit ::= (LiteralTypeExprInner LiteralValue | TypeName LiteralValue) {pin(".*")="LiteralTypeExprInner"} // the brackets are valuable
 //private LiteralTypeExprInner ::= StructType | ArrayOrSliceType | MapType
@@ -480,7 +482,7 @@ MutExpression ::= mut Expression
 //
 private MaxGroup ::=
 //    CompositeLit
-  OperandName
+  ReferenceExpression
 //  | BuiltinCallExpr
   | CallExpr
 //  | TypeAssertionExpr
