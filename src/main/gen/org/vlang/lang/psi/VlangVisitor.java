@@ -178,6 +178,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitFieldInitializationKey(@NotNull VlangFieldInitializationKey o) {
+    visitCompositeElement(o);
+  }
+
   public void visitFieldInitializationKeyValueList(@NotNull VlangFieldInitializationKeyValueList o) {
     visitCompositeElement(o);
   }

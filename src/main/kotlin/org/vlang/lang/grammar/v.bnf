@@ -188,7 +188,8 @@ AnonymousFieldDefinition ::= TypeDecl {
 StructInitialization ::= TypeDecl '{' ( '}' | FieldInitialization '}') {pin=3}
 FieldInitialization ::= FieldInitializationKeyValueList | FieldInitializationValueList
 FieldInitializationKeyValueList ::= ((FieldInitializationKeyValue | UnpackingExpression) semi)+ semi?
-private FieldInitializationKeyValue ::= Expression ':' Expression {pin=2}
+private FieldInitializationKeyValue ::= FieldInitializationKey ':' Expression {pin=2}
+FieldInitializationKey ::= Expression
 FieldInitializationValueList ::= FieldInitializationValue (',' FieldInitializationValue)* ','?
 // see return if a > b { a } else { b }
 private FieldInitializationValue ::= Expression {pin=1}
@@ -397,7 +398,7 @@ Attribute ::= '[' AttributeExpression (';' AttributeExpression)* ']' {pin=1}
 AttributeExpression ::= IfAttribute | PlainAttribute
 
 IfAttribute ::= if identifier {pin=1}
-PlainAttribute ::= (identifier | unsafe | int | string) (':' (identifier | StringLiteral))?
+PlainAttribute ::= (identifier | unsafe | int | string | StringLiteral) (':' (identifier | StringLiteral))?
 
 Literal ::=
     int

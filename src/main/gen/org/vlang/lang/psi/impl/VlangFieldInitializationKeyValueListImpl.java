@@ -32,4 +32,10 @@ public class VlangFieldInitializationKeyValueListImpl extends VlangCompositeElem
     return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangExpression.class);
   }
 
+  @Override
+  @NotNull
+  public List<VlangFieldInitializationKey> getFieldInitializationKeyList() {
+    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangFieldInitializationKey.class);
+  }
+
 }

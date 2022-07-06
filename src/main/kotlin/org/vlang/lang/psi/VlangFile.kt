@@ -1,7 +1,6 @@
 package org.vlang.lang.psi
 
 import com.intellij.extapi.psi.PsiFileBase
-import com.intellij.openapi.util.IconLoader
 import com.intellij.psi.*
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
 import com.intellij.psi.stubs.StubElement
@@ -15,6 +14,7 @@ import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.impl.VlangPsiImplUtil
 import org.vlang.lang.stubs.types.VlangFunctionDeclarationStubElementType
 import org.vlang.lang.stubs.types.VlangMethodDeclarationStubElementType
+import org.vlang.lang.ui.PluginIcons
 
 class VlangFile(viewProvider: FileViewProvider) :
     PsiFileBase(viewProvider, VlangLanguage.INSTANCE), PsiImportHolder, PsiClassOwner {
@@ -23,7 +23,7 @@ class VlangFile(viewProvider: FileViewProvider) :
 
     override fun toString() = "Vlang Language file"
 
-    override fun getIcon(flags: Int) = IconLoader.getIcon("/icons/vlang.svg", this::class.java)
+    override fun getIcon(flags: Int) = PluginIcons.vlang
 
     override fun getReference() = references.getOrNull(0)
 

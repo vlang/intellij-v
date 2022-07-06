@@ -27,9 +27,9 @@ public class VlangPlainAttributeImpl extends VlangCompositeElementImpl implement
   }
 
   @Override
-  @Nullable
-  public VlangStringLiteral getStringLiteral() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangStringLiteral.class);
+  @NotNull
+  public List<VlangStringLiteral> getStringLiteralList() {
+    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangStringLiteral.class);
   }
 
   @Override

@@ -7,6 +7,7 @@ import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
+import com.intellij.psi.util.findParentOfType
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.*
 
@@ -63,6 +64,10 @@ class VlangAnnotator : Annotator {
 
         if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangEnumFetch) {
             holder.textAttributes(element, JavaHighlightingColors.STATIC_FINAL_FIELD_ATTRIBUTES)
+        }
+
+        if (element.elementType == VlangTypes.IDENTIFIER && element.findParentOfType<VlangFieldInitializationKey>() != null) {
+            holder.textAttributes(element, JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES)
         }
     }
 

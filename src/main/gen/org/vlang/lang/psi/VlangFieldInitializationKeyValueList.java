@@ -10,4 +10,7 @@ public interface VlangFieldInitializationKeyValueList extends VlangCompositeElem
   @NotNull
   List<VlangExpression> getExpressionList();
 
+  @NotNull
+  List<VlangFieldInitializationKey> getFieldInitializationKeyList();
+
 }

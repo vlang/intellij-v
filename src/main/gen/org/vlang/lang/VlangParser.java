@@ -1246,12 +1246,23 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Expression ':' Expression
+  // Expression
+  public static boolean FieldInitializationKey(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FieldInitializationKey")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, FIELD_INITIALIZATION_KEY, "<field initialization key>");
+    r = Expression(b, l + 1, -1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // FieldInitializationKey ':' Expression
   static boolean FieldInitializationKeyValue(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FieldInitializationKeyValue")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
-    r = Expression(b, l + 1, -1);
+    r = FieldInitializationKey(b, l + 1);
     r = r && consumeToken(b, COLON);
     p = r; // pin = 2
     r = r && Expression(b, l + 1, -1);
@@ -2684,7 +2695,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (identifier | unsafe | int | string) (':' (identifier | StringLiteral))?
+  // (identifier | unsafe | int | string | StringLiteral) (':' (identifier | StringLiteral))?
   public static boolean PlainAttribute(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PlainAttribute")) return false;
     boolean r;
@@ -2695,7 +2706,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // identifier | unsafe | int | string
+  // identifier | unsafe | int | string | StringLiteral
   private static boolean PlainAttribute_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PlainAttribute_0")) return false;
     boolean r;
@@ -2703,6 +2714,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, UNSAFE);
     if (!r) r = consumeToken(b, INT);
     if (!r) r = consumeToken(b, STRING);
+    if (!r) r = StringLiteral(b, l + 1);
     return r;
   }
 

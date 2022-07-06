@@ -7,8 +7,8 @@ import com.intellij.psi.PsiElement;
 
 public interface VlangPlainAttribute extends VlangCompositeElement {
 
-  @Nullable
-  VlangStringLiteral getStringLiteral();
+  @NotNull
+  List<VlangStringLiteral> getStringLiteralList();
 
   @Nullable
   PsiElement getColon();

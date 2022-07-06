@@ -54,6 +54,7 @@ public interface VlangTypes {
   IElementType EXPRESSION = new VlangCompositeElementType("EXPRESSION");
   IElementType FIELD_DECLARATION = new VlangCompositeElementType("FIELD_DECLARATION");
   IElementType FIELD_INITIALIZATION = new VlangCompositeElementType("FIELD_INITIALIZATION");
+  IElementType FIELD_INITIALIZATION_KEY = new VlangCompositeElementType("FIELD_INITIALIZATION_KEY");
   IElementType FIELD_INITIALIZATION_KEY_VALUE_LIST = new VlangCompositeElementType("FIELD_INITIALIZATION_KEY_VALUE_LIST");
   IElementType FIELD_INITIALIZATION_VALUE_LIST = new VlangCompositeElementType("FIELD_INITIALIZATION_VALUE_LIST");
   IElementType FIELD_LOOKUP = new VlangCompositeElementType("FIELD_LOOKUP");
@@ -373,6 +374,9 @@ public interface VlangTypes {
       }
       else if (type == FIELD_INITIALIZATION) {
         return new VlangFieldInitializationImpl(node);
+      }
+      else if (type == FIELD_INITIALIZATION_KEY) {
+        return new VlangFieldInitializationKeyImpl(node);
       }
       else if (type == FIELD_INITIALIZATION_KEY_VALUE_LIST) {
         return new VlangFieldInitializationKeyValueListImpl(node);
