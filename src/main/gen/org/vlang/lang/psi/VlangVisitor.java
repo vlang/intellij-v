@@ -90,6 +90,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitStatement(o);
   }
 
+  public void visitCompileTimeForStatement(@NotNull VlangCompileTimeForStatement o) {
+    visitStatement(o);
+  }
+
   public void visitCompileTimeIfExpression(@NotNull VlangCompileTimeIfExpression o) {
     visitExpression(o);
   }
@@ -112,6 +116,10 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitConstSpec(@NotNull VlangConstSpec o) {
     visitCompositeElement(o);
+  }
+
+  public void visitConstexprIdentifierExpression(@NotNull VlangConstexprIdentifierExpression o) {
+    visitExpression(o);
   }
 
   public void visitContinueStatement(@NotNull VlangContinueStatement o) {
@@ -152,6 +160,10 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitErrorPropagation(@NotNull VlangErrorPropagation o) {
     visitCompositeElement(o);
+  }
+
+  public void visitErrorPropagationExpression(@NotNull VlangErrorPropagationExpression o) {
+    visitExpression(o);
   }
 
   public void visitExpression(@NotNull VlangExpression o) {
@@ -279,10 +291,6 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitLiteral(@NotNull VlangLiteral o) {
-    visitExpression(o);
-  }
-
-  public void visitLiteralTypeExpr(@NotNull VlangLiteralTypeExpr o) {
     visitExpression(o);
   }
 
@@ -468,6 +476,10 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitUnaryExpr(@NotNull VlangUnaryExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitUnpackingExpression(@NotNull VlangUnpackingExpression o) {
     visitExpression(o);
   }
 

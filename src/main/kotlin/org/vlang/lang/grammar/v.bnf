@@ -60,6 +60,7 @@
     QUOTIENT             =  '/'
     REMAINDER_ASSIGN     =  '%='
     REMAINDER            =  '%'
+    AT                   =  '@'
     SHIFT_RIGHT_ASSIGN   =  '>>='
     SHIFT_RIGHT          =  '>>'
     GREATER_OR_EQUAL     =  '>='
@@ -72,12 +73,10 @@
     TYPE_                = 'type'
     raw_string           = 'raw_string'
     char                 = 'char'
-//    IF_COMPILE_TIME      = '$if'
-//    ELSE_COMPILE_TIME    = '$else'
   ]
 
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional|OrBlock)Expr")=BinaryExpr
-  extends(".*(Expr|Literal|Lit|OperandName)|StructInitialization|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|DotExpression|IsExpression|NotIsExpression|AsExpression")=Expression
+  extends(".*(Expr|Literal|Lit|OperandName)|StructInitialization|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ErrorPropagationExpression|ConstexprIdentifierExpression")=Expression
 
   implements("(Type|Import)Spec|(Var|Const|Param|Field|Label)Definition|Receiver")="org.vlang.lang.psi.VlangNamedElement"
 //  implements("FunctionLit")="org.vlang.lang.psi.GoSignatureOwner"
@@ -179,7 +178,7 @@ AnonymousFieldDefinition ::= TypeDecl {
 
 StructInitialization ::= TypeDecl '{' ( '}' | FieldInitialization '}') {pin=3}
 FieldInitialization ::= FieldInitializationKeyValueList /*| FieldInitializationValueList*/
-FieldInitializationKeyValueList ::= (FieldInitializationKeyValue semi)+ semi?
+FieldInitializationKeyValueList ::= ((FieldInitializationKeyValue | UnpackingExpression) semi)+ semi?
 private FieldInitializationKeyValue ::= Expression ':' Expression {pin=2}
 //FieldInitializationValueList ::= FieldInitializationValue (',' FieldInitializationValue)* ','?
 // see return if a > b { a } else { b }
@@ -187,7 +186,7 @@ private FieldInitializationKeyValue ::= Expression ':' Expression {pin=2}
 
 
 PointerType ::= '&' TypeDecl {pin=1}
-NullableType ::= '?' TypeDecl {pin=1}
+NullableType ::= '?' TypeDecl? {pin=1}
 
 FunctionType ::= fn Signature {pin=1 /*implements="org.vlang.lang.psi.GoSignatureOwner"*/}
 
@@ -263,6 +262,7 @@ Statement ::=
 //  | SwitchStatement
 //  | SelectStatement
   | ForStatement
+  | CompileTimeForStatement
   | AssertStatement
   | CFlagStatement
   | CIncludeStatement
@@ -271,7 +271,7 @@ Statement ::=
   | DeferStatement {methods=[processDeclarations]}
 
 
-private StatementRecover ::= !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | char | struct | switch | var | unsafe | assert | match | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG | LANGUAGE_INJECTION)
+private StatementRecover ::= !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | char | struct | switch | var | unsafe | assert | match | FOR_COMPILE_TIME | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG | LANGUAGE_INJECTION)
 
 SimpleStatement ::=
   ShortVarDeclaration
@@ -298,12 +298,13 @@ private TopDeclaration ::=
   | InterfaceDeclaration
   | GlobalVariableDeclaration
   | CompileTimeIfStatement
+  | CompileTimeForStatement
   | CIncludeStatement
   | CFlagStatement
   | LanguageInjectionStatement
   | TypeStatement
 
-private TopLevelDeclarationRecover ::= !(';' | 'type' | const | fn | pub | BUILTIN_GLOBAL | var | struct | enum | interface | import | C_INCLUDE | C_FLAG | IF_COMPILE_TIME | LANGUAGE_INJECTION | '[')
+private TopLevelDeclarationRecover ::= !(';' | 'type' | const | fn | pub | BUILTIN_GLOBAL | var | struct | enum | interface | import | C_INCLUDE | C_FLAG | FOR_COMPILE_TIME | IF_COMPILE_TIME | LANGUAGE_INJECTION | '[')
 
 ConstDeclaration ::= SymbolVisibility const ( ConstSpec | '(' ConstSpecs? ')' ) {pin(".*")=2 methods=[addSpec deleteSpec]}
 private ConstSpecs ::= ConstSpec (semi ConstSpec)* semi? {pin=1}
@@ -328,7 +329,7 @@ private SimpleExpressionArgList ::= ExpressionOrTypeWithRecover (',' (Expression
 private ExpressionOrTypeWithRecover ::= Expression {recoverWhile=ExpressionListRecover}
 
 private NamedExpressionArgList ::= NamedArgumentExpr (semi (NamedArgumentExpr | &')'))* {pin(".*")=1}
-private NamedArgumentExpr ::= identifier ':' Expression {pin=2}
+private NamedArgumentExpr ::= identifier ':' (Expression | UnpackingExpression) {pin=2}
 
 private ExpressionList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &')'))* {pin(".*")=1}
 private ExpressionWithRecover ::= Expression {recoverWhile=ExpressionListRecover}
@@ -454,12 +455,17 @@ Expression ::=
   | EnumFetch
   | MutExpression
   | DotExpression
+  | ErrorPropagationExpression
+  | ConstexprIdentifierExpression
   | ParenthesesExpr {methods=[getGoType] /*implements="org.vlang.lang.psi.GoTypeOwner"*/}
 
 fake BinaryExpr ::= Expression+ {
   methods=[left="Expression[0]" right="Expression[1]" getOperator]
 }
 
+ConstexprIdentifierExpression ::= '@' identifier {pin=2}
+ErrorPropagationExpression ::= Expression '?' {pin=1}
+UnpackingExpression ::= '...' Expression {pin=1}
 EnumFetch ::= '.' identifier {pin=2}
 
 OrBlockExpr ::= Expression or Block
@@ -562,10 +568,13 @@ private SimpleStatementOpt ::= [SimpleStatement ';'?] // todo: remove ?
 //private TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
 TypeList ::= TypeDecl ( ',' TypeDecl )* ','?
 TypeListNoPin ::= TypeDecl ( ',' TypeDecl )* ','? {elementType=TypeList}
+
 ForStatement ::= for (ForOrRangeClause Block | Block | Expression Block) {pin(".*")="for|ForOrRangeClause"}
 private ForOrRangeClause ::= (ForClause | RangeClause)
 ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement? {methods=[processDeclarations]}
 RangeClause ::= in Expression | VarDefinitionList in Expression {pin(".*")=2 extends=ShortVarDeclaration methods=[getRangeExpression getLeftExpressionsList getRightExpressionsList]}
+
+CompileTimeForStatement ::= FOR_COMPILE_TIME (ForOrRangeClause Block | Block | Expression Block) {pin=1}
 
 GoStatement ::= go Expression
 //SelectStatement ::= select '{' CommClause* '}'

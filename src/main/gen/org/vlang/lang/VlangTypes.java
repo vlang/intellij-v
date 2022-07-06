@@ -30,9 +30,11 @@ public interface VlangTypes {
   IElementType BREAK_STATEMENT = new VlangCompositeElementType("BREAK_STATEMENT");
   IElementType CALL_EXPR = new VlangCompositeElementType("CALL_EXPR");
   IElementType COMPILE_ELSE_STATEMENT = new VlangCompositeElementType("COMPILE_ELSE_STATEMENT");
+  IElementType COMPILE_TIME_FOR_STATEMENT = new VlangCompositeElementType("COMPILE_TIME_FOR_STATEMENT");
   IElementType COMPILE_TIME_IF_EXPRESSION = new VlangCompositeElementType("COMPILE_TIME_IF_EXPRESSION");
   IElementType COMPILE_TIME_IF_STATEMENT = new VlangCompositeElementType("COMPILE_TIME_IF_STATEMENT");
   IElementType CONDITIONAL_EXPR = new VlangCompositeElementType("CONDITIONAL_EXPR");
+  IElementType CONSTEXPR_IDENTIFIER_EXPRESSION = new VlangCompositeElementType("CONSTEXPR_IDENTIFIER_EXPRESSION");
   IElementType CONST_DECLARATION = new VlangCompositeElementType("CONST_DECLARATION");
   IElementType CONST_DEFINITION = new VlangCompositeElementType("CONST_DEFINITION");
   IElementType CONST_SPEC = new VlangCompositeElementType("CONST_SPEC");
@@ -48,6 +50,7 @@ public interface VlangTypes {
   IElementType ENUM_FIELDS = new VlangCompositeElementType("ENUM_FIELDS");
   IElementType ENUM_FIELD_DECLARATION = new VlangCompositeElementType("ENUM_FIELD_DECLARATION");
   IElementType ERROR_PROPAGATION = new VlangCompositeElementType("ERROR_PROPAGATION");
+  IElementType ERROR_PROPAGATION_EXPRESSION = new VlangCompositeElementType("ERROR_PROPAGATION_EXPRESSION");
   IElementType EXPRESSION = new VlangCompositeElementType("EXPRESSION");
   IElementType FIELD_DECLARATION = new VlangCompositeElementType("FIELD_DECLARATION");
   IElementType FIELD_INITIALIZATION = new VlangCompositeElementType("FIELD_INITIALIZATION");
@@ -80,7 +83,6 @@ public interface VlangTypes {
   IElementType LANGUAGE_INJECTION_STATEMENT = new VlangCompositeElementType("LANGUAGE_INJECTION_STATEMENT");
   IElementType LEFT_HAND_EXPR_LIST = new VlangCompositeElementType("LEFT_HAND_EXPR_LIST");
   IElementType LITERAL = new VlangCompositeElementType("LITERAL");
-  IElementType LITERAL_TYPE_EXPR = new VlangCompositeElementType("LITERAL_TYPE_EXPR");
   IElementType MATCH_ARM = new VlangCompositeElementType("MATCH_ARM");
   IElementType MATCH_ARMS = new VlangCompositeElementType("MATCH_ARMS");
   IElementType MATCH_ELSE_ARM_CLAUSE = new VlangCompositeElementType("MATCH_ELSE_ARM_CLAUSE");
@@ -127,6 +129,7 @@ public interface VlangTypes {
   IElementType TYPE_STATEMENT = new VlangCompositeElementType("TYPE_STATEMENT");
   IElementType TYPE_UNION_LIST = new VlangCompositeElementType("TYPE_UNION_LIST");
   IElementType UNARY_EXPR = new VlangCompositeElementType("UNARY_EXPR");
+  IElementType UNPACKING_EXPRESSION = new VlangCompositeElementType("UNPACKING_EXPRESSION");
   IElementType UNSAFE_EXPRESSION = new VlangCompositeElementType("UNSAFE_EXPRESSION");
   IElementType UNSAFE_STATEMENT = new VlangCompositeElementType("UNSAFE_STATEMENT");
   IElementType VAR_DEFINITION = new VlangCompositeElementType("VAR_DEFINITION");
@@ -134,6 +137,7 @@ public interface VlangTypes {
   IElementType AS = new VlangTokenType("as");
   IElementType ASSERT = new VlangTokenType("assert");
   IElementType ASSIGN = new VlangTokenType("=");
+  IElementType AT = new VlangTokenType("@");
   IElementType BIN = new VlangTokenType("bin");
   IElementType BIT_AND = new VlangTokenType("&");
   IElementType BIT_AND_ASSIGN = new VlangTokenType("&=");
@@ -170,6 +174,7 @@ public interface VlangTypes {
   IElementType FLOATI = new VlangTokenType("floati");
   IElementType FN = new VlangTokenType("fn");
   IElementType FOR = new VlangTokenType("for");
+  IElementType FOR_COMPILE_TIME = new VlangTokenType("FOR_COMPILE_TIME");
   IElementType GO = new VlangTokenType("go");
   IElementType GOTO = new VlangTokenType("goto");
   IElementType GREATER = new VlangTokenType(">");
@@ -297,6 +302,9 @@ public interface VlangTypes {
       else if (type == COMPILE_ELSE_STATEMENT) {
         return new VlangCompileElseStatementImpl(node);
       }
+      else if (type == COMPILE_TIME_FOR_STATEMENT) {
+        return new VlangCompileTimeForStatementImpl(node);
+      }
       else if (type == COMPILE_TIME_IF_EXPRESSION) {
         return new VlangCompileTimeIfExpressionImpl(node);
       }
@@ -305,6 +313,9 @@ public interface VlangTypes {
       }
       else if (type == CONDITIONAL_EXPR) {
         return new VlangConditionalExprImpl(node);
+      }
+      else if (type == CONSTEXPR_IDENTIFIER_EXPRESSION) {
+        return new VlangConstexprIdentifierExpressionImpl(node);
       }
       else if (type == CONST_DECLARATION) {
         return new VlangConstDeclarationImpl(node);
@@ -350,6 +361,9 @@ public interface VlangTypes {
       }
       else if (type == ERROR_PROPAGATION) {
         return new VlangErrorPropagationImpl(node);
+      }
+      else if (type == ERROR_PROPAGATION_EXPRESSION) {
+        return new VlangErrorPropagationExpressionImpl(node);
       }
       else if (type == FIELD_DECLARATION) {
         return new VlangFieldDeclarationImpl(node);
@@ -443,9 +457,6 @@ public interface VlangTypes {
       }
       else if (type == LITERAL) {
         return new VlangLiteralImpl(node);
-      }
-      else if (type == LITERAL_TYPE_EXPR) {
-        return new VlangLiteralTypeExprImpl(node);
       }
       else if (type == MATCH_ARM) {
         return new VlangMatchArmImpl(node);
@@ -584,6 +595,9 @@ public interface VlangTypes {
       }
       else if (type == UNARY_EXPR) {
         return new VlangUnaryExprImpl(node);
+      }
+      else if (type == UNPACKING_EXPRESSION) {
+        return new VlangUnpackingExpressionImpl(node);
       }
       else if (type == UNSAFE_EXPRESSION) {
         return new VlangUnsafeExpressionImpl(node);

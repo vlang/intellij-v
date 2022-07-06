@@ -146,6 +146,7 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 
 "%="                                      { return REMAINDER_ASSIGN; }
 "%"                                       { return REMAINDER; }
+"@"                                       { return AT; }
 
 ">>="                                     { return SHIFT_RIGHT_ASSIGN; }
 ">>"                                      { return SHIFT_RIGHT; }
@@ -157,6 +158,7 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 "#include"                                { yybegin(C_STRING_LITERAL); return C_INCLUDE; }
 "#flag"                                   { yybegin(C_FLAG_VALUE_EXPECTED); return C_FLAG; }
 
+"$for"                                    { return FOR_COMPILE_TIME ; }
 "$if"                                     { return IF_COMPILE_TIME ; }
 "$else"                                   { return ELSE_COMPILE_TIME ; }
 

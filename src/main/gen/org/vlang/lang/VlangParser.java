@@ -40,18 +40,20 @@ public class VlangParser implements PsiParser, LightPsiParser {
     create_token_set_(ARRAY_OR_SLICE_TYPE, FUNCTION_TYPE, INTERFACE_TYPE, NULLABLE_TYPE,
       POINTER_TYPE, STRUCT_TYPE, TYPE_DECL, TYPE_LIST),
     create_token_set_(ASSERT_STATEMENT, ASSIGNMENT_STATEMENT, BREAK_STATEMENT, COMPILE_ELSE_STATEMENT,
-      COMPILE_TIME_IF_STATEMENT, CONTINUE_STATEMENT, C_FLAG_STATEMENT, C_INCLUDE_STATEMENT,
-      DEFER_STATEMENT, ELSE_STATEMENT, FOR_STATEMENT, GO_STATEMENT,
-      IF_STATEMENT, INC_DEC_STATEMENT, LANGUAGE_INJECTION_STATEMENT, RETURN_STATEMENT,
-      SIMPLE_STATEMENT, STATEMENT, TYPE_STATEMENT, UNSAFE_STATEMENT),
+      COMPILE_TIME_FOR_STATEMENT, COMPILE_TIME_IF_STATEMENT, CONTINUE_STATEMENT, C_FLAG_STATEMENT,
+      C_INCLUDE_STATEMENT, DEFER_STATEMENT, ELSE_STATEMENT, FOR_STATEMENT,
+      GO_STATEMENT, IF_STATEMENT, INC_DEC_STATEMENT, LANGUAGE_INJECTION_STATEMENT,
+      RETURN_STATEMENT, SIMPLE_STATEMENT, STATEMENT, TYPE_STATEMENT,
+      UNSAFE_STATEMENT),
     create_token_set_(ADD_EXPR, AND_EXPR, ARRAY_CREATION, AS_EXPRESSION,
-      CALL_EXPR, COMPILE_TIME_IF_EXPRESSION, CONDITIONAL_EXPR, DOT_EXPRESSION,
-      ENUM_FETCH, EXPRESSION, FUNCTION_LIT, IF_EXPRESSION,
-      INDEX_OR_SLICE_EXPR, IN_EXPRESSION, IS_EXPRESSION, LITERAL,
-      LITERAL_TYPE_EXPR, MATCH_EXPRESSION, MUL_EXPR, MUT_EXPRESSION,
-      NOT_IN_EXPRESSION, NOT_IS_EXPRESSION, OR_BLOCK_EXPR, OR_EXPR,
-      PARENTHESES_EXPR, RANGE_EXPR, REFERENCE_EXPRESSION, STRING_LITERAL,
-      STRUCT_INITIALIZATION, UNARY_EXPR, UNSAFE_EXPRESSION),
+      CALL_EXPR, COMPILE_TIME_IF_EXPRESSION, CONDITIONAL_EXPR, CONSTEXPR_IDENTIFIER_EXPRESSION,
+      DOT_EXPRESSION, ENUM_FETCH, ERROR_PROPAGATION_EXPRESSION, EXPRESSION,
+      FUNCTION_LIT, IF_EXPRESSION, INDEX_OR_SLICE_EXPR, IN_EXPRESSION,
+      IS_EXPRESSION, LITERAL, MATCH_EXPRESSION, MUL_EXPR,
+      MUT_EXPRESSION, NOT_IN_EXPRESSION, NOT_IS_EXPRESSION, OR_BLOCK_EXPR,
+      OR_EXPR, PARENTHESES_EXPR, RANGE_EXPR, REFERENCE_EXPRESSION,
+      STRING_LITERAL, STRUCT_INITIALIZATION, UNARY_EXPR, UNPACKING_EXPRESSION,
+      UNSAFE_EXPRESSION),
   };
 
   /* ********************************************************** */
@@ -475,6 +477,54 @@ public class VlangParser implements PsiParser, LightPsiParser {
     boolean r;
     r = CompileTimeIfStatement(b, l + 1);
     if (!r) r = Block(b, l + 1);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // FOR_COMPILE_TIME (ForOrRangeClause Block | Block | Expression Block)
+  public static boolean CompileTimeForStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CompileTimeForStatement")) return false;
+    if (!nextTokenIs(b, FOR_COMPILE_TIME)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, COMPILE_TIME_FOR_STATEMENT, null);
+    r = consumeToken(b, FOR_COMPILE_TIME);
+    p = r; // pin = 1
+    r = r && CompileTimeForStatement_1(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // ForOrRangeClause Block | Block | Expression Block
+  private static boolean CompileTimeForStatement_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CompileTimeForStatement_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = CompileTimeForStatement_1_0(b, l + 1);
+    if (!r) r = Block(b, l + 1);
+    if (!r) r = CompileTimeForStatement_1_2(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ForOrRangeClause Block
+  private static boolean CompileTimeForStatement_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CompileTimeForStatement_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = ForOrRangeClause(b, l + 1);
+    r = r && Block(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // Expression Block
+  private static boolean CompileTimeForStatement_1_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CompileTimeForStatement_1_2")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Expression(b, l + 1, -1);
+    r = r && Block(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -1208,7 +1258,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (FieldInitializationKeyValue semi)+ semi?
+  // ((FieldInitializationKeyValue | UnpackingExpression) semi)+ semi?
   public static boolean FieldInitializationKeyValueList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FieldInitializationKeyValueList")) return false;
     boolean r, p;
@@ -1220,7 +1270,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // (FieldInitializationKeyValue semi)+
+  // ((FieldInitializationKeyValue | UnpackingExpression) semi)+
   private static boolean FieldInitializationKeyValueList_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FieldInitializationKeyValueList_0")) return false;
     boolean r;
@@ -1235,16 +1285,25 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // FieldInitializationKeyValue semi
+  // (FieldInitializationKeyValue | UnpackingExpression) semi
   private static boolean FieldInitializationKeyValueList_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FieldInitializationKeyValueList_0_0")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
-    r = FieldInitializationKeyValue(b, l + 1);
+    r = FieldInitializationKeyValueList_0_0_0(b, l + 1);
     p = r; // pin = 1
     r = r && semi(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
+  }
+
+  // FieldInitializationKeyValue | UnpackingExpression
+  private static boolean FieldInitializationKeyValueList_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FieldInitializationKeyValueList_0_0_0")) return false;
+    boolean r;
+    r = FieldInitializationKeyValue(b, l + 1);
+    if (!r) r = UnpackingExpression(b, l + 1);
+    return r;
   }
 
   // semi?
@@ -1979,29 +2038,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LiteralTypeExprInner | TypeName
-  public static boolean LiteralTypeExpr(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "LiteralTypeExpr")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, LITERAL_TYPE_EXPR, "<literal type expr>");
-    r = LiteralTypeExprInner(b, l + 1);
-    if (!r) r = TypeName(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // StructType | ArrayOrSliceType
-  static boolean LiteralTypeExprInner(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "LiteralTypeExprInner")) return false;
-    if (!nextTokenIs(b, "", LBRACK, STRUCT)) return false;
-    boolean r;
-    r = StructType(b, l + 1);
-    if (!r) r = ArrayOrSliceType(b, l + 1);
-    return r;
-  }
-
-  /* ********************************************************** */
   // MatchExpressionList Block semi
   public static boolean MatchArm(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MatchArm")) return false;
@@ -2231,7 +2267,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier ':' Expression
+  // identifier ':' (Expression | UnpackingExpression)
   static boolean NamedArgumentExpr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NamedArgumentExpr")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
@@ -2239,9 +2275,18 @@ public class VlangParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_);
     r = consumeTokens(b, 2, IDENTIFIER, COLON);
     p = r; // pin = 2
-    r = r && Expression(b, l + 1, -1);
+    r = r && NamedArgumentExpr_2(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
+  }
+
+  // Expression | UnpackingExpression
+  private static boolean NamedArgumentExpr_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NamedArgumentExpr_2")) return false;
+    boolean r;
+    r = Expression(b, l + 1, -1);
+    if (!r) r = UnpackingExpression(b, l + 1);
+    return r;
   }
 
   /* ********************************************************** */
@@ -2303,7 +2348,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '?' TypeDecl
+  // '?' TypeDecl?
   public static boolean NullableType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NullableType")) return false;
     if (!nextTokenIs(b, QUESTION)) return false;
@@ -2311,9 +2356,16 @@ public class VlangParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, NULLABLE_TYPE, null);
     r = consumeToken(b, QUESTION);
     p = r; // pin = 1
-    r = r && TypeDecl(b, l + 1);
+    r = r && NullableType_1(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
+  }
+
+  // TypeDecl?
+  private static boolean NullableType_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NullableType_1")) return false;
+    TypeDecl(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -3004,6 +3056,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // //  | SwitchStatement
   // //  | SelectStatement
   //   | ForStatement
+  //   | CompileTimeForStatement
   //   | AssertStatement
   //   | CFlagStatement
   //   | CIncludeStatement
@@ -3025,6 +3078,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = IfStatement(b, l + 1);
     if (!r) r = UnsafeStatement(b, l + 1);
     if (!r) r = ForStatement(b, l + 1);
+    if (!r) r = CompileTimeForStatement(b, l + 1);
     if (!r) r = AssertStatement(b, l + 1);
     if (!r) r = CFlagStatement(b, l + 1);
     if (!r) r = CIncludeStatement(b, l + 1);
@@ -3036,7 +3090,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | char | struct | switch | var | unsafe | assert | match | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG | LANGUAGE_INJECTION)
+  // !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | char | struct | switch | var | unsafe | assert | match | FOR_COMPILE_TIME | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG | LANGUAGE_INJECTION)
   static boolean StatementRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StatementRecover")) return false;
     boolean r;
@@ -3046,7 +3100,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // '!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | char | struct | switch | var | unsafe | assert | match | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG | LANGUAGE_INJECTION
+  // '!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | char | struct | switch | var | unsafe | assert | match | FOR_COMPILE_TIME | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG | LANGUAGE_INJECTION
   private static boolean StatementRecover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StatementRecover_0")) return false;
     boolean r;
@@ -3101,6 +3155,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, UNSAFE);
     if (!r) r = consumeToken(b, ASSERT);
     if (!r) r = consumeToken(b, MATCH);
+    if (!r) r = consumeToken(b, FOR_COMPILE_TIME);
     if (!r) r = consumeToken(b, IF_COMPILE_TIME);
     if (!r) r = consumeToken(b, ELSE_COMPILE_TIME);
     if (!r) r = consumeToken(b, BUILTIN_GLOBAL);
@@ -3278,6 +3333,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   //   | InterfaceDeclaration
   //   | GlobalVariableDeclaration
   //   | CompileTimeIfStatement
+  //   | CompileTimeForStatement
   //   | CIncludeStatement
   //   | CFlagStatement
   //   | LanguageInjectionStatement
@@ -3293,6 +3349,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = InterfaceDeclaration(b, l + 1);
     if (!r) r = GlobalVariableDeclaration(b, l + 1);
     if (!r) r = CompileTimeIfStatement(b, l + 1);
+    if (!r) r = CompileTimeForStatement(b, l + 1);
     if (!r) r = CIncludeStatement(b, l + 1);
     if (!r) r = CFlagStatement(b, l + 1);
     if (!r) r = LanguageInjectionStatement(b, l + 1);
@@ -3325,7 +3382,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !(';' | 'type' | const | fn | pub | BUILTIN_GLOBAL | var | struct | enum | interface | import | C_INCLUDE | C_FLAG | IF_COMPILE_TIME | LANGUAGE_INJECTION | '[')
+  // !(';' | 'type' | const | fn | pub | BUILTIN_GLOBAL | var | struct | enum | interface | import | C_INCLUDE | C_FLAG | FOR_COMPILE_TIME | IF_COMPILE_TIME | LANGUAGE_INJECTION | '[')
   static boolean TopLevelDeclarationRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TopLevelDeclarationRecover")) return false;
     boolean r;
@@ -3335,7 +3392,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ';' | 'type' | const | fn | pub | BUILTIN_GLOBAL | var | struct | enum | interface | import | C_INCLUDE | C_FLAG | IF_COMPILE_TIME | LANGUAGE_INJECTION | '['
+  // ';' | 'type' | const | fn | pub | BUILTIN_GLOBAL | var | struct | enum | interface | import | C_INCLUDE | C_FLAG | FOR_COMPILE_TIME | IF_COMPILE_TIME | LANGUAGE_INJECTION | '['
   private static boolean TopLevelDeclarationRecover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TopLevelDeclarationRecover_0")) return false;
     boolean r;
@@ -3352,6 +3409,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, IMPORT);
     if (!r) r = consumeToken(b, C_INCLUDE);
     if (!r) r = consumeToken(b, C_FLAG);
+    if (!r) r = consumeToken(b, FOR_COMPILE_TIME);
     if (!r) r = consumeToken(b, IF_COMPILE_TIME);
     if (!r) r = consumeToken(b, LANGUAGE_INJECTION);
     if (!r) r = consumeToken(b, LBRACK);
@@ -3586,6 +3644,20 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // '...' Expression
+  public static boolean UnpackingExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UnpackingExpression")) return false;
+    if (!nextTokenIs(b, TRIPLE_DOT)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, UNPACKING_EXPRESSION, null);
+    r = consumeToken(b, TRIPLE_DOT);
+    p = r; // pin = 1
+    r = r && Expression(b, l + 1, -1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
   // UnsafeExpression
   public static boolean UnsafeStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "UnsafeStatement")) return false;
@@ -3709,7 +3781,9 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // 20: ATOM(EnumFetch)
   // 21: PREFIX(MutExpression)
   // 22: POSTFIX(DotExpression)
-  // 23: ATOM(ParenthesesExpr)
+  // 23: POSTFIX(ErrorPropagationExpression)
+  // 24: ATOM(ConstexprIdentifierExpression)
+  // 25: ATOM(ParenthesesExpr)
   public static boolean Expression(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "Expression")) return false;
     addVariant(b, "<expression>");
@@ -3727,6 +3801,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = FunctionLit(b, l + 1);
     if (!r) r = EnumFetch(b, l + 1);
     if (!r) r = MutExpression(b, l + 1);
+    if (!r) r = ConstexprIdentifierExpression(b, l + 1);
     if (!r) r = ParenthesesExpr(b, l + 1);
     p = r;
     r = r && Expression_0(b, l + 1, g);
@@ -3798,6 +3873,10 @@ public class VlangParser implements PsiParser, LightPsiParser {
       else if (g < 22 && DotExpression_0(b, l + 1)) {
         r = true;
         exit_section_(b, l, m, DOT_EXPRESSION, r, true, null);
+      }
+      else if (g < 23 && consumeTokenSmart(b, QUESTION)) {
+        r = true;
+        exit_section_(b, l, m, ERROR_PROPAGATION_EXPRESSION, r, true, null);
       }
       else {
         exit_section_(b, l, m, null, false, false, null);
@@ -4125,6 +4204,17 @@ public class VlangParser implements PsiParser, LightPsiParser {
     r = consumeTokenSmart(b, DOT);
     r = r && MethodOrField(b, l + 1);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // '@' identifier
+  public static boolean ConstexprIdentifierExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ConstexprIdentifierExpression")) return false;
+    if (!nextTokenIsSmart(b, AT)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokensSmart(b, 2, AT, IDENTIFIER);
+    exit_section_(b, m, CONSTEXPR_IDENTIFIER_EXPRESSION, r);
     return r;
   }
 
