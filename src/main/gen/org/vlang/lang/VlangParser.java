@@ -2255,7 +2255,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Attributes? SymbolVisibility fn Receiver identifier Signature BlockWithConsume?
+  // Attributes? SymbolVisibility fn Receiver MethodName Signature BlockWithConsume?
   public static boolean MethodDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MethodDeclaration")) return false;
     boolean r, p;
@@ -2264,7 +2264,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     r = r && SymbolVisibility(b, l + 1);
     r = r && consumeToken(b, FN);
     r = r && Receiver(b, l + 1);
-    r = r && consumeToken(b, IDENTIFIER);
+    r = r && MethodName(b, l + 1);
     p = r; // pin = 5
     r = r && report_error_(b, Signature(b, l + 1));
     r = p && MethodDeclaration_6(b, l + 1) && r;
@@ -2284,6 +2284,20 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "MethodDeclaration_6")) return false;
     BlockWithConsume(b, l + 1);
     return true;
+  }
+
+  /* ********************************************************** */
+  // identifier | AddOp | MulOp | RelOp
+  public static boolean MethodName(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MethodName")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, METHOD_NAME, "<method name>");
+    r = consumeToken(b, IDENTIFIER);
+    if (!r) r = AddOp(b, l + 1);
+    if (!r) r = MulOp(b, l + 1);
+    if (!r) r = RelOp(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
   }
 
   /* ********************************************************** */
@@ -3415,7 +3429,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
   //   | CFlagStatement
   //   | LanguageInjectionStatement
   //   | TypeStatement
-  //   | Statement
   static boolean TopDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TopDeclaration")) return false;
     boolean r;
@@ -3432,7 +3445,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = CFlagStatement(b, l + 1);
     if (!r) r = LanguageInjectionStatement(b, l + 1);
     if (!r) r = TypeStatement(b, l + 1);
-    if (!r) r = Statement(b, l + 1);
     return r;
   }
 

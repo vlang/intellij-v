@@ -334,6 +334,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitFunctionOrMethodDeclaration(o);
   }
 
+  public void visitMethodName(@NotNull VlangMethodName o) {
+    visitCompositeElement(o);
+  }
+
   public void visitModuleClause(@NotNull VlangModuleClause o) {
     visitCompositeElement(o);
   }
@@ -440,7 +444,7 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitStructDeclaration(@NotNull VlangStructDeclaration o) {
-    visitCompositeElement(o);
+    visitNamedElement(o);
   }
 
   public void visitStructInitialization(@NotNull VlangStructInitialization o) {
@@ -464,7 +468,7 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitTypeDecl(@NotNull VlangTypeDecl o) {
-    visitCompositeElement(o);
+    visitReferenceExpressionBase(o);
   }
 
   public void visitTypeList(@NotNull VlangTypeList o) {

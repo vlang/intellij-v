@@ -93,6 +93,7 @@ public interface VlangTypes {
   IElementType MEMBER_MODIFIERS = new VlangCompositeElementType("MEMBER_MODIFIERS");
   IElementType METHOD_CALL = new VlangCompositeElementType("METHOD_CALL");
   IElementType METHOD_DECLARATION = VlangElementTypeFactory.stubFactory("METHOD_DECLARATION");
+  IElementType METHOD_NAME = new VlangCompositeElementType("METHOD_NAME");
   IElementType MODULE_CLAUSE = VlangElementTypeFactory.stubFactory("MODULE_CLAUSE");
   IElementType MUL_EXPR = new VlangCompositeElementType("MUL_EXPR");
   IElementType MUT_EXPRESSION = new VlangCompositeElementType("MUT_EXPRESSION");
@@ -119,7 +120,7 @@ public interface VlangTypes {
   IElementType SIMPLE_STATEMENT = new VlangCompositeElementType("SIMPLE_STATEMENT");
   IElementType STATEMENT = new VlangCompositeElementType("STATEMENT");
   IElementType STRING_LITERAL = new VlangCompositeElementType("STRING_LITERAL");
-  IElementType STRUCT_DECLARATION = new VlangCompositeElementType("STRUCT_DECLARATION");
+  IElementType STRUCT_DECLARATION = VlangElementTypeFactory.stubFactory("STRUCT_DECLARATION");
   IElementType STRUCT_INITIALIZATION = new VlangCompositeElementType("STRUCT_INITIALIZATION");
   IElementType STRUCT_TYPE = new VlangCompositeElementType("STRUCT_TYPE");
   IElementType SYMBOL_MUTABILITY = new VlangCompositeElementType("SYMBOL_MUTABILITY");
@@ -489,6 +490,9 @@ public interface VlangTypes {
       }
       else if (type == METHOD_DECLARATION) {
         return new VlangMethodDeclarationImpl(node);
+      }
+      else if (type == METHOD_NAME) {
+        return new VlangMethodNameImpl(node);
       }
       else if (type == MODULE_CLAUSE) {
         return new VlangModuleClauseImpl(node);

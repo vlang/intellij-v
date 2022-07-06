@@ -20,8 +20,10 @@ class VlangFileElementType:
         return object : DefaultStubBuilder() {
             override fun createStubForFile(file: PsiFile): StubElement<*> {
                 return if (file is VlangFile) {
-                    VlangFileStub(file as VlangFile)
-                } else super.createStubForFile(file)
+                    VlangFileStub(file)
+                } else {
+                    super.createStubForFile(file)
+                }
             }
         }
     }

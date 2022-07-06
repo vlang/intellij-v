@@ -4,13 +4,17 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementResolveResult
 import com.intellij.psi.ResolveResult
+import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.util.ArrayUtil
-import org.vlang.lang.psi.VlangFile
+import org.vlang.lang.psi.VlangCallExpr
 import org.vlang.lang.psi.VlangReferenceExpressionBase
+import org.vlang.lang.stubs.index.VlangFunctionIndex
+import org.vlang.lang.stubs.index.VlangStructIndex
 
-class VlangReference(o: VlangReferenceExpressionBase) :
+class VlangReference(private val el: VlangReferenceExpressionBase) :
     VlangReferenceBase<VlangReferenceExpressionBase>(
-        o, TextRange.from(o.getIdentifier().startOffsetInParent, o.getIdentifier().textLength)
+        el,
+        TextRange.from(el.getIdentifier()?.startOffsetInParent ?: 0, el.getIdentifier()?.textLength ?: el.textLength)
     ) {
     override fun isReferenceTo(element: PsiElement): Boolean {
         return true
@@ -20,11 +24,21 @@ class VlangReference(o: VlangReferenceExpressionBase) :
         get() = myElement?.getIdentifier()
 
     override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
-        val file = myElement?.containingFile as? VlangFile ?: return emptyArray()
+//        val file = myElement?.containingFile as? VlangFile ?: return emptyArray()
+        val project = el.project
 
-        return file.getFunctions().filter {
-            it.nameIdentifier?.text == identifier?.text
+        val name = identifier?.text ?: return emptyArray()
+
+        val res = when {
+            el.parent is VlangCallExpr -> {
+                VlangFunctionIndex.find(name, project, GlobalSearchScope.allScope(project), null)
+            }
+            else -> {
+                VlangStructIndex.find(name, project, GlobalSearchScope.allScope(project), null)
+            }
         }
+
+        return res
             .map { PsiElementResolveResult(it) }
             .toTypedArray()
     }

@@ -32,10 +32,7 @@ class VlangFunctionDeclarationStubElementType(name: String) :
         return VlangFunctionDeclarationStub(parentStub, this, dataStream.readName(), dataStream.readBoolean())
     }
 
-
-    override fun getExtraIndexKeys(): Collection<StubIndexKey<String, out VlangNamedElement>> {
-        return EXTRA_KEYS
-    }
+    override fun getExtraIndexKeys() = EXTRA_KEYS
 
     companion object {
         val EMPTY_ARRAY: Array<VlangFunctionDeclaration?> = arrayOfNulls(0)

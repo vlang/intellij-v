@@ -4,10 +4,9 @@ import com.intellij.lang.parser.GeneratedParserUtilBase
 import com.intellij.openapi.util.Conditions
 import com.intellij.psi.PsiElement
 import com.intellij.psi.SyntaxTraverser
-import org.vlang.lang.psi.VlangFunctionDeclaration
-import org.vlang.lang.psi.VlangImportSpec
-import org.vlang.lang.psi.VlangModuleClause
-import org.vlang.lang.psi.VlangReferenceExpression
+import com.intellij.psi.util.elementType
+import org.vlang.lang.VlangTypes
+import org.vlang.lang.psi.*
 
 object VlangPsiImplUtil {
     @JvmStatic
@@ -16,7 +15,32 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getIdentifier(o: VlangMethodDeclaration): PsiElement? {
+        return if (o.methodName.elementType == VlangTypes.IDENTIFIER) o.methodName else null
+    }
+
+    @JvmStatic
+    fun getName(o: VlangStructDeclaration): String {
+        return o.getIdentifier()?.text ?: ""
+    }
+
+    @JvmStatic
+    fun getIdentifier(o: VlangStructDeclaration): PsiElement? {
+        return o.structType.getIdentifier()
+    }
+
+    @JvmStatic
+    fun getIdentifier(o: VlangTypeDecl): PsiElement? {
+        return null
+    }
+
+    @JvmStatic
     fun getReference(o: VlangReferenceExpression): VlangReference {
+        return VlangReference(o)
+    }
+
+    @JvmStatic
+    fun getReference(o: VlangTypeReferenceExpression): VlangReference {
         return VlangReference(o)
     }
 

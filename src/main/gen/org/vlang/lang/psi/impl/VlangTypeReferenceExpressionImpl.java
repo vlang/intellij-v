@@ -32,4 +32,10 @@ public class VlangTypeReferenceExpressionImpl extends VlangCompositeElementImpl 
     return notNullChild(findChildByType(IDENTIFIER));
   }
 
+  @Override
+  @NotNull
+  public VlangReference getReference() {
+    return VlangPsiImplUtil.getReference(this);
+  }
+
 }

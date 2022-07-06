@@ -46,6 +46,12 @@ public class VlangMethodDeclarationImpl extends VlangFunctionOrMethodDeclaration
 
   @Override
   @NotNull
+  public VlangMethodName getMethodName() {
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangMethodName.class));
+  }
+
+  @Override
+  @NotNull
   public VlangReceiver getReceiver() {
     return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangReceiver.class));
   }
@@ -69,9 +75,9 @@ public class VlangMethodDeclarationImpl extends VlangFunctionOrMethodDeclaration
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getIdentifier() {
-    return notNullChild(findChildByType(IDENTIFIER));
+    return VlangPsiImplUtil.getIdentifier(this);
   }
 
 }

@@ -7,7 +7,6 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.IElementType
-import com.intellij.psi.tree.IFileElementType
 import com.intellij.psi.tree.TokenSet
 import org.vlang.lang.VlangTypes.*
 import org.vlang.lang.lexer.VlangLexer
@@ -25,7 +24,7 @@ class VlangParserDefinition : ParserDefinition {
 
     override fun createParser(project: Project) = VlangParser()
 
-    override fun getFileNodeType() = FILE
+    override fun getFileNodeType() = VlangFileElementType.INSTANCE
 
     override fun createFile(viewProvider: FileViewProvider) = VlangFile(viewProvider)
 
@@ -93,6 +92,5 @@ class VlangParserDefinition : ParserDefinition {
         )
 
         val WHITE_SPACES = TokenSet.create(WS, NLS)
-        val FILE = IFileElementType(VlangLanguage.INSTANCE)
     }
 }

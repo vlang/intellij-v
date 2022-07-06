@@ -8,9 +8,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
+import org.vlang.lang.stubs.VlangStructDeclarationStub;
 import org.vlang.lang.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class VlangStructDeclarationImpl extends VlangCompositeElementImpl implements VlangStructDeclaration {
+public class VlangStructDeclarationImpl extends VlangNamedElementImpl<VlangStructDeclarationStub> implements VlangStructDeclaration {
+
+  public VlangStructDeclarationImpl(@NotNull VlangStructDeclarationStub stub, @NotNull IStubElementType<?, ?> type) {
+    super(stub, type);
+  }
 
   public VlangStructDeclarationImpl(@NotNull ASTNode node) {
     super(node);
@@ -42,6 +48,18 @@ public class VlangStructDeclarationImpl extends VlangCompositeElementImpl implem
   @Nullable
   public VlangSymbolVisibility getSymbolVisibility() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangSymbolVisibility.class);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getIdentifier() {
+    return VlangPsiImplUtil.getIdentifier(this);
+  }
+
+  @Override
+  @NotNull
+  public String getName() {
+    return VlangPsiImplUtil.getName(this);
   }
 
 }

@@ -78,18 +78,22 @@
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional|OrBlock)Expr")=BinaryExpr
   extends(".*(Expr|Literal|Lit|OperandName)|StructInitialization|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ErrorPropagationExpression|ConstexprIdentifierExpression")=Expression
 
-  implements("(Type|Import)Spec|(Var|Const|Param|Field|Label)Definition|Receiver")="org.vlang.lang.psi.VlangNamedElement"
+  implements("(Type|Import)Spec|(Var|Const|Param|Field|Label)Definition|(Struct)Declaration|Receiver")="org.vlang.lang.psi.VlangNamedElement"
 //  implements("FunctionLit")="org.vlang.lang.psi.GoSignatureOwner"
-  implements("MethodSpec")="org.vlang.lang.psi.GoNamedSignatureOwner"
+//  implements("MethodSpec")="org.vlang.lang.psi.GoNamedSignatureOwner"
   implements("(Function|Method)Declaration")="org.vlang.lang.psi.VlangFunctionOrMethodDeclaration"
 //  implements("(Const|Type|Var)Declaration")="org.vlang.lang.psi.GoTopLevelDeclaration"
   implements(".*ReferenceExpression|FieldName")="org.vlang.lang.psi.VlangReferenceExpressionBase"
+  implements("TypeDecl")="org.vlang.lang.psi.VlangReferenceExpressionBase"
+
+  extends("ImportSpec|ParamDefinition|Receiver|(Var|Const|Field|Label)Definition")="org.vlang.lang.psi.impl.VlangSimpleNamedElementImpl"
 
   extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
-  extends("ImportSpec|ParamDefinition|Receiver|(Var|Const|Field|Label)Definition")="org.vlang.lang.psi.impl.VlangSimpleNamedElementImpl"
-  extends("(Method)Spec")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
   extends("ModuleClause")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
-  elementTypeFactory("ModuleClause|(Function|Method)Declaration")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
+  extends("StructDeclaration")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
+
+  elementTypeFactory("ModuleClause|(Function|Method|Struct)Declaration")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
+
 //  pin(".*Statement")=1
   extends(".*Statement")=Statement
   extends(".*Type|TypeList")=TypeDecl
@@ -128,7 +132,9 @@ SelectiveImportList ::= '{' identifier (',' identifier)* '}' {pin(".*")=2}
 ImportAlias ::= identifier {pin(".*")=2}
 
 TypeDecl ::= TypeLit
-  | TypeName
+  | TypeName {
+  methods=[getIdentifier]
+}
 //  | ParType {
 //  stubClass="org.vlang.lang.stubs.GoTypeStub"
 //  methods=[getUnderlyingType shouldGoDeeper]
@@ -155,7 +161,10 @@ EnumDeclaration ::= Attributes? SymbolVisibility? enum identifier '{' EnumFields
 EnumFields ::= EnumFieldDeclaration (semi EnumFieldDeclaration)* semi?
 EnumFieldDeclaration ::= identifier ('=' Expression)? {pin=1}
 
-StructDeclaration ::= Attributes? SymbolVisibility? StructType
+StructDeclaration ::= Attributes? SymbolVisibility? StructType {
+  stubClass="org.vlang.lang.stubs.VlangStructDeclarationStub"
+  methods=[getIdentifier getName]
+}
 
 StructType ::= struct identifier? '{' Fields? '}' {pin=1}
 
@@ -369,11 +378,13 @@ FunctionDeclaration ::= Attributes? SymbolVisibility fn identifier Signature Blo
   methods=[getName]
 }
 
-MethodDeclaration ::= Attributes? SymbolVisibility fn Receiver identifier Signature BlockWithConsume? {
+MethodDeclaration ::= Attributes? SymbolVisibility fn Receiver MethodName Signature BlockWithConsume? {
   pin=5
   stubClass="org.vlang.lang.stubs.VlangMethodDeclarationStub"
-  methods=[getReceiverType]
+  methods=[getReceiverType getIdentifier]
 }
+MethodName ::= identifier | AddOp | MulOp | RelOp
+
 Receiver ::= '(' (SymbolMutability identifier ReceiverTail | ReceiverTail) ')' {
   methods=[getGoTypeInner]
   pin=1

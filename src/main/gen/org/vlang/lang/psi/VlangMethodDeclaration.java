@@ -16,6 +16,9 @@ public interface VlangMethodDeclaration extends VlangFunctionOrMethodDeclaration
   VlangBlock getBlock();
 
   @NotNull
+  VlangMethodName getMethodName();
+
+  @NotNull
   VlangReceiver getReceiver();
 
   @Nullable
@@ -27,11 +30,11 @@ public interface VlangMethodDeclaration extends VlangFunctionOrMethodDeclaration
   @NotNull
   PsiElement getFn();
 
-  @NotNull
-  PsiElement getIdentifier();
-
   //WARNING: getReceiverType(...) is skipped
   //matching getReceiverType(VlangMethodDeclaration, ...)
   //methods are not found in VlangPsiImplUtil
+
+  @Nullable
+  PsiElement getIdentifier();
 
 }

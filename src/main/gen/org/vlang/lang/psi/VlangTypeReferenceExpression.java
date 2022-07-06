@@ -4,15 +4,15 @@ package org.vlang.lang.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import org.vlang.lang.psi.impl.VlangReference;
 
 public interface VlangTypeReferenceExpression extends VlangReferenceExpressionBase {
 
   @NotNull
   PsiElement getIdentifier();
 
-  //WARNING: getReference(...) is skipped
-  //matching getReference(VlangTypeReferenceExpression, ...)
-  //methods are not found in VlangPsiImplUtil
+  @NotNull
+  VlangReference getReference();
 
   //WARNING: getQualifier(...) is skipped
   //matching getQualifier(VlangTypeReferenceExpression, ...)

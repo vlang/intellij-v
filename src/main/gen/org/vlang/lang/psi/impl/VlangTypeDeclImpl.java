@@ -32,4 +32,10 @@ public class VlangTypeDeclImpl extends VlangCompositeElementImpl implements Vlan
     return VlangPsiTreeUtil.getChildOfType(this, VlangTypeReferenceExpression.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getIdentifier() {
+    return VlangPsiImplUtil.getIdentifier(this);
+  }
+
 }

@@ -60,6 +60,10 @@ class VlangAnnotator : Annotator {
         if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangStatement) {
             holder.textAttributes(element, JavaHighlightingColors.INTERFACE_NAME_ATTRIBUTES)
         }
+
+        if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangEnumFetch) {
+            holder.textAttributes(element, JavaHighlightingColors.STATIC_FINAL_FIELD_ATTRIBUTES)
+        }
     }
 
     private fun AnnotationHolder.textAttributes(element: PsiElement, textAttributes: TextAttributesKey) {

@@ -38,17 +38,18 @@ class VlangFile(viewProvider: FileViewProvider) :
     override fun importClass(aClass: PsiClass) = false
 
     fun getFunctions(): List<VlangFunctionDeclaration> {
-        return CachedValuesManager.getCachedValue(
-            this
-        ) {
+        return CachedValuesManager.getCachedValue(this) {
             val functions: List<VlangFunctionDeclaration> =
                 if (stub != null) getChildrenByType(
                     stub!!,
                     VlangTypes.FUNCTION_DECLARATION,
                     VlangFunctionDeclarationStubElementType.ARRAY_FACTORY
-                ) else VlangPsiImplUtil.goTraverser().children(this).filter(
-                    VlangFunctionDeclaration::class.java
-                ).toList()
+                ) else {
+                    VlangPsiImplUtil.goTraverser().children(this).filter(
+                        VlangFunctionDeclaration::class.java
+                    ).toList()
+                }
+
             CachedValueProvider.Result.create(
                 functions,
                 this
