@@ -10,14 +10,15 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangFieldInitializationImpl extends VlangCompositeElementImpl implements VlangFieldInitialization {
+public class VlangMapTypeImpl extends VlangTypeDeclImpl implements VlangMapType {
 
-  public VlangFieldInitializationImpl(@NotNull ASTNode node) {
+  public VlangMapTypeImpl(@NotNull ASTNode node) {
     super(node);
   }
 
+  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitFieldInitialization(this);
+    visitor.visitMapType(this);
   }
 
   @Override
@@ -27,15 +28,21 @@ public class VlangFieldInitializationImpl extends VlangCompositeElementImpl impl
   }
 
   @Override
-  @Nullable
-  public VlangFieldInitializationKeyValueList getFieldInitializationKeyValueList() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangFieldInitializationKeyValueList.class);
+  @NotNull
+  public List<VlangTypeDecl> getTypeDeclList() {
+    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangTypeDecl.class);
   }
 
   @Override
   @Nullable
-  public VlangFieldInitializationValueList getFieldInitializationValueList() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangFieldInitializationValueList.class);
+  public PsiElement getLbrack() {
+    return findChildByType(LBRACK);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRbrack() {
+    return findChildByType(RBRACK);
   }
 
 }

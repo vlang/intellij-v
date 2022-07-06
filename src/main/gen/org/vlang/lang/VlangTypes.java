@@ -55,6 +55,7 @@ public interface VlangTypes {
   IElementType FIELD_DECLARATION = new VlangCompositeElementType("FIELD_DECLARATION");
   IElementType FIELD_INITIALIZATION = new VlangCompositeElementType("FIELD_INITIALIZATION");
   IElementType FIELD_INITIALIZATION_KEY_VALUE_LIST = new VlangCompositeElementType("FIELD_INITIALIZATION_KEY_VALUE_LIST");
+  IElementType FIELD_INITIALIZATION_VALUE_LIST = new VlangCompositeElementType("FIELD_INITIALIZATION_VALUE_LIST");
   IElementType FIELD_LOOKUP = new VlangCompositeElementType("FIELD_LOOKUP");
   IElementType FIELD_NAME = new VlangCompositeElementType("FIELD_NAME");
   IElementType FOR_CLAUSE = new VlangCompositeElementType("FOR_CLAUSE");
@@ -83,6 +84,7 @@ public interface VlangTypes {
   IElementType LANGUAGE_INJECTION_STATEMENT = new VlangCompositeElementType("LANGUAGE_INJECTION_STATEMENT");
   IElementType LEFT_HAND_EXPR_LIST = new VlangCompositeElementType("LEFT_HAND_EXPR_LIST");
   IElementType LITERAL = new VlangCompositeElementType("LITERAL");
+  IElementType MAP_TYPE = new VlangCompositeElementType("MAP_TYPE");
   IElementType MATCH_ARM = new VlangCompositeElementType("MATCH_ARM");
   IElementType MATCH_ARMS = new VlangCompositeElementType("MATCH_ARMS");
   IElementType MATCH_ELSE_ARM_CLAUSE = new VlangCompositeElementType("MATCH_ELSE_ARM_CLAUSE");
@@ -374,6 +376,9 @@ public interface VlangTypes {
       else if (type == FIELD_INITIALIZATION_KEY_VALUE_LIST) {
         return new VlangFieldInitializationKeyValueListImpl(node);
       }
+      else if (type == FIELD_INITIALIZATION_VALUE_LIST) {
+        return new VlangFieldInitializationValueListImpl(node);
+      }
       else if (type == FIELD_LOOKUP) {
         return new VlangFieldLookupImpl(node);
       }
@@ -457,6 +462,9 @@ public interface VlangTypes {
       }
       else if (type == LITERAL) {
         return new VlangLiteralImpl(node);
+      }
+      else if (type == MAP_TYPE) {
+        return new VlangMapTypeImpl(node);
       }
       else if (type == MATCH_ARM) {
         return new VlangMatchArmImpl(node);

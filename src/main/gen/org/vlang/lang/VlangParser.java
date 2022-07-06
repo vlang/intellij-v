@@ -37,8 +37,9 @@ public class VlangParser implements PsiParser, LightPsiParser {
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
     create_token_set_(RANGE_CLAUSE, SHORT_VAR_DECLARATION),
-    create_token_set_(ARRAY_OR_SLICE_TYPE, FUNCTION_TYPE, INTERFACE_TYPE, NULLABLE_TYPE,
-      POINTER_TYPE, STRUCT_TYPE, TYPE_DECL, TYPE_LIST),
+    create_token_set_(ARRAY_OR_SLICE_TYPE, FUNCTION_TYPE, INTERFACE_TYPE, MAP_TYPE,
+      NULLABLE_TYPE, POINTER_TYPE, STRUCT_TYPE, TYPE_DECL,
+      TYPE_LIST),
     create_token_set_(ASSERT_STATEMENT, ASSIGNMENT_STATEMENT, BREAK_STATEMENT, COMPILE_ELSE_STATEMENT,
       COMPILE_TIME_FOR_STATEMENT, COMPILE_TIME_IF_STATEMENT, CONTINUE_STATEMENT, C_FLAG_STATEMENT,
       C_INCLUDE_STATEMENT, DEFER_STATEMENT, ELSE_STATEMENT, FOR_STATEMENT,
@@ -1233,12 +1234,13 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // FieldInitializationKeyValueList
+  // FieldInitializationKeyValueList | FieldInitializationValueList
   public static boolean FieldInitialization(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FieldInitialization")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, FIELD_INITIALIZATION, "<field initialization>");
     r = FieldInitializationKeyValueList(b, l + 1);
+    if (!r) r = FieldInitializationValueList(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -1310,6 +1312,56 @@ public class VlangParser implements PsiParser, LightPsiParser {
   private static boolean FieldInitializationKeyValueList_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FieldInitializationKeyValueList_1")) return false;
     semi(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // Expression
+  static boolean FieldInitializationValue(PsiBuilder b, int l) {
+    return Expression(b, l + 1, -1);
+  }
+
+  /* ********************************************************** */
+  // FieldInitializationValue (',' FieldInitializationValue)* ','?
+  public static boolean FieldInitializationValueList(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FieldInitializationValueList")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, FIELD_INITIALIZATION_VALUE_LIST, "<field initialization value list>");
+    r = FieldInitializationValue(b, l + 1);
+    p = r; // pin = 1
+    r = r && report_error_(b, FieldInitializationValueList_1(b, l + 1));
+    r = p && FieldInitializationValueList_2(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // (',' FieldInitializationValue)*
+  private static boolean FieldInitializationValueList_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FieldInitializationValueList_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!FieldInitializationValueList_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "FieldInitializationValueList_1", c)) break;
+    }
+    return true;
+  }
+
+  // ',' FieldInitializationValue
+  private static boolean FieldInitializationValueList_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FieldInitializationValueList_1_0")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = consumeToken(b, COMMA);
+    p = r; // pin = 1
+    r = r && FieldInitializationValue(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // ','?
+  private static boolean FieldInitializationValueList_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FieldInitializationValueList_2")) return false;
+    consumeToken(b, COMMA);
     return true;
   }
 
@@ -2038,6 +2090,22 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // 'map' '[' TypeDecl ']' TypeDecl
+  public static boolean MapType(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MapType")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, MAP_TYPE, "<map type>");
+    r = consumeToken(b, "map");
+    p = r; // pin = 1
+    r = r && report_error_(b, consumeToken(b, LBRACK));
+    r = p && report_error_(b, TypeDecl(b, l + 1)) && r;
+    r = p && report_error_(b, consumeToken(b, RBRACK)) && r;
+    r = p && TypeDecl(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
   // MatchExpressionList Block semi
   public static boolean MatchArm(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MatchArm")) return false;
@@ -2290,7 +2358,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // NamedArgumentExpr (semi (NamedArgumentExpr | &')'))*
+  // NamedArgumentExpr ((semi | ',') (NamedArgumentExpr | &')'))*
   static boolean NamedExpressionArgList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NamedExpressionArgList")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
@@ -2303,7 +2371,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // (semi (NamedArgumentExpr | &')'))*
+  // ((semi | ',') (NamedArgumentExpr | &')'))*
   private static boolean NamedExpressionArgList_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NamedExpressionArgList_1")) return false;
     while (true) {
@@ -2314,16 +2382,25 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // semi (NamedArgumentExpr | &')')
+  // (semi | ',') (NamedArgumentExpr | &')')
   private static boolean NamedExpressionArgList_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NamedExpressionArgList_1_0")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
-    r = semi(b, l + 1);
+    r = NamedExpressionArgList_1_0_0(b, l + 1);
     p = r; // pin = 1
     r = r && NamedExpressionArgList_1_0_1(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
+  }
+
+  // semi | ','
+  private static boolean NamedExpressionArgList_1_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NamedExpressionArgList_1_0_0")) return false;
+    boolean r;
+    r = semi(b, l + 1);
+    if (!r) r = consumeToken(b, COMMA);
+    return r;
   }
 
   // NamedArgumentExpr | &')'
@@ -3338,6 +3415,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   //   | CFlagStatement
   //   | LanguageInjectionStatement
   //   | TypeStatement
+  //   | Statement
   static boolean TopDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TopDeclaration")) return false;
     boolean r;
@@ -3354,6 +3432,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = CFlagStatement(b, l + 1);
     if (!r) r = LanguageInjectionStatement(b, l + 1);
     if (!r) r = TypeStatement(b, l + 1);
+    if (!r) r = Statement(b, l + 1);
     return r;
   }
 
@@ -3417,14 +3496,14 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // TypeName
-  //   | TypeLit
+  // TypeLit
+  //   | TypeName
   public static boolean TypeDecl(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeDecl")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _COLLAPSE_, TYPE_DECL, "<type decl>");
-    r = TypeName(b, l + 1);
-    if (!r) r = TypeLit(b, l + 1);
+    r = TypeLit(b, l + 1);
+    if (!r) r = TypeName(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -3521,6 +3600,8 @@ public class VlangParser implements PsiParser, LightPsiParser {
   //   | PointerType
   //   | NullableType
   //   | FunctionType
+  // //  | InterfaceType
+  //   | MapType
   static boolean TypeLit(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeLit")) return false;
     boolean r;
@@ -3529,6 +3610,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = PointerType(b, l + 1);
     if (!r) r = NullableType(b, l + 1);
     if (!r) r = FunctionType(b, l + 1);
+    if (!r) r = MapType(b, l + 1);
     return r;
   }
 

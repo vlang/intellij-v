@@ -127,8 +127,8 @@ SelectiveImportList ::= '{' identifier (',' identifier)* '}' {pin(".*")=2}
 
 ImportAlias ::= identifier {pin(".*")=2}
 
-TypeDecl ::= TypeName
-  | TypeLit
+TypeDecl ::= TypeLit
+  | TypeName
 //  | ParType {
 //  stubClass="org.vlang.lang.stubs.GoTypeStub"
 //  methods=[getUnderlyingType shouldGoDeeper]
@@ -146,7 +146,7 @@ private TypeLit ::=
   | NullableType
   | FunctionType
 //  | InterfaceType
-//  | MapType
+  | MapType
 //  | ChannelType
 
 ArrayOrSliceType ::= '[' ('...'|Expression?) ']' TypeDecl {pin=1}
@@ -177,12 +177,12 @@ AnonymousFieldDefinition ::= TypeDecl {
 }
 
 StructInitialization ::= TypeDecl '{' ( '}' | FieldInitialization '}') {pin=3}
-FieldInitialization ::= FieldInitializationKeyValueList /*| FieldInitializationValueList*/
+FieldInitialization ::= FieldInitializationKeyValueList | FieldInitializationValueList
 FieldInitializationKeyValueList ::= ((FieldInitializationKeyValue | UnpackingExpression) semi)+ semi?
 private FieldInitializationKeyValue ::= Expression ':' Expression {pin=2}
-//FieldInitializationValueList ::= FieldInitializationValue (',' FieldInitializationValue)* ','?
+FieldInitializationValueList ::= FieldInitializationValue (',' FieldInitializationValue)* ','?
 // see return if a > b { a } else { b }
-//private FieldInitializationValue ::= Expression {pin=1}
+private FieldInitializationValue ::= Expression {pin=1}
 
 
 PointerType ::= '&' TypeDecl {pin=1}
@@ -226,14 +226,14 @@ AnonymousInterfaceDefinition ::= TypeDecl {
   methods=[getIdentifier getName getTypeReferenceExpression getGoTypeInner]
 }
 
-//
-//MapType ::= map '[' Type ']' Type {
-//  pin=1
-//  methods = [
-//    keyType="Type[0]"
-//    valueType="Type[1]"
-//  ]
-//}
+MapType ::= 'map' '[' TypeDecl ']' TypeDecl {
+  pin=1
+  methods = [
+    keyType="Type[0]"
+    valueType="Type[1]"
+  ]
+}
+
 //ChannelType ::= ChanTypePrefix Type {pin=1}
 //private ChanTypePrefix ::= chan '<-'? | '<-' chan {pin(".*")=1}
 //
@@ -328,7 +328,7 @@ private ExpressionArgList ::= NamedExpressionArgList | SimpleExpressionArgList
 private SimpleExpressionArgList ::= ExpressionOrTypeWithRecover (',' (ExpressionOrTypeWithRecover | &')'))* {pin(".*")=2}
 private ExpressionOrTypeWithRecover ::= Expression {recoverWhile=ExpressionListRecover}
 
-private NamedExpressionArgList ::= NamedArgumentExpr (semi (NamedArgumentExpr | &')'))* {pin(".*")=1}
+private NamedExpressionArgList ::= NamedArgumentExpr ((semi | ',') (NamedArgumentExpr | &')'))* {pin(".*")=1}
 private NamedArgumentExpr ::= identifier ':' (Expression | UnpackingExpression) {pin=2}
 
 private ExpressionList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &')'))* {pin(".*")=1}

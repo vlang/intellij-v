@@ -7,7 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface VlangFieldInitialization extends VlangCompositeElement {
 
-  @NotNull
+  @Nullable
   VlangFieldInitializationKeyValueList getFieldInitializationKeyValueList();
+
+  @Nullable
+  VlangFieldInitializationValueList getFieldInitializationValueList();
 
 }
