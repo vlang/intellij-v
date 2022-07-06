@@ -2924,13 +2924,14 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '{' identifier (',' identifier)* '}'
+  // '{' ReferenceExpression (',' ReferenceExpression)* '}'
   public static boolean SelectiveImportList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SelectiveImportList")) return false;
     if (!nextTokenIs(b, LBRACE)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, SELECTIVE_IMPORT_LIST, null);
-    r = consumeTokens(b, 2, LBRACE, IDENTIFIER);
+    r = consumeToken(b, LBRACE);
+    r = r && ReferenceExpression(b, l + 1);
     p = r; // pin = 2
     r = r && report_error_(b, SelectiveImportList_2(b, l + 1));
     r = p && consumeToken(b, RBRACE) && r;
@@ -2938,7 +2939,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // (',' identifier)*
+  // (',' ReferenceExpression)*
   private static boolean SelectiveImportList_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SelectiveImportList_2")) return false;
     while (true) {
@@ -2949,12 +2950,13 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // ',' identifier
+  // ',' ReferenceExpression
   private static boolean SelectiveImportList_2_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SelectiveImportList_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 2, COMMA, IDENTIFIER);
+    r = consumeToken(b, COMMA);
+    r = r && ReferenceExpression(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }

@@ -127,7 +127,7 @@ ImportSpec ::= ImportString ('.' ImportString)* (SelectiveImportList | as Import
 }
 private ImportString ::= identifier {methods=[getReferences resolve getPath getPathTextRange]}
 
-SelectiveImportList ::= '{' identifier (',' identifier)* '}' {pin(".*")=2}
+SelectiveImportList ::= '{' ReferenceExpression (',' ReferenceExpression)* '}' {pin(".*")=2}
 
 ImportAlias ::= identifier {pin(".*")=2}
 

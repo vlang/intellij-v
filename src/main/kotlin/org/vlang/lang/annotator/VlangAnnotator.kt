@@ -20,9 +20,16 @@ class VlangAnnotator : Annotator {
 
         if (element is VlangReferenceExpression) {
             val ref = element.reference
-            val func = ref.resolve()
-            if (func != null) {
+            val resolvedElement = ref.multiResolve(false).firstOrNull()?.element ?: return
+
+            if (resolvedElement is VlangFunctionDeclaration) {
                 holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES)
+                return
+            }
+
+            if (resolvedElement is VlangStructDeclaration) {
+                holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.CLASS_NAME_ATTRIBUTES)
+                return
             }
         }
 
@@ -46,7 +53,7 @@ class VlangAnnotator : Annotator {
             holder.textAttributes(element, JavaHighlightingColors.ENUM_NAME_ATTRIBUTES)
         }
 
-        if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangStructDeclaration) {
+        if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangStructType) {
             holder.textAttributes(element, JavaHighlightingColors.CLASS_NAME_ATTRIBUTES)
         }
 

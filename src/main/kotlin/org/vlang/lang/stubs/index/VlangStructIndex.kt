@@ -8,6 +8,7 @@ import com.intellij.psi.stubs.StubIndexKey
 import com.intellij.util.Processor
 import com.intellij.util.indexing.IdFilter
 import org.vlang.lang.VlangFileElementType
+import org.vlang.lang.psi.VlangFunctionDeclaration
 import org.vlang.lang.psi.VlangStructDeclaration
 
 class VlangStructIndex : StringStubIndexExtension<VlangStructDeclaration>() {
@@ -34,6 +35,23 @@ class VlangStructIndex : StringStubIndexExtension<VlangStructDeclaration>() {
                 KEY, name, project, scope, idFilter,
                 VlangStructDeclaration::class.java, processor
             )
+        }
+
+        fun getAll(project: Project): List<VlangStructDeclaration> {
+            val result = mutableListOf<VlangStructDeclaration>()
+            for (key in StubIndex.getInstance().getAllKeys(KEY, project)) {
+                val els = StubIndex.getElements(
+                    KEY,
+                    key,
+                    project,
+                    GlobalSearchScope.allScope(project),
+                    null,
+                    VlangStructDeclaration::class.java
+                )
+                result.addAll(els)
+            }
+
+            return result
         }
     }
 

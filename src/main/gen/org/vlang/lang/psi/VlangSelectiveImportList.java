@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface VlangSelectiveImportList extends VlangCompositeElement {
 
   @NotNull
+  List<VlangReferenceExpression> getReferenceExpressionList();
+
+  @NotNull
   PsiElement getLbrace();
 
   @Nullable

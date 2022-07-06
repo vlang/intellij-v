@@ -28,6 +28,12 @@ public class VlangSelectiveImportListImpl extends VlangCompositeElementImpl impl
 
   @Override
   @NotNull
+  public List<VlangReferenceExpression> getReferenceExpressionList() {
+    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangReferenceExpression.class);
+  }
+
+  @Override
+  @NotNull
   public PsiElement getLbrace() {
     return notNullChild(findChildByType(LBRACE));
   }

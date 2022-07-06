@@ -30,10 +30,28 @@ class VlangFunctionIndex : StringStubIndexExtension<VlangFunctionDeclaration>() 
             idFilter: IdFilter?,
             processor: Processor<VlangFunctionDeclaration>
         ): Boolean {
+
             return StubIndex.getInstance().processElements(
                 KEY, name, project, scope, idFilter,
                 VlangFunctionDeclaration::class.java, processor
             )
+        }
+
+        fun getAll(project: Project): List<VlangFunctionDeclaration> {
+            val result = mutableListOf<VlangFunctionDeclaration>()
+            for (key in StubIndex.getInstance().getAllKeys(KEY, project)) {
+                val els = StubIndex.getElements(
+                    KEY,
+                    key,
+                    project,
+                    GlobalSearchScope.allScope(project),
+                    null,
+                    VlangFunctionDeclaration::class.java
+                )
+                result.addAll(els)
+            }
+
+            return result
         }
     }
 

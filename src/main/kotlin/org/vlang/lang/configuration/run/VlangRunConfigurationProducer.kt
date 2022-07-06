@@ -29,7 +29,7 @@ class VlangRunConfigurationProducer : LazyRunConfigurationProducer<VlangRunConfi
         sourceElement: Ref<PsiElement>
     ): Boolean {
         val element = sourceElement.get()
-        val containingFile = element.containingFile
+        val containingFile = element.containingFile ?: return false
 
         configuration.name = "V Run ${containingFile.name}"
         configuration.scriptName = containingFile.virtualFile.path

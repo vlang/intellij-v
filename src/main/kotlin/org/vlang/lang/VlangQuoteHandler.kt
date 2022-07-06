@@ -1,0 +1,5 @@
+package org.vlang.lang
+
+import com.intellij.codeInsight.editorActions.SimpleTokenSetQuoteHandler
+
+class VlangQuoteHandler : SimpleTokenSetQuoteHandler(VlangParserDefinition.STRING_LITERALS)
