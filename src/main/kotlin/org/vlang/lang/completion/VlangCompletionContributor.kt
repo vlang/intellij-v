@@ -10,6 +10,7 @@ import org.vlang.lang.VlangTypes
 import org.vlang.lang.stubs.index.VlangFunctionIndex
 import org.vlang.lang.stubs.index.VlangStructIndex
 import org.vlang.lang.stubs.index.VlangTypeAliasIndex
+import org.vlang.lang.stubs.index.VlangUnionIndex
 
 class VlangCompletionContributor : CompletionContributor() {
     init {
@@ -27,6 +28,11 @@ class VlangCompletionContributor : CompletionContributor() {
             CompletionType.BASIC,
             PlatformPatterns.psiElement(VlangTypes.IDENTIFIER),
             VlangStructsCompletionProvider()
+        )
+        extend(
+            CompletionType.BASIC,
+            PlatformPatterns.psiElement(VlangTypes.IDENTIFIER),
+            VlangUnionsCompletionProvider()
         )
         extend(
             CompletionType.BASIC,
@@ -75,6 +81,23 @@ class VlangCompletionContributor : CompletionContributor() {
             allStructs.forEach {
                 val el = LookupElementBuilder.create(it)
                     .withIcon(AllIcons.Nodes.Class)
+                resultSet.addElement(el)
+            }
+        }
+    }
+
+    class VlangUnionsCompletionProvider : CompletionProvider<CompletionParameters>() {
+        override fun addCompletions(
+            parameters: CompletionParameters,
+            context: ProcessingContext,
+            resultSet: CompletionResultSet
+        ) {
+            val file = parameters.originalFile
+            val allStructs = VlangUnionIndex.getAll(file.project)
+
+            allStructs.forEach {
+                val el = LookupElementBuilder.create(it)
+                    .withIcon(AllIcons.Nodes.AnonymousClass)
                 resultSet.addElement(el)
             }
         }

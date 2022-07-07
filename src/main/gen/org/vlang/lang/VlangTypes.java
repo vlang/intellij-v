@@ -133,6 +133,7 @@ public interface VlangTypes {
   IElementType TYPE_REFERENCE_EXPRESSION = new VlangCompositeElementType("TYPE_REFERENCE_EXPRESSION");
   IElementType TYPE_UNION_LIST = new VlangCompositeElementType("TYPE_UNION_LIST");
   IElementType UNARY_EXPR = new VlangCompositeElementType("UNARY_EXPR");
+  IElementType UNION_DECLARATION = VlangElementTypeFactory.stubFactory("UNION_DECLARATION");
   IElementType UNPACKING_EXPRESSION = new VlangCompositeElementType("UNPACKING_EXPRESSION");
   IElementType UNSAFE_EXPRESSION = new VlangCompositeElementType("UNSAFE_EXPRESSION");
   IElementType UNSAFE_STATEMENT = new VlangCompositeElementType("UNSAFE_STATEMENT");
@@ -242,6 +243,7 @@ public interface VlangTypes {
   IElementType SWITCH = new VlangTokenType("switch");
   IElementType TRIPLE_DOT = new VlangTokenType("...");
   IElementType TYPE_ = new VlangTokenType("type");
+  IElementType UNION = new VlangTokenType("union");
   IElementType UNSAFE = new VlangTokenType("unsafe");
   IElementType VAR = new VlangTokenType("var");
   IElementType VAR_ASSIGN = new VlangTokenType(":=");
@@ -611,6 +613,9 @@ public interface VlangTypes {
       }
       else if (type == UNARY_EXPR) {
         return new VlangUnaryExprImpl(node);
+      }
+      else if (type == UNION_DECLARATION) {
+        return new VlangUnionDeclarationImpl(node);
       }
       else if (type == UNPACKING_EXPRESSION) {
         return new VlangUnpackingExpressionImpl(node);

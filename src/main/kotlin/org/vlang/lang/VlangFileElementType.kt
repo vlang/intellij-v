@@ -1,7 +1,6 @@
 package org.vlang.lang
 
 import com.intellij.openapi.util.text.StringUtil
-import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.StubBuilder
 import com.intellij.psi.stubs.*
@@ -50,6 +49,6 @@ class VlangFileElementType:
 
     companion object {
         val INSTANCE = VlangFileElementType()
-        const val VERSION = 21
+        const val VERSION = 24
     }
 }

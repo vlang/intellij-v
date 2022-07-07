@@ -182,6 +182,7 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 
 //"chan"                                    { return CHAN; }
 
+"union"                                   { return UNION; }
 "struct"                                  { return STRUCT; }
 "enum"                                    { return ENUM; }
 "else"                                    { return ELSE; }

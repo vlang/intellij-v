@@ -11,6 +11,7 @@ import org.vlang.lang.psi.VlangReferenceExpressionBase
 import org.vlang.lang.stubs.index.VlangFunctionIndex
 import org.vlang.lang.stubs.index.VlangStructIndex
 import org.vlang.lang.stubs.index.VlangTypeAliasIndex
+import org.vlang.lang.stubs.index.VlangUnionIndex
 
 class VlangReference(private val el: VlangReferenceExpressionBase) :
     VlangReferenceBase<VlangReferenceExpressionBase>(
@@ -36,7 +37,9 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
             else -> {
                 val structs = VlangStructIndex.find(name, project, GlobalSearchScope.allScope(project), null)
                 structs.ifEmpty {
-                    VlangTypeAliasIndex.find(name, project, GlobalSearchScope.allScope(project), null)
+                    VlangTypeAliasIndex.find(name, project, GlobalSearchScope.allScope(project), null).ifEmpty {
+                        VlangUnionIndex.find(name, project, GlobalSearchScope.allScope(project), null)
+                    }
                 }
             }
         }

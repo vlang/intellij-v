@@ -27,10 +27,4 @@ public class VlangLanguageInjectionStatementImpl extends VlangStatementImpl impl
     else super.accept(visitor);
   }
 
-  @Override
-  @NotNull
-  public PsiElement getLanguageInjection() {
-    return notNullChild(findChildByType(LANGUAGE_INJECTION));
-  }
-
 }

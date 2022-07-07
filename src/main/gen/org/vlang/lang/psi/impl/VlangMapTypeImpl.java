@@ -34,9 +34,9 @@ public class VlangMapTypeImpl extends VlangTypeDeclImpl implements VlangMapType 
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiElement getLbrack() {
-    return findChildByType(LBRACK);
+    return notNullChild(findChildByType(LBRACK));
   }
 
   @Override

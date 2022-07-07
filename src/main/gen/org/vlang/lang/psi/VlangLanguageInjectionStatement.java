@@ -7,7 +7,4 @@ import com.intellij.psi.PsiElement;
 
 public interface VlangLanguageInjectionStatement extends VlangStatement {
 
-  @NotNull
-  PsiElement getLanguageInjection();
-
 }

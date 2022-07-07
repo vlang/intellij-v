@@ -495,6 +495,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitUnionDeclaration(@NotNull VlangUnionDeclaration o) {
+    visitNamedElement(o);
+  }
+
   public void visitUnpackingExpression(@NotNull VlangUnpackingExpression o) {
     visitExpression(o);
   }

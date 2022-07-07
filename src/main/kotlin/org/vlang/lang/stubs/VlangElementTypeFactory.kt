@@ -28,6 +28,7 @@ object VlangElementTypeFactory {
         if ("FUNCTION_DECLARATION" == name) return VlangFunctionDeclarationStubElementType(name)
         if ("METHOD_DECLARATION" == name) return VlangMethodDeclarationStubElementType(name)
         if ("STRUCT_DECLARATION" == name) return VlangStructDeclarationStubElementType(name)
+        if ("UNION_DECLARATION" == name) return VlangUnionDeclarationStubElementType(name)
         if ("TYPE_ALIAS_DECLARATION" == name) return VlangTypeAliasDeclarationStubElementType(name)
 //        if ("IMPORT_SPEC" == name) return VlangImportSpecStubElementType(name)
 //        if ("PARAM_DEFINITION" == name) return VlangParamDefinitionStubElementType(name)

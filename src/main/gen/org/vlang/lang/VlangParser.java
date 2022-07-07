@@ -1016,7 +1016,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | char | struct | enum | switch | var | unsafe | assert | match)
+  // !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | char | struct | enum | union | switch | var | unsafe | assert | match)
   static boolean ExpressionListRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExpressionListRecover")) return false;
     boolean r;
@@ -1026,7 +1026,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // '!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | char | struct | enum | switch | var | unsafe | assert | match
+  // '!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | char | struct | enum | union | switch | var | unsafe | assert | match
   private static boolean ExpressionListRecover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExpressionListRecover_0")) return false;
     boolean r;
@@ -1108,6 +1108,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, CHAR);
     if (!r) r = consumeToken(b, STRUCT);
     if (!r) r = consumeToken(b, ENUM);
+    if (!r) r = consumeToken(b, UNION);
     if (!r) r = consumeToken(b, SWITCH);
     if (!r) r = consumeToken(b, VAR);
     if (!r) r = consumeToken(b, UNSAFE);
@@ -2077,14 +2078,38 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LANGUAGE_INJECTION
+  // LANGUAGE_INJECTION (semi LANGUAGE_INJECTION)*
   public static boolean LanguageInjectionStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LanguageInjectionStatement")) return false;
     if (!nextTokenIs(b, LANGUAGE_INJECTION)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, LANGUAGE_INJECTION_STATEMENT, null);
+    r = consumeToken(b, LANGUAGE_INJECTION);
+    p = r; // pin = 1
+    r = r && LanguageInjectionStatement_1(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // (semi LANGUAGE_INJECTION)*
+  private static boolean LanguageInjectionStatement_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LanguageInjectionStatement_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!LanguageInjectionStatement_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "LanguageInjectionStatement_1", c)) break;
+    }
+    return true;
+  }
+
+  // semi LANGUAGE_INJECTION
+  private static boolean LanguageInjectionStatement_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LanguageInjectionStatement_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, LANGUAGE_INJECTION);
-    exit_section_(b, m, LANGUAGE_INJECTION_STATEMENT, r);
+    r = semi(b, l + 1);
+    r = r && consumeToken(b, LANGUAGE_INJECTION);
+    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -2106,9 +2131,9 @@ public class VlangParser implements PsiParser, LightPsiParser {
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, MAP_TYPE, "<map type>");
     r = consumeToken(b, "map");
-    p = r; // pin = 1
-    r = r && report_error_(b, consumeToken(b, LBRACK));
-    r = p && report_error_(b, TypeDecl(b, l + 1)) && r;
+    r = r && consumeToken(b, LBRACK);
+    p = r; // pin = 2
+    r = r && report_error_(b, TypeDecl(b, l + 1));
     r = p && report_error_(b, consumeToken(b, RBRACK)) && r;
     r = p && TypeDecl(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
@@ -3194,7 +3219,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | char | struct | switch | var | unsafe | assert | match | FOR_COMPILE_TIME | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG | LANGUAGE_INJECTION)
+  // !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | char | struct | union | switch | var | unsafe | assert | match | FOR_COMPILE_TIME | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG | LANGUAGE_INJECTION)
   static boolean StatementRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StatementRecover")) return false;
     boolean r;
@@ -3204,7 +3229,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // '!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | char | struct | switch | var | unsafe | assert | match | FOR_COMPILE_TIME | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG | LANGUAGE_INJECTION
+  // '!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | char | struct | union | switch | var | unsafe | assert | match | FOR_COMPILE_TIME | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG | LANGUAGE_INJECTION
   private static boolean StatementRecover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StatementRecover_0")) return false;
     boolean r;
@@ -3254,6 +3279,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, RAW_STRING);
     if (!r) r = consumeToken(b, CHAR);
     if (!r) r = consumeToken(b, STRUCT);
+    if (!r) r = consumeToken(b, UNION);
     if (!r) r = consumeToken(b, SWITCH);
     if (!r) r = consumeToken(b, VAR);
     if (!r) r = consumeToken(b, UNSAFE);
@@ -3435,6 +3461,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   //   | StructDeclaration
   //   | EnumDeclaration
   //   | InterfaceDeclaration
+  //   | UnionDeclaration
   //   | GlobalVariableDeclaration
   //   | CompileTimeIfStatement
   //   | CompileTimeForStatement
@@ -3451,6 +3478,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = StructDeclaration(b, l + 1);
     if (!r) r = EnumDeclaration(b, l + 1);
     if (!r) r = InterfaceDeclaration(b, l + 1);
+    if (!r) r = UnionDeclaration(b, l + 1);
     if (!r) r = GlobalVariableDeclaration(b, l + 1);
     if (!r) r = CompileTimeIfStatement(b, l + 1);
     if (!r) r = CompileTimeForStatement(b, l + 1);
@@ -3486,7 +3514,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !(';' | 'type' | const | fn | pub | BUILTIN_GLOBAL | var | struct | enum | interface | import | C_INCLUDE | C_FLAG | FOR_COMPILE_TIME | IF_COMPILE_TIME | LANGUAGE_INJECTION | '[')
+  // !(';' | 'type' | const | fn | pub | BUILTIN_GLOBAL | var | struct | enum | interface | union | import | C_INCLUDE | C_FLAG | FOR_COMPILE_TIME | IF_COMPILE_TIME | LANGUAGE_INJECTION | '[')
   static boolean TopLevelDeclarationRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TopLevelDeclarationRecover")) return false;
     boolean r;
@@ -3496,7 +3524,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ';' | 'type' | const | fn | pub | BUILTIN_GLOBAL | var | struct | enum | interface | import | C_INCLUDE | C_FLAG | FOR_COMPILE_TIME | IF_COMPILE_TIME | LANGUAGE_INJECTION | '['
+  // ';' | 'type' | const | fn | pub | BUILTIN_GLOBAL | var | struct | enum | interface | union | import | C_INCLUDE | C_FLAG | FOR_COMPILE_TIME | IF_COMPILE_TIME | LANGUAGE_INJECTION | '['
   private static boolean TopLevelDeclarationRecover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TopLevelDeclarationRecover_0")) return false;
     boolean r;
@@ -3510,6 +3538,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, STRUCT);
     if (!r) r = consumeToken(b, ENUM);
     if (!r) r = consumeToken(b, INTERFACE);
+    if (!r) r = consumeToken(b, UNION);
     if (!r) r = consumeToken(b, IMPORT);
     if (!r) r = consumeToken(b, C_INCLUDE);
     if (!r) r = consumeToken(b, C_FLAG);
@@ -3748,6 +3777,52 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, COND_AND);
     if (!r) r = consumeToken(b, SEND_CHANNEL);
     return r;
+  }
+
+  /* ********************************************************** */
+  // Attributes? SymbolVisibility? union identifier? '{' Fields? '}'
+  public static boolean UnionDeclaration(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UnionDeclaration")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, UNION_DECLARATION, "<union declaration>");
+    r = UnionDeclaration_0(b, l + 1);
+    r = r && UnionDeclaration_1(b, l + 1);
+    r = r && consumeToken(b, UNION);
+    p = r; // pin = 3
+    r = r && report_error_(b, UnionDeclaration_3(b, l + 1));
+    r = p && report_error_(b, consumeToken(b, LBRACE)) && r;
+    r = p && report_error_(b, UnionDeclaration_5(b, l + 1)) && r;
+    r = p && consumeToken(b, RBRACE) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // Attributes?
+  private static boolean UnionDeclaration_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UnionDeclaration_0")) return false;
+    Attributes(b, l + 1);
+    return true;
+  }
+
+  // SymbolVisibility?
+  private static boolean UnionDeclaration_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UnionDeclaration_1")) return false;
+    SymbolVisibility(b, l + 1);
+    return true;
+  }
+
+  // identifier?
+  private static boolean UnionDeclaration_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UnionDeclaration_3")) return false;
+    consumeToken(b, IDENTIFIER);
+    return true;
+  }
+
+  // Fields?
+  private static boolean UnionDeclaration_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UnionDeclaration_5")) return false;
+    Fields(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */

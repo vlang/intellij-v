@@ -10,7 +10,7 @@ public interface VlangMapType extends VlangTypeDecl {
   @NotNull
   List<VlangTypeDecl> getTypeDeclList();
 
-  @Nullable
+  @NotNull
   PsiElement getLbrack();
 
   @Nullable

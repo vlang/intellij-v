@@ -78,7 +78,7 @@
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional|OrBlock)Expr")=BinaryExpr
   extends(".*(Expr|Literal|Lit|OperandName)|StructInitialization|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ErrorPropagationExpression|ConstexprIdentifierExpression")=Expression
 
-  implements("(Type|Import)Spec|(Var|Const|Param|Field|Label)Definition|(Struct|TypeAlias)Declaration|Receiver")="org.vlang.lang.psi.VlangNamedElement"
+  implements("(Type|Import)Spec|(Var|Const|Param|Field|Label)Definition|(Struct|TypeAlias|Union)Declaration|Receiver")="org.vlang.lang.psi.VlangNamedElement"
 //  implements("FunctionLit")="org.vlang.lang.psi.GoSignatureOwner"
 //  implements("MethodSpec")="org.vlang.lang.psi.GoNamedSignatureOwner"
   implements("(Function|Method)Declaration")="org.vlang.lang.psi.VlangFunctionOrMethodDeclaration"
@@ -90,9 +90,9 @@
 
   extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
   extends("ModuleClause")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
-  extends("StructDeclaration|TypeAliasDeclaration")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
+  extends("(Struct|TypeAlias|Union)Declaration")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
 
-  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias)Declaration")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
+  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union)Declaration")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
 
 //  pin(".*Statement")=1
   extends(".*Statement")=Statement
@@ -194,6 +194,11 @@ FieldInitializationValueList ::= FieldInitializationValue (',' FieldInitializati
 // see return if a > b { a } else { b }
 private FieldInitializationValue ::= Expression {pin=1}
 
+UnionDeclaration ::= Attributes? SymbolVisibility? union identifier? '{' Fields? '}' {
+  pin=3
+  stubClass="org.vlang.lang.stubs.VlangUnionDeclarationStub"
+  methods=[getName]
+}
 
 PointerType ::= '&' TypeDecl {pin=1}
 NullableType ::= '?' TypeDecl? {pin=1}
@@ -237,7 +242,7 @@ AnonymousInterfaceDefinition ::= TypeDecl {
 }
 
 MapType ::= 'map' '[' TypeDecl ']' TypeDecl {
-  pin=1
+  pin=2
   methods = [
     keyType="Type[0]"
     valueType="Type[1]"
@@ -281,7 +286,7 @@ Statement ::=
   | DeferStatement {methods=[processDeclarations]}
 
 
-private StatementRecover ::= !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | char | struct | switch | var | unsafe | assert | match | FOR_COMPILE_TIME | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG | LANGUAGE_INJECTION)
+private StatementRecover ::= !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | char | struct | union | switch | var | unsafe | assert | match | FOR_COMPILE_TIME | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG | LANGUAGE_INJECTION)
 
 SimpleStatement ::=
   ShortVarDeclaration
@@ -296,7 +301,9 @@ TypeAliasDeclaration ::= SymbolVisibility 'type' identifier '=' TypeUnionList {
 
 TypeUnionList ::= TypeDecl ('|' TypeDecl)* {pin=1}
 
-LanguageInjectionStatement ::= LANGUAGE_INJECTION {pin=1}
+LanguageInjectionStatement ::= LANGUAGE_INJECTION (semi LANGUAGE_INJECTION)* {
+  pin=1
+}
 
 CIncludeStatement ::= C_INCLUDE StringLiteral {pin=1}
 CFlagStatement ::= C_FLAG C_FLAG_VALUE {pin=1}
@@ -311,6 +318,7 @@ private TopDeclaration ::=
   | StructDeclaration
   | EnumDeclaration
   | InterfaceDeclaration
+  | UnionDeclaration
   | GlobalVariableDeclaration
   | CompileTimeIfStatement
   | CompileTimeForStatement
@@ -319,7 +327,7 @@ private TopDeclaration ::=
   | LanguageInjectionStatement
   | TypeAliasDeclaration
 
-private TopLevelDeclarationRecover ::= !(';' | 'type' | const | fn | pub | BUILTIN_GLOBAL | var | struct | enum | interface | import | C_INCLUDE | C_FLAG | FOR_COMPILE_TIME | IF_COMPILE_TIME | LANGUAGE_INJECTION | '[')
+private TopLevelDeclarationRecover ::= !(';' | 'type' | const | fn | pub | BUILTIN_GLOBAL | var | struct | enum | interface | union | import | C_INCLUDE | C_FLAG | FOR_COMPILE_TIME | IF_COMPILE_TIME | LANGUAGE_INJECTION | '[')
 
 ConstDeclaration ::= SymbolVisibility const ( ConstSpec | '(' ConstSpecs? ')' ) {pin(".*")=2 methods=[addSpec deleteSpec]}
 private ConstSpecs ::= ConstSpec (semi ConstSpec)* semi? {pin=1}
@@ -348,7 +356,7 @@ private NamedArgumentExpr ::= identifier ':' (Expression | UnpackingExpression) 
 
 private ExpressionList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &')'))* {pin(".*")=1}
 private ExpressionWithRecover ::= Expression {recoverWhile=ExpressionListRecover}
-private ExpressionListRecover ::= !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | char | struct | enum | switch | var | unsafe | assert | match)
+private ExpressionListRecover ::= !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | char | struct | enum | union | switch | var | unsafe | assert | match)
 
 //TypeDeclaration ::= 'type' ( TypeSpec | '(' TypeSpecs? ')' ) {pin(".*")=1}
 //private TypeSpecs ::= TypeSpec (semi TypeSpec)* semi? {pin=1}
