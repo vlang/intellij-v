@@ -18,7 +18,7 @@ class VlangRunConfigurationProducer : LazyRunConfigurationProducer<VlangRunConfi
         context: ConfigurationContext
     ): Boolean {
         val element = context.location?.psiElement ?: return false
-        val containingFile = element.containingFile
+        val containingFile = element.containingFile ?: return false
 
         return configuration.scriptName == containingFile.virtualFile.path
     }
