@@ -8,7 +8,6 @@ import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.util.ArrayUtil
 import org.vlang.lang.psi.VlangCallExpr
 import org.vlang.lang.psi.VlangReferenceExpressionBase
-import org.vlang.lang.psi.VlangTypeDecl
 import org.vlang.lang.stubs.index.VlangFunctionIndex
 import org.vlang.lang.stubs.index.VlangStructIndex
 import org.vlang.lang.stubs.index.VlangTypeAliasIndex
@@ -26,7 +25,6 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
         get() = myElement?.getIdentifier()
 
     override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
-//        val file = myElement?.containingFile as? VlangFile ?: return emptyArray()
         val project = el.project
 
         val name = identifier?.text ?: return emptyArray()
