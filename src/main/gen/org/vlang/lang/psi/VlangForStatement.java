@@ -14,6 +14,9 @@ public interface VlangForStatement extends VlangStatement {
   VlangForClause getForClause();
 
   @Nullable
+  VlangForLabel getForLabel();
+
+  @Nullable
   VlangRangeClause getRangeClause();
 
   @NotNull

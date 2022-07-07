@@ -40,6 +40,12 @@ public class VlangResultImpl extends VlangCompositeElementImpl implements VlangR
 
   @Override
   @Nullable
+  public VlangTypeListNoPin getTypeListNoPin() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeListNoPin.class);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getLparen() {
     return findChildByType(LPAREN);
   }

@@ -10,7 +10,7 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangRangeClauseImpl extends VlangShortVarDeclarationImpl implements VlangRangeClause {
+public class VlangRangeClauseImpl extends VlangVarDeclarationImpl implements VlangRangeClause {
 
   public VlangRangeClauseImpl(@NotNull ASTNode node) {
     super(node);

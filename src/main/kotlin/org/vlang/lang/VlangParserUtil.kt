@@ -1,7 +1,11 @@
 package org.vlang.lang
 
+import com.intellij.lang.PsiBuilder
 import com.intellij.lang.parser.GeneratedParserUtilBase
 import com.intellij.openapi.util.Key
+import com.intellij.psi.impl.source.resolve.FileContextUtil
+import com.intellij.psi.tree.IElementType
+import com.intellij.util.indexing.IndexingDataKeys
 import gnu.trove.TObjectIntHashMap
 
 object VlangParserUtil : GeneratedParserUtilBase() {

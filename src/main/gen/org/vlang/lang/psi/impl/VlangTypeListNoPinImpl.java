@@ -10,15 +10,14 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangTypeListImpl extends VlangTypeDeclImpl implements VlangTypeList {
+public class VlangTypeListNoPinImpl extends VlangCompositeElementImpl implements VlangTypeListNoPin {
 
-  public VlangTypeListImpl(@NotNull ASTNode node) {
+  public VlangTypeListNoPinImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitTypeList(this);
+    visitor.visitTypeListNoPin(this);
   }
 
   @Override

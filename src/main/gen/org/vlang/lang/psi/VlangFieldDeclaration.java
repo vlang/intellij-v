@@ -25,4 +25,7 @@ public interface VlangFieldDeclaration extends VlangCompositeElement {
   @Nullable
   VlangTypeDecl getTypeDecl();
 
+  @Nullable
+  PsiElement getShared();
+
 }

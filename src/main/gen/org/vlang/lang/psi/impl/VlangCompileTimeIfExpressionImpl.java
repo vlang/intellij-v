@@ -41,12 +41,6 @@ public class VlangCompileTimeIfExpressionImpl extends VlangExpressionImpl implem
 
   @Override
   @Nullable
-  public VlangErrorPropagation getErrorPropagation() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangErrorPropagation.class);
-  }
-
-  @Override
-  @Nullable
   public VlangExpression getExpression() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class);
   }
@@ -61,6 +55,12 @@ public class VlangCompileTimeIfExpressionImpl extends VlangExpressionImpl implem
   @NotNull
   public PsiElement getIfCompileTime() {
     return notNullChild(findChildByType(IF_COMPILE_TIME));
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getQuestion() {
+    return findChildByType(QUESTION);
   }
 
   @Override

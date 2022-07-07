@@ -41,12 +41,6 @@ public class VlangIfExpressionImpl extends VlangExpressionImpl implements VlangI
 
   @Override
   @Nullable
-  public VlangErrorPropagation getErrorPropagation() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangErrorPropagation.class);
-  }
-
-  @Override
-  @Nullable
   public VlangExpression getExpression() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class);
   }
@@ -55,6 +49,12 @@ public class VlangIfExpressionImpl extends VlangExpressionImpl implements VlangI
   @Nullable
   public VlangStatement getStatement() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getQuestion() {
+    return findChildByType(QUESTION);
   }
 
   @Override

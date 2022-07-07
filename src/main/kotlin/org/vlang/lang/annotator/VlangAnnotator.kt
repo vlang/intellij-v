@@ -73,6 +73,10 @@ class VlangAnnotator : Annotator {
             holder.textAttributes(element, JavaHighlightingColors.STATIC_FINAL_FIELD_ATTRIBUTES)
         }
 
+        if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangLabelRef) {
+            holder.textAttributes(element, VlangHighlightingData.VLANG_LABEL)
+        }
+
         if (element.elementType == VlangTypes.IDENTIFIER && element.findParentOfType<VlangFieldInitializationKey>() != null) {
             holder.textAttributes(element, JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES)
         }

@@ -9,7 +9,7 @@ import org.vlang.lang.stubs.VlangTypeAliasDeclarationStub;
 
 public interface VlangTypeAliasDeclaration extends VlangNamedElement, StubBasedPsiElement<VlangTypeAliasDeclarationStub> {
 
-  @NotNull
+  @Nullable
   VlangSymbolVisibility getSymbolVisibility();
 
   @Nullable

@@ -33,9 +33,9 @@ public class VlangConstDeclarationImpl extends VlangCompositeElementImpl impleme
   }
 
   @Override
-  @NotNull
+  @Nullable
   public VlangSymbolVisibility getSymbolVisibility() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangSymbolVisibility.class));
+    return VlangPsiTreeUtil.getChildOfType(this, VlangSymbolVisibility.class);
   }
 
   @Override

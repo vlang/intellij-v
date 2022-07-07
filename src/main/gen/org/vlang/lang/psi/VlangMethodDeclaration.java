@@ -24,7 +24,7 @@ public interface VlangMethodDeclaration extends VlangFunctionOrMethodDeclaration
   @Nullable
   VlangSignature getSignature();
 
-  @NotNull
+  @Nullable
   VlangSymbolVisibility getSymbolVisibility();
 
   @NotNull

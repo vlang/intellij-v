@@ -12,11 +12,11 @@ class VlangSyntaxHighlighter : SyntaxHighlighterBase() {
     override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> {
         val attr = when {
             tokenType == VlangTypes.LANGUAGE_INJECTION -> JavaHighlightingColors.LINE_COMMENT
-            VlangParserDefinition.COMMENTS.contains(tokenType) -> JavaHighlightingColors.LINE_COMMENT
             VlangParserDefinition.STRING_LITERALS.contains(tokenType) -> JavaHighlightingColors.STRING
             VlangParserDefinition.NUMBERS.contains(tokenType) -> JavaHighlightingColors.NUMBER
             VlangParserDefinition.KEYWORDS.contains(tokenType) -> JavaHighlightingColors.KEYWORD
             VlangParserDefinition.OPERATORS.contains(tokenType) -> JavaHighlightingColors.OPERATION_SIGN
+            VlangParserDefinition.COMMENTS.contains(tokenType) -> JavaHighlightingColors.LINE_COMMENT
             else -> null
         }
 

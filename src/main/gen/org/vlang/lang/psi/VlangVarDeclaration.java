@@ -5,15 +5,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangAssignmentStatement extends VlangStatement {
-
-  @NotNull
-  VlangAssignOp getAssignOp();
+public interface VlangVarDeclaration extends VlangCompositeElement {
 
   @NotNull
   List<VlangExpression> getExpressionList();
 
   @NotNull
-  VlangLeftHandExprList getLeftHandExprList();
+  List<VlangVarDefinition> getVarDefinitionList();
+
+  @NotNull
+  PsiElement getVarAssign();
 
 }

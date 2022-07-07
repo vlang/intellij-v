@@ -5,9 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangTypeList extends VlangTypeDecl {
+public interface VlangForLabel extends VlangCompositeElement {
 
   @NotNull
-  List<VlangTypeDecl> getTypeDeclList();
+  VlangLabelRef getLabelRef();
+
+  @NotNull
+  PsiElement getColon();
 
 }

@@ -39,12 +39,6 @@ public class VlangImportSpecImpl extends VlangSimpleNamedElementImpl implements 
   }
 
   @Override
-  @Nullable
-  public PsiElement getAs() {
-    return findChildByType(AS);
-  }
-
-  @Override
   @NotNull
   public PsiElement getIdentifier() {
     return VlangPsiImplUtil.getIdentifier(this);

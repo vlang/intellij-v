@@ -7,8 +7,8 @@ import com.intellij.psi.PsiElement;
 
 public interface VlangVarDefinition extends VlangNamedElement {
 
-  @NotNull
-  VlangSymbolMutability getSymbolMutability();
+  @Nullable
+  VlangVarModifiers getVarModifiers();
 
   @NotNull
   PsiElement getIdentifier();

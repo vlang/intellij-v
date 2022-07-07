@@ -10,14 +10,15 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangErrorPropagationImpl extends VlangCompositeElementImpl implements VlangErrorPropagation {
+public class VlangChannelTypeImpl extends VlangTypeDeclImpl implements VlangChannelType {
 
-  public VlangErrorPropagationImpl(@NotNull ASTNode node) {
+  public VlangChannelTypeImpl(@NotNull ASTNode node) {
     super(node);
   }
 
+  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitErrorPropagation(this);
+    visitor.visitChannelType(this);
   }
 
   @Override
@@ -27,9 +28,15 @@ public class VlangErrorPropagationImpl extends VlangCompositeElementImpl impleme
   }
 
   @Override
+  @Nullable
+  public VlangTypeDecl getTypeDecl() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class);
+  }
+
+  @Override
   @NotNull
-  public PsiElement getQuestion() {
-    return notNullChild(findChildByType(QUESTION));
+  public PsiElement getChan() {
+    return notNullChild(findChildByType(CHAN));
   }
 
 }

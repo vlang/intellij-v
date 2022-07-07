@@ -5,27 +5,19 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangIfExpression extends VlangExpression {
-
-  @Nullable
-  VlangBlock getBlock();
-
-  @Nullable
-  VlangElseStatement getElseStatement();
+public interface VlangSendStatement extends VlangStatement {
 
   @Nullable
   VlangExpression getExpression();
 
-  @Nullable
+  @NotNull
   VlangStatement getStatement();
 
-  @Nullable
-  PsiElement getQuestion();
-
-  @Nullable
-  PsiElement getSemicolon();
-
   @NotNull
-  PsiElement getIf();
+  PsiElement getSendChannel();
+
+  //WARNING: getSendExpression(...) is skipped
+  //matching getSendExpression(VlangSendStatement, ...)
+  //methods are not found in VlangPsiImplUtil
 
 }

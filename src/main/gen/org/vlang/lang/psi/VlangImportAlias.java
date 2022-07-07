@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface VlangImportAlias extends VlangCompositeElement {
 
   @NotNull
+  PsiElement getAs();
+
+  @NotNull
   PsiElement getIdentifier();
 
 }

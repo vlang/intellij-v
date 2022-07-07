@@ -13,9 +13,6 @@ public interface VlangImportSpec extends VlangNamedElement {
   @Nullable
   VlangSelectiveImportList getSelectiveImportList();
 
-  @Nullable
-  PsiElement getAs();
-
   @NotNull
   PsiElement getIdentifier();
 

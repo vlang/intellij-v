@@ -28,6 +28,12 @@ public class VlangImportAliasImpl extends VlangCompositeElementImpl implements V
 
   @Override
   @NotNull
+  public PsiElement getAs() {
+    return notNullChild(findChildByType(AS));
+  }
+
+  @Override
+  @NotNull
   public PsiElement getIdentifier() {
     return notNullChild(findChildByType(IDENTIFIER));
   }

@@ -10,14 +10,15 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangShortVarDeclarationImpl extends VlangCompositeElementImpl implements VlangShortVarDeclaration {
+public class VlangGotoStatementImpl extends VlangStatementImpl implements VlangGotoStatement {
 
-  public VlangShortVarDeclarationImpl(@NotNull ASTNode node) {
+  public VlangGotoStatementImpl(@NotNull ASTNode node) {
     super(node);
   }
 
+  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitShortVarDeclaration(this);
+    visitor.visitGotoStatement(this);
   }
 
   @Override
@@ -28,20 +29,14 @@ public class VlangShortVarDeclarationImpl extends VlangCompositeElementImpl impl
 
   @Override
   @NotNull
-  public List<VlangExpression> getExpressionList() {
-    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangExpression.class);
+  public VlangLabelRef getLabelRef() {
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangLabelRef.class));
   }
 
   @Override
   @NotNull
-  public List<VlangVarDefinition> getVarDefinitionList() {
-    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangVarDefinition.class);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getVarAssign() {
-    return notNullChild(findChildByType(VAR_ASSIGN));
+  public PsiElement getGoto() {
+    return notNullChild(findChildByType(GOTO));
   }
 
 }

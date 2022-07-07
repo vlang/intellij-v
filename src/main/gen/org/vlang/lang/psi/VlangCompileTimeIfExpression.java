@@ -14,9 +14,6 @@ public interface VlangCompileTimeIfExpression extends VlangExpression {
   VlangCompileElseStatement getCompileElseStatement();
 
   @Nullable
-  VlangErrorPropagation getErrorPropagation();
-
-  @Nullable
   VlangExpression getExpression();
 
   @Nullable
@@ -24,6 +21,9 @@ public interface VlangCompileTimeIfExpression extends VlangExpression {
 
   @NotNull
   PsiElement getIfCompileTime();
+
+  @Nullable
+  PsiElement getQuestion();
 
   @Nullable
   PsiElement getSemicolon();

@@ -10,7 +10,7 @@ public interface VlangConstDeclaration extends VlangCompositeElement {
   @NotNull
   List<VlangConstSpec> getConstSpecList();
 
-  @NotNull
+  @Nullable
   VlangSymbolVisibility getSymbolVisibility();
 
   @Nullable

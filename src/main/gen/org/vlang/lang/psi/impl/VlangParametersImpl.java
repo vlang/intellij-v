@@ -34,8 +34,8 @@ public class VlangParametersImpl extends VlangCompositeElementImpl implements Vl
 
   @Override
   @Nullable
-  public VlangTypeDecl getTypeDecl() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class);
+  public VlangTypeListNoPin getTypeListNoPin() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeListNoPin.class);
   }
 
   @Override

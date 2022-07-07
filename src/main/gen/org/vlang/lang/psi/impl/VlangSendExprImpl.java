@@ -10,14 +10,15 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangSymbolMutabilityImpl extends VlangCompositeElementImpl implements VlangSymbolMutability {
+public class VlangSendExprImpl extends VlangExpressionImpl implements VlangSendExpr {
 
-  public VlangSymbolMutabilityImpl(@NotNull ASTNode node) {
+  public VlangSendExprImpl(@NotNull ASTNode node) {
     super(node);
   }
 
+  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitSymbolMutability(this);
+    visitor.visitSendExpr(this);
   }
 
   @Override
@@ -27,9 +28,15 @@ public class VlangSymbolMutabilityImpl extends VlangCompositeElementImpl impleme
   }
 
   @Override
-  @Nullable
-  public PsiElement getMut() {
-    return findChildByType(MUT);
+  @NotNull
+  public List<VlangExpression> getExpressionList() {
+    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangExpression.class);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getSendChannel() {
+    return notNullChild(findChildByType(SEND_CHANNEL));
   }
 
 }

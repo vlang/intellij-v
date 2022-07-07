@@ -28,14 +28,14 @@ public class VlangReceiverImpl extends VlangSimpleNamedElementImpl implements Vl
 
   @Override
   @Nullable
-  public VlangSymbolMutability getSymbolMutability() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangSymbolMutability.class);
+  public VlangTypeDecl getTypeDecl() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class);
   }
 
   @Override
   @Nullable
-  public VlangTypeDecl getTypeDecl() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class);
+  public VlangVarModifiers getVarModifiers() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangVarModifiers.class);
   }
 
   @Override

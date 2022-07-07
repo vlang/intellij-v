@@ -10,15 +10,14 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangSimpleStatementImpl extends VlangStatementImpl implements VlangSimpleStatement {
+public class VlangForLabelImpl extends VlangCompositeElementImpl implements VlangForLabel {
 
-  public VlangSimpleStatementImpl(@NotNull ASTNode node) {
+  public VlangForLabelImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitSimpleStatement(this);
+    visitor.visitForLabel(this);
   }
 
   @Override
@@ -28,21 +27,15 @@ public class VlangSimpleStatementImpl extends VlangStatementImpl implements Vlan
   }
 
   @Override
-  @Nullable
-  public VlangLeftHandExprList getLeftHandExprList() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangLeftHandExprList.class);
+  @NotNull
+  public VlangLabelRef getLabelRef() {
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangLabelRef.class));
   }
 
   @Override
-  @Nullable
-  public VlangStatement getStatement() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangStatement.class);
-  }
-
-  @Override
-  @Nullable
-  public VlangVarDeclaration getVarDeclaration() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangVarDeclaration.class);
+  @NotNull
+  public PsiElement getColon() {
+    return notNullChild(findChildByType(COLON));
   }
 
 }

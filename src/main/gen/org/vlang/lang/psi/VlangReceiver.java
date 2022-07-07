@@ -8,10 +8,10 @@ import com.intellij.psi.PsiElement;
 public interface VlangReceiver extends VlangNamedElement {
 
   @Nullable
-  VlangSymbolMutability getSymbolMutability();
+  VlangTypeDecl getTypeDecl();
 
   @Nullable
-  VlangTypeDecl getTypeDecl();
+  VlangVarModifiers getVarModifiers();
 
   @Nullable
   PsiElement getComma();

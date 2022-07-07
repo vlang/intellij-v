@@ -10,15 +10,15 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangSimpleStatementImpl extends VlangStatementImpl implements VlangSimpleStatement {
+public class VlangLockStatementImpl extends VlangStatementImpl implements VlangLockStatement {
 
-  public VlangSimpleStatementImpl(@NotNull ASTNode node) {
+  public VlangLockStatementImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitSimpleStatement(this);
+    visitor.visitLockStatement(this);
   }
 
   @Override
@@ -29,20 +29,20 @@ public class VlangSimpleStatementImpl extends VlangStatementImpl implements Vlan
 
   @Override
   @Nullable
-  public VlangLeftHandExprList getLeftHandExprList() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangLeftHandExprList.class);
+  public VlangExpression getExpression() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class);
   }
 
   @Override
   @Nullable
-  public VlangStatement getStatement() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangStatement.class);
+  public PsiElement getLock() {
+    return findChildByType(LOCK);
   }
 
   @Override
   @Nullable
-  public VlangVarDeclaration getVarDeclaration() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangVarDeclaration.class);
+  public PsiElement getRlock() {
+    return findChildByType(RLOCK);
   }
 
 }

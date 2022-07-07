@@ -41,6 +41,12 @@ public class VlangForStatementImpl extends VlangStatementImpl implements VlangFo
 
   @Override
   @Nullable
+  public VlangForLabel getForLabel() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangForLabel.class);
+  }
+
+  @Override
+  @Nullable
   public VlangRangeClause getRangeClause() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangRangeClause.class);
   }

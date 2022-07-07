@@ -27,9 +27,9 @@ public class VlangVarDefinitionImpl extends VlangSimpleNamedElementImpl implemen
   }
 
   @Override
-  @NotNull
-  public VlangSymbolMutability getSymbolMutability() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangSymbolMutability.class));
+  @Nullable
+  public VlangVarModifiers getVarModifiers() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangVarModifiers.class);
   }
 
   @Override

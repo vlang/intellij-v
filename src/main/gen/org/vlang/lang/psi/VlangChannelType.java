@@ -5,9 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangPointerType extends VlangTypeDecl {
+public interface VlangChannelType extends VlangTypeDecl {
 
   @Nullable
   VlangTypeDecl getTypeDecl();
+
+  @NotNull
+  PsiElement getChan();
 
 }

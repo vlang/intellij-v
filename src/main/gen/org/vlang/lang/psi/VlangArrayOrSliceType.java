@@ -19,7 +19,4 @@ public interface VlangArrayOrSliceType extends VlangTypeDecl {
   @Nullable
   PsiElement getRbrack();
 
-  @Nullable
-  PsiElement getTripleDot();
-
 }

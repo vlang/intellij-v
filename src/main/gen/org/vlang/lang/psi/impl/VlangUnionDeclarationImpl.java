@@ -8,22 +8,22 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
-import org.vlang.lang.stubs.VlangFunctionDeclarationStub;
+import org.vlang.lang.stubs.VlangUnionDeclarationStub;
 import org.vlang.lang.psi.*;
 import com.intellij.psi.stubs.IStubElementType;
 
-public class VlangFunctionDeclarationImpl extends VlangFunctionOrMethodDeclarationImpl<VlangFunctionDeclarationStub> implements VlangFunctionDeclaration {
+public class VlangUnionDeclarationImpl extends VlangNamedElementImpl<VlangUnionDeclarationStub> implements VlangUnionDeclaration {
 
-  public VlangFunctionDeclarationImpl(@NotNull VlangFunctionDeclarationStub stub, @NotNull IStubElementType<?, ?> type) {
+  public VlangUnionDeclarationImpl(@NotNull VlangUnionDeclarationStub stub, @NotNull IStubElementType<?, ?> type) {
     super(stub, type);
   }
 
-  public VlangFunctionDeclarationImpl(@NotNull ASTNode node) {
+  public VlangUnionDeclarationImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitFunctionDeclaration(this);
+    visitor.visitUnionDeclaration(this);
   }
 
   @Override
@@ -40,14 +40,14 @@ public class VlangFunctionDeclarationImpl extends VlangFunctionOrMethodDeclarati
 
   @Override
   @Nullable
-  public VlangBlock getBlock() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangBlock.class);
+  public VlangFieldDeclaration getFieldDeclaration() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangFieldDeclaration.class);
   }
 
   @Override
   @Nullable
-  public VlangSignature getSignature() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangSignature.class);
+  public VlangMemberModifiers getMemberModifiers() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangMemberModifiers.class);
   }
 
   @Override
@@ -57,15 +57,27 @@ public class VlangFunctionDeclarationImpl extends VlangFunctionOrMethodDeclarati
   }
 
   @Override
-  @NotNull
-  public PsiElement getFn() {
-    return notNullChild(findChildByType(FN));
+  @Nullable
+  public PsiElement getLbrace() {
+    return findChildByType(LBRACE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRbrace() {
+    return findChildByType(RBRACE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getIdentifier() {
+    return findChildByType(IDENTIFIER);
   }
 
   @Override
   @NotNull
-  public PsiElement getIdentifier() {
-    return notNullChild(findChildByType(IDENTIFIER));
+  public PsiElement getUnion() {
+    return notNullChild(findChildByType(UNION));
   }
 
   @Override

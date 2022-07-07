@@ -11,9 +11,9 @@ public interface VlangSimpleStatement extends VlangStatement {
   VlangLeftHandExprList getLeftHandExprList();
 
   @Nullable
-  VlangShortVarDeclaration getShortVarDeclaration();
+  VlangStatement getStatement();
 
   @Nullable
-  VlangStatement getStatement();
+  VlangVarDeclaration getVarDeclaration();
 
 }

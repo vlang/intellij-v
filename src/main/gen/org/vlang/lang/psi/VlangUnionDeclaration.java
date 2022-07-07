@@ -5,27 +5,33 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
-import org.vlang.lang.stubs.VlangFunctionDeclarationStub;
+import org.vlang.lang.stubs.VlangUnionDeclarationStub;
 
-public interface VlangFunctionDeclaration extends VlangFunctionOrMethodDeclaration, StubBasedPsiElement<VlangFunctionDeclarationStub> {
+public interface VlangUnionDeclaration extends VlangNamedElement, StubBasedPsiElement<VlangUnionDeclarationStub> {
 
   @Nullable
   VlangAttributes getAttributes();
 
   @Nullable
-  VlangBlock getBlock();
+  VlangFieldDeclaration getFieldDeclaration();
 
   @Nullable
-  VlangSignature getSignature();
+  VlangMemberModifiers getMemberModifiers();
 
   @Nullable
   VlangSymbolVisibility getSymbolVisibility();
 
-  @NotNull
-  PsiElement getFn();
+  @Nullable
+  PsiElement getLbrace();
+
+  @Nullable
+  PsiElement getRbrace();
+
+  @Nullable
+  PsiElement getIdentifier();
 
   @NotNull
-  PsiElement getIdentifier();
+  PsiElement getUnion();
 
   @NotNull
   String getName();

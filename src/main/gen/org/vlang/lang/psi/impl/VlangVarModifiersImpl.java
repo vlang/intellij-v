@@ -10,32 +10,20 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangParamDefinitionImpl extends VlangSimpleNamedElementImpl implements VlangParamDefinition {
+public class VlangVarModifiersImpl extends VlangCompositeElementImpl implements VlangVarModifiers {
 
-  public VlangParamDefinitionImpl(@NotNull ASTNode node) {
+  public VlangVarModifiersImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitParamDefinition(this);
+    visitor.visitVarModifiers(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof VlangVisitor) accept((VlangVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public VlangVarModifiers getVarModifiers() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangVarModifiers.class);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getIdentifier() {
-    return notNullChild(findChildByType(IDENTIFIER));
   }
 
 }

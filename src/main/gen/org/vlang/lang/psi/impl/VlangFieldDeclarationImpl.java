@@ -62,4 +62,10 @@ public class VlangFieldDeclarationImpl extends VlangCompositeElementImpl impleme
     return VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getShared() {
+    return findChildByType(SHARED);
+  }
+
 }

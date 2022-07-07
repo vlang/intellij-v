@@ -51,10 +51,4 @@ public class VlangArrayOrSliceTypeImpl extends VlangTypeDeclImpl implements Vlan
     return findChildByType(RBRACK);
   }
 
-  @Override
-  @Nullable
-  public PsiElement getTripleDot() {
-    return findChildByType(TRIPLE_DOT);
-  }
-
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangStructInitialization extends VlangExpression {
+public interface VlangTypeInitExpr extends VlangExpression {
 
   @Nullable
   VlangFieldInitialization getFieldInitialization();

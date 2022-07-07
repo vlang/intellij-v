@@ -29,6 +29,12 @@ public class VlangAssignmentStatementImpl extends VlangStatementImpl implements 
 
   @Override
   @NotNull
+  public VlangAssignOp getAssignOp() {
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangAssignOp.class));
+  }
+
+  @Override
+  @NotNull
   public List<VlangExpression> getExpressionList() {
     return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangExpression.class);
   }
@@ -37,12 +43,6 @@ public class VlangAssignmentStatementImpl extends VlangStatementImpl implements 
   @NotNull
   public VlangLeftHandExprList getLeftHandExprList() {
     return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangLeftHandExprList.class));
-  }
-
-  @Override
-  @NotNull
-  public VlangAssignOp getAssignOp() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangAssignOp.class));
   }
 
 }

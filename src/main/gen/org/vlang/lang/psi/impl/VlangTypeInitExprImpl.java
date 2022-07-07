@@ -10,15 +10,15 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangSimpleStatementImpl extends VlangStatementImpl implements VlangSimpleStatement {
+public class VlangTypeInitExprImpl extends VlangExpressionImpl implements VlangTypeInitExpr {
 
-  public VlangSimpleStatementImpl(@NotNull ASTNode node) {
+  public VlangTypeInitExprImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitSimpleStatement(this);
+    visitor.visitTypeInitExpr(this);
   }
 
   @Override
@@ -29,20 +29,26 @@ public class VlangSimpleStatementImpl extends VlangStatementImpl implements Vlan
 
   @Override
   @Nullable
-  public VlangLeftHandExprList getLeftHandExprList() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangLeftHandExprList.class);
+  public VlangFieldInitialization getFieldInitialization() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangFieldInitialization.class);
   }
 
   @Override
-  @Nullable
-  public VlangStatement getStatement() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangStatement.class);
+  @NotNull
+  public VlangTypeDecl getTypeDecl() {
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class));
   }
 
   @Override
-  @Nullable
-  public VlangVarDeclaration getVarDeclaration() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangVarDeclaration.class);
+  @NotNull
+  public PsiElement getLbrace() {
+    return notNullChild(findChildByType(LBRACE));
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getRbrace() {
+    return notNullChild(findChildByType(RBRACE));
   }
 
 }

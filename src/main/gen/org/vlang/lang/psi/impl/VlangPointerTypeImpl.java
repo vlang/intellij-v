@@ -33,10 +33,4 @@ public class VlangPointerTypeImpl extends VlangTypeDeclImpl implements VlangPoin
     return VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class);
   }
 
-  @Override
-  @NotNull
-  public PsiElement getBitAnd() {
-    return notNullChild(findChildByType(BIT_AND));
-  }
-
 }

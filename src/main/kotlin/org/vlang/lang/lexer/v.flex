@@ -82,7 +82,7 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 //"'\\u" {HEX_DIGIT} {4} "'"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
 //"'\\U" {HEX_DIGIT} {8} "'"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
 
-{STR_MODIFIER}? "\"" [^\"]* "\""?            { yybegin(MAYBE_SEMICOLON); return RAW_STRING; }
+{STR_MODIFIER}? "\"" [^\"]* "\""?         { yybegin(MAYBE_SEMICOLON); return RAW_STRING; }
 {STR_MODIFIER}? "'" [^']* "'"?            { yybegin(MAYBE_SEMICOLON); return RAW_STRING; }
 {CHAR}                                    { yybegin(MAYBE_SEMICOLON); return CHAR; }
 "..."                                     { return TRIPLE_DOT; }
@@ -176,11 +176,14 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 "interface"                               { return INTERFACE; }
 "select"                                  { return SELECT; }
 
-"case"                                    { return CASE; }
 "defer"                                   { return DEFER; }
 "go"                                      { return GO; }
 
-//"chan"                                    { return CHAN; }
+"shared"                                  { return SHARED; }
+"rlock"                                   { return RLOCK; }
+"lock"                                    { return LOCK; }
+
+"chan"                                    { return CHAN; }
 
 "union"                                   { return UNION; }
 "struct"                                  { return STRUCT; }

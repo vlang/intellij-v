@@ -67,5 +67,7 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
           language="vlang"
           implementationClass="org.vlang.lang.folding.VlangFoldingBuilder"/>
 
+        <additionalTextAttributes scheme="Default" file="colorSchemes/VlangAddonsDefault.xml"/>
+        <additionalTextAttributes scheme="Darcula" file="colorSchemes/VlangAddonsDarcula.xml"/>
     </extensions>
 </idea-plugin>

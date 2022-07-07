@@ -5,9 +5,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangErrorPropagation extends VlangCompositeElement {
+public interface VlangLockStatement extends VlangStatement {
 
-  @NotNull
-  PsiElement getQuestion();
+  @Nullable
+  VlangExpression getExpression();
+
+  @Nullable
+  PsiElement getLock();
+
+  @Nullable
+  PsiElement getRlock();
 
 }
