@@ -76,7 +76,7 @@
   ]
 
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional|OrBlock)Expr")=BinaryExpr
-  extends(".*(Expr|Literal|Lit|OperandName)|TypeInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ErrorPropagationExpression|ConstexprIdentifierExpression")=Expression
+  extends(".*(Expr|Literal|Lit|OperandName)|TypeInitExpr|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ErrorPropagationExpression|ConstexprIdentifierExpression")=Expression
 
   implements("(Type|Import)Spec|(Var|Const|Param|Field|Label)Definition|(Struct|TypeAlias|Union)Declaration|Receiver")="org.vlang.lang.psi.VlangNamedElement"
 //  implements("FunctionLit")="org.vlang.lang.psi.GoSignatureOwner"
@@ -230,13 +230,13 @@ SimpleStatement ::=
   | (LeftHandExprList AssignmentStatement? | SendStatement) {pin(".*")=LeftHandExprList}
 
 // <vars> := <exprs>
-VarDeclaration ::= VarDefinitionList ':=' ExpressionList {pin=2}
+VarDeclaration ::= VarDefinitionList ':=' (ExpressionList | MapInitExpr) {pin=2}
 
 // <expr>++/--
 IncDecStatement ::= Expression ('++' | '--') {pin=2}
 
 // = <list>
-left AssignmentStatement ::= AssignOp ExpressionList {pin=1}
+left AssignmentStatement ::= AssignOp (ExpressionList | MapInitExpr) {pin=1}
 AssignOp ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '&=' | '&^='
 
 // <- <expr>
@@ -479,6 +479,12 @@ Expression ::=
   | ConstexprIdentifierExpression
   | ParenthesesExpr {methods=[getGoType] /*implements="org.vlang.lang.psi.GoTypeOwner"*/}
 // end of expression rule
+
+// { ... }
+MapInitExpr ::= '{' KeyValues '}' {pin=3}
+KeyValues ::= KeyValue ((semi | ',') KeyValue)* (semi | ',')? {pin=1}
+// <key> : <value>
+KeyValue ::= (Literal | ReferenceExpression) ':' Expression {pin=1}
 
 // <type> {...}
 TypeInitExpr ::= TypeDecl '{' ( '}' | FieldInitialization '}') {pin=3}

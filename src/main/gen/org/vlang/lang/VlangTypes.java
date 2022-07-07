@@ -83,11 +83,14 @@ public interface VlangTypes {
   IElementType INTERFACE_TYPE = new VlangCompositeElementType("INTERFACE_TYPE");
   IElementType IN_EXPRESSION = new VlangCompositeElementType("IN_EXPRESSION");
   IElementType IS_EXPRESSION = new VlangCompositeElementType("IS_EXPRESSION");
+  IElementType KEY_VALUE = new VlangCompositeElementType("KEY_VALUE");
+  IElementType KEY_VALUES = new VlangCompositeElementType("KEY_VALUES");
   IElementType LABEL_REF = new VlangCompositeElementType("LABEL_REF");
   IElementType LANGUAGE_INJECTION_STATEMENT = new VlangCompositeElementType("LANGUAGE_INJECTION_STATEMENT");
   IElementType LEFT_HAND_EXPR_LIST = new VlangCompositeElementType("LEFT_HAND_EXPR_LIST");
   IElementType LITERAL = new VlangCompositeElementType("LITERAL");
   IElementType LOCK_STATEMENT = new VlangCompositeElementType("LOCK_STATEMENT");
+  IElementType MAP_INIT_EXPR = new VlangCompositeElementType("MAP_INIT_EXPR");
   IElementType MAP_TYPE = new VlangCompositeElementType("MAP_TYPE");
   IElementType MATCH_ARM = new VlangCompositeElementType("MATCH_ARM");
   IElementType MATCH_ARMS = new VlangCompositeElementType("MATCH_ARMS");
@@ -472,6 +475,12 @@ public interface VlangTypes {
       else if (type == IS_EXPRESSION) {
         return new VlangIsExpressionImpl(node);
       }
+      else if (type == KEY_VALUE) {
+        return new VlangKeyValueImpl(node);
+      }
+      else if (type == KEY_VALUES) {
+        return new VlangKeyValuesImpl(node);
+      }
       else if (type == LABEL_REF) {
         return new VlangLabelRefImpl(node);
       }
@@ -486,6 +495,9 @@ public interface VlangTypes {
       }
       else if (type == LOCK_STATEMENT) {
         return new VlangLockStatementImpl(node);
+      }
+      else if (type == MAP_INIT_EXPR) {
+        return new VlangMapInitExprImpl(node);
       }
       else if (type == MAP_TYPE) {
         return new VlangMapTypeImpl(node);
