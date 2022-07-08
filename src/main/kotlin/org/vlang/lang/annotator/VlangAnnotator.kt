@@ -99,6 +99,10 @@ class VlangAnnotator : Annotator {
         if (element.elementType == VlangDocTokenTypes.DOC_COMMENT_TAG) {
             holder.textAttributes(element, JavaHighlightingColors.DOC_COMMENT_TAG)
         }
+
+        if (element.elementType == VlangTypes.IDENTIFIER && (element.text == "_likely_" || element.text == "_unlikely_")) {
+            holder.textAttributes(element, JavaHighlightingColors.KEYWORD)
+        }
     }
 
     private fun AnnotationHolder.textAttributes(element: PsiElement, textAttributes: TextAttributesKey) {

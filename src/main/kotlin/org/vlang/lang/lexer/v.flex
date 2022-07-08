@@ -224,6 +224,8 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 
 {SPECIAL_IDENT}                           { yybegin(MAYBE_SEMICOLON); return IDENTIFIER; }
 {IDENT}                                   { yybegin(MAYBE_SEMICOLON); return IDENTIFIER; }
+"$"{IDENT}                                { yybegin(MAYBE_SEMICOLON); return IDENTIFIER; }
+"@"{IDENT}                                { yybegin(MAYBE_SEMICOLON); return IDENTIFIER; }
 
 "!" "in" {WS}+                            { return NOT_IN; }
 "!" "is" {WS}+                            { return NOT_IS; }
