@@ -45,7 +45,8 @@ public class VlangParser implements PsiParser, LightPsiParser {
       C_FLAG_STATEMENT, C_INCLUDE_STATEMENT, DEFER_STATEMENT, ELSE_STATEMENT,
       FOR_STATEMENT, GOTO_STATEMENT, GO_STATEMENT, IF_STATEMENT,
       INC_DEC_STATEMENT, LANGUAGE_INJECTION_STATEMENT, LOCK_STATEMENT, RETURN_STATEMENT,
-      SEND_STATEMENT, SIMPLE_STATEMENT, STATEMENT, UNSAFE_STATEMENT),
+      SEND_STATEMENT, SIMPLE_STATEMENT, SQL_STATEMENT, STATEMENT,
+      UNSAFE_STATEMENT),
     create_token_set_(ADD_EXPR, AND_EXPR, ARRAY_CREATION, AS_EXPRESSION,
       CALL_EXPR, COMPILE_TIME_IF_EXPRESSION, CONDITIONAL_EXPR, CONSTEXPR_IDENTIFIER_EXPRESSION,
       DOT_EXPRESSION, ENUM_FETCH, ERROR_PROPAGATION_EXPRESSION, EXPRESSION,
@@ -945,7 +946,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Attributes? SymbolVisibility? enum identifier '{' EnumFields '}'
+  // Attributes? SymbolVisibility? enum identifier '{' EnumFields? '}'
   public static boolean EnumDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "EnumDeclaration")) return false;
     boolean r, p;
@@ -954,7 +955,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     r = r && EnumDeclaration_1(b, l + 1);
     r = r && consumeTokens(b, 1, ENUM, IDENTIFIER, LBRACE);
     p = r; // pin = 3
-    r = r && report_error_(b, EnumFields(b, l + 1));
+    r = r && report_error_(b, EnumDeclaration_5(b, l + 1));
     r = p && consumeToken(b, RBRACE) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
@@ -971,6 +972,13 @@ public class VlangParser implements PsiParser, LightPsiParser {
   private static boolean EnumDeclaration_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "EnumDeclaration_1")) return false;
     SymbolVisibility(b, l + 1);
+    return true;
+  }
+
+  // EnumFields?
+  private static boolean EnumDeclaration_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "EnumDeclaration_5")) return false;
+    EnumFields(b, l + 1);
     return true;
   }
 
@@ -3548,13 +3556,13 @@ public class VlangParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // SqlExpression
-  public static boolean SqlStatemnt(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SqlStatemnt")) return false;
+  public static boolean SqlStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlStatement")) return false;
     if (!nextTokenIs(b, SQL)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = SqlExpression(b, l + 1);
-    exit_section_(b, m, SQL_STATEMNT, r);
+    exit_section_(b, m, SQL_STATEMENT, r);
     return r;
   }
 
@@ -3579,7 +3587,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   //   | LanguageInjectionStatement
   //   | TypeAliasDeclaration
   //   | AsmBlockStatement
-  //   | SqlStatemnt
+  //   | SqlStatement
   // //| SelectStatement
   //   | DeferStatement
   public static boolean Statement(PsiBuilder b, int l) {
@@ -3606,7 +3614,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = LanguageInjectionStatement(b, l + 1);
     if (!r) r = TypeAliasDeclaration(b, l + 1);
     if (!r) r = AsmBlockStatement(b, l + 1);
-    if (!r) r = SqlStatemnt(b, l + 1);
+    if (!r) r = SqlStatement(b, l + 1);
     if (!r) r = DeferStatement(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;

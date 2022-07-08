@@ -130,7 +130,7 @@ public interface VlangTypes {
   IElementType SIMPLE_STATEMENT = new VlangCompositeElementType("SIMPLE_STATEMENT");
   IElementType SQL_BLOCK = new VlangCompositeElementType("SQL_BLOCK");
   IElementType SQL_EXPRESSION = new VlangCompositeElementType("SQL_EXPRESSION");
-  IElementType SQL_STATEMNT = new VlangCompositeElementType("SQL_STATEMNT");
+  IElementType SQL_STATEMENT = new VlangCompositeElementType("SQL_STATEMENT");
   IElementType STATEMENT = new VlangCompositeElementType("STATEMENT");
   IElementType STRING_LITERAL = new VlangCompositeElementType("STRING_LITERAL");
   IElementType STRUCT_DECLARATION = VlangElementTypeFactory.stubFactory("STRUCT_DECLARATION");
@@ -626,8 +626,8 @@ public interface VlangTypes {
       else if (type == SQL_EXPRESSION) {
         return new VlangSqlExpressionImpl(node);
       }
-      else if (type == SQL_STATEMNT) {
-        return new VlangSqlStatemntImpl(node);
+      else if (type == SQL_STATEMENT) {
+        return new VlangSqlStatementImpl(node);
       }
       else if (type == STATEMENT) {
         return new VlangStatementImpl(node);

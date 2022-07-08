@@ -376,7 +376,7 @@ AnonymousInterfaceDefinition ::= TypeDecl {
 
 
 // enum
-EnumDeclaration ::= Attributes? SymbolVisibility? enum identifier '{' EnumFields '}' {
+EnumDeclaration ::= Attributes? SymbolVisibility? enum identifier '{' EnumFields? '}' {
   pin=3
   stubClass="org.vlang.lang.stubs.VlangEnumDeclarationStub"
   methods=[getName]

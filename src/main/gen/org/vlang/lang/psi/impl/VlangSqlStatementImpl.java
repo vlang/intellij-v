@@ -10,14 +10,15 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangStatementImpl extends VlangCompositeElementImpl implements VlangStatement {
+public class VlangSqlStatementImpl extends VlangStatementImpl implements VlangSqlStatement {
 
-  public VlangStatementImpl(@NotNull ASTNode node) {
+  public VlangSqlStatementImpl(@NotNull ASTNode node) {
     super(node);
   }
 
+  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitStatement(this);
+    visitor.visitSqlStatement(this);
   }
 
   @Override
@@ -27,21 +28,9 @@ public class VlangStatementImpl extends VlangCompositeElementImpl implements Vla
   }
 
   @Override
-  @Nullable
-  public VlangBlock getBlock() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangBlock.class);
-  }
-
-  @Override
-  @Nullable
-  public VlangConstDeclaration getConstDeclaration() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangConstDeclaration.class);
-  }
-
-  @Override
-  @Nullable
-  public VlangTypeAliasDeclaration getTypeAliasDeclaration() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeAliasDeclaration.class);
+  @NotNull
+  public VlangSqlExpression getSqlExpression() {
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangSqlExpression.class));
   }
 
 }

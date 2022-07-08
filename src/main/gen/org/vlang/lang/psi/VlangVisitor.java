@@ -487,8 +487,8 @@ public class VlangVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
-  public void visitSqlStatemnt(@NotNull VlangSqlStatemnt o) {
-    visitCompositeElement(o);
+  public void visitSqlStatement(@NotNull VlangSqlStatement o) {
+    visitStatement(o);
   }
 
   public void visitStatement(@NotNull VlangStatement o) {

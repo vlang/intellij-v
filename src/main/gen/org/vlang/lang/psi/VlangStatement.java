@@ -14,9 +14,6 @@ public interface VlangStatement extends VlangCompositeElement {
   VlangConstDeclaration getConstDeclaration();
 
   @Nullable
-  VlangSqlStatemnt getSqlStatemnt();
-
-  @Nullable
   VlangTypeAliasDeclaration getTypeAliasDeclaration();
 
   //WARNING: processDeclarations(...) is skipped
