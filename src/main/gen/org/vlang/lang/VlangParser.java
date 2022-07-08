@@ -609,7 +609,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // chan TypeDecl
+  // chan TypeDecl?
   public static boolean ChannelType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ChannelType")) return false;
     if (!nextTokenIs(b, CHAN)) return false;
@@ -617,9 +617,16 @@ public class VlangParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, CHANNEL_TYPE, null);
     r = consumeToken(b, CHAN);
     p = r; // pin = 1
-    r = r && TypeDecl(b, l + 1);
+    r = r && ChannelType_1(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
+  }
+
+  // TypeDecl?
+  private static boolean ChannelType_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ChannelType_1")) return false;
+    TypeDecl(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */

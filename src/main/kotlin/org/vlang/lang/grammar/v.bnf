@@ -599,7 +599,7 @@ MapType ::= 'map' '[' TypeDecl ']' TypeDecl {
 }
 
 // chan <type>
-ChannelType ::= chan TypeDecl {pin=1}
+ChannelType ::= chan TypeDecl? {pin=1}
 
 ////// TYPES END //////
 
