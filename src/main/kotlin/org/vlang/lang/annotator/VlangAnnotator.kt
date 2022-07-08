@@ -8,6 +8,7 @@ import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
 import com.intellij.psi.util.findParentOfType
+import org.vlang.lang.VlangParserDefinition
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.*
 
@@ -22,6 +23,14 @@ class VlangAnnotator : Annotator {
         }
 
         if (element is VlangReferenceExpression) {
+            if (element.parent is VlangCallExpr) {
+                val name = element.getIdentifier().text
+                if (VlangParserDefinition.typeCastFunctions.contains(name)) {
+                    holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.TYPE_PARAMETER_NAME_ATTRIBUTES)
+                    return
+                }
+            }
+
             val ref = element.reference
             val resolvedElement = ref.multiResolve(false).firstOrNull()?.element ?: return
 
