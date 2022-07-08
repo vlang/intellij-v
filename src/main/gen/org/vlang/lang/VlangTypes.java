@@ -31,6 +31,8 @@ public interface VlangTypes {
   IElementType BLOCK = new VlangCompositeElementType("BLOCK");
   IElementType BREAK_STATEMENT = new VlangCompositeElementType("BREAK_STATEMENT");
   IElementType CALL_EXPR = new VlangCompositeElementType("CALL_EXPR");
+  IElementType CAPTURE = new VlangCompositeElementType("CAPTURE");
+  IElementType CAPTURE_LIST = new VlangCompositeElementType("CAPTURE_LIST");
   IElementType CHANNEL_TYPE = new VlangCompositeElementType("CHANNEL_TYPE");
   IElementType COMPILE_ELSE_STATEMENT = new VlangCompositeElementType("COMPILE_ELSE_STATEMENT");
   IElementType COMPILE_TIME_FOR_STATEMENT = new VlangCompositeElementType("COMPILE_TIME_FOR_STATEMENT");
@@ -331,6 +333,12 @@ public interface VlangTypes {
       }
       else if (type == CALL_EXPR) {
         return new VlangCallExprImpl(node);
+      }
+      else if (type == CAPTURE) {
+        return new VlangCaptureImpl(node);
+      }
+      else if (type == CAPTURE_LIST) {
+        return new VlangCaptureListImpl(node);
       }
       else if (type == CHANNEL_TYPE) {
         return new VlangChannelTypeImpl(node);

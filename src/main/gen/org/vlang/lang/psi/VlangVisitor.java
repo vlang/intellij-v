@@ -98,6 +98,14 @@ public class VlangVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitCapture(@NotNull VlangCapture o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitCaptureList(@NotNull VlangCaptureList o) {
+    visitCompositeElement(o);
+  }
+
   public void visitChannelType(@NotNull VlangChannelType o) {
     visitTypeDecl(o);
   }

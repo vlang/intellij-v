@@ -551,6 +551,64 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // VarDefinition
+  public static boolean Capture(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Capture")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, CAPTURE, "<capture>");
+    r = VarDefinition(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // '[' (Capture | ',' Capture)* ']'
+  public static boolean CaptureList(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CaptureList")) return false;
+    if (!nextTokenIs(b, LBRACK)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LBRACK);
+    r = r && CaptureList_1(b, l + 1);
+    r = r && consumeToken(b, RBRACK);
+    exit_section_(b, m, CAPTURE_LIST, r);
+    return r;
+  }
+
+  // (Capture | ',' Capture)*
+  private static boolean CaptureList_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CaptureList_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!CaptureList_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "CaptureList_1", c)) break;
+    }
+    return true;
+  }
+
+  // Capture | ',' Capture
+  private static boolean CaptureList_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CaptureList_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Capture(b, l + 1);
+    if (!r) r = CaptureList_1_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ',' Capture
+  private static boolean CaptureList_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CaptureList_1_0_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && Capture(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // chan TypeDecl
   public static boolean ChannelType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ChannelType")) return false;
@@ -4733,7 +4791,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // fn Signature Block
+  // fn CaptureList? Signature Block
   public static boolean FunctionLit(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionLit")) return false;
     if (!nextTokenIsSmart(b, FN)) return false;
@@ -4741,10 +4799,18 @@ public class VlangParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, FUNCTION_LIT, null);
     r = consumeTokenSmart(b, FN);
     p = r; // pin = 1
-    r = r && report_error_(b, Signature(b, l + 1));
+    r = r && report_error_(b, FunctionLit_1(b, l + 1));
+    r = p && report_error_(b, Signature(b, l + 1)) && r;
     r = p && Block(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
+  }
+
+  // CaptureList?
+  private static boolean FunctionLit_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FunctionLit_1")) return false;
+    CaptureList(b, l + 1);
+    return true;
   }
 
   // '.' identifier

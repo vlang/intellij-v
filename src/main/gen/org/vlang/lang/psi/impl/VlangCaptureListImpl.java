@@ -10,15 +10,14 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangFunctionLitImpl extends VlangExpressionImpl implements VlangFunctionLit {
+public class VlangCaptureListImpl extends VlangCompositeElementImpl implements VlangCaptureList {
 
-  public VlangFunctionLitImpl(@NotNull ASTNode node) {
+  public VlangCaptureListImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitFunctionLit(this);
+    visitor.visitCaptureList(this);
   }
 
   @Override
@@ -28,27 +27,21 @@ public class VlangFunctionLitImpl extends VlangExpressionImpl implements VlangFu
   }
 
   @Override
-  @Nullable
-  public VlangBlock getBlock() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangBlock.class);
-  }
-
-  @Override
-  @Nullable
-  public VlangCaptureList getCaptureList() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangCaptureList.class);
-  }
-
-  @Override
-  @Nullable
-  public VlangSignature getSignature() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangSignature.class);
+  @NotNull
+  public List<VlangCapture> getCaptureList() {
+    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangCapture.class);
   }
 
   @Override
   @NotNull
-  public PsiElement getFn() {
-    return notNullChild(findChildByType(FN));
+  public PsiElement getLbrack() {
+    return notNullChild(findChildByType(LBRACK));
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getRbrack() {
+    return notNullChild(findChildByType(RBRACK));
   }
 
 }

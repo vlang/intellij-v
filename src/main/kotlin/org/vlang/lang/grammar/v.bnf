@@ -519,7 +519,11 @@ private MaxGroup ::=
 //| CompositeLit
 
 // fn (...) {...}
-FunctionLit ::= fn Signature Block {pin=1 methods=[processDeclarations]}
+FunctionLit ::= fn CaptureList? Signature Block {pin=1 methods=[processDeclarations]}
+// [<var1>, <var2>, ...]
+CaptureList ::= '[' (Capture | ',' Capture)* ']' {pin=3}
+// [mut] <ident>
+Capture ::= VarDefinition {pin=1}
 
 ////// TYPES //////
 

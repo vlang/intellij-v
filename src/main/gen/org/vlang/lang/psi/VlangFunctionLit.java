@@ -11,6 +11,9 @@ public interface VlangFunctionLit extends VlangExpression {
   VlangBlock getBlock();
 
   @Nullable
+  VlangCaptureList getCaptureList();
+
+  @Nullable
   VlangSignature getSignature();
 
   @NotNull
