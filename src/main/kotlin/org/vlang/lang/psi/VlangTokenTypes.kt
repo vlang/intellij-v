@@ -74,6 +74,8 @@ object VlangTokenTypes {
         LOCK,
         RLOCK,
         SHARED,
+        ASM,
+        VOLATILE,
     )
 
     val OPERATORS = TokenSet.create(
