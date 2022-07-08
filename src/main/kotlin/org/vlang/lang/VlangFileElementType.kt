@@ -31,7 +31,7 @@ class VlangFileElementType:
         super.indexStub(stub, sink)
         if (stub !is VlangFileStub) return
 
-        val packageName = stub.getPackageName() ?: return
+        val packageName = stub.getModuleName() ?: return
         if (packageName.isNotEmpty()) {
             sink.occurrence(VlangPackagesIndex.KEY, packageName)
         }
@@ -49,6 +49,6 @@ class VlangFileElementType:
 
     companion object {
         val INSTANCE = VlangFileElementType()
-        const val VERSION = 24
+        const val VERSION = 30
     }
 }

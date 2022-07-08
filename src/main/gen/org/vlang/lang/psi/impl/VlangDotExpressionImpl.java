@@ -29,8 +29,8 @@ public class VlangDotExpressionImpl extends VlangExpressionImpl implements Vlang
 
   @Override
   @NotNull
-  public VlangExpression getExpression() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class));
+  public List<VlangExpression> getExpressionList() {
+    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangExpression.class);
   }
 
   @Override

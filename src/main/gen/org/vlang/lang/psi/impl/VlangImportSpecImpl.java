@@ -44,4 +44,16 @@ public class VlangImportSpecImpl extends VlangSimpleNamedElementImpl implements 
     return VlangPsiImplUtil.getIdentifier(this);
   }
 
+  @Override
+  @NotNull
+  public String getLastPart() {
+    return VlangPsiImplUtil.getLastPart(this);
+  }
+
+  @Override
+  @NotNull
+  public String getName() {
+    return VlangPsiImplUtil.getName(this);
+  }
+
 }

@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface VlangFieldLookup extends VlangCompositeElement {
 
   @NotNull
-  PsiElement getIdentifier();
+  VlangReferenceExpression getReferenceExpression();
 
 }

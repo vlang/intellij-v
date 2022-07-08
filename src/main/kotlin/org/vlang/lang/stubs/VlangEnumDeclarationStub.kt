@@ -3,10 +3,10 @@ package org.vlang.lang.stubs
 import com.intellij.psi.stubs.IStubElementType
 import com.intellij.psi.stubs.StubElement
 import com.intellij.util.io.StringRef
-import org.vlang.lang.psi.VlangFunctionOrMethodDeclaration
+import org.vlang.lang.psi.VlangEnumDeclaration
 
-abstract class VlangFunctionOrMethodDeclarationStub<T : VlangFunctionOrMethodDeclaration> : VlangNamedStub<T> {
-    protected constructor(
+class VlangEnumDeclarationStub : VlangNamedStub<VlangEnumDeclaration> {
+    constructor(
         parent: StubElement<*>?,
         elementType: IStubElementType<*, *>,
         name: StringRef?,
@@ -14,7 +14,7 @@ abstract class VlangFunctionOrMethodDeclarationStub<T : VlangFunctionOrMethodDec
         isGlobal: Boolean,
     ) : super(parent, elementType, name, isPublic, isGlobal)
 
-    protected constructor(
+    constructor(
         parent: StubElement<*>?,
         elementType: IStubElementType<*, *>,
         name: String?,

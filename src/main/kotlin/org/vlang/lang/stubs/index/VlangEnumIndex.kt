@@ -8,34 +8,19 @@ import com.intellij.psi.stubs.StubIndexKey
 import com.intellij.util.Processor
 import com.intellij.util.indexing.IdFilter
 import org.vlang.lang.VlangFileElementType
-import org.vlang.lang.psi.VlangFunctionDeclaration
+import org.vlang.lang.psi.VlangEnumDeclaration
 
-class VlangFunctionIndex : StringStubIndexExtension<VlangFunctionDeclaration>() {
+class VlangEnumIndex : StringStubIndexExtension<VlangEnumDeclaration>() {
     companion object {
-        val KEY = StubIndexKey.createIndexKey<String, VlangFunctionDeclaration>("vlang.function")
+        val KEY = StubIndexKey.createIndexKey<String, VlangEnumDeclaration>("vlang.enum")
 
         fun find(
-            fqn: String,
             name: String,
             project: Project,
             scope: GlobalSearchScope?,
             idFilter: IdFilter?
-        ): Collection<VlangFunctionDeclaration> {
-            val res = StubIndex.getElements(KEY, fqn, project, scope, idFilter, VlangFunctionDeclaration::class.java)
-            if (res.isNotEmpty()) {
-                return res
-            }
-
-            val builtinName = "builtin.$name"
-
-            return StubIndex.getElements(
-                KEY,
-                builtinName,
-                project,
-                scope,
-                idFilter,
-                VlangFunctionDeclaration::class.java
-            )
+        ): Collection<VlangEnumDeclaration> {
+            return StubIndex.getElements(KEY, name, project, scope, idFilter, VlangEnumDeclaration::class.java)
         }
 
         fun process(
@@ -43,17 +28,16 @@ class VlangFunctionIndex : StringStubIndexExtension<VlangFunctionDeclaration>() 
             project: Project,
             scope: GlobalSearchScope?,
             idFilter: IdFilter?,
-            processor: Processor<VlangFunctionDeclaration>
+            processor: Processor<VlangEnumDeclaration>
         ): Boolean {
-
             return StubIndex.getInstance().processElements(
                 KEY, name, project, scope, idFilter,
-                VlangFunctionDeclaration::class.java, processor
+                VlangEnumDeclaration::class.java, processor
             )
         }
 
-        fun getAll(project: Project): List<VlangFunctionDeclaration> {
-            val result = mutableListOf<VlangFunctionDeclaration>()
+        fun getAll(project: Project): List<VlangEnumDeclaration> {
+            val result = mutableListOf<VlangEnumDeclaration>()
             for (key in StubIndex.getInstance().getAllKeys(KEY, project)) {
                 val els = StubIndex.getElements(
                     KEY,
@@ -61,7 +45,7 @@ class VlangFunctionIndex : StringStubIndexExtension<VlangFunctionDeclaration>() 
                     project,
                     GlobalSearchScope.allScope(project),
                     null,
-                    VlangFunctionDeclaration::class.java
+                    VlangEnumDeclaration::class.java
                 )
                 result.addAll(els)
             }
@@ -70,9 +54,7 @@ class VlangFunctionIndex : StringStubIndexExtension<VlangFunctionDeclaration>() 
         }
     }
 
-    override fun getVersion(): Int {
-        return VlangFileElementType.VERSION + 3
-    }
+    override fun getVersion() = VlangFileElementType.VERSION + 3
 
     override fun getKey() = KEY
 }

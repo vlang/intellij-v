@@ -11,6 +11,6 @@ public interface VlangMethodCall extends VlangCompositeElement {
   VlangArgumentList getArgumentList();
 
   @NotNull
-  PsiElement getIdentifier();
+  VlangReferenceExpression getReferenceExpression();
 
 }

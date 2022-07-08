@@ -20,6 +20,9 @@ public interface VlangImportSpec extends VlangNamedElement {
   //matching getAlias(VlangImportSpec, ...)
   //methods are not found in VlangPsiImplUtil
 
+  @NotNull
+  String getLastPart();
+
   //WARNING: getLocalPackageName(...) is skipped
   //matching getLocalPackageName(VlangImportSpec, ...)
   //methods are not found in VlangPsiImplUtil
@@ -40,9 +43,8 @@ public interface VlangImportSpec extends VlangNamedElement {
   //matching getPath(VlangImportSpec, ...)
   //methods are not found in VlangPsiImplUtil
 
-  //WARNING: getName(...) is skipped
-  //matching getName(VlangImportSpec, ...)
-  //methods are not found in VlangPsiImplUtil
+  @NotNull
+  String getName();
 
   //WARNING: isCImport(...) is skipped
   //matching isCImport(VlangImportSpec, ...)

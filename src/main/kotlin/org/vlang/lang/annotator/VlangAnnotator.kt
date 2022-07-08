@@ -15,7 +15,10 @@ class VlangAnnotator : Annotator {
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
         if (element is VlangFunctionDeclaration) {
             val ident = element.getIdentifier()
-            holder.textAttributes(ident, JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES)
+            val attr =
+                if (element.isPublic()) VlangHighlightingData.VLANG_PUBLIC_FUNCTION_NAME
+                else VlangHighlightingData.VLANG_FUNCTION_NAME
+            holder.textAttributes(ident, attr)
         }
 
         if (element is VlangReferenceExpression) {
@@ -33,8 +36,11 @@ class VlangAnnotator : Annotator {
             }
         }
 
-        if (element.elementType == VlangTypes.TYPE_REFERENCE_EXPRESSION) {
-            holder.textAttributes(element, JavaHighlightingColors.TYPE_PARAMETER_NAME_ATTRIBUTES)
+        if (element is VlangTypeDecl) {
+            val ident = element.getIdentifier()
+            if (ident != null) {
+                holder.textAttributes(ident, JavaHighlightingColors.TYPE_PARAMETER_NAME_ATTRIBUTES)
+            }
         }
 
         if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangPlainAttribute) {

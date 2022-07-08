@@ -28,8 +28,8 @@ public class VlangFieldLookupImpl extends VlangCompositeElementImpl implements V
 
   @Override
   @NotNull
-  public PsiElement getIdentifier() {
-    return notNullChild(findChildByType(IDENTIFIER));
+  public VlangReferenceExpression getReferenceExpression() {
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangReferenceExpression.class));
   }
 
 }

@@ -34,8 +34,8 @@ public class VlangMethodCallImpl extends VlangCompositeElementImpl implements Vl
 
   @Override
   @NotNull
-  public PsiElement getIdentifier() {
-    return notNullChild(findChildByType(IDENTIFIER));
+  public VlangReferenceExpression getReferenceExpression() {
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangReferenceExpression.class));
   }
 
 }

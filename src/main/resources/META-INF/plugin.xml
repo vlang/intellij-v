@@ -30,7 +30,9 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangMethodIndex"/>
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangStructIndex"/>
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangUnionIndex"/>
+        <stubIndex implementation="org.vlang.lang.stubs.index.VlangEnumIndex"/>
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangTypeAliasIndex"/>
+        <stubIndex implementation="org.vlang.lang.stubs.index.VlangNamesIndex"/>
         <stubElementTypeHolder class="org.vlang.lang.VlangTypes"/>
 
         <annotator language="vlang" order="first" id="org.vlang.lang.annotator.VlangAnnotator"

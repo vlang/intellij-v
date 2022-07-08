@@ -151,7 +151,7 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitEnumDeclaration(@NotNull VlangEnumDeclaration o) {
-    visitCompositeElement(o);
+    visitNamedElement(o);
   }
 
   public void visitEnumFetch(@NotNull VlangEnumFetch o) {

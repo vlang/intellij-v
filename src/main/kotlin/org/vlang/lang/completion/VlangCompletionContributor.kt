@@ -7,18 +7,15 @@ import com.intellij.icons.AllIcons
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.util.ProcessingContext
 import org.vlang.lang.VlangTypes
-import org.vlang.lang.stubs.index.VlangFunctionIndex
-import org.vlang.lang.stubs.index.VlangStructIndex
-import org.vlang.lang.stubs.index.VlangTypeAliasIndex
-import org.vlang.lang.stubs.index.VlangUnionIndex
+import org.vlang.lang.psi.VlangEnumDeclaration
+import org.vlang.lang.psi.VlangFunctionDeclaration
+import org.vlang.lang.psi.VlangStructDeclaration
+import org.vlang.lang.psi.VlangTypeAliasDeclaration
+import org.vlang.lang.psi.VlangUnionDeclaration
+import org.vlang.lang.stubs.index.*
 
 class VlangCompletionContributor : CompletionContributor() {
     init {
-        extend(
-            CompletionType.BASIC,
-            PlatformPatterns.psiElement(VlangTypes.IDENTIFIER),
-            VlangFunctionsCompletionProvider()
-        )
         extend(
             CompletionType.BASIC,
             PlatformPatterns.psiElement(VlangTypes.IDENTIFIER),
@@ -27,34 +24,48 @@ class VlangCompletionContributor : CompletionContributor() {
         extend(
             CompletionType.BASIC,
             PlatformPatterns.psiElement(VlangTypes.IDENTIFIER),
-            VlangStructsCompletionProvider()
-        )
-        extend(
-            CompletionType.BASIC,
-            PlatformPatterns.psiElement(VlangTypes.IDENTIFIER),
-            VlangUnionsCompletionProvider()
-        )
-        extend(
-            CompletionType.BASIC,
-            PlatformPatterns.psiElement(VlangTypes.IDENTIFIER),
-            VlangTypeAliasesCompletionProvider()
+            VlangNamesCompletionProvider()
         )
     }
 
-    class VlangFunctionsCompletionProvider : CompletionProvider<CompletionParameters>() {
+    class VlangNamesCompletionProvider : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(
             parameters: CompletionParameters,
             context: ProcessingContext,
             resultSet: CompletionResultSet
         ) {
             val file = parameters.originalFile
-            val allFunctions = VlangFunctionIndex.getAll(file.project)
 
-            allFunctions.forEach {
-                val el = LookupElementBuilder.create(it)
-                    .appendTailText(it.getSignature()?.text ?: "()", true)
-                    .withIcon(AllIcons.Nodes.Function)
-                    .withInsertHandler(NyInsertHandler())
+            val allPublicNames = VlangNamesIndex.getAll(file.project)
+
+            allPublicNames.forEach {
+                var el = LookupElementBuilder.create(it)
+
+                when (it) {
+                    is VlangFunctionDeclaration -> {
+                        el = el
+                            .appendTailText(it.getSignature()?.text ?: "()", true)
+                            .withIcon(AllIcons.Nodes.Function)
+                            .withInsertHandler(NyInsertHandler())
+                    }
+                    is VlangStructDeclaration -> {
+                        el = el
+                            .withIcon(AllIcons.Nodes.Class)
+                    }
+                    is VlangUnionDeclaration -> {
+                        el = el
+                            .withIcon(AllIcons.Nodes.AnonymousClass)
+                    }
+                    is VlangEnumDeclaration -> {
+                        el = el
+                            .withIcon(AllIcons.Nodes.Enum)
+                    }
+                    is VlangTypeAliasDeclaration -> {
+                        el = el
+                            .withIcon(AllIcons.Nodes.Alias)
+                    }
+                }
+
                 resultSet.addElement(el)
             }
         }
@@ -65,57 +76,6 @@ class VlangCompletionContributor : CompletionContributor() {
 
                 context.document.insertString(caretOffset, "()")
                 context.editor.caretModel.moveToOffset(caretOffset + 1)
-            }
-        }
-    }
-
-    class VlangStructsCompletionProvider : CompletionProvider<CompletionParameters>() {
-        override fun addCompletions(
-            parameters: CompletionParameters,
-            context: ProcessingContext,
-            resultSet: CompletionResultSet
-        ) {
-            val file = parameters.originalFile
-            val allStructs = VlangStructIndex.getAll(file.project)
-
-            allStructs.forEach {
-                val el = LookupElementBuilder.create(it)
-                    .withIcon(AllIcons.Nodes.Class)
-                resultSet.addElement(el)
-            }
-        }
-    }
-
-    class VlangUnionsCompletionProvider : CompletionProvider<CompletionParameters>() {
-        override fun addCompletions(
-            parameters: CompletionParameters,
-            context: ProcessingContext,
-            resultSet: CompletionResultSet
-        ) {
-            val file = parameters.originalFile
-            val allStructs = VlangUnionIndex.getAll(file.project)
-
-            allStructs.forEach {
-                val el = LookupElementBuilder.create(it)
-                    .withIcon(AllIcons.Nodes.AnonymousClass)
-                resultSet.addElement(el)
-            }
-        }
-    }
-
-    class VlangTypeAliasesCompletionProvider : CompletionProvider<CompletionParameters>() {
-        override fun addCompletions(
-            parameters: CompletionParameters,
-            context: ProcessingContext,
-            resultSet: CompletionResultSet
-        ) {
-            val file = parameters.originalFile
-            val allStructs = VlangTypeAliasIndex.getAll(file.project)
-
-            allStructs.forEach {
-                val el = LookupElementBuilder.create(it)
-                    .withIcon(AllIcons.Nodes.Alias)
-                resultSet.addElement(el)
             }
         }
     }

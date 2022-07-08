@@ -8,6 +8,7 @@ import com.intellij.psi.stubs.StubIndexKey
 import org.vlang.lang.psi.VlangNamedElement
 import org.vlang.lang.stubs.VlangFileStub
 import org.vlang.lang.stubs.VlangNamedStub
+import org.vlang.lang.stubs.index.VlangNamesIndex
 
 abstract class VlangNamedStubElementType<S : VlangNamedStub<T>, T : VlangNamedElement>(debugName: String) :
     VlangStubElementType<S, T>(debugName) {
@@ -19,36 +20,31 @@ abstract class VlangNamedStubElementType<S : VlangNamedStub<T>, T : VlangNamedEl
     }
 
     override fun indexStub(stub: S, sink: IndexSink) {
-        val name = stub.name
-        if (shouldIndex() && StringUtil.isNotEmpty(name)) {
+        val name = stub.name ?: return
+        if (shouldIndex() && name.isNotEmpty()) {
             var packageName: String? = null
             var parent: StubElement<*>? = stub.parentStub
             while (parent != null) {
                 if (parent is VlangFileStub) {
-                    packageName = parent.getPackageName()
+                    packageName = parent.getModuleName()
                     break
                 }
                 parent = parent.parentStub
             }
-            val indexingName = if (StringUtil.isNotEmpty(packageName)) "$packageName.$name" else name
-//            if (stub.isPublic()) {
-//                sink.occurrence<PsiElement, String>(VlangAllPublicNamesIndex.ALL_PUBLIC_NAMES, indexingName)
+            val indexingName = if (packageName != null && packageName.isNotEmpty()) "$packageName.$name" else name
+//            if (stub.isPublic) {
+                sink.occurrence(VlangNamesIndex.KEY, indexingName)
 //            } else {
 //                sink.occurrence<PsiElement, String>(VlangAllPrivateNamesIndex.ALL_PRIVATE_NAMES, indexingName)
 //            }
-            if (name != null) {
-                for (key in getExtraIndexKeys()) {
-                    sink.occurrence(key, name)
-                }
+
+            for (key in getExtraIndexKeys()) {
+                sink.occurrence(key, indexingName)
             }
         }
     }
 
-    protected fun shouldIndex(): Boolean {
-        return true
-    }
+    protected fun shouldIndex() = true
 
-    protected open fun getExtraIndexKeys(): Collection<StubIndexKey<String, out VlangNamedElement>> {
-        return emptyList()
-    }
+    protected open fun getExtraIndexKeys() = emptyList<StubIndexKey<String, out VlangNamedElement>>()
 }

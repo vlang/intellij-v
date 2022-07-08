@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface VlangDotExpression extends VlangExpression {
 
   @NotNull
-  VlangExpression getExpression();
+  List<VlangExpression> getExpressionList();
 
   @Nullable
   VlangFieldLookup getFieldLookup();

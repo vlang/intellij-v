@@ -18,6 +18,18 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> : VlangStubbedElemen
     constructor(stub: T, nodeType: IStubElementType<*, *>) : super(stub, nodeType)
     constructor(node: ASTNode) : super(node)
 
+    override fun isPublic(): Boolean {
+        val stub = stub
+        val isPublic = getSymbolVisibility()?.pub != null
+        return stub?.isPublic ?: isPublic
+    }
+
+    override fun isGlobal(): Boolean {
+        val stub = stub
+        val isGlobal = getSymbolVisibility()?.builtinGlobal != null
+        return stub?.isGlobal ?: isGlobal
+    }
+
     override fun getReferences(): Array<PsiReference> {
         return ReferenceProvidersRegistry.getReferencesFromProviders(this)
     }

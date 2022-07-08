@@ -11,13 +11,15 @@ class VlangStructDeclarationStub : VlangNamedStub<VlangStructDeclaration> {
         parent: StubElement<*>?,
         elementType: IStubElementType<*, *>,
         name: StringRef?,
-        isPublic: Boolean
-    ) : super(parent, elementType, name, isPublic)
+        isPublic: Boolean,
+        isGlobal: Boolean,
+    ) : super(parent, elementType, name, isPublic, isGlobal)
 
     constructor(
         parent: StubElement<*>?,
         elementType: IStubElementType<*, *>,
         name: String?,
-        isPublic: Boolean
-    ) : super(parent, elementType, name, isPublic)
+        isPublic: Boolean,
+        isGlobal: Boolean,
+    ) : super(parent, elementType, name, isPublic, isGlobal)
 }

@@ -12,6 +12,7 @@ import org.vlang.lang.VlangFileType
 import org.vlang.lang.VlangLanguage
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.impl.VlangPsiImplUtil
+import org.vlang.lang.stubs.VlangFileStub
 import org.vlang.lang.stubs.types.VlangFunctionDeclarationStubElementType
 import org.vlang.lang.stubs.types.VlangMethodDeclarationStubElementType
 import org.vlang.lang.ui.PluginIcons
@@ -31,11 +32,58 @@ class VlangFile(viewProvider: FileViewProvider) :
 
     override fun getClasses(): Array<PsiClass> = emptyArray()
 
-    override fun getPackageName() = ""
+    override fun getPackageName() = getModuleName()
 
     override fun setPackageName(packageName: String?) {}
 
     override fun importClass(aClass: PsiClass) = false
+
+    fun getModuleName(): String? {
+        val stub = stub as? VlangFileStub
+        val moduleName = stub?.getModuleName()
+        if (moduleName != null) {
+            return moduleName
+        }
+
+        val moduleNamePsi = findChildByClass(VlangModuleClause::class.java) ?: return null
+        return moduleNamePsi.name
+    }
+
+    private fun getImports(): List<VlangImportSpec> {
+        return findChildByClass(VlangImportList::class.java)?.importDeclarationList?.mapNotNull {
+            it.importSpec
+        } ?: emptyList()
+    }
+
+    fun resolveName(name: String): String? {
+        val imports = getImports()
+        for (import in imports) {
+            if (import.importAlias?.identifier?.text == name) {
+                return import.getIdentifier().text
+            }
+
+            val selectiveImport = import.selectiveImportList?.referenceExpressionList?.any {
+                it.getIdentifier().text == name
+            } ?: false
+
+            if (selectiveImport) {
+                return import.name + "." + name
+            }
+
+            val importName = import.name
+            if (importName == name) {
+                return importName
+            }
+
+            if (import.lastPart == name) {
+                return importName
+            }
+        }
+
+        val module = getModuleName() ?: return name
+
+        return "$module.$name"
+    }
 
     fun getFunctions(): List<VlangFunctionDeclaration> {
         return CachedValuesManager.getCachedValue(this) {

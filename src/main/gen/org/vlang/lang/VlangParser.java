@@ -1426,13 +1426,13 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier
+  // ReferenceExpression
   public static boolean FieldLookup(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FieldLookup")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, IDENTIFIER);
+    r = ReferenceExpression(b, l + 1);
     exit_section_(b, m, FIELD_LOOKUP, r);
     return r;
   }
@@ -2477,13 +2477,13 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier ArgumentList
+  // ReferenceExpression ArgumentList
   public static boolean MethodCall(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MethodCall")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, IDENTIFIER);
+    r = ReferenceExpression(b, l + 1);
     r = r && ArgumentList(b, l + 1);
     exit_section_(b, m, METHOD_CALL, r);
     return r;
@@ -2543,12 +2543,12 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MethodCall | FieldLookup
+  // MethodCall | TypeInitExpr | FieldLookup
   static boolean MethodOrField(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MethodOrField")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
     r = MethodCall(b, l + 1);
+    if (!r) r = TypeInitExpr(b, l + 1);
     if (!r) r = FieldLookup(b, l + 1);
     return r;
   }
@@ -3016,18 +3016,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
     boolean r;
     r = consumeToken(b, BIT_AND);
     if (!r) r = consumeToken(b, COND_AND);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // '.' identifier
-  public static boolean QualifiedTypeReferenceExpression(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "QualifiedTypeReferenceExpression")) return false;
-    if (!nextTokenIs(b, DOT)) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _LEFT_, TYPE_REFERENCE_EXPRESSION, null);
-    r = consumeTokens(b, 0, DOT, IDENTIFIER);
-    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -3885,7 +3873,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // TypeReferenceExpression (QualifiedTypeReferenceExpression)*
+  // TypeReferenceExpression ('.' TypeReferenceExpression)*
   static boolean TypeName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeName")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
@@ -3897,7 +3885,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (QualifiedTypeReferenceExpression)*
+  // ('.' TypeReferenceExpression)*
   private static boolean TypeName_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeName_1")) return false;
     while (true) {
@@ -3908,12 +3896,13 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (QualifiedTypeReferenceExpression)
+  // '.' TypeReferenceExpression
   private static boolean TypeName_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeName_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = QualifiedTypeReferenceExpression(b, l + 1);
+    r = consumeToken(b, DOT);
+    r = r && TypeReferenceExpression(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }

@@ -8,9 +8,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
+import org.vlang.lang.stubs.VlangEnumDeclarationStub;
 import org.vlang.lang.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class VlangEnumDeclarationImpl extends VlangCompositeElementImpl implements VlangEnumDeclaration {
+public class VlangEnumDeclarationImpl extends VlangNamedElementImpl<VlangEnumDeclarationStub> implements VlangEnumDeclaration {
+
+  public VlangEnumDeclarationImpl(@NotNull VlangEnumDeclarationStub stub, @NotNull IStubElementType<?, ?> type) {
+    super(stub, type);
+  }
 
   public VlangEnumDeclarationImpl(@NotNull ASTNode node) {
     super(node);
@@ -66,6 +72,12 @@ public class VlangEnumDeclarationImpl extends VlangCompositeElementImpl implemen
   @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);
+  }
+
+  @Override
+  @NotNull
+  public String getName() {
+    return VlangPsiImplUtil.getName(this);
   }
 
 }

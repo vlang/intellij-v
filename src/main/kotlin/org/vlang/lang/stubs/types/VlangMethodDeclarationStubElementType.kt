@@ -20,12 +20,13 @@ class VlangMethodDeclarationStubElementType(name: String) :
     }
 
     override fun createStub(psi: VlangMethodDeclaration, parentStub: StubElement<*>?): VlangMethodDeclarationStub {
-        return VlangMethodDeclarationStub(parentStub, this, psi.name, true, calcTypeText(psi))
+        return VlangMethodDeclarationStub(parentStub, this, psi.name, psi.isPublic(), psi.isGlobal(), calcTypeText(psi))
     }
 
     override fun serialize(stub: VlangMethodDeclarationStub, dataStream: StubOutputStream) {
-        dataStream.writeName(stub.getName())
+        dataStream.writeName(stub.name)
         dataStream.writeBoolean(stub.isPublic)
+        dataStream.writeBoolean(stub.isGlobal)
         dataStream.writeName("")
     }
 
@@ -34,6 +35,7 @@ class VlangMethodDeclarationStubElementType(name: String) :
             parentStub,
             this,
             dataStream.readName(),
+            dataStream.readBoolean(),
             dataStream.readBoolean(),
             dataStream.readName()
         )
@@ -45,7 +47,7 @@ class VlangMethodDeclarationStubElementType(name: String) :
         if (!StringUtil.isEmpty(typeName)) {
             val parent: StubElement<*> = stub.parentStub
             if (parent is VlangFileStub) {
-                val packageName = parent.getPackageName()
+                val packageName = parent.getModuleName()
                 if (!StringUtil.isEmpty(typeName)) {
                     sink.occurrence(VlangMethodIndex.KEY, "$packageName.$typeName")
                 }

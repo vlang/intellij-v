@@ -19,15 +19,22 @@ class VlangTypeAliasDeclarationStubElementType(name: String) :
     override fun createPsi(stub: VlangTypeAliasDeclarationStub) = VlangTypeAliasDeclarationImpl(stub, this)
 
     override fun createStub(psi: VlangTypeAliasDeclaration, parentStub: StubElement<*>) =
-        VlangTypeAliasDeclarationStub(parentStub, this, psi.name, true)
+        VlangTypeAliasDeclarationStub(parentStub, this, psi.name, psi.isPublic(), psi.isGlobal())
 
     override fun serialize(stub: VlangTypeAliasDeclarationStub, dataStream: StubOutputStream) {
         dataStream.writeName(stub.name)
         dataStream.writeBoolean(stub.isPublic)
+        dataStream.writeBoolean(stub.isGlobal)
     }
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>) =
-        VlangTypeAliasDeclarationStub(parentStub, this, dataStream.readName(), dataStream.readBoolean())
+        VlangTypeAliasDeclarationStub(
+            parentStub,
+            this,
+            dataStream.readName(),
+            dataStream.readBoolean(),
+            dataStream.readBoolean()
+        )
 
     override fun getExtraIndexKeys() = EXTRA_KEYS
 

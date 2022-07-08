@@ -20,16 +20,23 @@ class VlangFunctionDeclarationStubElementType(name: String) :
     }
 
     override fun createStub(psi: VlangFunctionDeclaration, parentStub: StubElement<*>?): VlangFunctionDeclarationStub {
-        return VlangFunctionDeclarationStub(parentStub, this, psi.name ?: "unknown", true)
+        return VlangFunctionDeclarationStub(parentStub, this, psi.name, psi.isPublic(), psi.isGlobal())
     }
 
     override fun serialize(stub: VlangFunctionDeclarationStub, dataStream: StubOutputStream) {
         dataStream.writeName(stub.name)
         dataStream.writeBoolean(stub.isPublic)
+        dataStream.writeBoolean(stub.isGlobal)
     }
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): VlangFunctionDeclarationStub {
-        return VlangFunctionDeclarationStub(parentStub, this, dataStream.readName(), dataStream.readBoolean())
+        return VlangFunctionDeclarationStub(
+            parentStub,
+            this,
+            dataStream.readName(),
+            dataStream.readBoolean(),
+            dataStream.readBoolean()
+        )
     }
 
     override fun getExtraIndexKeys() = EXTRA_KEYS

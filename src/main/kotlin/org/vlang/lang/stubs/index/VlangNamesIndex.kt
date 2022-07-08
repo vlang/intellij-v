@@ -8,11 +8,11 @@ import com.intellij.psi.stubs.StubIndexKey
 import com.intellij.util.Processor
 import com.intellij.util.indexing.IdFilter
 import org.vlang.lang.VlangFileElementType
-import org.vlang.lang.psi.VlangFunctionDeclaration
+import org.vlang.lang.psi.VlangNamedElement
 
-class VlangFunctionIndex : StringStubIndexExtension<VlangFunctionDeclaration>() {
+class VlangNamesIndex : StringStubIndexExtension<VlangNamedElement>() {
     companion object {
-        val KEY = StubIndexKey.createIndexKey<String, VlangFunctionDeclaration>("vlang.function")
+        val KEY = StubIndexKey.createIndexKey<String, VlangNamedElement>("vlang.named.element")
 
         fun find(
             fqn: String,
@@ -20,8 +20,8 @@ class VlangFunctionIndex : StringStubIndexExtension<VlangFunctionDeclaration>() 
             project: Project,
             scope: GlobalSearchScope?,
             idFilter: IdFilter?
-        ): Collection<VlangFunctionDeclaration> {
-            val res = StubIndex.getElements(KEY, fqn, project, scope, idFilter, VlangFunctionDeclaration::class.java)
+        ): Collection<VlangNamedElement> {
+            val res = StubIndex.getElements(KEY, fqn, project, scope, idFilter, VlangNamedElement::class.java)
             if (res.isNotEmpty()) {
                 return res
             }
@@ -34,7 +34,7 @@ class VlangFunctionIndex : StringStubIndexExtension<VlangFunctionDeclaration>() 
                 project,
                 scope,
                 idFilter,
-                VlangFunctionDeclaration::class.java
+                VlangNamedElement::class.java
             )
         }
 
@@ -43,17 +43,16 @@ class VlangFunctionIndex : StringStubIndexExtension<VlangFunctionDeclaration>() 
             project: Project,
             scope: GlobalSearchScope?,
             idFilter: IdFilter?,
-            processor: Processor<VlangFunctionDeclaration>
+            processor: Processor<VlangNamedElement>
         ): Boolean {
-
             return StubIndex.getInstance().processElements(
                 KEY, name, project, scope, idFilter,
-                VlangFunctionDeclaration::class.java, processor
+                VlangNamedElement::class.java, processor
             )
         }
 
-        fun getAll(project: Project): List<VlangFunctionDeclaration> {
-            val result = mutableListOf<VlangFunctionDeclaration>()
+        fun getAll(project: Project): List<VlangNamedElement> {
+            val result = mutableListOf<VlangNamedElement>()
             for (key in StubIndex.getInstance().getAllKeys(KEY, project)) {
                 val els = StubIndex.getElements(
                     KEY,
@@ -61,7 +60,7 @@ class VlangFunctionIndex : StringStubIndexExtension<VlangFunctionDeclaration>() 
                     project,
                     GlobalSearchScope.allScope(project),
                     null,
-                    VlangFunctionDeclaration::class.java
+                    VlangNamedElement::class.java
                 )
                 result.addAll(els)
             }
@@ -70,9 +69,7 @@ class VlangFunctionIndex : StringStubIndexExtension<VlangFunctionDeclaration>() 
         }
     }
 
-    override fun getVersion(): Int {
-        return VlangFileElementType.VERSION + 3
-    }
+    override fun getVersion() = VlangFileElementType.VERSION + 3
 
     override fun getKey() = KEY
 }

@@ -17,15 +17,22 @@ class VlangUnionDeclarationStubElementType(name: String) :
     override fun createPsi(stub: VlangUnionDeclarationStub) = VlangUnionDeclarationImpl(stub, this)
 
     override fun createStub(psi: VlangUnionDeclaration, parentStub: StubElement<*>?) =
-        VlangUnionDeclarationStub(parentStub, this, psi.name, true)
+        VlangUnionDeclarationStub(parentStub, this, psi.name, psi.isPublic(), psi.isGlobal())
 
     override fun serialize(stub: VlangUnionDeclarationStub, dataStream: StubOutputStream) {
         dataStream.writeName(stub.name)
         dataStream.writeBoolean(stub.isPublic)
+        dataStream.writeBoolean(stub.isGlobal)
     }
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): VlangUnionDeclarationStub {
-        return VlangUnionDeclarationStub(parentStub, this, dataStream.readName(), dataStream.readBoolean())
+        return VlangUnionDeclarationStub(
+            parentStub,
+            this,
+            dataStream.readName(),
+            dataStream.readBoolean(),
+            dataStream.readBoolean()
+        )
     }
 
     override fun getExtraIndexKeys() = EXTRA_KEYS

@@ -78,7 +78,7 @@
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional|OrBlock)Expr")=BinaryExpr
   extends(".*(Expr|Literal|Lit|OperandName)|TypeInitExpr|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ErrorPropagationExpression|ConstexprIdentifierExpression")=Expression
 
-  implements("(Type|Import)Spec|(Var|Const|Param|Field|Label)Definition|(Struct|TypeAlias|Union)Declaration|Receiver")="org.vlang.lang.psi.VlangNamedElement"
+  implements("(Type|Import)Spec|(Var|Const|Param|Field|Label)Definition|(Struct|TypeAlias|Union|Enum)Declaration|Receiver")="org.vlang.lang.psi.VlangNamedElement"
 //  implements("FunctionLit")="org.vlang.lang.psi.GoSignatureOwner"
 //  implements("MethodSpec")="org.vlang.lang.psi.GoNamedSignatureOwner"
   implements("(Function|Method)Declaration")="org.vlang.lang.psi.VlangFunctionOrMethodDeclaration"
@@ -90,9 +90,9 @@
 
   extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
   extends("ModuleClause")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
-  extends("(Struct|TypeAlias|Union)Declaration")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
+  extends("(Struct|TypeAlias|Union|Enum)Declaration")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
 
-  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union)Declaration")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
+  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum)Declaration")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
 
   extends(".*Statement")=Statement
   extends(".*Type|TypeList")=TypeDecl
@@ -137,7 +137,7 @@ ImportDeclaration ::= import ImportSpec {
 // <part1> as <alias>
 ImportSpec ::= ImportString ('.' ImportString)* (SelectiveImportList | ImportAlias)? {
 //  stubClass="org.vlang.lang.stubs.GoImportSpecStub"
-  methods=[getIdentifier getAlias getLocalPackageName shouldGoDeeper isForSideEffects isDot getPath getName isCImport]
+  methods=[getIdentifier getAlias getLastPart getLocalPackageName shouldGoDeeper isForSideEffects isDot getPath getName isCImport]
 }
 // just identifier
 private ImportString ::= identifier {methods=[getReferences resolve getPath getPathTextRange]}
@@ -368,7 +368,11 @@ AnonymousInterfaceDefinition ::= TypeDecl {
 
 
 // enum
-EnumDeclaration ::= Attributes? SymbolVisibility? enum identifier '{' EnumFields '}' {pin=3}
+EnumDeclaration ::= Attributes? SymbolVisibility? enum identifier '{' EnumFields '}' {
+  pin=3
+  stubClass="org.vlang.lang.stubs.VlangEnumDeclarationStub"
+  methods=[getName]
+}
 EnumFields ::= EnumFieldDeclaration (semi EnumFieldDeclaration)* semi?
 EnumFieldDeclaration ::= identifier ('=' Expression)? {pin=1}
 
@@ -521,9 +525,8 @@ TypeDecl ::=
 //  }
 //ParType ::= '(' Type ')' {methods=[getActualType]}
 
-private TypeName ::= TypeReferenceExpression (QualifiedTypeReferenceExpression)*
+private TypeName ::= TypeReferenceExpression ('.' TypeReferenceExpression)*
 TypeReferenceExpression ::= identifier { methods=[getReference getQualifier resolve resolveType] }
-left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
 
 private TypeLit ::=
     ArrayOrSliceType
@@ -613,9 +616,9 @@ DotExpression ::= Expression '.' MethodOrField {pin=1}
 
 private MethodOrField ::= MethodCall | FieldLookup
 // just <ident>
-FieldLookup ::= identifier
+FieldLookup ::= ReferenceExpression
 // <ident>(...)
-MethodCall ::= identifier ArgumentList {pin=2}
+MethodCall ::= ReferenceExpression ArgumentList {pin=2}
 
 // just <ident> with ref
 ReferenceExpression ::= identifier { methods=[getReference getQualifier resolve getReadWriteAccess] extends=Expression}

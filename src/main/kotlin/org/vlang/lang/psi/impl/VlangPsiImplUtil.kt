@@ -30,8 +30,23 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getName(o: VlangEnumDeclaration): String {
+        return o.getIdentifier()?.text ?: ""
+    }
+
+    @JvmStatic
     fun getName(o: VlangTypeAliasDeclaration): String {
         return o.getIdentifier()?.text ?: ""
+    }
+
+    @JvmStatic
+    fun getName(o: VlangImportSpec): String {
+        return o.getIdentifier().text ?: ""
+    }
+
+    @JvmStatic
+    fun getLastPart(o: VlangImportSpec): String {
+        return o.name.split(".").last()
     }
 
     @JvmStatic
@@ -41,7 +56,7 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getIdentifier(o: VlangTypeDecl): PsiElement? {
-        return null
+        return o.typeReferenceExpressionList.lastOrNull()?.getIdentifier()
     }
 
     @JvmStatic
@@ -62,7 +77,7 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getName(o: VlangModuleClause): String {
-        return o.firstChild.text
+        return o.identifier?.text ?: "<unknown>"
     }
 
     fun goTraverser(): SyntaxTraverser<PsiElement?> {

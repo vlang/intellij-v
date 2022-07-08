@@ -17,12 +17,12 @@ class VlangFileStub(file: VlangFile?, private val myBuildFlags: StringRef) : Psi
         return myBuildFlags.string
     }
 
-    fun getPackageClauseStub(): StubElement<VlangModuleClause>? {
+    private fun getModuleClauseStub(): StubElement<VlangModuleClause>? {
         return findChildStubByType(VlangModuleClauseStubElementType.INSTANCE)
     }
 
-    fun getPackageName(): String? {
-        val stub = getPackageClauseStub()
+    fun getModuleName(): String? {
+        val stub = getModuleClauseStub()
         return if (stub is VlangModuleClauseStub) stub.getName() else null
     }
 }
