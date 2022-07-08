@@ -55,7 +55,6 @@ STR_DOUBLE =   "\""
 CHAR_QUOTE =   "`"
 STR_MODIFIER = "r" | "c"
 
-CHAR = {CHAR_QUOTE} [^`]{1} {CHAR_QUOTE}
 ESCAPES = [abfnrtve] // TODO: need "e"?
 
 STR_ANGLE_OPEN =   "<"
@@ -81,18 +80,20 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 {DOC_COMMENT}                             { return DOC_COMMENT; }
 {MULTILINE_COMMENT}                       { return MULTILINE_COMMENT; }
 
-//"'\\'"                                    { yybegin(MAYBE_SEMICOLON); return BAD_CHARACTER; }
-//"'" [^\\] "'"?                            { yybegin(MAYBE_SEMICOLON); return CHAR; }
-//"'" \n "'"?                               { yybegin(MAYBE_SEMICOLON); return CHAR; }
-//"'\\" [abfnrtv\\\'] "'"?                  { yybegin(MAYBE_SEMICOLON); return CHAR; }
-//"'\\"  {OCT_DIGIT} {3} "'"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
-//"'\\x" {HEX_DIGIT} {2} "'"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
-//"'\\u" {HEX_DIGIT} {4} "'"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
-//"'\\U" {HEX_DIGIT} {8} "'"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
+"`\\`"                                    { yybegin(MAYBE_SEMICOLON); return BAD_CHARACTER; }
+"`" [^\\] "`"?                            { yybegin(MAYBE_SEMICOLON); return CHAR; }
+"`" \n "`"?                               { yybegin(MAYBE_SEMICOLON); return CHAR; }
+"`\\" [abfnrtv\\\`] "`"?                  { yybegin(MAYBE_SEMICOLON); return CHAR; }
+
+// \141`, `\342\230\205`
+"`" ("\\" {OCT_DIGIT} {3}) {1,3} "`"?     { yybegin(MAYBE_SEMICOLON); return CHAR; }
+"`" ("\\x" {HEX_DIGIT} {2}) {1,3} "`"?    { yybegin(MAYBE_SEMICOLON); return CHAR; }
+"`\\u" {HEX_DIGIT} {4} "`"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
+"`\\U" {HEX_DIGIT} {8} "`"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
 
 {STR_MODIFIER}? "\"" [^\"]* "\""?         { yybegin(MAYBE_SEMICOLON); return RAW_STRING; }
 {STR_MODIFIER}? "'" [^']* "'"?            { yybegin(MAYBE_SEMICOLON); return RAW_STRING; }
-{CHAR}                                    { yybegin(MAYBE_SEMICOLON); return CHAR; }
+
 "..."                                     { return TRIPLE_DOT; }
 ".."                                      { return RANGE; }
 "."                                       { return DOT; }
