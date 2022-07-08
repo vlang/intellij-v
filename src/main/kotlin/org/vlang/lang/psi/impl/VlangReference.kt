@@ -47,9 +47,9 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
 
         val parentDotCall = el.parentOfType<VlangDotExpression>()
         if (parentDotCall != null) {
-            val exprText = parentDotCall.expressionList.first().text
+            val exprText = parentDotCall.expression.text
             val importName = containingFile.resolveName(exprText)
-            if (parentDotCall.expressionList.first() == el) {
+            if (parentDotCall.expression == el) {
                 return importName
             }
 
