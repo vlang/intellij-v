@@ -34,16 +34,14 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
             val fqnWithoutName = parentTypeDecl.typeReferenceExpressionList.subList(0, list.size - 1)
                 .joinToString(".") { it.text }
             val importName = containingFile.resolveName(fqnWithoutName)
-            if (parentTypeDecl.typeReferenceExpressionList.first() == el) {
+            if (parentTypeDecl.typeReferenceExpressionList.first() == el && importName != "") {
                 return importName
             }
 
             val typeName = parentTypeDecl.getIdentifier()?.text
 
-            return if (importName != null && typeName != null) {
-                "$importName.$typeName"
-            } else {
-                null
+            if (importName != null && importName != "" && typeName != null) {
+                return "$importName.$typeName"
             }
         }
 
