@@ -11,6 +11,7 @@ import org.vlang.lang.psi.VlangCallExpr
 import org.vlang.lang.psi.VlangDotExpression
 import org.vlang.lang.psi.VlangFile
 import org.vlang.lang.psi.VlangReferenceExpressionBase
+import org.vlang.lang.psi.VlangTypeDecl
 import org.vlang.lang.stubs.index.*
 
 class VlangReference(private val el: VlangReferenceExpressionBase) :
@@ -26,6 +27,25 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
     private fun getFqn(): String? {
         val name = identifier?.text ?: return null
         val containingFile = el.containingFile as VlangFile
+
+        val parentTypeDecl = el.parentOfType<VlangTypeDecl>()
+        if (parentTypeDecl != null && parentTypeDecl.typeReferenceExpressionList.isNotEmpty()) {
+            val list = parentTypeDecl.typeReferenceExpressionList
+            val fqnWithoutName = parentTypeDecl.typeReferenceExpressionList.subList(0, list.size - 1)
+                .joinToString(".") { it.text }
+            val importName = containingFile.resolveName(fqnWithoutName)
+            if (parentTypeDecl.typeReferenceExpressionList.first() == el) {
+                return importName
+            }
+
+            val typeName = parentTypeDecl.getIdentifier()?.text
+
+            return if (importName != null && typeName != null) {
+                "$importName.$typeName"
+            } else {
+                null
+            }
+        }
 
         val parentDotCall = el.parentOfType<VlangDotExpression>()
         if (parentDotCall != null) {
