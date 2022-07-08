@@ -2,9 +2,9 @@ package org.vlang.lang;
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
-import org.vlang.lang.VlangTypes;
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
-import static org.vlang.lang.VlangParserDefinition.*;
+import static org.vlang.lang.psi.VlangTokenTypes.*;
+import static org.vlang.lang.psi.VlangDocTokenTypes.*;
 
 %%
 
@@ -27,6 +27,7 @@ WS = [ \t\f]
 
 LINE_COMMENT = "//" [^\r\n]*
 LANGUAGE_INJECTION_COMMENT = [^\r\n]*
+DOC_COMMENT = "/**" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?
 MULTILINE_COMMENT = "/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?
 
 LETTER = [:letter:] | "_"
@@ -71,6 +72,7 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 {NL}+                                     { return NLS; }
 
 {LINE_COMMENT}                            { return LINE_COMMENT; }
+{DOC_COMMENT}                             { return DOC_COMMENT; }
 {MULTILINE_COMMENT}                       { return MULTILINE_COMMENT; }
 
 //"'\\'"                                    { yybegin(MAYBE_SEMICOLON); return BAD_CHARACTER; }

@@ -80,6 +80,10 @@ class VlangAnnotator : Annotator {
         if (element.elementType == VlangTypes.IDENTIFIER && element.findParentOfType<VlangFieldInitializationKey>() != null) {
             holder.textAttributes(element, JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES)
         }
+
+        if (element.elementType == VlangDocTokenTypes.DOC_COMMENT_TAG) {
+            holder.textAttributes(element, JavaHighlightingColors.DOC_COMMENT_TAG)
+        }
     }
 
     private fun AnnotationHolder.textAttributes(element: PsiElement, textAttributes: TextAttributesKey) {
