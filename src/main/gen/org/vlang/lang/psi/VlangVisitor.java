@@ -286,8 +286,8 @@ public class VlangVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
-  public void visitIncDecStatement(@NotNull VlangIncDecStatement o) {
-    visitStatement(o);
+  public void visitIncDecExpression(@NotNull VlangIncDecExpression o) {
+    visitExpression(o);
   }
 
   public void visitIndexOrSliceExpr(@NotNull VlangIndexOrSliceExpr o) {

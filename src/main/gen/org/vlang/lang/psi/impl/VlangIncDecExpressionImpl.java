@@ -10,15 +10,15 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangIncDecStatementImpl extends VlangStatementImpl implements VlangIncDecStatement {
+public class VlangIncDecExpressionImpl extends VlangExpressionImpl implements VlangIncDecExpression {
 
-  public VlangIncDecStatementImpl(@NotNull ASTNode node) {
+  public VlangIncDecExpressionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitIncDecStatement(this);
+    visitor.visitIncDecExpression(this);
   }
 
   @Override

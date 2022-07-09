@@ -44,19 +44,19 @@ public class VlangParser implements PsiParser, LightPsiParser {
       COMPILE_ELSE_STATEMENT, COMPILE_TIME_FOR_STATEMENT, COMPILE_TIME_IF_STATEMENT, CONTINUE_STATEMENT,
       C_FLAG_STATEMENT, C_INCLUDE_STATEMENT, DEFER_STATEMENT, ELSE_STATEMENT,
       FOR_STATEMENT, GOTO_STATEMENT, GO_STATEMENT, IF_STATEMENT,
-      INC_DEC_STATEMENT, LABELED_STATEMENT, LANGUAGE_INJECTION_STATEMENT, LOCK_STATEMENT,
-      RETURN_STATEMENT, SEND_STATEMENT, SIMPLE_STATEMENT, SQL_STATEMENT,
-      STATEMENT, UNSAFE_STATEMENT),
+      LABELED_STATEMENT, LANGUAGE_INJECTION_STATEMENT, LOCK_STATEMENT, RETURN_STATEMENT,
+      SEND_STATEMENT, SIMPLE_STATEMENT, SQL_STATEMENT, STATEMENT,
+      UNSAFE_STATEMENT),
     create_token_set_(ADD_EXPR, AND_EXPR, ARRAY_CREATION, AS_EXPRESSION,
       CALL_EXPR, COMPILE_TIME_IF_EXPRESSION, CONDITIONAL_EXPR, CONSTEXPR_IDENTIFIER_EXPRESSION,
       DOT_EXPRESSION, ENUM_FETCH, ERROR_PROPAGATION_EXPRESSION, EXPRESSION,
-      FUNCTION_LIT, GO_EXPRESSION, IF_EXPRESSION, INDEX_OR_SLICE_EXPR,
-      IN_EXPRESSION, IS_EXPRESSION, LITERAL, LOCK_EXPRESSION,
-      MAP_INIT_EXPR, MATCH_EXPRESSION, MUL_EXPR, MUT_EXPRESSION,
-      NOT_IN_EXPRESSION, NOT_IS_EXPRESSION, OR_BLOCK_EXPR, OR_EXPR,
-      PARENTHESES_EXPR, RANGE_EXPR, REFERENCE_EXPRESSION, SEND_EXPR,
-      SHARED_EXPRESSION, SQL_EXPRESSION, STRING_LITERAL, TYPE_INIT_EXPR,
-      UNARY_EXPR, UNPACKING_EXPRESSION, UNSAFE_EXPRESSION),
+      FUNCTION_LIT, GO_EXPRESSION, IF_EXPRESSION, INC_DEC_EXPRESSION,
+      INDEX_OR_SLICE_EXPR, IN_EXPRESSION, IS_EXPRESSION, LITERAL,
+      LOCK_EXPRESSION, MAP_INIT_EXPR, MATCH_EXPRESSION, MUL_EXPR,
+      MUT_EXPRESSION, NOT_IN_EXPRESSION, NOT_IS_EXPRESSION, OR_BLOCK_EXPR,
+      OR_EXPR, PARENTHESES_EXPR, RANGE_EXPR, REFERENCE_EXPRESSION,
+      SEND_EXPR, SHARED_EXPRESSION, SQL_EXPRESSION, STRING_LITERAL,
+      TYPE_INIT_EXPR, UNARY_EXPR, UNPACKING_EXPRESSION, UNSAFE_EXPRESSION),
   };
 
   /* ********************************************************** */
@@ -2069,27 +2069,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Expression ('++' | '--')
-  public static boolean IncDecStatement(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "IncDecStatement")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, INC_DEC_STATEMENT, "<inc dec statement>");
-    r = Expression(b, l + 1, -1);
-    r = r && IncDecStatement_1(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // '++' | '--'
-  private static boolean IncDecStatement_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "IncDecStatement_1")) return false;
-    boolean r;
-    r = consumeToken(b, PLUS_PLUS);
-    if (!r) r = consumeToken(b, MINUS_MINUS);
-    return r;
-  }
-
-  /* ********************************************************** */
   // Expression SliceExprBodyInner?
   static boolean IndexExprBody(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IndexExprBody")) return false;
@@ -3486,45 +3465,44 @@ public class VlangParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // VarDeclaration
-  //   | IncDecStatement
+  // //  | IncDecStatement
   //   | (LeftHandExprList AssignmentStatement? | SendStatement)
   public static boolean SimpleStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SimpleStatement")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _COLLAPSE_, SIMPLE_STATEMENT, "<simple statement>");
     r = VarDeclaration(b, l + 1);
-    if (!r) r = IncDecStatement(b, l + 1);
-    if (!r) r = SimpleStatement_2(b, l + 1);
+    if (!r) r = SimpleStatement_1(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   // LeftHandExprList AssignmentStatement? | SendStatement
-  private static boolean SimpleStatement_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SimpleStatement_2")) return false;
+  private static boolean SimpleStatement_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SimpleStatement_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = SimpleStatement_2_0(b, l + 1);
+    r = SimpleStatement_1_0(b, l + 1);
     if (!r) r = SendStatement(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // LeftHandExprList AssignmentStatement?
-  private static boolean SimpleStatement_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SimpleStatement_2_0")) return false;
+  private static boolean SimpleStatement_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SimpleStatement_1_0")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
     r = LeftHandExprList(b, l + 1);
     p = r; // pin = LeftHandExprList
-    r = r && SimpleStatement_2_0_1(b, l + 1);
+    r = r && SimpleStatement_1_0_1(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
   // AssignmentStatement?
-  private static boolean SimpleStatement_2_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SimpleStatement_2_0_1")) return false;
+  private static boolean SimpleStatement_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SimpleStatement_1_0_1")) return false;
     AssignmentStatement(b, l + 1);
     return true;
   }
@@ -4443,7 +4421,8 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // 28: ATOM(MapInitExpr)
   // 29: PREFIX(GoExpression)
   // 30: ATOM(LockExpression)
-  // 31: ATOM(ParenthesesExpr)
+  // 31: POSTFIX(IncDecExpression)
+  // 32: ATOM(ParenthesesExpr)
   public static boolean Expression(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "Expression")) return false;
     addVariant(b, "<expression>");
@@ -4546,6 +4525,10 @@ public class VlangParser implements PsiParser, LightPsiParser {
       else if (g < 25 && consumeTokenSmart(b, QUESTION)) {
         r = true;
         exit_section_(b, l, m, ERROR_PROPAGATION_EXPRESSION, r, true, null);
+      }
+      else if (g < 31 && IncDecExpression_0(b, l + 1)) {
+        r = true;
+        exit_section_(b, l, m, INC_DEC_EXPRESSION, r, true, null);
       }
       else {
         exit_section_(b, l, m, null, false, false, null);
@@ -5028,6 +5011,15 @@ public class VlangParser implements PsiParser, LightPsiParser {
     boolean r;
     r = consumeTokenSmart(b, LOCK);
     if (!r) r = consumeTokenSmart(b, RLOCK);
+    return r;
+  }
+
+  // '++' | '--'
+  private static boolean IncDecExpression_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IncDecExpression_0")) return false;
+    boolean r;
+    r = consumeTokenSmart(b, PLUS_PLUS);
+    if (!r) r = consumeTokenSmart(b, MINUS_MINUS);
     return r;
   }
 

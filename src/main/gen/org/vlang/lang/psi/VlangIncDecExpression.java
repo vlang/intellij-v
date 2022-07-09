@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangIncDecStatement extends VlangStatement {
+public interface VlangIncDecExpression extends VlangExpression {
 
   @NotNull
   VlangExpression getExpression();

@@ -77,7 +77,7 @@
   ]
 
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional|OrBlock)Expr")=BinaryExpr
-  extends(".*(Expr|Literal|Lit|OperandName)|TypeInitExpr|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|SharedExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ErrorPropagationExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression|LockExpression")=Expression
+  extends(".*(Expr|Literal|Lit|OperandName)|TypeInitExpr|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|SharedExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ErrorPropagationExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression|LockExpression|IncDecExpression")=Expression
 
   implements("(Type|Import)Spec|(Var|Const|Param|Field|Label)Definition|(Struct|TypeAlias|Union|Enum)Declaration|Receiver")="org.vlang.lang.psi.VlangNamedElement"
 //  implements("FunctionLit")="org.vlang.lang.psi.GoSignatureOwner"
@@ -230,14 +230,10 @@ PlainAttribute ::= (identifier | unsafe | sql | int | string | StringLiteral) ('
 // simple statements
 SimpleStatement ::=
   VarDeclaration
-  | IncDecStatement
   | (LeftHandExprList AssignmentStatement? | SendStatement) {pin(".*")=LeftHandExprList}
 
 // <vars> := <exprs>
 VarDeclaration ::= VarDefinitionList ':=' (ExpressionList) {pin=2}
-
-// <expr>++/--
-IncDecStatement ::= Expression ('++' | '--') {pin=2}
 
 // <label>: <stmt>
 LabeledStatement ::= Label Statement? {pin=2}
@@ -508,6 +504,7 @@ Expression ::=
   | MapInitExpr
   | GoExpression
   | LockExpression
+  | IncDecExpression
   | ParenthesesExpr {methods=[getGoType] /*implements="org.vlang.lang.psi.GoTypeOwner"*/}
 // end of expression rule
 
@@ -680,6 +677,9 @@ fake BinaryExpr ::= Expression+ {
 // end of math and logical expressions
 
 ParenthesesExpr ::= '(' /*<<enterMode "PAR">>*/ Expression /*<<exitModeSafe "PAR">>*/')' {pin=1}
+
+// <expr>++/--
+IncDecExpression ::= Expression ('++' | '--') {pin=1}
 
 // @<ident>
 ConstexprIdentifierExpression ::= '@' identifier {pin=2}

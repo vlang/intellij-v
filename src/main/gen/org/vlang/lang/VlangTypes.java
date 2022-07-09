@@ -79,7 +79,7 @@ public interface VlangTypes {
   IElementType IMPORT_DECLARATION = new VlangCompositeElementType("IMPORT_DECLARATION");
   IElementType IMPORT_LIST = new VlangCompositeElementType("IMPORT_LIST");
   IElementType IMPORT_SPEC = new VlangCompositeElementType("IMPORT_SPEC");
-  IElementType INC_DEC_STATEMENT = new VlangCompositeElementType("INC_DEC_STATEMENT");
+  IElementType INC_DEC_EXPRESSION = new VlangCompositeElementType("INC_DEC_EXPRESSION");
   IElementType INDEX_OR_SLICE_EXPR = new VlangCompositeElementType("INDEX_OR_SLICE_EXPR");
   IElementType INTERFACE_DECLARATION = new VlangCompositeElementType("INTERFACE_DECLARATION");
   IElementType INTERFACE_FIELD_DECLARATION = new VlangCompositeElementType("INTERFACE_FIELD_DECLARATION");
@@ -482,8 +482,8 @@ public interface VlangTypes {
       else if (type == IMPORT_SPEC) {
         return new VlangImportSpecImpl(node);
       }
-      else if (type == INC_DEC_STATEMENT) {
-        return new VlangIncDecStatementImpl(node);
+      else if (type == INC_DEC_EXPRESSION) {
+        return new VlangIncDecExpressionImpl(node);
       }
       else if (type == INDEX_OR_SLICE_EXPR) {
         return new VlangIndexOrSliceExprImpl(node);
