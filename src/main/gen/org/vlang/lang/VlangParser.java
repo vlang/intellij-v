@@ -50,12 +50,13 @@ public class VlangParser implements PsiParser, LightPsiParser {
     create_token_set_(ADD_EXPR, AND_EXPR, ARRAY_CREATION, AS_EXPRESSION,
       CALL_EXPR, COMPILE_TIME_IF_EXPRESSION, CONDITIONAL_EXPR, CONSTEXPR_IDENTIFIER_EXPRESSION,
       DOT_EXPRESSION, ENUM_FETCH, ERROR_PROPAGATION_EXPRESSION, EXPRESSION,
-      FUNCTION_LIT, IF_EXPRESSION, INDEX_OR_SLICE_EXPR, IN_EXPRESSION,
-      IS_EXPRESSION, LITERAL, MAP_INIT_EXPR, MATCH_EXPRESSION,
-      MUL_EXPR, MUT_EXPRESSION, NOT_IN_EXPRESSION, NOT_IS_EXPRESSION,
-      OR_BLOCK_EXPR, OR_EXPR, PARENTHESES_EXPR, RANGE_EXPR,
-      REFERENCE_EXPRESSION, SEND_EXPR, SQL_EXPRESSION, STRING_LITERAL,
-      TYPE_INIT_EXPR, UNARY_EXPR, UNPACKING_EXPRESSION, UNSAFE_EXPRESSION),
+      FUNCTION_LIT, GO_EXPRESSION, IF_EXPRESSION, INDEX_OR_SLICE_EXPR,
+      IN_EXPRESSION, IS_EXPRESSION, LITERAL, MAP_INIT_EXPR,
+      MATCH_EXPRESSION, MUL_EXPR, MUT_EXPRESSION, NOT_IN_EXPRESSION,
+      NOT_IS_EXPRESSION, OR_BLOCK_EXPR, OR_EXPR, PARENTHESES_EXPR,
+      RANGE_EXPR, REFERENCE_EXPRESSION, SEND_EXPR, SQL_EXPRESSION,
+      STRING_LITERAL, TYPE_INIT_EXPR, UNARY_EXPR, UNPACKING_EXPRESSION,
+      UNSAFE_EXPRESSION),
   };
 
   /* ********************************************************** */
@@ -1888,14 +1889,13 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // go Expression
+  // GoExpression
   public static boolean GoStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "GoStatement")) return false;
     if (!nextTokenIs(b, GO)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, GO);
-    r = r && Expression(b, l + 1, -1);
+    r = GoExpression(b, l + 1);
     exit_section_(b, m, GO_STATEMENT, r);
     return r;
   }
@@ -4452,7 +4452,8 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // 25: ATOM(ConstexprIdentifierExpression)
   // 26: ATOM(SqlExpression)
   // 27: ATOM(MapInitExpr)
-  // 28: ATOM(ParenthesesExpr)
+  // 28: PREFIX(GoExpression)
+  // 29: ATOM(ParenthesesExpr)
   public static boolean Expression(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "Expression")) return false;
     addVariant(b, "<expression>");
@@ -4473,6 +4474,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = ConstexprIdentifierExpression(b, l + 1);
     if (!r) r = SqlExpression(b, l + 1);
     if (!r) r = MapInitExpr(b, l + 1);
+    if (!r) r = GoExpression(b, l + 1);
     if (!r) r = ParenthesesExpr(b, l + 1);
     p = r;
     r = r && Expression_0(b, l + 1, g);
@@ -4986,6 +4988,18 @@ public class VlangParser implements PsiParser, LightPsiParser {
     r = r && consumeToken(b, RBRACE);
     exit_section_(b, l, m, r, false, null);
     return r;
+  }
+
+  public static boolean GoExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GoExpression")) return false;
+    if (!nextTokenIsSmart(b, GO)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = consumeTokenSmart(b, GO);
+    p = r;
+    r = p && Expression(b, l, 28);
+    exit_section_(b, l, m, GO_EXPRESSION, r, p, null);
+    return r || p;
   }
 
   // '(' /*<<enterMode "PAR">>*/ Expression /*<<exitModeSafe "PAR">>*/')'

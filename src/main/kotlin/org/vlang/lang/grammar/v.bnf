@@ -77,7 +77,7 @@
   ]
 
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional|OrBlock)Expr")=BinaryExpr
-  extends(".*(Expr|Literal|Lit|OperandName)|TypeInitExpr|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ErrorPropagationExpression|ConstexprIdentifierExpression|SqlExpression")=Expression
+  extends(".*(Expr|Literal|Lit|OperandName)|TypeInitExpr|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ErrorPropagationExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression")=Expression
 
   implements("(Type|Import)Spec|(Var|Const|Param|Field|Label)Definition|(Struct|TypeAlias|Union|Enum)Declaration|Receiver")="org.vlang.lang.psi.VlangNamedElement"
 //  implements("FunctionLit")="org.vlang.lang.psi.GoSignatureOwner"
@@ -287,7 +287,7 @@ CompileTimeForStatement ::= FOR_COMPILE_TIME (ForOrRangeClause Block | Block | E
 LockStatement ::= (lock | rlock) Expression Block {pin=1}
 
 // go <expt>
-GoStatement ::= go Expression
+GoStatement ::= GoExpression
 
 // return <expr>
 // return <expr>, <expr>
@@ -505,8 +505,12 @@ Expression ::=
   | ConstexprIdentifierExpression
   | SqlExpression
   | MapInitExpr
+  | GoExpression
   | ParenthesesExpr {methods=[getGoType] /*implements="org.vlang.lang.psi.GoTypeOwner"*/}
 // end of expression rule
+
+// go <expr>
+GoExpression ::= go Expression
 
 // { ... }
 MapInitExpr ::= <<isModeOff "BLOCK?">> '{' KeyValues '}' {pin=4}

@@ -70,6 +70,7 @@ public interface VlangTypes {
   IElementType FUNCTION_TYPE = new VlangCompositeElementType("FUNCTION_TYPE");
   IElementType GLOBAL_VARIABLE_DECLARATION = new VlangCompositeElementType("GLOBAL_VARIABLE_DECLARATION");
   IElementType GOTO_STATEMENT = new VlangCompositeElementType("GOTO_STATEMENT");
+  IElementType GO_EXPRESSION = new VlangCompositeElementType("GO_EXPRESSION");
   IElementType GO_STATEMENT = new VlangCompositeElementType("GO_STATEMENT");
   IElementType IF_ATTRIBUTE = new VlangCompositeElementType("IF_ATTRIBUTE");
   IElementType IF_EXPRESSION = new VlangCompositeElementType("IF_EXPRESSION");
@@ -451,6 +452,9 @@ public interface VlangTypes {
       }
       else if (type == GOTO_STATEMENT) {
         return new VlangGotoStatementImpl(node);
+      }
+      else if (type == GO_EXPRESSION) {
+        return new VlangGoExpressionImpl(node);
       }
       else if (type == GO_STATEMENT) {
         return new VlangGoStatementImpl(node);

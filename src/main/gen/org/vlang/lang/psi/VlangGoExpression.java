@@ -5,9 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangGoStatement extends VlangStatement {
+public interface VlangGoExpression extends VlangExpression {
+
+  @Nullable
+  VlangExpression getExpression();
 
   @NotNull
-  VlangGoExpression getGoExpression();
+  PsiElement getGo();
 
 }

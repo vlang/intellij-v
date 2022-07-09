@@ -10,15 +10,15 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangGoStatementImpl extends VlangStatementImpl implements VlangGoStatement {
+public class VlangGoExpressionImpl extends VlangExpressionImpl implements VlangGoExpression {
 
-  public VlangGoStatementImpl(@NotNull ASTNode node) {
+  public VlangGoExpressionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitGoStatement(this);
+    visitor.visitGoExpression(this);
   }
 
   @Override
@@ -28,9 +28,15 @@ public class VlangGoStatementImpl extends VlangStatementImpl implements VlangGoS
   }
 
   @Override
+  @Nullable
+  public VlangExpression getExpression() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class);
+  }
+
+  @Override
   @NotNull
-  public VlangGoExpression getGoExpression() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangGoExpression.class));
+  public PsiElement getGo() {
+    return notNullChild(findChildByType(GO));
   }
 
 }
