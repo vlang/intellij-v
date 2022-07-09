@@ -64,8 +64,8 @@ STR_DOUBLE =   "\""
 STR_SINGLE =   "'"
 STR_MODIFIER = "r" | "c"
 
-DOUBLE_QUOTE_STRING = {STR_MODIFIER}? {STR_DOUBLE} ( [^\"\\] | "\\" ("\\" | {STR_DOUBLE} | {ESCAPES} | {DOLLAR} [0-8xuU] ) )* {STR_DOUBLE}
-SINGLE_QUOTE_STRING = {STR_MODIFIER}? {STR_SINGLE} ( [^\'\\] | "\\" ("\\" | {STR_SINGLE} | {ESCAPES} | {DOLLAR} | [0-8xuU] ) )* {STR_SINGLE}
+DOUBLE_QUOTE_STRING = {STR_MODIFIER}? {STR_DOUBLE} ( [^\"\\] | "\\" ("\\" | {STR_DOUBLE} | {STR_SINGLE} | {ESCAPES} | {DOLLAR} [0-8xuU] ) )* {STR_DOUBLE}
+SINGLE_QUOTE_STRING = {STR_MODIFIER}? {STR_SINGLE} ( [^\'\\] | "\\" ("\\" | {STR_DOUBLE} | {STR_SINGLE} | {ESCAPES} | {DOLLAR} | [0-8xuU] ) )* {STR_SINGLE}
 
 ESCAPES = [abfnrtve] // TODO: need "e"?
 
