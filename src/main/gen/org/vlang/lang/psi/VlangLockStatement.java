@@ -7,13 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface VlangLockStatement extends VlangStatement {
 
-  @Nullable
-  VlangExpression getExpression();
-
-  @Nullable
-  PsiElement getLock();
-
-  @Nullable
-  PsiElement getRlock();
+  @NotNull
+  VlangLockExpression getLockExpression();
 
 }

@@ -346,6 +346,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitLockExpression(@NotNull VlangLockExpression o) {
+    visitExpression(o);
+  }
+
   public void visitLockStatement(@NotNull VlangLockStatement o) {
     visitStatement(o);
   }

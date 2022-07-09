@@ -51,12 +51,12 @@ public class VlangParser implements PsiParser, LightPsiParser {
       CALL_EXPR, COMPILE_TIME_IF_EXPRESSION, CONDITIONAL_EXPR, CONSTEXPR_IDENTIFIER_EXPRESSION,
       DOT_EXPRESSION, ENUM_FETCH, ERROR_PROPAGATION_EXPRESSION, EXPRESSION,
       FUNCTION_LIT, GO_EXPRESSION, IF_EXPRESSION, INDEX_OR_SLICE_EXPR,
-      IN_EXPRESSION, IS_EXPRESSION, LITERAL, MAP_INIT_EXPR,
-      MATCH_EXPRESSION, MUL_EXPR, MUT_EXPRESSION, NOT_IN_EXPRESSION,
-      NOT_IS_EXPRESSION, OR_BLOCK_EXPR, OR_EXPR, PARENTHESES_EXPR,
-      RANGE_EXPR, REFERENCE_EXPRESSION, SEND_EXPR, SQL_EXPRESSION,
-      STRING_LITERAL, TYPE_INIT_EXPR, UNARY_EXPR, UNPACKING_EXPRESSION,
-      UNSAFE_EXPRESSION),
+      IN_EXPRESSION, IS_EXPRESSION, LITERAL, LOCK_EXPRESSION,
+      MAP_INIT_EXPR, MATCH_EXPRESSION, MUL_EXPR, MUT_EXPRESSION,
+      NOT_IN_EXPRESSION, NOT_IS_EXPRESSION, OR_BLOCK_EXPR, OR_EXPR,
+      PARENTHESES_EXPR, RANGE_EXPR, REFERENCE_EXPRESSION, SEND_EXPR,
+      SQL_EXPRESSION, STRING_LITERAL, TYPE_INIT_EXPR, UNARY_EXPR,
+      UNPACKING_EXPRESSION, UNSAFE_EXPRESSION),
   };
 
   /* ********************************************************** */
@@ -2479,26 +2479,14 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (lock | rlock) Expression Block
+  // LockExpression
   public static boolean LockStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LockStatement")) return false;
     if (!nextTokenIs(b, "<lock statement>", LOCK, RLOCK)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, LOCK_STATEMENT, "<lock statement>");
-    r = LockStatement_0(b, l + 1);
-    p = r; // pin = 1
-    r = r && report_error_(b, Expression(b, l + 1, -1));
-    r = p && Block(b, l + 1) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  // lock | rlock
-  private static boolean LockStatement_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "LockStatement_0")) return false;
     boolean r;
-    r = consumeToken(b, LOCK);
-    if (!r) r = consumeToken(b, RLOCK);
+    Marker m = enter_section_(b, l, _NONE_, LOCK_STATEMENT, "<lock statement>");
+    r = LockExpression(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -4453,7 +4441,8 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // 26: ATOM(SqlExpression)
   // 27: ATOM(MapInitExpr)
   // 28: PREFIX(GoExpression)
-  // 29: ATOM(ParenthesesExpr)
+  // 29: ATOM(LockExpression)
+  // 30: ATOM(ParenthesesExpr)
   public static boolean Expression(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "Expression")) return false;
     addVariant(b, "<expression>");
@@ -4475,6 +4464,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = SqlExpression(b, l + 1);
     if (!r) r = MapInitExpr(b, l + 1);
     if (!r) r = GoExpression(b, l + 1);
+    if (!r) r = LockExpression(b, l + 1);
     if (!r) r = ParenthesesExpr(b, l + 1);
     p = r;
     r = r && Expression_0(b, l + 1, g);
@@ -5000,6 +4990,29 @@ public class VlangParser implements PsiParser, LightPsiParser {
     r = p && Expression(b, l, 28);
     exit_section_(b, l, m, GO_EXPRESSION, r, p, null);
     return r || p;
+  }
+
+  // (lock | rlock) Expression Block
+  public static boolean LockExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LockExpression")) return false;
+    if (!nextTokenIsSmart(b, LOCK, RLOCK)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _COLLAPSE_, LOCK_EXPRESSION, "<lock expression>");
+    r = LockExpression_0(b, l + 1);
+    p = r; // pin = 1
+    r = r && report_error_(b, Expression(b, l + 1, -1));
+    r = p && Block(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // lock | rlock
+  private static boolean LockExpression_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LockExpression_0")) return false;
+    boolean r;
+    r = consumeTokenSmart(b, LOCK);
+    if (!r) r = consumeTokenSmart(b, RLOCK);
+    return r;
   }
 
   // '(' /*<<enterMode "PAR">>*/ Expression /*<<exitModeSafe "PAR">>*/')'

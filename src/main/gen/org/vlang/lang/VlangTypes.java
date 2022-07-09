@@ -95,6 +95,7 @@ public interface VlangTypes {
   IElementType LANGUAGE_INJECTION_STATEMENT = new VlangCompositeElementType("LANGUAGE_INJECTION_STATEMENT");
   IElementType LEFT_HAND_EXPR_LIST = new VlangCompositeElementType("LEFT_HAND_EXPR_LIST");
   IElementType LITERAL = new VlangCompositeElementType("LITERAL");
+  IElementType LOCK_EXPRESSION = new VlangCompositeElementType("LOCK_EXPRESSION");
   IElementType LOCK_STATEMENT = new VlangCompositeElementType("LOCK_STATEMENT");
   IElementType MAP_INIT_EXPR = new VlangCompositeElementType("MAP_INIT_EXPR");
   IElementType MAP_TYPE = new VlangCompositeElementType("MAP_TYPE");
@@ -527,6 +528,9 @@ public interface VlangTypes {
       }
       else if (type == LITERAL) {
         return new VlangLiteralImpl(node);
+      }
+      else if (type == LOCK_EXPRESSION) {
+        return new VlangLockExpressionImpl(node);
       }
       else if (type == LOCK_STATEMENT) {
         return new VlangLockStatementImpl(node);

@@ -10,15 +10,15 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangLockStatementImpl extends VlangStatementImpl implements VlangLockStatement {
+public class VlangLockExpressionImpl extends VlangExpressionImpl implements VlangLockExpression {
 
-  public VlangLockStatementImpl(@NotNull ASTNode node) {
+  public VlangLockExpressionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitLockStatement(this);
+    visitor.visitLockExpression(this);
   }
 
   @Override
@@ -28,9 +28,27 @@ public class VlangLockStatementImpl extends VlangStatementImpl implements VlangL
   }
 
   @Override
-  @NotNull
-  public VlangLockExpression getLockExpression() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangLockExpression.class));
+  @Nullable
+  public VlangBlock getBlock() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangBlock.class);
+  }
+
+  @Override
+  @Nullable
+  public VlangExpression getExpression() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getLock() {
+    return findChildByType(LOCK);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRlock() {
+    return findChildByType(RLOCK);
   }
 
 }
