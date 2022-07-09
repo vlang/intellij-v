@@ -2598,15 +2598,17 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MatchExpressionList Block semi
+  // <<enterMode "BLOCK?">> MatchExpressionList Block <<exitModeSafe "BLOCK?">> semi
   public static boolean MatchArm(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MatchArm")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, MATCH_ARM, "<match arm>");
-    r = MatchExpressionList(b, l + 1);
+    r = enterMode(b, l + 1, "BLOCK?");
+    r = r && MatchExpressionList(b, l + 1);
     r = r && Block(b, l + 1);
-    p = r; // pin = 2
-    r = r && semi(b, l + 1);
+    p = r; // pin = 3
+    r = r && report_error_(b, exitModeSafe(b, l + 1, "BLOCK?"));
+    r = p && semi(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -4251,7 +4253,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // TypeDecl ('|' TypeDecl)*
+  // TypeDecl (semi? '|' TypeDecl)*
   public static boolean TypeUnionList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeUnionList")) return false;
     boolean r, p;
@@ -4263,7 +4265,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // ('|' TypeDecl)*
+  // (semi? '|' TypeDecl)*
   private static boolean TypeUnionList_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeUnionList_1")) return false;
     while (true) {
@@ -4274,19 +4276,27 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // '|' TypeDecl
+  // semi? '|' TypeDecl
   private static boolean TypeUnionList_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeUnionList_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, BIT_OR);
+    r = TypeUnionList_1_0_0(b, l + 1);
+    r = r && consumeToken(b, BIT_OR);
     r = r && TypeDecl(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
+  // semi?
+  private static boolean TypeUnionList_1_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeUnionList_1_0_0")) return false;
+    semi(b, l + 1);
+    return true;
+  }
+
   /* ********************************************************** */
-  // '+' | '-' | '!' | '^' | '*' | '&' | '<-'
+  // '+' | '-' | '!' | '^' | '~' | '*' | '&' | '&&' | '<-'
   static boolean UnaryOp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "UnaryOp")) return false;
     boolean r;
@@ -4294,8 +4304,10 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, MINUS);
     if (!r) r = consumeToken(b, NOT);
     if (!r) r = consumeToken(b, BIT_XOR);
+    if (!r) r = consumeToken(b, TILDA);
     if (!r) r = consumeToken(b, MUL);
     if (!r) r = consumeToken(b, BIT_AND);
+    if (!r) r = consumeToken(b, COND_AND);
     if (!r) r = consumeToken(b, SEND_CHANNEL);
     return r;
   }
@@ -4780,7 +4792,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // if Condition Block ElseStatement?
+  // if Condition Block (semi? ElseStatement)?
   public static boolean IfExpression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IfExpression")) return false;
     if (!nextTokenIsSmart(b, IF)) return false;
@@ -4795,10 +4807,28 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // ElseStatement?
+  // (semi? ElseStatement)?
   private static boolean IfExpression_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IfExpression_3")) return false;
-    ElseStatement(b, l + 1);
+    IfExpression_3_0(b, l + 1);
+    return true;
+  }
+
+  // semi? ElseStatement
+  private static boolean IfExpression_3_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IfExpression_3_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = IfExpression_3_0_0(b, l + 1);
+    r = r && ElseStatement(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // semi?
+  private static boolean IfExpression_3_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IfExpression_3_0_0")) return false;
+    semi(b, l + 1);
     return true;
   }
 

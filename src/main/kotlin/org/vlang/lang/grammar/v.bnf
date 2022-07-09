@@ -69,6 +69,7 @@
     TRIPLE_DOT           =  '...'
     DOT                  =  '.'
     RANGE                =  '..'
+    TILDA                =  '~'
     SEMICOLON_SYNTHETIC  = '<NL>'
     TYPE_                = 'type'
     raw_string           = 'raw_string'
@@ -404,7 +405,7 @@ TypeAliasDeclaration ::= SymbolVisibility? 'type' identifier '=' TypeUnionList {
   methods=[getName]
 }
 // <type> [ | <type2>]...
-TypeUnionList ::= TypeDecl ('|' TypeDecl)* {pin=1}
+TypeUnionList ::= TypeDecl (semi? '|' TypeDecl)* {pin=1}
 
 
 // const declarations
@@ -654,7 +655,7 @@ MulExpr ::= Expression MulOp Expression
 private RelOp ::= '==' | '!=' | '<' | '<=' | '>' | '>='
 private AddOp ::= '+' | '-' | '|' | '^'
 private MulOp ::= '*' | '/' | '%' | '<<' | '>>' | '&' | '&^'
-private UnaryOp ::= '+' | '-' | '!' | '^' | '*' | '&' | '<-'
+private UnaryOp ::= '+' | '-' | '!' | '^' | '~' | '*' | '&' | '&&' | '<-'
 
 fake BinaryExpr ::= Expression+ {
   methods=[left="Expression[0]" right="Expression[1]" getOperator]
@@ -711,7 +712,7 @@ MatchExpression ::= match Expression '{' MatchArms '}' {pin=1}
 // else { ... }
 MatchArms ::= (MatchArm | MatchElseArmClause)*
 // <expr>[, <expr2>] { ... }
-MatchArm ::= MatchExpressionList Block semi {pin=2}
+MatchArm ::= <<enterMode "BLOCK?">> MatchExpressionList Block <<exitModeSafe "BLOCK?">> semi {pin=3}
 // <expr>[, <expr2>]
 private MatchExpressionList ::= Expression (',' Expression)* {pin(".*")=1}
 // else { ... }
@@ -734,7 +735,7 @@ AsExpression ::= Expression as Expression {pin=2}
 UnsafeExpression ::= unsafe Block {pin=1}
 
 // if <condition> { ... }
-IfExpression ::= if Condition Block ElseStatement? {pin=1}
+IfExpression ::= if Condition Block (semi? ElseStatement)? {pin=1}
 
 //  $if <condition> { ... }
 CompileTimeIfExpression ::= IF_COMPILE_TIME Condition Block CompileElseStatement? {pin=1}

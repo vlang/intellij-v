@@ -116,7 +116,8 @@ object VlangTokenTypes {
         SHIFT_RIGHT,
         GREATER_OR_EQUAL,
         GREATER,
-        VAR_ASSIGN
+        VAR_ASSIGN,
+        TILDA,
     )
 
     val WHITE_SPACES = TokenSet.create(WS, NLS)

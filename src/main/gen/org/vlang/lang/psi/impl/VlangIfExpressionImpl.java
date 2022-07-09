@@ -53,8 +53,8 @@ public class VlangIfExpressionImpl extends VlangExpressionImpl implements VlangI
 
   @Override
   @Nullable
-  public PsiElement getSemicolon() {
-    return findChildByType(SEMICOLON);
+  public PsiElement getSemicolonSynthetic() {
+    return findChildByType(SEMICOLON_SYNTHETIC);
   }
 
   @Override

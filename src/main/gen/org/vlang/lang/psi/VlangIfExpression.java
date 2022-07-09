@@ -20,7 +20,7 @@ public interface VlangIfExpression extends VlangExpression {
   VlangStatement getStatement();
 
   @Nullable
-  PsiElement getSemicolon();
+  PsiElement getSemicolonSynthetic();
 
   @NotNull
   PsiElement getIf();

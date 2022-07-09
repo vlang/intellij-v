@@ -109,6 +109,7 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 "..."                                     { return TRIPLE_DOT; }
 ".."                                      { return RANGE; }
 "."                                       { return DOT; }
+"~"                                       { return TILDA; }
 "|"                                       { return BIT_OR; }
 "{"                                       { return LBRACE; }
 "}"                                       { yybegin(MAYBE_SEMICOLON); return RBRACE; }

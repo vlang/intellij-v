@@ -265,6 +265,7 @@ public interface VlangTypes {
   IElementType STRING = new VlangTokenType("string");
   IElementType STRUCT = new VlangTokenType("struct");
   IElementType SWITCH = new VlangTokenType("switch");
+  IElementType TILDA = new VlangTokenType("~");
   IElementType TRIPLE_DOT = new VlangTokenType("...");
   IElementType TRUE = new VlangTokenType("true");
   IElementType TYPE_ = new VlangTokenType("type");
