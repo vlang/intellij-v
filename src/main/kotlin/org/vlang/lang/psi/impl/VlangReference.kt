@@ -29,7 +29,7 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
         val containingFile = el.containingFile as VlangFile
 
         val parentTypeDecl = el.parentOfType<VlangTypeDecl>()
-        if (parentTypeDecl != null && parentTypeDecl.typeReferenceExpressionList.isNotEmpty()) {
+        if (parentTypeDecl != null && parentTypeDecl.typeReferenceExpressionList.size > 1) {
             val list = parentTypeDecl.typeReferenceExpressionList
             val fqnWithoutName = parentTypeDecl.typeReferenceExpressionList.subList(0, list.size - 1)
                 .joinToString(".") { it.text }
