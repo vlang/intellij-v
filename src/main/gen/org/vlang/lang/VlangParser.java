@@ -844,95 +844,16 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ConstDefinition ( ',' ConstDefinition )*
-  static boolean ConstDefinitionList(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ConstDefinitionList")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_);
-    r = ConstDefinition(b, l + 1);
-    p = r; // pin = 1
-    r = r && ConstDefinitionList_1(b, l + 1);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  // ( ',' ConstDefinition )*
-  private static boolean ConstDefinitionList_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ConstDefinitionList_1")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!ConstDefinitionList_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "ConstDefinitionList_1", c)) break;
-    }
-    return true;
-  }
-
-  // ',' ConstDefinition
-  private static boolean ConstDefinitionList_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ConstDefinitionList_1_0")) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_);
-    r = consumeToken(b, COMMA);
-    p = r; // pin = 1
-    r = r && ConstDefinition(b, l + 1);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  /* ********************************************************** */
-  // ConstDefinitionList [ ('=' ExpressionList | TypeDecl '=' ExpressionList) ]
+  // ConstDefinition '=' Expression
   public static boolean ConstSpec(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ConstSpec")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, CONST_SPEC, null);
-    r = ConstDefinitionList(b, l + 1);
-    p = r; // pin = 1
-    r = r && ConstSpec_1(b, l + 1);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  // [ ('=' ExpressionList | TypeDecl '=' ExpressionList) ]
-  private static boolean ConstSpec_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ConstSpec_1")) return false;
-    ConstSpec_1_0(b, l + 1);
-    return true;
-  }
-
-  // '=' ExpressionList | TypeDecl '=' ExpressionList
-  private static boolean ConstSpec_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ConstSpec_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = ConstSpec_1_0_0(b, l + 1);
-    if (!r) r = ConstSpec_1_0_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // '=' ExpressionList
-  private static boolean ConstSpec_1_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ConstSpec_1_0_0")) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_);
-    r = consumeToken(b, ASSIGN);
-    p = r; // pin = 1
-    r = r && ExpressionList(b, l + 1);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  // TypeDecl '=' ExpressionList
-  private static boolean ConstSpec_1_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ConstSpec_1_0_1")) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_);
-    r = TypeDecl(b, l + 1);
-    p = r; // pin = 1
-    r = r && report_error_(b, consumeToken(b, ASSIGN));
-    r = p && ExpressionList(b, l + 1) && r;
+    r = ConstDefinition(b, l + 1);
+    r = r && consumeToken(b, ASSIGN);
+    p = r; // pin = 2
+    r = r && Expression(b, l + 1, -1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }

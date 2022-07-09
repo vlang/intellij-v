@@ -415,12 +415,20 @@ ConstDeclaration ::= SymbolVisibility? const ( ConstSpec | '(' ConstSpecs? ')' )
 // <spec> [<spec2>]
 private ConstSpecs ::= ConstSpec (semi ConstSpec)* semi? {pin=1}
 // <list> = <list>
-ConstSpec ::= ConstDefinitionList [ ('=' ExpressionList | TypeDecl '=' ExpressionList) ] {
-  pin(".*")=1
+ConstSpec ::= ConstDefinition '=' Expression {
+  pin=2
 //  stubClass="org.vlang.lang.stubs.GoConstSpecStub"
   methods=[deleteDefinition]
 }
-private ConstDefinitionList ::= ConstDefinition ( ',' ConstDefinition )*
+
+// TODO: when const declaration will support multiple assign
+//ConstSpec ::= ConstDefinitionList [ ('=' ExpressionList | TypeDecl '=' ExpressionList) ] {
+//  pin(".*")=1
+////  stubClass="org.vlang.lang.stubs.GoConstSpecStub"
+//  methods=[deleteDefinition]
+//}
+//private ConstDefinitionList ::= ConstDefinition ( ',' ConstDefinition )*
+
 // just identifier
 ConstDefinition ::= identifier {
 //  stubClass="org.vlang.lang.stubs.GoConstDefinitionStub"

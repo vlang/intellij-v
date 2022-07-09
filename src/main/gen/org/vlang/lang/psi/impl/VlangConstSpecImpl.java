@@ -28,26 +28,20 @@ public class VlangConstSpecImpl extends VlangCompositeElementImpl implements Vla
 
   @Override
   @NotNull
-  public List<VlangConstDefinition> getConstDefinitionList() {
-    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangConstDefinition.class);
+  public VlangConstDefinition getConstDefinition() {
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangConstDefinition.class));
+  }
+
+  @Override
+  @Nullable
+  public VlangExpression getExpression() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class);
   }
 
   @Override
   @NotNull
-  public List<VlangExpression> getExpressionList() {
-    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangExpression.class);
-  }
-
-  @Override
-  @Nullable
-  public VlangTypeDecl getTypeDecl() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getAssign() {
-    return findChildByType(ASSIGN);
+    return notNullChild(findChildByType(ASSIGN));
   }
 
 }

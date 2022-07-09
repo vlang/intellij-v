@@ -8,15 +8,12 @@ import com.intellij.psi.PsiElement;
 public interface VlangConstSpec extends VlangCompositeElement {
 
   @NotNull
-  List<VlangConstDefinition> getConstDefinitionList();
+  VlangConstDefinition getConstDefinition();
+
+  @Nullable
+  VlangExpression getExpression();
 
   @NotNull
-  List<VlangExpression> getExpressionList();
-
-  @Nullable
-  VlangTypeDecl getTypeDecl();
-
-  @Nullable
   PsiElement getAssign();
 
   //WARNING: deleteDefinition(...) is skipped
