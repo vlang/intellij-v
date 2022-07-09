@@ -511,7 +511,7 @@ Expression ::=
 // end of expression rule
 
 // (r)lock <var> { ... }
-LockExpression ::= (lock | rlock) <<enterMode "BLOCK?">> Expression Block <<exitModeSafe "BLOCK?">>  {pin=1}
+LockExpression ::= (lock | rlock) <<enterMode "BLOCK?">> ExpressionList Block <<exitModeSafe "BLOCK?">>  {pin=1}
 
 // go <expr>
 GoExpression ::= go Expression

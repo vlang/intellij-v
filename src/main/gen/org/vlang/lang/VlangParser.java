@@ -4992,7 +4992,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // (lock | rlock) <<enterMode "BLOCK?">> Expression Block <<exitModeSafe "BLOCK?">>
+  // (lock | rlock) <<enterMode "BLOCK?">> ExpressionList Block <<exitModeSafe "BLOCK?">>
   public static boolean LockExpression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LockExpression")) return false;
     if (!nextTokenIsSmart(b, LOCK, RLOCK)) return false;
@@ -5001,7 +5001,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     r = LockExpression_0(b, l + 1);
     p = r; // pin = 1
     r = r && report_error_(b, enterMode(b, l + 1, "BLOCK?"));
-    r = p && report_error_(b, Expression(b, l + 1, -1)) && r;
+    r = p && report_error_(b, ExpressionList(b, l + 1)) && r;
     r = p && report_error_(b, Block(b, l + 1)) && r;
     r = p && exitModeSafe(b, l + 1, "BLOCK?") && r;
     exit_section_(b, l, m, r, p, null);

@@ -10,8 +10,8 @@ public interface VlangLockExpression extends VlangExpression {
   @Nullable
   VlangBlock getBlock();
 
-  @Nullable
-  VlangExpression getExpression();
+  @NotNull
+  List<VlangExpression> getExpressionList();
 
   @Nullable
   PsiElement getLock();

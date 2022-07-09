@@ -34,9 +34,9 @@ public class VlangLockExpressionImpl extends VlangExpressionImpl implements Vlan
   }
 
   @Override
-  @Nullable
-  public VlangExpression getExpression() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class);
+  @NotNull
+  public List<VlangExpression> getExpressionList() {
+    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangExpression.class);
   }
 
   @Override
