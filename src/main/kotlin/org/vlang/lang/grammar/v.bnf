@@ -77,7 +77,7 @@
   ]
 
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional|OrBlock)Expr")=BinaryExpr
-  extends(".*(Expr|Literal|Lit|OperandName)|TypeInitExpr|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ErrorPropagationExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression|LockExpression")=Expression
+  extends(".*(Expr|Literal|Lit|OperandName)|TypeInitExpr|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|SharedExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ErrorPropagationExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression|LockExpression")=Expression
 
   implements("(Type|Import)Spec|(Var|Const|Param|Field|Label)Definition|(Struct|TypeAlias|Union|Enum)Declaration|Receiver")="org.vlang.lang.psi.VlangNamedElement"
 //  implements("FunctionLit")="org.vlang.lang.psi.GoSignatureOwner"
@@ -500,6 +500,7 @@ Expression ::=
   | MaxGroup
   | EnumFetch
   | MutExpression
+  | SharedExpression
   | DotExpression
   | ErrorPropagationExpression
   | ConstexprIdentifierExpression
@@ -701,6 +702,9 @@ OrBlockExpr ::= Expression or Block
 
 // mut <expr>
 MutExpression ::= mut Expression
+
+// shared <expr>
+SharedExpression ::= shared Expression
 
 // [<list>]
 ArrayCreation ::= '[' ArrayCreationList? (']' '!'?) {pin=1}

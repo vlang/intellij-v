@@ -491,6 +491,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitStatement(o);
   }
 
+  public void visitSharedExpression(@NotNull VlangSharedExpression o) {
+    visitExpression(o);
+  }
+
   public void visitSignature(@NotNull VlangSignature o) {
     visitCompositeElement(o);
   }

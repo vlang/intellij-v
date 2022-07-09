@@ -131,6 +131,7 @@ public interface VlangTypes {
   IElementType SELECTIVE_IMPORT_LIST = new VlangCompositeElementType("SELECTIVE_IMPORT_LIST");
   IElementType SEND_EXPR = new VlangCompositeElementType("SEND_EXPR");
   IElementType SEND_STATEMENT = new VlangCompositeElementType("SEND_STATEMENT");
+  IElementType SHARED_EXPRESSION = new VlangCompositeElementType("SHARED_EXPRESSION");
   IElementType SIGNATURE = new VlangCompositeElementType("SIGNATURE");
   IElementType SIMPLE_STATEMENT = new VlangCompositeElementType("SIMPLE_STATEMENT");
   IElementType SQL_BLOCK = new VlangCompositeElementType("SQL_BLOCK");
@@ -636,6 +637,9 @@ public interface VlangTypes {
       }
       else if (type == SEND_STATEMENT) {
         return new VlangSendStatementImpl(node);
+      }
+      else if (type == SHARED_EXPRESSION) {
+        return new VlangSharedExpressionImpl(node);
       }
       else if (type == SIGNATURE) {
         return new VlangSignatureImpl(node);
