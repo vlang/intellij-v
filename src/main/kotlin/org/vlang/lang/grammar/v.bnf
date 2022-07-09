@@ -178,7 +178,7 @@ private TopLevelDeclarationRecover ::= !(';' | 'type' | const | fn | pub | BUILT
 // Block { }
 BlockWithConsume ::= /*<<consumeBlock>> |*/ BlockInner {elementType=Block}
 Block ::= BlockInner {methods=[processDeclarations]}
-private BlockInner ::= '{' ('}' | Statements '}') {pin(".*")=1}
+private BlockInner ::= '{' ('}' | (<<withOff Statements "BLOCK?" "PAR">> | (!() Statements)) '}') {pin(".*")=1}
 // end of block rule
 
 private Statements ::= StatementWithSemi*
@@ -206,10 +206,11 @@ Statement ::=
   | TypeAliasDeclaration
   | AsmBlockStatement
   | SqlStatement
+  | LabeledStatement
 //| SelectStatement
   | DeferStatement {methods=[processDeclarations]}
 
-private StatementRecover ::= !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | shared | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | char | struct | union | switch | var | unsafe | assert | match | lock | rlock | asm | sql | FOR_COMPILE_TIME | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG | LANGUAGE_INJECTION)
+private StatementRecover ::= !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '&&' | '}' | break | case | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | shared | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | char | struct | union | switch | var | unsafe | assert | match | lock | rlock | asm | sql | true | false | FOR_COMPILE_TIME | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG | LANGUAGE_INJECTION)
 
 // attributes start
 // [attr1]
@@ -232,13 +233,16 @@ SimpleStatement ::=
   | (LeftHandExprList AssignmentStatement? | SendStatement) {pin(".*")=LeftHandExprList}
 
 // <vars> := <exprs>
-VarDeclaration ::= VarDefinitionList ':=' (ExpressionList | MapInitExpr) {pin=2}
+VarDeclaration ::= VarDefinitionList ':=' (ExpressionList) {pin=2}
 
 // <expr>++/--
 IncDecStatement ::= Expression ('++' | '--') {pin=2}
 
+// <label>: <stmt>
+LabeledStatement ::= Label Statement? {pin=2}
+
 // = <list>
-left AssignmentStatement ::= AssignOp (ExpressionList | MapInitExpr) {pin=1}
+left AssignmentStatement ::= AssignOp (ExpressionList) {pin=1}
 AssignOp ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '&=' | '&^='
 
 // <- <expr>
@@ -261,9 +265,9 @@ CompileElseStatement ::= ELSE_COMPILE_TIME (CompileTimeIfStatement | Block) {pin
 
 // For statement
 // [<label>:] for ( ... ) { ... }
-ForStatement ::= ForLabel? for (ForOrRangeClause Block | Block | Expression Block) {pin(".*")="for|ForOrRangeClause"}
+ForStatement ::= Label? for <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) <<exitModeSafe "BLOCK?">> {pin(".*")="for|ForOrRangeClause"}
 // <label>:
-ForLabel ::= LabelRef ':' {pin=2}
+Label ::= LabelRef ':' {pin=2}
 // for (;;;) or for (<*> in <*>)
 private ForOrRangeClause ::= (ForClause | RangeClause)
 // [<statement>]; [<expression>]; [<statement>]
@@ -425,7 +429,8 @@ ConstDefinition ::= identifier {
 
 
 // <[attrs]> __global <ident> = <expr>
-GlobalVariableDeclaration ::= Attributes? BUILTIN_GLOBAL identifier '=' Expression {pin=3}
+// <[attrs]> __global <ident> <type>
+GlobalVariableDeclaration ::= Attributes? BUILTIN_GLOBAL identifier ('=' Expression | TypeDecl) {pin=3}
 
 
 VarModifiers ::= (mut | shared)*
@@ -490,22 +495,23 @@ Expression ::=
   | ErrorPropagationExpression
   | ConstexprIdentifierExpression
   | SqlExpression
+  | MapInitExpr
   | ParenthesesExpr {methods=[getGoType] /*implements="org.vlang.lang.psi.GoTypeOwner"*/}
 // end of expression rule
 
 // { ... }
-MapInitExpr ::= '{' KeyValues '}' {pin=3}
+MapInitExpr ::= <<isModeOff "BLOCK?">> '{' KeyValues '}' {pin=4}
 KeyValues ::= KeyValue ((semi | ',') KeyValue)* (semi | ',')? {pin=1}
 // <key> : <value>
 KeyValue ::= (Literal | ReferenceExpression) ':' Expression {pin=1}
 
 // <type> {...}
-TypeInitExpr ::= TypeDecl '{' ( '}' | FieldInitialization '}') {pin=3}
+TypeInitExpr ::= <<isModeOff "BLOCK?">> TypeDecl '{' ( '}' | FieldInitialization '}') {pin=4}
 FieldInitialization ::= FieldInitializationKeyValueList | FieldInitializationValueList
-FieldInitializationKeyValueList ::= ((FieldInitializationKeyValue | UnpackingExpression) semi)+ semi?
+FieldInitializationKeyValueList ::= ((FieldInitializationKeyValue | UnpackingExpression) (semi | ','?))+ semi?
 private FieldInitializationKeyValue ::= FieldInitializationKey ':' Expression {pin=2}
 FieldInitializationKey ::= Expression
-FieldInitializationValueList ::= FieldInitializationValue (',' FieldInitializationValue)* ','?
+FieldInitializationValueList ::= (FieldInitializationValue ','?)* semi?
 // see return if a > b { a } else { b }
 private FieldInitializationValue ::= Expression {pin=1}
 // end of type init
@@ -519,7 +525,7 @@ private MaxGroup ::=
 //| CompositeLit
 
 // fn (...) {...}
-FunctionLit ::= fn CaptureList? Signature Block {pin=1 methods=[processDeclarations]}
+FunctionLit ::= fn <<enterMode "BLOCK?">> CaptureList? Signature Block <<exitModeSafe "BLOCK?">> {pin=1 methods=[processDeclarations]}
 // [<var1>, <var2>, ...]
 CaptureList ::= '[' (Capture | ',' Capture)* ']' {pin=3}
 // [mut] <ident>
@@ -568,7 +574,7 @@ FunctionType ::= fn Signature {pin=1}
 // signature
 // (...) ...
 Signature ::= Parameters Result? {pin=1 /*stubClass="org.vlang.lang.stubs.GoSignatureStub"*/}
-Result ::= '(' TypeListNoPin ')' | TypeDecl | Parameters { // todo: reorder and pin (
+Result ::= '?'? '(' TypeListNoPin ')' | TypeDecl | Parameters { // todo: reorder and pin (
   methods=[isVoid]
 //  stubClass="org.vlang.lang.stubs.GoResultStub"
 }
@@ -615,7 +621,7 @@ private NamedArgumentExpr ::= identifier ':' (Expression | UnpackingExpression) 
 
 private ExpressionList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &')'))* {pin(".*")=1}
 private ExpressionWithRecover ::= Expression !':' {recoverWhile=ExpressionListRecover}
-private ExpressionListRecover ::= !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | char | struct | enum | union | switch | var | unsafe | assert | match | asm | sql )
+private ExpressionListRecover ::= !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+'  | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | char | struct | enum | union | switch | var | unsafe | assert | match | asm | sql | true | false )
 
 private VarDefinitionList ::= VarDefinition (',' VarDefinition)*
 VarDefinition ::= VarModifiers? identifier {
@@ -637,8 +643,8 @@ MethodCall ::= ReferenceExpression ArgumentList {pin=2}
 ReferenceExpression ::= identifier { methods=[getReference getQualifier resolve getReadWriteAccess] extends=Expression}
 
 // math and logical expressions
-OrExpr ::= Expression '||' Expression
-AndExpr ::= Expression '&&' Expression
+OrExpr ::= Expression semi? '||' Expression
+AndExpr ::= Expression semi? '&&' Expression
 SendExpr ::= Expression '<-' Expression
 UnaryExpr ::=  UnaryOp Expression {methods=[getOperator]}
 ConditionalExpr ::= Expression RelOp Expression
@@ -648,7 +654,7 @@ MulExpr ::= Expression MulOp Expression
 private RelOp ::= '==' | '!=' | '<' | '<=' | '>' | '>='
 private AddOp ::= '+' | '-' | '|' | '^'
 private MulOp ::= '*' | '/' | '%' | '<<' | '>>' | '&' | '&^'
-private UnaryOp ::= '+' | '-' | '!' | '^' | '*' | '&' | '&&' | '<-'
+private UnaryOp ::= '+' | '-' | '!' | '^' | '*' | '&' | '<-'
 
 fake BinaryExpr ::= Expression+ {
   methods=[left="Expression[0]" right="Expression[1]" getOperator]
@@ -732,8 +738,8 @@ IfExpression ::= if Condition Block ElseStatement? {pin=1}
 
 //  $if <condition> { ... }
 CompileTimeIfExpression ::= IF_COMPILE_TIME Condition Block CompileElseStatement? {pin=1}
-private Condition ::= SimpleStatementOpt Expression? '?'?
-private SimpleStatementOpt ::= [SimpleStatement ';'?] // todo: remove ?
+private Condition ::= <<enterMode "BLOCK?">> SimpleStatementOpt? Expression? <<exitModeSafe "BLOCK?">>
+private SimpleStatementOpt ::= SimpleStatement ';'?
 
 // sql <ident> { ... }
 SqlExpression ::= sql identifier SqlBlock {pin=1}
@@ -753,6 +759,8 @@ Literal ::=
   | hex
   | oct
   | bin
+  | true
+  | false
   | StringLiteral
   | char
 

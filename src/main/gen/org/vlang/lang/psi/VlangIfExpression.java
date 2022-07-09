@@ -20,9 +20,6 @@ public interface VlangIfExpression extends VlangExpression {
   VlangStatement getStatement();
 
   @Nullable
-  PsiElement getQuestion();
-
-  @Nullable
   PsiElement getSemicolon();
 
   @NotNull

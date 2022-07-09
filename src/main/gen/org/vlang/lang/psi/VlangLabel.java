@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangForLabel extends VlangCompositeElement {
+public interface VlangLabel extends VlangCompositeElement {
 
   @NotNull
   VlangLabelRef getLabelRef();

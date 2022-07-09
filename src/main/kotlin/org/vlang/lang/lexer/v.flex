@@ -30,30 +30,42 @@ LANGUAGE_INJECTION_COMMENT = [^\r\n]*
 DOC_COMMENT = "/**" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?
 MULTILINE_COMMENT = "/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?
 
-ASM_COMMENT = ";" [^\r\n]*
-
 LETTER = [:letter:] | "_"
 DIGIT =  [:digit:]
 
-HEX_DIGIT = [0-9A-Fa-f_]
-INT_DIGIT = [0-9_]
-OCT_DIGIT = [0-7_]
-BIN_DIGIT = [0-1_]
+HEX_DIGIT = [0-9A-Fa-f]
+HEX_DIGIT_OR_SEP = {HEX_DIGIT} | "_"
 
-NUM_INT = "0" | ([1-9] {INT_DIGIT}*)
-NUM_HEX = ("0x" | "0X") {HEX_DIGIT}+
-NUM_OCT = "0o" {OCT_DIGIT}+
-NUM_BIN = "0b" {BIN_DIGIT}+
+INT_DIGIT = [0-9]
+INT_DEGIT_OR_SEP = {INT_DIGIT} | "_"
 
-FLOAT_EXPONENT = [eE] [+-]? {INT_DIGIT}+
-NUM_FLOAT = ( ( ({INT_DIGIT}+ "." [^.] {INT_DIGIT}*) | ({INT_DIGIT}* "." {INT_DIGIT}+) ) {FLOAT_EXPONENT}?) | ({INT_DIGIT}+ {FLOAT_EXPONENT})
+OCT_DIGIT = [0-7]
+OCT_DIGIT_OR_SEP = {OCT_DIGIT} | "_"
+
+BIN_DIGIT = [0-1]
+BIN_DIGIT_OR_SEP = {BIN_DIGIT} | "_"
+
+NUM_INT = ({INT_DIGIT} {INT_DEGIT_OR_SEP}* {INT_DIGIT}) | {INT_DIGIT}
+NUM_HEX = ("0x" | "0X") (({HEX_DIGIT} {HEX_DIGIT_OR_SEP}* {HEX_DIGIT}) | {HEX_DIGIT})
+NUM_OCT = "0o" (({OCT_DIGIT} {OCT_DIGIT_OR_SEP}* {OCT_DIGIT}) | {OCT_DIGIT})
+NUM_BIN = "0b" (({BIN_DIGIT} {BIN_DIGIT_OR_SEP}* {BIN_DIGIT}) | {BIN_DIGIT})
+
+FLOAT_EXPONENT = [eE] [+-]? {NUM_INT}
+NUM_FLOAT = (
+    ({NUM_INT}? "." {NUM_INT}) {FLOAT_EXPONENT}?) |
+    ({NUM_INT} {FLOAT_EXPONENT}
+)
 
 IDENT = {LETTER} ({LETTER} | {DIGIT} )*
 SPECIAL_IDENT = ("JS." | "C.") {LETTER} ({LETTER} | {DIGIT} | "." )*
 
+DOLLAR = "$"
 STR_DOUBLE =   "\""
-CHAR_QUOTE =   "`"
+STR_SINGLE =   "'"
 STR_MODIFIER = "r" | "c"
+
+DOUBLE_QUOTE_STRING = {STR_MODIFIER}? {STR_DOUBLE} ( [^\"\\] | "\\" ("\\" | {STR_DOUBLE} | {ESCAPES} | {DOLLAR} [0-8xuU] ) )* {STR_DOUBLE}
+SINGLE_QUOTE_STRING = {STR_MODIFIER}? {STR_SINGLE} ( [^\'\\] | "\\" ("\\" | {STR_SINGLE} | {ESCAPES} | {DOLLAR} | [0-8xuU] ) )* {STR_SINGLE}
 
 ESCAPES = [abfnrtve] // TODO: need "e"?
 
@@ -91,8 +103,8 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 "`\\u" {HEX_DIGIT} {4} "`"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
 "`\\U" {HEX_DIGIT} {8} "`"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
 
-{STR_MODIFIER}? "\"" [^\"]* "\""?         { yybegin(MAYBE_SEMICOLON); return RAW_STRING; }
-{STR_MODIFIER}? "'" [^']* "'"?            { yybegin(MAYBE_SEMICOLON); return RAW_STRING; }
+{DOUBLE_QUOTE_STRING}                     { yybegin(MAYBE_SEMICOLON); return RAW_STRING; }
+{SINGLE_QUOTE_STRING}                     { yybegin(MAYBE_SEMICOLON); return RAW_STRING; }
 
 "..."                                     { return TRIPLE_DOT; }
 ".."                                      { return RANGE; }
@@ -109,7 +121,7 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 "("                                       { return LPAREN; }
 ")"                                       { yybegin(MAYBE_SEMICOLON); return RPAREN; }
 
-":"                                       { return COLON; }
+":"                                       { yybegin(MAYBE_SEMICOLON); return COLON; }
 ";"                                       { return SEMICOLON; }
 ","                                       { return COMMA; }
 
@@ -170,6 +182,9 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 "$for"                                    { return FOR_COMPILE_TIME ; }
 "$if"                                     { return IF_COMPILE_TIME ; }
 "$else"                                   { return ELSE_COMPILE_TIME ; }
+
+"true"                                    { yybegin(MAYBE_SEMICOLON); return TRUE; }
+"false"                                   { yybegin(MAYBE_SEMICOLON); return FALSE; }
 
 "assert"                                  { return ASSERT; }
 "break"                                   { yybegin(MAYBE_SEMICOLON); return BREAK; }

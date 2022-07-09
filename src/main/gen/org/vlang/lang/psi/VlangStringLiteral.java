@@ -8,9 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface VlangStringLiteral extends VlangExpression {
 
   @Nullable
-  PsiElement getChar();
-
-  @Nullable
   PsiElement getRawString();
 
   @Nullable

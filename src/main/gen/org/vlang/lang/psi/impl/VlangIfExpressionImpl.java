@@ -53,12 +53,6 @@ public class VlangIfExpressionImpl extends VlangExpressionImpl implements VlangI
 
   @Override
   @Nullable
-  public PsiElement getQuestion() {
-    return findChildByType(QUESTION);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getSemicolon() {
     return findChildByType(SEMICOLON);
   }

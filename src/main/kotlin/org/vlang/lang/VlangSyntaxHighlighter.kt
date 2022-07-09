@@ -16,6 +16,7 @@ class VlangSyntaxHighlighter : SyntaxHighlighterBase() {
             tokenType == VlangTypes.LANGUAGE_INJECTION -> JavaHighlightingColors.LINE_COMMENT
             tokenType == VlangDocTokenTypes.DOC_COMMENT -> JavaHighlightingColors.DOC_COMMENT
 
+            VlangTokenTypes.BOOL_LITERALS.contains(tokenType) -> JavaHighlightingColors.NUMBER
             VlangTokenTypes.STRING_LITERALS.contains(tokenType) -> JavaHighlightingColors.STRING
             VlangTokenTypes.NUMBERS.contains(tokenType) -> JavaHighlightingColors.NUMBER
             VlangTokenTypes.KEYWORDS.contains(tokenType) -> JavaHighlightingColors.KEYWORD

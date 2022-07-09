@@ -10,14 +10,14 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangForLabelImpl extends VlangCompositeElementImpl implements VlangForLabel {
+public class VlangLabelImpl extends VlangCompositeElementImpl implements VlangLabel {
 
-  public VlangForLabelImpl(@NotNull ASTNode node) {
+  public VlangLabelImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitForLabel(this);
+    visitor.visitLabel(this);
   }
 
   @Override

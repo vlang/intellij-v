@@ -17,9 +17,6 @@ public interface VlangUnaryExpr extends VlangExpression {
   PsiElement getBitXor();
 
   @Nullable
-  PsiElement getCondAnd();
-
-  @Nullable
   PsiElement getMinus();
 
   @Nullable

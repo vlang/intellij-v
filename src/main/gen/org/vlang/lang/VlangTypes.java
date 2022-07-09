@@ -64,7 +64,6 @@ public interface VlangTypes {
   IElementType FIELD_LOOKUP = new VlangCompositeElementType("FIELD_LOOKUP");
   IElementType FIELD_NAME = new VlangCompositeElementType("FIELD_NAME");
   IElementType FOR_CLAUSE = new VlangCompositeElementType("FOR_CLAUSE");
-  IElementType FOR_LABEL = new VlangCompositeElementType("FOR_LABEL");
   IElementType FOR_STATEMENT = new VlangCompositeElementType("FOR_STATEMENT");
   IElementType FUNCTION_DECLARATION = VlangElementTypeFactory.stubFactory("FUNCTION_DECLARATION");
   IElementType FUNCTION_LIT = new VlangCompositeElementType("FUNCTION_LIT");
@@ -89,6 +88,8 @@ public interface VlangTypes {
   IElementType IS_EXPRESSION = new VlangCompositeElementType("IS_EXPRESSION");
   IElementType KEY_VALUE = new VlangCompositeElementType("KEY_VALUE");
   IElementType KEY_VALUES = new VlangCompositeElementType("KEY_VALUES");
+  IElementType LABEL = new VlangCompositeElementType("LABEL");
+  IElementType LABELED_STATEMENT = new VlangCompositeElementType("LABELED_STATEMENT");
   IElementType LABEL_REF = new VlangCompositeElementType("LABEL_REF");
   IElementType LANGUAGE_INJECTION_STATEMENT = new VlangCompositeElementType("LANGUAGE_INJECTION_STATEMENT");
   IElementType LEFT_HAND_EXPR_LIST = new VlangCompositeElementType("LEFT_HAND_EXPR_LIST");
@@ -192,6 +193,7 @@ public interface VlangTypes {
   IElementType ENUM = new VlangTokenType("enum");
   IElementType EQ = new VlangTokenType("==");
   IElementType FALLTHROUGH = new VlangTokenType("fallthrough");
+  IElementType FALSE = new VlangTokenType("false");
   IElementType FLOAT = new VlangTokenType("float");
   IElementType FLOATI = new VlangTokenType("floati");
   IElementType FN = new VlangTokenType("fn");
@@ -264,6 +266,7 @@ public interface VlangTypes {
   IElementType STRUCT = new VlangTokenType("struct");
   IElementType SWITCH = new VlangTokenType("switch");
   IElementType TRIPLE_DOT = new VlangTokenType("...");
+  IElementType TRUE = new VlangTokenType("true");
   IElementType TYPE_ = new VlangTokenType("type");
   IElementType UNION = new VlangTokenType("union");
   IElementType UNSAFE = new VlangTokenType("unsafe");
@@ -430,9 +433,6 @@ public interface VlangTypes {
       else if (type == FOR_CLAUSE) {
         return new VlangForClauseImpl(node);
       }
-      else if (type == FOR_LABEL) {
-        return new VlangForLabelImpl(node);
-      }
       else if (type == FOR_STATEMENT) {
         return new VlangForStatementImpl(node);
       }
@@ -504,6 +504,12 @@ public interface VlangTypes {
       }
       else if (type == KEY_VALUES) {
         return new VlangKeyValuesImpl(node);
+      }
+      else if (type == LABEL) {
+        return new VlangLabelImpl(node);
+      }
+      else if (type == LABELED_STATEMENT) {
+        return new VlangLabeledStatementImpl(node);
       }
       else if (type == LABEL_REF) {
         return new VlangLabelRefImpl(node);

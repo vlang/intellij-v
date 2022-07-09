@@ -17,6 +17,9 @@ public interface VlangLiteral extends VlangExpression {
   PsiElement getDecimali();
 
   @Nullable
+  PsiElement getFalse();
+
+  @Nullable
   PsiElement getFloat();
 
   @Nullable
@@ -30,5 +33,8 @@ public interface VlangLiteral extends VlangExpression {
 
   @Nullable
   PsiElement getOct();
+
+  @Nullable
+  PsiElement getTrue();
 
 }

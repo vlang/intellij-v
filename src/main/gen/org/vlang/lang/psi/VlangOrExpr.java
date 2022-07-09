@@ -10,4 +10,10 @@ public interface VlangOrExpr extends VlangBinaryExpr {
   @NotNull
   PsiElement getCondOr();
 
+  @Nullable
+  PsiElement getSemicolon();
+
+  @Nullable
+  PsiElement getSemicolonSynthetic();
+
 }

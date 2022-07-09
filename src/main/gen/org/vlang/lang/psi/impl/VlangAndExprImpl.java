@@ -33,4 +33,16 @@ public class VlangAndExprImpl extends VlangBinaryExprImpl implements VlangAndExp
     return notNullChild(findChildByType(COND_AND));
   }
 
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSemicolonSynthetic() {
+    return findChildByType(SEMICOLON_SYNTHETIC);
+  }
+
 }

@@ -10,7 +10,10 @@ public interface VlangSendStatement extends VlangStatement {
   @Nullable
   VlangExpression getExpression();
 
-  @NotNull
+  @Nullable
+  VlangLabel getLabel();
+
+  @Nullable
   VlangStatement getStatement();
 
   @NotNull

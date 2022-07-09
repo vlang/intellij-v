@@ -59,12 +59,6 @@ public class VlangCompileTimeIfExpressionImpl extends VlangExpressionImpl implem
 
   @Override
   @Nullable
-  public PsiElement getQuestion() {
-    return findChildByType(QUESTION);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getSemicolon() {
     return findChildByType(SEMICOLON);
   }

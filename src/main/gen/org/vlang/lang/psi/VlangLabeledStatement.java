@@ -5,15 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangFieldInitializationValueList extends VlangCompositeElement {
+public interface VlangLabeledStatement extends VlangStatement {
 
   @NotNull
-  List<VlangExpression> getExpressionList();
+  VlangLabel getLabel();
 
   @Nullable
-  PsiElement getSemicolon();
-
-  @Nullable
-  PsiElement getSemicolonSynthetic();
+  VlangStatement getStatement();
 
 }

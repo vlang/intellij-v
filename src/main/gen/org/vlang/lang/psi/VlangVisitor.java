@@ -222,10 +222,6 @@ public class VlangVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitForLabel(@NotNull VlangForLabel o) {
-    visitCompositeElement(o);
-  }
-
   public void visitForStatement(@NotNull VlangForStatement o) {
     visitStatement(o);
   }
@@ -322,8 +318,16 @@ public class VlangVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitLabel(@NotNull VlangLabel o) {
+    visitCompositeElement(o);
+  }
+
   public void visitLabelRef(@NotNull VlangLabelRef o) {
     visitCompositeElement(o);
+  }
+
+  public void visitLabeledStatement(@NotNull VlangLabeledStatement o) {
+    visitStatement(o);
   }
 
   public void visitLanguageInjectionStatement(@NotNull VlangLanguageInjectionStatement o) {

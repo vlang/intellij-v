@@ -52,6 +52,12 @@ public class VlangResultImpl extends VlangCompositeElementImpl implements VlangR
 
   @Override
   @Nullable
+  public PsiElement getQuestion() {
+    return findChildByType(QUESTION);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getRparen() {
     return findChildByType(RPAREN);
   }

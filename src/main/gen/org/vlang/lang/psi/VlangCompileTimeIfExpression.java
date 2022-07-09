@@ -23,9 +23,6 @@ public interface VlangCompileTimeIfExpression extends VlangExpression {
   PsiElement getIfCompileTime();
 
   @Nullable
-  PsiElement getQuestion();
-
-  @Nullable
   PsiElement getSemicolon();
 
 }

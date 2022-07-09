@@ -28,6 +28,7 @@ object VlangTokenTypes {
         OCT,
         BIN
     )
+    val BOOL_LITERALS = TokenSet.create(TRUE, FALSE)
 
     val KEYWORDS = TokenSet.create(
         BREAK,

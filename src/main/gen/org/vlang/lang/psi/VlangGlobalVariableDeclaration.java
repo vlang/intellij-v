@@ -14,6 +14,9 @@ public interface VlangGlobalVariableDeclaration extends VlangCompositeElement {
   VlangExpression getExpression();
 
   @Nullable
+  VlangTypeDecl getTypeDecl();
+
+  @Nullable
   PsiElement getAssign();
 
   @NotNull

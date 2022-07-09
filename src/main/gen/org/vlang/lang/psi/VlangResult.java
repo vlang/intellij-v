@@ -20,6 +20,9 @@ public interface VlangResult extends VlangCompositeElement {
   PsiElement getLparen();
 
   @Nullable
+  PsiElement getQuestion();
+
+  @Nullable
   PsiElement getRparen();
 
   //WARNING: isVoid(...) is skipped
