@@ -1,4 +1,4 @@
-package org.vlang.lang.annotator
+package org.vlang.ide.highlight
 
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.editor.colors.TextAttributesKey

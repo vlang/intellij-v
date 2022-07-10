@@ -5,7 +5,7 @@ import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.psi.PsiElement
-import org.vlang.lang.annotator.VlangHighlightingData
+import org.vlang.ide.highlight.VlangHighlightingData
 import org.vlang.lang.vmod.psi.VmodFieldName
 
 class VmodAnnotator : Annotator {
