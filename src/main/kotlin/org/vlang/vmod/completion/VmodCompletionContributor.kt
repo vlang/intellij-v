@@ -43,7 +43,7 @@ class VmodCompletionContributor : CompletionContributor() {
             override fun handleInsert(context: InsertionContext, item: LookupElement) {
                 val caretOffset = context.editor.caretModel.offset
 
-                val insertValue = if (field == "dependencies") {
+                val insertValue = if (field == "dependencies" || field == "tags") {
                     "[]"
                 } else {
                     "''"

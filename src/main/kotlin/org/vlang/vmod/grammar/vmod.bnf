@@ -33,7 +33,7 @@ File ::= ModuleDeclaration
 
 ModuleDeclaration ::= module '{' Fields? semi '}'
 
-Fields ::= Field (semi Field)* {pin=2}
+Fields ::= Field ((semi | ',') Field)* {pin=2}
 
 Field ::= FieldName ':' Expression
 

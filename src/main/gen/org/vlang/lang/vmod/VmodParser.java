@@ -168,7 +168,7 @@ public class VmodParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Field (semi Field)*
+  // Field ((semi | ',') Field)*
   public static boolean Fields(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Fields")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
@@ -180,7 +180,7 @@ public class VmodParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (semi Field)*
+  // ((semi | ',') Field)*
   private static boolean Fields_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Fields_1")) return false;
     while (true) {
@@ -191,14 +191,23 @@ public class VmodParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // semi Field
+  // (semi | ',') Field
   private static boolean Fields_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Fields_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = semi(b, l + 1);
+    r = Fields_1_0_0(b, l + 1);
     r = r && Field(b, l + 1);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // semi | ','
+  private static boolean Fields_1_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Fields_1_0_0")) return false;
+    boolean r;
+    r = semi(b, l + 1);
+    if (!r) r = consumeToken(b, COMMA);
     return r;
   }
 
