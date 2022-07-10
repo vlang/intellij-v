@@ -3,6 +3,7 @@ package org.vlang.lang.vmod.psi;
 
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
+import org.vlang.vmod.psi.VmodCompositeElement;
 
 public class VmodVisitor extends PsiElementVisitor {
 

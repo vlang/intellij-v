@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.vlang.lang.vmod.VmodTypes.*;
 import org.vlang.lang.vmod.psi.*;
+import org.vlang.vmod.psi.impl.VmodCompositeElementImpl;
 
 public class VmodArrayImpl extends VmodCompositeElementImpl implements VmodArray {
 

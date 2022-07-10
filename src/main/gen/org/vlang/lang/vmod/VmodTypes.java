@@ -4,8 +4,8 @@ package org.vlang.lang.vmod;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.PsiElement;
 import com.intellij.lang.ASTNode;
-import org.vlang.lang.vmod.psi.VmodCompositeElementType;
-import org.vlang.lang.vmod.psi.VmodTokenType;
+import org.vlang.vmod.psi.VmodCompositeElementType;
+import org.vlang.vmod.psi.VmodTokenType;
 import org.vlang.lang.vmod.psi.impl.*;
 
 public interface VmodTypes {

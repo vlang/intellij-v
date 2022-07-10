@@ -5,7 +5,7 @@ package org.vlang.lang.vmod;
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
-import static org.vlang.lang.vmod.psi.VmodTokenTypes.*;
+import static org.vlang.vmod.psi.VmodTokenTypes.*;
 
 
 /**
