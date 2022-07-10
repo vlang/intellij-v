@@ -767,7 +767,7 @@ IsExpression ::= Expression is Expression {pin=2}
 NotIsExpression ::= Expression NOT_IS Expression {pin=2}
 
 // <expr> as <expr>
-AsExpression ::= Expression as Expression {pin=2}
+AsExpression ::= Expression as TypeDecl {pin=2}
 
 // unsafe { ... }
 UnsafeExpression ::= unsafe Block {pin=1}

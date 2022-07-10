@@ -8,7 +8,10 @@ import com.intellij.psi.PsiElement;
 public interface VlangAsExpression extends VlangExpression {
 
   @NotNull
-  List<VlangExpression> getExpressionList();
+  VlangExpression getExpression();
+
+  @Nullable
+  VlangTypeDecl getTypeDecl();
 
   @NotNull
   PsiElement getAs();
