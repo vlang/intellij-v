@@ -1,4 +1,4 @@
-package org.vlang.lang.ui
+package org.vlang.ide.ui
 
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.util.IconLoader

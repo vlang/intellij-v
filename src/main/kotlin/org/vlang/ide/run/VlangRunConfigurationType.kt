@@ -3,7 +3,7 @@ package org.vlang.ide.run
 import com.intellij.execution.configurations.ConfigurationFactory
 import com.intellij.execution.configurations.ConfigurationTypeBase
 import com.intellij.openapi.project.Project
-import org.vlang.lang.ui.PluginIcons
+import org.vlang.ide.ui.PluginIcons
 
 class VlangRunConfigurationType : ConfigurationTypeBase(
     ID, "Run",

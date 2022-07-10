@@ -1,7 +1,7 @@
 package org.vlang.lang
 
 import com.intellij.openapi.fileTypes.LanguageFileType
-import org.vlang.lang.ui.PluginIcons
+import org.vlang.ide.ui.PluginIcons
 
 class VlangFileType : LanguageFileType(VlangLanguage.INSTANCE) {
     override fun getName() = "V"

@@ -4,7 +4,7 @@ import com.intellij.extapi.psi.PsiFileBase
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiReference
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
-import org.vlang.lang.ui.PluginIcons
+import org.vlang.ide.ui.PluginIcons
 import org.vlang.vmod.VmodFileType
 import org.vlang.vmod.VmodLanguage
 

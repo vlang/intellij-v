@@ -2,7 +2,7 @@ package org.vlang.vmod
 
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.fileTypes.LanguageFileType
-import org.vlang.lang.ui.PluginIcons
+import org.vlang.ide.ui.PluginIcons
 
 class VmodFileType : LanguageFileType(VmodLanguage.INSTANCE) {
     override fun getName() = "V Module"

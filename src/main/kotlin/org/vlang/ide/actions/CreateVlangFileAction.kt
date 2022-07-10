@@ -6,7 +6,7 @@ import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiDirectory
-import org.vlang.lang.ui.PluginIcons
+import org.vlang.ide.ui.PluginIcons
 
 class CreateVlangFileAction : CreateFileFromTemplateAction(
     "V File",
