@@ -10,7 +10,7 @@ class VlangFileType : LanguageFileType(VlangLanguage.INSTANCE) {
 
     override fun getDefaultExtension() = FILE_EXTENSION
 
-    override fun getIcon() = PluginIcons.vlangModule
+    override fun getIcon() = PluginIcons.vlang
 
     companion object {
         const val FILE_EXTENSION = "v"

@@ -1,10 +1,10 @@
 package org.vlang.lang.vmod.psi
 
 import com.intellij.extapi.psi.PsiFileBase
-import com.intellij.icons.AllIcons
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiReference
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
+import org.vlang.lang.ui.PluginIcons
 import org.vlang.lang.vmod.VmodFileType
 import org.vlang.lang.vmod.VmodLanguage
 
@@ -13,7 +13,7 @@ class VmodFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, VmodL
 
     override fun toString() = "V module file"
 
-    override fun getIcon(flags: Int) = AllIcons.FileTypes.Config
+    override fun getIcon(flags: Int) = PluginIcons.vlangModule
 
     override fun getReference() = references.getOrNull(0)
 
