@@ -594,7 +594,7 @@ PointerType ::= ('&' | '&&')+ TypeDecl {pin=1}
 // !<type>
 // bare !
 NotNullableType ::= '!' TypeDecl? {pin=1}
-// ?<type> 3164 3142
+// ?<type>
 // bare ?
 NullableType ::= '?' TypeDecl? {pin=1}
 // fn (...) <type>
