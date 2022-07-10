@@ -7,9 +7,6 @@ import com.intellij.psi.PsiElement;
 
 public interface VlangChannelType extends VlangTypeDecl {
 
-  @Nullable
-  VlangTypeDecl getTypeDecl();
-
   @NotNull
   PsiElement getChan();
 

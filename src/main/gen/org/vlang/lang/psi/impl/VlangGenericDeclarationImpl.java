@@ -10,15 +10,14 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangArrayOrSliceTypeImpl extends VlangTypeDeclImpl implements VlangArrayOrSliceType {
+public class VlangGenericDeclarationImpl extends VlangCompositeElementImpl implements VlangGenericDeclaration {
 
-  public VlangArrayOrSliceTypeImpl(@NotNull ASTNode node) {
+  public VlangGenericDeclarationImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitArrayOrSliceType(this);
+    visitor.visitGenericDeclaration(this);
   }
 
   @Override
@@ -28,21 +27,21 @@ public class VlangArrayOrSliceTypeImpl extends VlangTypeDeclImpl implements Vlan
   }
 
   @Override
-  @Nullable
-  public VlangExpression getExpression() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class);
+  @NotNull
+  public VlangGenericDeclarationList getGenericDeclarationList() {
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangGenericDeclarationList.class));
   }
 
   @Override
   @NotNull
-  public PsiElement getLbrack() {
-    return notNullChild(findChildByType(LBRACK));
+  public PsiElement getGreater() {
+    return notNullChild(findChildByType(GREATER));
   }
 
   @Override
-  @Nullable
-  public PsiElement getRbrack() {
-    return findChildByType(RBRACK);
+  @NotNull
+  public PsiElement getLess() {
+    return notNullChild(findChildByType(LESS));
   }
 
 }

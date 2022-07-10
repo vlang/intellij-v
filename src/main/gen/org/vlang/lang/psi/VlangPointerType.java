@@ -7,7 +7,4 @@ import com.intellij.psi.PsiElement;
 
 public interface VlangPointerType extends VlangTypeDecl {
 
-  @Nullable
-  VlangTypeDecl getTypeDecl();
-
 }

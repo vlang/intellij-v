@@ -46,6 +46,12 @@ public class VlangUnionDeclarationImpl extends VlangNamedElementImpl<VlangUnionD
 
   @Override
   @Nullable
+  public VlangGenericDeclaration getGenericDeclaration() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangGenericDeclaration.class);
+  }
+
+  @Override
+  @Nullable
   public VlangMemberModifiers getMemberModifiers() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangMemberModifiers.class);
   }

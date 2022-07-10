@@ -16,6 +16,9 @@ public interface VlangEnumDeclaration extends VlangNamedElement, StubBasedPsiEle
   VlangEnumFields getEnumFields();
 
   @Nullable
+  VlangGenericDeclaration getGenericDeclaration();
+
+  @Nullable
   VlangSymbolVisibility getSymbolVisibility();
 
   @Nullable

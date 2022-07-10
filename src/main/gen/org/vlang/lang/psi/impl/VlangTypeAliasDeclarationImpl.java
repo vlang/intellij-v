@@ -34,6 +34,12 @@ public class VlangTypeAliasDeclarationImpl extends VlangNamedElementImpl<VlangTy
 
   @Override
   @Nullable
+  public VlangGenericDeclaration getGenericDeclaration() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangGenericDeclaration.class);
+  }
+
+  @Override
+  @Nullable
   public VlangSymbolVisibility getSymbolVisibility() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangSymbolVisibility.class);
   }

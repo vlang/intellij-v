@@ -16,6 +16,9 @@ public interface VlangUnionDeclaration extends VlangNamedElement, StubBasedPsiEl
   VlangFieldDeclaration getFieldDeclaration();
 
   @Nullable
+  VlangGenericDeclaration getGenericDeclaration();
+
+  @Nullable
   VlangMemberModifiers getMemberModifiers();
 
   @Nullable

@@ -7,9 +7,6 @@ import com.intellij.psi.PsiElement;
 
 public interface VlangNullableType extends VlangTypeDecl {
 
-  @Nullable
-  VlangTypeDecl getTypeDecl();
-
   @NotNull
   PsiElement getQuestion();
 

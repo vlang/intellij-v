@@ -28,12 +28,6 @@ public class VlangNullableTypeImpl extends VlangTypeDeclImpl implements VlangNul
   }
 
   @Override
-  @Nullable
-  public VlangTypeDecl getTypeDecl() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class);
-  }
-
-  @Override
   @NotNull
   public PsiElement getQuestion() {
     return notNullChild(findChildByType(QUESTION));

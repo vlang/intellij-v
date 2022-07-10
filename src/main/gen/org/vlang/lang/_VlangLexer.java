@@ -1118,7 +1118,7 @@ public class _VlangLexer implements FlexLexer, VlangTypes {
             // fall through
           case 140: break;
           case 11: 
-            { return GREATER;
+            { yybegin(MAYBE_SEMICOLON); return GREATER;
             } 
             // fall through
           case 141: break;

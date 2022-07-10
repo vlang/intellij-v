@@ -7,6 +7,12 @@ import com.intellij.psi.PsiElement;
 
 public interface VlangTypeDecl extends VlangReferenceExpressionBase {
 
+  @Nullable
+  VlangGenericDeclaration getGenericDeclaration();
+
+  @Nullable
+  VlangTypeDecl getTypeDecl();
+
   @NotNull
   List<VlangTypeReferenceExpression> getTypeReferenceExpressionList();
 

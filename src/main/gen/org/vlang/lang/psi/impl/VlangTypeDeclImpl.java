@@ -27,6 +27,18 @@ public class VlangTypeDeclImpl extends VlangCompositeElementImpl implements Vlan
   }
 
   @Override
+  @Nullable
+  public VlangGenericDeclaration getGenericDeclaration() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangGenericDeclaration.class);
+  }
+
+  @Override
+  @Nullable
+  public VlangTypeDecl getTypeDecl() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class);
+  }
+
+  @Override
   @NotNull
   public List<VlangTypeReferenceExpression> getTypeReferenceExpressionList() {
     return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangTypeReferenceExpression.class);

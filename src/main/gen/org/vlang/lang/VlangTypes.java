@@ -68,6 +68,9 @@ public interface VlangTypes {
   IElementType FUNCTION_DECLARATION = VlangElementTypeFactory.stubFactory("FUNCTION_DECLARATION");
   IElementType FUNCTION_LIT = new VlangCompositeElementType("FUNCTION_LIT");
   IElementType FUNCTION_TYPE = new VlangCompositeElementType("FUNCTION_TYPE");
+  IElementType GENERIC_DECLARATION = new VlangCompositeElementType("GENERIC_DECLARATION");
+  IElementType GENERIC_DECLARATION_LIST = new VlangCompositeElementType("GENERIC_DECLARATION_LIST");
+  IElementType GENERIC_NAME = new VlangCompositeElementType("GENERIC_NAME");
   IElementType GLOBAL_VARIABLE_DECLARATION = new VlangCompositeElementType("GLOBAL_VARIABLE_DECLARATION");
   IElementType GOTO_STATEMENT = new VlangCompositeElementType("GOTO_STATEMENT");
   IElementType GO_EXPRESSION = new VlangCompositeElementType("GO_EXPRESSION");
@@ -448,6 +451,15 @@ public interface VlangTypes {
       }
       else if (type == FUNCTION_TYPE) {
         return new VlangFunctionTypeImpl(node);
+      }
+      else if (type == GENERIC_DECLARATION) {
+        return new VlangGenericDeclarationImpl(node);
+      }
+      else if (type == GENERIC_DECLARATION_LIST) {
+        return new VlangGenericDeclarationListImpl(node);
+      }
+      else if (type == GENERIC_NAME) {
+        return new VlangGenericNameImpl(node);
       }
       else if (type == GLOBAL_VARIABLE_DECLARATION) {
         return new VlangGlobalVariableDeclarationImpl(node);

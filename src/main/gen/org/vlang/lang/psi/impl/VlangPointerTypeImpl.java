@@ -27,10 +27,4 @@ public class VlangPointerTypeImpl extends VlangTypeDeclImpl implements VlangPoin
     else super.accept(visitor);
   }
 
-  @Override
-  @Nullable
-  public VlangTypeDecl getTypeDecl() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class);
-  }
-
 }

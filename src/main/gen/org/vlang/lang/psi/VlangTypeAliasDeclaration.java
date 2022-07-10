@@ -10,6 +10,9 @@ import org.vlang.lang.stubs.VlangTypeAliasDeclarationStub;
 public interface VlangTypeAliasDeclaration extends VlangNamedElement, StubBasedPsiElement<VlangTypeAliasDeclarationStub> {
 
   @Nullable
+  VlangGenericDeclaration getGenericDeclaration();
+
+  @Nullable
   VlangSymbolVisibility getSymbolVisibility();
 
   @Nullable

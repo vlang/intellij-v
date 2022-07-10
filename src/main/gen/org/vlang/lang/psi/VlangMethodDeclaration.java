@@ -15,6 +15,9 @@ public interface VlangMethodDeclaration extends VlangFunctionOrMethodDeclaration
   @Nullable
   VlangBlock getBlock();
 
+  @Nullable
+  VlangGenericDeclaration getGenericDeclaration();
+
   @NotNull
   VlangMethodName getMethodName();
 

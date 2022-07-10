@@ -10,15 +10,14 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangArrayOrSliceTypeImpl extends VlangTypeDeclImpl implements VlangArrayOrSliceType {
+public class VlangGenericNameImpl extends VlangCompositeElementImpl implements VlangGenericName {
 
-  public VlangArrayOrSliceTypeImpl(@NotNull ASTNode node) {
+  public VlangGenericNameImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitArrayOrSliceType(this);
+    visitor.visitGenericName(this);
   }
 
   @Override
@@ -28,21 +27,9 @@ public class VlangArrayOrSliceTypeImpl extends VlangTypeDeclImpl implements Vlan
   }
 
   @Override
-  @Nullable
-  public VlangExpression getExpression() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class);
-  }
-
-  @Override
   @NotNull
-  public PsiElement getLbrack() {
-    return notNullChild(findChildByType(LBRACK));
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getRbrack() {
-    return findChildByType(RBRACK);
+  public PsiElement getIdentifier() {
+    return notNullChild(findChildByType(IDENTIFIER));
   }
 
 }

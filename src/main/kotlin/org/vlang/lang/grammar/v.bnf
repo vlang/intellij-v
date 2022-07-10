@@ -341,7 +341,7 @@ StructDeclaration ::= Attributes? SymbolVisibility? StructType {
   methods=[getIdentifier getName]
 }
 
-StructType ::= struct identifier? '{' Fields? '}' {pin=1}
+StructType ::= struct identifier GenericDeclaration? '{' Fields? '}' {pin=1}
 
 MemberModifiers ::= MemberModifier (MemberModifier)* ':' {pin=1}
 MemberModifier ::= mut | pub | shared | BUILTIN_GLOBAL
@@ -364,7 +364,7 @@ AnonymousFieldDefinition ::= TypeDecl {
 // interface
 InterfaceDeclaration ::= Attributes? SymbolVisibility? InterfaceType
 
-InterfaceType ::= interface identifier? '{' InterfaceMembers? '}' {pin=1}
+InterfaceType ::= interface identifier GenericDeclaration? '{' InterfaceMembers? '}' {pin=1}
 
 private InterfaceMembers ::= MemberModifiers? (InterfaceFieldDeclaration | InterfaceMethodDeclaration | AnonymousInterfaceDefinition)? (semi InterfaceMembers)* semi? {pin=1}
 InterfaceFieldDeclaration ::= (FieldDefinitionList TypeDecl) Attribute? Tag?
@@ -377,7 +377,7 @@ AnonymousInterfaceDefinition ::= TypeDecl {
 
 
 // enum
-EnumDeclaration ::= Attributes? SymbolVisibility? enum identifier '{' EnumFields? '}' {
+EnumDeclaration ::= Attributes? SymbolVisibility? enum identifier GenericDeclaration? '{' EnumFields? '}' {
   pin=3
   stubClass="org.vlang.lang.stubs.VlangEnumDeclarationStub"
   methods=[getName]
@@ -387,7 +387,7 @@ EnumFieldDeclaration ::= identifier ('=' Expression)? {pin=1}
 
 
 // union
-UnionDeclaration ::= Attributes? SymbolVisibility? union identifier? '{' Fields? '}' {
+UnionDeclaration ::= Attributes? SymbolVisibility? union identifier GenericDeclaration? '{' Fields? '}' {
   pin=3
   stubClass="org.vlang.lang.stubs.VlangUnionDeclarationStub"
   methods=[getName]
@@ -395,7 +395,7 @@ UnionDeclaration ::= Attributes? SymbolVisibility? union identifier? '{' Fields?
 
 
 // [<visibility>] type <ident> = <types>
-TypeAliasDeclaration ::= SymbolVisibility? 'type' identifier '=' TypeUnionList {
+TypeAliasDeclaration ::= SymbolVisibility? 'type' identifier GenericDeclaration? '=' TypeUnionList {
   pin=2
   stubClass="org.vlang.lang.stubs.VlangTypeAliasDeclarationStub"
   methods=[getName]
@@ -442,13 +442,22 @@ VarModifiers ::= (mut | shared)*
 
 SymbolVisibility ::= pub | BUILTIN_GLOBAL
 
-FunctionDeclaration ::= Attributes? SymbolVisibility? fn identifier Signature BlockWithConsume? {
+GenericDeclaration ::= '<' GenericDeclarationList '>'
+
+GenericDeclarationList ::= GenericName (',' GenericName)*
+
+GenericName ::= identifier {
+//  stubClass="org.vlang.lang.stubs.GoGenericNameStub"
+//  methods=[getName]
+}
+
+FunctionDeclaration ::= Attributes? SymbolVisibility? fn identifier GenericDeclaration? Signature BlockWithConsume? {
   pin=4
   stubClass="org.vlang.lang.stubs.VlangFunctionDeclarationStub"
   methods=[getName]
 }
 
-MethodDeclaration ::= Attributes? SymbolVisibility? fn Receiver MethodName Signature BlockWithConsume? {
+MethodDeclaration ::= Attributes? SymbolVisibility? fn Receiver MethodName GenericDeclaration? Signature BlockWithConsume? {
   pin=5
   stubClass="org.vlang.lang.stubs.VlangMethodDeclarationStub"
   methods=[getReceiverType getIdentifier]
@@ -548,9 +557,7 @@ Capture ::= VarDefinition {pin=1}
 
 ////// TYPES //////
 
-TypeDecl ::=
-    TypeLit
-  | TypeName {
+TypeDecl ::= (TypeLit | TypeName) GenericDeclaration? {
   methods=[getIdentifier]
 }
 //  | ParType {
