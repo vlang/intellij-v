@@ -175,6 +175,10 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 ">="                                      { return GREATER_OR_EQUAL; }
 ">"                                       { yybegin(MAYBE_SEMICOLON); return GREATER; }
 
+"'"                                       { return SINGLE_QUOTE; }
+"\""                                      { return DOUBLE_QUOTE; }
+"`"                                       { return BACKTICK; }
+
 ":="                                      { return VAR_ASSIGN; }
 
 "#include"                                { yybegin(C_STRING_LITERAL); return C_INCLUDE; }
