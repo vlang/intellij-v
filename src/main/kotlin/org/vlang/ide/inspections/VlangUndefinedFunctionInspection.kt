@@ -1,6 +1,5 @@
 package org.vlang.ide.inspections
 
-import com.intellij.codeInspection.LocalInspectionTool
 import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.psi.PsiElementVisitor
@@ -8,7 +7,7 @@ import org.vlang.lang.psi.VlangCallExpr
 import org.vlang.lang.psi.VlangReferenceExpression
 import org.vlang.lang.psi.VlangVisitor
 
-class VlangUndefinedFunctionInspection : LocalInspectionTool() {
+class VlangUndefinedFunctionInspection : VlangBaseInspection() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
         return object : VlangVisitor() {
             override fun visitCallExpr(o: VlangCallExpr) {

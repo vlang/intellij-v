@@ -10,15 +10,14 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangStructTypeImpl extends VlangTypeDeclImpl implements VlangStructType {
+public class VlangFieldsGroupImpl extends VlangCompositeElementImpl implements VlangFieldsGroup {
 
-  public VlangStructTypeImpl(@NotNull ASTNode node) {
+  public VlangFieldsGroupImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitStructType(this);
+    visitor.visitFieldsGroup(this);
   }
 
   @Override
@@ -29,32 +28,26 @@ public class VlangStructTypeImpl extends VlangTypeDeclImpl implements VlangStruc
 
   @Override
   @NotNull
-  public List<VlangFieldsGroup> getFieldsGroupList() {
-    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangFieldsGroup.class);
+  public List<VlangFieldDeclaration> getFieldDeclarationList() {
+    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangFieldDeclaration.class);
   }
 
   @Override
   @Nullable
-  public PsiElement getLbrace() {
-    return findChildByType(LBRACE);
+  public VlangMemberModifiers getMemberModifiers() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangMemberModifiers.class);
   }
 
   @Override
   @Nullable
-  public PsiElement getRbrace() {
-    return findChildByType(RBRACE);
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
   }
 
   @Override
   @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getStruct() {
-    return notNullChild(findChildByType(STRUCT));
+  public PsiElement getSemicolonSynthetic() {
+    return findChildByType(SEMICOLON_SYNTHETIC);
   }
 
 }

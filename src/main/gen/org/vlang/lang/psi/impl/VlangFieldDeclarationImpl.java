@@ -64,6 +64,18 @@ public class VlangFieldDeclarationImpl extends VlangCompositeElementImpl impleme
 
   @Override
   @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSemicolonSynthetic() {
+    return findChildByType(SEMICOLON_SYNTHETIC);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getShared() {
     return findChildByType(SHARED);
   }

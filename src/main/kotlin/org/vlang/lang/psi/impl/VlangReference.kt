@@ -7,12 +7,10 @@ import com.intellij.psi.ResolveResult
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ArrayUtil
-import org.vlang.lang.psi.VlangCallExpr
-import org.vlang.lang.psi.VlangDotExpression
-import org.vlang.lang.psi.VlangFile
-import org.vlang.lang.psi.VlangReferenceExpressionBase
-import org.vlang.lang.psi.VlangTypeDecl
-import org.vlang.lang.stubs.index.*
+import org.vlang.lang.psi.*
+import org.vlang.lang.stubs.index.VlangFunctionIndex
+import org.vlang.lang.stubs.index.VlangNamesIndex
+import org.vlang.lang.utils.LabelUtil
 
 class VlangReference(private val el: VlangReferenceExpressionBase) :
     VlangReferenceBase<VlangReferenceExpressionBase>(
@@ -67,8 +65,12 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
 
     override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
         val project = el.project
-
         val name = identifier?.text ?: return emptyArray()
+
+        if (myElement is VlangLabelRef) {
+            return resolveLabelRef(name)
+        }
+
         val fqn = getFqn() ?: return emptyArray()
 
         val res = when {
@@ -83,6 +85,12 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
         return res
             .map { PsiElementResolveResult(it) }
             .toTypedArray()
+    }
+
+    private fun resolveLabelRef(name: String): Array<ResolveResult> {
+        val labels = LabelUtil.collectContextLabels(myElement)
+        val label = labels.find { it.label.labelRef.name == name } ?: return emptyArray()
+        return arrayOf(PsiElementResolveResult(label))
     }
 
     override fun getVariants() = ArrayUtil.EMPTY_OBJECT_ARRAY

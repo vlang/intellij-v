@@ -5,6 +5,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
 import com.intellij.psi.stubs.IStubElementType
+import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.elementType
 import org.vlang.lang.VlangTypes
@@ -44,15 +45,16 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> : VlangStubbedElemen
     }
 
     override fun getNameIdentifier(): PsiElement? {
-        var ident: PsiElement? = null
-        PsiTreeUtil.processElements(this) {
-            if (it.elementType == VlangTypes.IDENTIFIER) {
-                ident = it
-                return@processElements false
-            }
-
-            true
-        }
+//        var ident: PsiElement? = null
+        val ident = this.findChildByFilter(TokenSet.create(VlangTypes.IDENTIFIER))
+//        PsiTreeUtil.processElements(this) {
+//            if (it.elementType == VlangTypes.IDENTIFIER) {
+//                ident = it
+//                return@processElements false
+//            }
+//
+//            true
+//        }
         return ident
     }
 }

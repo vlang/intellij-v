@@ -53,17 +53,32 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
         <annotator language="vlang" order="first" id="org.vlang.lang.annotator.VlangAnnotator"
                    implementationClass="org.vlang.lang.annotator.VlangAnnotator"/>
 
-        <localInspection language="vlang" groupName="Vlang plugin" shortName="KphpUndefinedClassInspection"
+        <lang.inspectionSuppressor language="vlang"
+                                   implementationClass="org.vlang.ide.inspections.suppression.VlangInspectionSuppressor"/>
+
+        <localInspection language="vlang" groupName="V" shortName="VlangUndefinedFunctionInspection"
                          displayName="Undefined function"
                          enabledByDefault="true" level="ERROR"
                          implementationClass="org.vlang.ide.inspections.VlangUndefinedFunctionInspection"/>
+
+        <localInspection language="vlang" groupName="V" shortName="VlangUnresolvedLabelInspection"
+                         displayName="Unresolved label"
+                         enabledByDefault="true" level="ERROR"
+                         implementationClass="org.vlang.ide.inspections.VlangUnresolvedLabelInspection"/>
 
         <runLineMarkerContributor id="VlangRunLineMarkerProvider" language="vlang"
                                   implementationClass="org.vlang.ide.run.VlangRunLineMarkerProvider"/>
 
         <completion.contributor
           language="vlang"
-          implementationClass="org.vlang.lang.completion.VlangCompletionContributor"/>
+          order="last"
+          implementationClass="org.vlang.lang.completion.VlangKeywordsCompletionContributor"/>
+
+        <completion.contributor
+          language="vlang"
+          implementationClass="org.vlang.lang.completion.VlangContextCompletionContributor"/>
+
+        <typedHandler implementation="org.vlang.lang.completion.VlangTypedHandler"/>
 
         <formattingService implementation="org.vlang.lang.formatter.VlangFormattingService"/>
 

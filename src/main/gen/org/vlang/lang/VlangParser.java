@@ -1300,7 +1300,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (FieldDefinitionList shared? TypeDecl | AnonymousFieldDefinition) DefaultFieldValue? Attribute? Tag?
+  // (FieldDefinitionList shared? TypeDecl | AnonymousFieldDefinition) DefaultFieldValue? Attribute? Tag? semi
   public static boolean FieldDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FieldDeclaration")) return false;
     boolean r;
@@ -1309,6 +1309,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     r = r && FieldDeclaration_1(b, l + 1);
     r = r && FieldDeclaration_2(b, l + 1);
     r = r && FieldDeclaration_3(b, l + 1);
+    r = r && semi(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -1603,61 +1604,15 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MemberModifiers? FieldDeclaration? (semi Fields)* semi?
-  static boolean Fields(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Fields")) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_);
-    r = Fields_0(b, l + 1);
-    p = r; // pin = 1
-    r = r && report_error_(b, Fields_1(b, l + 1));
-    r = p && report_error_(b, Fields_2(b, l + 1)) && r;
-    r = p && Fields_3(b, l + 1) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  // MemberModifiers?
-  private static boolean Fields_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Fields_0")) return false;
-    MemberModifiers(b, l + 1);
-    return true;
-  }
-
-  // FieldDeclaration?
-  private static boolean Fields_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Fields_1")) return false;
-    FieldDeclaration(b, l + 1);
-    return true;
-  }
-
-  // (semi Fields)*
-  private static boolean Fields_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Fields_2")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!Fields_2_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "Fields_2", c)) break;
-    }
-    return true;
-  }
-
-  // semi Fields
-  private static boolean Fields_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Fields_2_0")) return false;
+  // WithModifiersFieldsGroup | WithoutModifiersFieldsGroup
+  public static boolean FieldsGroup(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FieldsGroup")) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = semi(b, l + 1);
-    r = r && Fields(b, l + 1);
-    exit_section_(b, m, null, r);
+    Marker m = enter_section_(b, l, _NONE_, FIELDS_GROUP, "<fields group>");
+    r = WithModifiersFieldsGroup(b, l + 1);
+    if (!r) r = WithoutModifiersFieldsGroup(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
-  }
-
-  // semi?
-  private static boolean Fields_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Fields_3")) return false;
-    semi(b, l + 1);
-    return true;
   }
 
   /* ********************************************************** */
@@ -1745,44 +1700,36 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Label? for <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) <<exitModeSafe "BLOCK?">>
+  // for <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) <<exitModeSafe "BLOCK?">>
   public static boolean ForStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForStatement")) return false;
-    if (!nextTokenIs(b, "<for statement>", FOR, IDENTIFIER)) return false;
+    if (!nextTokenIs(b, FOR)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, FOR_STATEMENT, "<for statement>");
-    r = ForStatement_0(b, l + 1);
-    r = r && consumeToken(b, FOR);
+    Marker m = enter_section_(b, l, _NONE_, FOR_STATEMENT, null);
+    r = consumeToken(b, FOR);
     p = r; // pin = for|ForOrRangeClause
     r = r && report_error_(b, enterMode(b, l + 1, "BLOCK?"));
-    r = p && report_error_(b, ForStatement_3(b, l + 1)) && r;
+    r = p && report_error_(b, ForStatement_2(b, l + 1)) && r;
     r = p && exitModeSafe(b, l + 1, "BLOCK?") && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
-  // Label?
-  private static boolean ForStatement_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ForStatement_0")) return false;
-    Label(b, l + 1);
-    return true;
-  }
-
   // ForOrRangeClause Block | Block | Expression Block
-  private static boolean ForStatement_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ForStatement_3")) return false;
+  private static boolean ForStatement_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ForStatement_2")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = ForStatement_3_0(b, l + 1);
+    r = ForStatement_2_0(b, l + 1);
     if (!r) r = Block(b, l + 1);
-    if (!r) r = ForStatement_3_2(b, l + 1);
+    if (!r) r = ForStatement_2_2(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // ForOrRangeClause Block
-  private static boolean ForStatement_3_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ForStatement_3_0")) return false;
+  private static boolean ForStatement_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ForStatement_2_0")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
     r = ForOrRangeClause(b, l + 1);
@@ -1793,8 +1740,8 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   // Expression Block
-  private static boolean ForStatement_3_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ForStatement_3_2")) return false;
+  private static boolean ForStatement_2_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ForStatement_2_2")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = Expression(b, l + 1, -1);
@@ -2683,38 +2630,26 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MemberModifier (MemberModifier)* ':'
+  // MemberModifier* ':'
   public static boolean MemberModifiers(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MemberModifiers")) return false;
-    boolean r, p;
+    boolean r;
     Marker m = enter_section_(b, l, _NONE_, MEMBER_MODIFIERS, "<member modifiers>");
-    r = MemberModifier(b, l + 1);
-    p = r; // pin = 1
-    r = r && report_error_(b, MemberModifiers_1(b, l + 1));
-    r = p && consumeToken(b, COLON) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+    r = MemberModifiers_0(b, l + 1);
+    r = r && consumeToken(b, COLON);
+    exit_section_(b, l, m, r, false, null);
+    return r;
   }
 
-  // (MemberModifier)*
-  private static boolean MemberModifiers_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MemberModifiers_1")) return false;
+  // MemberModifier*
+  private static boolean MemberModifiers_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MemberModifiers_0")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!MemberModifiers_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "MemberModifiers_1", c)) break;
+      if (!MemberModifier(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "MemberModifiers_0", c)) break;
     }
     return true;
-  }
-
-  // (MemberModifier)
-  private static boolean MemberModifiers_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MemberModifiers_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = MemberModifier(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */
@@ -3964,7 +3899,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // struct identifier GenericDeclaration? '{' Fields? '}'
+  // struct identifier GenericDeclaration? '{' FieldsGroup* '}'
   public static boolean StructType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StructType")) return false;
     if (!nextTokenIs(b, STRUCT)) return false;
@@ -3987,10 +3922,14 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // Fields?
+  // FieldsGroup*
   private static boolean StructType_4(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StructType_4")) return false;
-    Fields(b, l + 1);
+    while (true) {
+      int c = current_position_(b);
+      if (!FieldsGroup(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "StructType_4", c)) break;
+    }
     return true;
   }
 
@@ -4347,7 +4286,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Attributes? SymbolVisibility? union identifier GenericDeclaration? '{' Fields? '}'
+  // Attributes? SymbolVisibility? union identifier GenericDeclaration? '{' FieldsGroup? '}'
   public static boolean UnionDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "UnionDeclaration")) return false;
     boolean r, p;
@@ -4385,10 +4324,10 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // Fields?
+  // FieldsGroup?
   private static boolean UnionDeclaration_6(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "UnionDeclaration_6")) return false;
-    Fields(b, l + 1);
+    FieldsGroup(b, l + 1);
     return true;
   }
 
@@ -4517,6 +4456,79 @@ public class VlangParser implements PsiParser, LightPsiParser {
     boolean r;
     r = consumeToken(b, MUT);
     if (!r) r = consumeToken(b, SHARED);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // MemberModifiers semi? FieldDeclaration+
+  static boolean WithModifiersFieldsGroup(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "WithModifiersFieldsGroup")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = MemberModifiers(b, l + 1);
+    p = r; // pin = 1
+    r = r && report_error_(b, WithModifiersFieldsGroup_1(b, l + 1));
+    r = p && WithModifiersFieldsGroup_2(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // semi?
+  private static boolean WithModifiersFieldsGroup_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "WithModifiersFieldsGroup_1")) return false;
+    semi(b, l + 1);
+    return true;
+  }
+
+  // FieldDeclaration+
+  private static boolean WithModifiersFieldsGroup_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "WithModifiersFieldsGroup_2")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = FieldDeclaration(b, l + 1);
+    while (r) {
+      int c = current_position_(b);
+      if (!FieldDeclaration(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "WithModifiersFieldsGroup_2", c)) break;
+    }
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // !MemberModifiers FieldDeclaration+
+  static boolean WithoutModifiersFieldsGroup(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "WithoutModifiersFieldsGroup")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = WithoutModifiersFieldsGroup_0(b, l + 1);
+    r = r && WithoutModifiersFieldsGroup_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // !MemberModifiers
+  private static boolean WithoutModifiersFieldsGroup_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "WithoutModifiersFieldsGroup_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NOT_);
+    r = !MemberModifiers(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // FieldDeclaration+
+  private static boolean WithoutModifiersFieldsGroup_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "WithoutModifiersFieldsGroup_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = FieldDeclaration(b, l + 1);
+    while (r) {
+      int c = current_position_(b);
+      if (!FieldDeclaration(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "WithoutModifiersFieldsGroup_1", c)) break;
+    }
+    exit_section_(b, m, null, r);
     return r;
   }
 

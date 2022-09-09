@@ -87,10 +87,11 @@
 //  implements("MethodSpec")="org.vlang.lang.psi.GoNamedSignatureOwner"
   implements("(Function|Method)Declaration")="org.vlang.lang.psi.VlangFunctionOrMethodDeclaration"
 //  implements("(Const|Type|Var)Declaration")="org.vlang.lang.psi.GoTopLevelDeclaration"
-  implements(".*ReferenceExpression|FieldName")="org.vlang.lang.psi.VlangReferenceExpressionBase"
+  implements(".*ReferenceExpression|FieldName|LabelRef")="org.vlang.lang.psi.VlangReferenceExpressionBase"
   implements("TypeDecl")="org.vlang.lang.psi.VlangReferenceExpressionBase"
+  implements("(Continue|Break|Goto)Statement")="org.vlang.lang.psi.VlangLabelRefOwnerElement"
 
-  extends("ImportSpec|ParamDefinition|Receiver|(Var|Const|Field|Label)Definition")="org.vlang.lang.psi.impl.VlangSimpleNamedElementImpl"
+  extends("ImportSpec|ParamDefinition|Receiver|(Var|Const|Field)Definition|LabelRef")="org.vlang.lang.psi.impl.VlangSimpleNamedElementImpl"
 
   extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
   extends("ModuleClause")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
@@ -265,7 +266,7 @@ CompileElseStatement ::= ELSE_COMPILE_TIME (CompileTimeIfStatement | Block) {pin
 
 // For statement
 // [<label>:] for ( ... ) { ... }
-ForStatement ::= Label? for <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) <<exitModeSafe "BLOCK?">> {pin(".*")="for|ForOrRangeClause"}
+ForStatement ::= for <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) <<exitModeSafe "BLOCK?">> {pin(".*")="for|ForOrRangeClause"}
 // <label>:
 Label ::= LabelRef ':' {pin=2}
 // for (;;;) or for (<*> in <*>)
@@ -311,7 +312,7 @@ UnsafeStatement ::= UnsafeExpression
 DeferStatement ::= defer Block
 
 // <label>:
-LabelRef ::= identifier { methods=[getReference] }
+LabelRef ::= identifier { methods=[getReference getNameIdentifier getName] }
 
 // TODO
 //SelectStatement ::= select '{' CommClause* '}'
@@ -344,14 +345,18 @@ StructDeclaration ::= Attributes? SymbolVisibility? StructType {
   methods=[getIdentifier getName]
 }
 
-StructType ::= struct identifier GenericDeclaration? '{' Fields? '}' {pin=1}
+StructType ::= struct identifier GenericDeclaration? '{' FieldsGroup* '}' {pin=1}
 
-MemberModifiers ::= MemberModifier (MemberModifier)* ':' {pin=1}
+MemberModifiers ::= MemberModifier* ':' {pin=2}
 MemberModifier ::= mut | pub | shared | BUILTIN_GLOBAL
 
+FieldsGroup ::= WithModifiersFieldsGroup | WithoutModifiersFieldsGroup
+
+private WithModifiersFieldsGroup ::= MemberModifiers semi? FieldDeclaration+ {pin=1}
+private WithoutModifiersFieldsGroup ::= !MemberModifiers FieldDeclaration+
+
+FieldDeclaration ::= (FieldDefinitionList shared? TypeDecl | AnonymousFieldDefinition) DefaultFieldValue? Attribute? Tag? semi
 DefaultFieldValue ::= '=' Expression
-private Fields ::= MemberModifiers? FieldDeclaration? (semi Fields)* semi? {pin=1}
-FieldDeclaration ::= (FieldDefinitionList shared? TypeDecl | AnonymousFieldDefinition) DefaultFieldValue? Attribute? Tag?
 Tag ::= StringLiteral
 private FieldDefinitionList ::= FieldName (',' FieldName)*
 FieldName ::= identifier {
@@ -390,7 +395,7 @@ EnumFieldDeclaration ::= identifier ('=' Expression)? {pin=1}
 
 
 // union
-UnionDeclaration ::= Attributes? SymbolVisibility? union identifier GenericDeclaration? '{' Fields? '}' {
+UnionDeclaration ::= Attributes? SymbolVisibility? union identifier GenericDeclaration? '{' FieldsGroup? '}' {
   pin=3
   stubClass="org.vlang.lang.stubs.VlangUnionDeclarationStub"
   methods=[getName]

@@ -5,21 +5,18 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangStructType extends VlangTypeDecl {
+public interface VlangFieldsGroup extends VlangCompositeElement {
 
   @NotNull
-  List<VlangFieldsGroup> getFieldsGroupList();
+  List<VlangFieldDeclaration> getFieldDeclarationList();
 
   @Nullable
-  PsiElement getLbrace();
+  VlangMemberModifiers getMemberModifiers();
 
   @Nullable
-  PsiElement getRbrace();
+  PsiElement getSemicolon();
 
   @Nullable
-  PsiElement getIdentifier();
-
-  @NotNull
-  PsiElement getStruct();
+  PsiElement getSemicolonSynthetic();
 
 }

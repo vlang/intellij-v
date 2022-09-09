@@ -70,6 +70,21 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getReference(o: VlangLabelRef): VlangReference {
+        return VlangReference(o)
+    }
+
+    @JvmStatic
+    fun getNameIdentifier(o: VlangLabelRef): PsiElement {
+        return o.getIdentifier()
+    }
+
+    @JvmStatic
+    fun getName(o: VlangLabelRef): String {
+        return o.nameIdentifier.text
+    }
+
+    @JvmStatic
     fun getIdentifier(o: VlangImportSpec): PsiElement {
         return o.firstChild
     }

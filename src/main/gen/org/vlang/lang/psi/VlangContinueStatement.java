@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangContinueStatement extends VlangStatement {
+public interface VlangContinueStatement extends VlangStatement, VlangLabelRefOwnerElement {
 
   @Nullable
   VlangLabelRef getLabelRef();

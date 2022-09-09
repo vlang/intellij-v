@@ -33,9 +33,9 @@ public class VlangMemberModifiersImpl extends VlangCompositeElementImpl implemen
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiElement getColon() {
-    return findChildByType(COLON);
+    return notNullChild(findChildByType(COLON));
   }
 
 }

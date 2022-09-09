@@ -10,7 +10,7 @@ public interface VlangMemberModifiers extends VlangCompositeElement {
   @NotNull
   List<VlangMemberModifier> getMemberModifierList();
 
-  @Nullable
+  @NotNull
   PsiElement getColon();
 
 }

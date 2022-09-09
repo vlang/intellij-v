@@ -26,6 +26,12 @@ public interface VlangFieldDeclaration extends VlangCompositeElement {
   VlangTypeDecl getTypeDecl();
 
   @Nullable
+  PsiElement getSemicolon();
+
+  @Nullable
+  PsiElement getSemicolonSynthetic();
+
+  @Nullable
   PsiElement getShared();
 
 }

@@ -56,6 +56,7 @@ public interface VlangTypes {
   IElementType ENUM_FIELD_DECLARATION = new VlangCompositeElementType("ENUM_FIELD_DECLARATION");
   IElementType ERROR_PROPAGATION_EXPRESSION = new VlangCompositeElementType("ERROR_PROPAGATION_EXPRESSION");
   IElementType EXPRESSION = new VlangCompositeElementType("EXPRESSION");
+  IElementType FIELDS_GROUP = new VlangCompositeElementType("FIELDS_GROUP");
   IElementType FIELD_DECLARATION = new VlangCompositeElementType("FIELD_DECLARATION");
   IElementType FIELD_INITIALIZATION = new VlangCompositeElementType("FIELD_INITIALIZATION");
   IElementType FIELD_INITIALIZATION_KEY = new VlangCompositeElementType("FIELD_INITIALIZATION_KEY");
@@ -420,6 +421,9 @@ public interface VlangTypes {
       }
       else if (type == ERROR_PROPAGATION_EXPRESSION) {
         return new VlangErrorPropagationExpressionImpl(node);
+      }
+      else if (type == FIELDS_GROUP) {
+        return new VlangFieldsGroupImpl(node);
       }
       else if (type == FIELD_DECLARATION) {
         return new VlangFieldDeclarationImpl(node);
