@@ -10,9 +10,7 @@ import org.vlang.lang.psi.VlangFile
 import org.vlang.lang.stubs.VlangFileStub
 import org.vlang.lang.stubs.index.VlangPackagesIndex
 
-class VlangFileElementType:
-    IStubFileElementType<VlangFileStub>("VLANG_FILE", VlangLanguage.INSTANCE) {
-
+class VlangFileElementType : IStubFileElementType<VlangFileStub>("VLANG_FILE", VlangLanguage.INSTANCE) {
     override fun getStubVersion() = VERSION
 
     override fun getBuilder(): StubBuilder {

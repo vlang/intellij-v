@@ -1,0 +1,65 @@
+package org.vlang.lang.formatter
+
+import com.intellij.formatting.*
+import com.intellij.lang.ASTNode
+import com.intellij.psi.TokenType
+import com.intellij.psi.formatter.common.AbstractBlock
+import com.intellij.psi.impl.source.tree.LeafPsiElement
+import org.intellij.markdown.ast.LeafASTNode
+import org.vlang.lang.psi.VlangBlock
+import org.vlang.lang.psi.VlangConstDeclaration
+import org.vlang.lang.psi.VlangEnumDeclaration
+import org.vlang.lang.psi.VlangInterfaceType
+import org.vlang.lang.psi.VlangMapInitExpr
+import org.vlang.lang.psi.VlangMatchArms
+import org.vlang.lang.psi.VlangStructType
+import org.vlang.lang.psi.VlangTypeInitExpr
+import org.vlang.lang.psi.VlangUnionDeclaration
+
+class VlangFormattingBlock(
+    node: ASTNode,
+    wrap: Wrap? = Wrap.createWrap(WrapType.NONE, false),
+    alignment: Alignment? = null,
+    private val withIdent: Boolean = false,
+    private val spacingBuilder: SpacingBuilder,
+) : AbstractBlock(node, wrap, alignment) {
+
+    override fun buildChildren(): List<VlangFormattingBlock> {
+        val blocks = mutableListOf<VlangFormattingBlock>()
+        val parent = node.psi ?: return emptyList()
+
+        var child = myNode.firstChildNode
+        while (child != null) {
+            if (child.elementType == TokenType.WHITE_SPACE) {
+                child = child.treeNext
+                continue
+            }
+
+            val needIdent = when (parent) {
+                is VlangBlock            -> true
+                is VlangInterfaceType    -> true
+                is VlangStructType       -> true
+                is VlangEnumDeclaration  -> true
+                is VlangUnionDeclaration -> true
+                is VlangConstDeclaration -> true
+                is VlangTypeInitExpr     -> true
+                is VlangMatchArms        -> true
+                is VlangMapInitExpr      -> true
+                else                     -> false
+            } && child !is LeafPsiElement
+
+            val block = VlangFormattingBlock(child, spacingBuilder = spacingBuilder, withIdent = needIdent)
+            blocks.add(block)
+
+            child = child.treeNext
+        }
+
+        return blocks
+    }
+
+    override fun getSpacing(child1: Block?, child2: Block) = spacingBuilder.getSpacing(this, child1, child2)
+
+    override fun getIndent(): Indent = if (withIdent) Indent.getNormalIndent(false) else Indent.getNoneIndent()
+
+    override fun isLeaf() = node.firstChildNode == null
+}

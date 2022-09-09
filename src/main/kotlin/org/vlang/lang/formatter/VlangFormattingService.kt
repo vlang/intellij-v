@@ -1,4 +1,4 @@
-package org.vlang.lang.formatting
+package org.vlang.lang.formatter
 
 import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.execution.process.CapturingProcessAdapter
