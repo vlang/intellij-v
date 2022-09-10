@@ -89,7 +89,7 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
 
     private fun resolveLabelRef(name: String): Array<ResolveResult> {
         val labels = LabelUtil.collectContextLabels(myElement)
-        val label = labels.find { it.label.labelRef.name == name } ?: return emptyArray()
+        val label = labels.find { it.labelRef.name == name } ?: return emptyArray()
         return arrayOf(PsiElementResolveResult(label))
     }
 

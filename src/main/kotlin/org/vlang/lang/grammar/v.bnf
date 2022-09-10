@@ -809,7 +809,7 @@ Literal ::=
   | char
 
 // just different strings
-StringLiteral ::= string | raw_string {
+StringLiteral ::= string | 'raw_string' {
 //  implements = "com.intellij.psi.PsiLanguageInjectionHost"
   methods = [isValidHost updateText createLiteralTextEscaper getDecodedText]
 }
