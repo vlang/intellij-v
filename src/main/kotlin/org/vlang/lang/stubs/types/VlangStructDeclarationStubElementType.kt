@@ -6,6 +6,7 @@ import com.intellij.psi.stubs.StubInputStream
 import com.intellij.psi.stubs.StubOutputStream
 import com.intellij.util.ArrayFactory
 import com.intellij.util.containers.ContainerUtil
+import org.vlang.lang.psi.VlangFunctionDeclaration
 import org.vlang.lang.psi.VlangStructDeclaration
 import org.vlang.lang.psi.VlangNamedElement
 import org.vlang.lang.psi.impl.VlangStructDeclarationImpl
@@ -42,5 +43,10 @@ class VlangStructDeclarationStubElementType(name: String) :
     companion object {
         private val EXTRA_KEYS: ArrayList<StubIndexKey<String, out VlangNamedElement>> =
             ContainerUtil.newArrayList(VlangStructIndex.KEY)
+
+        private val EMPTY_ARRAY: Array<VlangStructDeclaration?> = arrayOfNulls(0)
+        val ARRAY_FACTORY = ArrayFactory<VlangStructDeclaration> { count: Int ->
+            if (count == 0) EMPTY_ARRAY else arrayOfNulls<VlangStructDeclaration>(count)
+        }
     }
 }

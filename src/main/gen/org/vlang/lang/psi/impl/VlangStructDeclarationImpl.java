@@ -41,7 +41,7 @@ public class VlangStructDeclarationImpl extends VlangNamedElementImpl<VlangStruc
   @Override
   @NotNull
   public VlangStructType getStructType() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangStructType.class));
+    return notNullChild(VlangPsiTreeUtil.getStubChildOfType(this, VlangStructType.class));
   }
 
   @Override

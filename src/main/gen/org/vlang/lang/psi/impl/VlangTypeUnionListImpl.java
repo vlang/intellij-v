@@ -28,8 +28,8 @@ public class VlangTypeUnionListImpl extends VlangCompositeElementImpl implements
 
   @Override
   @NotNull
-  public List<VlangTypeDecl> getTypeDeclList() {
-    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangTypeDecl.class);
+  public List<VlangType> getTypeList() {
+    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangType.class);
   }
 
 }

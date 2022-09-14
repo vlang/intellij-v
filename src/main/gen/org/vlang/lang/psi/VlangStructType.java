@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangStructType extends VlangTypeDecl {
+public interface VlangStructType extends VlangType {
 
   @NotNull
   List<VlangFieldsGroup> getFieldsGroupList();

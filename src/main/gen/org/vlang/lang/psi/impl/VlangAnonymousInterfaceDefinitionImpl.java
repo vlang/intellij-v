@@ -28,8 +28,8 @@ public class VlangAnonymousInterfaceDefinitionImpl extends VlangCompositeElement
 
   @Override
   @NotNull
-  public VlangTypeDecl getTypeDecl() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class));
+  public VlangType getType() {
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangType.class));
   }
 
 }

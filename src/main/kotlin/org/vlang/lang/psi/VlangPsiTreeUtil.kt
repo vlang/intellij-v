@@ -12,6 +12,7 @@ import com.intellij.util.SmartList
 import com.intellij.util.containers.ContainerUtil
 
 object VlangPsiTreeUtil {
+    @JvmStatic
     fun <T : PsiElement?> getStubChildOfType(element: PsiElement?, aClass: Class<T>): T? {
         if (element == null) return null
         val stub = (if (element is StubBasedPsiElement<*>) element.stub else null)
@@ -25,6 +26,7 @@ object VlangPsiTreeUtil {
         return null
     }
 
+    @JvmStatic
     fun <T : PsiElement?> getStubChildrenOfTypeAsList(element: PsiElement?, aClass: Class<T>): List<T> {
         if (element == null) return emptyList()
         val stub = (if (element is StubBasedPsiElement<*>) element.stub else null)

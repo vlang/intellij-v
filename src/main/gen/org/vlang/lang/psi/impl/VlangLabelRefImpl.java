@@ -10,7 +10,7 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangLabelRefImpl extends VlangSimpleNamedElementImpl implements VlangLabelRef {
+public class VlangLabelRefImpl extends VlangCompositeElementImpl implements VlangLabelRef {
 
   public VlangLabelRefImpl(@NotNull ASTNode node) {
     super(node);
@@ -34,14 +34,8 @@ public class VlangLabelRefImpl extends VlangSimpleNamedElementImpl implements Vl
 
   @Override
   @NotNull
-  public VlangReference getReference() {
+  public VlangLabelReference getReference() {
     return VlangPsiImplUtil.getReference(this);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getNameIdentifier() {
-    return VlangPsiImplUtil.getNameIdentifier(this);
   }
 
   @Override

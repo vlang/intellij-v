@@ -34,8 +34,8 @@ public class VlangResultImpl extends VlangCompositeElementImpl implements VlangR
 
   @Override
   @Nullable
-  public VlangTypeDecl getTypeDecl() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class);
+  public VlangType getType() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangType.class);
   }
 
   @Override

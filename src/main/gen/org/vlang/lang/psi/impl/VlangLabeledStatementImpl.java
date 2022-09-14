@@ -29,8 +29,8 @@ public class VlangLabeledStatementImpl extends VlangStatementImpl implements Vla
 
   @Override
   @NotNull
-  public VlangLabel getLabel() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangLabel.class));
+  public VlangLabelDefinition getLabelDefinition() {
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangLabelDefinition.class));
   }
 
   @Override

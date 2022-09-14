@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface VlangReceiver extends VlangNamedElement {
 
   @Nullable
-  VlangTypeDecl getTypeDecl();
+  VlangType getType();
 
   @Nullable
   VlangVarModifiers getVarModifiers();
@@ -28,5 +28,8 @@ public interface VlangReceiver extends VlangNamedElement {
   //WARNING: getGoTypeInner(...) is skipped
   //matching getGoTypeInner(VlangReceiver, ...)
   //methods are not found in VlangPsiImplUtil
+
+  @Nullable
+  String getName();
 
 }

@@ -3,12 +3,12 @@ package org.vlang.ide.test.configuration
 import com.intellij.execution.configurations.ConfigurationFactory
 import com.intellij.execution.configurations.ConfigurationTypeBase
 import com.intellij.openapi.project.Project
-import org.vlang.ide.ui.PluginIcons
+import org.vlang.ide.ui.VIcons
 
 class VlangTestConfigurationType : ConfigurationTypeBase(
     ID, "Test",
     "Run V test",
-    PluginIcons.vlang
+    VIcons.Vlang
 ) {
     companion object {
         const val ID = "VlangTest"

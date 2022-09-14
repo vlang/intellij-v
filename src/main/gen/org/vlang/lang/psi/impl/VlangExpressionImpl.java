@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElementVisitor;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
+import com.intellij.psi.ResolveState;
 
 public abstract class VlangExpressionImpl extends VlangCompositeElementImpl implements VlangExpression {
 
@@ -24,6 +25,12 @@ public abstract class VlangExpressionImpl extends VlangCompositeElementImpl impl
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof VlangVisitor) accept((VlangVisitor)visitor);
     else super.accept(visitor);
+  }
+
+  @Override
+  @Nullable
+  public VlangType getType(@Nullable ResolveState context) {
+    return VlangPsiImplUtil.getType(this, context);
   }
 
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangArrayOrSliceType extends VlangTypeDecl {
+public interface VlangArrayOrSliceType extends VlangType {
 
   @Nullable
   VlangExpression getExpression();

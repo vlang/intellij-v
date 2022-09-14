@@ -8,16 +8,22 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
+import org.vlang.lang.stubs.VlangLabelDefinitionStub;
 import org.vlang.lang.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class VlangTypeDeclImpl extends VlangCompositeElementImpl implements VlangTypeDecl {
+public class VlangLabelDefinitionImpl extends VlangNamedElementImpl<VlangLabelDefinitionStub> implements VlangLabelDefinition {
 
-  public VlangTypeDeclImpl(@NotNull ASTNode node) {
+  public VlangLabelDefinitionImpl(@NotNull VlangLabelDefinitionStub stub, @NotNull IStubElementType<?, ?> type) {
+    super(stub, type);
+  }
+
+  public VlangLabelDefinitionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitTypeDecl(this);
+    visitor.visitLabelDefinition(this);
   }
 
   @Override
@@ -27,27 +33,15 @@ public class VlangTypeDeclImpl extends VlangCompositeElementImpl implements Vlan
   }
 
   @Override
-  @Nullable
-  public VlangGenericDeclaration getGenericDeclaration() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangGenericDeclaration.class);
-  }
-
-  @Override
-  @Nullable
-  public VlangTypeDecl getTypeDecl() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class);
+  @NotNull
+  public PsiElement getColon() {
+    return notNullChild(findChildByType(COLON));
   }
 
   @Override
   @NotNull
-  public List<VlangTypeReferenceExpression> getTypeReferenceExpressionList() {
-    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangTypeReferenceExpression.class);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getIdentifier() {
-    return VlangPsiImplUtil.getIdentifier(this);
+    return notNullChild(findChildByType(IDENTIFIER));
   }
 
 }

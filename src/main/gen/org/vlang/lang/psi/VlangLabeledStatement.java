@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface VlangLabeledStatement extends VlangStatement {
 
   @NotNull
-  VlangLabel getLabel();
+  VlangLabelDefinition getLabelDefinition();
 
   @Nullable
   VlangStatement getStatement();

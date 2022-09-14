@@ -11,7 +11,7 @@ public interface VlangTypeInitExpr extends VlangExpression {
   VlangFieldInitialization getFieldInitialization();
 
   @NotNull
-  VlangTypeDecl getTypeDecl();
+  VlangType getType();
 
   @NotNull
   PsiElement getLbrace();

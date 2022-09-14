@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangFunctionType extends VlangTypeDecl {
+public interface VlangFunctionType extends VlangType {
 
   @Nullable
   VlangSignature getSignature();

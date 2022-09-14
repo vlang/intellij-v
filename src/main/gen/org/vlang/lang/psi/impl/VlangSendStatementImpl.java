@@ -35,8 +35,8 @@ public class VlangSendStatementImpl extends VlangStatementImpl implements VlangS
 
   @Override
   @Nullable
-  public VlangLabel getLabel() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangLabel.class);
+  public VlangLabelDefinition getLabelDefinition() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangLabelDefinition.class);
   }
 
   @Override

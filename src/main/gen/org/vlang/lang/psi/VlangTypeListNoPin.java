@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface VlangTypeListNoPin extends VlangCompositeElement {
 
   @NotNull
-  List<VlangTypeDecl> getTypeDeclList();
+  List<VlangType> getTypeList();
 
 }

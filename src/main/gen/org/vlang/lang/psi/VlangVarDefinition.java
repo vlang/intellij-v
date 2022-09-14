@@ -4,8 +4,12 @@ package org.vlang.lang.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.StubBasedPsiElement;
+import org.vlang.lang.stubs.VlangVarDefinitionStub;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.ResolveState;
 
-public interface VlangVarDefinition extends VlangNamedElement {
+public interface VlangVarDefinition extends VlangNamedElement, StubBasedPsiElement<VlangVarDefinitionStub> {
 
   @Nullable
   VlangVarModifiers getVarModifiers();
@@ -13,16 +17,20 @@ public interface VlangVarDefinition extends VlangNamedElement {
   @NotNull
   PsiElement getIdentifier();
 
-  //WARNING: getGoTypeInner(...) is skipped
-  //matching getGoTypeInner(VlangVarDefinition, ...)
-  //methods are not found in VlangPsiImplUtil
+  @Nullable
+  VlangType getTypeInner(@Nullable ResolveState context);
 
-  //WARNING: getReference(...) is skipped
-  //matching getReference(VlangVarDefinition, ...)
-  //methods are not found in VlangPsiImplUtil
+  @NotNull
+  String getName();
+
+  @Nullable
+  PsiReference getReference();
 
   //WARNING: getValue(...) is skipped
   //matching getValue(VlangVarDefinition, ...)
   //methods are not found in VlangPsiImplUtil
+
+  @Nullable
+  VlangSymbolVisibility getSymbolVisibility();
 
 }

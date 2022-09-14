@@ -38,4 +38,16 @@ public class VlangTypeReferenceExpressionImpl extends VlangCompositeElementImpl 
     return VlangPsiImplUtil.getReference(this);
   }
 
+  @Override
+  @Nullable
+  public VlangTypeReferenceExpression getQualifier() {
+    return VlangPsiImplUtil.getQualifier(this);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement resolve() {
+    return VlangPsiImplUtil.resolve(this);
+  }
+
 }

@@ -44,8 +44,4 @@ abstract class VlangStubbedElementImpl<T : StubBase<*>> : StubBasedPsiElementBas
     override fun getContainingFile(): VlangFile {
         return super.getContainingFile() as VlangFile
     }
-
-    fun shouldVlangDeeper(): Boolean {
-        return true
-    }
 }

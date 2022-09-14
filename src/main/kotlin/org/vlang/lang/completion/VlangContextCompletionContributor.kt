@@ -3,8 +3,10 @@ package org.vlang.lang.completion
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.icons.AllIcons
-import com.intellij.patterns.*
+import com.intellij.patterns.ElementPattern
 import com.intellij.patterns.PlatformPatterns.psiElement
+import com.intellij.patterns.PsiElementPattern
+import com.intellij.patterns.StandardPatterns
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
@@ -12,6 +14,7 @@ import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.impl.VlangCachedReference
 import org.vlang.lang.utils.LabelUtil
 
 class VlangContextCompletionContributor : CompletionContributor() {
@@ -31,6 +34,18 @@ class VlangContextCompletionContributor : CompletionContributor() {
             insideWithLabelStatement(VlangTypes.IDENTIFIER),
             LabelCompletionProvider()
         )
+
+        extend(
+            CompletionType.BASIC,
+            referenceExpression(),
+            ReferenceCompletionProvider()
+        )
+
+        extend(
+            CompletionType.BASIC,
+            cachedReferenceExpression(),
+            ReferenceCompletionProvider()
+        )
     }
 
     private class LabelCompletionProvider : CompletionProvider<CompletionParameters>() {
@@ -39,6 +54,8 @@ class VlangContextCompletionContributor : CompletionContributor() {
             context: ProcessingContext,
             resultSet: CompletionResultSet,
         ) {
+            if (parameters.position.text == CompletionUtilCore.DUMMY_IDENTIFIER_TRIMMED) return
+
             val element = parameters.originalFile.findElementAt(parameters.offset)
                 ?: return
 
@@ -47,7 +64,7 @@ class VlangContextCompletionContributor : CompletionContributor() {
             labels.forEach {
                 resultSet.addElement(
                     PrioritizedLookupElement.withPriority(
-                        LookupElementBuilder.create(it), 25.0
+                        LookupElementBuilder.create(it), VlangCompletionUtil.CONTEXT_KEYWORD_PRIORITY.toDouble()
                     )
                 )
             }
@@ -60,8 +77,10 @@ class VlangContextCompletionContributor : CompletionContributor() {
             context: ProcessingContext,
             resultSet: CompletionResultSet,
         ) {
+            if (parameters.position.text == CompletionUtilCore.DUMMY_IDENTIFIER_TRIMMED) return
+
             val element = parameters.originalFile.findElementAt(parameters.offset) ?: return
-            val refs = element.parentOfType<VlangTypeInitExpr>()?.typeDecl?.typeReferenceExpressionList ?: return
+            val refs = element.parentOfType<VlangTypeInitExpr>()?.type?.typeReferenceExpressionList ?: return
 
             refs
                 .mapNotNull { it.reference.resolve() }
@@ -83,6 +102,14 @@ class VlangContextCompletionContributor : CompletionContributor() {
         }
     }
 
+    private fun referenceExpression(): PsiElementPattern.Capture<PsiElement> {
+        return psiElement().withParent(VlangReferenceExpressionBase::class.java)
+    }
+
+    private fun cachedReferenceExpression(): PsiElementPattern.Capture<PsiElement> {
+        return psiElement().withParent(psiElement().withReference(VlangCachedReference::class.java))
+    }
+
     private fun onStatementBeginning(vararg tokenTypes: IElementType): PsiElementPattern.Capture<PsiElement?> {
         return psiElement().withElementType(TokenSet.create(*tokenTypes))
     }
@@ -99,4 +126,5 @@ class VlangContextCompletionContributor : CompletionContributor() {
                 psiElement(VlangFunctionDeclaration::class.java)
             )
     }
+
 }

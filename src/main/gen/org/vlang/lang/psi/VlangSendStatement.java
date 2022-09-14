@@ -11,7 +11,7 @@ public interface VlangSendStatement extends VlangStatement {
   VlangExpression getExpression();
 
   @Nullable
-  VlangLabel getLabel();
+  VlangLabelDefinition getLabelDefinition();
 
   @Nullable
   VlangStatement getStatement();

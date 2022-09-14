@@ -28,8 +28,8 @@ public class VlangReceiverImpl extends VlangSimpleNamedElementImpl implements Vl
 
   @Override
   @Nullable
-  public VlangTypeDecl getTypeDecl() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class);
+  public VlangType getType() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangType.class);
   }
 
   @Override
@@ -60,6 +60,12 @@ public class VlangReceiverImpl extends VlangSimpleNamedElementImpl implements Vl
   @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);
+  }
+
+  @Override
+  @Nullable
+  public String getName() {
+    return VlangPsiImplUtil.getName(this);
   }
 
 }

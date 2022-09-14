@@ -38,4 +38,10 @@ public class VlangParamDefinitionImpl extends VlangSimpleNamedElementImpl implem
     return notNullChild(findChildByType(IDENTIFIER));
   }
 
+  @Override
+  @NotNull
+  public String getName() {
+    return VlangPsiImplUtil.getName(this);
+  }
+
 }

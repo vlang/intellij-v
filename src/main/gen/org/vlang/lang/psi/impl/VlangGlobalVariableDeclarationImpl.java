@@ -40,8 +40,8 @@ public class VlangGlobalVariableDeclarationImpl extends VlangCompositeElementImp
 
   @Override
   @Nullable
-  public VlangTypeDecl getTypeDecl() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class);
+  public VlangType getType() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangType.class);
   }
 
   @Override

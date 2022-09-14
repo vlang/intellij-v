@@ -22,7 +22,7 @@ abstract class VlangStubElementType<S : StubBase<T>, T : VlangCompositeElement>(
         return super.shouldCreateStub(node) && shouldCreateStubInBlock(node)
     }
 
-    protected fun shouldCreateStubInBlock(node: ASTNode): Boolean {
+    protected open fun shouldCreateStubInBlock(node: ASTNode): Boolean {
         return PsiTreeUtil.getParentOfType(node.psi, VlangBlock::class.java) == null
     }
 }

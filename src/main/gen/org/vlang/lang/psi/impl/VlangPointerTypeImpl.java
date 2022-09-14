@@ -9,8 +9,14 @@ import com.intellij.psi.PsiElementVisitor;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
+import org.vlang.lang.stubs.VlangTypeStub;
 
-public class VlangPointerTypeImpl extends VlangTypeDeclImpl implements VlangPointerType {
+public class VlangPointerTypeImpl extends VlangTypeImpl implements VlangPointerType {
+
+  public VlangPointerTypeImpl(@NotNull VlangTypeStub stub, @NotNull IStubElementType<?, ?> type) {
+    super(stub, type);
+  }
 
   public VlangPointerTypeImpl(@NotNull ASTNode node) {
     super(node);

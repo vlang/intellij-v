@@ -32,4 +32,10 @@ public class VlangFieldNameImpl extends VlangCompositeElementImpl implements Vla
     return notNullChild(findChildByType(IDENTIFIER));
   }
 
+  @Override
+  @Nullable
+  public VlangReferenceExpression getQualifier() {
+    return VlangPsiImplUtil.getQualifier(this);
+  }
+
 }

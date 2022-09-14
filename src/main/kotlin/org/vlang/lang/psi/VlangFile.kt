@@ -15,7 +15,8 @@ import org.vlang.lang.psi.impl.VlangPsiImplUtil
 import org.vlang.lang.stubs.VlangFileStub
 import org.vlang.lang.stubs.types.VlangFunctionDeclarationStubElementType
 import org.vlang.lang.stubs.types.VlangMethodDeclarationStubElementType
-import org.vlang.ide.ui.PluginIcons
+import org.vlang.ide.ui.VIcons
+import org.vlang.lang.stubs.types.VlangStructDeclarationStubElementType
 
 class VlangFile(viewProvider: FileViewProvider) :
     PsiFileBase(viewProvider, VlangLanguage.INSTANCE), PsiImportHolder, PsiClassOwner {
@@ -24,7 +25,7 @@ class VlangFile(viewProvider: FileViewProvider) :
 
     override fun toString() = "Vlang Language file"
 
-    override fun getIcon(flags: Int) = PluginIcons.vlang
+    override fun getIcon(flags: Int) = VIcons.Vlang
 
     override fun getReference() = references.getOrNull(0)
 
@@ -38,6 +39,10 @@ class VlangFile(viewProvider: FileViewProvider) :
 
     override fun importClass(aClass: PsiClass) = false
 
+    fun getModule(): VlangModuleClause? {
+        return findChildByClass(VlangModuleClause::class.java)
+    }
+
     fun getModuleName(): String? {
         val stub = stub as? VlangFileStub
         val moduleName = stub?.getModuleName()
@@ -45,8 +50,7 @@ class VlangFile(viewProvider: FileViewProvider) :
             return moduleName
         }
 
-        val moduleNamePsi = findChildByClass(VlangModuleClause::class.java) ?: return null
-        return moduleNamePsi.name
+        return getModule()?.name
     }
 
     private fun getImports(): List<VlangImportSpec> {
@@ -85,16 +89,22 @@ class VlangFile(viewProvider: FileViewProvider) :
         return "$module.$name"
     }
 
-    fun getFunctions(): List<VlangFunctionDeclaration> {
+    fun getFunctions(): List<VlangFunctionDeclaration> =
+        getNamedElements(VlangTypes.FUNCTION_DECLARATION, VlangFunctionDeclarationStubElementType.ARRAY_FACTORY)
+
+    fun getStructs(): List<VlangStructDeclaration> =
+        getNamedElements(VlangTypes.STRUCT_DECLARATION, VlangStructDeclarationStubElementType.ARRAY_FACTORY)
+
+    private inline fun <reified T : PsiElement?> getNamedElements(elementType: IElementType, arrayFactory: ArrayFactory<T>): List<T> {
         return CachedValuesManager.getCachedValue(this) {
-            val functions: List<VlangFunctionDeclaration> =
+            val functions =
                 if (stub != null) getChildrenByType(
                     stub!!,
-                    VlangTypes.FUNCTION_DECLARATION,
-                    VlangFunctionDeclarationStubElementType.ARRAY_FACTORY
+                    elementType,
+                    arrayFactory
                 ) else {
-                    VlangPsiImplUtil.goTraverser().children(this).filter(
-                        VlangFunctionDeclaration::class.java
+                    VlangPsiImplUtil.traverser().children(this).filter(
+                        T::class.java
                     ).toList()
                 }
 
@@ -114,7 +124,7 @@ class VlangFile(viewProvider: FileViewProvider) :
                     stub!!,
                     VlangTypes.METHOD_DECLARATION,
                     VlangMethodDeclarationStubElementType.ARRAY_FACTORY
-                ) else VlangPsiImplUtil.goTraverser().children(this).filter(
+                ) else VlangPsiImplUtil.traverser().children(this).filter(
                     VlangMethodDeclaration::class.java
                 ).toList()
             CachedValueProvider.Result.create(
@@ -124,10 +134,10 @@ class VlangFile(viewProvider: FileViewProvider) :
         }
     }
 
-    private fun <E : PsiElement?> getChildrenByType(
+    fun <E : PsiElement?> getChildrenByType(
         stub: StubElement<out PsiElement>,
         elementType: IElementType,
-        f: ArrayFactory<E>
+        f: ArrayFactory<E>,
     ): List<E> {
         return listOf(*stub.getChildrenByType(elementType, f))
     }

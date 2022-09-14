@@ -39,4 +39,16 @@ public class VlangReferenceExpressionImpl extends VlangExpressionImpl implements
     return VlangPsiImplUtil.getReference(this);
   }
 
+  @Override
+  @Nullable
+  public VlangReferenceExpression getQualifier() {
+    return VlangPsiImplUtil.getQualifier(this);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement resolve() {
+    return VlangPsiImplUtil.resolve(this);
+  }
+
 }

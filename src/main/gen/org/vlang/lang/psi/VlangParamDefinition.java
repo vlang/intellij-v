@@ -17,4 +17,7 @@ public interface VlangParamDefinition extends VlangNamedElement {
   //matching isVariadic(VlangParamDefinition, ...)
   //methods are not found in VlangPsiImplUtil
 
+  @NotNull
+  String getName();
+
 }

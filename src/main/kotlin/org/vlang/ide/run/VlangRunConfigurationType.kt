@@ -3,12 +3,12 @@ package org.vlang.ide.run
 import com.intellij.execution.configurations.ConfigurationFactory
 import com.intellij.execution.configurations.ConfigurationTypeBase
 import com.intellij.openapi.project.Project
-import org.vlang.ide.ui.PluginIcons
+import org.vlang.ide.ui.VIcons
 
 class VlangRunConfigurationType : ConfigurationTypeBase(
     ID, "Run",
     "Run V script",
-    PluginIcons.vlang
+    VIcons.Vlang
 ) {
     companion object {
         const val ID = "VlangRun"

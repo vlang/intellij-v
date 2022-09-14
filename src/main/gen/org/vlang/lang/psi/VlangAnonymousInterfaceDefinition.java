@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface VlangAnonymousInterfaceDefinition extends VlangCompositeElement {
 
   @NotNull
-  VlangTypeDecl getTypeDecl();
+  VlangType getType();
 
   //WARNING: getIdentifier(...) is skipped
   //matching getIdentifier(VlangAnonymousInterfaceDefinition, ...)

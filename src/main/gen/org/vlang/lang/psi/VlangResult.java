@@ -11,7 +11,7 @@ public interface VlangResult extends VlangCompositeElement {
   VlangParameters getParameters();
 
   @Nullable
-  VlangTypeDecl getTypeDecl();
+  VlangType getType();
 
   @Nullable
   VlangTypeListNoPin getTypeListNoPin();

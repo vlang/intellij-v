@@ -17,6 +17,6 @@ public interface VlangInterfaceFieldDeclaration extends VlangCompositeElement {
   VlangTag getTag();
 
   @NotNull
-  VlangTypeDecl getTypeDecl();
+  VlangType getType();
 
 }

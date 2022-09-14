@@ -8,9 +8,17 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
+import org.vlang.lang.stubs.VlangVarDefinitionStub;
 import org.vlang.lang.psi.*;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class VlangVarDefinitionImpl extends VlangSimpleNamedElementImpl implements VlangVarDefinition {
+public class VlangVarDefinitionImpl extends VlangNamedElementImpl<VlangVarDefinitionStub> implements VlangVarDefinition {
+
+  public VlangVarDefinitionImpl(@NotNull VlangVarDefinitionStub stub, @NotNull IStubElementType<?, ?> type) {
+    super(stub, type);
+  }
 
   public VlangVarDefinitionImpl(@NotNull ASTNode node) {
     super(node);
@@ -36,6 +44,30 @@ public class VlangVarDefinitionImpl extends VlangSimpleNamedElementImpl implemen
   @NotNull
   public PsiElement getIdentifier() {
     return notNullChild(findChildByType(IDENTIFIER));
+  }
+
+  @Override
+  @Nullable
+  public VlangType getTypeInner(@Nullable ResolveState context) {
+    return VlangPsiImplUtil.getTypeInner(this, context);
+  }
+
+  @Override
+  @NotNull
+  public String getName() {
+    return VlangPsiImplUtil.getName(this);
+  }
+
+  @Override
+  @Nullable
+  public PsiReference getReference() {
+    return VlangPsiImplUtil.getReference(this);
+  }
+
+  @Override
+  @Nullable
+  public VlangSymbolVisibility getSymbolVisibility() {
+    return VlangPsiImplUtil.getSymbolVisibility(this);
   }
 
 }

@@ -12,9 +12,9 @@ import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
 import com.intellij.util.ProcessingContext
 import org.vlang.lang.VlangTypes
+import org.vlang.lang.completion.VlangCompletionUtil.KEYWORD_PRIORITY
 import org.vlang.lang.psi.*
 import org.vlang.lang.stubs.index.*
-import org.vlang.lang.utils.LabelUtil
 
 class VlangKeywordsCompletionContributor : CompletionContributor() {
     init {
@@ -52,6 +52,10 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
             context: ProcessingContext,
             resultSet: CompletionResultSet,
         ) {
+            if (parameters.position.text == CompletionUtilCore.DUMMY_IDENTIFIER_TRIMMED) {
+                return
+            }
+
             val file = parameters.originalFile
 
             val allPublicNames = VlangNamesIndex.getAll(file.project)
@@ -108,10 +112,14 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
             context: ProcessingContext,
             result: CompletionResultSet,
         ) {
+            if (parameters.position.text == CompletionUtilCore.DUMMY_IDENTIFIER_TRIMMED) {
+                return
+            }
+
             for (keyword in keywords) {
                 result.addElement(
                     PrioritizedLookupElement.withPriority(
-                        LookupElementBuilder.create(keyword).bold(), 20.0
+                        LookupElementBuilder.create(keyword).bold(), KEYWORD_PRIORITY.toDouble()
                     )
                 )
             }
@@ -173,36 +181,38 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
     }
 
     companion object {
-        val BLOCK_KEYWORDS = arrayOf(
+        val BLOCK_EXPRESSION_KEYWORDS = arrayOf(
             "as",
-            "asm",
-            "assert",
-            "atomic",
-            "defer",
-            "else",
             "false",
-            "for",
             "go",
-            "goto",
             "if",
             "in",
             "is",
             "isreftype",
-            "lock",
             "match",
-            "mut",
             "none",
             "or",
+            "sizeof",
+            "true",
+            "typeof",
+            "unsafe",
+        )
+
+        val BLOCK_KEYWORDS = arrayOf(
+            "asm",
+            "assert",
+            "atomic",
+            "defer",
+            "for",
+            "goto",
+            "mut",
             "return",
             "rlock",
             "select",
             "shared",
             "sizeof",
-            "true",
-            "typeof",
-            "unsafe",
             "volatile",
             "__offsetof",
-        )
+        ) + BLOCK_EXPRESSION_KEYWORDS
     }
 }

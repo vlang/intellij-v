@@ -1,8 +1,7 @@
 package org.vlang.vmod
 
-import com.intellij.icons.AllIcons
 import com.intellij.openapi.fileTypes.LanguageFileType
-import org.vlang.ide.ui.PluginIcons
+import org.vlang.ide.ui.VIcons
 
 class VmodFileType : LanguageFileType(VmodLanguage.INSTANCE) {
     override fun getName() = "V Module"
@@ -11,7 +10,7 @@ class VmodFileType : LanguageFileType(VmodLanguage.INSTANCE) {
 
     override fun getDefaultExtension() = FILE_EXTENSION
 
-    override fun getIcon() = PluginIcons.vlangModule
+    override fun getIcon() = VIcons.VlangModule
 
     companion object {
         const val FILE_EXTENSION = "mod"

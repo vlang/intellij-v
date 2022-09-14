@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import org.vlang.lang.stubs.VlangMethodDeclarationStub;
 
-public interface VlangMethodDeclaration extends VlangFunctionOrMethodDeclaration, StubBasedPsiElement<VlangMethodDeclarationStub> {
+public interface VlangMethodDeclaration extends VlangSignatureOwner, VlangFunctionOrMethodDeclaration, StubBasedPsiElement<VlangMethodDeclarationStub> {
 
   @Nullable
   VlangAttributes getAttributes();

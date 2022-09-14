@@ -11,7 +11,7 @@ public interface VlangAsExpression extends VlangExpression {
   VlangExpression getExpression();
 
   @Nullable
-  VlangTypeDecl getTypeDecl();
+  VlangType getType();
 
   @NotNull
   PsiElement getAs();

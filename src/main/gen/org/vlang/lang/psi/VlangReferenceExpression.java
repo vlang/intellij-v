@@ -14,13 +14,11 @@ public interface VlangReferenceExpression extends VlangExpression, VlangReferenc
   @NotNull
   VlangReference getReference();
 
-  //WARNING: getQualifier(...) is skipped
-  //matching getQualifier(VlangReferenceExpression, ...)
-  //methods are not found in VlangPsiImplUtil
+  @Nullable
+  VlangReferenceExpression getQualifier();
 
-  //WARNING: resolve(...) is skipped
-  //matching resolve(VlangReferenceExpression, ...)
-  //methods are not found in VlangPsiImplUtil
+  @Nullable
+  PsiElement resolve();
 
   //WARNING: getReadWriteAccess(...) is skipped
   //matching getReadWriteAccess(VlangReferenceExpression, ...)

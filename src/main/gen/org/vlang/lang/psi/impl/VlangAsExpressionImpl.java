@@ -35,8 +35,8 @@ public class VlangAsExpressionImpl extends VlangExpressionImpl implements VlangA
 
   @Override
   @Nullable
-  public VlangTypeDecl getTypeDecl() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeDecl.class);
+  public VlangType getType() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangType.class);
   }
 
   @Override

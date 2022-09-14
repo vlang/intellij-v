@@ -4,18 +4,15 @@ package org.vlang.lang.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import org.vlang.lang.psi.impl.VlangReference;
+import org.vlang.lang.psi.impl.VlangLabelReference;
 
-public interface VlangLabelRef extends VlangReferenceExpressionBase {
+public interface VlangLabelRef extends VlangCompositeElement {
 
   @NotNull
   PsiElement getIdentifier();
 
   @NotNull
-  VlangReference getReference();
-
-  @NotNull
-  PsiElement getNameIdentifier();
+  VlangLabelReference getReference();
 
   @NotNull
   String getName();

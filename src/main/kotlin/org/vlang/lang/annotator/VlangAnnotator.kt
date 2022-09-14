@@ -46,7 +46,7 @@ class VlangAnnotator : Annotator {
             }
         }
 
-        if (element is VlangTypeDecl) {
+        if (element is VlangType) {
             val ident = element.getIdentifier()
             if (ident != null) {
                 holder.textAttributes(ident, JavaHighlightingColors.TYPE_PARAMETER_NAME_ATTRIBUTES)

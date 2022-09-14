@@ -5,7 +5,7 @@ import com.intellij.openapi.options.colors.ColorDescriptor
 import com.intellij.openapi.options.colors.ColorSettingsPage
 import com.intellij.psi.codeStyle.DisplayPriority
 import com.intellij.psi.codeStyle.DisplayPrioritySortable
-import org.vlang.ide.ui.PluginIcons
+import org.vlang.ide.ui.VIcons
 import org.vlang.lang.VlangSyntaxHighlighter
 
 // TODO: add all descriptors when ready
@@ -22,7 +22,7 @@ class VlangColorsAndFontsPage : ColorSettingsPage, DisplayPrioritySortable {
         "label" to VlangHighlightingData.VLANG_LABEL,
     )
 
-    override fun getIcon() = PluginIcons.vlang
+    override fun getIcon() = VIcons.Vlang
 
     override fun getAttributeDescriptors() = DESCRIPTORS
 

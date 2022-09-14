@@ -6,12 +6,12 @@ import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiDirectory
-import org.vlang.ide.ui.PluginIcons
+import org.vlang.ide.ui.VIcons
 
 class CreateVlangFileAction : CreateFileFromTemplateAction(
     "V File",
     "Create new V file",
-    PluginIcons.vlang
+    VIcons.Vlang
 ) {
     override fun isAvailable(dataContext: DataContext): Boolean {
         val project = CommonDataKeys.PROJECT.getData(dataContext)
@@ -27,7 +27,7 @@ class CreateVlangFileAction : CreateFileFromTemplateAction(
     ) {
         builder
             .setTitle("New V File")
-            .addKind("V File", PluginIcons.vlang, "V File")
-            .addKind("V Simple Application", PluginIcons.vlang, "V Simple Application")
+            .addKind("V File", VIcons.Vlang, "V File")
+            .addKind("V Simple Application", VIcons.Vlang, "V Simple Application")
     }
 }

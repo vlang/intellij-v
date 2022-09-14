@@ -9,8 +9,14 @@ import com.intellij.psi.PsiElementVisitor;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
+import org.vlang.lang.stubs.VlangTypeStub;
 
-public class VlangMapTypeImpl extends VlangTypeDeclImpl implements VlangMapType {
+public class VlangMapTypeImpl extends VlangTypeImpl implements VlangMapType {
+
+  public VlangMapTypeImpl(@NotNull VlangTypeStub stub, @NotNull IStubElementType<?, ?> type) {
+    super(stub, type);
+  }
 
   public VlangMapTypeImpl(@NotNull ASTNode node) {
     super(node);
@@ -29,8 +35,8 @@ public class VlangMapTypeImpl extends VlangTypeDeclImpl implements VlangMapType 
 
   @Override
   @NotNull
-  public List<VlangTypeDecl> getTypeDeclList() {
-    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangTypeDecl.class);
+  public List<VlangType> getTypeList() {
+    return VlangPsiTreeUtil.getStubChildrenOfTypeAsList(this, VlangType.class);
   }
 
   @Override
@@ -43,6 +49,20 @@ public class VlangMapTypeImpl extends VlangTypeDeclImpl implements VlangMapType 
   @Nullable
   public PsiElement getRbrack() {
     return findChildByType(RBRACK);
+  }
+
+  @Override
+  @Nullable
+  public VlangType getKeyType() {
+    List<VlangType> p1 = getTypeList();
+    return p1.size() < 1 ? null : p1.get(0);
+  }
+
+  @Override
+  @Nullable
+  public VlangType getValueType() {
+    List<VlangType> p1 = getTypeList();
+    return p1.size() < 2 ? null : p1.get(1);
   }
 
 }

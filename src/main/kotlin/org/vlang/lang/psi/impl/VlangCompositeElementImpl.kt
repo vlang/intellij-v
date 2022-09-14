@@ -5,7 +5,8 @@ import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveState
 import com.intellij.psi.scope.PsiScopeProcessor
-import org.vlang.lang.psi.VlangCompositeElement
+import com.intellij.psi.util.PsiTreeUtil
+import org.vlang.lang.psi.*
 
 open class VlangCompositeElementImpl(node: ASTNode) : ASTWrapperPsiElement(node), VlangCompositeElement {
     override fun toString(): String {
@@ -16,7 +17,7 @@ open class VlangCompositeElementImpl(node: ASTNode) : ASTWrapperPsiElement(node)
         processor: PsiScopeProcessor,
         state: ResolveState,
         lastParent: PsiElement?,
-        place: PsiElement
+        place: PsiElement,
     ): Boolean {
         return processDeclarationsDefault(this, processor, state, lastParent, place)
     }
@@ -27,51 +28,58 @@ open class VlangCompositeElementImpl(node: ASTNode) : ASTWrapperPsiElement(node)
             processor: PsiScopeProcessor,
             state: ResolveState,
             lastParent: PsiElement?,
-            place: PsiElement
+            place: PsiElement,
         ): Boolean {
-//            if (o is GoLeftHandExprList || o is GoExpression) return true
-//            if (!o.shouldGoDeeper()) return processor.execute(o, state)
+            if (o is VlangExpression) return true
             if (!processor.execute(o, state)) return false
-//            if ((o is GoSwitchStatement ||
-//                        o is GoIfStatement ||
-//                        o is GoForStatement ||
-//                        o is GoCommClause ||
-//                        o is GoBlock ||
-//                        o is GoCaseClause)
-//                && processor is GoScopeProcessorBase
-//            ) {
-//                if (!PsiTreeUtil.isAncestor(o, (processor as GoScopeProcessorBase).myOrigin, false)) return true
-//            }
-//            return if (o is GoBlock) processBlock(
-//                o as GoBlock,
-//                processor,
-//                state,
-//                lastParent,
-//                place
-//            ) else ResolveUtil.processChildren(o, processor, state, lastParent, place)
-
-            return false
+            if ((o is VlangIfStatement || o is VlangForStatement || o is VlangBlock)
+                && processor is VlangScopeProcessorBase
+            ) {
+                if (!PsiTreeUtil.isAncestor(o, processor.origin, false)) {
+                    return true
+                }
+            }
+            return if (o is VlangBlock)
+                processBlock(o, processor, state, lastParent, place)
+            else
+                ResolveUtil.processChildren(o, processor, state, lastParent, place)
         }
 
-//        private fun processBlock(
-//            o: GoBlock,
-//            processor: PsiScopeProcessor,
-//            state: ResolveState,
-//            lastParent: PsiElement?, place: PsiElement
-//        ): Boolean {
-//            return ResolveUtil.processChildrenFromTop(o, processor, state, lastParent, place) && processParameters(
-//                o,
-//                processor
-//            )
-//        }
-//
-//        private fun processParameters(b: GoBlock, processor: PsiScopeProcessor): Boolean {
-//            return if (processor is GoScopeProcessorBase && b.getParent() is GoSignatureOwner) {
-//                GoPsiImplUtil.processSignatureOwner(
-//                    b.getParent() as GoSignatureOwner,
-//                    processor as GoScopeProcessorBase
-//                )
-//            } else true
-//        }
+        private fun processBlock(
+            o: VlangBlock,
+            processor: PsiScopeProcessor,
+            state: ResolveState,
+            lastParent: PsiElement?, place: PsiElement,
+        ): Boolean {
+            return ResolveUtil.processChildrenFromTop(o, processor, state, lastParent, place) &&
+                    processParameters(o, processor) && processReceiver(o, processor)
+        }
+
+        private fun processParameters(b: VlangBlock, processor: PsiScopeProcessor): Boolean {
+            if (processor !is VlangScopeProcessorBase || b.parent !is VlangSignatureOwner) {
+                return true
+            }
+
+            return VlangPsiImplUtil.processSignatureOwner(
+                b.parent as VlangSignatureOwner,
+                processor
+            )
+        }
+
+        private fun processReceiver(b: VlangBlock, processor: PsiScopeProcessor): Boolean {
+            if (processor !is VlangScopeProcessorBase || b.parent !is VlangMethodDeclaration) {
+                return true
+            }
+
+            val receiver = (b.parent as VlangMethodDeclaration).receiver
+
+            return VlangPsiImplUtil.processNamedElements(
+                processor,
+                ResolveState.initial(),
+                listOf(receiver),
+                true
+            )
+        }
     }
 }
+

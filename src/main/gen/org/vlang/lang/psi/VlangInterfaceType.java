@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangInterfaceType extends VlangTypeDecl {
+public interface VlangInterfaceType extends VlangType {
 
   @Nullable
   VlangAnonymousInterfaceDefinition getAnonymousInterfaceDefinition();

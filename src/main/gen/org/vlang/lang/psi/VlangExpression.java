@@ -4,11 +4,11 @@ package org.vlang.lang.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
 
-public interface VlangExpression extends VlangCompositeElement {
+public interface VlangExpression extends VlangTypeOwner {
 
-  //WARNING: getGoType(...) is skipped
-  //matching getGoType(VlangExpression, ...)
-  //methods are not found in VlangPsiImplUtil
+  @Nullable
+  VlangType getType(@Nullable ResolveState context);
 
 }

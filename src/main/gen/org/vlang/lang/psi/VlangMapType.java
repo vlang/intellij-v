@@ -5,15 +5,21 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangMapType extends VlangTypeDecl {
+public interface VlangMapType extends VlangType {
 
   @NotNull
-  List<VlangTypeDecl> getTypeDeclList();
+  List<VlangType> getTypeList();
 
   @NotNull
   PsiElement getLbrack();
 
   @Nullable
   PsiElement getRbrack();
+
+  @Nullable
+  VlangType getKeyType();
+
+  @Nullable
+  VlangType getValueType();
 
 }
