@@ -5,6 +5,7 @@ import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.colors.TextAttributesKey
+import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
 import com.intellij.psi.util.findParentOfType
@@ -47,66 +48,73 @@ class VlangAnnotator : Annotator {
         }
 
         if (element is VlangType) {
-            val ident = element.getIdentifier()
+            val ident = element.identifier
             if (ident != null) {
                 holder.textAttributes(ident, JavaHighlightingColors.TYPE_PARAMETER_NAME_ATTRIBUTES)
             }
-        }
-
-        if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangPlainAttribute) {
-            holder.textAttributes(element, JavaHighlightingColors.ANNOTATION_NAME_ATTRIBUTES)
         }
 
         if (element is VlangFieldName) {
             holder.textAttributes(element, JavaHighlightingColors.INSTANCE_FIELD_ATTRIBUTES)
         }
 
-        if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangInterfaceMethodDeclaration) {
-            holder.textAttributes(element, JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES)
-        }
+        if (element.elementType == VlangTypes.IDENTIFIER) {
+            when (element.parent) {
+                is VlangPlainAttribute             -> holder.textAttributes(element, JavaHighlightingColors.ANNOTATION_NAME_ATTRIBUTES)
+                is VlangInterfaceMethodDeclaration -> holder.textAttributes(element, JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES)
+                is VlangEnumDeclaration            -> holder.textAttributes(element, JavaHighlightingColors.ENUM_NAME_ATTRIBUTES)
+                is VlangStructType                 -> holder.textAttributes(element, JavaHighlightingColors.CLASS_NAME_ATTRIBUTES)
+                is VlangInterfaceDeclaration       -> holder.textAttributes(element, JavaHighlightingColors.INTERFACE_NAME_ATTRIBUTES)
+                is VlangEnumFieldDeclaration       -> holder.textAttributes(element, JavaHighlightingColors.STATIC_FINAL_FIELD_ATTRIBUTES)
+                is VlangStatement                  -> holder.textAttributes(element, JavaHighlightingColors.INTERFACE_NAME_ATTRIBUTES)
+                is VlangEnumFetch                  -> holder.textAttributes(element, JavaHighlightingColors.STATIC_FINAL_FIELD_ATTRIBUTES)
+                is VlangLabelRef                   -> holder.textAttributes(element, VlangHighlightingData.VLANG_LABEL)
+            }
 
-        if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangEnumDeclaration) {
-            holder.textAttributes(element, JavaHighlightingColors.ENUM_NAME_ATTRIBUTES)
-        }
+            when {
+                element.findParentOfType<VlangFieldInitializationKey>() != null ->
+                    holder.textAttributes(element, JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES)
 
-        if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangStructType) {
-            holder.textAttributes(element, JavaHighlightingColors.CLASS_NAME_ATTRIBUTES)
-        }
-
-        if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangInterfaceDeclaration) {
-            holder.textAttributes(element, JavaHighlightingColors.INTERFACE_NAME_ATTRIBUTES)
-        }
-
-        if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangEnumFieldDeclaration) {
-            holder.textAttributes(element, JavaHighlightingColors.STATIC_FINAL_FIELD_ATTRIBUTES)
-        }
-
-        if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangStatement) {
-            holder.textAttributes(element, JavaHighlightingColors.INTERFACE_NAME_ATTRIBUTES)
-        }
-
-        if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangEnumFetch) {
-            holder.textAttributes(element, JavaHighlightingColors.STATIC_FINAL_FIELD_ATTRIBUTES)
-        }
-
-        if (element.elementType == VlangTypes.IDENTIFIER && element.parent is VlangLabelRef) {
-            holder.textAttributes(element, VlangHighlightingData.VLANG_LABEL)
-        }
-
-        if (element.elementType == VlangTypes.IDENTIFIER && element.findParentOfType<VlangFieldInitializationKey>() != null) {
-            holder.textAttributes(element, JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES)
+                element.text == "_likely_" || element.text == "_unlikely_"      ->
+                    holder.textAttributes(element, JavaHighlightingColors.KEYWORD)
+            }
         }
 
         if (element.elementType == VlangDocTokenTypes.DOC_COMMENT_TAG) {
             holder.textAttributes(element, JavaHighlightingColors.DOC_COMMENT_TAG)
         }
 
-        if (element.elementType == VlangTypes.IDENTIFIER && (element.text == "_likely_" || element.text == "_unlikely_")) {
-            holder.textAttributes(element, JavaHighlightingColors.KEYWORD)
+        if (element.elementType in listOf(
+                VlangTypes.LONG_TEMPLATE_ENTRY_START,
+                VlangTypes.LONG_TEMPLATE_ENTRY_END,
+            )
+        ) {
+            holder.textAttributes(element, JavaHighlightingColors.VALID_STRING_ESCAPE)
+        }
+
+        if (element.elementType == VlangTypes.LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY) {
+            holder.textAttributes(element, JavaHighlightingColors.VALID_STRING_ESCAPE)
+        }
+
+        if (element.elementType == VlangTypes.RAW_STRING) {
+            holder.textAttributes(element, TextRange(0, 1), JavaHighlightingColors.VALID_STRING_ESCAPE)
+        }
+
+        if (element.elementType == VlangTypes.SHORT_TEMPLATE_ENTRY_START) {
+            if (element.parent is VlangShortStringTemplateEntry) {
+                holder.textAttributes(element, JavaHighlightingColors.VALID_STRING_ESCAPE)
+            } else {
+                holder.textAttributes(element, JavaHighlightingColors.STRING)
+            }
         }
     }
 
     private fun AnnotationHolder.textAttributes(element: PsiElement, textAttributes: TextAttributesKey) {
         newSilentAnnotation(HighlightSeverity.INFORMATION).range(element).textAttributes(textAttributes).create()
+    }
+
+    private fun AnnotationHolder.textAttributes(element: PsiElement, range: TextRange, textAttributes: TextAttributesKey) {
+        val newRange = TextRange(element.textRange.startOffset + range.startOffset, element.textRange.startOffset + range.endOffset)
+        newSilentAnnotation(HighlightSeverity.INFORMATION).range(newRange).textAttributes(textAttributes).create()
     }
 }

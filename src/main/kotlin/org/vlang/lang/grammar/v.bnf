@@ -215,7 +215,7 @@ Statement ::=
 //| SelectStatement
   | DeferStatement {methods=[processDeclarations]}
 
-private StatementRecover ::= !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '&&' | '}' | break | case | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | shared | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | char | struct | union | switch | var | unsafe | assert | match | lock | rlock | asm | sql | true | false | FOR_COMPILE_TIME | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG | LANGUAGE_INJECTION)
+private StatementRecover ::= !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '&&' | '}' | break | case | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | shared | go | goto | hex | identifier | if | int | interface | oct | return | select | string | 'raw_string' | OPEN_QUOTE | char | struct | union | switch | var | unsafe | assert | match | lock | rlock | asm | sql | true | false | FOR_COMPILE_TIME | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG | LANGUAGE_INJECTION)
 
 // attributes start
 // [attr1]
@@ -661,7 +661,7 @@ private NamedArgumentExpr ::= identifier ':' (Expression | UnpackingExpression) 
 
 private ExpressionList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &')'))* {pin(".*")=1}
 private ExpressionWithRecover ::= Expression !':' {recoverWhile=ExpressionListRecover}
-private ExpressionListRecover ::= !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+'  | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | go | goto | hex | identifier | if | int | interface | oct | return | select | string | raw_string | char | struct | enum | union | switch | var | unsafe | assert | match | asm | sql | true | false )
+private ExpressionListRecover ::= !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+'  | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | go | goto | hex | identifier | if | int | interface | oct | return | select | string | 'raw_string' | OPEN_QUOTE | char | struct | enum | union | switch | var | unsafe | assert | match | asm | sql | true | false )
 
 private VarDefinitionList ::= VarDefinition (',' VarDefinition)*
 VarDefinition ::= VarModifiers? identifier {
@@ -814,9 +814,28 @@ Literal ::=
   | char
 
 // just different strings
-StringLiteral ::= string | 'raw_string' {
+StringLiteral ::= string | 'raw_string' | StringTemplate {
 //  implements = "com.intellij.psi.PsiLanguageInjectionHost"
   methods = [isValidHost updateText createLiteralTextEscaper getDecodedText]
 }
+
+StringTemplate ::= OPEN_QUOTE StringTemplatePart* CLOSING_QUOTE {pin=1}
+
+private StringTemplatePart ::=
+    LITERAL_STRING_TEMPLATE_ENTRY
+  | LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY
+  | LongStringTemplateEntry
+  | ShortStringTemplateEntry
+  | SHORT_TEMPLATE_ENTRY_START
+
+LongStringTemplateEntry ::= LONG_TEMPLATE_ENTRY_START Expression FormatSpecifier? LONG_TEMPLATE_ENTRY_END {pin=1}
+
+FormatSpecifier ::= ':' FormatSpecifierExpression
+FormatSpecifierExpression ::= FormatSpecifierLeftAlignFlag? FormatSpecifierWidthAndPrecision? FormatSpecifierLetter?
+FormatSpecifierLeftAlignFlag ::= '-'
+FormatSpecifierWidthAndPrecision ::= int | float
+FormatSpecifierLetter ::= identifier
+
+ShortStringTemplateEntry ::= SHORT_TEMPLATE_ENTRY_START Expression {pin=2}
 
 ////// LITERALS END //////

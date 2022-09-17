@@ -17,7 +17,17 @@ object VlangTokenTypes {
     val NLS = VlangTokenType("VLANG_WS_NEW_LINES")
 
     val COMMENTS = TokenSet.create(LINE_COMMENT, MULTILINE_COMMENT, VlangDocTokenTypes.DOC_COMMENT)
-    val STRING_LITERALS = TokenSet.create(STRING, RAW_STRING, CHAR, SINGLE_QUOTE, DOUBLE_QUOTE, BACKTICK)
+    val STRING_LITERALS = TokenSet.create(
+        STRING,
+        RAW_STRING,
+        CHAR,
+        SINGLE_QUOTE,
+        DOUBLE_QUOTE,
+        BACKTICK,
+        OPEN_QUOTE,
+        CLOSING_QUOTE,
+        LITERAL_STRING_TEMPLATE_ENTRY,
+    )
     val NUMBERS = TokenSet.create(
         INT,
         FLOAT,

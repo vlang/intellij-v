@@ -236,6 +236,26 @@ public class VlangVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitFormatSpecifier(@NotNull VlangFormatSpecifier o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitFormatSpecifierExpression(@NotNull VlangFormatSpecifierExpression o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitFormatSpecifierLeftAlignFlag(@NotNull VlangFormatSpecifierLeftAlignFlag o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitFormatSpecifierLetter(@NotNull VlangFormatSpecifierLetter o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitFormatSpecifierWidthAndPrecision(@NotNull VlangFormatSpecifierWidthAndPrecision o) {
+    visitCompositeElement(o);
+  }
+
   public void visitFunctionDeclaration(@NotNull VlangFunctionDeclaration o) {
     visitSignatureOwner(o);
     // visitFunctionOrMethodDeclaration(o);
@@ -377,6 +397,10 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitLockStatement(@NotNull VlangLockStatement o) {
     visitStatement(o);
+  }
+
+  public void visitLongStringTemplateEntry(@NotNull VlangLongStringTemplateEntry o) {
+    visitCompositeElement(o);
   }
 
   public void visitMapInitExpr(@NotNull VlangMapInitExpr o) {
@@ -525,6 +549,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitShortStringTemplateEntry(@NotNull VlangShortStringTemplateEntry o) {
+    visitCompositeElement(o);
+  }
+
   public void visitSignature(@NotNull VlangSignature o) {
     visitCompositeElement(o);
   }
@@ -551,6 +579,10 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitStringLiteral(@NotNull VlangStringLiteral o) {
     visitExpression(o);
+  }
+
+  public void visitStringTemplate(@NotNull VlangStringTemplate o) {
+    visitCompositeElement(o);
   }
 
   public void visitStructDeclaration(@NotNull VlangStructDeclaration o) {

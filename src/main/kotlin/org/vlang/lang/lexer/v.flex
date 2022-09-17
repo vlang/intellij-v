@@ -2,6 +2,7 @@ package org.vlang.lang;
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
+import java.util.Stack;
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
 import static org.vlang.lang.psi.VlangTokenTypes.*;
 import static org.vlang.lang.psi.VlangDocTokenTypes.*;
@@ -9,8 +10,26 @@ import static org.vlang.lang.psi.VlangDocTokenTypes.*;
 %%
 
 %{
+  private volatile boolean insideDoubleQuoteString = false;
+  private Stack<Integer> stack = new Stack<Integer>();
+
+  public void yy_push_state(int state) {
+    stack.push(state);
+    yybegin(state);
+  }
+
+  public void yy_pop_state() {
+    stack.pop();
+    yybegin(stack.lastElement());
+  }
+
+  public boolean inside_interpolation() {
+    return stack.size() > 2 && stack.get(1) == TEMPLATE_STRING;
+  }
+
   public _VlangLexer() {
     this((java.io.Reader)null);
+    stack.push(YYINITIAL);
  }
 %}
 
@@ -60,12 +79,13 @@ IDENT = {LETTER} ({LETTER} | {DIGIT} )*
 SPECIAL_IDENT = ("JS." | "C.") {LETTER} ({LETTER} | {DIGIT} | "." )*
 
 DOLLAR = "$"
-STR_DOUBLE =   "\""
-STR_SINGLE =   "'"
-STR_MODIFIER = "r" | "c"
+STR_DOUBLE = "\""
+STR_SINGLE = "'"
+STR_MODIFIER = "c"
+RAW_STR_MODIFIER = "r"
 
-DOUBLE_QUOTE_STRING = {STR_MODIFIER}? {STR_DOUBLE} ( [^\"\\] | "\\" ("\\" | {STR_DOUBLE} | {STR_SINGLE} | {ESCAPES} | {DOLLAR} [0-8xuU] ) )* {STR_DOUBLE}
-SINGLE_QUOTE_STRING = {STR_MODIFIER}? {STR_SINGLE} ( [^\'\\] | "\\" ("\\" | {STR_DOUBLE} | {STR_SINGLE} | {ESCAPES} | {DOLLAR} | [0-8xuU] ) )* {STR_SINGLE}
+RAW_DOUBLE_QUOTE_STRING = {RAW_STR_MODIFIER} {STR_DOUBLE} [^\"]* {STR_DOUBLE}
+RAW_SINGLE_QUOTE_STRING = {RAW_STR_MODIFIER} {STR_SINGLE} [^\']* {STR_SINGLE}
 
 ESCAPES = [abfnrtve] // TODO: need "e"?
 
@@ -75,6 +95,9 @@ C_STRING_DOUBLE = {STR_DOUBLE} ( [^\"\\\n\r] | "\\" ("\\" | {STR_DOUBLE} | {ESCA
 C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 
 %state MAYBE_SEMICOLON
+%state TEMPLATE_STRING
+%state SHORT_TEMPLATE_ENTRY
+%state SHORT_TEMPLATE_ENTRY_FIELD_NAME
 %state C_STRING_LITERAL
 %state C_FLAG_VALUE_EXPECTED
 %state ASM_BLOCK
@@ -83,6 +106,81 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 %state SQL_BLOCK_LINE
 
 %%
+
+<SHORT_TEMPLATE_ENTRY> {
+"$"               { return SHORT_TEMPLATE_ENTRY_START; }
+"${"              { yy_push_state(YYINITIAL); return LONG_TEMPLATE_ENTRY_START; }
+{IDENT}           { return IDENTIFIER; }
+"."               { yybegin(SHORT_TEMPLATE_ENTRY_FIELD_NAME); return DOT; }
+{STR_DOUBLE} {
+    if (!insideDoubleQuoteString) {
+        return LITERAL_STRING_TEMPLATE_ENTRY;
+    }
+    insideDoubleQuoteString = false;
+    yy_pop_state();
+    yybegin(MAYBE_SEMICOLON);
+    return CLOSING_QUOTE;
+}
+{STR_SINGLE} {
+   if (insideDoubleQuoteString) {
+       return LITERAL_STRING_TEMPLATE_ENTRY;
+   }
+   yy_pop_state();
+   yybegin(MAYBE_SEMICOLON);
+   return CLOSING_QUOTE;
+}
+"\\" (. | "\\")   { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY; }
+.                 { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ENTRY; }
+}
+
+<SHORT_TEMPLATE_ENTRY_FIELD_NAME> {
+{IDENT}           { return IDENTIFIER; }
+"."               { return DOT; }
+{STR_DOUBLE} {
+    if (!insideDoubleQuoteString) {
+        return LITERAL_STRING_TEMPLATE_ENTRY;
+    }
+    insideDoubleQuoteString = false;
+    yy_pop_state();
+    yybegin(MAYBE_SEMICOLON);
+    return CLOSING_QUOTE;
+}
+{STR_SINGLE} {
+   if (insideDoubleQuoteString) {
+       return LITERAL_STRING_TEMPLATE_ENTRY;
+   }
+   yy_pop_state();
+   yybegin(MAYBE_SEMICOLON);
+   return CLOSING_QUOTE;
+}
+"\\" (. | "\\") { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY; }
+.               { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ENTRY; }
+}
+
+<TEMPLATE_STRING> {
+"${"         { yy_push_state(YYINITIAL); return LONG_TEMPLATE_ENTRY_START; }
+"$"          { yybegin(SHORT_TEMPLATE_ENTRY); return SHORT_TEMPLATE_ENTRY_START; }
+
+{STR_DOUBLE} {
+    if (!insideDoubleQuoteString) {
+        return LITERAL_STRING_TEMPLATE_ENTRY;
+    }
+    insideDoubleQuoteString = false;
+    yy_pop_state();
+    yybegin(MAYBE_SEMICOLON);
+    return CLOSING_QUOTE;
+}
+{STR_SINGLE} {
+   if (insideDoubleQuoteString) {
+       return LITERAL_STRING_TEMPLATE_ENTRY;
+   }
+   yy_pop_state();
+   yybegin(MAYBE_SEMICOLON);
+   return CLOSING_QUOTE;
+}
+"\\" (. | "\\") { return LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY; }
+[^\"\'\\$]+    { return LITERAL_STRING_TEMPLATE_ENTRY; }
+}
 
 <YYINITIAL> {
 {WS}                                      { return WS; }
@@ -105,8 +203,42 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 "`\\u" {HEX_DIGIT} {4} "`"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
 "`\\U" {HEX_DIGIT} {8} "`"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
 
-{DOUBLE_QUOTE_STRING}                     { yybegin(MAYBE_SEMICOLON); return RAW_STRING; }
-{SINGLE_QUOTE_STRING}                     { yybegin(MAYBE_SEMICOLON); return RAW_STRING; }
+{RAW_DOUBLE_QUOTE_STRING}                 { yybegin(MAYBE_SEMICOLON); return RAW_STRING; }
+{RAW_SINGLE_QUOTE_STRING}                 { yybegin(MAYBE_SEMICOLON); return RAW_STRING; }
+
+{STR_MODIFIER} {STR_DOUBLE} {
+    yy_push_state(TEMPLATE_STRING);
+    insideDoubleQuoteString = true;
+    return OPEN_QUOTE;
+}
+
+{STR_MODIFIER} {STR_SINGLE} {
+    yy_push_state(TEMPLATE_STRING);
+    insideDoubleQuoteString = false;
+    return OPEN_QUOTE;
+}
+
+{STR_DOUBLE} {
+    if (inside_interpolation()) {
+        yy_pop_state();
+        insideDoubleQuoteString = false;
+        return CLOSING_QUOTE;
+    }
+    yy_push_state(TEMPLATE_STRING);
+    insideDoubleQuoteString = true;
+    return OPEN_QUOTE;
+}
+
+{STR_SINGLE} {
+    if (inside_interpolation()) {
+        yy_pop_state();
+        insideDoubleQuoteString = false;
+        return CLOSING_QUOTE;
+    }
+    yy_push_state(TEMPLATE_STRING);
+    insideDoubleQuoteString = false;
+    return OPEN_QUOTE;
+}
 
 "..."                                     { return TRIPLE_DOT; }
 ".."                                      { return RANGE; }
@@ -114,7 +246,15 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 "~"                                       { return TILDA; }
 "|"                                       { return BIT_OR; }
 "{"                                       { return LBRACE; }
-"}"                                       { yybegin(MAYBE_SEMICOLON); return RBRACE; }
+"}" {
+    if (inside_interpolation()) {
+        yy_pop_state();
+        return LONG_TEMPLATE_ENTRY_END;
+    }
+
+    yybegin(MAYBE_SEMICOLON);
+    return RBRACE;
+}
 
 "#["                                      { return HASH_LBRACK; }
 
@@ -177,8 +317,6 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 ">="                                      { return GREATER_OR_EQUAL; }
 ">"                                       { yybegin(MAYBE_SEMICOLON); return GREATER; }
 
-"'"                                       { return SINGLE_QUOTE; }
-"\""                                      { return DOUBLE_QUOTE; }
 "`"                                       { return BACKTICK; }
 
 ":="                                      { return VAR_ASSIGN; }

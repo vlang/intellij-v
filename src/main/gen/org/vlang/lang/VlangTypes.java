@@ -65,6 +65,11 @@ public interface VlangTypes {
   IElementType FIELD_LOOKUP = new VlangCompositeElementType("FIELD_LOOKUP");
   IElementType FIELD_NAME = new VlangCompositeElementType("FIELD_NAME");
   IElementType FORCE_NO_ERROR_PROPAGATION_EXPRESSION = new VlangCompositeElementType("FORCE_NO_ERROR_PROPAGATION_EXPRESSION");
+  IElementType FORMAT_SPECIFIER = new VlangCompositeElementType("FORMAT_SPECIFIER");
+  IElementType FORMAT_SPECIFIER_EXPRESSION = new VlangCompositeElementType("FORMAT_SPECIFIER_EXPRESSION");
+  IElementType FORMAT_SPECIFIER_LEFT_ALIGN_FLAG = new VlangCompositeElementType("FORMAT_SPECIFIER_LEFT_ALIGN_FLAG");
+  IElementType FORMAT_SPECIFIER_LETTER = new VlangCompositeElementType("FORMAT_SPECIFIER_LETTER");
+  IElementType FORMAT_SPECIFIER_WIDTH_AND_PRECISION = new VlangCompositeElementType("FORMAT_SPECIFIER_WIDTH_AND_PRECISION");
   IElementType FOR_CLAUSE = new VlangCompositeElementType("FOR_CLAUSE");
   IElementType FOR_STATEMENT = new VlangCompositeElementType("FOR_STATEMENT");
   IElementType FUNCTION_DECLARATION = VlangElementTypeFactory.stubFactory("FUNCTION_DECLARATION");
@@ -102,6 +107,7 @@ public interface VlangTypes {
   IElementType LITERAL = new VlangCompositeElementType("LITERAL");
   IElementType LOCK_EXPRESSION = new VlangCompositeElementType("LOCK_EXPRESSION");
   IElementType LOCK_STATEMENT = new VlangCompositeElementType("LOCK_STATEMENT");
+  IElementType LONG_STRING_TEMPLATE_ENTRY = new VlangCompositeElementType("LONG_STRING_TEMPLATE_ENTRY");
   IElementType MAP_INIT_EXPR = new VlangCompositeElementType("MAP_INIT_EXPR");
   IElementType MAP_TYPE = VlangElementTypeFactory.stubFactory("MAP_TYPE");
   IElementType MATCH_ARM = new VlangCompositeElementType("MATCH_ARM");
@@ -138,6 +144,7 @@ public interface VlangTypes {
   IElementType SEND_EXPR = new VlangCompositeElementType("SEND_EXPR");
   IElementType SEND_STATEMENT = new VlangCompositeElementType("SEND_STATEMENT");
   IElementType SHARED_EXPRESSION = new VlangCompositeElementType("SHARED_EXPRESSION");
+  IElementType SHORT_STRING_TEMPLATE_ENTRY = new VlangCompositeElementType("SHORT_STRING_TEMPLATE_ENTRY");
   IElementType SIGNATURE = new VlangCompositeElementType("SIGNATURE");
   IElementType SIMPLE_STATEMENT = new VlangCompositeElementType("SIMPLE_STATEMENT");
   IElementType SQL_BLOCK = new VlangCompositeElementType("SQL_BLOCK");
@@ -145,6 +152,7 @@ public interface VlangTypes {
   IElementType SQL_STATEMENT = new VlangCompositeElementType("SQL_STATEMENT");
   IElementType STATEMENT = new VlangCompositeElementType("STATEMENT");
   IElementType STRING_LITERAL = new VlangCompositeElementType("STRING_LITERAL");
+  IElementType STRING_TEMPLATE = new VlangCompositeElementType("STRING_TEMPLATE");
   IElementType STRUCT_DECLARATION = VlangElementTypeFactory.stubFactory("STRUCT_DECLARATION");
   IElementType STRUCT_TYPE = VlangElementTypeFactory.stubFactory("STRUCT_TYPE");
   IElementType SYMBOL_VISIBILITY = new VlangCompositeElementType("SYMBOL_VISIBILITY");
@@ -185,6 +193,7 @@ public interface VlangTypes {
   IElementType CASE = new VlangTokenType("case");
   IElementType CHAN = new VlangTokenType("chan");
   IElementType CHAR = new VlangTokenType("char");
+  IElementType CLOSING_QUOTE = new VlangTokenType("CLOSING_QUOTE");
   IElementType COLON = new VlangTokenType(":");
   IElementType COMMA = new VlangTokenType(",");
   IElementType COND_AND = new VlangTokenType("&&");
@@ -229,7 +238,11 @@ public interface VlangTypes {
   IElementType LBRACK = new VlangTokenType("[");
   IElementType LESS = new VlangTokenType("<");
   IElementType LESS_OR_EQUAL = new VlangTokenType("<=");
+  IElementType LITERAL_STRING_TEMPLATE_ENTRY = new VlangTokenType("LITERAL_STRING_TEMPLATE_ENTRY");
+  IElementType LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY = new VlangTokenType("LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY");
   IElementType LOCK = new VlangTokenType("lock");
+  IElementType LONG_TEMPLATE_ENTRY_END = new VlangTokenType("LONG_TEMPLATE_ENTRY_END");
+  IElementType LONG_TEMPLATE_ENTRY_START = new VlangTokenType("LONG_TEMPLATE_ENTRY_START");
   IElementType LPAREN = new VlangTokenType("(");
   IElementType MATCH = new VlangTokenType("match");
   IElementType MINUS = new VlangTokenType("-");
@@ -244,6 +257,7 @@ public interface VlangTypes {
   IElementType NOT_IN = new VlangTokenType("NOT_IN");
   IElementType NOT_IS = new VlangTokenType("NOT_IS");
   IElementType OCT = new VlangTokenType("oct");
+  IElementType OPEN_QUOTE = new VlangTokenType("OPEN_QUOTE");
   IElementType OR = new VlangTokenType("or");
   IElementType PLUS = new VlangTokenType("+");
   IElementType PLUS_ASSIGN = new VlangTokenType("+=");
@@ -271,6 +285,7 @@ public interface VlangTypes {
   IElementType SHIFT_LEFT_ASSIGN = new VlangTokenType("<<=");
   IElementType SHIFT_RIGHT = new VlangTokenType(">>");
   IElementType SHIFT_RIGHT_ASSIGN = new VlangTokenType(">>=");
+  IElementType SHORT_TEMPLATE_ENTRY_START = new VlangTokenType("SHORT_TEMPLATE_ENTRY_START");
   IElementType SINGLE_QUOTE = new VlangTokenType("'");
   IElementType SQL = new VlangTokenType("sql");
   IElementType SQL_LINE = new VlangTokenType("SQL_LINE");
@@ -449,6 +464,21 @@ public interface VlangTypes {
       else if (type == FORCE_NO_ERROR_PROPAGATION_EXPRESSION) {
         return new VlangForceNoErrorPropagationExpressionImpl(node);
       }
+      else if (type == FORMAT_SPECIFIER) {
+        return new VlangFormatSpecifierImpl(node);
+      }
+      else if (type == FORMAT_SPECIFIER_EXPRESSION) {
+        return new VlangFormatSpecifierExpressionImpl(node);
+      }
+      else if (type == FORMAT_SPECIFIER_LEFT_ALIGN_FLAG) {
+        return new VlangFormatSpecifierLeftAlignFlagImpl(node);
+      }
+      else if (type == FORMAT_SPECIFIER_LETTER) {
+        return new VlangFormatSpecifierLetterImpl(node);
+      }
+      else if (type == FORMAT_SPECIFIER_WIDTH_AND_PRECISION) {
+        return new VlangFormatSpecifierWidthAndPrecisionImpl(node);
+      }
       else if (type == FOR_CLAUSE) {
         return new VlangForClauseImpl(node);
       }
@@ -560,6 +590,9 @@ public interface VlangTypes {
       else if (type == LOCK_STATEMENT) {
         return new VlangLockStatementImpl(node);
       }
+      else if (type == LONG_STRING_TEMPLATE_ENTRY) {
+        return new VlangLongStringTemplateEntryImpl(node);
+      }
       else if (type == MAP_INIT_EXPR) {
         return new VlangMapInitExprImpl(node);
       }
@@ -668,6 +701,9 @@ public interface VlangTypes {
       else if (type == SHARED_EXPRESSION) {
         return new VlangSharedExpressionImpl(node);
       }
+      else if (type == SHORT_STRING_TEMPLATE_ENTRY) {
+        return new VlangShortStringTemplateEntryImpl(node);
+      }
       else if (type == SIGNATURE) {
         return new VlangSignatureImpl(node);
       }
@@ -688,6 +724,9 @@ public interface VlangTypes {
       }
       else if (type == STRING_LITERAL) {
         return new VlangStringLiteralImpl(node);
+      }
+      else if (type == STRING_TEMPLATE) {
+        return new VlangStringTemplateImpl(node);
       }
       else if (type == STRUCT_DECLARATION) {
         return new VlangStructDeclarationImpl(node);

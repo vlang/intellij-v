@@ -10,15 +10,14 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangStringLiteralImpl extends VlangExpressionImpl implements VlangStringLiteral {
+public class VlangFormatSpecifierLeftAlignFlagImpl extends VlangCompositeElementImpl implements VlangFormatSpecifierLeftAlignFlag {
 
-  public VlangStringLiteralImpl(@NotNull ASTNode node) {
+  public VlangFormatSpecifierLeftAlignFlagImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitStringLiteral(this);
+    visitor.visitFormatSpecifierLeftAlignFlag(this);
   }
 
   @Override
@@ -28,21 +27,9 @@ public class VlangStringLiteralImpl extends VlangExpressionImpl implements Vlang
   }
 
   @Override
-  @Nullable
-  public VlangStringTemplate getStringTemplate() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangStringTemplate.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getRawString() {
-    return findChildByType(RAW_STRING);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getString() {
-    return findChildByType(STRING);
+  @NotNull
+  public PsiElement getMinus() {
+    return notNullChild(findChildByType(MINUS));
   }
 
 }

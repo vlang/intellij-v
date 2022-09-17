@@ -10,15 +10,14 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangStringLiteralImpl extends VlangExpressionImpl implements VlangStringLiteral {
+public class VlangLongStringTemplateEntryImpl extends VlangCompositeElementImpl implements VlangLongStringTemplateEntry {
 
-  public VlangStringLiteralImpl(@NotNull ASTNode node) {
+  public VlangLongStringTemplateEntryImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitStringLiteral(this);
+    visitor.visitLongStringTemplateEntry(this);
   }
 
   @Override
@@ -29,20 +28,26 @@ public class VlangStringLiteralImpl extends VlangExpressionImpl implements Vlang
 
   @Override
   @Nullable
-  public VlangStringTemplate getStringTemplate() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangStringTemplate.class);
+  public VlangExpression getExpression() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class);
   }
 
   @Override
   @Nullable
-  public PsiElement getRawString() {
-    return findChildByType(RAW_STRING);
+  public VlangFormatSpecifier getFormatSpecifier() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangFormatSpecifier.class);
   }
 
   @Override
   @Nullable
-  public PsiElement getString() {
-    return findChildByType(STRING);
+  public PsiElement getLongTemplateEntryEnd() {
+    return findChildByType(LONG_TEMPLATE_ENTRY_END);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getLongTemplateEntryStart() {
+    return notNullChild(findChildByType(LONG_TEMPLATE_ENTRY_START));
   }
 
 }
