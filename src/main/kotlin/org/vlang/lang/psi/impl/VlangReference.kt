@@ -3,7 +3,6 @@ package org.vlang.lang.psi.impl
 import com.intellij.openapi.util.*
 import com.intellij.psi.*
 import com.intellij.psi.impl.source.resolve.ResolveCache
-import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ArrayUtil
 import org.vlang.lang.psi.*
@@ -98,7 +97,7 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
         }
         val localResolve = true //isLocalResolve(myFile, file)
 //        val parent: VlangTypeSpec = getTypeSpecSafe(type)
-//        val canProcessMethods = state.get<Any?>(com.goide.psi.impl.VlangReference.DONT_PROCESS_METHODS) == null
+//        val canProcessMethods = state.get<Any?>(com.Vlangide.psi.impl.VlangReference.DONT_PROCESS_METHODS) == null
 //        if (canProcessMethods && parent != null && !processNamedElements(
 //                processor,
 //                state,
@@ -130,7 +129,7 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
             ) return false
             if (!processCollectedRefs(structRefs, processor, state)) return false
         }
-//        else if (state.get<Any?>(com.goide.psi.impl.VlangReference.POINTER) == null && type is VlangInterfaceType) {
+//        else if (state.get<Any?>(com.Vlangide.psi.impl.VlangReference.POINTER) == null && type is VlangInterfaceType) {
 //            if (!processNamedElements(processor, state, (type as VlangInterfaceType).getMethods(), localResolve, true)) return false
 //            if (!processCollectedRefs((type as VlangInterfaceType).getBaseTypesReferences(), processor, state)) return false
 //        } else if (type is VlangFunctionType) {
@@ -170,11 +169,11 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
 
 //            if (type is VlangSpecType) {
 //                val inner: VlangType = (type as VlangSpecType).getType()
-//                if (inner is VlangPointerType && state.get<Any?>(com.goide.psi.impl.VlangReference.POINTER) != null) return true
+//                if (inner is VlangPointerType && state.get<Any?>(com.Vlangide.psi.impl.VlangReference.POINTER) != null) return true
 //                if (inner != null && !processVlangType(
 //                        inner,
 //                        processor,
-//                        state.put<Any>(com.goide.psi.impl.VlangReference.DONT_PROCESS_METHODS, true)
+//                        state.put<Any>(com.Vlangide.psi.impl.VlangReference.DONT_PROCESS_METHODS, true)
 //                    )
 //                ) return false
 //            }
@@ -295,7 +294,35 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
         }
     }
 
-    override fun isReferenceTo(element: PsiElement) = true
+    override fun isReferenceTo(element: PsiElement) = couldBeReferenceTo(element, myElement) && super.isReferenceTo(element);
+
+    private fun couldBeReferenceTo(definition: PsiElement, reference: PsiElement): Boolean {
+        if (definition is PsiDirectory && reference is VlangReferenceExpressionBase) return true
+        if (reference is VlangLabelRef && definition !is VlangLabelDefinition) return false
+
+        val definitionFile = definition.containingFile
+        val referenceFile = reference.containingFile
+
+        val inSameFile = definitionFile.isEquivalentTo(referenceFile)
+        if (inSameFile) return true
+        return if (inSamePackage(referenceFile, definitionFile))
+            true
+        else
+            reference !is VlangNamedElement || !reference.isPublic()
+    }
+
+    private fun inSamePackage(firstFile: PsiFile, secondFile: PsiFile): Boolean {
+        val containingDirectory = firstFile.containingDirectory
+        if (containingDirectory == null || containingDirectory != secondFile.containingDirectory) {
+            return false
+        }
+        if (firstFile is VlangFile && secondFile is VlangFile) {
+            val referencePackage = firstFile.packageName
+            val definitionPackage = secondFile.packageName
+            return referencePackage != null && referencePackage == definitionPackage
+        }
+        return true
+    }
 
     private val identifier: PsiElement?
         get() = myElement?.getIdentifier()
