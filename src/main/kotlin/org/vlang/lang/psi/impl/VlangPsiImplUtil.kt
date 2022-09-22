@@ -21,7 +21,7 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getIdentifier(o: VlangMethodDeclaration): PsiElement? {
-        return if (o.methodName.elementType == VlangTypes.IDENTIFIER) o.methodName else null
+        return o.methodName.identifier
     }
 
     @JvmStatic

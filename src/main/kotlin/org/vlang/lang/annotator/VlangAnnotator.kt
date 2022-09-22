@@ -16,8 +16,8 @@ import org.vlang.lang.psi.*
 
 class VlangAnnotator : Annotator {
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
-        if (element is VlangFunctionDeclaration) {
-            val ident = element.getIdentifier()
+        if (element is VlangFunctionOrMethodDeclaration) {
+            val ident = element.getIdentifier() ?: return
             val attr =
                 if (element.isPublic()) VlangHighlightingData.VLANG_PUBLIC_FUNCTION_NAME
                 else VlangHighlightingData.VLANG_FUNCTION_NAME
@@ -45,6 +45,16 @@ class VlangAnnotator : Annotator {
                 holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.CLASS_NAME_ATTRIBUTES)
                 return
             }
+
+            if (resolvedElement is VlangParamDefinition) {
+                holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.PARAMETER_ATTRIBUTES)
+                return
+            }
+
+            if (resolvedElement is VlangReceiver) {
+                holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.PARAMETER_ATTRIBUTES)
+                return
+            }
         }
 
         if (element is VlangType) {
@@ -69,6 +79,8 @@ class VlangAnnotator : Annotator {
                 is VlangStatement                  -> holder.textAttributes(element, JavaHighlightingColors.INTERFACE_NAME_ATTRIBUTES)
                 is VlangEnumFetch                  -> holder.textAttributes(element, JavaHighlightingColors.STATIC_FINAL_FIELD_ATTRIBUTES)
                 is VlangLabelRef                   -> holder.textAttributes(element, VlangHighlightingData.VLANG_LABEL)
+                is VlangParamDefinition            -> holder.textAttributes(element, JavaHighlightingColors.PARAMETER_ATTRIBUTES)
+                is VlangReceiver                   -> holder.textAttributes(element, JavaHighlightingColors.PARAMETER_ATTRIBUTES)
             }
 
             when {
@@ -94,6 +106,10 @@ class VlangAnnotator : Annotator {
 
         if (element.elementType == VlangTypes.LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY) {
             holder.textAttributes(element, JavaHighlightingColors.VALID_STRING_ESCAPE)
+        }
+
+        if (element is VlangLiteral && (element.text == "true" || element.text == "false")) {
+            holder.textAttributes(element, JavaHighlightingColors.KEYWORD)
         }
 
         if (element.elementType == VlangTypes.RAW_STRING) {
