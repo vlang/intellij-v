@@ -1,13 +1,13 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang;
 
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.PsiElement;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.tree.IElementType;
 import org.vlang.lang.psi.VlangCompositeElementType;
-import org.vlang.lang.stubs.VlangElementTypeFactory;
 import org.vlang.lang.psi.VlangTokenType;
 import org.vlang.lang.psi.impl.*;
+import org.vlang.lang.stubs.VlangElementTypeFactory;
 
 public interface VlangTypes {
 
@@ -88,6 +88,7 @@ public interface VlangTypes {
   IElementType IMPORT_ALIAS = new VlangCompositeElementType("IMPORT_ALIAS");
   IElementType IMPORT_DECLARATION = new VlangCompositeElementType("IMPORT_DECLARATION");
   IElementType IMPORT_LIST = new VlangCompositeElementType("IMPORT_LIST");
+  IElementType IMPORT_PATH = new VlangCompositeElementType("IMPORT_PATH");
   IElementType IMPORT_SPEC = new VlangCompositeElementType("IMPORT_SPEC");
   IElementType INC_DEC_EXPRESSION = new VlangCompositeElementType("INC_DEC_EXPRESSION");
   IElementType INDEX_OR_SLICE_EXPR = new VlangCompositeElementType("INDEX_OR_SLICE_EXPR");
@@ -532,6 +533,9 @@ public interface VlangTypes {
       }
       else if (type == IMPORT_LIST) {
         return new VlangImportListImpl(node);
+      }
+      else if (type == IMPORT_PATH) {
+        return new VlangImportPathImpl(node);
       }
       else if (type == IMPORT_SPEC) {
         return new VlangImportSpecImpl(node);

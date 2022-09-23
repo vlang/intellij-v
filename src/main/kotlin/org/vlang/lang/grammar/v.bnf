@@ -87,7 +87,7 @@
 //  implements("InterfaceMethodDeclaration")="org.vlang.lang.psi.VlangNamedSignatureOwner"
   implements("(Function|Method)Declaration")="org.vlang.lang.psi.VlangFunctionOrMethodDeclaration"
 //  implements("(Const|Type|Var)Declaration")="org.vlang.lang.psi.GoTopLevelDeclaration"
-  implements(".*ReferenceExpression|FieldName")="org.vlang.lang.psi.VlangReferenceExpressionBase"
+  implements(".*ReferenceExpression|FieldName|ImportPath")="org.vlang.lang.psi.VlangReferenceExpressionBase"
 //  implements("Type")="org.vlang.lang.psi.VlangReferenceExpressionBase"
   implements("(Continue|Break|Goto)Statement")="org.vlang.lang.psi.VlangLabelRefOwnerElement"
 
@@ -140,12 +140,17 @@ ImportDeclaration ::= import ImportSpec {
 // <part1>.<part2>
 // <part1> { <ref> }
 // <part1> as <alias>
-ImportSpec ::= ImportString ('.' ImportString)* (SelectiveImportList | ImportAlias)? {
+ImportSpec ::= ImportPath (SelectiveImportList | ImportAlias)? {
 //  stubClass="org.vlang.lang.stubs.GoImportSpecStub"
   methods=[getIdentifier getAlias getLastPart getLocalPackageName shouldGoDeeper isForSideEffects isDot getPath getName isCImport]
 }
+
+// <part1>
+// <part1>.<part2>
+ImportPath ::= ImportString ('.' ImportString)* {methods=[getIdentifier getQualifier]}
+
 // just identifier
-private ImportString ::= identifier {methods=[getReferences resolve getPath getPathTextRange]}
+private ImportString ::= ReferenceExpression {methods=[getReference resolve getPath getPathTextRange]}
 
 // { <ref>[, <ref2>] }
 SelectiveImportList ::= '{' ReferenceExpression (',' ReferenceExpression)* '}' {pin(".*")=2}

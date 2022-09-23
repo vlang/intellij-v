@@ -19,7 +19,7 @@ class VlangFunctionIndex : StringStubIndexExtension<VlangFunctionDeclaration>() 
             name: String,
             project: Project,
             scope: GlobalSearchScope?,
-            idFilter: IdFilter?
+            idFilter: IdFilter?,
         ): Collection<VlangFunctionDeclaration> {
             val res = StubIndex.getElements(KEY, fqn, project, scope, idFilter, VlangFunctionDeclaration::class.java)
             if (res.isNotEmpty()) {
@@ -43,7 +43,7 @@ class VlangFunctionIndex : StringStubIndexExtension<VlangFunctionDeclaration>() 
             project: Project,
             scope: GlobalSearchScope?,
             idFilter: IdFilter?,
-            processor: Processor<VlangFunctionDeclaration>
+            processor: Processor<VlangFunctionDeclaration>,
         ): Boolean {
 
             return StubIndex.getInstance().processElements(
@@ -70,9 +70,7 @@ class VlangFunctionIndex : StringStubIndexExtension<VlangFunctionDeclaration>() 
         }
     }
 
-    override fun getVersion(): Int {
-        return VlangFileElementType.VERSION + 3
-    }
+    override fun getVersion() = VlangFileElementType.VERSION + 3
 
     override fun getKey() = KEY
 }

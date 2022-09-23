@@ -8,6 +8,7 @@ import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.CachedValuesManager
 import com.intellij.util.ArrayFactory
+import org.vlang.ide.ui.VIcons
 import org.vlang.lang.VlangFileType
 import org.vlang.lang.VlangLanguage
 import org.vlang.lang.VlangTypes
@@ -15,7 +16,6 @@ import org.vlang.lang.psi.impl.VlangPsiImplUtil
 import org.vlang.lang.stubs.VlangFileStub
 import org.vlang.lang.stubs.types.VlangFunctionDeclarationStubElementType
 import org.vlang.lang.stubs.types.VlangMethodDeclarationStubElementType
-import org.vlang.ide.ui.VIcons
 import org.vlang.lang.stubs.types.VlangStructDeclarationStubElementType
 
 class VlangFile(viewProvider: FileViewProvider) :
@@ -57,6 +57,38 @@ class VlangFile(viewProvider: FileViewProvider) :
         return findChildByClass(VlangImportList::class.java)?.importDeclarationList?.mapNotNull {
             it.importSpec
         } ?: emptyList()
+    }
+
+    fun resolveImportName(name: String): String? {
+        return resolveImportNameAndSpec(name).first
+    }
+
+    fun resolveImportNameAndSpec(name: String): Pair<String?, PsiElement?> {
+        val imports = getImports()
+        for (import in imports) {
+            if (import.importAlias?.identifier?.text == name) {
+                return import.getIdentifier().text to import.importAlias
+            }
+
+            val selectiveImport = import.selectiveImportList?.referenceExpressionList?.any {
+                it.getIdentifier().text == name
+            } ?: false
+
+            if (selectiveImport) {
+                return import.name + "." + name to import.selectiveImportList
+            }
+
+            val importName = import.name
+            if (importName == name) {
+                return importName to import
+            }
+
+            if (import.lastPart == name) {
+                return importName to import
+            }
+        }
+
+        return null to null
     }
 
     fun resolveName(name: String): String? {

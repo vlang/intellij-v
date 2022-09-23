@@ -1,12 +1,16 @@
 package org.vlang.lang.psi.impl
 
-import com.intellij.openapi.util.*
+import com.intellij.openapi.util.Conditions
+import com.intellij.openapi.util.Key
+import com.intellij.openapi.util.RecursionManager
+import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
 import com.intellij.psi.impl.source.resolve.ResolveCache
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ArrayUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangPsiImplUtil.processNamedElements
+import org.vlang.lang.stubs.index.VlangPackagesIndex
 
 class VlangReference(private val el: VlangReferenceExpressionBase) :
     VlangReferenceBase<VlangReferenceExpressionBase>(
@@ -77,7 +81,7 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
 //                ) // a bit hacky resolve for: var a C.foo; a.b
             }
         }
-        return true
+        return false
     }
 
     private fun processType(type: VlangType, processor: VlangScopeProcessor, state: ResolveState): Boolean {
@@ -205,8 +209,9 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
 //        if (grandPa is VlangSelectorExpr && !processSelector(grandPa as VlangSelectorExpr, processor, state, parent)) return false
 //        if (prevDot(parent)) return false
         if (!processBlock(processor, state, true)) return false
+        if (!processModules(file, processor, state, true)) return false
 //        if (!processReceiver(processor, state, true)) return false
-//        if (!processImports(file, processor, state, myElement)) return false
+        if (!processImports(file, processor, state, myElement)) return false
         if (!processFileEntities(file, processor, state, true)) return false
 //        return if (!processDirectory(
 //                file.getOriginalFile().getParent(),
@@ -219,6 +224,37 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
 //        ) false else processBuiltin(processor, state, myElement)
 
         return false
+    }
+
+    // TODO: redone
+    protected fun processImports(
+        file: VlangFile,
+        processor: VlangScopeProcessor,
+        state: ResolveState,
+        element: VlangCompositeElement,
+    ): Boolean {
+        val (fqn, import) = file.resolveImportNameAndSpec(identifier!!.text)
+        if (import == null) {
+            return true
+        }
+
+        return !processor.execute(import, state)
+    }
+
+    // TODO: redone
+    private fun processModules(file: VlangFile, processor: VlangScopeProcessor, state: ResolveState, localResolve: Boolean): Boolean {
+        if (identifier?.parentOfType<VlangImportSpec>() == null) {
+            return true
+        }
+
+        val fqn = file.resolveImportName(identifier!!.text) ?: return false
+
+        val modules = VlangPackagesIndex.find(fqn, myElement.project, myElement.resolveScope, null)
+
+        return modules.any {
+            val module = it.getModule() ?: return@any false
+            !processor.execute(module, state)
+        }
     }
 
     protected fun processFileEntities(
@@ -282,7 +318,11 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
                     return !result.add(PsiElementResolveResult(element))
                 }
 
-                val name = state.get(ACTUAL_NAME) ?: if (element is PsiNamedElement) element.name else null
+                val name = state.get(ACTUAL_NAME) ?: when (element) {
+                    is PsiNamedElement   -> element.name
+                    is VlangModuleClause -> element.name
+                    else                 -> null
+                }
                 val ident = reference.getIdentifier() ?: return true
 
                 if (name != null && ident.textMatches(name)) {

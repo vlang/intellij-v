@@ -1,8 +1,8 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi;
 
-import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
+import org.jetbrains.annotations.NotNull;
 
 public class VlangVisitor extends PsiElementVisitor {
 
@@ -321,6 +321,10 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitImportList(@NotNull VlangImportList o) {
     visitCompositeElement(o);
+  }
+
+  public void visitImportPath(@NotNull VlangImportPath o) {
+    visitReferenceExpressionBase(o);
   }
 
   public void visitImportSpec(@NotNull VlangImportSpec o) {

@@ -14,4 +14,5 @@ object VIcons {
     var Parameter = AllIcons.Nodes.Parameter
     var Field = AllIcons.Nodes.Field
     var Receiver = AllIcons.Nodes.Parameter
+    var Directory = AllIcons.Nodes.Folder
 }

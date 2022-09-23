@@ -10,7 +10,6 @@ import com.intellij.openapi.util.text.StringUtil
 import com.intellij.psi.*
 import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.util.*
-import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.*
 
 object VlangPsiImplUtil {
@@ -71,7 +70,13 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getQualifier(o: VlangReferenceExpression): VlangReferenceExpression? {
-        return PsiTreeUtil.getChildOfType(o, VlangReferenceExpression::class.java)
+        val parentDot = o.parentOfType<VlangDotExpression>() ?: return null
+        val qualifier = parentDot.expression as? VlangReferenceExpression
+        if (qualifier == o) {
+            return null
+        }
+
+        return qualifier
     }
 
     @JvmStatic
@@ -83,7 +88,7 @@ object VlangPsiImplUtil {
     fun resolve(o: VlangTypeReferenceExpression): PsiElement? {
         return o.getReference().resolve()
     }
-    
+
     @JvmStatic
     fun getQualifier(o: VlangFieldName): VlangReferenceExpression? {
         return null
@@ -112,6 +117,21 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun getIdentifier(o: VlangImportSpec): PsiElement {
         return o.firstChild
+    }
+
+    @JvmStatic
+    fun getIdentifier(o: VlangImportPath): PsiElement? {
+        return o.referenceExpressionList.firstOrNull()
+    }
+
+    @JvmStatic
+    fun getQualifier(o: VlangImportPath): VlangReferenceExpressionBase? {
+        return null
+    }
+
+    @JvmStatic
+    fun getReference(o: VlangImportSpec): VlangReference {
+        return VlangReference(o.importPath)
     }
 
     @JvmStatic
@@ -187,7 +207,7 @@ object VlangPsiImplUtil {
         } else if (expr is VlangReferenceExpression) {
             val reference = expr.reference
             val resolve = reference.resolve()
-            if (resolve is VlangTypeOwner) 
+            if (resolve is VlangTypeOwner)
                 return typeOrParameterType(resolve, context)
         } else if (expr is VlangParenthesesExpr) {
             return expr.expression?.getType(context)
@@ -244,7 +264,7 @@ object VlangPsiImplUtil {
         ) is VlangBlock
         return if (createRef) VlangVarReference(o) else null
     }
-    
+
     fun getBuiltinType(name: String, context: PsiElement): VlangType? {
 //        val builtin = VlangSdkUtil.findBuiltinFile(context)
 //        if (builtin != null) {
@@ -260,7 +280,7 @@ object VlangPsiImplUtil {
 
         return type
     }
-    
+
     @JvmStatic
     fun getTypeInner(o: VlangVarDefinition, context: ResolveState?): VlangType? {
         // see http://Vlanglang.org/ref/spec#RangeClause

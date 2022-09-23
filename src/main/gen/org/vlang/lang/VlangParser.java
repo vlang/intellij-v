@@ -1,15 +1,16 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang;
 
+import com.intellij.lang.ASTNode;
+import com.intellij.lang.LightPsiParser;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
-import static org.vlang.lang.VlangTypes.*;
-import static org.vlang.lang.VlangParserUtil.*;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.tree.TokenSet;
 import com.intellij.lang.PsiParser;
-import com.intellij.lang.LightPsiParser;
+import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.tree.TokenSet;
+
+import static org.vlang.lang.VlangParserUtil.*;
+import static org.vlang.lang.VlangTypes.*;
 
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
 public class VlangParser implements PsiParser, LightPsiParser {
@@ -2126,33 +2127,32 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ImportString ('.' ImportString)* (SelectiveImportList | ImportAlias)?
-  public static boolean ImportSpec(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ImportSpec")) return false;
+  // ImportString ('.' ImportString)*
+  public static boolean ImportPath(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ImportPath")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = ImportString(b, l + 1);
-    r = r && ImportSpec_1(b, l + 1);
-    r = r && ImportSpec_2(b, l + 1);
-    exit_section_(b, m, IMPORT_SPEC, r);
+    r = r && ImportPath_1(b, l + 1);
+    exit_section_(b, m, IMPORT_PATH, r);
     return r;
   }
 
   // ('.' ImportString)*
-  private static boolean ImportSpec_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ImportSpec_1")) return false;
+  private static boolean ImportPath_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ImportPath_1")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!ImportSpec_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "ImportSpec_1", c)) break;
+      if (!ImportPath_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "ImportPath_1", c)) break;
     }
     return true;
   }
 
   // '.' ImportString
-  private static boolean ImportSpec_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ImportSpec_1_0")) return false;
+  private static boolean ImportPath_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ImportPath_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, DOT);
@@ -2161,16 +2161,29 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
+  /* ********************************************************** */
+  // ImportPath (SelectiveImportList | ImportAlias)?
+  public static boolean ImportSpec(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ImportSpec")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = ImportPath(b, l + 1);
+    r = r && ImportSpec_1(b, l + 1);
+    exit_section_(b, m, IMPORT_SPEC, r);
+    return r;
+  }
+
   // (SelectiveImportList | ImportAlias)?
-  private static boolean ImportSpec_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ImportSpec_2")) return false;
-    ImportSpec_2_0(b, l + 1);
+  private static boolean ImportSpec_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ImportSpec_1")) return false;
+    ImportSpec_1_0(b, l + 1);
     return true;
   }
 
   // SelectiveImportList | ImportAlias
-  private static boolean ImportSpec_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ImportSpec_2_0")) return false;
+  private static boolean ImportSpec_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ImportSpec_1_0")) return false;
     boolean r;
     r = SelectiveImportList(b, l + 1);
     if (!r) r = ImportAlias(b, l + 1);
@@ -2178,9 +2191,9 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier
+  // ReferenceExpression
   static boolean ImportString(PsiBuilder b, int l) {
-    return consumeToken(b, IDENTIFIER);
+    return ReferenceExpression(b, l + 1);
   }
 
   /* ********************************************************** */
