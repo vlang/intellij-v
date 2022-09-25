@@ -230,11 +230,15 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
     private fun processBuiltin(processor: VlangScopeProcessor, state: ResolveState, element: VlangReferenceExpressionBase?): Boolean {
         val builtin = VlangSdkUtil.findBuiltinDir(element!!) ?: return true
         val psiManager = PsiManager.getInstance(element.project)
-        builtin.children.map { psiManager.findFile(it) }.filterIsInstance<VlangFile>().forEach {
-            val res = processFileEntities(it, processor, state, true)
-            if (!res)
-                return false
-        }
+        builtin.children
+            .map { psiManager.findFile(it) }
+            .filterIsInstance<VlangFile>()
+            .filter { !it.isTestFile() }
+            .forEach {
+                val res = processFileEntities(it, processor, state, true)
+                if (!res)
+                    return false
+            }
 
         return true
     }

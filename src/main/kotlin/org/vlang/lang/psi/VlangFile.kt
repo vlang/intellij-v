@@ -39,6 +39,8 @@ class VlangFile(viewProvider: FileViewProvider) :
 
     override fun importClass(aClass: PsiClass) = false
 
+    fun isTestFile(): Boolean = name.split(".").first().endsWith("_test")
+
     fun getModule(): VlangModuleClause? {
         return findChildByClass(VlangModuleClause::class.java)
     }
