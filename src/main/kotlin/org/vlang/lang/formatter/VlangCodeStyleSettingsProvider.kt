@@ -24,6 +24,6 @@ class VlangCodeStyleSettingsProvider : CodeStyleSettingsProvider() {
         }
     }
 
-    private class VlangCodeStyleMainPanel(currentSettings: CodeStyleSettings?, settings: CodeStyleSettings?) :
+    private class VlangCodeStyleMainPanel(currentSettings: CodeStyleSettings, settings: CodeStyleSettings) :
         TabbedLanguageCodeStylePanel(VlangLanguage.INSTANCE, currentSettings, settings)
 }

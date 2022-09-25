@@ -127,6 +127,10 @@ class VlangFile(viewProvider: FileViewProvider) :
     fun getStructs(): List<VlangStructDeclaration> =
         getNamedElements(VlangTypes.STRUCT_DECLARATION, VlangStructDeclarationStubElementType.ARRAY_FACTORY)
 
+    // TODO
+    fun getTypes(): List<VlangStructDeclaration> =
+        getNamedElements(VlangTypes.TYPE_ALIAS_DECLARATION, VlangStructDeclarationStubElementType.ARRAY_FACTORY)
+
     private inline fun <reified T : PsiElement?> getNamedElements(elementType: IElementType, arrayFactory: ArrayFactory<T>): List<T> {
         return CachedValuesManager.getCachedValue(this) {
             val functions =

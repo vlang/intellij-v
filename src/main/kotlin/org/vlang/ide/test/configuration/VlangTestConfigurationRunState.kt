@@ -5,6 +5,7 @@ import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.execution.process.KillableColoredProcessHandler
 import com.intellij.execution.process.ProcessHandler
 import com.intellij.execution.runners.ExecutionEnvironment
+import org.vlang.sdk.VlangSdkService
 import java.io.File
 
 class VlangTestConfigurationRunState(
@@ -15,8 +16,10 @@ class VlangTestConfigurationRunState(
     override fun startProcess(): ProcessHandler {
         val file = File(conf.testFile)
 
+        val exe = VlangSdkService.getInstance(conf.project).getExecutable()
+            ?: throw RuntimeException("V executable not found, SDK not setup correctly?")
         val commandLine = GeneralCommandLine()
-            .withExePath("/Users/petrmakhnev/v/v")
+            .withExePath(exe)
 
         if (conf.testModule.isNotEmpty()) {
             val workingDir = file.parentFile.parentFile

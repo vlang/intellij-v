@@ -5,9 +5,14 @@ import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
+import org.vlang.lang.psi.VlangFile
 
 class VlangTypedHandler : TypedHandlerDelegate() {
     override fun charTyped(c: Char, project: Project, editor: Editor, file: PsiFile): Result {
+        if (file !is VlangFile) {
+            return Result.CONTINUE
+        }
+
         val chars = editor.document.charsSequence
         val offset = editor.caretModel.offset
 

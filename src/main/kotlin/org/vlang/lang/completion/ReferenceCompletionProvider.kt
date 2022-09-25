@@ -20,9 +20,12 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
     override fun addCompletions(
         parameters: CompletionParameters,
         context: ProcessingContext,
-        resultSet: CompletionResultSet,
+        result: CompletionResultSet,
     ) {
-        if (parameters.position.text == CompletionUtilCore.DUMMY_IDENTIFIER_TRIMMED) return
+        if (parameters.position.text == CompletionUtilCore.DUMMY_IDENTIFIER_TRIMMED) {
+            result.stopHere()
+            return
+        }
 
         val expression = parameters.position.parentOfType<VlangReferenceExpressionBase>() ?: return
         val originalFile = parameters.originalFile
@@ -30,7 +33,7 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
         if (ref is VlangReference) {
             ref.processResolveVariants(
                 MyScopeProcessor(
-                    resultSet,
+                    result,
                     originalFile,
                     false
                 )
@@ -38,7 +41,7 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
         } else if (ref is VlangCachedReference<*>) {
             ref.processResolveVariants(
                 MyScopeProcessor(
-                    resultSet,
+                    result,
                     originalFile,
                     false
                 )
@@ -90,34 +93,41 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
     }
 
     private fun createLookupElement(
-        o: PsiElement,
+        element: PsiElement,
         state: ResolveState,
         forTypes: Boolean,
     ): LookupElement? {
-        if (o is VlangNamedElement && !o.isBlank()/* || o is VlangImportSpec && !o.isDot()*/) {
-            if (o is VlangImportSpec) {
-                //                    return VlangCompletionUtil.createPackageLookupElement(
-                //                        o as VlangImportSpec,
-                //                        state[VlangReferenceBase.ACTUAL_NAME],
-                //                        vendoringEnabled
-                //                    )
-            } else if (o is VlangNamedSignatureOwner && o.name != null) {
-                val name = o.name
-                if (name != null) {
-                    //                        return VlangCompletionUtil.createFunctionOrMethodLookupElement(
-                    //                            o as VlangNamedSignatureOwner, name, null,
-                    //                            VlangCompletionUtil.FUNCTION_PRIORITY
-                    //                        )
-                }
-            } else if (o is PsiDirectory) {
-                //                    return VlangCompletionUtil.createPackageLookupElement(o.name, o, o, vendoringEnabled, true)
-            } else if (o is VlangLabelDefinition) {
-                val name = o.name
-                //                    if (name != null) return VlangCompletionUtil.createLabelLookupElement(o as VlangLabelDefinition, name)
-            } else {
-                return VlangCompletionUtil.createVariableLikeLookupElement(o)
+        if (element !is VlangNamedElement || element.isBlank()) return null
+
+        if (element is VlangImportSpec) {
+            //                    return VlangCompletionUtil.createPackageLookupElement(
+            //                        o as VlangImportSpec,
+            //                        state[VlangReferenceBase.ACTUAL_NAME],
+            //                        vendoringEnabled
+            //                    )
+        } else if (element is VlangNamedSignatureOwner && element.name != null) {
+            val name = element.name
+            if (name != null) {
+                //                        return VlangCompletionUtil.createFunctionOrMethodLookupElement(
+                //                            o as VlangNamedSignatureOwner, name, null,
+                //                            VlangCompletionUtil.FUNCTION_PRIORITY
+                //                        )
             }
+        } else if (element is PsiDirectory) {
+            //                    return VlangCompletionUtil.createPackageLookupElement(o.name, o, o, vendoringEnabled, true)
+        } else if (element is VlangLabelDefinition) {
+            val name = element.name
+            //                    if (name != null) return VlangCompletionUtil.createLabelLookupElement(o as VlangLabelDefinition, name)
         }
-        return null
+
+        return when (element) {
+            is VlangFunctionDeclaration  -> VlangCompletionUtil.createFunctionLookupElement(element)
+            is VlangMethodDeclaration    -> VlangCompletionUtil.createFunctionLookupElement(element)
+            is VlangStructDeclaration    -> VlangCompletionUtil.createStructLookupElement(element)
+            is VlangUnionDeclaration     -> VlangCompletionUtil.createUnionLookupElement(element)
+            is VlangEnumDeclaration      -> VlangCompletionUtil.createEnumLookupElement(element)
+            is VlangTypeAliasDeclaration -> VlangCompletionUtil.createTypeAliasLookupElement(element)
+            else                         -> VlangCompletionUtil.createVariableLikeLookupElement(element)
+        }
     }
 }

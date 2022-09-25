@@ -39,6 +39,10 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
         <lang.findUsagesProvider language="vlang"
                                  implementationClass="org.vlang.lang.usages.VlangFindUsagesProvider"/>
 
+        <lang.smartEnterProcessor language="vlang"
+                                  order="first"
+                                  implementationClass="org.vlang.lang.VlangSmartEnterProcessor"/>
+
         <lang.formatter language="vlang" implementationClass="org.vlang.lang.formatter.VlangFormattingModelBuilder"/>
         <codeStyleSettingsProvider implementation="org.vlang.lang.formatter.VlangCodeStyleSettingsProvider"/>
         <langCodeStyleSettingsProvider implementation="org.vlang.lang.formatter.VlangLanguageCodeStyleSettingsProvider"/>
@@ -64,7 +68,7 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
 
         <localInspection language="vlang" groupName="V" shortName="VlangUndefinedFunctionInspection"
                          displayName="Undefined function"
-                         enabledByDefault="true" level="ERROR"
+                         enabledByDefault="false" level="ERROR"
                          implementationClass="org.vlang.ide.inspections.VlangUndefinedFunctionInspection"/>
 
         <localInspection language="vlang" groupName="V" shortName="VlangUnresolvedLabelInspection"
@@ -78,8 +82,8 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
                          implementationClass="org.vlang.ide.inspections.VlangLabelOutsideUnsafeInspection"/>
 
         <localInspection language="vlang" groupName="V" shortName="VlangVariableRedeclaration"
-                         displayName=""
-                         enabledByDefault="true" level="ERROR"
+                         displayName="Variable redeclaration"
+                         enabledByDefault="false" level="ERROR"
                          implementationClass="org.vlang.ide.inspections.VlangVariableRedeclarationInspection"/>
 
         <runLineMarkerContributor id="VlangRunLineMarkerProvider" language="vlang"
@@ -104,6 +108,25 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
 
         <colorSettingsPage implementation="org.vlang.ide.highlight.VlangColorsAndFontsPage"/>
         <!-- End of V File -->
+
+        <!-- Project -->
+        <projectConfigurable id="v" groupId="language" provider="org.vlang.configurations.VlangProjectConfigurableProvider"
+                             dynamic="true"/>
+        <moduleBuilder builderClass="org.vlang.projectWizard.VlangModuleBuilder"/>
+        <postStartupActivity implementation="org.vlang.project.VlangPostStartupActivity"/>
+        <indexedRootsProvider implementation="org.vlang.project.VlangIndexedRootsProvider"/>
+        <!-- End of Project -->
+
+
+        <!-- SDK -->
+        <sdkType implementation="org.vlang.sdk.VlangSdkType"/>
+        <library.presentationProvider implementation="org.vlang.sdk.VlangLibraryPresentationProvider"/>
+        <library.type implementation="org.vlang.sdk.VlangLibraryType"/>
+
+        <projectService serviceImplementation="org.vlang.sdk.VlangSdkService"/>
+        <moduleType id="V_MODULE" implementationClass="org.vlang.sdk.VlangModuleType"/>
+        <moduleConfigurationEditorProvider implementation="org.vlang.configurations.VlangModuleEditorsProvider" order="first"/>
+        <!-- End of SDK -->
 
         <!-- Run V script Configuration -->
         <configurationType implementation="org.vlang.ide.run.VlangRunConfigurationType"/>
@@ -155,7 +178,9 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
         <additionalTextAttributes scheme="Darcula" file="colorSchemes/VlangAddonsDarcula.xml"/>
 
         <defaultLiveTemplates file="/liveTemplates/V.xml"/>
-        <liveTemplateContext implementation="org.vlang.ide.templates.VlangLiveTemplateContext"/>
+        <liveTemplateContext implementation="org.vlang.ide.templates.VlangTemplateContextType$TopLevel"/>
+        <liveTemplateContext implementation="org.vlang.ide.templates.VlangTemplateContextType$Statement"/>
+        <liveTemplateContext implementation="org.vlang.ide.templates.VlangTemplateContextType$Comment"/>
     </extensions>
 
     <actions>

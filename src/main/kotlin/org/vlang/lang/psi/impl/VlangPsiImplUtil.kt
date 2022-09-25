@@ -11,6 +11,7 @@ import com.intellij.psi.*
 import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.util.*
 import org.vlang.lang.psi.*
+import org.vlang.sdk.VlangSdkUtil
 
 object VlangPsiImplUtil {
     @JvmStatic
@@ -266,13 +267,10 @@ object VlangPsiImplUtil {
     }
 
     fun getBuiltinType(name: String, context: PsiElement): VlangType? {
-//        val builtin = VlangSdkUtil.findBuiltinFile(context)
-//        if (builtin != null) {
-//            val spec = ContainerUtil.find(builtin.getTypes()) { spec1 -> name == spec1.getName() }
-//            if (spec != null) {
-//                return spec.getSpecType().getType() // todo
-//            }
-//        }
+        val builtin = VlangSdkUtil.findBuiltinDir(context)
+        if (builtin != null) {
+            print("")
+        }
 
         val file = VlangElementFactory.createFileFromText(context.project, "fn f(a $name)")
 

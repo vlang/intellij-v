@@ -5,15 +5,7 @@ import com.intellij.lang.ASTNode
 import com.intellij.psi.TokenType
 import com.intellij.psi.formatter.common.AbstractBlock
 import com.intellij.psi.impl.source.tree.LeafPsiElement
-import org.vlang.lang.psi.VlangBlock
-import org.vlang.lang.psi.VlangConstDeclaration
-import org.vlang.lang.psi.VlangEnumFields
-import org.vlang.lang.psi.VlangInterfaceType
-import org.vlang.lang.psi.VlangMapInitExpr
-import org.vlang.lang.psi.VlangMatchArms
-import org.vlang.lang.psi.VlangStructType
-import org.vlang.lang.psi.VlangTypeInitExpr
-import org.vlang.lang.psi.VlangUnionDeclaration
+import org.vlang.lang.psi.*
 
 class VlangFormattingBlock(
     node: ASTNode,
@@ -58,7 +50,10 @@ class VlangFormattingBlock(
 
     override fun getSpacing(child1: Block?, child2: Block) = spacingBuilder.getSpacing(this, child1, child2)
 
-    override fun getIndent(): Indent = if (withIdent) Indent.getNormalIndent(false) else Indent.getNoneIndent()
+    override fun getIndent(): Indent? = if (withIdent)
+        Indent.getNormalIndent(false)
+    else
+        Indent.getNoneIndent()
 
     override fun isLeaf() = node.firstChildNode == null
 }

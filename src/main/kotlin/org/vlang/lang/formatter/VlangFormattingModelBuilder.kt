@@ -15,12 +15,14 @@ class VlangFormattingModelBuilder : FormattingModelBuilder {
 
     override fun createModel(formattingContext: FormattingContext): FormattingModel {
         val codeStyleSettings = formattingContext.codeStyleSettings
+//        CodeInsightSettings.getInstance().SMART_INDENT_ON_ENTER = false
         return FormattingModelProvider
             .createFormattingModelForPsiFile(
                 formattingContext.containingFile,
                 VlangFormattingBlock(
                     formattingContext.node,
-                    spacingBuilder = createSpaceBuilder(codeStyleSettings)
+                    spacingBuilder = createSpaceBuilder(codeStyleSettings),
+                    withIdent = false,
                 ),
                 codeStyleSettings
             )

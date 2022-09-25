@@ -1,9 +1,7 @@
 package org.vlang.lang.completion
 
 import com.intellij.codeInsight.completion.*
-import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
-import com.intellij.icons.AllIcons
 import com.intellij.patterns.*
 import com.intellij.patterns.PlatformPatterns.psiElement
 import com.intellij.psi.PsiElement
@@ -13,19 +11,13 @@ import com.intellij.psi.tree.TokenSet
 import com.intellij.util.ProcessingContext
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.completion.VlangCompletionUtil.KEYWORD_PRIORITY
-import org.vlang.lang.psi.*
-import org.vlang.lang.stubs.index.*
+import org.vlang.lang.psi.VlangBlock
+import org.vlang.lang.psi.VlangFile
+import org.vlang.lang.psi.VlangForStatement
+import org.vlang.lang.psi.VlangFunctionDeclaration
 
 class VlangKeywordsCompletionContributor : CompletionContributor() {
     init {
-        extend(
-            CompletionType.BASIC,
-            psiElement(VlangTypes.IDENTIFIER)
-                .andNot(
-                    insideWithLabelStatement(VlangTypes.IDENTIFIER)
-                ),
-            VlangNamesCompletionProvider()
-        )
         extend(
             CompletionType.BASIC,
             topLevelPattern(),
@@ -46,73 +38,14 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         )
     }
 
-    class VlangNamesCompletionProvider : CompletionProvider<CompletionParameters>() {
-        override fun addCompletions(
-            parameters: CompletionParameters,
-            context: ProcessingContext,
-            resultSet: CompletionResultSet,
-        ) {
-            if (parameters.position.text == CompletionUtilCore.DUMMY_IDENTIFIER_TRIMMED) {
-                return
-            }
-
-            val file = parameters.originalFile
-
-            val allPublicNames = VlangNamesIndex.getAll(file.project)
-
-            allPublicNames.forEach {
-                var el = LookupElementBuilder.create(it)
-
-                when (it) {
-                    is VlangFunctionDeclaration  -> {
-                        el = el
-                            .appendTailText(it.getSignature()?.text ?: "()", true)
-                            .withIcon(AllIcons.Nodes.Function)
-                            .withInsertHandler(NyInsertHandler())
-                    }
-
-                    is VlangStructDeclaration    -> {
-                        el = el
-                            .withIcon(AllIcons.Nodes.Class)
-                    }
-
-                    is VlangUnionDeclaration     -> {
-                        el = el
-                            .withIcon(AllIcons.Nodes.AnonymousClass)
-                    }
-
-                    is VlangEnumDeclaration      -> {
-                        el = el
-                            .withIcon(AllIcons.Nodes.Enum)
-                    }
-
-                    is VlangTypeAliasDeclaration -> {
-                        el = el
-                            .withIcon(AllIcons.Nodes.Alias)
-                    }
-                }
-
-                resultSet.addElement(el)
-            }
-        }
-
-        class NyInsertHandler : InsertHandler<LookupElement> {
-            override fun handleInsert(context: InsertionContext, item: LookupElement) {
-                val caretOffset = context.editor.caretModel.offset
-
-                context.document.insertString(caretOffset, "()")
-                context.editor.caretModel.moveToOffset(caretOffset + 1)
-            }
-        }
-    }
-
     private class KeywordsCompletionProvider(private vararg val keywords: String) : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(
             parameters: CompletionParameters,
             context: ProcessingContext,
             result: CompletionResultSet,
         ) {
-            if (parameters.position.text == CompletionUtilCore.DUMMY_IDENTIFIER_TRIMMED) {
+            if (VlangCompletionUtil.shouldSuppressCompletion(parameters.position)) {
+                result.stopHere()
                 return
             }
 
