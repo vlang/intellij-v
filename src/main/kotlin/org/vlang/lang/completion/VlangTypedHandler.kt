@@ -22,6 +22,13 @@ class VlangTypedHandler : TypedHandlerDelegate() {
             return Result.STOP
         }
 
+        val prevSymbol = chars.subSequence(offset - 2, offset - 1).first()
+        if (c == '{' && prevSymbol == '$') {
+            editor.document.insertString(offset, "}")
+            showCompletion(editor)
+            return Result.STOP
+        }
+
         return Result.DEFAULT
     }
 

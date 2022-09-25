@@ -13,13 +13,22 @@ class VlangBackspaceHandlerDelegate : BackspaceHandlerDelegate() {
     override fun charDeleted(c: Char, file: PsiFile, editor: Editor): Boolean {
         val offset = editor.caretModel.currentCaret.offset
         val element = file.findElementAt(offset - 1) ?: return false
+        val chars = editor.document.charsSequence
+
         if (element.parent is VlangFile) {
-            val prev = editor.document.charsSequence.subSequence(offset - 1, offset)
+            val prev = chars.subSequence(offset - 1, offset)
             if (prev == "\t") {
                 editor.document.deleteString(offset - 1, offset)
             }
             return true
         }
+
+        val prevSymbol = chars.subSequence(offset - 1, offset).first()
+        if (c == '{' && prevSymbol == '$') {
+            editor.document.deleteString(offset, offset + 1)
+            return true
+        }
+
         return false
     }
 }
