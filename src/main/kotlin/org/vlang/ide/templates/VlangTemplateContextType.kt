@@ -1,5 +1,6 @@
 package org.vlang.ide.templates
 
+import com.intellij.codeInsight.template.EverywhereContextType
 import com.intellij.codeInsight.template.TemplateActionContext
 import com.intellij.codeInsight.template.TemplateContextType
 import com.intellij.psi.PsiComment
@@ -17,7 +18,8 @@ import org.vlang.lang.psi.VlangModuleClause
 abstract class VlangTemplateContextType(
     id: String,
     presentableName: String,
-) : TemplateContextType(id, presentableName) {
+    baseContextType: Class<out TemplateContextType>?
+) : TemplateContextType(id, presentableName, baseContextType) {
 
     override fun isInContext(templateActionContext: TemplateActionContext): Boolean {
         val file = templateActionContext.file
@@ -54,15 +56,19 @@ abstract class VlangTemplateContextType(
 
     protected open fun isCommentInContext() = false
 
-    class TopLevel : VlangTemplateContextType("VLANG_TOPLEVEL", "top-level") {
+    class Generic : VlangTemplateContextType("VLANG_GENERIC", "V", EverywhereContextType::class.java) {
         override fun isInContext(element: PsiElement) = element.parent is VlangFile || element.parent.parent is VlangFile
     }
 
-    class Statement : VlangTemplateContextType("VLANG_STATEMENT", "statement") {
+    class TopLevel : VlangTemplateContextType("VLANG_TOPLEVEL", "top-level", Generic::class.java) {
+        override fun isInContext(element: PsiElement) = element.parent is VlangFile || element.parent.parent is VlangFile
+    }
+
+    class Statement : VlangTemplateContextType("VLANG_STATEMENT", "statement", Generic::class.java) {
         override fun isInContext(element: PsiElement) = element.parentOfType<VlangFunctionDeclaration>() != null
     }
 
-    class Comment : VlangTemplateContextType("VLANG_COMMENT", "comment") {
+    class Comment : VlangTemplateContextType("VLANG_COMMENT", "comment", Generic::class.java) {
         override fun isInContext(element: PsiElement) = false
         override fun isCommentInContext() = true
     }

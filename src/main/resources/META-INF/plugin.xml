@@ -180,6 +180,7 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
         <additionalTextAttributes scheme="Darcula" file="colorSchemes/VlangAddonsDarcula.xml"/>
 
         <defaultLiveTemplates file="/liveTemplates/V.xml"/>
+        <liveTemplateContext implementation="org.vlang.ide.templates.VlangTemplateContextType$Generic"/>
         <liveTemplateContext implementation="org.vlang.ide.templates.VlangTemplateContextType$TopLevel"/>
         <liveTemplateContext implementation="org.vlang.ide.templates.VlangTemplateContextType$Statement"/>
         <liveTemplateContext implementation="org.vlang.ide.templates.VlangTemplateContextType$Comment"/>
