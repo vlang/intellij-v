@@ -196,6 +196,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitFieldDefinition(@NotNull VlangFieldDefinition o) {
+    visitNamedElement(o);
+  }
+
   public void visitFieldInitialization(@NotNull VlangFieldInitialization o) {
     visitCompositeElement(o);
   }
@@ -214,10 +218,6 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitFieldLookup(@NotNull VlangFieldLookup o) {
     visitCompositeElement(o);
-  }
-
-  public void visitFieldName(@NotNull VlangFieldName o) {
-    visitReferenceExpressionBase(o);
   }
 
   public void visitFieldsGroup(@NotNull VlangFieldsGroup o) {

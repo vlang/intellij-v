@@ -64,7 +64,7 @@ class VlangAnnotator : Annotator {
             }
         }
 
-        if (element is VlangFieldName) {
+        if (element is VlangFieldDefinition) {
             holder.textAttributes(element, JavaHighlightingColors.INSTANCE_FIELD_ATTRIBUTES)
         }
 

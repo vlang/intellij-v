@@ -5,7 +5,9 @@ import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
+import com.intellij.psi.util.parentOfType
 import org.vlang.lang.psi.VlangFile
+import org.vlang.lang.psi.VlangReferenceExpression
 
 class VlangTypedHandler : TypedHandlerDelegate() {
     override fun charTyped(c: Char, project: Project, editor: Editor, file: PsiFile): Result {
@@ -25,6 +27,13 @@ class VlangTypedHandler : TypedHandlerDelegate() {
         val prevSymbol = chars.subSequence(offset - 2, offset - 1).first()
         if (c == '{' && prevSymbol == '$') {
             editor.document.insertString(offset, "}")
+            showCompletion(editor)
+            return Result.STOP
+        }
+
+        val prevElement = file.findElementAt(offset - 2)
+
+        if (c == '.' && prevElement?.parentOfType<VlangReferenceExpression>() != null) {
             showCompletion(editor)
             return Result.STOP
         }

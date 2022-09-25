@@ -7,26 +7,25 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.stubs.IStubElementType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.vlang.lang.psi.VlangParamDefinition;
-import org.vlang.lang.psi.VlangPsiTreeUtil;
-import org.vlang.lang.psi.VlangVarModifiers;
+import org.vlang.lang.psi.VlangFieldDefinition;
+import org.vlang.lang.psi.VlangReferenceExpression;
 import org.vlang.lang.psi.VlangVisitor;
-import org.vlang.lang.stubs.VlangParamDefinitionStub;
+import org.vlang.lang.stubs.VlangFieldDefinitionStub;
 
 import static org.vlang.lang.VlangTypes.IDENTIFIER;
 
-public class VlangParamDefinitionImpl extends VlangNamedElementImpl<VlangParamDefinitionStub> implements VlangParamDefinition {
+public class VlangFieldDefinitionImpl extends VlangNamedElementImpl<VlangFieldDefinitionStub> implements VlangFieldDefinition {
 
-  public VlangParamDefinitionImpl(@NotNull VlangParamDefinitionStub stub, @NotNull IStubElementType<?, ?> type) {
+  public VlangFieldDefinitionImpl(@NotNull VlangFieldDefinitionStub stub, @NotNull IStubElementType<?, ?> type) {
     super(stub, type);
   }
 
-  public VlangParamDefinitionImpl(@NotNull ASTNode node) {
+  public VlangFieldDefinitionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitParamDefinition(this);
+    visitor.visitFieldDefinition(this);
   }
 
   @Override
@@ -36,21 +35,15 @@ public class VlangParamDefinitionImpl extends VlangNamedElementImpl<VlangParamDe
   }
 
   @Override
-  @Nullable
-  public VlangVarModifiers getVarModifiers() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangVarModifiers.class);
-  }
-
-  @Override
   @NotNull
   public PsiElement getIdentifier() {
     return notNullChild(findChildByType(IDENTIFIER));
   }
 
   @Override
-  @NotNull
-  public String getName() {
-    return VlangPsiImplUtil.getName(this);
+  @Nullable
+  public VlangReferenceExpression getQualifier() {
+    return VlangPsiImplUtil.getQualifier(this);
   }
 
 }

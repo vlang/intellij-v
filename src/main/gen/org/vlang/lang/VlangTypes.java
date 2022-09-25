@@ -58,12 +58,12 @@ public interface VlangTypes {
   IElementType EXPRESSION = new VlangCompositeElementType("EXPRESSION");
   IElementType FIELDS_GROUP = new VlangCompositeElementType("FIELDS_GROUP");
   IElementType FIELD_DECLARATION = new VlangCompositeElementType("FIELD_DECLARATION");
+  IElementType FIELD_DEFINITION = VlangElementTypeFactory.stubFactory("FIELD_DEFINITION");
   IElementType FIELD_INITIALIZATION = new VlangCompositeElementType("FIELD_INITIALIZATION");
   IElementType FIELD_INITIALIZATION_KEY = new VlangCompositeElementType("FIELD_INITIALIZATION_KEY");
   IElementType FIELD_INITIALIZATION_KEY_VALUE_LIST = new VlangCompositeElementType("FIELD_INITIALIZATION_KEY_VALUE_LIST");
   IElementType FIELD_INITIALIZATION_VALUE_LIST = new VlangCompositeElementType("FIELD_INITIALIZATION_VALUE_LIST");
   IElementType FIELD_LOOKUP = new VlangCompositeElementType("FIELD_LOOKUP");
-  IElementType FIELD_NAME = new VlangCompositeElementType("FIELD_NAME");
   IElementType FORCE_NO_ERROR_PROPAGATION_EXPRESSION = new VlangCompositeElementType("FORCE_NO_ERROR_PROPAGATION_EXPRESSION");
   IElementType FORMAT_SPECIFIER = new VlangCompositeElementType("FORMAT_SPECIFIER");
   IElementType FORMAT_SPECIFIER_EXPRESSION = new VlangCompositeElementType("FORMAT_SPECIFIER_EXPRESSION");
@@ -131,7 +131,7 @@ public interface VlangTypes {
   IElementType OR_EXPR = new VlangCompositeElementType("OR_EXPR");
   IElementType PARAMETERS = new VlangCompositeElementType("PARAMETERS");
   IElementType PARAMETER_DECLARATION = new VlangCompositeElementType("PARAMETER_DECLARATION");
-  IElementType PARAM_DEFINITION = new VlangCompositeElementType("PARAM_DEFINITION");
+  IElementType PARAM_DEFINITION = VlangElementTypeFactory.stubFactory("PARAM_DEFINITION");
   IElementType PARENTHESES_EXPR = new VlangCompositeElementType("PARENTHESES_EXPR");
   IElementType PLAIN_ATTRIBUTE = new VlangCompositeElementType("PLAIN_ATTRIBUTE");
   IElementType POINTER_TYPE = VlangElementTypeFactory.stubFactory("POINTER_TYPE");
@@ -444,6 +444,9 @@ public interface VlangTypes {
       else if (type == FIELD_DECLARATION) {
         return new VlangFieldDeclarationImpl(node);
       }
+      else if (type == FIELD_DEFINITION) {
+        return new VlangFieldDefinitionImpl(node);
+      }
       else if (type == FIELD_INITIALIZATION) {
         return new VlangFieldInitializationImpl(node);
       }
@@ -458,9 +461,6 @@ public interface VlangTypes {
       }
       else if (type == FIELD_LOOKUP) {
         return new VlangFieldLookupImpl(node);
-      }
-      else if (type == FIELD_NAME) {
-        return new VlangFieldNameImpl(node);
       }
       else if (type == FORCE_NO_ERROR_PROPAGATION_EXPRESSION) {
         return new VlangForceNoErrorPropagationExpressionImpl(node);

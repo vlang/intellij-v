@@ -10,6 +10,7 @@ import com.intellij.codeInsight.lookup.LookupElementPresentation
 import com.intellij.codeInsight.lookup.LookupElementRenderer
 import com.intellij.icons.AllIcons
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.parentOfType
 import org.vlang.ide.ui.VIcons
 import org.vlang.lang.psi.*
 import javax.swing.Icon
@@ -77,6 +78,18 @@ object VlangCompletionUtil {
         )
     }
 
+    fun createFieldLookupElement(element: VlangNamedElement): LookupElement? {
+        val name = element.name
+        if (name.isNullOrEmpty()) {
+            return null
+        }
+
+        return createFieldLookupElement(
+            element, name,
+            priority = FIELD_PRIORITY,
+        )
+    }
+
     fun createStructLookupElement(element: VlangNamedElement): LookupElement? =
         createLookupElement(element, AllIcons.Nodes.Class, STRUCT_PRIORITY)
 
@@ -109,6 +122,18 @@ object VlangCompletionUtil {
         return PrioritizedLookupElement.withPriority(
             LookupElementBuilder.createWithSmartPointer(lookupString, element)
                 .withIcon(icon)
+                .withInsertHandler(insertHandler), priority.toDouble()
+        )
+    }
+
+    private fun createFieldLookupElement(
+        element: VlangNamedElement, lookupString: String,
+        insertHandler: InsertHandler<LookupElement>? = null,
+        priority: Int = 0,
+    ): LookupElement {
+        return PrioritizedLookupElement.withPriority(
+            LookupElementBuilder.createWithSmartPointer(lookupString, element)
+                .withRenderer(FIELD_RENDERER)
                 .withInsertHandler(insertHandler), priority.toDouble()
         )
     }
@@ -159,6 +184,23 @@ object VlangCompletionUtil {
                 is VlangAnonymousFieldDefinition -> VIcons.Field
                 else                             -> null
             }
+
+            p.icon = icon
+            p.typeText = typeText
+            p.isTypeGrayed = true
+            p.itemText = element.lookupString
+        }
+    }
+
+    private val FIELD_RENDERER = object : LookupElementRenderer<LookupElement>() {
+        override fun renderElement(element: LookupElement, p: LookupElementPresentation) {
+            val elem = element.psiElement as? VlangNamedElement ?: return
+            val type = elem.getType(null)
+            val typeText = type?.text ?: ""
+            val icon = VIcons.Field
+
+            val parentStruct = elem.parentOfType<VlangStructDeclaration>()
+            p.tailText = " of " + parentStruct?.name
 
             p.icon = icon
             p.typeText = typeText

@@ -1368,20 +1368,32 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // FieldName (',' FieldName)*
+  // identifier
+  public static boolean FieldDefinition(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FieldDefinition")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, IDENTIFIER);
+    exit_section_(b, m, FIELD_DEFINITION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // FieldDefinition (',' FieldDefinition)*
   static boolean FieldDefinitionList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FieldDefinitionList")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
-    r = FieldName(b, l + 1);
+    r = FieldDefinition(b, l + 1);
     p = r; // pin = 1
     r = r && FieldDefinitionList_1(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
-  // (',' FieldName)*
+  // (',' FieldDefinition)*
   private static boolean FieldDefinitionList_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FieldDefinitionList_1")) return false;
     while (true) {
@@ -1392,14 +1404,14 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // ',' FieldName
+  // ',' FieldDefinition
   private static boolean FieldDefinitionList_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FieldDefinitionList_1_0")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
     r = consumeToken(b, COMMA);
     p = r; // pin = 1
-    r = r && FieldName(b, l + 1);
+    r = r && FieldDefinition(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -1580,18 +1592,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = ReferenceExpression(b, l + 1);
     exit_section_(b, m, FIELD_LOOKUP, r);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // identifier
-  public static boolean FieldName(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "FieldName")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, IDENTIFIER);
-    exit_section_(b, m, FIELD_NAME, r);
     return r;
   }
 

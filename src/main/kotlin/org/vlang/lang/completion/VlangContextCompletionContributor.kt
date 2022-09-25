@@ -87,7 +87,7 @@ class VlangContextCompletionContributor : CompletionContributor() {
                 .filterIsInstance<VlangStructDeclaration>()
                 .forEach { decl ->
                     val groups = decl.structType.fieldsGroupList
-                    val fields = groups.flatMap { it.fieldDeclarationList }.flatMap { it.fieldNameList }
+                    val fields = groups.flatMap { it.fieldDeclarationList }.flatMap { it.fieldDefinitionList }
 
                     for (field in fields) {
                         resultSet.addElement(

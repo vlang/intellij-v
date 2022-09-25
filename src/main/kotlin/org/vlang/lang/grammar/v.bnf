@@ -82,7 +82,7 @@
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional|OrBlock)Expr")=BinaryExpr
   extends(".*(Expr|Literal|Lit|OperandName)|TypeInitExpr|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|SharedExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ErrorPropagationExpression|ForceNoErrorPropagationExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression|LockExpression|IncDecExpression")=Expression
 
-  implements("(Type|Import)Spec|(Var|Const|Param|Field|Label|Var)Definition|(Struct|TypeAlias|Union|Enum)Declaration|Receiver")="org.vlang.lang.psi.VlangNamedElement"
+  implements("(Type|Import)Spec|(Var|Const|Param|Field|Label|Var)Definition|(Struct|TypeAlias|Union|Enum)Declaration|Receiver|FieldDefinition")="org.vlang.lang.psi.VlangNamedElement"
   implements("FunctionLit|(Function|Method)Declaration")="org.vlang.lang.psi.VlangSignatureOwner"
 //  implements("InterfaceMethodDeclaration")="org.vlang.lang.psi.VlangNamedSignatureOwner"
   implements("(Function|Method)Declaration")="org.vlang.lang.psi.VlangFunctionOrMethodDeclaration"
@@ -91,13 +91,13 @@
 //  implements("Type")="org.vlang.lang.psi.VlangReferenceExpressionBase"
   implements("(Continue|Break|Goto)Statement")="org.vlang.lang.psi.VlangLabelRefOwnerElement"
 
-  extends("ImportSpec|ParamDefinition|Receiver|(Const|Field)Definition")="org.vlang.lang.psi.impl.VlangSimpleNamedElementImpl"
+  extends("ImportSpec|Receiver|(Const)Definition")="org.vlang.lang.psi.impl.VlangSimpleNamedElementImpl"
 
   extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
   extends("ModuleClause|Type")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
-  extends("(Struct|TypeAlias|Union|Enum)Declaration|(Var|Label)Definition")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
+  extends("(Struct|TypeAlias|Union|Enum)Declaration|(Var|Label|Param|Field)Definition")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
 
-  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum)Declaration|.*Type|(Var|Label)Definition")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
+  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum)Declaration|.*Type|(Var|Label|Field|Param)Definition")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
 
   extends(".*Statement")=Statement
   extends(".*Type|TypeList")=Type
@@ -366,10 +366,10 @@ private WithoutModifiersFieldsGroup ::= !MemberModifiers FieldDeclaration+
 FieldDeclaration ::= (FieldDefinitionList shared? Type | AnonymousFieldDefinition) DefaultFieldValue? Attribute? Tag? semi
 DefaultFieldValue ::= '=' Expression
 Tag ::= StringLiteral
-private FieldDefinitionList ::= FieldName (',' FieldName)*
-FieldName ::= identifier {
+private FieldDefinitionList ::= FieldDefinition (',' FieldDefinition)*
+FieldDefinition ::= identifier {
   methods=[getQualifier]
-//  stubClass="org.vlang.lang.stubs.GoFieldDefinitionStub"
+  stubClass="org.vlang.lang.stubs.VlangFieldDefinitionStub"
 }
 
 AnonymousFieldDefinition ::= Type {
@@ -634,7 +634,7 @@ ParameterDeclaration ::= ParamDefinitionListNoPin? '...'? Type | Type { // todo:
 }
 private ParamDefinitionListNoPin ::= ParamDefinition &(!('.' | ')')) (',' ParamDefinition)* // todo
 ParamDefinition ::= VarModifiers? identifier {
-//  stubClass="org.vlang.lang.stubs.GoParamDefinitionStub"
+  stubClass="org.vlang.lang.stubs.VlangParamDefinitionStub"
   methods = [isVariadic getName]
 }
 TypeListNoPin ::= Type ( ',' Type )* ','?
@@ -676,7 +676,7 @@ VarDefinition ::= VarModifiers? identifier {
 }
 
 // <expr>.<ident>[(...)]
-DotExpression ::= Expression '.' MethodOrField {pin=1}
+DotExpression ::= Expression '.' MethodOrField {pin=2}
 
 private MethodOrField ::= MethodCall | FieldLookup
 // just <ident>

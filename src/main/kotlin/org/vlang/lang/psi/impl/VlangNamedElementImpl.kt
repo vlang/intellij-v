@@ -68,10 +68,6 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
     }
 
     override fun getType(context: ResolveState?): VlangType? {
-        if (context == null) {
-            return null
-        }
-
         val inner = getTypeInner(context)
         if (inner != null) {
             return inner
@@ -92,8 +88,9 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
         val stub = stub
         return if (stub != null) {
             VlangPsiTreeUtil.getStubChildOfType(parentByStub, VlangType::class.java)
-        } else
+        } else {
             PsiTreeUtil.getNextSiblingOfType(this, VlangType::class.java)
+        }
     }
 
     override fun getTextOffset(): Int {

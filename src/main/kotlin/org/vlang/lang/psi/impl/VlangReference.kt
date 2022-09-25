@@ -61,27 +61,28 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
         processor: VlangScopeProcessor,
         state: ResolveState,
     ): Boolean {
-        var target = (qualifier.reference?.resolve()) ?: return false
-        if (target === qualifier)
-            return processor.execute(myElement, state)
+        if (qualifier is VlangExpression) {
+            val type = qualifier.getType(null) ?: return false
+            if (!processType(type, processor, state)) return false
+        }
 
 //        if (target is VlangImportSpec) {
 //            if (target.isCImport()) return processor.execute(myElement, state)
 //            target = target.getImportString().resolve()
 //        }
 //        if (target is PsiDirectory && !processDirectory(target, file, null, processor, state, false)) return false
-        if (target is VlangTypeOwner) {
-            val type = typeOrParameterType(target, createContextOnElement(myElement))
-
-            if (type != null) {
-                if (!processType(type, processor, state)) return false
-//                val ref = getTypeRefExpression(type)
-//                if (ref != null && ref.resolve() === ref) return processor.execute(
-//                    myElement,
-//                    state
-//                ) // a bit hacky resolve for: var a C.foo; a.b
-            }
-        }
+//        if (target is VlangTypeOwner) {
+//            val type = typeOrParameterType(target, createContextOnElement(myElement))
+//
+//            if (type != null) {
+//                if (!processType(type, processor, state)) return false
+////                val ref = getTypeRefExpression(type)
+////                if (ref != null && ref.resolve() === ref) return processor.execute(
+////                    myElement,
+////                    state
+////                ) // a bit hacky resolve for: var a C.foo; a.b
+//            }
+//        }
         return false
     }
 
@@ -121,11 +122,12 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
             val structRefs = mutableListOf<VlangTypeReferenceExpression>()
 
             val groups = type.fieldsGroupList
-            val fields = groups.flatMap { it.fieldDeclarationList }.flatMap { it.fieldNameList }
+            val fields = groups.flatMap { it.fieldDeclarationList }.flatMap { it.fieldDefinitionList }
 
             for (d in fields) {
-//                if (!processNamedElements(processor, state, d, localResolve)) return false
+                if (!processNamedElements(processor, state, fields, localResolve)) return false
             }
+
             if (!processCollectedRefs(
                     interfaceRefs,
                     processor,
@@ -134,6 +136,16 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
             ) return false
             if (!processCollectedRefs(structRefs, processor, state)) return false
         }
+
+        if (type is VlangArrayOrSliceType) {
+            val builtin = VlangSdkUtil.findBuiltinDir(type)
+            val arrayVirtualFile = builtin?.findChild("array.v") ?: return false
+            val arrayFile = PsiManager.getInstance(type.project).findFile(arrayVirtualFile) as? VlangFile ?: return false
+            val arrayStruct = arrayFile.getStructs()
+                .firstOrNull { it.name == "array" } ?: return false
+            return processExistingType(arrayStruct.structType, processor, state)
+        }
+
 //        else if (state.get<Any?>(com.Vlangide.psi.impl.VlangReference.POINTER) == null && type is VlangInterfaceType) {
 //            if (!processNamedElements(processor, state, (type as VlangInterfaceType).getMethods(), localResolve, true)) return false
 //            if (!processCollectedRefs((type as VlangInterfaceType).getBaseTypesReferences(), processor, state)) return false

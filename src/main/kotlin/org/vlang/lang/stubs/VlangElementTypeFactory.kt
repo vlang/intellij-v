@@ -2,7 +2,6 @@ package org.vlang.lang.stubs
 
 import com.intellij.psi.stubs.IStubElementType
 import com.intellij.util.ReflectionUtil
-import org.vlang.lang.psi.VlangNotNullableType
 import org.vlang.lang.psi.VlangType
 import org.vlang.lang.psi.impl.*
 import org.vlang.lang.stubs.types.*
@@ -29,7 +28,7 @@ object VlangElementTypeFactory {
     @JvmStatic
     fun stubFactory(name: String): IStubElementType<*, *> {
 //        if ("CONST_DEFINITION" == name) return VlangConstDefinitionStubElementType(name)
-//        if ("FIELD_DEFINITION" == name) return VlangFieldDefinitionStubElementType(name)
+        if ("FIELD_DEFINITION" == name) return VlangFieldDefinitionStubElementType(name)
 //        if ("ANONYMOUS_FIELD_DEFINITION" == name) return VlangAnonymousFieldDefinitionStubElementType(name)
         if ("FUNCTION_DECLARATION" == name) return VlangFunctionDeclarationStubElementType(name)
         if ("METHOD_DECLARATION" == name) return VlangMethodDeclarationStubElementType(name)
@@ -38,7 +37,7 @@ object VlangElementTypeFactory {
         if ("ENUM_DECLARATION" == name) return VlangEnumDeclarationStubElementType(name)
         if ("TYPE_ALIAS_DECLARATION" == name) return VlangTypeAliasDeclarationStubElementType(name)
 //        if ("IMPORT_SPEC" == name) return VlangImportSpecStubElementType(name)
-//        if ("PARAM_DEFINITION" == name) return VlangParamDefinitionStubElementType(name)
+        if ("PARAM_DEFINITION" == name) return VlangParamDefinitionStubElementType(name)
 //        if ("RECEIVER" == name) return VlangReceiverStubElementType(name)
 //        if ("TYPE" == name) return VlangTypeStubElementType(name)
 //        if ("METHOD_SPEC" == name) return VlangMethodSpecStubElementType(name)

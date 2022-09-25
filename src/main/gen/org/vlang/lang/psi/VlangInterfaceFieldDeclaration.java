@@ -1,9 +1,10 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
-import org.jetbrains.annotations.*;
-import com.intellij.psi.PsiElement;
 
 public interface VlangInterfaceFieldDeclaration extends VlangCompositeElement {
 
@@ -11,7 +12,7 @@ public interface VlangInterfaceFieldDeclaration extends VlangCompositeElement {
   VlangAttribute getAttribute();
 
   @NotNull
-  List<VlangFieldName> getFieldNameList();
+  List<VlangFieldDefinition> getFieldDefinitionList();
 
   @Nullable
   VlangTag getTag();

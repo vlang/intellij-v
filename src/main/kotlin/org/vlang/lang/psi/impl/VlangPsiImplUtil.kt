@@ -91,7 +91,7 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getQualifier(o: VlangFieldName): VlangReferenceExpression? {
+    fun getQualifier(o: VlangFieldDefinition): VlangReferenceExpression? {
         return null
     }
 
@@ -185,7 +185,7 @@ object VlangPsiImplUtil {
 
     private fun unwrapParType(o: VlangExpression, c: ResolveState?): VlangType? {
         val inner = getTypeInner(o, c)
-        return /*if (inner is VlangParType) (inner as VlangParType).getActualType() else*/ inner
+        return /*if (inner is VlangParType) (inner as VlangParType).getActualType() else*/ clarifyType(inner)
     }
 
     private fun getTypeInner(expr: VlangExpression, context: ResolveState?): VlangType? {
@@ -226,6 +226,10 @@ object VlangPsiImplUtil {
         }
 
         if (expr is VlangTypeInitExpr) {
+            val type = expr.type.typeReferenceExpressionList.firstOrNull()?.resolve()
+            if (type?.firstChild is VlangStructType) {
+                return type.firstChild as VlangStructType
+            }
             return expr.type
         }
 
@@ -240,6 +244,19 @@ object VlangPsiImplUtil {
 //        return if (resolve is VlangSignatureOwner) {
 //            LightFunctionType(resolve as VlangSignatureOwner)
 //        } else type
+        return type
+    }
+
+    private fun clarifyType(type: VlangType?): VlangType? {
+        if (type !is VlangTypeImpl) {
+            return type
+        }
+
+        val resolved = type.typeReferenceExpressionList.firstOrNull()?.resolve()
+        if (resolved?.firstChild is VlangStructType) {
+            return resolved.firstChild as VlangStructType
+        }
+
         return type
     }
 
