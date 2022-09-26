@@ -70,7 +70,6 @@ class VlangAnnotator : Annotator {
 
         if (element.elementType == VlangTypes.IDENTIFIER) {
             when (element.parent) {
-                is VlangPlainAttribute             -> holder.textAttributes(element, JavaHighlightingColors.ANNOTATION_NAME_ATTRIBUTES)
                 is VlangInterfaceMethodDeclaration -> holder.textAttributes(element, JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES)
                 is VlangEnumDeclaration            -> holder.textAttributes(element, JavaHighlightingColors.ENUM_NAME_ATTRIBUTES)
                 is VlangStructType                 -> holder.textAttributes(element, JavaHighlightingColors.CLASS_NAME_ATTRIBUTES)
@@ -90,6 +89,16 @@ class VlangAnnotator : Annotator {
                 element.text == "_likely_" || element.text == "_unlikely_"      ->
                     holder.textAttributes(element, JavaHighlightingColors.KEYWORD)
             }
+        }
+
+        if (element.parent is VlangPlainAttribute) {
+            if (element.elementType == VlangTypes.IDENTIFIER || element.elementType == VlangTypes.UNSAFE || element.elementType == VlangTypes.SQL) {
+                holder.textAttributes(element, JavaHighlightingColors.ANNOTATION_NAME_ATTRIBUTES)
+            }
+        }
+
+        if (element.parent is VlangAttribute && (element.elementType == VlangTypes.LBRACK || element.elementType == VlangTypes.RBRACK)) {
+            holder.textAttributes(element, JavaHighlightingColors.ANNOTATION_NAME_ATTRIBUTES)
         }
 
         if (element.elementType == VlangDocTokenTypes.DOC_COMMENT_TAG) {
