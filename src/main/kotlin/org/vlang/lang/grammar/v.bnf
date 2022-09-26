@@ -91,13 +91,13 @@
 //  implements("Type")="org.vlang.lang.psi.VlangReferenceExpressionBase"
   implements("(Continue|Break|Goto)Statement")="org.vlang.lang.psi.VlangLabelRefOwnerElement"
 
-  extends("ImportSpec|Receiver|(Const)Definition")="org.vlang.lang.psi.impl.VlangSimpleNamedElementImpl"
+  extends("ImportSpec|(Const)Definition")="org.vlang.lang.psi.impl.VlangSimpleNamedElementImpl"
 
   extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
   extends("ModuleClause|Type")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
-  extends("(Struct|TypeAlias|Union|Enum)Declaration|(Var|Label|Param|Field)Definition")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
+  extends("(Struct|TypeAlias|Union|Enum)Declaration|(Var|Label|Param|Field)Definition|Receiver")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
 
-  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum)Declaration|.*Type|(Var|Label|Field|Param)Definition")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
+  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum)Declaration|.*Type|(Var|Label|Field|Param)Definition|Receiver")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
 
   extends(".*Statement")=Statement
   extends(".*Type|TypeList")=Type
@@ -474,19 +474,19 @@ FunctionDeclaration ::= Attributes? SymbolVisibility? fn identifier GenericDecla
   methods=[getName]
 }
 
-MethodDeclaration ::= Attributes? SymbolVisibility? fn Receiver MethodName GenericDeclaration? Signature BlockWithConsume? {
-  pin=5
+MethodDeclaration ::= Attributes? SymbolVisibility? fn '(' Receiver ')' MethodName GenericDeclaration? Signature BlockWithConsume? {
+  pin=7
   stubClass="org.vlang.lang.stubs.VlangMethodDeclarationStub"
   methods=[getReceiverType getIdentifier]
 }
 // <ident> or <ops> for overload
 MethodName ::= identifier | AddOp | MulOp | RelOp
 
-// ([mut|shared] <ident> <type>)
-Receiver ::= '(' (VarModifiers? identifier ReceiverTail | ReceiverTail) ')' {
-  methods=[getGoTypeInner getName]
+// [mut|shared] <ident> <type>
+Receiver ::= (VarModifiers? identifier ReceiverTail) | ReceiverTail {
+  methods=[getTypeInner getName]
   pin=1
-//  stubClass="org.vlang.lang.stubs.GoReceiverStub"
+  stubClass="org.vlang.lang.stubs.VlangReceiverStub"
 }
 private ReceiverTail ::= Type ','?
 

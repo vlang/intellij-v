@@ -86,6 +86,18 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getReceiverType(o: VlangMethodDeclaration): VlangType? {
+        return o.receiver.type
+    }
+
+    fun getTypeReference(o: VlangType?): VlangTypeReferenceExpression? {
+        if (o is VlangPointerType) {
+            return PsiTreeUtil.findChildOfAnyType(o, VlangTypeReferenceExpression::class.java)
+        }
+        return o?.typeReferenceExpressionList?.firstOrNull()
+    }
+
+    @JvmStatic
     fun resolve(o: VlangTypeReferenceExpression): PsiElement? {
         return o.getReference().resolve()
     }
@@ -148,6 +160,11 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun getName(o: VlangReceiver): String? {
         return o.getIdentifier()?.text
+    }
+
+    @JvmStatic
+    fun getTypeInner(o: VlangReceiver, context: ResolveState?): VlangType {
+        return o.type
     }
 
     @JvmStatic
@@ -217,8 +234,8 @@ object VlangPsiImplUtil {
         } else if (expr is VlangLiteral) {
             if (expr.char != null) return getBuiltinType("rune", expr)
             if (expr.int != null || expr.hex != null || expr.oct != null)
-                return getBuiltinType("int", expr)
-            if (expr.float != null) return getBuiltinType("float64", expr)
+                return getBuiltinType("i64", expr)
+            if (expr.float != null) return getBuiltinType("f64", expr)
             if (expr.floati != null) return getBuiltinType("complex64", expr)
             if (expr.decimali != null) return getBuiltinType("complex128", expr)
         } else if (expr is VlangConditionalExpr) {

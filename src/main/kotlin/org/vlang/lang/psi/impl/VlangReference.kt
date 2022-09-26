@@ -6,10 +6,12 @@ import com.intellij.openapi.util.RecursionManager
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
 import com.intellij.psi.impl.source.resolve.ResolveCache
+import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ArrayUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangPsiImplUtil.processNamedElements
+import org.vlang.lang.stubs.index.VlangNamesIndex
 import org.vlang.lang.stubs.index.VlangPackagesIndex
 import org.vlang.sdk.VlangSdkUtil
 
@@ -126,6 +128,16 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
 
             for (d in fields) {
                 if (!processNamedElements(processor, state, fields, localResolve)) return false
+            }
+
+//            val method = VlangNamesIndex.find("main", "", myElement.project, myElement.resolveScope, null)
+
+            val fqn = (type.parent as VlangStructDeclaration).getQualifiedName()
+//            val methodName = fqn + "." + identifier!!.text
+
+            VlangNamesIndex.processPrefix("$fqn.", myElement.project, GlobalSearchScope.allScope(myElement.project), null) {
+                if (!processor.execute(it, state)) return@processPrefix false
+                true
             }
 
             if (!processCollectedRefs(
@@ -343,6 +355,7 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
     ): VlangScopeProcessor {
         return object : VlangScopeProcessor() {
             override fun execute(element: PsiElement, state: ResolveState): Boolean {
+                // TODO: only public
                 if (element == reference) {
                     return !result.add(PsiElementResolveResult(element))
                 }

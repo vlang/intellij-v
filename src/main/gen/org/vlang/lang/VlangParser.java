@@ -2776,20 +2776,21 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Attributes? SymbolVisibility? fn Receiver MethodName GenericDeclaration? Signature BlockWithConsume?
+  // Attributes? SymbolVisibility? fn '(' Receiver ')' MethodName GenericDeclaration? Signature BlockWithConsume?
   public static boolean MethodDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MethodDeclaration")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, METHOD_DECLARATION, "<method declaration>");
     r = MethodDeclaration_0(b, l + 1);
     r = r && MethodDeclaration_1(b, l + 1);
-    r = r && consumeToken(b, FN);
+    r = r && consumeTokens(b, 0, FN, LPAREN);
     r = r && Receiver(b, l + 1);
+    r = r && consumeToken(b, RPAREN);
     r = r && MethodName(b, l + 1);
-    p = r; // pin = 5
-    r = r && report_error_(b, MethodDeclaration_5(b, l + 1));
+    p = r; // pin = 7
+    r = r && report_error_(b, MethodDeclaration_7(b, l + 1));
     r = p && report_error_(b, Signature(b, l + 1)) && r;
-    r = p && MethodDeclaration_7(b, l + 1) && r;
+    r = p && MethodDeclaration_9(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -2809,15 +2810,15 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   // GenericDeclaration?
-  private static boolean MethodDeclaration_5(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MethodDeclaration_5")) return false;
+  private static boolean MethodDeclaration_7(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MethodDeclaration_7")) return false;
     GenericDeclaration(b, l + 1);
     return true;
   }
 
   // BlockWithConsume?
-  private static boolean MethodDeclaration_7(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MethodDeclaration_7")) return false;
+  private static boolean MethodDeclaration_9(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MethodDeclaration_9")) return false;
     BlockWithConsume(b, l + 1);
     return true;
   }
@@ -3372,37 +3373,23 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '(' (VarModifiers? identifier ReceiverTail | ReceiverTail) ')'
+  // (VarModifiers? identifier ReceiverTail) | ReceiverTail
   public static boolean Receiver(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Receiver")) return false;
-    if (!nextTokenIs(b, LPAREN)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, RECEIVER, null);
-    r = consumeToken(b, LPAREN);
-    p = r; // pin = 1
-    r = r && report_error_(b, Receiver_1(b, l + 1));
-    r = p && consumeToken(b, RPAREN) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  // VarModifiers? identifier ReceiverTail | ReceiverTail
-  private static boolean Receiver_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Receiver_1")) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = Receiver_1_0(b, l + 1);
+    Marker m = enter_section_(b, l, _NONE_, RECEIVER, "<receiver>");
+    r = Receiver_0(b, l + 1);
     if (!r) r = ReceiverTail(b, l + 1);
-    exit_section_(b, m, null, r);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   // VarModifiers? identifier ReceiverTail
-  private static boolean Receiver_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Receiver_1_0")) return false;
+  private static boolean Receiver_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Receiver_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = Receiver_1_0_0(b, l + 1);
+    r = Receiver_0_0(b, l + 1);
     r = r && consumeToken(b, IDENTIFIER);
     r = r && ReceiverTail(b, l + 1);
     exit_section_(b, m, null, r);
@@ -3410,8 +3397,8 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   // VarModifiers?
-  private static boolean Receiver_1_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Receiver_1_0_0")) return false;
+  private static boolean Receiver_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Receiver_0_0")) return false;
     VarModifiers(b, l + 1);
     return true;
   }

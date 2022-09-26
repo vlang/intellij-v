@@ -18,12 +18,11 @@ import org.vlang.lang.stubs.types.VlangFunctionDeclarationStubElementType
 import org.vlang.lang.stubs.types.VlangMethodDeclarationStubElementType
 import org.vlang.lang.stubs.types.VlangStructDeclarationStubElementType
 
-class VlangFile(viewProvider: FileViewProvider) :
-    PsiFileBase(viewProvider, VlangLanguage.INSTANCE), PsiImportHolder, PsiClassOwner {
+class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, VlangLanguage.INSTANCE), PsiImportHolder, PsiClassOwner {
 
     override fun getFileType() = VlangFileType.INSTANCE
 
-    override fun toString() = "Vlang Language file"
+    override fun toString() = "V Language file"
 
     override fun getIcon(flags: Int) = VIcons.Vlang
 

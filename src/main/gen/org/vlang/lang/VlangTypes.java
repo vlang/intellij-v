@@ -137,7 +137,7 @@ public interface VlangTypes {
   IElementType POINTER_TYPE = VlangElementTypeFactory.stubFactory("POINTER_TYPE");
   IElementType RANGE_CLAUSE = new VlangCompositeElementType("RANGE_CLAUSE");
   IElementType RANGE_EXPR = new VlangCompositeElementType("RANGE_EXPR");
-  IElementType RECEIVER = new VlangCompositeElementType("RECEIVER");
+  IElementType RECEIVER = VlangElementTypeFactory.stubFactory("RECEIVER");
   IElementType REFERENCE_EXPRESSION = new VlangCompositeElementType("REFERENCE_EXPRESSION");
   IElementType RESULT = new VlangCompositeElementType("RESULT");
   IElementType RETURN_STATEMENT = new VlangCompositeElementType("RETURN_STATEMENT");

@@ -38,7 +38,7 @@ object VlangElementTypeFactory {
         if ("TYPE_ALIAS_DECLARATION" == name) return VlangTypeAliasDeclarationStubElementType(name)
 //        if ("IMPORT_SPEC" == name) return VlangImportSpecStubElementType(name)
         if ("PARAM_DEFINITION" == name) return VlangParamDefinitionStubElementType(name)
-//        if ("RECEIVER" == name) return VlangReceiverStubElementType(name)
+        if ("RECEIVER" == name) return VlangReceiverStubElementType(name)
 //        if ("TYPE" == name) return VlangTypeStubElementType(name)
 //        if ("METHOD_SPEC" == name) return VlangMethodSpecStubElementType(name)
 //        if ("CONST_SPEC" == name) return VlangConstSpecStubElementType(name)

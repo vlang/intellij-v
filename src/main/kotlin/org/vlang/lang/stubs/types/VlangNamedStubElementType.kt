@@ -7,6 +7,7 @@ import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.stubs.StubIndexKey
 import org.vlang.lang.psi.VlangNamedElement
 import org.vlang.lang.stubs.VlangFileStub
+import org.vlang.lang.stubs.VlangMethodDeclarationStub
 import org.vlang.lang.stubs.VlangNamedStub
 import org.vlang.lang.stubs.index.VlangNamesIndex
 
@@ -32,8 +33,16 @@ abstract class VlangNamedStubElementType<S : VlangNamedStub<T>, T : VlangNamedEl
                 parent = parent.parentStub
             }
             val indexingName = if (packageName != null && packageName.isNotEmpty()) "$packageName.$name" else name
+
+            if (stub is VlangMethodDeclarationStub) {
+                val typeName = stub.typeName ?: return
+                if (typeName.isNotEmpty()) {
+                    sink.occurrence(VlangNamesIndex.KEY, "$packageName.$typeName.$name")
+                }
+            }
+
 //            if (stub.isPublic) {
-                sink.occurrence(VlangNamesIndex.KEY, indexingName)
+            sink.occurrence(VlangNamesIndex.KEY, indexingName)
 //            } else {
 //                sink.occurrence<PsiElement, String>(VlangAllPrivateNamesIndex.ALL_PRIVATE_NAMES, indexingName)
 //            }

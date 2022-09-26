@@ -6,14 +6,12 @@ import com.intellij.psi.stubs.StubInputStream
 import com.intellij.psi.stubs.StubOutputStream
 import org.vlang.lang.psi.VlangType
 import org.vlang.lang.stubs.VlangTypeStub
-import java.io.IOException
 
 abstract class VlangTypeStubElementType(name: String) : VlangStubElementType<VlangTypeStub, VlangType>(name) {
     override fun createStub(psi: VlangType, parentStub: StubElement<*>?): VlangTypeStub {
         return VlangTypeStub(parentStub, this, psi.text)
     }
 
-    @Throws(IOException::class)
     override fun serialize(stub: VlangTypeStub, dataStream: StubOutputStream) {
         dataStream.writeName(stub.getText())
     }

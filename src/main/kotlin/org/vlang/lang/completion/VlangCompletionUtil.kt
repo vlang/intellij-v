@@ -18,6 +18,8 @@ import javax.swing.Icon
 object VlangCompletionUtil {
     const val KEYWORD_PRIORITY = 20
     const val CONTEXT_KEYWORD_PRIORITY = 25
+    const val NOT_IMPORTED_METHOD_PRIORITY = 4
+    const val METHOD_PRIORITY = NOT_IMPORTED_METHOD_PRIORITY + 10
     const val NOT_IMPORTED_FUNCTION_PRIORITY = 3
     const val FUNCTION_PRIORITY = NOT_IMPORTED_FUNCTION_PRIORITY + 10
     const val NOT_IMPORTED_STRUCT_PRIORITY = 2
@@ -75,6 +77,18 @@ object VlangCompletionUtil {
             element, name,
             insertHandler = StringInsertHandler("()", 1),
             priority = FUNCTION_PRIORITY,
+        )
+    }
+
+    fun createMethodLookupElement(element: VlangNamedElement): LookupElement? {
+        val name = element.name
+        if (name.isNullOrEmpty()) {
+            return null
+        }
+        return createMethodLookupElement(
+            element, name,
+            insertHandler = StringInsertHandler("()", 1),
+            priority = METHOD_PRIORITY,
         )
     }
 
@@ -150,6 +164,18 @@ object VlangCompletionUtil {
         )
     }
 
+    private fun createMethodLookupElement(
+        element: VlangNamedElement, lookupString: String,
+        insertHandler: InsertHandler<LookupElement>? = null,
+        priority: Int = 0,
+    ): LookupElement {
+        return PrioritizedLookupElement.withPriority(
+            LookupElementBuilder.createWithSmartPointer(lookupString, element)
+                .withRenderer(METHOD_RENDERER)
+                .withInsertHandler(insertHandler), priority.toDouble()
+        )
+    }
+
     private fun createVariableLikeLookupElement(
         element: VlangNamedElement, lookupString: String,
         insertHandler: InsertHandler<LookupElement>? = null,
@@ -184,6 +210,24 @@ object VlangCompletionUtil {
                 is VlangAnonymousFieldDefinition -> VIcons.Field
                 else                             -> null
             }
+
+            p.icon = icon
+            p.typeText = typeText
+            p.isTypeGrayed = true
+            p.itemText = element.lookupString
+        }
+    }
+
+    private val METHOD_RENDERER = object : LookupElementRenderer<LookupElement>() {
+        override fun renderElement(element: LookupElement, p: LookupElementPresentation) {
+            val elem = element.psiElement as? VlangMethodDeclaration ?: return
+            val signature = elem.getSignature()
+
+            val typeText = signature?.result?.text ?: "void"
+            val icon = VIcons.Method
+
+            val parentStruct = elem.receiverType?.typeReferenceExpressionList?.firstOrNull()?.resolve() as? VlangStructDeclaration
+            p.tailText = signature?.parameters?.text + " of " + parentStruct?.name
 
             p.icon = icon
             p.typeText = typeText

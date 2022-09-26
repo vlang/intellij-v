@@ -122,7 +122,7 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
 
         return when (element) {
             is VlangFunctionDeclaration  -> VlangCompletionUtil.createFunctionLookupElement(element)
-            is VlangMethodDeclaration    -> VlangCompletionUtil.createFunctionLookupElement(element)
+            is VlangMethodDeclaration    -> VlangCompletionUtil.createMethodLookupElement(element)
             is VlangStructDeclaration    -> VlangCompletionUtil.createStructLookupElement(element)
             is VlangUnionDeclaration     -> VlangCompletionUtil.createUnionLookupElement(element)
             is VlangEnumDeclaration      -> VlangCompletionUtil.createEnumLookupElement(element)
