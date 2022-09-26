@@ -274,20 +274,40 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
 //        if (prevDot(parent)) return false
         if (!processBlock(processor, state, true)) return false
         if (!processModules(file, processor, state, true)) return false
-//        if (!processReceiver(processor, state, true)) return false
         if (!processImports(file, processor, state, myElement)) return false
         if (!processFileEntities(file, processor, state, true)) return false
-//        return if (!processDirectory(
-//                file.getOriginalFile().getParent(),
-//                file,
-//                file.getPackageName(),
-//                processor,
-//                state,
-//                true
-//            )
-//        ) false else processBuiltin(processor, state, myElement)
+        if (!processDirectory(file.originalFile.parent, file, file.packageName, processor, state, true)) return false
 
         return processBuiltin(processor, state, myElement)
+    }
+
+    protected fun processDirectory(
+        dir: PsiDirectory?,
+        file: VlangFile?,
+        packageName: String?,
+        processor: VlangScopeProcessor,
+        state: ResolveState,
+        localProcessing: Boolean,
+    ): Boolean {
+        if (dir == null) {
+            return true
+        }
+
+        val filePath = getPath(file)
+
+        for (f in dir.files) {
+            if (f !is VlangFile || getPath(f) == filePath) {
+                continue
+            }
+            if (packageName != null && packageName != f.packageName) {
+                continue
+            }
+            if (!processFileEntities(f, processor, state, localProcessing)) {
+                return false
+            }
+        }
+
+        return true
     }
 
     private fun processBuiltin(processor: VlangScopeProcessor, state: ResolveState, element: VlangReferenceExpressionBase?): Boolean {
