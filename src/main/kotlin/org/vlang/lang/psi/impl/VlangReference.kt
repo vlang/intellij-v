@@ -7,6 +7,7 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
 import com.intellij.psi.impl.source.resolve.ResolveCache
 import com.intellij.psi.search.GlobalSearchScope
+import com.intellij.psi.util.childrenOfType
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ArrayUtil
 import org.vlang.lang.psi.*
@@ -97,6 +98,20 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
         return result == true
     }
 
+    private fun clarifyType(type: VlangType?): VlangType? {
+        if (type !is VlangTypeImpl) {
+            return type
+        }
+
+        val resolved = type.typeReferenceExpressionList.firstOrNull()?.resolve()
+        val typeChild = resolved?.childrenOfType<VlangStructType>()?.firstOrNull()
+        if (typeChild != null) {
+            return typeChild
+        }
+
+        return type
+    }
+
     private fun processExistingType(type: VlangType, processor: VlangScopeProcessor, state: ResolveState): Boolean {
         val file = type.containingFile as? VlangFile ?: return true
         val myFile = getContextFile(state) ?: myElement.containingFile
@@ -117,13 +132,37 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
 //        if (type is VlangSpecType) {
 //            type = type.getUnderlyingType()
 //        }
-        if (type is VlangStructType) {
+
+        val typ = clarifyType(type)
+
+        if (typ is VlangPointerType) {
+            val baseType = typ.type
+            if (baseType != null) {
+                return processType(baseType, processor, state)
+            }
+        }
+
+        if (typ is VlangNullableType) {
+            val baseType = typ.type
+            if (baseType != null) {
+                return processType(baseType, processor, state)
+            }
+        }
+
+        if (typ is VlangNotNullableType) {
+            val baseType = typ.type
+            if (baseType != null) {
+                return processType(baseType, processor, state)
+            }
+        }
+
+        if (typ is VlangStructType) {
             val delegate = createDelegate(processor)
-            type.processDeclarations(delegate, ResolveState.initial(), null, myElement)
+            typ.processDeclarations(delegate, ResolveState.initial(), null, myElement)
             val interfaceRefs = mutableListOf<VlangTypeReferenceExpression>()
             val structRefs = mutableListOf<VlangTypeReferenceExpression>()
 
-            val groups = type.fieldsGroupList
+            val groups = typ.fieldsGroupList
             val fields = groups.flatMap { it.fieldDeclarationList }.flatMap { it.fieldDefinitionList }
 
             for (d in fields) {
@@ -132,7 +171,7 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
 
 //            val method = VlangNamesIndex.find("main", "", myElement.project, myElement.resolveScope, null)
 
-            val fqn = (type.parent as VlangStructDeclaration).getQualifiedName()
+            val fqn = (typ.parent as VlangStructDeclaration).getQualifiedName()
 //            val methodName = fqn + "." + identifier!!.text
 
             VlangNamesIndex.processPrefix("$fqn.", myElement.project, GlobalSearchScope.allScope(myElement.project), null) {
@@ -149,10 +188,10 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
             if (!processCollectedRefs(structRefs, processor, state)) return false
         }
 
-        if (type is VlangArrayOrSliceType) {
-            val builtin = VlangSdkUtil.findBuiltinDir(type)
+        if (typ is VlangArrayOrSliceType) {
+            val builtin = VlangSdkUtil.findBuiltinDir(typ)
             val arrayVirtualFile = builtin?.findChild("array.v") ?: return false
-            val arrayFile = PsiManager.getInstance(type.project).findFile(arrayVirtualFile) as? VlangFile ?: return false
+            val arrayFile = PsiManager.getInstance(typ.project).findFile(arrayVirtualFile) as? VlangFile ?: return false
             val arrayStruct = arrayFile.getStructs()
                 .firstOrNull { it.name == "array" } ?: return false
             return processExistingType(arrayStruct.structType, processor, state)
