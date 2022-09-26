@@ -31,6 +31,11 @@ class VlangAnnotator : Annotator {
                     holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.TYPE_PARAMETER_NAME_ATTRIBUTES)
                     return
                 }
+
+                if (name in arrayOf("sizeof", "__offsetof")) {
+                    holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.KEYWORD)
+                    return
+                }
             }
 
             val ref = element.reference
@@ -80,6 +85,13 @@ class VlangAnnotator : Annotator {
                 is VlangLabelRef                   -> holder.textAttributes(element, VlangHighlightingData.VLANG_LABEL)
                 is VlangParamDefinition            -> holder.textAttributes(element, JavaHighlightingColors.PARAMETER_ATTRIBUTES)
                 is VlangReceiver                   -> holder.textAttributes(element, JavaHighlightingColors.PARAMETER_ATTRIBUTES)
+            }
+
+            if (element.parent is VlangReferenceExpression) {
+                when (element.parent.parent) {
+                    is VlangFieldLookup -> holder.textAttributes(element, JavaHighlightingColors.INSTANCE_FIELD_ATTRIBUTES)
+                    is VlangMethodCall  -> holder.textAttributes(element, JavaHighlightingColors.METHOD_CALL_ATTRIBUTES)
+                }
             }
 
             when {
