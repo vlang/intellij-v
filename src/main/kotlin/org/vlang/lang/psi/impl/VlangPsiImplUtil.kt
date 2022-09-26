@@ -56,7 +56,7 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getIdentifier(o: VlangStructDeclaration): PsiElement? {
-        return o.structType.getIdentifier()
+        return o.structType.identifier
     }
 
     @JvmStatic

@@ -783,7 +783,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // SymbolVisibility? const ( ConstSpec | '(' ConstSpecs? ')' )
+  // SymbolVisibility? const ( ConstDefinition | '(' ConstDefinitions? ')' )
   public static boolean ConstDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ConstDeclaration")) return false;
     boolean r, p;
@@ -803,18 +803,18 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // ConstSpec | '(' ConstSpecs? ')'
+  // ConstDefinition | '(' ConstDefinitions? ')'
   private static boolean ConstDeclaration_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ConstDeclaration_2")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = ConstSpec(b, l + 1);
+    r = ConstDefinition(b, l + 1);
     if (!r) r = ConstDeclaration_2_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // '(' ConstSpecs? ')'
+  // '(' ConstDefinitions? ')'
   private static boolean ConstDeclaration_2_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ConstDeclaration_2_1")) return false;
     boolean r, p;
@@ -827,34 +827,21 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // ConstSpecs?
+  // ConstDefinitions?
   private static boolean ConstDeclaration_2_1_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ConstDeclaration_2_1_1")) return false;
-    ConstSpecs(b, l + 1);
+    ConstDefinitions(b, l + 1);
     return true;
   }
 
   /* ********************************************************** */
-  // identifier
+  // identifier '=' Expression
   public static boolean ConstDefinition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ConstDefinition")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, IDENTIFIER);
-    exit_section_(b, m, CONST_DEFINITION, r);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // ConstDefinition '=' Expression
-  public static boolean ConstSpec(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ConstSpec")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, CONST_SPEC, null);
-    r = ConstDefinition(b, l + 1);
-    r = r && consumeToken(b, ASSIGN);
+    Marker m = enter_section_(b, l, _NONE_, CONST_DEFINITION, null);
+    r = consumeTokens(b, 2, IDENTIFIER, ASSIGN);
     p = r; // pin = 2
     r = r && Expression(b, l + 1, -1);
     exit_section_(b, l, m, r, p, null);
@@ -862,45 +849,45 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ConstSpec (semi ConstSpec)* semi?
-  static boolean ConstSpecs(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ConstSpecs")) return false;
+  // ConstDefinition (semi ConstDefinition)* semi?
+  static boolean ConstDefinitions(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ConstDefinitions")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
-    r = ConstSpec(b, l + 1);
+    r = ConstDefinition(b, l + 1);
     p = r; // pin = 1
-    r = r && report_error_(b, ConstSpecs_1(b, l + 1));
-    r = p && ConstSpecs_2(b, l + 1) && r;
+    r = r && report_error_(b, ConstDefinitions_1(b, l + 1));
+    r = p && ConstDefinitions_2(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
-  // (semi ConstSpec)*
-  private static boolean ConstSpecs_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ConstSpecs_1")) return false;
+  // (semi ConstDefinition)*
+  private static boolean ConstDefinitions_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ConstDefinitions_1")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!ConstSpecs_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "ConstSpecs_1", c)) break;
+      if (!ConstDefinitions_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "ConstDefinitions_1", c)) break;
     }
     return true;
   }
 
-  // semi ConstSpec
-  private static boolean ConstSpecs_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ConstSpecs_1_0")) return false;
+  // semi ConstDefinition
+  private static boolean ConstDefinitions_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ConstDefinitions_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = semi(b, l + 1);
-    r = r && ConstSpec(b, l + 1);
+    r = r && ConstDefinition(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // semi?
-  private static boolean ConstSpecs_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ConstSpecs_2")) return false;
+  private static boolean ConstDefinitions_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ConstDefinitions_2")) return false;
     semi(b, l + 1);
     return true;
   }

@@ -41,8 +41,7 @@ public interface VlangTypes {
   IElementType CONDITIONAL_EXPR = new VlangCompositeElementType("CONDITIONAL_EXPR");
   IElementType CONSTEXPR_IDENTIFIER_EXPRESSION = new VlangCompositeElementType("CONSTEXPR_IDENTIFIER_EXPRESSION");
   IElementType CONST_DECLARATION = new VlangCompositeElementType("CONST_DECLARATION");
-  IElementType CONST_DEFINITION = new VlangCompositeElementType("CONST_DEFINITION");
-  IElementType CONST_SPEC = new VlangCompositeElementType("CONST_SPEC");
+  IElementType CONST_DEFINITION = VlangElementTypeFactory.stubFactory("CONST_DEFINITION");
   IElementType CONTINUE_STATEMENT = new VlangCompositeElementType("CONTINUE_STATEMENT");
   IElementType C_FLAG_STATEMENT = new VlangCompositeElementType("C_FLAG_STATEMENT");
   IElementType C_INCLUDE_STATEMENT = new VlangCompositeElementType("C_INCLUDE_STATEMENT");
@@ -398,9 +397,6 @@ public interface VlangTypes {
       }
       else if (type == CONST_DEFINITION) {
         return new VlangConstDefinitionImpl(node);
-      }
-      else if (type == CONST_SPEC) {
-        return new VlangConstSpecImpl(node);
       }
       else if (type == CONTINUE_STATEMENT) {
         return new VlangContinueStatementImpl(node);

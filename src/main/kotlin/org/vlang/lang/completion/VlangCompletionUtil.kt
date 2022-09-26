@@ -26,6 +26,8 @@ object VlangCompletionUtil {
     const val STRUCT_PRIORITY = NOT_IMPORTED_STRUCT_PRIORITY + 10
     const val NOT_IMPORTED_TYPE_ALIAS_PRIORITY = 1
     const val TYPE_ALIAS_PRIORITY = NOT_IMPORTED_TYPE_ALIAS_PRIORITY + 10
+    const val NOT_IMPORTED_CONSTANT_PRIORITY = 1
+    const val CONSTANT_PRIORITY = NOT_IMPORTED_CONSTANT_PRIORITY + 10
     const val NOT_IMPORTED_TYPE_PRIORITY = 5
     const val TYPE_PRIORITY = NOT_IMPORTED_TYPE_PRIORITY + 10
     const val NOT_IMPORTED_TYPE_CONVERSION = 1
@@ -77,6 +79,17 @@ object VlangCompletionUtil {
             element, name,
             insertHandler = StringInsertHandler("()", 1),
             priority = FUNCTION_PRIORITY,
+        )
+    }
+
+    fun createConstantLookupElement(element: VlangNamedElement): LookupElement? {
+        val name = element.name
+        if (name.isNullOrEmpty()) {
+            return null
+        }
+        return createConstantLookupElement(
+            element, name,
+            priority = CONSTANT_PRIORITY,
         )
     }
 
@@ -176,6 +189,18 @@ object VlangCompletionUtil {
         )
     }
 
+    private fun createConstantLookupElement(
+        element: VlangNamedElement, lookupString: String,
+        insertHandler: InsertHandler<LookupElement>? = null,
+        priority: Int = 0,
+    ): LookupElement {
+        return PrioritizedLookupElement.withPriority(
+            LookupElementBuilder.createWithSmartPointer(lookupString, element)
+                .withRenderer(CONST_RENDERER)
+                .withInsertHandler(insertHandler), priority.toDouble()
+        )
+    }
+
     private fun createVariableLikeLookupElement(
         element: VlangNamedElement, lookupString: String,
         insertHandler: InsertHandler<LookupElement>? = null,
@@ -206,7 +231,6 @@ object VlangCompletionUtil {
                 is VlangVarDefinition            -> VIcons.Variable
                 is VlangParamDefinition          -> VIcons.Parameter
                 is VlangReceiver                 -> VIcons.Receiver
-                is VlangConstDefinition          -> VIcons.Constant
                 is VlangAnonymousFieldDefinition -> VIcons.Field
                 else                             -> null
             }
@@ -259,6 +283,18 @@ object VlangCompletionUtil {
             p.icon = VIcons.Function
             p.itemText = element.lookupString
             p.tailText = elem.getSignature()?.text
+        }
+    }
+
+    private val CONST_RENDERER = object : LookupElementRenderer<LookupElement>() {
+        override fun renderElement(element: LookupElement, p: LookupElementPresentation) {
+            val elem = element.psiElement as? VlangConstDefinition ?: return
+            p.icon = VIcons.Constant
+            p.itemText = element.lookupString
+
+            val valueText = elem.expression?.text
+            p.tailText = " = $valueText"
+            p.typeText = elem.expression?.getType(null)?.text
         }
     }
 }

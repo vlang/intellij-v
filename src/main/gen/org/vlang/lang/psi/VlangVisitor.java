@@ -139,10 +139,6 @@ public class VlangVisitor extends PsiElementVisitor {
     visitNamedElement(o);
   }
 
-  public void visitConstSpec(@NotNull VlangConstSpec o) {
-    visitCompositeElement(o);
-  }
-
   public void visitConstexprIdentifierExpression(@NotNull VlangConstexprIdentifierExpression o) {
     visitExpression(o);
   }

@@ -128,28 +128,54 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
     fun getStructs(): List<VlangStructDeclaration> =
         getNamedElements(VlangTypes.STRUCT_DECLARATION, VlangStructDeclarationStubElementType.ARRAY_FACTORY)
 
+    fun getConstants(): List<VlangConstDefinition> {
+        val value = {
+            if (stub != null) {
+                val decls = getChildrenByType(stub!!, VlangTypes.CONST_DECLARATION) { arrayOfNulls<VlangConstDeclaration>(it) }
+                decls.filterNotNull().flatMap { it.constDefinitionList }
+            } else {
+                val decls = children.filterIsInstance<VlangConstDeclaration>()
+                decls.flatMap { it.constDefinitionList }
+            }
+        }
+
+        return CachedValuesManager.getCachedValue(this) {
+            CachedValueProvider.Result.create(value(), this)
+        }
+    }
+
     // TODO
     fun getTypes(): List<VlangStructDeclaration> =
         getNamedElements(VlangTypes.TYPE_ALIAS_DECLARATION, VlangStructDeclarationStubElementType.ARRAY_FACTORY)
 
     private inline fun <reified T : PsiElement?> getNamedElements(elementType: IElementType, arrayFactory: ArrayFactory<T>): List<T> {
-        return CachedValuesManager.getCachedValue(this) {
-            val functions =
-                if (stub != null) getChildrenByType(
-                    stub!!,
-                    elementType,
-                    arrayFactory
-                ) else {
-                    VlangPsiImplUtil.traverser().children(this).filter(
-                        T::class.java
-                    ).toList()
-                }
+        return VlangPsiImplUtil.traverser()
+            .children(this)
+            .filter(T::class.java)
+            .toList()
 
-            CachedValueProvider.Result.create(
-                functions,
-                this
-            )
-        }
+//        return if (stub != null) {
+//            getChildrenByType(stub!!, elementType, arrayFactory)
+//        } else {
+//            VlangPsiImplUtil.traverser()
+//                .children(this)
+//                .filter(T::class.java)
+//                .toList()
+//        }
+
+//        return CachedValuesManager.getCachedValue(this) {
+//            val elements =
+//                if (stub != null) {
+//                    getChildrenByType(stub!!, elementType, arrayFactory)
+//                } else {
+//                    VlangPsiImplUtil.traverser()
+//                        .children(this)
+//                        .filter(T::class.java)
+//                        .toList()
+//                }
+//
+//            CachedValueProvider.Result.create(elements, this)
+//        }
     }
 
     fun getMethods(): List<VlangMethodDeclaration> {

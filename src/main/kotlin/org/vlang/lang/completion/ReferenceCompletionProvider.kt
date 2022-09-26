@@ -128,6 +128,7 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
             is VlangEnumDeclaration      -> VlangCompletionUtil.createEnumLookupElement(element)
             is VlangTypeAliasDeclaration -> VlangCompletionUtil.createTypeAliasLookupElement(element)
             is VlangFieldDefinition      -> VlangCompletionUtil.createFieldLookupElement(element)
+            is VlangConstDefinition      -> VlangCompletionUtil.createConstantLookupElement(element)
             else                         -> VlangCompletionUtil.createVariableLikeLookupElement(element)
         }
     }
