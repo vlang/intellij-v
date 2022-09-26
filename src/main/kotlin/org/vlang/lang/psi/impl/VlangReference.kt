@@ -65,8 +65,25 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
         state: ResolveState,
     ): Boolean {
         if (qualifier is VlangExpression) {
-            val type = qualifier.getType(null) ?: return false
-            if (!processType(type, processor, state)) return false
+            val type = qualifier.getType(null)
+            if (type != null) {
+                if (!processType(type, processor, state)) {
+                    return false
+                }
+            }
+
+            if (qualifier is VlangReferenceExpression) {
+                val resolved = qualifier.resolve()
+                if (resolved is VlangImportSpec) {
+                    val moduleName = resolved.name
+                    val moduleFiles =
+                        VlangPackagesIndex.find(moduleName, myElement.project, GlobalSearchScope.allScope(myElement.project), null)
+                    val moduleDir = moduleFiles.first().parent
+                    if (!processDirectory(moduleDir, null, null, processor, state, false)) {
+                        return false
+                    }
+                }
+            }
         }
 
 //        if (target is VlangImportSpec) {
