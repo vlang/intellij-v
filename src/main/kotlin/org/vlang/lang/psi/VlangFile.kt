@@ -149,33 +149,19 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
         getNamedElements(VlangTypes.TYPE_ALIAS_DECLARATION, VlangStructDeclarationStubElementType.ARRAY_FACTORY)
 
     private inline fun <reified T : PsiElement?> getNamedElements(elementType: IElementType, arrayFactory: ArrayFactory<T>): List<T> {
-        return VlangPsiImplUtil.traverser()
-            .children(this)
-            .filter(T::class.java)
-            .toList()
+        return CachedValuesManager.getCachedValue(this) {
+            val elements =
+                if (stub != null) {
+                    getChildrenByType(stub!!, elementType, arrayFactory)
+                } else {
+                    VlangPsiImplUtil.traverser()
+                        .children(this)
+                        .filter(T::class.java)
+                        .toList()
+                }
 
-//        return if (stub != null) {
-//            getChildrenByType(stub!!, elementType, arrayFactory)
-//        } else {
-//            VlangPsiImplUtil.traverser()
-//                .children(this)
-//                .filter(T::class.java)
-//                .toList()
-//        }
-
-//        return CachedValuesManager.getCachedValue(this) {
-//            val elements =
-//                if (stub != null) {
-//                    getChildrenByType(stub!!, elementType, arrayFactory)
-//                } else {
-//                    VlangPsiImplUtil.traverser()
-//                        .children(this)
-//                        .filter(T::class.java)
-//                        .toList()
-//                }
-//
-//            CachedValueProvider.Result.create(elements, this)
-//        }
+            CachedValueProvider.Result.create(elements, this)
+        }
     }
 
     fun getMethods(): List<VlangMethodDeclaration> {
