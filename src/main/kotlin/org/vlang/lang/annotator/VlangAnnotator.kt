@@ -7,6 +7,7 @@ import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
+import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.elementType
 import com.intellij.psi.util.findParentOfType
 import org.vlang.ide.highlight.VlangHighlightingData
@@ -85,6 +86,13 @@ class VlangAnnotator : Annotator {
                 is VlangLabelRef                   -> holder.textAttributes(element, VlangHighlightingData.VLANG_LABEL)
                 is VlangParamDefinition            -> holder.textAttributes(element, JavaHighlightingColors.PARAMETER_ATTRIBUTES)
                 is VlangReceiver                   -> holder.textAttributes(element, JavaHighlightingColors.PARAMETER_ATTRIBUTES)
+                is VlangLabelDefinition            -> {
+                    val parent = element.parent
+                    val search = ReferencesSearch.search(parent, parent.useScope)
+                    if (search.findFirst() != null) {
+                        holder.textAttributes(element, VlangHighlightingData.VLANG_LABEL)
+                    }
+                }
             }
 
             if (element.parent is VlangReferenceExpression) {
