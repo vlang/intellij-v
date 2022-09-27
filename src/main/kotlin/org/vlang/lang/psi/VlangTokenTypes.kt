@@ -1,5 +1,6 @@
 package org.vlang.lang.psi
 
+import com.intellij.psi.TokenType
 import com.intellij.psi.tree.TokenSet
 import org.vlang.lang.VlangTypes.*
 
@@ -131,5 +132,5 @@ object VlangTokenTypes {
         TILDA,
     )
 
-    val WHITE_SPACES = TokenSet.create(WS, NLS)
+    val WHITE_SPACES = TokenSet.create(WS, NLS, TokenType.WHITE_SPACE)
 }

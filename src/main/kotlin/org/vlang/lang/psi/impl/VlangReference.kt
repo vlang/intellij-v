@@ -78,9 +78,12 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
                     val moduleName = resolved.name
                     val moduleFiles =
                         VlangPackagesIndex.find(moduleName, myElement.project, GlobalSearchScope.allScope(myElement.project), null)
-                    val moduleDir = moduleFiles.first().parent
-                    if (!processDirectory(moduleDir, null, null, processor, state, false)) {
-                        return false
+
+                    if (moduleFiles.isNotEmpty()) {
+                        val moduleDir = moduleFiles.first().parent
+                        if (!processDirectory(moduleDir, null, null, processor, state, false)) {
+                            return false
+                        }
                     }
                 }
             }
