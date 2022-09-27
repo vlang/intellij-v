@@ -1,24 +1,27 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import org.vlang.lang.psi.VlangPsiTreeUtil;
-import static org.vlang.lang.VlangTypes.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.*;
 
-public class VlangTypeInitExprImpl extends VlangExpressionImpl implements VlangTypeInitExpr {
+import java.util.List;
 
-  public VlangTypeInitExprImpl(@NotNull ASTNode node) {
+import static org.vlang.lang.VlangTypes.LBRACE;
+import static org.vlang.lang.VlangTypes.RBRACE;
+
+public class VlangLiteralValueExpressionImpl extends VlangExpressionImpl implements VlangLiteralValueExpression {
+
+  public VlangLiteralValueExpressionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitTypeInitExpr(this);
+    visitor.visitLiteralValueExpression(this);
   }
 
   @Override
@@ -28,9 +31,9 @@ public class VlangTypeInitExprImpl extends VlangExpressionImpl implements VlangT
   }
 
   @Override
-  @Nullable
-  public VlangFieldInitialization getFieldInitialization() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangFieldInitialization.class);
+  @NotNull
+  public List<VlangElement> getElementList() {
+    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangElement.class);
   }
 
   @Override
@@ -46,9 +49,9 @@ public class VlangTypeInitExprImpl extends VlangExpressionImpl implements VlangT
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getRbrace() {
-    return notNullChild(findChildByType(RBRACE));
+    return findChildByType(RBRACE);
   }
 
 }

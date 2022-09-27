@@ -60,16 +60,17 @@ object VlangParserUtil : GeneratedParserUtilBase() {
         return getParsingModes(builder)[mode] > 0
     }
 
-//    fun withOn(builder: PsiBuilder, level_: Int, mode: String, parser: GeneratedParserUtilBase.Parser): Boolean {
-//        return withImpl(builder, level_, mode, true, parser, parser)
-//    }
+    @JvmStatic
+    fun withOn(builder: PsiBuilder, level_: Int, mode: String, parser: Parser): Boolean {
+        return withImpl(builder, level_, mode, true, parser, parser)
+    }
 
     @JvmStatic
     fun withOff(
         builder: PsiBuilder,
         level_: Int,
         parser: Parser,
-        vararg modes: String
+        vararg modes: String,
     ): Boolean {
         val map = getParsingModes(builder)
         val prev = TObjectIntHashMap<String>()
@@ -88,42 +89,47 @@ object VlangParserUtil : GeneratedParserUtilBase() {
         return result
     }
 
-    //    private fun withImpl(
-//        builder: PsiBuilder,
-//        level_: Int,
-//        mode: String,
-//        onOff: Boolean,
-//        whenOn: GeneratedParserUtilBase.Parser,
-//        whenOff: GeneratedParserUtilBase.Parser
-//    ): Boolean {
-//        val map = getParsingModes(builder)
-//        val prev = map[mode]
-//        val change = prev and 1 == 0 == onOff
-//        if (change) map.put(mode, prev shl 1 or if (onOff) 1 else 0)
-//        val result: Boolean = (if (change) whenOn else whenOff).parse(builder, level_)
-//        if (change) map.put(mode, prev)
-//        return result
-//    }
-//
+    private fun withImpl(
+        builder: PsiBuilder,
+        level_: Int,
+        mode: String,
+        onOff: Boolean,
+        whenOn: Parser,
+        whenOff: Parser,
+    ): Boolean {
+        val map = getParsingModes(builder)
+        val prev = map[mode]
+        val change = prev and 1 == 0 == onOff
+        if (change) map.put(mode, prev shl 1 or if (onOff) 1 else 0)
+        val result: Boolean = (if (change) whenOn else whenOff).parse(builder, level_)
+        if (change) map.put(mode, prev)
+        return result
+    }
+
     @JvmStatic
     fun isModeOff(builder: PsiBuilder, level: Int, mode: String?): Boolean {
         return getParsingModes(builder)[mode] == 0
     }
 
-//    fun prevIsType(builder: PsiBuilder, level: Int): Boolean {
+    //    fun prevIsType(builder: PsiBuilder, level: Int): Boolean {
 //        val marker = builder.latestDoneMarker
 //        val type = marker?.tokenType
 //        return type === VlangTypes.ARRAY_OR_SLICE_TYPE || type === VlangTypes.MAP_TYPE || type === VlangTypes.STRUCT_TYPE
 //    }
 //
-//    fun keyOrValueExpression(builder: PsiBuilder, level: Int): Boolean {
-//        val m: PsiBuilder.Marker = GeneratedParserUtilBase.enter_section_(builder)
-//        var r: Boolean = VlangParser.Expression(builder, level + 1, -1)
-//        if (!r) r = VlangParser.LiteralValue(builder, level + 1)
-//        val type: IElementType = if (r && builder.tokenType === VlangTypes.COLON) VlangTypes.KEY else VlangTypes.VALUE
-//        GeneratedParserUtilBase.exit_section_(builder, m, type, r)
-//        return r
-//    }
+    @JvmStatic
+    fun keyOrValueExpression(builder: PsiBuilder, level: Int): Boolean {
+        val m = enter_section_(builder)
+        var r = VlangParser.Expression(builder, level + 1, -1)
+        if (!r)
+            r = VlangParser.LiteralValueExpression(builder, level + 1)
+        val type = if (r && builder.tokenType === VlangTypes.COLON)
+            VlangTypes.KEY
+        else
+            VlangTypes.VALUE
+        exit_section_(builder, m, type, r)
+        return r
+    }
 
     @JvmStatic
     fun enterMode(builder: PsiBuilder, level: Int, mode: String?): Boolean {

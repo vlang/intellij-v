@@ -8,13 +8,11 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
+import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.completion.VlangCompletionUtil.KEYWORD_PRIORITY
-import org.vlang.lang.psi.VlangBlock
-import org.vlang.lang.psi.VlangFile
-import org.vlang.lang.psi.VlangForStatement
-import org.vlang.lang.psi.VlangFunctionDeclaration
+import org.vlang.lang.psi.*
 
 class VlangKeywordsCompletionContributor : CompletionContributor() {
     init {
@@ -45,6 +43,11 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
             result: CompletionResultSet,
         ) {
             if (VlangCompletionUtil.shouldSuppressCompletion(parameters.position)) {
+                result.stopHere()
+                return
+            }
+
+            if (parameters.position.parentOfType<VlangLiteralValueExpression>() != null) {
                 result.stopHere()
                 return
             }

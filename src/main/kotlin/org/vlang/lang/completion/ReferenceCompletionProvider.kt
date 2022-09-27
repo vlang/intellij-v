@@ -3,7 +3,6 @@ package org.vlang.lang.completion
 import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.codeInsight.completion.CompletionProvider
 import com.intellij.codeInsight.completion.CompletionResultSet
-import com.intellij.codeInsight.completion.CompletionUtilCore
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiElement
@@ -13,6 +12,7 @@ import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangCachedReference
+import org.vlang.lang.psi.impl.VlangFieldNameReference
 import org.vlang.lang.psi.impl.VlangReference
 import org.vlang.lang.psi.impl.VlangScopeProcessor
 
@@ -22,22 +22,29 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
         context: ProcessingContext,
         result: CompletionResultSet,
     ) {
-        if (parameters.position.text == CompletionUtilCore.DUMMY_IDENTIFIER_TRIMMED) {
-            result.stopHere()
-            return
-        }
+//        if (parameters.position.text == CompletionUtilCore.DUMMY_IDENTIFIER_TRIMMED) {
+//            result.stopHere()
+//            return
+//        }
 
         val expression = parameters.position.parentOfType<VlangReferenceExpressionBase>() ?: return
         val originalFile = parameters.originalFile
         val ref = expression.reference
         if (ref is VlangReference) {
-            ref.processResolveVariants(
-                MyScopeProcessor(
-                    result,
-                    originalFile,
-                    false
+            val refExpression = ref.element as? VlangReferenceExpression
+            val variants = VlangStructLiteralCompletion.allowedVariants(refExpression)
+
+            fillStructFieldNameVariants(originalFile, result, variants, refExpression)
+
+            if (variants != VlangStructLiteralCompletion.Variants.FIELD_NAME_ONLY) {
+                ref.processResolveVariants(
+                    MyScopeProcessor(
+                        result,
+                        originalFile,
+                        false
+                    )
                 )
-            )
+            }
         } else if (ref is VlangCachedReference<*>) {
             ref.processResolveVariants(
                 MyScopeProcessor(
@@ -49,7 +56,81 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
         }
     }
 
-    private inner class MyScopeProcessor(
+    private fun fillStructFieldNameVariants(
+        file: PsiFile,
+        result: CompletionResultSet,
+        variants: VlangStructLiteralCompletion.Variants,
+        refExpression: VlangReferenceExpression?,
+    ) {
+        if (refExpression == null ||
+            variants !== VlangStructLiteralCompletion.Variants.FIELD_NAME_ONLY &&
+            variants !== VlangStructLiteralCompletion.Variants.BOTH
+        ) {
+            return
+        }
+
+        val fields = mutableSetOf<String>()
+        val literal = refExpression.parentOfType<VlangLiteralValueExpression>()
+        VlangFieldNameReference(refExpression).processResolveVariants(object : MyScopeProcessor(result, file, false) {
+            val alreadyAssignedFields: Set<String> = VlangStructLiteralCompletion.alreadyAssignedFields(literal)
+
+            override fun execute(o: PsiElement, state: ResolveState): Boolean {
+                val structFieldName: String? =
+                    if (o is VlangFieldDefinition)
+                        o.name
+                    else if (o is VlangAnonymousFieldDefinition)
+//                        o.getName() // TODO
+                        ""
+                    else null
+
+                if (structFieldName != null) {
+                    fields.add(structFieldName)
+                }
+
+                return if (structFieldName != null && alreadyAssignedFields.contains(structFieldName)) {
+                    true
+                } else {
+                    super.execute(o, state)
+                }
+            }
+        })
+
+        // TODO
+//        result.addElement(
+//            PrioritizedLookupElement.withPriority(
+//                LookupElementBuilder.create("")
+//                    .withPresentableText("Fill all field...")
+//                    .withInsertHandler { context, item ->
+//                        val offset = context.editor.caretModel.offset
+//                        val element = context.file.findElementAt(offset)?.parent ?: return@withInsertHandler
+//
+//                        val line = context.document.getLineNumber(offset)
+//                        val startLineOffset = context.document.getLineStartOffset(line)
+//                        val shift = offset - startLineOffset
+//
+////                        val data = fields.joinToString("\n") { " ".repeat(shift + 1) + it + ": " }
+////                        context.document.insertString(offset, "\n$data\n" + " ".repeat(shift))
+//
+////                        val editorEx = context.editor as EditorEx
+////                        editorEx.setPlaceholder("name")
+//
+//                        val manager = TemplateManager.getInstance(context.project)
+//                        val template = manager.createTemplate("", "", "\$name\$")
+//
+//                        val builder = TemplateBuilderImpl(element)
+//                        builder.replaceElement(
+//                            element,
+//                            TextRange(0, 2), "var", ConstantNode("name"), true
+//                        )
+//
+//                        builder.initInlineTemplate(template)
+//                    },
+//                10000.0
+//            )
+//        )
+    }
+
+    private open inner class MyScopeProcessor(
         private val myResult: CompletionResultSet,
         originalFile: PsiFile,
         private val myForTypes: Boolean,

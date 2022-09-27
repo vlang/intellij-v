@@ -80,7 +80,7 @@
   ]
 
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional|OrBlock)Expr")=BinaryExpr
-  extends(".*(Expr|Literal|Lit|OperandName)|TypeInitExpr|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|SharedExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ErrorPropagationExpression|ForceNoErrorPropagationExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression|LockExpression|IncDecExpression")=Expression
+  extends(".*(Expr|Literal|Lit|OperandName)|TypeInitExpr|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|SharedExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ErrorPropagationExpression|ForceNoErrorPropagationExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression|LockExpression|IncDecExpression|LiteralValueExpression")=Expression
 
   implements("(Type|Import)Spec|(Var|Param|Field|Label|Var|Const|EnumField)Definition|(Struct|TypeAlias|Union|Enum|Interface)Declaration|Receiver|FieldDefinition")="org.vlang.lang.psi.VlangNamedElement"
   implements("FunctionLit|(Function|Method)Declaration")="org.vlang.lang.psi.VlangSignatureOwner"
@@ -511,7 +511,7 @@ Expression ::=
   | UnaryExpr
   | SendExpr
   | RangeExpr
-  | TypeInitExpr
+  | LiteralValueExpression
   | UnsafeExpression
   | MatchExpression
   | IfExpression
@@ -535,6 +535,7 @@ Expression ::=
   | GoExpression
   | LockExpression
   | IncDecExpression
+  | UnpackingExpression
   | ParenthesesExpr {methods=[getType] implements="org.vlang.lang.psi.VlangTypeOwner"}
 // end of expression rule
 
@@ -551,14 +552,16 @@ KeyValues ::= KeyValue ((semi | ',') KeyValue)* (semi | ',')? {pin=1}
 KeyValue ::= (Literal | ReferenceExpression) ':' Expression {pin=1}
 
 // <type> {...}
-TypeInitExpr ::= <<isModeOff "BLOCK?">> Type '{' ( '}' | FieldInitialization '}') {pin=4}
-FieldInitialization ::= FieldInitializationKeyValueList | FieldInitializationValueList
-FieldInitializationKeyValueList ::= ((FieldInitializationKeyValue | UnpackingExpression) (semi | ','?))+ semi?
-private FieldInitializationKeyValue ::= FieldInitializationKey ':' Expression {pin=2}
-FieldInitializationKey ::= Expression
-FieldInitializationValueList ::= (FieldInitializationValue ','?)* semi?
-// see return if a > b { a } else { b }
-private FieldInitializationValue ::= Expression {pin=1}
+LiteralValueExpression ::= Type (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">>) '{' ElementList? '}' {pin=3}
+private ElementList ::= ElementInner ((',' | semi) ElementInner?)*
+private ElementInner ::= <<withOn "PAR" Element>> | (!() Element) {recoverWhile=ElementInnerRecover}
+private ElementInnerRecover ::= !('}' | ',' | semi)
+Element ::= First [':' Value]  {pin(".*")=1}
+private First ::= Key | <<keyOrValueExpression>>
+Key ::= (FieldName &':') | !() Expression // nullability hack for key without reference inside
+FieldName ::= ReferenceExpression { methods=[getIdentifier getQualifier] }
+Value ::= Expression | LiteralValueExpression
+
 // end of type init
 
 private MaxGroup ::=
@@ -580,7 +583,7 @@ Capture ::= VarDefinition {pin=1}
 
 Type ::= (TypeLit | TypeName) GenericDeclaration? {
   stubClass="org.vlang.lang.stubs.VlangTypeStub"
-  methods=[getIdentifier getUnderlyingType]
+  methods=[getIdentifier getUnderlyingType resolveType]
 }
 //  | ParType {
 //  stubClass="org.vlang.lang.stubs.GoTypeStub"
@@ -709,7 +712,7 @@ fake BinaryExpr ::= Expression+ {
 }
 // end of math and logical expressions
 
-ParenthesesExpr ::= '(' /*<<enterMode "PAR">>*/ Expression /*<<exitModeSafe "PAR">>*/')' {pin=1}
+ParenthesesExpr ::= '(' <<enterMode "PAR">> Expression <<exitModeSafe "PAR">>')' {pin=1}
 
 // <expr>++/--
 IncDecExpression ::= Expression ('++' | '--') {pin=1}
@@ -763,7 +766,7 @@ CallExpr ::= Expression ArgumentList
 ArgumentList ::= '(' [ ExpressionArgList '...'? ','? ] ')' {pin=1}
 
 // match <expr> { ... }
-MatchExpression ::= match Expression '{' MatchArms '}' {pin=1}
+MatchExpression ::= match <<enterMode "BLOCK?">> Expression '{' MatchArms '}' <<exitModeSafe "BLOCK?">> {pin=1}
 // <expr>[, <expr2>] { ... }
 // else { ... }
 MatchArms ::= (MatchArm | MatchElseArmClause)*

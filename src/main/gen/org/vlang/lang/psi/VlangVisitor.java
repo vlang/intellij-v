@@ -160,6 +160,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitElement(@NotNull VlangElement o) {
+    visitCompositeElement(o);
+  }
+
   public void visitElseStatement(@NotNull VlangElseStatement o) {
     visitStatement(o);
   }
@@ -204,24 +208,12 @@ public class VlangVisitor extends PsiElementVisitor {
     visitNamedElement(o);
   }
 
-  public void visitFieldInitialization(@NotNull VlangFieldInitialization o) {
-    visitCompositeElement(o);
-  }
-
-  public void visitFieldInitializationKey(@NotNull VlangFieldInitializationKey o) {
-    visitCompositeElement(o);
-  }
-
-  public void visitFieldInitializationKeyValueList(@NotNull VlangFieldInitializationKeyValueList o) {
-    visitCompositeElement(o);
-  }
-
-  public void visitFieldInitializationValueList(@NotNull VlangFieldInitializationValueList o) {
-    visitCompositeElement(o);
-  }
-
   public void visitFieldLookup(@NotNull VlangFieldLookup o) {
     visitCompositeElement(o);
+  }
+
+  public void visitFieldName(@NotNull VlangFieldName o) {
+    visitReferenceExpressionBase(o);
   }
 
   public void visitFieldsGroup(@NotNull VlangFieldsGroup o) {
@@ -367,6 +359,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitKey(@NotNull VlangKey o) {
+    visitCompositeElement(o);
+  }
+
   public void visitKeyValue(@NotNull VlangKeyValue o) {
     visitCompositeElement(o);
   }
@@ -396,6 +392,10 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitLiteral(@NotNull VlangLiteral o) {
+    visitExpression(o);
+  }
+
+  public void visitLiteralValueExpression(@NotNull VlangLiteralValueExpression o) {
     visitExpression(o);
   }
 
@@ -617,10 +617,6 @@ public class VlangVisitor extends PsiElementVisitor {
     visitNamedElement(o);
   }
 
-  public void visitTypeInitExpr(@NotNull VlangTypeInitExpr o) {
-    visitExpression(o);
-  }
-
   public void visitTypeListNoPin(@NotNull VlangTypeListNoPin o) {
     visitCompositeElement(o);
   }
@@ -651,6 +647,10 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitUnsafeStatement(@NotNull VlangUnsafeStatement o) {
     visitStatement(o);
+  }
+
+  public void visitValue(@NotNull VlangValue o) {
+    visitCompositeElement(o);
   }
 
   public void visitVarDeclaration(@NotNull VlangVarDeclaration o) {

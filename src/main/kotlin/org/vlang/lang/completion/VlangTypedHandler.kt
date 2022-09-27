@@ -1,11 +1,11 @@
 package org.vlang.lang.completion
 
-import com.intellij.codeInsight.AutoPopupController
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.parentOfType
+import org.vlang.lang.completion.VlangCompletionUtil.showCompletion
 import org.vlang.lang.psi.VlangFile
 import org.vlang.lang.psi.VlangReferenceExpression
 
@@ -45,7 +45,4 @@ class VlangTypedHandler : TypedHandlerDelegate() {
         return Result.DEFAULT
     }
 
-    private fun showCompletion(editor: Editor) {
-        AutoPopupController.getInstance(editor.project!!).autoPopupMemberLookup(editor, null)
-    }
 }

@@ -96,7 +96,7 @@ class VlangFoldingBuilder : FoldingBuilderEx(), DumbAware {
                 super.visitElement(el)
             }
 
-            override fun visitTypeInitExpr(el: VlangTypeInitExpr) {
+            override fun visitLiteralValueExpression(el: VlangLiteralValueExpression) {
                 genericFolding(el)
                 super.visitElement(el)
             }

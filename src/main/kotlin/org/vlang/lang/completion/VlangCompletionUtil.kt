@@ -1,5 +1,6 @@
 package org.vlang.lang.completion
 
+import com.intellij.codeInsight.AutoPopupController
 import com.intellij.codeInsight.completion.CompletionUtilCore
 import com.intellij.codeInsight.completion.InsertHandler
 import com.intellij.codeInsight.completion.InsertionContext
@@ -9,7 +10,9 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.codeInsight.lookup.LookupElementPresentation
 import com.intellij.codeInsight.lookup.LookupElementRenderer
 import com.intellij.icons.AllIcons
+import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parentOfType
 import org.vlang.ide.ui.VIcons
 import org.vlang.lang.psi.*
@@ -125,11 +128,21 @@ object VlangCompletionUtil {
         return createFieldLookupElement(
             element, name,
             priority = FIELD_PRIORITY,
+            insertHandler = FieldInsertHandler()
         )
     }
 
-    fun createStructLookupElement(element: VlangNamedElement): LookupElement? =
-        createLookupElement(element, AllIcons.Nodes.Class, STRUCT_PRIORITY)
+    fun createStructLookupElement(element: VlangNamedElement): LookupElement? {
+        val name = element.name
+        if (name.isNullOrEmpty()) {
+            return null
+        }
+        return createStructLookupElement(
+            element, name,
+            priority = STRUCT_PRIORITY,
+            insertHandler = StructInsertHandler()
+        )
+    }
 
     fun createUnionLookupElement(element: VlangNamedElement): LookupElement? =
         createLookupElement(element, AllIcons.Nodes.AnonymousClass, STRUCT_PRIORITY)
@@ -163,6 +176,18 @@ object VlangCompletionUtil {
         return PrioritizedLookupElement.withPriority(
             LookupElementBuilder.createWithSmartPointer(lookupString, element)
                 .withIcon(icon)
+                .withInsertHandler(insertHandler), priority.toDouble()
+        )
+    }
+
+    private fun createStructLookupElement(
+        element: VlangNamedElement, lookupString: String,
+        insertHandler: InsertHandler<LookupElement>? = null,
+        priority: Int = 0,
+    ): LookupElement {
+        return PrioritizedLookupElement.withPriority(
+            LookupElementBuilder.createWithSmartPointer(lookupString, element)
+                .withIcon(AllIcons.Nodes.Class)
                 .withInsertHandler(insertHandler), priority.toDouble()
         )
     }
@@ -239,12 +264,48 @@ object VlangCompletionUtil {
         )
     }
 
+    fun showCompletion(editor: Editor) {
+        AutoPopupController.getInstance(editor.project!!).autoPopupMemberLookup(editor, null)
+    }
+
     class StringInsertHandler(val string: String, val shift: Int) : InsertHandler<LookupElement> {
         override fun handleInsert(context: InsertionContext, item: LookupElement) {
             val caretOffset = context.editor.caretModel.offset
 
             context.document.insertString(caretOffset, string)
             context.editor.caretModel.moveToOffset(caretOffset + shift)
+        }
+    }
+
+    class StructInsertHandler : InsertHandler<LookupElement> {
+        override fun handleInsert(context: InsertionContext, item: LookupElement) {
+            val caretOffset = context.editor.caretModel.offset
+
+            context.document.insertString(caretOffset, "{}")
+            context.editor.caretModel.moveToOffset(caretOffset + 1)
+
+            showCompletion(context.editor)
+        }
+    }
+
+    class FieldInsertHandler : SingleCharInsertHandler(':', needSpace = true) {
+        override fun handleInsert(context: InsertionContext, item: LookupElement) {
+            val file = context.file as? VlangFile ?: return
+            context.commitDocument()
+
+            val offset = context.startOffset
+            val at = file.findElementAt(offset)
+
+            val ref = PsiTreeUtil.getParentOfType(at, VlangValue::class.java, VlangReferenceExpression::class.java)
+            if (ref is VlangReferenceExpression && (ref.getQualifier() != null)) {
+                return
+            }
+
+            val value = PsiTreeUtil.getParentOfType(at, VlangValue::class.java)
+            if (value == null || PsiTreeUtil.getPrevSiblingOfType(value, VlangKey::class.java) != null) {
+                return
+            }
+            super.handleInsert(context, item)
         }
     }
 

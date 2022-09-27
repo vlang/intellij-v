@@ -7,7 +7,6 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
 import com.intellij.psi.impl.source.resolve.ResolveCache
 import com.intellij.psi.search.GlobalSearchScope
-import com.intellij.psi.util.childrenOfType
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ArrayUtil
 import org.vlang.lang.psi.*
@@ -118,20 +117,6 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
         return result == true
     }
 
-    private fun clarifyType(type: VlangType?): VlangType? {
-        if (type !is VlangTypeImpl) {
-            return type
-        }
-
-        val resolved = type.typeReferenceExpressionList.firstOrNull()?.resolve()
-        val typeChild = resolved?.childrenOfType<VlangStructType>()?.firstOrNull()
-        if (typeChild != null) {
-            return typeChild
-        }
-
-        return type
-    }
-
     private fun processExistingType(type: VlangType, processor: VlangScopeProcessor, state: ResolveState): Boolean {
         val file = type.containingFile as? VlangFile ?: return true
         val myFile = getContextFile(state) ?: myElement.containingFile
@@ -153,7 +138,7 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
 //            type = type.getUnderlyingType()
 //        }
 
-        val typ = clarifyType(type)
+        val typ = type.resolveType()
 
         if (typ is VlangPointerType) {
             val baseType = typ.type
@@ -309,6 +294,11 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
                 val assignExpression = parentAssign.leftHandExprList.expressionList.firstOrNull() as? VlangReferenceExpression ?: return true
                 return processQualifierExpression(file, assignExpression, processor, state)
             }
+        }
+        if (parent is VlangFieldName) {
+            val initExpr = parent.parentOfType<VlangLiteralValueExpression>()
+            val type = initExpr?.type ?: return true
+            return processType(type, processor, state)
         }
 
 //        if (parent is VlangSelectorExpr) {

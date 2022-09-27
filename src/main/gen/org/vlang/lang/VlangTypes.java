@@ -48,6 +48,7 @@ public interface VlangTypes {
   IElementType DEFAULT_FIELD_VALUE = new VlangCompositeElementType("DEFAULT_FIELD_VALUE");
   IElementType DEFER_STATEMENT = new VlangCompositeElementType("DEFER_STATEMENT");
   IElementType DOT_EXPRESSION = new VlangCompositeElementType("DOT_EXPRESSION");
+  IElementType ELEMENT = new VlangCompositeElementType("ELEMENT");
   IElementType ELSE_STATEMENT = new VlangCompositeElementType("ELSE_STATEMENT");
   IElementType ENUM_DECLARATION = VlangElementTypeFactory.stubFactory("ENUM_DECLARATION");
   IElementType ENUM_FETCH = new VlangCompositeElementType("ENUM_FETCH");
@@ -60,11 +61,8 @@ public interface VlangTypes {
   IElementType FIELDS_GROUP = new VlangCompositeElementType("FIELDS_GROUP");
   IElementType FIELD_DECLARATION = new VlangCompositeElementType("FIELD_DECLARATION");
   IElementType FIELD_DEFINITION = VlangElementTypeFactory.stubFactory("FIELD_DEFINITION");
-  IElementType FIELD_INITIALIZATION = new VlangCompositeElementType("FIELD_INITIALIZATION");
-  IElementType FIELD_INITIALIZATION_KEY = new VlangCompositeElementType("FIELD_INITIALIZATION_KEY");
-  IElementType FIELD_INITIALIZATION_KEY_VALUE_LIST = new VlangCompositeElementType("FIELD_INITIALIZATION_KEY_VALUE_LIST");
-  IElementType FIELD_INITIALIZATION_VALUE_LIST = new VlangCompositeElementType("FIELD_INITIALIZATION_VALUE_LIST");
   IElementType FIELD_LOOKUP = new VlangCompositeElementType("FIELD_LOOKUP");
+  IElementType FIELD_NAME = new VlangCompositeElementType("FIELD_NAME");
   IElementType FORCE_NO_ERROR_PROPAGATION_EXPRESSION = new VlangCompositeElementType("FORCE_NO_ERROR_PROPAGATION_EXPRESSION");
   IElementType FORMAT_SPECIFIER = new VlangCompositeElementType("FORMAT_SPECIFIER");
   IElementType FORMAT_SPECIFIER_EXPRESSION = new VlangCompositeElementType("FORMAT_SPECIFIER_EXPRESSION");
@@ -99,6 +97,7 @@ public interface VlangTypes {
   IElementType INTERFACE_TYPE = VlangElementTypeFactory.stubFactory("INTERFACE_TYPE");
   IElementType IN_EXPRESSION = new VlangCompositeElementType("IN_EXPRESSION");
   IElementType IS_EXPRESSION = new VlangCompositeElementType("IS_EXPRESSION");
+  IElementType KEY = new VlangCompositeElementType("KEY");
   IElementType KEY_VALUE = new VlangCompositeElementType("KEY_VALUE");
   IElementType KEY_VALUES = new VlangCompositeElementType("KEY_VALUES");
   IElementType LABELED_STATEMENT = new VlangCompositeElementType("LABELED_STATEMENT");
@@ -107,6 +106,7 @@ public interface VlangTypes {
   IElementType LANGUAGE_INJECTION_STATEMENT = new VlangCompositeElementType("LANGUAGE_INJECTION_STATEMENT");
   IElementType LEFT_HAND_EXPR_LIST = new VlangCompositeElementType("LEFT_HAND_EXPR_LIST");
   IElementType LITERAL = new VlangCompositeElementType("LITERAL");
+  IElementType LITERAL_VALUE_EXPRESSION = new VlangCompositeElementType("LITERAL_VALUE_EXPRESSION");
   IElementType LOCK_EXPRESSION = new VlangCompositeElementType("LOCK_EXPRESSION");
   IElementType LOCK_STATEMENT = new VlangCompositeElementType("LOCK_STATEMENT");
   IElementType LONG_STRING_TEMPLATE_ENTRY = new VlangCompositeElementType("LONG_STRING_TEMPLATE_ENTRY");
@@ -161,7 +161,6 @@ public interface VlangTypes {
   IElementType TAG = new VlangCompositeElementType("TAG");
   IElementType TYPE = VlangElementTypeFactory.stubFactory("TYPE");
   IElementType TYPE_ALIAS_DECLARATION = VlangElementTypeFactory.stubFactory("TYPE_ALIAS_DECLARATION");
-  IElementType TYPE_INIT_EXPR = new VlangCompositeElementType("TYPE_INIT_EXPR");
   IElementType TYPE_LIST_NO_PIN = new VlangCompositeElementType("TYPE_LIST_NO_PIN");
   IElementType TYPE_REFERENCE_EXPRESSION = new VlangCompositeElementType("TYPE_REFERENCE_EXPRESSION");
   IElementType TYPE_UNION_LIST = new VlangCompositeElementType("TYPE_UNION_LIST");
@@ -170,6 +169,7 @@ public interface VlangTypes {
   IElementType UNPACKING_EXPRESSION = new VlangCompositeElementType("UNPACKING_EXPRESSION");
   IElementType UNSAFE_EXPRESSION = new VlangCompositeElementType("UNSAFE_EXPRESSION");
   IElementType UNSAFE_STATEMENT = new VlangCompositeElementType("UNSAFE_STATEMENT");
+  IElementType VALUE = new VlangCompositeElementType("VALUE");
   IElementType VAR_DECLARATION = new VlangCompositeElementType("VAR_DECLARATION");
   IElementType VAR_DEFINITION = VlangElementTypeFactory.stubFactory("VAR_DEFINITION");
   IElementType VAR_MODIFIERS = new VlangCompositeElementType("VAR_MODIFIERS");
@@ -418,6 +418,9 @@ public interface VlangTypes {
       else if (type == DOT_EXPRESSION) {
         return new VlangDotExpressionImpl(node);
       }
+      else if (type == ELEMENT) {
+        return new VlangElementImpl(node);
+      }
       else if (type == ELSE_STATEMENT) {
         return new VlangElseStatementImpl(node);
       }
@@ -451,20 +454,11 @@ public interface VlangTypes {
       else if (type == FIELD_DEFINITION) {
         return new VlangFieldDefinitionImpl(node);
       }
-      else if (type == FIELD_INITIALIZATION) {
-        return new VlangFieldInitializationImpl(node);
-      }
-      else if (type == FIELD_INITIALIZATION_KEY) {
-        return new VlangFieldInitializationKeyImpl(node);
-      }
-      else if (type == FIELD_INITIALIZATION_KEY_VALUE_LIST) {
-        return new VlangFieldInitializationKeyValueListImpl(node);
-      }
-      else if (type == FIELD_INITIALIZATION_VALUE_LIST) {
-        return new VlangFieldInitializationValueListImpl(node);
-      }
       else if (type == FIELD_LOOKUP) {
         return new VlangFieldLookupImpl(node);
+      }
+      else if (type == FIELD_NAME) {
+        return new VlangFieldNameImpl(node);
       }
       else if (type == FORCE_NO_ERROR_PROPAGATION_EXPRESSION) {
         return new VlangForceNoErrorPropagationExpressionImpl(node);
@@ -568,6 +562,9 @@ public interface VlangTypes {
       else if (type == IS_EXPRESSION) {
         return new VlangIsExpressionImpl(node);
       }
+      else if (type == KEY) {
+        return new VlangKeyImpl(node);
+      }
       else if (type == KEY_VALUE) {
         return new VlangKeyValueImpl(node);
       }
@@ -591,6 +588,9 @@ public interface VlangTypes {
       }
       else if (type == LITERAL) {
         return new VlangLiteralImpl(node);
+      }
+      else if (type == LITERAL_VALUE_EXPRESSION) {
+        return new VlangLiteralValueExpressionImpl(node);
       }
       else if (type == LOCK_EXPRESSION) {
         return new VlangLockExpressionImpl(node);
@@ -754,9 +754,6 @@ public interface VlangTypes {
       else if (type == TYPE_ALIAS_DECLARATION) {
         return new VlangTypeAliasDeclarationImpl(node);
       }
-      else if (type == TYPE_INIT_EXPR) {
-        return new VlangTypeInitExprImpl(node);
-      }
       else if (type == TYPE_LIST_NO_PIN) {
         return new VlangTypeListNoPinImpl(node);
       }
@@ -780,6 +777,9 @@ public interface VlangTypes {
       }
       else if (type == UNSAFE_STATEMENT) {
         return new VlangUnsafeStatementImpl(node);
+      }
+      else if (type == VALUE) {
+        return new VlangValueImpl(node);
       }
       else if (type == VAR_DECLARATION) {
         return new VlangVarDeclarationImpl(node);

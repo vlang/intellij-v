@@ -2,7 +2,6 @@ package org.vlang.lang.completion
 
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElementBuilder
-import com.intellij.icons.AllIcons
 import com.intellij.patterns.ElementPattern
 import com.intellij.patterns.PlatformPatterns.psiElement
 import com.intellij.patterns.PsiElementPattern
@@ -10,25 +9,15 @@ import com.intellij.patterns.StandardPatterns
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
-import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
 import org.vlang.lang.VlangTypes
-import org.vlang.lang.psi.*
+import org.vlang.lang.psi.VlangFunctionDeclaration
+import org.vlang.lang.psi.VlangReferenceExpressionBase
 import org.vlang.lang.psi.impl.VlangCachedReference
 import org.vlang.lang.utils.LabelUtil
 
 class VlangContextCompletionContributor : CompletionContributor() {
     init {
-        extend(
-            CompletionType.BASIC,
-            onStatementBeginning(VlangTypes.IDENTIFIER)
-                .withSuperParent(
-                    3,
-                    psiElement(VlangFieldInitializationKeyValueList::class.java),
-                ),
-            VlangStructFieldsCompletionProvider()
-        )
-
         extend(
             CompletionType.BASIC,
             insideWithLabelStatement(VlangTypes.IDENTIFIER),
@@ -68,37 +57,6 @@ class VlangContextCompletionContributor : CompletionContributor() {
                     )
                 )
             }
-        }
-    }
-
-    class VlangStructFieldsCompletionProvider : CompletionProvider<CompletionParameters>() {
-        override fun addCompletions(
-            parameters: CompletionParameters,
-            context: ProcessingContext,
-            resultSet: CompletionResultSet,
-        ) {
-            if (parameters.position.text == CompletionUtilCore.DUMMY_IDENTIFIER_TRIMMED) return
-
-            val element = parameters.originalFile.findElementAt(parameters.offset) ?: return
-            val refs = element.parentOfType<VlangTypeInitExpr>()?.type?.typeReferenceExpressionList ?: return
-
-            refs
-                .mapNotNull { it.reference.resolve() }
-                .filterIsInstance<VlangStructDeclaration>()
-                .forEach { decl ->
-                    val groups = decl.structType.fieldsGroupList
-                    val fields = groups.flatMap { it.fieldDeclarationList }.flatMap { it.fieldDefinitionList }
-
-                    for (field in fields) {
-                        resultSet.addElement(
-                            PrioritizedLookupElement.withPriority(
-                                LookupElementBuilder.create(field.getIdentifier().text)
-                                    .withIcon(AllIcons.Nodes.Field),
-                                25.0
-                            )
-                        )
-                    }
-                }
         }
     }
 

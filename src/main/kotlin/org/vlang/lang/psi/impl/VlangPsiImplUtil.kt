@@ -85,6 +85,16 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getIdentifier(o: VlangFieldName): PsiElement? {
+        return o.referenceExpression.getIdentifier()
+    }
+
+    @JvmStatic
+    fun getQualifier(o: VlangFieldName): VlangReferenceExpressionBase? {
+        return null
+    }
+
+    @JvmStatic
     fun getReference(o: VlangReferenceExpression): VlangReference {
         return VlangReference(o)
     }
@@ -115,6 +125,21 @@ object VlangPsiImplUtil {
             return PsiTreeUtil.findChildOfAnyType(o, VlangTypeReferenceExpression::class.java)
         }
         return o?.typeReferenceExpressionList?.firstOrNull()
+    }
+
+    @JvmStatic
+    fun resolveType(type: VlangType): VlangType? {
+        if (type !is VlangTypeImpl) {
+            return type
+        }
+
+        val resolved = type.typeReferenceExpressionList.firstOrNull()?.resolve()
+        val typeChild = resolved?.childrenOfType<VlangStructType>()?.firstOrNull()
+        if (typeChild != null) {
+            return typeChild
+        }
+
+        return type
     }
 
     @JvmStatic
@@ -197,6 +222,16 @@ object VlangPsiImplUtil {
         return null // TODO
     }
 
+    fun getParentVlangValue(element: PsiElement): VlangValue? {
+        var place: PsiElement? = element
+        while (PsiTreeUtil.getParentOfType(place, VlangLiteralValueExpression::class.java).also { place = it } != null) {
+            if (place?.parent is VlangValue) {
+                return place?.parent as? VlangValue
+            }
+        }
+        return null
+    }
+
     fun getFqn(packageName: String?, elementName: String): String {
         return if (StringUtil.isNotEmpty(packageName)) "$packageName.$elementName" else elementName
     }
@@ -267,7 +302,7 @@ object VlangPsiImplUtil {
             return getBuiltinType("bool", expr)
         }
 
-        if (expr is VlangTypeInitExpr) {
+        if (expr is VlangLiteralValueExpression) {
             val type = expr.type.typeReferenceExpressionList.firstOrNull()?.resolve()
             if (type?.firstChild is VlangStructType) {
                 return type.firstChild as VlangStructType
