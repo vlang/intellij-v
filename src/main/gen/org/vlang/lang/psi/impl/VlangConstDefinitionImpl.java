@@ -54,4 +54,10 @@ public class VlangConstDefinitionImpl extends VlangNamedElementImpl<VlangConstDe
     return notNullChild(findChildByType(IDENTIFIER));
   }
 
+  @Override
+  @NotNull
+  public String getName() {
+    return VlangPsiImplUtil.getName(this);
+  }
+
 }

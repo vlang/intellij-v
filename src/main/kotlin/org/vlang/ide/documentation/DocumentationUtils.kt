@@ -17,6 +17,8 @@ object DocumentationUtils {
     val asDeclaration = loadKey(DefaultLanguageHighlighterColors.FUNCTION_DECLARATION)
     val asParameter = loadKey(DefaultLanguageHighlighterColors.PARAMETER)
     val asAttribute = loadKey(DefaultLanguageHighlighterColors.METADATA)
+    val asString = loadKey(DefaultLanguageHighlighterColors.STRING)
+    val asNumber = loadKey(DefaultLanguageHighlighterColors.NUMBER)
 
     @Suppress("UnstableApiUsage")
     fun StringBuilder.colorize(text: String, attrs: TextAttributes, noHtml: Boolean = false) {

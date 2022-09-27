@@ -22,4 +22,7 @@ public interface VlangConstDefinition extends VlangNamedElement, StubBasedPsiEle
   //matching deleteDefinition(VlangConstDefinition, ...)
   //methods are not found in VlangPsiImplUtil
 
+  @NotNull
+  String getName();
+
 }

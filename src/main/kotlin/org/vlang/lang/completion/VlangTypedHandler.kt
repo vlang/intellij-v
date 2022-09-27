@@ -18,17 +18,21 @@ class VlangTypedHandler : TypedHandlerDelegate() {
         val chars = editor.document.charsSequence
         val offset = editor.caretModel.offset
 
-        val prevText = chars.subSequence(offset - "continue ".length, offset).trim()
-        if (c == ' ' && (prevText.endsWith("continue") || prevText.endsWith("break") || prevText.endsWith("goto"))) {
-            showCompletion(editor)
-            return Result.STOP
+        if (offset > 10) {
+            val prevText = chars.subSequence(offset - "continue ".length, offset).trim()
+            if (c == ' ' && (prevText.endsWith("continue") || prevText.endsWith("break") || prevText.endsWith("goto"))) {
+                showCompletion(editor)
+                return Result.STOP
+            }
         }
 
-        val prevSymbol = chars.subSequence(offset - 2, offset - 1).first()
-        if (c == '{' && prevSymbol == '$') {
-            editor.document.insertString(offset, "}")
-            showCompletion(editor)
-            return Result.STOP
+        if (offset > 2) {
+            val prevSymbol = chars.subSequence(offset - 2, offset - 1).first()
+            if (c == '{' && prevSymbol == '$') {
+                editor.document.insertString(offset, "}")
+                showCompletion(editor)
+                return Result.STOP
+            }
         }
 
         val prevElement = file.findElementAt(offset - 2)

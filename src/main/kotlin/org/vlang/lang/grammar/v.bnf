@@ -379,7 +379,9 @@ AnonymousFieldDefinition ::= Type {
 
 
 // interface
-InterfaceDeclaration ::= Attributes? SymbolVisibility? InterfaceType
+InterfaceDeclaration ::= Attributes? SymbolVisibility? InterfaceType {
+  methods=[getName]
+}
 
 InterfaceType ::= interface identifier GenericDeclaration? '{' InterfaceMembers? '}' {pin=1}
 
@@ -431,7 +433,7 @@ private ConstDefinitions ::= ConstDefinition (semi ConstDefinition)* semi? {pin=
 ConstDefinition ::= identifier '=' Expression {
   pin=2
   stubClass="org.vlang.lang.stubs.VlangConstDefinitionStub"
-  methods=[deleteDefinition]
+  methods=[deleteDefinition getName]
 }
 
 // TODO: when const declaration will support multiple assign

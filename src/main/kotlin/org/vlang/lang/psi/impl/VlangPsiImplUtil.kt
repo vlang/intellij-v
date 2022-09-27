@@ -40,6 +40,16 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getName(o: VlangInterfaceDeclaration): String {
+        return o.interfaceType.identifier?.text ?: ""
+    }
+
+    @JvmStatic
+    fun getName(o: VlangConstDefinition): String {
+        return o.getIdentifier().text ?: ""
+    }
+
+    @JvmStatic
     fun getName(o: VlangTypeAliasDeclaration): String {
         return o.getIdentifier()?.text ?: ""
     }
