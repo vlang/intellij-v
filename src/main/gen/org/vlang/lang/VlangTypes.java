@@ -53,6 +53,8 @@ public interface VlangTypes {
   IElementType ENUM_FETCH = new VlangCompositeElementType("ENUM_FETCH");
   IElementType ENUM_FIELDS = new VlangCompositeElementType("ENUM_FIELDS");
   IElementType ENUM_FIELD_DECLARATION = new VlangCompositeElementType("ENUM_FIELD_DECLARATION");
+  IElementType ENUM_FIELD_DEFINITION = VlangElementTypeFactory.stubFactory("ENUM_FIELD_DEFINITION");
+  IElementType ENUM_TYPE = VlangElementTypeFactory.stubFactory("ENUM_TYPE");
   IElementType ERROR_PROPAGATION_EXPRESSION = new VlangCompositeElementType("ERROR_PROPAGATION_EXPRESSION");
   IElementType EXPRESSION = new VlangCompositeElementType("EXPRESSION");
   IElementType FIELDS_GROUP = new VlangCompositeElementType("FIELDS_GROUP");
@@ -430,6 +432,12 @@ public interface VlangTypes {
       }
       else if (type == ENUM_FIELD_DECLARATION) {
         return new VlangEnumFieldDeclarationImpl(node);
+      }
+      else if (type == ENUM_FIELD_DEFINITION) {
+        return new VlangEnumFieldDefinitionImpl(node);
+      }
+      else if (type == ENUM_TYPE) {
+        return new VlangEnumTypeImpl(node);
       }
       else if (type == ERROR_PROPAGATION_EXPRESSION) {
         return new VlangErrorPropagationExpressionImpl(node);

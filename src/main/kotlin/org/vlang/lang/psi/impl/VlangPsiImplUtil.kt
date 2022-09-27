@@ -30,6 +30,11 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getIdentifier(o: VlangEnumDeclaration): PsiElement? {
+        return o.enumType.identifier
+    }
+
+    @JvmStatic
     fun getName(o: VlangStructDeclaration): String {
         return o.getIdentifier()?.text ?: ""
     }
@@ -180,6 +185,11 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun getTypeInner(o: VlangReceiver, context: ResolveState?): VlangType {
         return o.type
+    }
+
+    @JvmStatic
+    fun getTypeInner(o: VlangEnumDeclaration, context: ResolveState?): VlangType {
+        return o.enumType
     }
 
     @JvmStatic

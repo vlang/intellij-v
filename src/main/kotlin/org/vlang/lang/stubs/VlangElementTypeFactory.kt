@@ -13,6 +13,7 @@ object VlangElementTypeFactory {
             put("CHANNEL_TYPE", VlangChannelTypeImpl::class.java)
             put("FUNCTION_TYPE", VlangFunctionTypeImpl::class.java)
             put("INTERFACE_TYPE", VlangInterfaceTypeImpl::class.java)
+            put("ENUM_TYPE", VlangEnumTypeImpl::class.java)
             put("MAP_TYPE", VlangMapTypeImpl::class.java)
             put("POINTER_TYPE", VlangPointerTypeImpl::class.java)
             put("STRUCT_TYPE", VlangStructTypeImpl::class.java)
@@ -29,6 +30,7 @@ object VlangElementTypeFactory {
     fun stubFactory(name: String): IStubElementType<*, *> {
 //        if ("CONST_DEFINITION" == name) return VlangConstDefinitionStubElementType(name)
         if ("FIELD_DEFINITION" == name) return VlangFieldDefinitionStubElementType(name)
+        if ("ENUM_FIELD_DEFINITION" == name) return VlangEnumFieldDefinitionStubElementType(name)
 //        if ("ANONYMOUS_FIELD_DEFINITION" == name) return VlangAnonymousFieldDefinitionStubElementType(name)
         if ("FUNCTION_DECLARATION" == name) return VlangFunctionDeclarationStubElementType(name)
         if ("METHOD_DECLARATION" == name) return VlangMethodDeclarationStubElementType(name)

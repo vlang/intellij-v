@@ -82,6 +82,11 @@ class VlangAnnotator : Annotator {
                 holder.textAttributes(element.getIdentifier(), DefaultLanguageHighlighterColors.CONSTANT)
                 return
             }
+
+            if (resolvedElement is VlangEnumFieldDefinition) {
+                holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.INSTANCE_FIELD_ATTRIBUTES)
+                return
+            }
         }
 
         if (element is VlangType) {
@@ -95,6 +100,10 @@ class VlangAnnotator : Annotator {
             holder.textAttributes(element, JavaHighlightingColors.INSTANCE_FIELD_ATTRIBUTES)
         }
 
+        if (element is VlangEnumFieldDefinition) {
+            holder.textAttributes(element, JavaHighlightingColors.INSTANCE_FIELD_ATTRIBUTES)
+        }
+
         if (element.elementType == VlangTypes.IDENTIFIER) {
             when (element.parent) {
                 is VlangInterfaceMethodDeclaration -> holder.textAttributes(element, JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES)
@@ -103,7 +112,6 @@ class VlangAnnotator : Annotator {
                 is VlangInterfaceDeclaration       -> holder.textAttributes(element, JavaHighlightingColors.INTERFACE_NAME_ATTRIBUTES)
                 is VlangEnumFieldDeclaration       -> holder.textAttributes(element, JavaHighlightingColors.STATIC_FINAL_FIELD_ATTRIBUTES)
                 is VlangStatement                  -> holder.textAttributes(element, JavaHighlightingColors.INTERFACE_NAME_ATTRIBUTES)
-                is VlangEnumFetch                  -> holder.textAttributes(element, JavaHighlightingColors.STATIC_FINAL_FIELD_ATTRIBUTES)
                 is VlangLabelRef                   -> holder.textAttributes(element, VlangHighlightingData.VLANG_LABEL)
                 is VlangParamDefinition            -> holder.textAttributes(element, JavaHighlightingColors.PARAMETER_ATTRIBUTES)
                 is VlangReceiver                   -> holder.textAttributes(element, JavaHighlightingColors.PARAMETER_ATTRIBUTES)

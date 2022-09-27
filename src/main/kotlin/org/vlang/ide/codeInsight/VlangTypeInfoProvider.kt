@@ -7,10 +7,7 @@ import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.SyntaxTraverser
 import com.intellij.psi.util.PsiTreeUtil
 import io.ktor.util.*
-import org.vlang.lang.psi.VlangFile
-import org.vlang.lang.psi.VlangFunctionOrMethodDeclaration
-import org.vlang.lang.psi.VlangStructType
-import org.vlang.lang.psi.VlangTypeOwner
+import org.vlang.lang.psi.*
 
 class VlangTypeInfoProvider : ExpressionTypeProvider<VlangTypeOwner>() {
     companion object {
@@ -21,6 +18,10 @@ class VlangTypeInfoProvider : ExpressionTypeProvider<VlangTypeOwner>() {
         val type = element.getType(null) ?: return UNKNOWN_TYPE
 
         if (type is VlangStructType) {
+            return type.identifier?.text ?: UNKNOWN_TYPE
+        }
+
+        if (type is VlangEnumType) {
             return type.identifier?.text ?: UNKNOWN_TYPE
         }
 

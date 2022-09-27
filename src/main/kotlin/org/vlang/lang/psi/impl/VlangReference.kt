@@ -185,9 +185,7 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
             val groups = typ.fieldsGroupList
             val fields = groups.flatMap { it.fieldDeclarationList }.flatMap { it.fieldDefinitionList }
 
-            for (d in fields) {
-                if (!processNamedElements(processor, state, fields, localResolve)) return false
-            }
+            if (!processNamedElements(processor, state, fields, localResolve)) return false
 
 //            val method = VlangNamesIndex.find("main", "", myElement.project, myElement.resolveScope, null)
 
@@ -206,6 +204,11 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
                 )
             ) return false
             if (!processCollectedRefs(structRefs, processor, state)) return false
+        }
+
+        if (typ is VlangEnumType) {
+            val fields = typ.enumFields?.enumFieldDeclarationList?.map { it.enumFieldDefinition } ?: emptyList()
+            if (!processNamedElements(processor, state, fields, localResolve)) return false
         }
 
         if (typ is VlangArrayOrSliceType) {
@@ -284,6 +287,30 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
         }
 
         val parent = myElement.parent
+        if (parent is VlangEnumFetch) {
+            if (parent.parent is VlangMatchArm) {
+                val parentMatch = parent.parentOfType<VlangMatchExpression>()
+                if (parentMatch != null) {
+                    val matchExpression = parentMatch.expression as? VlangReferenceExpression ?: return true
+                    return processQualifierExpression(file, matchExpression, processor, state)
+                }
+            }
+            if (parent.parent is VlangDefaultFieldValue) {
+                val fieldDeclaration = parent.parent.parent
+                if (fieldDeclaration is VlangFieldDeclaration) {
+                    // TODO: support multi fields
+                    val fieldDefinitionType = fieldDeclaration.type?.typeReferenceExpressionList?.firstOrNull() ?: return true
+                    return processQualifierExpression(file, fieldDefinitionType, processor, state)
+                }
+            }
+            val parentAssign = parent.parentOfType<VlangAssignmentStatement>()
+            if (parentAssign != null) {
+                // TODO: support multi assign
+                val assignExpression = parentAssign.leftHandExprList.expressionList.firstOrNull() as? VlangReferenceExpression ?: return true
+                return processQualifierExpression(file, assignExpression, processor, state)
+            }
+        }
+
 //        if (parent is VlangSelectorExpr) {
 //            val result: Boolean = processSelector(parent as VlangSelectorExpr, processor, state, myElement)
 //            if (processor.isCompletion()) return result

@@ -93,6 +93,17 @@ object VlangCompletionUtil {
         )
     }
 
+    fun createEnumFieldLookupElement(element: VlangNamedElement): LookupElement? {
+        val name = element.name
+        if (name.isNullOrEmpty()) {
+            return null
+        }
+        return createEnumFieldLookupElement(
+            element, name,
+            priority = FIELD_PRIORITY,
+        )
+    }
+
     fun createMethodLookupElement(element: VlangNamedElement): LookupElement? {
         val name = element.name
         if (name.isNullOrEmpty()) {
@@ -204,6 +215,18 @@ object VlangCompletionUtil {
         )
     }
 
+    private fun createEnumFieldLookupElement(
+        element: VlangNamedElement, lookupString: String,
+        insertHandler: InsertHandler<LookupElement>? = null,
+        priority: Int = 0,
+    ): LookupElement {
+        return PrioritizedLookupElement.withPriority(
+            LookupElementBuilder.createWithSmartPointer(lookupString, element)
+                .withRenderer(ENUM_FIELD_RENDERER)
+                .withInsertHandler(insertHandler), priority.toDouble()
+        )
+    }
+
     private fun createVariableLikeLookupElement(
         element: VlangNamedElement, lookupString: String,
         insertHandler: InsertHandler<LookupElement>? = null,
@@ -298,6 +321,21 @@ object VlangCompletionUtil {
             val valueText = elem.expression?.text
             p.tailText = " = $valueText"
             p.typeText = elem.expression?.getType(null)?.text
+        }
+    }
+
+    private val ENUM_FIELD_RENDERER = object : LookupElementRenderer<LookupElement>() {
+        override fun renderElement(element: LookupElement, p: LookupElementPresentation) {
+            val elem = element.psiElement as? VlangEnumFieldDefinition ?: return
+            p.icon = VIcons.Field
+            p.itemText = element.lookupString
+
+            val parent = elem.parent as? VlangEnumFieldDeclaration ?: return
+            val valueText = parent.expression?.text
+            if (valueText != null) {
+                p.tailText = " = $valueText"
+            }
+            p.typeText = parent.expression?.getType(null)?.text
         }
     }
 }

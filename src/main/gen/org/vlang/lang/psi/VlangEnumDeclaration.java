@@ -1,10 +1,11 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
 import com.intellij.psi.StubBasedPsiElement;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.stubs.VlangEnumDeclarationStub;
 
 public interface VlangEnumDeclaration extends VlangNamedElement, StubBasedPsiElement<VlangEnumDeclarationStub> {
@@ -12,28 +13,19 @@ public interface VlangEnumDeclaration extends VlangNamedElement, StubBasedPsiEle
   @Nullable
   VlangAttributes getAttributes();
 
-  @Nullable
-  VlangEnumFields getEnumFields();
-
-  @Nullable
-  VlangGenericDeclaration getGenericDeclaration();
+  @NotNull
+  VlangEnumType getEnumType();
 
   @Nullable
   VlangSymbolVisibility getSymbolVisibility();
 
-  @Nullable
-  PsiElement getLbrace();
-
-  @Nullable
-  PsiElement getRbrace();
-
   @NotNull
-  PsiElement getEnum();
+  String getName();
 
   @Nullable
   PsiElement getIdentifier();
 
   @NotNull
-  String getName();
+  VlangType getTypeInner(@Nullable ResolveState context);
 
 }

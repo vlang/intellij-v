@@ -5,15 +5,21 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface VlangEnumFieldDeclaration extends VlangCompositeElement {
+public interface VlangEnumType extends VlangType {
+
+  @Nullable
+  VlangEnumFields getEnumFields();
+
+  @Nullable
+  PsiElement getLbrace();
+
+  @Nullable
+  PsiElement getRbrace();
 
   @NotNull
-  VlangEnumFieldDefinition getEnumFieldDefinition();
+  PsiElement getEnum();
 
   @Nullable
-  VlangExpression getExpression();
-
-  @Nullable
-  PsiElement getAssign();
+  PsiElement getIdentifier();
 
 }

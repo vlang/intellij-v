@@ -82,7 +82,7 @@
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional|OrBlock)Expr")=BinaryExpr
   extends(".*(Expr|Literal|Lit|OperandName)|TypeInitExpr|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|SharedExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ErrorPropagationExpression|ForceNoErrorPropagationExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression|LockExpression|IncDecExpression")=Expression
 
-  implements("(Type|Import)Spec|(Var|Param|Field|Label|Var|Const)Definition|(Struct|TypeAlias|Union|Enum|Interface)Declaration|Receiver|FieldDefinition")="org.vlang.lang.psi.VlangNamedElement"
+  implements("(Type|Import)Spec|(Var|Param|Field|Label|Var|Const|EnumField)Definition|(Struct|TypeAlias|Union|Enum|Interface)Declaration|Receiver|FieldDefinition")="org.vlang.lang.psi.VlangNamedElement"
   implements("FunctionLit|(Function|Method)Declaration")="org.vlang.lang.psi.VlangSignatureOwner"
 //  implements("InterfaceMethodDeclaration")="org.vlang.lang.psi.VlangNamedSignatureOwner"
   implements("(Function|Method)Declaration")="org.vlang.lang.psi.VlangFunctionOrMethodDeclaration"
@@ -95,9 +95,9 @@
 
   extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
   extends("ModuleClause|Type")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
-  extends("(Struct|TypeAlias|Union|Enum|Interface)Declaration|(Var|Label|Param|Field|Const)Definition|Receiver")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
+  extends("(Struct|TypeAlias|Union|Enum|Interface)Declaration|(Var|Label|Param|Field|Const|EnumField)Definition|Receiver")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
 
-  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum|Interface)Declaration|.*Type|(Var|Label|Field|Param|Const)Definition|Receiver")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
+  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum|Interface)Declaration|.*Type|(Var|Label|Field|Param|Const|EnumField)Definition|Receiver")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
 
   extends(".*Statement")=Statement
   extends(".*Type|TypeList")=Type
@@ -397,14 +397,19 @@ AnonymousInterfaceDefinition ::= Type {
 
 
 // enum
-EnumDeclaration ::= Attributes? SymbolVisibility? enum identifier GenericDeclaration? '{' EnumFields? '}' {
-  pin=3
+EnumDeclaration ::= Attributes? SymbolVisibility? EnumType {
   stubClass="org.vlang.lang.stubs.VlangEnumDeclarationStub"
-  methods=[getName]
+  methods=[getName getIdentifier getTypeInner]
 }
-EnumFields ::= EnumFieldDeclaration (semi EnumFieldDeclaration)* semi?
-EnumFieldDeclaration ::= identifier ('=' Expression)? {pin=1}
 
+EnumType ::= enum identifier GenericDeclaration? '{' EnumFields? '}' {pin=1}
+
+EnumFields ::= EnumFieldDeclaration (semi EnumFieldDeclaration)* semi?
+EnumFieldDeclaration ::= EnumFieldDefinition ('=' Expression)? {pin=1}
+EnumFieldDefinition ::= identifier {
+//  methods=[getQualifier]
+  stubClass="org.vlang.lang.stubs.VlangEnumFieldDefinitionStub"
+}
 
 // union
 UnionDeclaration ::= Attributes? SymbolVisibility? union identifier GenericDeclaration? '{' FieldsGroup? '}' {
@@ -584,7 +589,7 @@ Type ::= (TypeLit | TypeName) GenericDeclaration? {
 //ParType ::= '(' Type ')' {methods=[getActualType]}
 
 private TypeName ::= TypeReferenceExpression ('.' TypeReferenceExpression)*
-TypeReferenceExpression ::= identifier { methods=[getReference getQualifier resolve resolveType] }
+TypeReferenceExpression ::= identifier { methods=[getReference getQualifier resolve getType] }
 
 private TypeLit ::=
     ArrayOrSliceType
@@ -722,7 +727,7 @@ ForceNoErrorPropagationExpression ::= Expression '!' {pin=1}
 UnpackingExpression ::= '...' Expression {pin=1}
 
 // .<ident>
-EnumFetch ::= '.' identifier {pin=2}
+EnumFetch ::= '.' ReferenceExpression {pin=2}
 
 // <expr>..<expr>
 // <expr>...<expr> (inclusive)

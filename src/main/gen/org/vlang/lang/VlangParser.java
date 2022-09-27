@@ -38,9 +38,9 @@ public class VlangParser implements PsiParser, LightPsiParser {
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
     create_token_set_(RANGE_CLAUSE, VAR_DECLARATION),
-    create_token_set_(ARRAY_OR_SLICE_TYPE, CHANNEL_TYPE, FUNCTION_TYPE, INTERFACE_TYPE,
-      MAP_TYPE, NOT_NULLABLE_TYPE, NULLABLE_TYPE, POINTER_TYPE,
-      STRUCT_TYPE, TYPE),
+    create_token_set_(ARRAY_OR_SLICE_TYPE, CHANNEL_TYPE, ENUM_TYPE, FUNCTION_TYPE,
+      INTERFACE_TYPE, MAP_TYPE, NOT_NULLABLE_TYPE, NULLABLE_TYPE,
+      POINTER_TYPE, STRUCT_TYPE, TYPE),
     create_token_set_(ASM_BLOCK_STATEMENT, ASSERT_STATEMENT, ASSIGNMENT_STATEMENT, BREAK_STATEMENT,
       COMPILE_ELSE_STATEMENT, COMPILE_TIME_FOR_STATEMENT, COMPILE_TIME_IF_STATEMENT, CONTINUE_STATEMENT,
       C_FLAG_STATEMENT, C_INCLUDE_STATEMENT, DEFER_STATEMENT, ELSE_STATEMENT,
@@ -962,21 +962,16 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Attributes? SymbolVisibility? enum identifier GenericDeclaration? '{' EnumFields? '}'
+  // Attributes? SymbolVisibility? EnumType
   public static boolean EnumDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "EnumDeclaration")) return false;
-    boolean r, p;
+    boolean r;
     Marker m = enter_section_(b, l, _NONE_, ENUM_DECLARATION, "<enum declaration>");
     r = EnumDeclaration_0(b, l + 1);
     r = r && EnumDeclaration_1(b, l + 1);
-    r = r && consumeTokens(b, 1, ENUM, IDENTIFIER);
-    p = r; // pin = 3
-    r = r && report_error_(b, EnumDeclaration_4(b, l + 1));
-    r = p && report_error_(b, consumeToken(b, LBRACE)) && r;
-    r = p && report_error_(b, EnumDeclaration_6(b, l + 1)) && r;
-    r = p && consumeToken(b, RBRACE) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+    r = r && EnumType(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
   }
 
   // Attributes?
@@ -993,28 +988,14 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // GenericDeclaration?
-  private static boolean EnumDeclaration_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "EnumDeclaration_4")) return false;
-    GenericDeclaration(b, l + 1);
-    return true;
-  }
-
-  // EnumFields?
-  private static boolean EnumDeclaration_6(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "EnumDeclaration_6")) return false;
-    EnumFields(b, l + 1);
-    return true;
-  }
-
   /* ********************************************************** */
-  // identifier ('=' Expression)?
+  // EnumFieldDefinition ('=' Expression)?
   public static boolean EnumFieldDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "EnumFieldDeclaration")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, ENUM_FIELD_DECLARATION, null);
-    r = consumeToken(b, IDENTIFIER);
+    r = EnumFieldDefinition(b, l + 1);
     p = r; // pin = 1
     r = r && EnumFieldDeclaration_1(b, l + 1);
     exit_section_(b, l, m, r, p, null);
@@ -1036,6 +1017,18 @@ public class VlangParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, ASSIGN);
     r = r && Expression(b, l + 1, -1);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // identifier
+  public static boolean EnumFieldDefinition(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "EnumFieldDefinition")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, IDENTIFIER);
+    exit_section_(b, m, ENUM_FIELD_DEFINITION, r);
     return r;
   }
 
@@ -1079,6 +1072,37 @@ public class VlangParser implements PsiParser, LightPsiParser {
   private static boolean EnumFields_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "EnumFields_2")) return false;
     semi(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // enum identifier GenericDeclaration? '{' EnumFields? '}'
+  public static boolean EnumType(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "EnumType")) return false;
+    if (!nextTokenIs(b, ENUM)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, ENUM_TYPE, null);
+    r = consumeTokens(b, 1, ENUM, IDENTIFIER);
+    p = r; // pin = 1
+    r = r && report_error_(b, EnumType_2(b, l + 1));
+    r = p && report_error_(b, consumeToken(b, LBRACE)) && r;
+    r = p && report_error_(b, EnumType_4(b, l + 1)) && r;
+    r = p && consumeToken(b, RBRACE) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // GenericDeclaration?
+  private static boolean EnumType_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "EnumType_2")) return false;
+    GenericDeclaration(b, l + 1);
+    return true;
+  }
+
+  // EnumFields?
+  private static boolean EnumType_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "EnumType_4")) return false;
+    EnumFields(b, l + 1);
     return true;
   }
 
@@ -4710,7 +4734,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // 19: POSTFIX(AsExpression)
   // 20: ATOM(ReferenceExpression) POSTFIX(CallExpr) POSTFIX(IndexOrSliceExpr) ATOM(Literal)
   //    ATOM(FunctionLit)
-  // 21: ATOM(EnumFetch)
+  // 21: PREFIX(EnumFetch)
   // 22: PREFIX(MutExpression)
   // 23: PREFIX(SharedExpression)
   // 24: POSTFIX(DotExpression)
@@ -5209,15 +5233,16 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // '.' identifier
   public static boolean EnumFetch(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "EnumFetch")) return false;
     if (!nextTokenIsSmart(b, DOT)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokensSmart(b, 2, DOT, IDENTIFIER);
-    exit_section_(b, m, ENUM_FETCH, r);
-    return r;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = consumeTokenSmart(b, DOT);
+    p = r;
+    r = p && Expression(b, l, 19);
+    exit_section_(b, l, m, ENUM_FETCH, r, p, null);
+    return r || p;
   }
 
   public static boolean MutExpression(PsiBuilder b, int l) {
