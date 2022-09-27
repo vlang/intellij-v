@@ -53,6 +53,21 @@ class VlangAnnotator : Annotator {
                 return
             }
 
+            if (resolvedElement is VlangEnumDeclaration) {
+                holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.ENUM_NAME_ATTRIBUTES)
+                return
+            }
+
+            if (resolvedElement is VlangUnionDeclaration) {
+                holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.CLASS_NAME_ATTRIBUTES)
+                return
+            }
+
+            if (resolvedElement is VlangInterfaceDeclaration) {
+                holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.INTERFACE_NAME_ATTRIBUTES)
+                return
+            }
+
             if (resolvedElement is VlangParamDefinition) {
                 holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.PARAMETER_ATTRIBUTES)
                 return

@@ -126,6 +126,9 @@ object VlangCompletionUtil {
     fun createEnumLookupElement(element: VlangNamedElement): LookupElement? =
         createLookupElement(element, AllIcons.Nodes.Enum, STRUCT_PRIORITY)
 
+    fun createInterfaceLookupElement(element: VlangNamedElement): LookupElement? =
+        createLookupElement(element, AllIcons.Nodes.Interface, STRUCT_PRIORITY)
+
     fun createTypeAliasLookupElement(element: VlangNamedElement): LookupElement? =
         createLookupElement(element, AllIcons.Nodes.Alias, TYPE_ALIAS_PRIORITY)
 

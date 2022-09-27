@@ -340,7 +340,7 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitInterfaceDeclaration(@NotNull VlangInterfaceDeclaration o) {
-    visitCompositeElement(o);
+    visitNamedElement(o);
   }
 
   public void visitInterfaceFieldDeclaration(@NotNull VlangInterfaceFieldDeclaration o) {

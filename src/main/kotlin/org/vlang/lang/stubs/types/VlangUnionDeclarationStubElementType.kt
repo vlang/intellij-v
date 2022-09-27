@@ -4,6 +4,7 @@ import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.stubs.StubIndexKey
 import com.intellij.psi.stubs.StubInputStream
 import com.intellij.psi.stubs.StubOutputStream
+import com.intellij.util.ArrayFactory
 import com.intellij.util.containers.ContainerUtil
 import org.vlang.lang.psi.VlangNamedElement
 import org.vlang.lang.psi.VlangUnionDeclaration
@@ -40,5 +41,10 @@ class VlangUnionDeclarationStubElementType(name: String) :
     companion object {
         private val EXTRA_KEYS: ArrayList<StubIndexKey<String, out VlangNamedElement>> =
             ContainerUtil.newArrayList(VlangUnionIndex.KEY)
+
+        private val EMPTY_ARRAY: Array<VlangUnionDeclaration?> = arrayOfNulls(0)
+        val ARRAY_FACTORY = ArrayFactory<VlangUnionDeclaration> { count: Int ->
+            if (count == 0) EMPTY_ARRAY else arrayOfNulls<VlangUnionDeclaration>(count)
+        }
     }
 }

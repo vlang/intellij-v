@@ -397,6 +397,36 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
         if (!processNamedElements(
                 processor,
                 state,
+                file.getUnions(),
+                Conditions.alwaysTrue(),
+                localProcessing,
+                false
+            )
+        ) return false
+
+        if (!processNamedElements(
+                processor,
+                state,
+                file.getEnums(),
+                Conditions.alwaysTrue(),
+                localProcessing,
+                false
+            )
+        ) return false
+
+        if (!processNamedElements(
+                processor,
+                state,
+                file.getInterfaces(),
+                Conditions.alwaysTrue(),
+                localProcessing,
+                false
+            )
+        ) return false
+
+        if (!processNamedElements(
+                processor,
+                state,
                 file.getConstants(),
                 Conditions.alwaysTrue(),
                 localProcessing,

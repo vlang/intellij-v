@@ -2,12 +2,19 @@
 package org.vlang.lang.psi.impl;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.stubs.IStubElementType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.*;
+import org.vlang.lang.stubs.VlangInterfaceDeclarationStub;
 
-public class VlangInterfaceDeclarationImpl extends VlangCompositeElementImpl implements VlangInterfaceDeclaration {
+public class VlangInterfaceDeclarationImpl extends VlangNamedElementImpl<VlangInterfaceDeclarationStub> implements VlangInterfaceDeclaration {
+
+  public VlangInterfaceDeclarationImpl(@NotNull VlangInterfaceDeclarationStub stub, @NotNull IStubElementType<?, ?> type) {
+    super(stub, type);
+  }
 
   public VlangInterfaceDeclarationImpl(@NotNull ASTNode node) {
     super(node);
@@ -32,7 +39,7 @@ public class VlangInterfaceDeclarationImpl extends VlangCompositeElementImpl imp
   @Override
   @NotNull
   public VlangInterfaceType getInterfaceType() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangInterfaceType.class));
+    return notNullChild(VlangPsiTreeUtil.getStubChildOfType(this, VlangInterfaceType.class));
   }
 
   @Override
@@ -45,6 +52,12 @@ public class VlangInterfaceDeclarationImpl extends VlangCompositeElementImpl imp
   @NotNull
   public String getName() {
     return VlangPsiImplUtil.getName(this);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getIdentifier() {
+    return VlangPsiImplUtil.getIdentifier(this);
   }
 
 }

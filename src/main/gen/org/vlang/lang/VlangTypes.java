@@ -91,7 +91,7 @@ public interface VlangTypes {
   IElementType IMPORT_SPEC = new VlangCompositeElementType("IMPORT_SPEC");
   IElementType INC_DEC_EXPRESSION = new VlangCompositeElementType("INC_DEC_EXPRESSION");
   IElementType INDEX_OR_SLICE_EXPR = new VlangCompositeElementType("INDEX_OR_SLICE_EXPR");
-  IElementType INTERFACE_DECLARATION = new VlangCompositeElementType("INTERFACE_DECLARATION");
+  IElementType INTERFACE_DECLARATION = VlangElementTypeFactory.stubFactory("INTERFACE_DECLARATION");
   IElementType INTERFACE_FIELD_DECLARATION = new VlangCompositeElementType("INTERFACE_FIELD_DECLARATION");
   IElementType INTERFACE_METHOD_DECLARATION = new VlangCompositeElementType("INTERFACE_METHOD_DECLARATION");
   IElementType INTERFACE_TYPE = VlangElementTypeFactory.stubFactory("INTERFACE_TYPE");

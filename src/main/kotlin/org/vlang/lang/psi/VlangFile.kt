@@ -14,9 +14,7 @@ import org.vlang.lang.VlangLanguage
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.impl.VlangPsiImplUtil
 import org.vlang.lang.stubs.VlangFileStub
-import org.vlang.lang.stubs.types.VlangFunctionDeclarationStubElementType
-import org.vlang.lang.stubs.types.VlangMethodDeclarationStubElementType
-import org.vlang.lang.stubs.types.VlangStructDeclarationStubElementType
+import org.vlang.lang.stubs.types.*
 
 class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, VlangLanguage.INSTANCE), PsiImportHolder, PsiClassOwner {
 
@@ -127,6 +125,15 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
 
     fun getStructs(): List<VlangStructDeclaration> =
         getNamedElements(VlangTypes.STRUCT_DECLARATION, VlangStructDeclarationStubElementType.ARRAY_FACTORY)
+
+    fun getUnions(): List<VlangUnionDeclaration> =
+        getNamedElements(VlangTypes.UNION_DECLARATION, VlangUnionDeclarationStubElementType.ARRAY_FACTORY)
+
+    fun getEnums(): List<VlangEnumDeclaration> =
+        getNamedElements(VlangTypes.ENUM_DECLARATION, VlangEnumDeclarationStubElementType.ARRAY_FACTORY)
+
+    fun getInterfaces(): List<VlangInterfaceDeclaration> =
+        getNamedElements(VlangTypes.INTERFACE_DECLARATION, VlangInterfaceDeclarationStubElementType.ARRAY_FACTORY)
 
     fun getConstants(): List<VlangConstDefinition> {
         val value = {
