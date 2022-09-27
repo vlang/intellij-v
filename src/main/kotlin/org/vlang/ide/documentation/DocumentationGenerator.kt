@@ -184,7 +184,7 @@ object DocumentationGenerator {
         }
     }
 
-    private fun VlangReceiver.generateDoc(): String {
+    private fun VlangReceiver.generateMethodDoc(): String {
         return buildString {
             append("(")
             appendNotNull(varModifiers?.generateDoc())
@@ -205,7 +205,7 @@ object DocumentationGenerator {
             generateSymbolVisibilityDoc(getSymbolVisibility())
 
             if (this@generateDoc is VlangMethodDeclaration) {
-                part(receiver.generateDoc())
+                part(receiver.generateMethodDoc())
             }
 
             part("fn", asKeyword)
@@ -268,7 +268,7 @@ object DocumentationGenerator {
             generateModuleName(containingFile)
             append(DocumentationMarkup.DEFINITION_START)
             line(attributes?.generateDoc())
-            generateSymbolVisibilityDoc(symbolVisibility)
+            generateSymbolVisibilityDoc(getSymbolVisibility())
 
             part("interface", asKeyword)
             colorize(name, asDeclaration)
@@ -310,6 +310,24 @@ object DocumentationGenerator {
             }
             part(name, asDeclaration)
             append(type?.generateDoc() ?: DocumentationUtils.colorize("unknown", asDeclaration))
+            append(DocumentationMarkup.DEFINITION_END)
+
+            generateCommentsPart(this@generateDoc)
+        }
+    }
+
+    fun VlangReceiver.generateDoc(): String {
+        return buildString {
+            generateModuleName(containingFile)
+            append(DocumentationMarkup.DEFINITION_START)
+
+            val modifiersDoc = varModifiers?.generateDoc()
+            if (!modifiersDoc.isNullOrEmpty()) {
+                append(modifiersDoc)
+            }
+            part("receiver", asKeyword)
+            part(name, asDeclaration)
+            append(type.generateDoc())
             append(DocumentationMarkup.DEFINITION_END)
 
             generateCommentsPart(this@generateDoc)
