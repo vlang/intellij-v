@@ -1,8 +1,13 @@
+
+<p align="center">
+<img width="300" src="src/main/resources/icons/vl.svg">
+</p>
+
 ![Build](https://github.com/i582/vlang-idea/workflows/Build/badge.svg)
 [![Version](https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
 
-# <img src="src/main/resources/META-INF/pluginIcon.svg"> V language plugin for JetBrains IDEs
+# V language plugin for JetBrains IDEs
 
 ## About
 
@@ -25,5 +30,5 @@ This plugin adds support of [V](https://vlang.io) language to JetBrains IDEs.
 
 ## License
 
-This project is under the **MIT License**. See the [LICENSE](https://github.com/VKCOM/admstorm/blob/master/LICENSE) file
+This project is under the **MIT License**. See the [LICENSE](https://github.com/i582/vlang-idea/blob/master/LICENSE) file
 for the full license text.
