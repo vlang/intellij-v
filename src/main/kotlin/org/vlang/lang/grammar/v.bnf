@@ -87,7 +87,7 @@
 //  implements("InterfaceMethodDeclaration")="org.vlang.lang.psi.VlangNamedSignatureOwner"
   implements("(Function|Method)Declaration")="org.vlang.lang.psi.VlangFunctionOrMethodDeclaration"
 //  implements("(Const|Type|Var)Declaration")="org.vlang.lang.psi.GoTopLevelDeclaration"
-  implements(".*ReferenceExpression|FieldName|ImportPath")="org.vlang.lang.psi.VlangReferenceExpressionBase"
+  implements(".*ReferenceExpression|FieldName|ImportPath|DotExpression")="org.vlang.lang.psi.VlangReferenceExpressionBase"
 //  implements("Type")="org.vlang.lang.psi.VlangReferenceExpressionBase"
   implements("(Continue|Break|Goto)Statement")="org.vlang.lang.psi.VlangLabelRefOwnerElement"
 
@@ -436,10 +436,10 @@ ConstDeclaration ::= SymbolVisibility? const ( ConstDefinition | '(' ConstDefini
 // <spec> [<spec2>]
 private ConstDefinitions ::= ConstDefinition (semi ConstDefinition)* semi? {pin=1}
 // <list> = <list>
-ConstDefinition ::= identifier '=' Expression {
+ConstDefinition ::= identifier '=' (<<withOff Expression "BLOCK?">> | (!() Expression)) {
   pin=2
   stubClass="org.vlang.lang.stubs.VlangConstDefinitionStub"
-  methods=[deleteDefinition getName]
+  methods=[deleteDefinition getName getSymbolVisibility]
 }
 
 // TODO: when const declaration will support multiple assign
@@ -682,7 +682,11 @@ VarDefinition ::= VarModifiers? identifier {
 }
 
 // <expr>.<ident>[(...)]
-DotExpression ::= Expression '.' MethodOrField {pin=2}
+DotExpression ::= Expression '.' MethodOrField {
+  pin=2
+  methods=[getIdentifier getQualifier resolve getReference]
+  implements="org.vlang.lang.psi.VlangReferenceExpression"
+}
 
 private MethodOrField ::= MethodCall | FieldLookup
 // just <ident>

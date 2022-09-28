@@ -25,4 +25,7 @@ public interface VlangConstDefinition extends VlangNamedElement, StubBasedPsiEle
   @NotNull
   String getName();
 
+  @Nullable
+  VlangSymbolVisibility getSymbolVisibility();
+
 }

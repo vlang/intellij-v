@@ -4,8 +4,9 @@ package org.vlang.lang.psi;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.vlang.lang.psi.impl.VlangReference;
 
-public interface VlangDotExpression extends VlangExpression {
+public interface VlangDotExpression extends VlangExpression, VlangReferenceExpression, VlangReferenceExpressionBase {
 
   @NotNull
   VlangExpression getExpression();
@@ -18,5 +19,17 @@ public interface VlangDotExpression extends VlangExpression {
 
   @NotNull
   PsiElement getDot();
+
+  @Nullable
+  PsiElement getIdentifier();
+
+  @Nullable
+  VlangReferenceExpression getQualifier();
+
+  @Nullable
+  PsiElement resolve();
+
+  @NotNull
+  VlangReference getReference();
 
 }

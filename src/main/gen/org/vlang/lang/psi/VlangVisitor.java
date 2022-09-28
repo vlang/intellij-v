@@ -158,6 +158,8 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitDotExpression(@NotNull VlangDotExpression o) {
     visitExpression(o);
+    // visitReferenceExpression(o);
+    // visitReferenceExpressionBase(o);
   }
 
   public void visitElement(@NotNull VlangElement o) {

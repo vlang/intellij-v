@@ -10,6 +10,7 @@ import com.intellij.openapi.util.text.StringUtil
 import com.intellij.psi.*
 import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.util.*
+import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.*
 import org.vlang.sdk.VlangSdkUtil
 
@@ -105,8 +106,29 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getReference(o: VlangDotExpression): VlangReference {
+        return VlangReference(o)
+    }
+
+    @JvmStatic
+    fun getIdentifier(o: VlangDotExpression): PsiElement? {
+        return o.fieldLookup?.referenceExpression?.getIdentifier() ?: o.methodCall?.referenceExpression?.getIdentifier()
+    }
+
+    @JvmStatic
+    fun getQualifier(o: VlangDotExpression): VlangReferenceExpression? {
+        return o.expression as? VlangReferenceExpression
+    }
+
+    @JvmStatic
     fun getQualifier(o: VlangReferenceExpression): VlangReferenceExpression? {
-        val parentDot = o.parentOfType<VlangDotExpression>() ?: return null
+        val parent = o.parent
+        val parentDot = when (parent) {
+            is VlangFieldLookup -> parent.parent
+            is VlangMethodCall  -> parent.parent
+            else                -> o.parent
+        } as? VlangDotExpression ?: return null
+
         val qualifier = parentDot.expression as? VlangReferenceExpression
         if (qualifier == o) {
             return null
@@ -117,7 +139,14 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getQualifier(o: VlangTypeReferenceExpression): VlangTypeReferenceExpression? {
-        return PsiTreeUtil.getChildOfType(o, VlangTypeReferenceExpression::class.java)
+        val sibling = PsiTreeUtil.findSiblingBackward(o, VlangTypes.TYPE_REFERENCE_EXPRESSION, null)
+        // TODO
+        val qualifier = sibling as? VlangTypeReferenceExpression
+        if (qualifier == o) {
+            return null
+        }
+
+        return qualifier
     }
 
     @JvmStatic
@@ -159,7 +188,12 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun resolve(o: VlangReferenceExpression): PsiElement? {
-        return o.getReference().resolve()
+        return o.reference.resolve()
+    }
+
+    @JvmStatic
+    fun resolve(o: VlangDotExpression): PsiElement? {
+        return o.reference.resolve()
     }
 
     @JvmStatic
@@ -332,6 +366,11 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun getSymbolVisibility(o: VlangVarDefinition): VlangSymbolVisibility? {
         return null
+    }
+
+    @JvmStatic
+    fun getSymbolVisibility(o: VlangConstDefinition): VlangSymbolVisibility? {
+        return (o.parent as? VlangConstDeclaration)?.symbolVisibility
     }
 
     @JvmStatic

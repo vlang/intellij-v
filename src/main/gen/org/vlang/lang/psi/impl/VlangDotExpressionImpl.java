@@ -51,4 +51,28 @@ public class VlangDotExpressionImpl extends VlangExpressionImpl implements Vlang
     return notNullChild(findChildByType(DOT));
   }
 
+  @Override
+  @Nullable
+  public PsiElement getIdentifier() {
+    return VlangPsiImplUtil.getIdentifier(this);
+  }
+
+  @Override
+  @Nullable
+  public VlangReferenceExpression getQualifier() {
+    return VlangPsiImplUtil.getQualifier(this);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement resolve() {
+    return VlangPsiImplUtil.resolve(this);
+  }
+
+  @Override
+  @NotNull
+  public VlangReference getReference() {
+    return VlangPsiImplUtil.getReference(this);
+  }
+
 }

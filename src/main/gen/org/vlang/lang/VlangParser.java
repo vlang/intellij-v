@@ -825,7 +825,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier '=' Expression
+  // identifier '=' (<<withOff Expression "BLOCK?">> | (!() Expression))
   public static boolean ConstDefinition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ConstDefinition")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
@@ -833,9 +833,46 @@ public class VlangParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, CONST_DEFINITION, null);
     r = consumeTokens(b, 2, IDENTIFIER, ASSIGN);
     p = r; // pin = 2
-    r = r && Expression(b, l + 1, -1);
+    r = r && ConstDefinition_2(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
+  }
+
+  // <<withOff Expression "BLOCK?">> | (!() Expression)
+  private static boolean ConstDefinition_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ConstDefinition_2")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = withOff(b, l + 1, Expression_parser_, "BLOCK?");
+    if (!r) r = ConstDefinition_2_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // !() Expression
+  private static boolean ConstDefinition_2_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ConstDefinition_2_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = ConstDefinition_2_1_0(b, l + 1);
+    r = r && Expression(b, l + 1, -1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // !()
+  private static boolean ConstDefinition_2_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ConstDefinition_2_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NOT_);
+    r = !ConstDefinition_2_1_0_0(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // ()
+  private static boolean ConstDefinition_2_1_0_0(PsiBuilder b, int l) {
+    return true;
   }
 
   /* ********************************************************** */
@@ -5439,4 +5476,5 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
+  static final Parser Expression_parser_ = (b, l) -> Expression(b, l + 1, -1);
 }

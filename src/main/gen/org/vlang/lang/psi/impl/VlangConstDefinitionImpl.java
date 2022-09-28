@@ -7,10 +7,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.stubs.IStubElementType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.vlang.lang.psi.VlangConstDefinition;
-import org.vlang.lang.psi.VlangExpression;
-import org.vlang.lang.psi.VlangPsiTreeUtil;
-import org.vlang.lang.psi.VlangVisitor;
+import org.vlang.lang.psi.*;
 import org.vlang.lang.stubs.VlangConstDefinitionStub;
 
 import static org.vlang.lang.VlangTypes.ASSIGN;
@@ -58,6 +55,12 @@ public class VlangConstDefinitionImpl extends VlangNamedElementImpl<VlangConstDe
   @NotNull
   public String getName() {
     return VlangPsiImplUtil.getName(this);
+  }
+
+  @Override
+  @Nullable
+  public VlangSymbolVisibility getSymbolVisibility() {
+    return VlangPsiImplUtil.getSymbolVisibility(this);
   }
 
 }
