@@ -20,6 +20,11 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun isDefinition(o: VlangFunctionDeclaration): Boolean {
+        return o.getBlock() == null
+    }
+
+    @JvmStatic
     fun getIdentifier(o: VlangMethodDeclaration): PsiElement? {
         return o.methodName.identifier
     }

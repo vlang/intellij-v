@@ -474,7 +474,7 @@ GenericName ::= identifier {
 FunctionDeclaration ::= Attributes? SymbolVisibility? fn identifier GenericDeclaration? Signature BlockWithConsume? {
   pin=4
   stubClass="org.vlang.lang.stubs.VlangFunctionDeclarationStub"
-  methods=[getName]
+  methods=[getName isDefinition]
 }
 
 MethodDeclaration ::= Attributes? SymbolVisibility? fn '(' Receiver ')' MethodName GenericDeclaration? Signature BlockWithConsume? {
@@ -554,7 +554,7 @@ KeyValue ::= (Literal | ReferenceExpression) ':' Expression {pin=1}
 // <type> {...}
 LiteralValueExpression ::= Type (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">>) '{' ElementList? '}' {pin=3}
 private ElementList ::= ElementInner ((',' | semi) ElementInner?)*
-private ElementInner ::= <<withOn "PAR" Element>> | (!() Element) {recoverWhile=ElementInnerRecover}
+private ElementInner ::= Element | (!() Element) {recoverWhile=ElementInnerRecover}
 private ElementInnerRecover ::= !('}' | ',' | semi | ')')
 Element ::= First [':' Value]  {pin(".*")=1}
 private First ::= Key | <<keyOrValueExpression>>

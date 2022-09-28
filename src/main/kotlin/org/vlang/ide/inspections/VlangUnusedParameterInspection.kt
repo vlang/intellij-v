@@ -16,6 +16,10 @@ class VlangUnusedParameterInspection : VlangBaseInspection() {
             }
 
             override fun visitFunctionDeclaration(o: VlangFunctionDeclaration) {
+                if (o.isDefinition) {
+                    return
+                }
+
                 super.visitFunctionDeclaration(o)
                 visitDeclaration(o, true)
             }

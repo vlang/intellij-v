@@ -961,12 +961,12 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // <<withOn "PAR" Element>> | (!() Element)
+  // Element | (!() Element)
   static boolean ElementInner(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ElementInner")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_);
-    r = withOn(b, l + 1, "PAR", VlangParser::Element);
+    r = Element(b, l + 1);
     if (!r) r = ElementInner_1(b, l + 1);
     exit_section_(b, l, m, r, false, VlangParser::ElementInnerRecover);
     return r;
