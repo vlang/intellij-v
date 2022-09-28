@@ -1938,9 +1938,8 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // GenericName (',' GenericName)*
   public static boolean GenericDeclarationList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "GenericDeclarationList")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, GENERIC_DECLARATION_LIST, null);
+    Marker m = enter_section_(b, l, _NONE_, GENERIC_DECLARATION_LIST, "<generic declaration list>");
     r = GenericName(b, l + 1);
     p = r; // pin = 1
     r = r && GenericDeclarationList_1(b, l + 1);
@@ -1972,18 +1971,31 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier {
+  // DotExpression | ReferenceExpression {
   // //  stubClass="org.vlang.lang.stubs.GoGenericNameStub"
   // //  methods=[getName]
   // }
   public static boolean GenericName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "GenericName")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, GENERIC_NAME, "<generic name>");
+    r = Expression(b, l + 1, 23);
+    if (!r) r = GenericName_1(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // ReferenceExpression {
+  // //  stubClass="org.vlang.lang.stubs.GoGenericNameStub"
+  // //  methods=[getName]
+  // }
+  private static boolean GenericName_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GenericName_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, IDENTIFIER);
-    r = r && GenericName_1(b, l + 1);
-    exit_section_(b, m, GENERIC_NAME, r);
+    r = ReferenceExpression(b, l + 1);
+    r = r && GenericName_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -1991,7 +2003,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // //  stubClass="org.vlang.lang.stubs.GoGenericNameStub"
   // //  methods=[getName]
   // }
-  private static boolean GenericName_1(PsiBuilder b, int l) {
+  private static boolean GenericName_1_1(PsiBuilder b, int l) {
     return true;
   }
 

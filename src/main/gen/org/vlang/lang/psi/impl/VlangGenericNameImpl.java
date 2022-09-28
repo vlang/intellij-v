@@ -1,14 +1,13 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import org.jetbrains.annotations.NotNull;
+import org.vlang.lang.psi.VlangExpression;
+import org.vlang.lang.psi.VlangGenericName;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
-import static org.vlang.lang.VlangTypes.*;
-import org.vlang.lang.psi.*;
+import org.vlang.lang.psi.VlangVisitor;
 
 public class VlangGenericNameImpl extends VlangCompositeElementImpl implements VlangGenericName {
 
@@ -28,8 +27,8 @@ public class VlangGenericNameImpl extends VlangCompositeElementImpl implements V
 
   @Override
   @NotNull
-  public PsiElement getIdentifier() {
-    return notNullChild(findChildByType(IDENTIFIER));
+  public VlangExpression getExpression() {
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class));
   }
 
 }

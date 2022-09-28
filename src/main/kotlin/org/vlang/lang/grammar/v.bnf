@@ -466,7 +466,7 @@ GenericDeclaration ::= '<' GenericDeclarationList '>'
 
 GenericDeclarationList ::= GenericName (',' GenericName)*
 
-GenericName ::= identifier {
+GenericName ::= DotExpression | ReferenceExpression {
 //  stubClass="org.vlang.lang.stubs.GoGenericNameStub"
 //  methods=[getName]
 }
