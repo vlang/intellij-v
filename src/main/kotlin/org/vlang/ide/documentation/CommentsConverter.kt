@@ -3,10 +3,7 @@ package org.vlang.ide.documentation
 import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
-import org.vlang.lang.psi.VlangConstDefinition
-import org.vlang.lang.psi.VlangTokenTypes
-import org.vlang.lang.psi.VlangTypeAliasDeclaration
-import org.vlang.lang.psi.VlangVarDefinition
+import org.vlang.lang.psi.*
 
 object CommentsConverter {
     fun toHtml(comments: List<PsiComment>): String {
@@ -43,6 +40,9 @@ object CommentsConverter {
     private fun getCommentsInner(element: PsiElement?): List<PsiComment> {
         if (element == null) {
             return emptyList()
+        }
+        if (element is VlangFieldDefinition) {
+            return getCommentsInner(element.parent)
         }
         val result = mutableListOf<PsiComment>()
         var e: PsiElement?

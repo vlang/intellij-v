@@ -5,6 +5,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.util.elementType
+import com.intellij.psi.util.parentOfType
 import io.ktor.util.*
 import org.vlang.ide.documentation.DocumentationUtils.appendNotNull
 import org.vlang.ide.documentation.DocumentationUtils.asAttribute
@@ -102,6 +103,30 @@ object DocumentationGenerator {
         }
 
         return sb.toString()
+    }
+
+    private fun VlangMemberModifiers?.generateDoc(): String {
+        val isMutable = this?.memberModifierList?.find { it.text == "mut" } != null
+        val isPublic = this?.memberModifierList?.find { it.text == "pub" } != null
+        val isShared = this?.memberModifierList?.find { it.text == "shared" } != null
+        val isGlobal = this?.memberModifierList?.find { it.text == "__global" } != null
+
+        return buildString {
+            if (isPublic) {
+                part("public", asKeyword)
+            } else {
+                part("private", asKeyword)
+            }
+            if (isMutable) {
+                part("mutable", asKeyword)
+            }
+            if (isShared) {
+                part("shared", asKeyword)
+            }
+            if (isGlobal) {
+                part("global", asKeyword)
+            }
+        }
     }
 
     private fun VlangSymbolVisibility.generateDoc(): String {
@@ -311,6 +336,39 @@ object DocumentationGenerator {
             append(type?.generateDoc() ?: DocumentationUtils.colorize("unknown", asDeclaration))
             append(DocumentationMarkup.DEFINITION_END)
 
+            generateCommentsPart(this@generateDoc)
+        }
+    }
+
+    fun VlangFieldDefinition.generateDoc(): String {
+        return buildString {
+            generateModuleName(containingFile)
+            append(DocumentationMarkup.DEFINITION_START)
+            val parent = parent as? VlangFieldDeclaration
+            val parentGroup = parent?.parent as? VlangFieldsGroup
+            val parentStruct = parent?.parentOfType<VlangStructDeclaration>()
+            val type = parent?.type
+
+            line(parent?.attribute?.generateDoc())
+
+            val modifiersDoc = parentGroup?.memberModifiers.generateDoc()
+            if (modifiersDoc.isNotEmpty()) {
+                append(modifiersDoc)
+            }
+
+            part("field", asKeyword)
+            colorize(parentStruct?.name ?: "anon", asDeclaration)
+            append(".")
+            part(name, asDeclaration)
+            append(type?.generateDoc() ?: DocumentationUtils.colorize("unknown", asDeclaration))
+
+            val valueDoc = parent?.defaultFieldValue?.expression?.generateDoc()
+            if (valueDoc != null) {
+                part(" =")
+                append(valueDoc)
+            }
+
+            append(DocumentationMarkup.DEFINITION_END)
             generateCommentsPart(this@generateDoc)
         }
     }

@@ -21,6 +21,7 @@ class VlangDocumentationProvider : AbstractDocumentationProvider() {
             is VlangUnionDeclaration            -> return element.generateDoc()
             is VlangConstDefinition             -> return element.generateDoc()
             is VlangVarDefinition               -> return element.generateDoc()
+            is VlangFieldDefinition             -> return element.generateDoc()
             is VlangReceiver                    -> return element.generateDoc()
         }
 
