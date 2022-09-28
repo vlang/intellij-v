@@ -271,34 +271,16 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
             return processor.execute(myElement, state)
         }
 
-        val parent = myElement.parent
-        if (parent is VlangEnumFetch) {
-            if (parent.parent is VlangMatchArm) {
-                val parentMatch = parent.parentOfType<VlangMatchExpression>()
-                if (parentMatch != null) {
-                    val matchExpression = parentMatch.expression as? VlangReferenceExpression ?: return true
-                    return processQualifierExpression(file, matchExpression, processor, state)
-                }
+        when (val parent = myElement.parent) {
+            is VlangEnumFetch -> {
+                if (!handleEnumFetch(parent, file, processor, state)) return false
             }
-            if (parent.parent is VlangDefaultFieldValue) {
-                val fieldDeclaration = parent.parent.parent
-                if (fieldDeclaration is VlangFieldDeclaration) {
-                    // TODO: support multi fields
-                    val fieldDefinitionType = fieldDeclaration.type?.typeReferenceExpressionList?.firstOrNull() ?: return true
-                    return processQualifierExpression(file, fieldDefinitionType, processor, state)
-                }
+
+            is VlangFieldName -> {
+                val initExpr = parent.parentOfType<VlangLiteralValueExpression>()
+                val type = initExpr?.type ?: return true
+                return processType(type, processor, state)
             }
-            val parentAssign = parent.parentOfType<VlangAssignmentStatement>()
-            if (parentAssign != null) {
-                // TODO: support multi assign
-                val assignExpression = parentAssign.leftHandExprList.expressionList.firstOrNull() as? VlangReferenceExpression ?: return true
-                return processQualifierExpression(file, assignExpression, processor, state)
-            }
-        }
-        if (parent is VlangFieldName) {
-            val initExpr = parent.parentOfType<VlangLiteralValueExpression>()
-            val type = initExpr?.type ?: return true
-            return processType(type, processor, state)
         }
 
 //        if (parent is VlangSelectorExpr) {
@@ -316,6 +298,37 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
         if (!processDirectory(file.originalFile.parent, file, file.packageName, processor, state, true)) return false
 
         return processBuiltin(processor, state, myElement)
+    }
+
+    private fun handleEnumFetch(
+        parent: VlangEnumFetch,
+        file: VlangFile,
+        processor: VlangScopeProcessor,
+        state: ResolveState,
+    ): Boolean {
+        if (parent.parent is VlangMatchArm) {
+            val parentMatch = parent.parentOfType<VlangMatchExpression>()
+            if (parentMatch != null) {
+                val matchExpression = parentMatch.expression as? VlangReferenceExpression ?: return true
+                return processQualifierExpression(file, matchExpression, processor, state)
+            }
+        }
+        if (parent.parent is VlangDefaultFieldValue) {
+            val fieldDeclaration = parent.parent.parent
+            if (fieldDeclaration is VlangFieldDeclaration) {
+                // TODO: support multi fields
+                val fieldDefinitionType = fieldDeclaration.type?.typeReferenceExpressionList?.firstOrNull() ?: return true
+                return processQualifierExpression(file, fieldDefinitionType, processor, state)
+            }
+        }
+        val parentAssign = parent.parentOfType<VlangAssignmentStatement>()
+        if (parentAssign != null) {
+            // TODO: support multi assign
+            val assignExpression = parentAssign.leftHandExprList.expressionList.firstOrNull() as? VlangReferenceExpression ?: return true
+            return processQualifierExpression(file, assignExpression, processor, state)
+        }
+
+        return true
     }
 
     protected fun processDirectory(

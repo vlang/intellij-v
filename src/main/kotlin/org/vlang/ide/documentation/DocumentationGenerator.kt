@@ -17,6 +17,7 @@ import org.vlang.ide.documentation.DocumentationUtils.colorize
 import org.vlang.ide.documentation.DocumentationUtils.line
 import org.vlang.ide.documentation.DocumentationUtils.part
 import org.vlang.lang.VlangTypes
+import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.*
 
 object DocumentationGenerator {
@@ -302,11 +303,10 @@ object DocumentationGenerator {
             val type = parent?.expressionList?.firstOrNull()?.getType(null) // TODO: support multi assign
 
             val modifiersDoc = varModifiers?.generateDoc()
-            if (modifiersDoc.isNullOrEmpty()) {
-                part("var", asKeyword)
-            } else {
+            if (!modifiersDoc.isNullOrEmpty()) {
                 append(modifiersDoc)
             }
+            part("var", asKeyword)
             part(name, asDeclaration)
             append(type?.generateDoc() ?: DocumentationUtils.colorize("unknown", asDeclaration))
             append(DocumentationMarkup.DEFINITION_END)
@@ -356,6 +356,21 @@ object DocumentationGenerator {
 
     private fun StringBuilder.generateSymbolVisibilityDoc(visibility: VlangSymbolVisibility?) {
         part(visibility?.generateDoc() ?: DocumentationUtils.colorize("private", asKeyword))
+    }
+
+    fun generateCompileTimeConstantDoc(element: VlangReferenceExpression): String? {
+        val name = element.getIdentifier().text.removePrefix("@")
+        val description = VlangCompletionUtil.compileTimeConstants[name] ?: return null
+        return buildString {
+            generateModuleName(element.containingFile)
+            append(DocumentationMarkup.DEFINITION_START)
+            part("compile-time constant", asKeyword)
+            part(name, asDeclaration)
+            append(DocumentationMarkup.DEFINITION_END)
+            append(DocumentationMarkup.CONTENT_START)
+            append(description)
+            append(DocumentationMarkup.CONTENT_END)
+        }
     }
 
     private fun StringBuilder.generateCommentsPart(element: PsiElement?) {

@@ -27,7 +27,14 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
 //            return
 //        }
 
-        val expression = parameters.position.parentOfType<VlangReferenceExpressionBase>() ?: return
+        val element = parameters.position
+
+        if (VlangCompletionUtil.isCompileTimeIdentifier(element)) {
+            fillCompileTimeConstantsVariants(result)
+            return
+        }
+
+        val expression = element.parentOfType<VlangReferenceExpressionBase>() ?: return
         val originalFile = parameters.originalFile
         val ref = expression.reference
         if (ref is VlangReference) {
@@ -54,6 +61,14 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
                 )
             )
         }
+    }
+
+    private fun fillCompileTimeConstantsVariants(result: CompletionResultSet) {
+        result.addAllElements(
+            VlangCompletionUtil.compileTimeConstants.map {
+                VlangCompletionUtil.createCompilePseudoVarLookupElement(it.key, it.value)
+            }
+        )
     }
 
     private fun fillStructFieldNameVariants(

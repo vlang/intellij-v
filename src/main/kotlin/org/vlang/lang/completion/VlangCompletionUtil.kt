@@ -13,8 +13,10 @@ import com.intellij.icons.AllIcons
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.util.elementType
 import com.intellij.psi.util.parentOfType
 import org.vlang.ide.ui.VIcons
+import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.*
 import javax.swing.Icon
 
@@ -31,6 +33,7 @@ object VlangCompletionUtil {
     const val TYPE_ALIAS_PRIORITY = NOT_IMPORTED_TYPE_ALIAS_PRIORITY + 10
     const val NOT_IMPORTED_CONSTANT_PRIORITY = 1
     const val CONSTANT_PRIORITY = NOT_IMPORTED_CONSTANT_PRIORITY + 10
+    const val COMPILE_TIME_CONSTANT_PRIORITY = CONSTANT_PRIORITY + 5
     const val NOT_IMPORTED_TYPE_PRIORITY = 5
     const val TYPE_PRIORITY = NOT_IMPORTED_TYPE_PRIORITY + 10
     const val NOT_IMPORTED_TYPE_CONVERSION = 1
@@ -40,6 +43,26 @@ object VlangCompletionUtil {
     const val FIELD_PRIORITY = CONTEXT_KEYWORD_PRIORITY + 1
     const val LABEL_PRIORITY = 15
     const val PACKAGE_PRIORITY = 5
+
+    val compileTimeConstants = mapOf(
+        "FN" to "The name of the current function",
+        "METHOD" to "The name of the current method",
+        "MOD" to "The name of the current module",
+        "STRUCT" to "The name of the current struct",
+        "FILE" to "The absolute path to the current file",
+        "LINE" to "The line number of the current line (as a string)",
+        "FILE_LINE" to "The relative path and line number of the current line (like @FILE:@LINE)",
+        "COLUMN" to "The column number of the current line (as a string)",
+        "VEXE" to "The absolute path to the V compiler executable",
+        "VEXEROOT" to "The absolute path to the V compiler executable's root directory",
+        "VHASH" to "The V compiler's git hash",
+        "VMOD_FILE" to "The content to the nearest v.mod file",
+        "VMODROOT" to "The absolute path to the nearest v.mod file's directory",
+    )
+
+    fun isCompileTimeIdentifier(element: PsiElement): Boolean {
+        return element.elementType == VlangTypes.IDENTIFIER && element.text.startsWith("@")
+    }
 
     fun shouldSuppressCompletion(element: PsiElement): Boolean {
         if (element.text == CompletionUtilCore.DUMMY_IDENTIFIER_TRIMMED) {
@@ -141,6 +164,14 @@ object VlangCompletionUtil {
             element, name,
             priority = STRUCT_PRIORITY,
             insertHandler = StructInsertHandler()
+        )
+    }
+
+    fun createCompilePseudoVarLookupElement(name: String, description: String): LookupElement {
+        return PrioritizedLookupElement.withPriority(
+            LookupElementBuilder.create("@$name")
+                .withTypeText(description)
+                .withIcon(VIcons.Constant), COMPILE_TIME_CONSTANT_PRIORITY.toDouble()
         )
     }
 

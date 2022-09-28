@@ -13,6 +13,7 @@ import com.intellij.psi.util.elementType
 import org.vlang.ide.highlight.VlangHighlightingData
 import org.vlang.lang.VlangParserDefinition
 import org.vlang.lang.VlangTypes
+import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.*
 
 class VlangAnnotator : Annotator {
@@ -181,6 +182,10 @@ class VlangAnnotator : Annotator {
             } else {
                 holder.textAttributes(element, JavaHighlightingColors.STRING)
             }
+        }
+
+        if (VlangCompletionUtil.isCompileTimeIdentifier(element)) {
+            holder.textAttributes(element, DefaultLanguageHighlighterColors.CONSTANT)
         }
     }
 

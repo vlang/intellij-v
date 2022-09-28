@@ -11,6 +11,7 @@ import com.intellij.psi.*
 import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.util.*
 import org.vlang.lang.VlangTypes
+import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.*
 import org.vlang.sdk.VlangSdkUtil
 
@@ -322,6 +323,10 @@ object VlangPsiImplUtil {
             val right = (expr as VlangBinaryExpr).right
             if (right != null) return right.getType(context)
         } else if (expr is VlangReferenceExpression) {
+            if (VlangCompletionUtil.isCompileTimeIdentifier(expr.getIdentifier())) {
+                return getBuiltinType("string", expr)
+            }
+
             val reference = expr.reference
             val resolve = reference.resolve()
             if (resolve is VlangTypeOwner)
