@@ -1,7 +1,6 @@
 package org.vlang.ide.documentation
 
 import com.intellij.lang.documentation.DocumentationMarkup
-import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiWhiteSpace
@@ -360,7 +359,7 @@ object DocumentationGenerator {
     }
 
     private fun StringBuilder.generateCommentsPart(element: PsiElement?) {
-        val comments = CommentsConverter.toHtml(getCommentsForElement(element))
+        val comments = CommentsConverter.toHtml(CommentsConverter.getCommentsForElement(element))
         if (comments.isNotEmpty()) {
             append(DocumentationMarkup.CONTENT_START)
             append(comments)
@@ -384,44 +383,5 @@ object DocumentationGenerator {
             append("</a>")
             append(DocumentationMarkup.CONTENT_END)
         }
-    }
-
-    private fun getCommentsForElement(element: PsiElement?): List<PsiComment> {
-        var comments = getCommentsInner(element)
-        if (comments.isEmpty()) {
-            if (element is VlangVarDefinition || element is VlangConstDefinition) {
-                val parent = element.parent // spec
-                comments = getCommentsInner(parent)
-                if (comments.isEmpty() && parent != null) {
-                    return getCommentsInner(parent.parent) // declaration
-                }
-            } else if (element is VlangTypeAliasDeclaration) {
-                return getCommentsInner(element.parent) // type declaration
-            }
-        }
-        return comments
-    }
-
-    private fun getCommentsInner(element: PsiElement?): List<PsiComment> {
-        if (element == null) {
-            return emptyList()
-        }
-        val result = mutableListOf<PsiComment>()
-        var e: PsiElement?
-        e = element.prevSibling
-        while (e != null) {
-            if (e is PsiWhiteSpace) {
-                if (e.getText().contains("\n\n")) return result
-                e = e.getPrevSibling()
-                continue
-            }
-            if (e is PsiComment) {
-                result.add(0, e)
-            } else {
-                return result
-            }
-            e = e.prevSibling
-        }
-        return result
     }
 }

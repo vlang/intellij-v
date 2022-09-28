@@ -96,7 +96,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '(' [ ExpressionArgList '...'? ','? ] ')'
+  // '(' ElementList? '...'? ','? ')'
   public static boolean ArgumentList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ArgumentList")) return false;
     if (!nextTokenIs(b, LPAREN)) return false;
@@ -105,40 +105,30 @@ public class VlangParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, LPAREN);
     p = r; // pin = 1
     r = r && report_error_(b, ArgumentList_1(b, l + 1));
+    r = p && report_error_(b, ArgumentList_2(b, l + 1)) && r;
+    r = p && report_error_(b, ArgumentList_3(b, l + 1)) && r;
     r = p && consumeToken(b, RPAREN) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
-  // [ ExpressionArgList '...'? ','? ]
+  // ElementList?
   private static boolean ArgumentList_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ArgumentList_1")) return false;
-    ArgumentList_1_0(b, l + 1);
+    ElementList(b, l + 1);
     return true;
   }
 
-  // ExpressionArgList '...'? ','?
-  private static boolean ArgumentList_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ArgumentList_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = ExpressionArgList(b, l + 1);
-    r = r && ArgumentList_1_0_1(b, l + 1);
-    r = r && ArgumentList_1_0_2(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
   // '...'?
-  private static boolean ArgumentList_1_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ArgumentList_1_0_1")) return false;
+  private static boolean ArgumentList_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ArgumentList_2")) return false;
     consumeToken(b, TRIPLE_DOT);
     return true;
   }
 
   // ','?
-  private static boolean ArgumentList_1_0_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ArgumentList_1_0_2")) return false;
+  private static boolean ArgumentList_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ArgumentList_3")) return false;
     consumeToken(b, COMMA);
     return true;
   }
@@ -1009,7 +999,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !('}' | ',' | semi)
+  // !('}' | ',' | semi | ')')
   static boolean ElementInnerRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ElementInnerRecover")) return false;
     boolean r;
@@ -1019,13 +1009,14 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // '}' | ',' | semi
+  // '}' | ',' | semi | ')'
   private static boolean ElementInnerRecover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ElementInnerRecover_0")) return false;
     boolean r;
     r = consumeToken(b, RBRACE);
     if (!r) r = consumeToken(b, COMMA);
     if (!r) r = semi(b, l + 1);
+    if (!r) r = consumeToken(b, RPAREN);
     return r;
   }
 
@@ -1250,13 +1241,9 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // NamedExpressionArgList | SimpleExpressionArgList
+  // ElementList
   static boolean ExpressionArgList(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ExpressionArgList")) return false;
-    boolean r;
-    r = NamedExpressionArgList(b, l + 1);
-    if (!r) r = SimpleExpressionArgList(b, l + 1);
-    return r;
+    return ElementList(b, l + 1);
   }
 
   /* ********************************************************** */

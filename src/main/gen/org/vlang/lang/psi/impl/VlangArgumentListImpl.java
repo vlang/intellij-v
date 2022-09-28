@@ -1,14 +1,19 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.vlang.lang.psi.VlangArgumentList;
+import org.vlang.lang.psi.VlangElement;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
+import org.vlang.lang.psi.VlangVisitor;
+
+import java.util.List;
+
 import static org.vlang.lang.VlangTypes.*;
-import org.vlang.lang.psi.*;
 
 public class VlangArgumentListImpl extends VlangCompositeElementImpl implements VlangArgumentList {
 
@@ -28,8 +33,8 @@ public class VlangArgumentListImpl extends VlangCompositeElementImpl implements 
 
   @Override
   @NotNull
-  public List<VlangExpression> getExpressionList() {
-    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangExpression.class);
+  public List<VlangElement> getElementList() {
+    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangElement.class);
   }
 
   @Override

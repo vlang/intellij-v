@@ -131,7 +131,6 @@ class VlangAnnotator : Annotator {
 
             if (element.parent is VlangReferenceExpression) {
                 when (element.parent.parent) {
-                    is VlangFieldLookup -> holder.textAttributes(element, JavaHighlightingColors.INSTANCE_FIELD_ATTRIBUTES)
                     is VlangMethodCall  -> holder.textAttributes(element, JavaHighlightingColors.METHOD_CALL_ATTRIBUTES)
                 }
             }

@@ -555,7 +555,7 @@ KeyValue ::= (Literal | ReferenceExpression) ':' Expression {pin=1}
 LiteralValueExpression ::= Type (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">>) '{' ElementList? '}' {pin=3}
 private ElementList ::= ElementInner ((',' | semi) ElementInner?)*
 private ElementInner ::= <<withOn "PAR" Element>> | (!() Element) {recoverWhile=ElementInnerRecover}
-private ElementInnerRecover ::= !('}' | ',' | semi)
+private ElementInnerRecover ::= !('}' | ',' | semi | ')')
 Element ::= First [':' Value]  {pin(".*")=1}
 private First ::= Key | <<keyOrValueExpression>>
 Key ::= (FieldName &':') | !() Expression // nullability hack for key without reference inside
@@ -662,7 +662,7 @@ ChannelType ::= chan Type? {pin=1}
 
 
 LeftHandExprList ::= ExpressionList
-private ExpressionArgList ::= NamedExpressionArgList | SimpleExpressionArgList
+private ExpressionArgList ::= ElementList
 
 private SimpleExpressionArgList ::= ExpressionOrTypeWithRecover (',' (ExpressionOrTypeWithRecover | &')'))* {pin(".*")=2}
 private ExpressionOrTypeWithRecover ::= Expression {recoverWhile=ExpressionListRecover}
@@ -763,7 +763,7 @@ private SliceExprBody ::= &'..' '..' Expression
 // <expr>(...)
 CallExpr ::= Expression ArgumentList
 // ([<arg1>, <arg2>[...], ...])
-ArgumentList ::= '(' [ ExpressionArgList '...'? ','? ] ')' {pin=1}
+ArgumentList ::= '(' ElementList? '...'? ','? ')' {pin=1}
 
 // match <expr> { ... }
 MatchExpression ::= match <<enterMode "BLOCK?">> Expression '{' MatchArms '}' <<exitModeSafe "BLOCK?">> {pin=1}
