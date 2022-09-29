@@ -72,11 +72,6 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
             }
 
             if (qualifier is VlangReferenceExpression) {
-                // expr or { err }
-                if (qualifier.getIdentifier().text == "err" && qualifier.parentOfType<VlangOrBlockExpr>() != null) {
-                    return !processBuiltin( processor, state.put(SEARCH_NAME, "IError"), myElement)
-                }
-
                 val importSpec = when (val resolved = qualifier.resolve()) {
                     is VlangImportAlias -> resolved.parent
                     is VlangImportPath  -> resolved.parent
@@ -292,6 +287,11 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
     ): Boolean {
         if (identifier!!.textMatches("_")) {
             return processor.execute(myElement, state)
+        }
+
+        // expr or { err }
+        if (identifier!!.text == "err" && identifier!!.parentOfType<VlangOrBlockExpr>() != null) {
+            return !processBuiltin( processor, state.put(SEARCH_NAME, "IError"), myElement)
         }
 
         when (val parent = myElement.parent) {
