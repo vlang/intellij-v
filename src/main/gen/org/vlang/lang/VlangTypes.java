@@ -415,6 +415,9 @@ public interface VlangTypes {
       else if (type == DEFER_STATEMENT) {
         return new VlangDeferStatementImpl(node);
       }
+      else if (type == DOT_EXPRESSION) {
+        return new VlangDotExpressionImpl(node);
+      }
       else if (type == ELEMENT) {
         return new VlangElementImpl(node);
       }

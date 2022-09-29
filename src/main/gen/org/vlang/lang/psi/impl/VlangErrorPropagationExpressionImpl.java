@@ -1,22 +1,21 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import org.vlang.lang.psi.VlangPsiTreeUtil;
-import static org.vlang.lang.VlangTypes.*;
-import org.vlang.lang.psi.*;
+import org.jetbrains.annotations.NotNull;
+import org.vlang.lang.psi.VlangErrorPropagationExpression;
+import org.vlang.lang.psi.VlangVisitor;
 
-public class VlangErrorPropagationExpressionImpl extends VlangExpressionImpl implements VlangErrorPropagationExpression {
+import static org.vlang.lang.VlangTypes.QUESTION;
+
+public class VlangErrorPropagationExpressionImpl extends VlangCompositeElementImpl implements VlangErrorPropagationExpression {
 
   public VlangErrorPropagationExpressionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  @Override
   public void accept(@NotNull VlangVisitor visitor) {
     visitor.visitErrorPropagationExpression(this);
   }
@@ -29,14 +28,8 @@ public class VlangErrorPropagationExpressionImpl extends VlangExpressionImpl imp
 
   @Override
   @NotNull
-  public VlangExpression getExpression() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class));
-  }
-
-  @Override
-  @Nullable
   public PsiElement getQuestion() {
-    return findChildByType(QUESTION);
+    return notNullChild(findChildByType(QUESTION));
   }
 
 }

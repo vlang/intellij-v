@@ -47,6 +47,9 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
         <codeStyleSettingsProvider implementation="org.vlang.lang.formatter.VlangCodeStyleSettingsProvider"/>
         <langCodeStyleSettingsProvider implementation="org.vlang.lang.formatter.VlangLanguageCodeStyleSettingsProvider"/>
 
+        <referenceImporter implementation="org.vlang.lang.psi.impl.imports.VlangReferenceImporter"/>
+        <applicationService serviceImplementation="org.vlang.ide.codeInsight.imports.VlangCodeInsightSettings"/>
+
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangPackagesIndex"/>
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangFunctionIndex"/>
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangMethodIndex"/>
@@ -80,12 +83,17 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
         <localInspection language="vlang" groupName="V" shortName="VlangLabelOutsideUnsafeInspection"
                          displayName="Go to statement outside unsafe block"
                          enabledByDefault="true" level="WARNING"
-                         implementationClass="org.vlang.ide.inspections.VlangLabelOutsideUnsafeInspection"/>
+                         implementationClass="org.vlang.ide.inspections.VlangLabelOutsideInspection"/>
 
         <localInspection language="vlang" groupName="V" shortName="VlangVariableRedeclaration"
                          displayName="Variable redeclaration"
                          enabledByDefault="false" level="ERROR"
                          implementationClass="org.vlang.ide.inspections.VlangVariableRedeclarationInspection"/>
+
+        <localInspection language="vlang" groupName="V" shortName="VlangUnresolvedReferenceUnsafeInspection"
+                         displayName="Unresolved reference inspection"
+                         enabledByDefault="true" level="ERROR"
+                         implementationClass="org.vlang.ide.inspections.VlangUnresolvedReferenceUnsafeInspection"/>
 
         <!-- Unused inspections -->
         <localInspection language="vlang" groupName="V" shortName="VlangUnusedParameterInspection"

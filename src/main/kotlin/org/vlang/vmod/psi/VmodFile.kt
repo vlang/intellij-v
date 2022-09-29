@@ -13,7 +13,7 @@ class VmodFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, VmodL
 
     override fun toString() = "V module file"
 
-    override fun getIcon(flags: Int) = VIcons.VlangModule
+    override fun getIcon(flags: Int) = VIcons.Module
 
     override fun getReference() = references.getOrNull(0)
 

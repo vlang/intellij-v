@@ -38,6 +38,25 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
 
     fun isTestFile(): Boolean = name.split(".").first().endsWith("_test")
 
+    fun addImport(path: String, alias: String?): VlangImportSpec {
+        return VlangPsiImplUtil.addImport(this, getImportList(), path, alias)
+    }
+
+    fun getImportedModulesMap(): Map<String, VlangImportSpec> {
+        return CachedValuesManager.getCachedValue(this) {
+            val map = mutableMapOf<String, VlangImportSpec>()
+            for (spec in getImports()) {
+                val path = spec.importPath.importNameList.joinToString(".") { it.text }
+                map[path] = spec
+            }
+            CachedValueProvider.Result.create(map, this)
+        }
+    }
+    
+    fun getImportList(): VlangImportList? {
+        return findChildByClass(VlangImportList::class.java)
+    }
+    
     fun getModule(): VlangModuleClause? {
         return findChildByClass(VlangModuleClause::class.java)
     }

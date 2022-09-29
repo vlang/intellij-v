@@ -10,7 +10,7 @@ class VmodFileType : LanguageFileType(VmodLanguage.INSTANCE) {
 
     override fun getDefaultExtension() = FILE_EXTENSION
 
-    override fun getIcon() = VIcons.VlangModule
+    override fun getIcon() = VIcons.Module
 
     companion object {
         const val FILE_EXTENSION = "mod"

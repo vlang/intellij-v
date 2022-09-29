@@ -193,7 +193,7 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitErrorPropagationExpression(@NotNull VlangErrorPropagationExpression o) {
-    visitExpression(o);
+    visitCompositeElement(o);
   }
 
   public void visitExpression(@NotNull VlangExpression o) {
@@ -225,7 +225,7 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitForceNoErrorPropagationExpression(@NotNull VlangForceNoErrorPropagationExpression o) {
-    visitExpression(o);
+    visitCompositeElement(o);
   }
 
   public void visitFormatSpecifier(@NotNull VlangFormatSpecifier o) {

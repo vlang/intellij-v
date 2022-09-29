@@ -9,8 +9,14 @@ import java.util.List;
 
 public interface VlangIndexOrSliceExpr extends VlangExpression {
 
+  @Nullable
+  VlangErrorPropagationExpression getErrorPropagationExpression();
+
   @NotNull
   List<VlangExpression> getExpressionList();
+
+  @Nullable
+  VlangForceNoErrorPropagationExpression getForceNoErrorPropagationExpression();
 
   @Nullable
   PsiElement getHashLbrack();

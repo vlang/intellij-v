@@ -1,6 +1,7 @@
 package org.vlang.lang.psi.impl
 
 import com.intellij.lang.parser.GeneratedParserUtilBase
+import com.intellij.openapi.module.Module
 import com.intellij.openapi.module.ModuleUtilCore
 import com.intellij.openapi.util.Condition
 import com.intellij.openapi.util.Conditions
@@ -8,6 +9,7 @@ import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.RecursionManager
 import com.intellij.openapi.util.text.StringUtil
 import com.intellij.psi.*
+import com.intellij.psi.impl.source.tree.LeafElement
 import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.util.*
 import org.vlang.lang.VlangTypes
@@ -232,6 +234,47 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun getIdentifier(o: VlangImportSpec): PsiElement {
         return o.firstChild
+    }
+
+    fun prevDot(e: PsiElement?): Boolean {
+        val prev = if (e == null) null else PsiTreeUtil.prevVisibleLeaf(e)
+        return prev is LeafElement && (prev as LeafElement).elementType === VlangTypes.DOT
+    }
+
+    @JvmStatic
+    fun addImport(file: VlangFile, list: VlangImportList?, name: String, alias: String?): VlangImportSpec {
+        val decl = VlangElementFactory.createImportDeclaration(file.project, name, alias)!!
+        if (list == null) {
+            var importList = VlangElementFactory.createImportList(file.project, name, alias)!!
+            val modulePsi = file.getModule()
+
+            importList = if (modulePsi == null) {
+                file.addBefore(importList, file.firstChild) as VlangImportList
+            } else {
+                val listPsi = file.addAfter(importList, modulePsi) as VlangImportList
+                file.addBefore(VlangElementFactory.createDoubleNewLine(file.project), listPsi)
+
+                listPsi
+            }
+
+            return importList.importDeclarationList.first().importSpec!!
+        }
+        return addImportDeclaration(list, decl)
+    }
+
+    private fun addImportDeclaration(importList: VlangImportList, newImportDeclaration: VlangImportDeclaration): VlangImportSpec {
+        val lastImport = importList.importDeclarationList.last()
+        val importDeclaration = importList.addAfter(newImportDeclaration, lastImport) as VlangImportDeclaration
+        val importListNextSibling = importList.nextSibling
+        if (importListNextSibling !is PsiWhiteSpace) {
+            importList.addAfter(VlangElementFactory.createNewLine(importList.project), importDeclaration)
+            if (importListNextSibling != null) {
+                // double new line if there is something valuable after import list
+                importList.addAfter(VlangElementFactory.createNewLine(importList.project), importDeclaration)
+            }
+        }
+        importList.addBefore(VlangElementFactory.createNewLine(importList.project), importDeclaration)
+        return importDeclaration.importSpec!!
     }
 
     @JvmStatic
@@ -590,4 +633,10 @@ object VlangPsiImplUtil {
             .forceDisregardTypes(Conditions.equalTo(GeneratedParserUtilBase.DUMMY_BLOCK))
     }
 
+    fun canBeAutoImported(file: VlangFile, allowMain: Boolean, module: Module?): Boolean {
+        return file.getModuleName() != "main"
+//        return if (VlangPsiImplUtil.isBuiltinFile(file) || !allowMain && file.packageName == "main") {
+//            false
+//        } else VlangPsiImplUtil.allowed(file, null, module) && !VlangUtil.isExcludedFile(file)
+    }
 }

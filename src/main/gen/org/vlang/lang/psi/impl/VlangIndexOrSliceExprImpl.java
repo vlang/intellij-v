@@ -6,10 +6,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.vlang.lang.psi.VlangExpression;
-import org.vlang.lang.psi.VlangIndexOrSliceExpr;
-import org.vlang.lang.psi.VlangPsiTreeUtil;
-import org.vlang.lang.psi.VlangVisitor;
+import org.vlang.lang.psi.*;
 
 import java.util.List;
 
@@ -33,9 +30,21 @@ public class VlangIndexOrSliceExprImpl extends VlangExpressionImpl implements Vl
   }
 
   @Override
+  @Nullable
+  public VlangErrorPropagationExpression getErrorPropagationExpression() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangErrorPropagationExpression.class);
+  }
+
+  @Override
   @NotNull
   public List<VlangExpression> getExpressionList() {
     return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangExpression.class);
+  }
+
+  @Override
+  @Nullable
+  public VlangForceNoErrorPropagationExpression getForceNoErrorPropagationExpression() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangForceNoErrorPropagationExpression.class);
   }
 
   @Override

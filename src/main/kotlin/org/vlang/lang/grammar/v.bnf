@@ -80,7 +80,7 @@
   ]
 
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional|OrBlock)Expr")=BinaryExpr
-  extends(".*(Expr|Literal|Lit|OperandName)|TypeInitExpr|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|SharedExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ErrorPropagationExpression|ForceNoErrorPropagationExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression|LockExpression|IncDecExpression|LiteralValueExpression")=Expression
+  extends(".*(Expr|Literal|Lit|OperandName)|TypeInitExpr|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|SharedExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression|LockExpression|IncDecExpression|LiteralValueExpression")=Expression
 
   implements("(Var|Param|Field|Label|Var|Const|EnumField)Definition|(Struct|TypeAlias|Union|Enum|Interface)Declaration|Receiver|FieldDefinition|ImportPath|ImportAlias")="org.vlang.lang.psi.VlangNamedElement"
   implements("FunctionLit|(Function|Method)Declaration")="org.vlang.lang.psi.VlangSignatureOwner"
@@ -125,9 +125,7 @@ ModuleClause ::= Attributes? module identifier semi {
 // import <part1>.<part2>
 // import <part1>.<part2> { <import list> }
 // import <part1>.<part2> as <alias>
-ImportList ::= (ImportDeclaration semi)+ {
-  methods=[addImport]
-}
+ImportList ::= (ImportDeclaration semi)+
 
 // import <spec>
 ImportDeclaration ::= import ImportSpec {
@@ -534,8 +532,8 @@ Expression ::=
   | EnumFetch
   | MutExpression
   | SharedExpression
-  | ErrorPropagationExpression
-  | ForceNoErrorPropagationExpression
+//  | ErrorPropagationExpression
+//  | ForceNoErrorPropagationExpression
   | ConstexprIdentifierExpression
   | SqlExpression
   | MapInitExpr
@@ -688,7 +686,15 @@ private DotPrimaryExpr ::= ReferenceExpression | Literal | ParenthesesExpr
 ReferenceExpression ::= identifier { methods=[getReference getQualifier resolve getReadWriteAccess] extends=Expression}
 left QualifiedReferenceExpression ::= '.' identifier {elementType=ReferenceExpression}
 
-private RightHandExprs ::= (CallExpr | IndexOrSliceExpr | QualifiedReferenceExpression | OrBlockExpr)*
+private RightHandExprs ::= RightHandExpr*
+
+private RightHandExpr ::=
+  CallExpr
+  | IndexOrSliceExpr
+  | QualifiedReferenceExpression
+  | OrBlockExpr
+  | ErrorPropagationExpression
+  | ForceNoErrorPropagationExpression
 
 // <expr>(...)
 left CallExpr ::= ArgumentList
@@ -734,10 +740,10 @@ IncDecExpression ::= Expression ('++' | '--') {pin=1}
 ConstexprIdentifierExpression ::= '@' identifier {pin=2}
 
 // <expr>?
-ErrorPropagationExpression ::= Expression '?' {pin=1}
+ErrorPropagationExpression ::= '?' {pin=1}
 
 // <expr>!
-ForceNoErrorPropagationExpression ::= Expression '!' {pin=1}
+ForceNoErrorPropagationExpression ::= '!' {pin=1}
 
 // ...<expr>
 UnpackingExpression ::= '...' Expression {pin=1}

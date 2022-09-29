@@ -1,13 +1,10 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import org.vlang.lang.psi.VlangPsiTreeUtil;
-import static org.vlang.lang.VlangTypes.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.*;
 
 public class VlangCallExprImpl extends VlangExpressionImpl implements VlangCallExpr {
@@ -34,9 +31,21 @@ public class VlangCallExprImpl extends VlangExpressionImpl implements VlangCallE
   }
 
   @Override
-  @NotNull
+  @Nullable
+  public VlangErrorPropagationExpression getErrorPropagationExpression() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangErrorPropagationExpression.class);
+  }
+
+  @Override
+  @Nullable
   public VlangExpression getExpression() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class));
+    return VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class);
+  }
+
+  @Override
+  @Nullable
+  public VlangForceNoErrorPropagationExpression getForceNoErrorPropagationExpression() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangForceNoErrorPropagationExpression.class);
   }
 
 }
