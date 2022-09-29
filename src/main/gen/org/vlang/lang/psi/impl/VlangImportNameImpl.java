@@ -5,22 +5,19 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.vlang.lang.psi.VlangCompositeElement;
-import org.vlang.lang.psi.VlangReferenceExpression;
+import org.vlang.lang.psi.VlangImportName;
 import org.vlang.lang.psi.VlangVisitor;
 
 import static org.vlang.lang.VlangTypes.IDENTIFIER;
 
-public class VlangReferenceExpressionImpl extends VlangExpressionImpl implements VlangReferenceExpression {
+public class VlangImportNameImpl extends VlangCompositeElementImpl implements VlangImportName {
 
-  public VlangReferenceExpressionImpl(@NotNull ASTNode node) {
+  public VlangImportNameImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitReferenceExpression(this);
+    visitor.visitImportName(this);
   }
 
   @Override
@@ -33,24 +30,6 @@ public class VlangReferenceExpressionImpl extends VlangExpressionImpl implements
   @NotNull
   public PsiElement getIdentifier() {
     return notNullChild(findChildByType(IDENTIFIER));
-  }
-
-  @Override
-  @NotNull
-  public VlangReference getReference() {
-    return VlangPsiImplUtil.getReference(this);
-  }
-
-  @Override
-  @Nullable
-  public VlangCompositeElement getQualifier() {
-    return VlangPsiImplUtil.getQualifier(this);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement resolve() {
-    return VlangPsiImplUtil.resolve(this);
   }
 
 }

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.*;
 
-public class VlangImportSpecImpl extends VlangSimpleNamedElementImpl implements VlangImportSpec {
+public class VlangImportSpecImpl extends VlangCompositeElementImpl implements VlangImportSpec {
 
   public VlangImportSpecImpl(@NotNull ASTNode node) {
     super(node);

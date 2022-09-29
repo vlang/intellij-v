@@ -13,6 +13,6 @@ public interface VlangFieldDefinition extends VlangNamedElement, StubBasedPsiEle
   PsiElement getIdentifier();
 
   @Nullable
-  VlangReferenceExpression getQualifier();
+  VlangCompositeElement getQualifier();
 
 }

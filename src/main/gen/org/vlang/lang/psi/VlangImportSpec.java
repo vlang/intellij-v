@@ -5,7 +5,7 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface VlangImportSpec extends VlangNamedElement {
+public interface VlangImportSpec extends VlangCompositeElement {
 
   @Nullable
   VlangImportAlias getImportAlias();
@@ -18,6 +18,10 @@ public interface VlangImportSpec extends VlangNamedElement {
 
   @NotNull
   PsiElement getIdentifier();
+
+  //WARNING: getReference(...) is skipped
+  //matching getReference(VlangImportSpec, ...)
+  //methods are not found in VlangPsiImplUtil
 
   //WARNING: getAlias(...) is skipped
   //matching getAlias(VlangImportSpec, ...)

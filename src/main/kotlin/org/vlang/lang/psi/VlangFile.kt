@@ -62,11 +62,11 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
         return resolveImportNameAndSpec(name).first
     }
 
-    fun resolveImportNameAndSpec(name: String): Pair<String?, PsiElement?> {
+    fun resolveImportNameAndSpec(name: String): Pair<String?, VlangImportSpec?> {
         val imports = getImports()
         for (import in imports) {
-            if (import.importAlias?.identifier?.text == name) {
-                return import.getIdentifier().text to import.importAlias
+            if (import.importAlias?.name == name) {
+                return import.identifier.text to import
             }
 
             val selectiveImport = import.selectiveImportList?.referenceExpressionList?.any {
@@ -74,7 +74,7 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
             } ?: false
 
             if (selectiveImport) {
-                return import.name + "." + name to import.selectiveImportList
+                return import.name + "." + name to import
             }
 
             val importName = import.name
@@ -93,7 +93,7 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
     fun resolveName(name: String): String? {
         val imports = getImports()
         for (import in imports) {
-            if (import.importAlias?.identifier?.text == name) {
+            if (import.importAlias?.name == name) {
                 return import.getIdentifier().text
             }
 

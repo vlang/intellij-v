@@ -98,6 +98,11 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
                          enabledByDefault="true" level="WARNING"
                          implementationClass="org.vlang.ide.inspections.VlangUnusedLabelInspection"/>
 
+       <localInspection language="vlang" groupName="V" shortName="VlangUnusedImportInspection"
+                         displayName="Unused import inspection"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="org.vlang.ide.inspections.VlangUnusedImportInspection"/>
+
         <runLineMarkerContributor id="VlangRunLineMarkerProvider" language="vlang"
                                   implementationClass="org.vlang.ide.run.VlangRunLineMarkerProvider"/>
 

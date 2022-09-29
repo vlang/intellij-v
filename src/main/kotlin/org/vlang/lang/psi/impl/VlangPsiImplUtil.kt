@@ -13,6 +13,7 @@ import com.intellij.psi.util.*
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.impl.imports.VlangImportReference
 import org.vlang.sdk.VlangSdkUtil
 
 object VlangPsiImplUtil {
@@ -73,7 +74,7 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getName(o: VlangImportSpec): String {
-        return o.getIdentifier().text ?: ""
+        return o.importPath.getIdentifier()?.text ?: ""
     }
 
     @JvmStatic
@@ -97,7 +98,7 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getQualifier(o: VlangFieldName): VlangReferenceExpressionBase? {
+    fun getQualifier(o: VlangFieldName): VlangCompositeElement? {
         return null
     }
 
@@ -106,40 +107,56 @@ object VlangPsiImplUtil {
         return VlangReference(o)
     }
 
+//    @JvmStatic
+//    fun getReference(o: VlangDotExpression): VlangReference {
+//        return VlangReference(o)
+//    }
+//
+//    @JvmStatic
+//    fun getIdentifier(o: VlangDotExpression): PsiElement? {
+//        return o.fieldLookup?.referenceExpression?.getIdentifier() ?: o.methodCall?.referenceExpression?.getIdentifier()
+//    }
+//
+//    @JvmStatic
+//    fun getIdentifier(o: VlangSimpleQualifiedReferenceExpression): PsiElement? {
+//        return o.referenceExpression.getIdentifier()
+//    }
+//
+//    @JvmStatic
+//    fun getQualifier(o: VlangSimpleQualifiedReferenceExpression): VlangReferenceExpression? {
+//        return o.referenceExpression
+//    }
+//
+//    @JvmStatic
+//    fun getIdentifier(o: VlangQualifiedReferenceExpression): PsiElement? {
+//        return o.referenceExpression.getIdentifier()
+//    }
+//
+//    @JvmStatic
+//    fun getQualifier(o: VlangQualifiedReferenceExpression): VlangReferenceExpression? {
+//        return o.referenceExpression
+//    }
+//
+//    @JvmStatic
+//    fun getQualifier(o: VlangDotExpression): VlangReferenceExpression? {
+//        return o.simpleQualifiedReferenceExpression.referenceExpression
+//    }
+
     @JvmStatic
-    fun getReference(o: VlangDotExpression): VlangReference {
-        return VlangReference(o)
+    fun getQualifier(o: VlangReferenceExpression): VlangCompositeElement? {
+//        val parenExpr = o.childrenOfType<VlangParenthesesExpr>().firstOrNull()
+//        if (parenExpr != null) {
+//            return parenExpr.expression as? VlangReferenceExpression
+//        }
+//        val accessExpr = o.childrenOfType<VlangIndexOrSliceExpr>().firstOrNull()
+//        if (accessExpr != null) {
+//            return accessExpr.expressionList.firstOrNull() as? VlangReferenceExpression
+//        }
+        return PsiTreeUtil.getChildOfType(o, VlangExpression::class.java)
     }
 
     @JvmStatic
-    fun getIdentifier(o: VlangDotExpression): PsiElement? {
-        return o.fieldLookup?.referenceExpression?.getIdentifier() ?: o.methodCall?.referenceExpression?.getIdentifier()
-    }
-
-    @JvmStatic
-    fun getQualifier(o: VlangDotExpression): VlangReferenceExpression? {
-        return o.expression as? VlangReferenceExpression
-    }
-
-    @JvmStatic
-    fun getQualifier(o: VlangReferenceExpression): VlangReferenceExpression? {
-        val parent = o.parent
-        val parentDot = when (parent) {
-            is VlangFieldLookup -> parent.parent
-            is VlangMethodCall  -> parent.parent
-            else                -> o.parent
-        } as? VlangDotExpression ?: return null
-
-        val qualifier = parentDot.expression as? VlangReferenceExpression
-        if (qualifier == o) {
-            return null
-        }
-
-        return qualifier
-    }
-
-    @JvmStatic
-    fun getQualifier(o: VlangTypeReferenceExpression): VlangTypeReferenceExpression? {
+    fun getQualifier(o: VlangTypeReferenceExpression): VlangCompositeElement? {
         val sibling = PsiTreeUtil.findSiblingBackward(o, VlangTypes.TYPE_REFERENCE_EXPRESSION, null)
         // TODO
         val qualifier = sibling as? VlangTypeReferenceExpression
@@ -183,7 +200,7 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getQualifier(o: VlangFieldDefinition): VlangReferenceExpression? {
+    fun getQualifier(o: VlangFieldDefinition): VlangCompositeElement? {
         return null
     }
 
@@ -192,10 +209,10 @@ object VlangPsiImplUtil {
         return o.reference.resolve()
     }
 
-    @JvmStatic
-    fun resolve(o: VlangDotExpression): PsiElement? {
-        return o.reference.resolve()
-    }
+//    @JvmStatic
+//    fun resolve(o: VlangDotExpression): PsiElement? {
+//        return o.reference.resolve()
+//    }
 
     @JvmStatic
     fun getReference(o: VlangTypeReferenceExpression): VlangReference {
@@ -219,22 +236,37 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getIdentifier(o: VlangImportPath): PsiElement? {
-        return o.referenceExpressionList.firstOrNull()
+        return o.importNameList.firstOrNull()?.identifier
     }
 
     @JvmStatic
-    fun getQualifier(o: VlangImportPath): VlangReferenceExpressionBase? {
+    fun getIdentifier(o: VlangImportAlias): PsiElement? {
+        return o.importAliasName?.identifier
+    }
+
+    @JvmStatic
+    fun getQualifier(o: VlangImportPath): VlangCompositeElement? {
         return null
     }
 
     @JvmStatic
-    fun getReference(o: VlangImportSpec): VlangReference {
-        return VlangReference(o.importPath)
+    fun getReference(o: VlangImportPath): VlangImportReference<VlangImportPath> {
+        return VlangImportReference(o, o.parent as VlangImportSpec)
+    }
+
+    @JvmStatic
+    fun getReference(o: VlangImportAliasName): VlangImportReference<VlangImportAliasName> {
+        return VlangImportReference(o, o.parent.parent as VlangImportSpec)
     }
 
     @JvmStatic
     fun getName(o: VlangModuleClause): String {
         return o.identifier?.text ?: "<unknown>"
+    }
+
+    @JvmStatic
+    fun getName(o: VlangImportAlias): String {
+        return o.importAliasName?.identifier?.text ?: ""
     }
 
     @JvmStatic
@@ -344,6 +376,16 @@ object VlangPsiImplUtil {
             if (expr.decimali != null) return getBuiltinType("complex128", expr)
         } else if (expr is VlangConditionalExpr) {
             return getBuiltinType("bool", expr)
+        }
+
+        if (expr is VlangIndexOrSliceExpr) {
+            val inner = expr.expressionList.firstOrNull()?.getType(null)
+            if (inner is VlangArrayOrSliceType) {
+                return inner.type
+            }
+            if (inner is VlangMapType) {
+                return inner.valueType
+            }
         }
 
         if (expr is VlangLiteralValueExpression) {

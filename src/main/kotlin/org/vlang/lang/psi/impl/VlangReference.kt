@@ -59,7 +59,7 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
 
     private fun processQualifierExpression(
         file: VlangFile,
-        qualifier: VlangReferenceExpressionBase,
+        qualifier: VlangCompositeElement,
         processor: VlangScopeProcessor,
         state: ResolveState,
     ): Boolean {
@@ -72,9 +72,13 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
             }
 
             if (qualifier is VlangReferenceExpression) {
-                val resolved = qualifier.resolve()
-                if (resolved is VlangImportSpec) {
-                    val moduleName = resolved.name
+                val importSpec = when (val resolved = qualifier.resolve()) {
+                    is VlangImportAlias -> resolved.parent
+                    is VlangImportPath  -> resolved.parent
+                    else                -> null
+                }
+                if (importSpec is VlangImportSpec) {
+                    val moduleName = importSpec.name
                     val moduleFiles =
                         VlangPackagesIndex.find(moduleName, myElement.project, GlobalSearchScope.allScope(myElement.project), null)
 
@@ -283,14 +287,6 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
             }
         }
 
-//        if (parent is VlangSelectorExpr) {
-//            val result: Boolean = processSelector(parent as VlangSelectorExpr, processor, state, myElement)
-//            if (processor.isCompletion()) return result
-//            if (!result || prevDot(myElement)) return false
-//        }
-//        val grandPa = parent.parent
-//        if (grandPa is VlangSelectorExpr && !processSelector(grandPa as VlangSelectorExpr, processor, state, parent)) return false
-//        if (prevDot(parent)) return false
         if (!processBlock(processor, state, true)) return false
         if (!processModules(file, processor, state, true)) return false
         if (!processImports(file, processor, state, myElement)) return false
@@ -383,12 +379,25 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
         state: ResolveState,
         element: VlangCompositeElement,
     ): Boolean {
-        val (fqn, import) = file.resolveImportNameAndSpec(identifier!!.text)
+        if (element.parentOfType<VlangImportSpec>() != null) {
+            return true
+        }
+
+        val searchName = identifier!!.text
+        val (name, import) = file.resolveImportNameAndSpec(identifier!!.text)
         if (import == null) {
             return true
         }
 
-        return !processor.execute(import, state)
+        if (searchName == name) {
+            return !processor.execute(import.importPath, state)
+        }
+
+        if (import.importAlias != null) {
+            return processor.execute(import.importAlias!!, state.put(ACTUAL_NAME, searchName))
+        }
+
+        return !processor.execute(import.importPath, state.put(ACTUAL_NAME, searchName))
     }
 
     // TODO: redone
@@ -399,11 +408,15 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
 
         val fqn = file.resolveImportName(identifier!!.text) ?: return false
 
-        val modules = VlangPackagesIndex.find(fqn, myElement.project, myElement.resolveScope, null)
+        val modules = VlangPackagesIndex.find(fqn, myElement.project, GlobalSearchScope.allScope(file.project), null)
 
         return modules.any {
-            val module = it.getModule() ?: return@any false
-            !processor.execute(module, state)
+            val module = it.getModule()
+            val ref = module?.identifier ?: return@any false
+            val name = module.name
+            val dir = it.parent ?: return@any false
+
+            !processor.execute(dir, state.put(ACTUAL_NAME, name))
         }
     }
 
@@ -514,6 +527,7 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
                     is VlangModuleClause -> element.name
                     else                 -> null
                 }
+
                 val ident = reference.getIdentifier() ?: return true
 
                 if (name != null && ident.textMatches(name)) {
@@ -557,72 +571,6 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
 
     private val identifier: PsiElement?
         get() = myElement?.getIdentifier()
-
-    private fun getFqn(): String? {
-        val name = identifier?.text ?: return null
-        val containingFile = el.containingFile as VlangFile
-
-        val parentTypeDecl = el.parentOfType<VlangType>()
-        if (parentTypeDecl != null && parentTypeDecl.typeReferenceExpressionList.size > 1) {
-            val list = parentTypeDecl.typeReferenceExpressionList
-            val fqnWithoutName = parentTypeDecl.typeReferenceExpressionList.subList(0, list.size - 1)
-                .joinToString(".") { it.text }
-            val importName = containingFile.resolveName(fqnWithoutName)
-            if (parentTypeDecl.typeReferenceExpressionList.first() == el && importName != "") {
-                return importName
-            }
-
-            val typeName = parentTypeDecl.getIdentifier()?.text
-
-            if (importName != null && importName != "" && typeName != null) {
-                return "$importName.$typeName"
-            }
-        }
-
-        val parentDotCall = el.parentOfType<VlangDotExpression>()
-        if (parentDotCall != null) {
-            val exprText = parentDotCall.expression.text
-            val importName = containingFile.resolveName(exprText)
-            if (parentDotCall.expression == el) {
-                return importName
-            }
-
-            val methodName = parentDotCall.methodCall?.referenceExpression?.getIdentifier()?.text
-
-            return if (importName != null && methodName != null) {
-                "$importName.$methodName"
-            } else {
-                null
-            }
-        }
-
-        return containingFile.resolveName(name)
-    }
-
-//    override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
-//        val project = el.project
-//        val name = identifier?.text ?: return emptyArray()
-//
-//        if (myElement is VlangLabelRef) {
-//            return resolveLabelRef(name)
-//        }
-//
-//        val fqn = getFqn() ?: return emptyArray()
-//
-//        val res = when {
-//            el.parent is VlangCallExpr -> {
-//                VlangFunctionIndex.find(fqn, name, project, GlobalSearchScope.allScope(project), null)
-//            }
-//
-//            else                       -> {
-//                VlangNamesIndex.find(fqn, name, project, GlobalSearchScope.allScope(project), null)
-//            }
-//        }
-//
-//        return res
-//            .map { PsiElementResolveResult(it) }
-//            .toTypedArray()
-//    }
 
     override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult?> {
         return if (!myElement.isValid)

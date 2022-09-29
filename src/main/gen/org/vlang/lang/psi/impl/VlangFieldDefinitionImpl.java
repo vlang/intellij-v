@@ -7,8 +7,8 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.stubs.IStubElementType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.vlang.lang.psi.VlangCompositeElement;
 import org.vlang.lang.psi.VlangFieldDefinition;
-import org.vlang.lang.psi.VlangReferenceExpression;
 import org.vlang.lang.psi.VlangVisitor;
 import org.vlang.lang.stubs.VlangFieldDefinitionStub;
 
@@ -42,7 +42,7 @@ public class VlangFieldDefinitionImpl extends VlangNamedElementImpl<VlangFieldDe
 
   @Override
   @Nullable
-  public VlangReferenceExpression getQualifier() {
+  public VlangCompositeElement getQualifier() {
     return VlangPsiImplUtil.getQualifier(this);
   }
 

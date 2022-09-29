@@ -82,22 +82,20 @@
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional|OrBlock)Expr")=BinaryExpr
   extends(".*(Expr|Literal|Lit|OperandName)|TypeInitExpr|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|SharedExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ErrorPropagationExpression|ForceNoErrorPropagationExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression|LockExpression|IncDecExpression|LiteralValueExpression")=Expression
 
-  implements("(Type|Import)Spec|(Var|Param|Field|Label|Var|Const|EnumField)Definition|(Struct|TypeAlias|Union|Enum|Interface)Declaration|Receiver|FieldDefinition")="org.vlang.lang.psi.VlangNamedElement"
+  implements("(Var|Param|Field|Label|Var|Const|EnumField)Definition|(Struct|TypeAlias|Union|Enum|Interface)Declaration|Receiver|FieldDefinition|ImportPath|ImportAlias")="org.vlang.lang.psi.VlangNamedElement"
   implements("FunctionLit|(Function|Method)Declaration")="org.vlang.lang.psi.VlangSignatureOwner"
 //  implements("InterfaceMethodDeclaration")="org.vlang.lang.psi.VlangNamedSignatureOwner"
   implements("(Function|Method)Declaration")="org.vlang.lang.psi.VlangFunctionOrMethodDeclaration"
 //  implements("(Const|Type|Var)Declaration")="org.vlang.lang.psi.GoTopLevelDeclaration"
-  implements(".*ReferenceExpression|FieldName|ImportPath|DotExpression")="org.vlang.lang.psi.VlangReferenceExpressionBase"
+  implements(".*ReferenceExpression|FieldName|ImportPath")="org.vlang.lang.psi.VlangReferenceExpressionBase"
 //  implements("Type")="org.vlang.lang.psi.VlangReferenceExpressionBase"
   implements("(Continue|Break|Goto)Statement")="org.vlang.lang.psi.VlangLabelRefOwnerElement"
 
-  extends("ImportSpec")="org.vlang.lang.psi.impl.VlangSimpleNamedElementImpl"
-
   extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
   extends("ModuleClause|Type")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
-  extends("(Struct|TypeAlias|Union|Enum|Interface)Declaration|(Var|Label|Param|Field|Const|EnumField)Definition|Receiver")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
+  extends("(Struct|TypeAlias|Union|Enum|Interface)Declaration|(Var|Label|Param|Field|Const|EnumField)Definition|Receiver|ImportPath|ImportAlias")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
 
-  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum|Interface)Declaration|.*Type|(Var|Label|Field|Param|Const|EnumField)Definition|Receiver")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
+  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum|Interface)Declaration|.*Type|(Var|Label|Field|Param|Const|EnumField)Definition|Receiver|ImportPath|ImportAlias")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
 
   extends(".*Statement")=Statement
   extends(".*Type|TypeList")=Type
@@ -117,7 +115,8 @@ File ::= ModuleClause? ImportList? TopLevelDeclaration*
 private semi ::= '<NL>' | ';' | <<eof>>
 
 // [attr] module <name>
-ModuleClause ::= Attributes? module identifier semi {pin=2
+ModuleClause ::= Attributes? module identifier semi {
+  pin=2
   methods=[getName]
   stubClass="org.vlang.lang.stubs.VlangModuleClauseStub"
 }
@@ -132,7 +131,7 @@ ImportList ::= (ImportDeclaration semi)+ {
 
 // import <spec>
 ImportDeclaration ::= import ImportSpec {
-  pin(".*")=1
+  pin=1
   methods=[addImportSpec]
 }
 
@@ -141,22 +140,32 @@ ImportDeclaration ::= import ImportSpec {
 // <part1> { <ref> }
 // <part1> as <alias>
 ImportSpec ::= ImportPath (SelectiveImportList | ImportAlias)? {
-//  stubClass="org.vlang.lang.stubs.GoImportSpecStub"
-  methods=[getIdentifier getAlias getLastPart getLocalPackageName shouldGoDeeper isForSideEffects isDot getPath getName isCImport]
+  methods=[getIdentifier getReference getAlias getLastPart getLocalPackageName shouldGoDeeper isForSideEffects isDot getPath getName isCImport]
 }
 
 // <part1>
 // <part1>.<part2>
-ImportPath ::= ImportString ('.' ImportString)* {methods=[getIdentifier getQualifier]}
+ImportPath ::= ImportName ('.' ImportName)* {
+  stubClass="org.vlang.lang.stubs.VlangImportPathStub"
+  methods=[getIdentifier getQualifier getReference]
+}
 
 // just identifier
-private ImportString ::= ReferenceExpression {methods=[getReference resolve getPath getPathTextRange]}
+ImportName ::= identifier
 
 // { <ref>[, <ref2>] }
 SelectiveImportList ::= '{' ReferenceExpression (',' ReferenceExpression)* '}' {pin(".*")=2}
 
 // as <ident>
-ImportAlias ::= as identifier {pin(".*")=2}
+ImportAlias ::= as ImportAliasName {
+  pin=1
+  stubClass="org.vlang.lang.stubs.VlangImportAliasStub"
+  methods=[getName getIdentifier]
+}
+
+ImportAliasName ::= identifier {
+  methods=[getReference]
+}
 // end of import rule
 
 ////////// TOP LEVEL DECLARATIONS //////////
@@ -502,8 +511,7 @@ private ReceiverTail ::= Type ','?
 ////////// EXPRESSIONS //////////
 
 Expression ::=
-    OrBlockExpr
-  | OrExpr
+    OrExpr
   | AndExpr
   | ConditionalExpr
   | AddExpr
@@ -526,7 +534,6 @@ Expression ::=
   | EnumFetch
   | MutExpression
   | SharedExpression
-  | DotExpression
   | ErrorPropagationExpression
   | ForceNoErrorPropagationExpression
   | ConstexprIdentifierExpression
@@ -565,9 +572,7 @@ Value ::= Expression | LiteralValueExpression
 // end of type init
 
 private MaxGroup ::=
-  ReferenceExpression
-  | CallExpr
-  | IndexOrSliceExpr
+    DotExpression
   | Literal
   | FunctionLit
 //| CompositeLit
@@ -662,13 +667,6 @@ ChannelType ::= chan Type? {pin=1}
 
 
 LeftHandExprList ::= ExpressionList
-private ExpressionArgList ::= ElementList
-
-private SimpleExpressionArgList ::= ExpressionOrTypeWithRecover (',' (ExpressionOrTypeWithRecover | &')'))* {pin(".*")=2}
-private ExpressionOrTypeWithRecover ::= Expression {recoverWhile=ExpressionListRecover}
-
-private NamedExpressionArgList ::= NamedArgumentExpr ((semi | ',') (NamedArgumentExpr | &')'))* {pin(".*")=1}
-private NamedArgumentExpr ::= identifier ':' (Expression | UnpackingExpression) {pin=2}
 
 private ExpressionList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &')'))* {pin(".*")=1}
 private ExpressionWithRecover ::= Expression !':' {recoverWhile=ExpressionListRecover}
@@ -681,21 +679,32 @@ VarDefinition ::= VarModifiers? identifier {
   stubClass="org.vlang.lang.stubs.VlangVarDefinitionStub"
 }
 
-// <expr>.<ident>[(...)]
-DotExpression ::= Expression '.' MethodOrField {
-  pin=2
-  methods=[getIdentifier getQualifier resolve getReference]
-  implements="org.vlang.lang.psi.VlangReferenceExpression"
-}
+// <ident>[.<ident>]*
+DotExpression ::= DotPrimaryExpr RightHandExprs {extends=Expression}
 
-private MethodOrField ::= MethodCall | FieldLookup
-// just <ident>
-FieldLookup ::= ReferenceExpression
-// <ident>(...)
-MethodCall ::= ReferenceExpression ArgumentList {pin=2}
+private DotPrimaryExpr ::= ReferenceExpression | Literal | ParenthesesExpr
 
 // just <ident> with ref
 ReferenceExpression ::= identifier { methods=[getReference getQualifier resolve getReadWriteAccess] extends=Expression}
+left QualifiedReferenceExpression ::= '.' identifier {elementType=ReferenceExpression}
+
+private RightHandExprs ::= (CallExpr | IndexOrSliceExpr | QualifiedReferenceExpression | OrBlockExpr)*
+
+// <expr>(...)
+left CallExpr ::= ArgumentList
+
+// <expr>[<expr>]
+// <expr>#[<exr>]
+// <expr>[0..10]
+// <expr>[..10]
+// <expr>[0..]
+left IndexOrSliceExpr ::= ('[' | HASH_LBRACK) (SliceExprBody | IndexExprBody) '..'? ']'
+private IndexExprBody ::= Expression SliceExprBodyInner?
+private inner SliceExprBodyInner ::= SliceExprBody
+private SliceExprBody ::= &'..' '..' Expression
+
+// <expr> or { ... }
+left OrBlockExpr ::= or Block
 
 // math and logical expressions
 OrExpr ::= Expression semi? '||' Expression
@@ -740,9 +749,6 @@ EnumFetch ::= '.' ReferenceExpression {pin=2}
 // <expr>...<expr> (inclusive)
 RangeExpr ::= Expression ('..' | '...') !']' Expression {pin=2}
 
-// <expr> or { ... }
-OrBlockExpr ::= Expression or Block
-
 // mut <expr>
 MutExpression ::= mut Expression
 
@@ -754,18 +760,6 @@ ArrayCreation ::= '[' ArrayCreationList? (']' '!'?) {pin=1}
 // <expr1>, <expr2>, ..., <exprN>
 ArrayCreationList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &']'))* {pin(".*")=1}
 
-// <expr>[<expr>]
-// <expr>#[<exr>]
-// <expr>[0..10]
-// <expr>[..10]
-// <expr>[0..]
-IndexOrSliceExpr ::= Expression ('[' | HASH_LBRACK) (SliceExprBody | IndexExprBody) '..'? ']' {pin=2 methods = [getExpression getIndices]}
-private IndexExprBody ::= Expression SliceExprBodyInner?
-private inner SliceExprBodyInner ::= SliceExprBody
-private SliceExprBody ::= &'..' '..' Expression
-
-// <expr>(...)
-CallExpr ::= Expression ArgumentList
 // ([<arg1>, <arg2>[...], ...])
 ArgumentList ::= '(' ElementList? '...'? ','? ')' {pin=1}
 

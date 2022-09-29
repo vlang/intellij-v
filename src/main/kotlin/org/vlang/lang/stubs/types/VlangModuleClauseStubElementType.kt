@@ -15,7 +15,7 @@ class VlangModuleClauseStubElementType :
     }
 
     override fun createStub(psi: VlangModuleClause, parentStub: StubElement<*>): VlangModuleClauseStub {
-        return VlangModuleClauseStub(parentStub, this, psi.identifier?.text ?: "") // TODO
+        return VlangModuleClauseStub(parentStub, this, psi.name) // TODO
     }
 
     override fun serialize(stub: VlangModuleClauseStub, dataStream: StubOutputStream) {

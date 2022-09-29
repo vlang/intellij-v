@@ -8,7 +8,6 @@ import com.intellij.execution.configurations.ConfigurationTypeUtil
 import com.intellij.openapi.roots.TestSourcesFilter
 import com.intellij.openapi.util.Ref
 import com.intellij.psi.PsiElement
-import org.vlang.ide.test.VlangTestSourcesFilter
 import org.vlang.lang.psi.VlangFile
 import org.vlang.lang.psi.VlangModuleClause
 
@@ -33,7 +32,7 @@ class VlangTestConfigurationProducer : LazyRunConfigurationProducer<VlangTestCon
         }
 
         if (parent is VlangModuleClause) {
-            val moduleName = parent.identifier!!.text
+            val moduleName = parent.name
             return configuration.testModule == moduleName
         }
 
@@ -57,7 +56,7 @@ class VlangTestConfigurationProducer : LazyRunConfigurationProducer<VlangTestCon
         }
 
         if (parent is VlangModuleClause) {
-            val moduleName = parent.identifier!!.text
+            val moduleName = parent.name
             configuration.name = "V Test $moduleName"
             configuration.testModule = moduleName
             configuration.testFile = containingFile.virtualFile.path

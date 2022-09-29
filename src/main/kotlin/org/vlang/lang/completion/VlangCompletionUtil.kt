@@ -11,6 +11,7 @@ import com.intellij.codeInsight.lookup.LookupElementPresentation
 import com.intellij.codeInsight.lookup.LookupElementRenderer
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.editor.Editor
+import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.elementType
@@ -187,6 +188,10 @@ object VlangCompletionUtil {
     fun createTypeAliasLookupElement(element: VlangNamedElement): LookupElement? =
         createLookupElement(element, AllIcons.Nodes.Alias, TYPE_ALIAS_PRIORITY)
 
+    fun createDirectoryLookupElement(dir: PsiDirectory): LookupElementBuilder {
+        return LookupElementBuilder.createWithSmartPointer(dir.name, dir).withIcon(VIcons.Directory)
+    }
+
     fun createLookupElement(element: VlangNamedElement, icon: Icon, priority: Int): LookupElement? {
         val name = element.name
         if (name.isNullOrEmpty()) {
@@ -343,7 +348,7 @@ object VlangCompletionUtil {
     private val VARIABLE_RENDERER = object : LookupElementRenderer<LookupElement>() {
         override fun renderElement(element: LookupElement, p: LookupElementPresentation) {
             val elem = element.psiElement as? VlangNamedElement ?: return
-            val type = elem.getType(null)
+            val type = elem.getType(null)?.resolveType()
             val typeText = type?.text ?: ""
             val icon = when (elem) {
                 is VlangVarDefinition            -> VIcons.Variable

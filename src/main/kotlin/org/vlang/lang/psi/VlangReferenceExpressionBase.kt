@@ -4,5 +4,5 @@ import com.intellij.psi.PsiElement
 
 interface VlangReferenceExpressionBase : VlangCompositeElement {
     fun getIdentifier(): PsiElement?
-    fun getQualifier(): VlangReferenceExpressionBase?
+    fun getQualifier(): VlangCompositeElement?
 }

@@ -61,7 +61,6 @@ public interface VlangTypes {
   IElementType FIELDS_GROUP = new VlangCompositeElementType("FIELDS_GROUP");
   IElementType FIELD_DECLARATION = new VlangCompositeElementType("FIELD_DECLARATION");
   IElementType FIELD_DEFINITION = VlangElementTypeFactory.stubFactory("FIELD_DEFINITION");
-  IElementType FIELD_LOOKUP = new VlangCompositeElementType("FIELD_LOOKUP");
   IElementType FIELD_NAME = new VlangCompositeElementType("FIELD_NAME");
   IElementType FORCE_NO_ERROR_PROPAGATION_EXPRESSION = new VlangCompositeElementType("FORCE_NO_ERROR_PROPAGATION_EXPRESSION");
   IElementType FORMAT_SPECIFIER = new VlangCompositeElementType("FORMAT_SPECIFIER");
@@ -84,10 +83,12 @@ public interface VlangTypes {
   IElementType IF_ATTRIBUTE = new VlangCompositeElementType("IF_ATTRIBUTE");
   IElementType IF_EXPRESSION = new VlangCompositeElementType("IF_EXPRESSION");
   IElementType IF_STATEMENT = new VlangCompositeElementType("IF_STATEMENT");
-  IElementType IMPORT_ALIAS = new VlangCompositeElementType("IMPORT_ALIAS");
+  IElementType IMPORT_ALIAS = VlangElementTypeFactory.stubFactory("IMPORT_ALIAS");
+  IElementType IMPORT_ALIAS_NAME = new VlangCompositeElementType("IMPORT_ALIAS_NAME");
   IElementType IMPORT_DECLARATION = new VlangCompositeElementType("IMPORT_DECLARATION");
   IElementType IMPORT_LIST = new VlangCompositeElementType("IMPORT_LIST");
-  IElementType IMPORT_PATH = new VlangCompositeElementType("IMPORT_PATH");
+  IElementType IMPORT_NAME = new VlangCompositeElementType("IMPORT_NAME");
+  IElementType IMPORT_PATH = VlangElementTypeFactory.stubFactory("IMPORT_PATH");
   IElementType IMPORT_SPEC = new VlangCompositeElementType("IMPORT_SPEC");
   IElementType INC_DEC_EXPRESSION = new VlangCompositeElementType("INC_DEC_EXPRESSION");
   IElementType INDEX_OR_SLICE_EXPR = new VlangCompositeElementType("INDEX_OR_SLICE_EXPR");
@@ -118,7 +119,6 @@ public interface VlangTypes {
   IElementType MATCH_EXPRESSION = new VlangCompositeElementType("MATCH_EXPRESSION");
   IElementType MEMBER_MODIFIER = new VlangCompositeElementType("MEMBER_MODIFIER");
   IElementType MEMBER_MODIFIERS = new VlangCompositeElementType("MEMBER_MODIFIERS");
-  IElementType METHOD_CALL = new VlangCompositeElementType("METHOD_CALL");
   IElementType METHOD_DECLARATION = VlangElementTypeFactory.stubFactory("METHOD_DECLARATION");
   IElementType METHOD_NAME = new VlangCompositeElementType("METHOD_NAME");
   IElementType MODULE_CLAUSE = VlangElementTypeFactory.stubFactory("MODULE_CLAUSE");
@@ -415,9 +415,6 @@ public interface VlangTypes {
       else if (type == DEFER_STATEMENT) {
         return new VlangDeferStatementImpl(node);
       }
-      else if (type == DOT_EXPRESSION) {
-        return new VlangDotExpressionImpl(node);
-      }
       else if (type == ELEMENT) {
         return new VlangElementImpl(node);
       }
@@ -453,9 +450,6 @@ public interface VlangTypes {
       }
       else if (type == FIELD_DEFINITION) {
         return new VlangFieldDefinitionImpl(node);
-      }
-      else if (type == FIELD_LOOKUP) {
-        return new VlangFieldLookupImpl(node);
       }
       else if (type == FIELD_NAME) {
         return new VlangFieldNameImpl(node);
@@ -526,11 +520,17 @@ public interface VlangTypes {
       else if (type == IMPORT_ALIAS) {
         return new VlangImportAliasImpl(node);
       }
+      else if (type == IMPORT_ALIAS_NAME) {
+        return new VlangImportAliasNameImpl(node);
+      }
       else if (type == IMPORT_DECLARATION) {
         return new VlangImportDeclarationImpl(node);
       }
       else if (type == IMPORT_LIST) {
         return new VlangImportListImpl(node);
+      }
+      else if (type == IMPORT_NAME) {
+        return new VlangImportNameImpl(node);
       }
       else if (type == IMPORT_PATH) {
         return new VlangImportPathImpl(node);
@@ -624,9 +624,6 @@ public interface VlangTypes {
       }
       else if (type == MEMBER_MODIFIERS) {
         return new VlangMemberModifiersImpl(node);
-      }
-      else if (type == METHOD_CALL) {
-        return new VlangMethodCallImpl(node);
       }
       else if (type == METHOD_DECLARATION) {
         return new VlangMethodDeclarationImpl(node);

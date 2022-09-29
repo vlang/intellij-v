@@ -38,7 +38,7 @@ public class VlangFieldNameImpl extends VlangCompositeElementImpl implements Vla
 
   @Override
   @Nullable
-  public VlangReferenceExpressionBase getQualifier() {
+  public VlangCompositeElement getQualifier() {
     return VlangPsiImplUtil.getQualifier(this);
   }
 

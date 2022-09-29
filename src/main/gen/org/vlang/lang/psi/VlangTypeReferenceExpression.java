@@ -15,7 +15,7 @@ public interface VlangTypeReferenceExpression extends VlangReferenceExpressionBa
   VlangReference getReference();
 
   @Nullable
-  VlangTypeReferenceExpression getQualifier();
+  VlangCompositeElement getQualifier();
 
   @Nullable
   PsiElement resolve();

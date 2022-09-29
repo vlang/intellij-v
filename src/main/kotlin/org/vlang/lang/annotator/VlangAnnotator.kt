@@ -130,11 +130,11 @@ class VlangAnnotator : Annotator {
                 }
             }
 
-            if (element.parent is VlangReferenceExpression) {
-                when (element.parent.parent) {
-                    is VlangMethodCall  -> holder.textAttributes(element, JavaHighlightingColors.METHOD_CALL_ATTRIBUTES)
-                }
-            }
+//            if (element.parent is VlangReferenceExpression) {
+//                when (element.parent.parent) {
+//                    is VlangMethodCall  -> holder.textAttributes(element, JavaHighlightingColors.METHOD_CALL_ATTRIBUTES)
+//                }
+//            }
 
             when {
                 element.text == "_likely_" || element.text == "_unlikely_"      ->
