@@ -72,11 +72,30 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
             }
 
             if (qualifier is VlangReferenceExpression) {
+                // expr or { err }
+                if (qualifier.getIdentifier().text == "err" && qualifier.parentOfType<VlangOrBlockExpr>() != null) {
+                    return !processBuiltin( processor, state.put(SEARCH_NAME, "IError"), myElement)
+                }
+
                 val importSpec = when (val resolved = qualifier.resolve()) {
                     is VlangImportAlias -> resolved.parent
                     is VlangImportPath  -> resolved.parent
                     else                -> null
                 }
+
+                if (importSpec == null) {
+                    val name = qualifier.getIdentifier().text
+                    val moduleName = file.getModuleName()
+                    if (name == moduleName) {
+                        val moduleDir = file.parent
+                        if (!processDirectory(moduleDir, null, null, processor, state, true)) {
+                            return false
+                        }
+
+                        return true
+                    }
+                }
+
                 if (importSpec is VlangImportSpec) {
                     val moduleName = importSpec.name
                     val moduleFiles =
@@ -384,7 +403,13 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
         }
 
         val searchName = identifier!!.text
-        val (name, import) = file.resolveImportNameAndSpec(identifier!!.text)
+        val currentModuleName = file.getModuleName()
+        if (searchName == currentModuleName) {
+            val dir = file.parent ?: return true
+            return !processor.execute(dir, state.put(ACTUAL_NAME, searchName))
+        }
+
+        val (name, import) = file.resolveImportNameAndSpec(searchName)
         if (import == null) {
             return true
         }
@@ -412,8 +437,7 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
 
         return modules.any {
             val module = it.getModule()
-            val ref = module?.identifier ?: return@any false
-            val name = module.name
+            val name = module?.name ?: return@any false
             val dir = it.parent ?: return@any false
 
             !processor.execute(dir, state.put(ACTUAL_NAME, name))
@@ -528,9 +552,9 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
                     else                 -> null
                 }
 
-                val ident = reference.getIdentifier() ?: return true
+                val ident = state.get(SEARCH_NAME) ?: reference.getIdentifier()?.text ?: return true
 
-                if (name != null && ident.textMatches(name)) {
+                if (name != null && ident == name) {
                     result.add(PsiElementResolveResult(element))
                     return false
                 }

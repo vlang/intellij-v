@@ -30,8 +30,12 @@ open class VlangCompositeElementImpl(node: ASTNode) : ASTWrapperPsiElement(node)
             lastParent: PsiElement?,
             place: PsiElement,
         ): Boolean {
-            if (o is VlangExpression) return true
-            if (!processor.execute(o, state)) return false
+            if (o is VlangExpression && o !is VlangIfExpression) {
+                return true
+            }
+            if (!processor.execute(o, state)) {
+                return false
+            }
             if ((o is VlangIfStatement || o is VlangForStatement || o is VlangBlock)
                 && processor is VlangScopeProcessorBase
             ) {

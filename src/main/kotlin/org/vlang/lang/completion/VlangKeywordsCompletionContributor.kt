@@ -13,6 +13,7 @@ import com.intellij.util.ProcessingContext
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.completion.VlangCompletionUtil.KEYWORD_PRIORITY
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.impl.VlangPsiImplUtil
 
 class VlangKeywordsCompletionContributor : CompletionContributor() {
     init {
@@ -48,6 +49,11 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
             }
 
             if (parameters.position.parentOfType<VlangLiteralValueExpression>() != null) {
+                result.stopHere()
+                return
+            }
+
+            if (VlangPsiImplUtil.prevDot(parameters.position)) {
                 result.stopHere()
                 return
             }

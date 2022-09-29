@@ -402,6 +402,11 @@ object VlangPsiImplUtil {
                 return getBuiltinType("string", expr)
             }
 
+            // expr or { err }
+            if (expr.getIdentifier().text == "err" && expr.parentOfType<VlangOrBlockExpr>() != null) {
+                return getBuiltinType("IError", expr)
+            }
+
             val reference = expr.reference
             val resolve = reference.resolve()
             if (resolve is VlangTypeOwner)
