@@ -316,27 +316,35 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
     }
 
     private fun handleEnumFetch(
-        parent: VlangEnumFetch,
+        fetch: VlangEnumFetch,
         file: VlangFile,
         processor: VlangScopeProcessor,
         state: ResolveState,
     ): Boolean {
-        if (parent.parent is VlangMatchArm) {
-            val parentMatch = parent.parentOfType<VlangMatchExpression>()
+        if (fetch.parent is VlangMatchArm) {
+            val parentMatch = fetch.parentOfType<VlangMatchExpression>()
             if (parentMatch != null) {
                 val matchExpression = parentMatch.expression as? VlangReferenceExpression ?: return true
                 return processQualifierExpression(file, matchExpression, processor, state)
             }
         }
-        if (parent.parent is VlangDefaultFieldValue) {
-            val fieldDeclaration = parent.parent.parent
+        if (fetch.parent is VlangDefaultFieldValue) {
+            val fieldDeclaration = fetch.parent.parent
             if (fieldDeclaration is VlangFieldDeclaration) {
                 // TODO: support multi fields
                 val fieldDefinitionType = fieldDeclaration.type?.typeReferenceExpressionList?.firstOrNull() ?: return true
                 return processQualifierExpression(file, fieldDefinitionType, processor, state)
             }
         }
-        val parentAssign = parent.parentOfType<VlangAssignmentStatement>()
+        if (fetch.parent is VlangBinaryExpr) {
+            val binaryExpr = fetch.parent as VlangBinaryExpr
+            if (binaryExpr.right != null && binaryExpr.right!!.isEquivalentTo(fetch)) {
+                val left = binaryExpr.left ?: return true
+                return processQualifierExpression(file, left, processor, state)
+            }
+        }
+
+        val parentAssign = fetch.parentOfType<VlangAssignmentStatement>()
         if (parentAssign != null) {
             // TODO: support multi assign
             val assignExpression = parentAssign.leftHandExprList.expressionList.firstOrNull() as? VlangReferenceExpression ?: return true
