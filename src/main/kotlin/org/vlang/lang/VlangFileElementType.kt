@@ -8,7 +8,7 @@ import com.intellij.psi.tree.IStubFileElementType
 import com.intellij.util.io.StringRef
 import org.vlang.lang.psi.VlangFile
 import org.vlang.lang.stubs.VlangFileStub
-import org.vlang.lang.stubs.index.VlangPackagesIndex
+import org.vlang.lang.stubs.index.VlangModulesIndex
 
 class VlangFileElementType : IStubFileElementType<VlangFileStub>("VLANG_FILE", VlangLanguage.INSTANCE) {
     override fun getStubVersion() = VERSION
@@ -29,9 +29,9 @@ class VlangFileElementType : IStubFileElementType<VlangFileStub>("VLANG_FILE", V
         super.indexStub(stub, sink)
         if (stub !is VlangFileStub) return
 
-        val packageName = stub.getModuleName() ?: return
-        if (packageName.isNotEmpty()) {
-            sink.occurrence(VlangPackagesIndex.KEY, packageName)
+        val moduleName = stub.getModuleQualifiedName() ?: return
+        if (moduleName.isNotEmpty()) {
+            sink.occurrence(VlangModulesIndex.KEY, moduleName)
         }
     }
 
@@ -47,6 +47,6 @@ class VlangFileElementType : IStubFileElementType<VlangFileStub>("VLANG_FILE", V
 
     companion object {
         val INSTANCE = VlangFileElementType()
-        const val VERSION = 36
+        const val VERSION = 38
     }
 }

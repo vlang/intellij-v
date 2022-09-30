@@ -104,7 +104,7 @@ object VlangCompletionUtil {
         }
         return createFunctionLookupElement(
             element, name,
-            insertHandler = StringInsertHandler("()", 1),
+            insertHandler = FunctionInsertHandler(),
             priority = FUNCTION_PRIORITY,
         )
     }
@@ -304,6 +304,19 @@ object VlangCompletionUtil {
         AutoPopupController.getInstance(editor.project!!).autoPopupMemberLookup(editor, null)
     }
 
+    class FunctionInsertHandler : InsertHandler<LookupElement> {
+        override fun handleInsert(context: InsertionContext, item: LookupElement) {
+            val caretOffset = context.editor.caretModel.offset
+            val element = context.file.findElementAt(caretOffset - 1) ?: return
+            if (element.parentOfType<VlangSelectiveImportList>() != null) {
+                return
+            }
+
+            context.document.insertString(caretOffset, "()")
+            context.editor.caretModel.moveToOffset(caretOffset + 1)
+        }
+    }
+
     class StringInsertHandler(val string: String, val shift: Int) : InsertHandler<LookupElement> {
         override fun handleInsert(context: InsertionContext, item: LookupElement) {
             val caretOffset = context.editor.caretModel.offset
@@ -316,6 +329,10 @@ object VlangCompletionUtil {
     class StructInsertHandler : InsertHandler<LookupElement> {
         override fun handleInsert(context: InsertionContext, item: LookupElement) {
             val caretOffset = context.editor.caretModel.offset
+            val element = context.file.findElementAt(caretOffset - 1) ?: return
+            if (element.parentOfType<VlangSelectiveImportList>() != null) {
+                return
+            }
 
             context.document.insertString(caretOffset, "{}")
             context.editor.caretModel.moveToOffset(caretOffset + 1)

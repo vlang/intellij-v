@@ -76,12 +76,32 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getName(o: VlangImportSpec): String {
-        return o.importPath.getIdentifier()?.text ?: ""
+        return o.importPath.qualifiedName
+    }
+
+    @JvmStatic
+    fun getQualifiedName(o: VlangImportPath): String {
+        return o.importNameList.joinToString(".") { it.text }
+    }
+
+    @JvmStatic
+    fun getLastPart(o: VlangImportPath): String {
+        return o.lastPartPsi.text
+    }
+
+    @JvmStatic
+    fun getLastPartPsi(o: VlangImportPath): PsiElement {
+        return o.importNameList.last()
     }
 
     @JvmStatic
     fun getLastPart(o: VlangImportSpec): String {
-        return o.name.split(".").last()
+        return o.importPath.lastPart
+    }
+
+    @JvmStatic
+    fun getLastPartPsi(o: VlangImportSpec): PsiElement {
+        return o.importPath.lastPartPsi
     }
 
     @JvmStatic
@@ -109,51 +129,58 @@ object VlangPsiImplUtil {
         return VlangReference(o)
     }
 
-//    @JvmStatic
-//    fun getReference(o: VlangDotExpression): VlangReference {
-//        return VlangReference(o)
-//    }
-//
-//    @JvmStatic
-//    fun getIdentifier(o: VlangDotExpression): PsiElement? {
-//        return o.fieldLookup?.referenceExpression?.getIdentifier() ?: o.methodCall?.referenceExpression?.getIdentifier()
-//    }
-//
-//    @JvmStatic
-//    fun getIdentifier(o: VlangSimpleQualifiedReferenceExpression): PsiElement? {
-//        return o.referenceExpression.getIdentifier()
-//    }
-//
-//    @JvmStatic
-//    fun getQualifier(o: VlangSimpleQualifiedReferenceExpression): VlangReferenceExpression? {
-//        return o.referenceExpression
-//    }
-//
-//    @JvmStatic
-//    fun getIdentifier(o: VlangQualifiedReferenceExpression): PsiElement? {
-//        return o.referenceExpression.getIdentifier()
-//    }
-//
-//    @JvmStatic
-//    fun getQualifier(o: VlangQualifiedReferenceExpression): VlangReferenceExpression? {
-//        return o.referenceExpression
-//    }
-//
-//    @JvmStatic
-//    fun getQualifier(o: VlangDotExpression): VlangReferenceExpression? {
-//        return o.simpleQualifiedReferenceExpression.referenceExpression
-//    }
+    @JvmStatic
+    fun getReference(o: VlangImportName): VlangImportReference<VlangImportName> {
+        return VlangImportReference(o, o.parentOfType()!!)
+    }
+
+    @JvmStatic
+    fun resolve(o: VlangImportName): PsiElement? {
+        return o.reference.resolve()
+    }
+
+    @JvmStatic
+    fun getNameIdentifier(o: VlangImportName): PsiElement {
+        return o.getIdentifier()
+    }
+
+    @JvmStatic
+    fun getTextOffset(o: VlangImportName): Int {
+        return getNameIdentifier(o).textOffset
+    }
+
+    @JvmStatic
+    fun setName(o: VlangImportName, newName: String): PsiElement {
+        val identifier = o.identifier
+        identifier.replace(VlangElementFactory.createIdentifierFromText(o.project, newName))
+        return o
+    }
+
+    @JvmStatic
+    fun getName(o: VlangImportName): String? {
+        val stub = o.stub
+        if (stub != null) {
+            return stub.name
+        }
+        return o.identifier.text
+    }
+
+    @JvmStatic
+    fun getQualifier(o: VlangImportName): String {
+        val parts = mutableListOf<String>()
+        var sibling = o.prevSibling
+        while (sibling != null) {
+            if (sibling is VlangImportName) {
+                parts.add(sibling.text)
+            }
+            sibling = sibling.prevSibling
+        }
+
+        return parts.reversed().joinToString(".")
+    }
 
     @JvmStatic
     fun getQualifier(o: VlangReferenceExpression): VlangCompositeElement? {
-//        val parenExpr = o.childrenOfType<VlangParenthesesExpr>().firstOrNull()
-//        if (parenExpr != null) {
-//            return parenExpr.expression as? VlangReferenceExpression
-//        }
-//        val accessExpr = o.childrenOfType<VlangIndexOrSliceExpr>().firstOrNull()
-//        if (accessExpr != null) {
-//            return accessExpr.expressionList.firstOrNull() as? VlangReferenceExpression
-//        }
         return PsiTreeUtil.getChildOfType(o, VlangExpression::class.java)
     }
 
@@ -210,11 +237,6 @@ object VlangPsiImplUtil {
     fun resolve(o: VlangReferenceExpression): PsiElement? {
         return o.reference.resolve()
     }
-
-//    @JvmStatic
-//    fun resolve(o: VlangDotExpression): PsiElement? {
-//        return o.reference.resolve()
-//    }
 
     @JvmStatic
     fun getReference(o: VlangTypeReferenceExpression): VlangReference {
@@ -278,23 +300,8 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getIdentifier(o: VlangImportPath): PsiElement? {
-        return o.importNameList.firstOrNull()?.identifier
-    }
-
-    @JvmStatic
     fun getIdentifier(o: VlangImportAlias): PsiElement? {
         return o.importAliasName?.identifier
-    }
-
-    @JvmStatic
-    fun getQualifier(o: VlangImportPath): VlangCompositeElement? {
-        return null
-    }
-
-    @JvmStatic
-    fun getReference(o: VlangImportPath): VlangImportReference<VlangImportPath> {
-        return VlangImportReference(o, o.parent as VlangImportSpec)
     }
 
     @JvmStatic

@@ -1,6 +1,7 @@
 package org.vlang.lang.psi
 
 import com.intellij.extapi.psi.PsiFileBase
+import com.intellij.openapi.project.guessProjectDir
 import com.intellij.psi.*
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
 import com.intellij.psi.stubs.StubElement
@@ -46,13 +47,13 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
         return CachedValuesManager.getCachedValue(this) {
             val map = mutableMapOf<String, VlangImportSpec>()
             for (spec in getImports()) {
-                val path = spec.importPath.importNameList.joinToString(".") { it.text }
+                val path = spec.importPath.qualifiedName
                 map[path] = spec
             }
             CachedValueProvider.Result.create(map, this)
         }
     }
-    
+
     fun getImportList(): VlangImportList? {
         return findChildByClass(VlangImportList::class.java)
     }
@@ -71,6 +72,33 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
         return getModule()?.name
     }
 
+    fun getModuleQualifiedName(): String {
+        val stub = stub as? VlangFileStub
+        val moduleQualifiedName = stub?.getModuleQualifiedName()
+        if (moduleQualifiedName != null) {
+            return moduleQualifiedName
+        }
+
+        val projectDir = project.guessProjectDir() ?: return ""
+
+        val moduleNames = mutableListOf<String>()
+        var dir = virtualFile?.parent?.parent // parent directory for directory with this file
+        var depth = 0
+        while (dir != projectDir && dir != null && dir.name != "src" && depth < 10) {
+            moduleNames.add(dir.name)
+
+            dir = dir.parent
+            depth++
+        }
+
+        val qualifier = moduleNames.reversed().joinToString(".")
+        val moduleName = getModuleName()
+        if (qualifier.isNotEmpty()) {
+            return "$qualifier.$moduleName"
+        }
+        return moduleName ?: ""
+    }
+
     private fun getImports(): List<VlangImportSpec> {
         return findChildByClass(VlangImportList::class.java)?.importDeclarationList?.mapNotNull {
             it.importSpec
@@ -81,11 +109,11 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
         return resolveImportNameAndSpec(name).first
     }
 
-    fun resolveImportNameAndSpec(name: String): Pair<String?, VlangImportSpec?> {
+    fun resolveImportNameAndSpec(name: String): Triple<String?, VlangImportSpec?, Boolean> {
         val imports = getImports()
         for (import in imports) {
             if (import.importAlias?.name == name) {
-                return import.identifier.text to import
+                return Triple(import.importPath.qualifiedName, import, false)
             }
 
             val selectiveImport = import.selectiveImportList?.referenceExpressionList?.any {
@@ -93,20 +121,20 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
             } ?: false
 
             if (selectiveImport) {
-                return import.name + "." + name to import
+                return Triple(import.importPath.qualifiedName + "." + name, import, true)
             }
 
-            val importName = import.name
-            if (importName == name) {
-                return importName to import
-            }
+//            val importName = import.name
+//            if (importName == name) {
+//                return importName to import
+//            }
 
-            if (import.lastPart == name) {
-                return importName to import
+            if (import.importPath.lastPart == name) {
+                return Triple(import.importPath.qualifiedName, import, false)
             }
         }
 
-        return null to null
+        return Triple(null, null, false)
     }
 
     fun resolveName(name: String): String? {
@@ -174,7 +202,7 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
     fun getTypes(): List<VlangStructDeclaration> =
         getNamedElements(VlangTypes.TYPE_ALIAS_DECLARATION, VlangStructDeclarationStubElementType.ARRAY_FACTORY)
 
-    private inline fun <reified T : PsiElement?> getNamedElements(elementType: IElementType, arrayFactory: ArrayFactory<T>): List<T> {
+    private inline fun <reified T : PsiElement> getNamedElements(elementType: IElementType, arrayFactory: ArrayFactory<T>): List<T> {
         return CachedValuesManager.getCachedValue(this) {
             val elements =
                 if (stub != null) {

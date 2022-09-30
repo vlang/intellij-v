@@ -87,8 +87,8 @@ public interface VlangTypes {
   IElementType IMPORT_ALIAS_NAME = new VlangCompositeElementType("IMPORT_ALIAS_NAME");
   IElementType IMPORT_DECLARATION = new VlangCompositeElementType("IMPORT_DECLARATION");
   IElementType IMPORT_LIST = new VlangCompositeElementType("IMPORT_LIST");
-  IElementType IMPORT_NAME = new VlangCompositeElementType("IMPORT_NAME");
-  IElementType IMPORT_PATH = VlangElementTypeFactory.stubFactory("IMPORT_PATH");
+  IElementType IMPORT_NAME = VlangElementTypeFactory.stubFactory("IMPORT_NAME");
+  IElementType IMPORT_PATH = new VlangCompositeElementType("IMPORT_PATH");
   IElementType IMPORT_SPEC = new VlangCompositeElementType("IMPORT_SPEC");
   IElementType INC_DEC_EXPRESSION = new VlangCompositeElementType("INC_DEC_EXPRESSION");
   IElementType INDEX_OR_SLICE_EXPR = new VlangCompositeElementType("INDEX_OR_SLICE_EXPR");

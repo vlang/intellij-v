@@ -11,11 +11,11 @@ import com.intellij.psi.util.parentOfType
 import com.intellij.util.ArrayUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangPsiImplUtil.processNamedElements
+import org.vlang.lang.stubs.index.VlangModulesIndex
 import org.vlang.lang.stubs.index.VlangNamesIndex
-import org.vlang.lang.stubs.index.VlangPackagesIndex
 import org.vlang.sdk.VlangSdkUtil
 
-class VlangReference(private val el: VlangReferenceExpressionBase) :
+class VlangReference(el: VlangReferenceExpressionBase) :
     VlangReferenceBase<VlangReferenceExpressionBase>(
         el,
         TextRange.from(
@@ -74,7 +74,7 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
             if (qualifier is VlangReferenceExpression) {
                 val importSpec = when (val resolved = qualifier.resolve()) {
                     is VlangImportAlias -> resolved.parent
-                    is VlangImportPath  -> resolved.parent
+                    is VlangImportName  -> resolved.parent.parent
                     else                -> null
                 }
 
@@ -92,18 +92,13 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
                 }
 
                 if (importSpec is VlangImportSpec) {
-                    val moduleName = importSpec.name
-                    val moduleFiles =
-                        VlangPackagesIndex.find(moduleName, myElement.project, GlobalSearchScope.allScope(myElement.project), null)
-
-                    if (moduleFiles.isNotEmpty()) {
-                        val moduleDir = moduleFiles.first().parent
-                        if (!processDirectory(moduleDir, null, null, processor, state, false)) {
-                            return false
-                        }
-                    }
+                    if (processImportPath(importSpec.importPath, processor, state)) return false
                 }
             }
+        }
+
+        if (qualifier is VlangImportPath) {
+            if (processImportPath(qualifier, processor, state)) return false
         }
 
 //        if (target is VlangImportSpec) {
@@ -123,6 +118,24 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
 ////                ) // a bit hacky resolve for: var a C.foo; a.b
 //            }
 //        }
+        return false
+    }
+
+    private fun processImportPath(
+        importPath: VlangImportPath,
+        processor: VlangScopeProcessor,
+        state: ResolveState,
+    ): Boolean {
+        val moduleName = importPath.qualifiedName
+        val moduleFiles =
+            VlangModulesIndex.find(moduleName, myElement.project, GlobalSearchScope.allScope(myElement.project), null)
+
+        if (moduleFiles.isNotEmpty()) {
+            val moduleDir = moduleFiles.first().parent
+            if (!processDirectory(moduleDir, null, null, processor, state, false)) {
+                return true
+            }
+        }
         return false
     }
 
@@ -306,6 +319,13 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
             }
         }
 
+        when (val grand = myElement.parent.parent) {
+            is VlangImportSpec -> {
+                val importPath = grand.importPath
+                return processQualifierExpression(file, importPath, processor, state)
+            }
+        }
+
         if (!processBlock(processor, state, true)) return false
         if (!processModules(file, processor, state, true)) return false
         if (!processImports(file, processor, state, myElement)) return false
@@ -417,20 +437,24 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
             return !processor.execute(dir, state.put(ACTUAL_NAME, searchName))
         }
 
-        val (name, import) = file.resolveImportNameAndSpec(searchName)
+        val (name, import, isSelectiveImport) = file.resolveImportNameAndSpec(searchName)
         if (import == null) {
             return true
         }
 
+        if (isSelectiveImport) {
+            return !processQualifierExpression(file, import.importPath, processor, state)
+        }
+
         if (searchName == name) {
-            return !processor.execute(import.importPath, state)
+            return !processor.execute(import.lastPartPsi, state)
         }
 
         if (import.importAlias != null) {
             return processor.execute(import.importAlias!!, state.put(ACTUAL_NAME, searchName))
         }
 
-        return !processor.execute(import.importPath, state.put(ACTUAL_NAME, searchName))
+        return !processor.execute(import.lastPartPsi, state.put(ACTUAL_NAME, searchName))
     }
 
     // TODO: redone
@@ -441,7 +465,7 @@ class VlangReference(private val el: VlangReferenceExpressionBase) :
 
         val fqn = file.resolveImportName(identifier!!.text) ?: return false
 
-        val modules = VlangPackagesIndex.find(fqn, myElement.project, GlobalSearchScope.allScope(file.project), null)
+        val modules = VlangModulesIndex.find(fqn, myElement.project, GlobalSearchScope.allScope(file.project), null)
 
         return modules.any {
             val module = it.getModule()

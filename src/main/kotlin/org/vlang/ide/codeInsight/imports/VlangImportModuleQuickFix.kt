@@ -19,7 +19,8 @@ import com.intellij.openapi.ui.popup.JBPopupFactory
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiReference
-import com.intellij.ui.components.JBLabel
+import com.intellij.ui.SimpleColoredComponent
+import com.intellij.ui.SimpleTextAttributes
 import com.intellij.ui.components.JBList
 import com.intellij.util.IncorrectOperationException
 import com.intellij.util.containers.ContainerUtil
@@ -30,8 +31,7 @@ import org.vlang.lang.psi.VlangReferenceExpression
 import org.vlang.lang.psi.VlangTypeReferenceExpression
 import org.vlang.lang.psi.impl.VlangPsiImplUtil
 import org.vlang.lang.psi.impl.VlangReference
-import org.vlang.lang.stubs.index.VlangPackagesIndex
-import javax.swing.SwingConstants
+import org.vlang.lang.stubs.index.VlangModulesIndex
 
 class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, HintAction, HighPriorityAction {
     private val myModuleName: String
@@ -62,10 +62,12 @@ class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, H
     }
 
     override fun getText(): String {
-        val element: PsiElement = getStartElement()
+        val element = startElement
         return if (element != null) {
             "Import " + getText(getImportPathVariantsToImport(element))
-        } else "Import module"
+        } else {
+            "Import module"
+        }
     }
 
     override fun getFamilyName(): String {
@@ -154,12 +156,20 @@ class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, H
             editor != null || modulesToImport.size == 1,
             "Cannot invoke fix with ambiguous imports on null editor"
         )
+
         if (modulesToImport.size > 1 && editor != null) {
             val list = JBList(modulesToImport)
-            list.installCellRenderer { o: String ->
-                val label = JBLabel(o, VIcons.Module, SwingConstants.LEFT)
-                label.border = JBUI.Borders.empty(2, 4, 2, 4)
-                label
+
+            list.installCellRenderer { name ->
+                val parts = name.split('.')
+                val shortName = parts.last()
+
+                SimpleColoredComponent().apply {
+                    icon = VIcons.Module
+                    append(shortName)
+                    append(" ($name)", SimpleTextAttributes.GRAY_ATTRIBUTES)
+                    border = JBUI.Borders.empty(2, 4, 2, 4)
+                }
             }
 
             val builder = JBPopupFactory.getInstance().createListPopupBuilder(list).setRequestFocus(true)
@@ -172,7 +182,7 @@ class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, H
 
                     perform(file, modulesToImport[i])
                 }
-                .setFilteringEnabled { o: Any -> if (o is String) o else o.toString() }
+                .setFilteringEnabled { element: Any -> if (element is String) element else element.toString() }
 
             val popup = builder.createPopup()
             builder.scrollPane.border = null
@@ -250,7 +260,7 @@ class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, H
 //            val modules: Collection<VlangFile> =
 //                StubIndex.getElements(VlangModulesIndex.KEY, moduleName, project, scope, VlangFile::class.java)
 
-            val modules = VlangPackagesIndex.getAll(project)
+            val modules = VlangModulesIndex.getAll(project)
 
             return modules.mapNotNull { file ->
 //                if (parentDirectory != null && parentDirectory.isEquivalentTo(file.parent)) {
@@ -261,7 +271,12 @@ class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, H
                 if (!VlangPsiImplUtil.canBeAutoImported(file, false, module)) {
                     return@mapNotNull null
                 }
-                val importPath = file.getModuleName() // file.getImportPath(vendoringEnabled)
+                val importPath = file.getModuleQualifiedName() // file.getImportPath(vendoringEnabled)
+                val parts = importPath.split('.')
+                val shortName = parts.last()
+                if (shortName != moduleName) {
+                    return@mapNotNull null
+                }
 
                 if (!imported.contains(importPath))
                     importPath

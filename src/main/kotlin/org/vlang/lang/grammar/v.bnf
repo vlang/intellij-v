@@ -82,20 +82,20 @@
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional|OrBlock)Expr")=BinaryExpr
   extends(".*(Expr|Literal|Lit|OperandName)|TypeInitExpr|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|SharedExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression|LockExpression|IncDecExpression|LiteralValueExpression")=Expression
 
-  implements("(Var|Param|Field|Label|Var|Const|EnumField)Definition|(Struct|TypeAlias|Union|Enum|Interface)Declaration|Receiver|FieldDefinition|ImportPath|ImportAlias")="org.vlang.lang.psi.VlangNamedElement"
+  implements("(Var|Param|Field|Label|Var|Const|EnumField)Definition|(Struct|TypeAlias|Union|Enum|Interface)Declaration|Receiver|FieldDefinition|Import(Alias)")="org.vlang.lang.psi.VlangNamedElement"
   implements("FunctionLit|(Function|Method)Declaration")="org.vlang.lang.psi.VlangSignatureOwner"
 //  implements("InterfaceMethodDeclaration")="org.vlang.lang.psi.VlangNamedSignatureOwner"
   implements("(Function|Method)Declaration")="org.vlang.lang.psi.VlangFunctionOrMethodDeclaration"
 //  implements("(Const|Type|Var)Declaration")="org.vlang.lang.psi.GoTopLevelDeclaration"
-  implements(".*ReferenceExpression|FieldName|ImportPath")="org.vlang.lang.psi.VlangReferenceExpressionBase"
+  implements(".*ReferenceExpression|FieldName")="org.vlang.lang.psi.VlangReferenceExpressionBase"
 //  implements("Type")="org.vlang.lang.psi.VlangReferenceExpressionBase"
   implements("(Continue|Break|Goto)Statement")="org.vlang.lang.psi.VlangLabelRefOwnerElement"
 
   extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
-  extends("ModuleClause|Type")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
-  extends("(Struct|TypeAlias|Union|Enum|Interface)Declaration|(Var|Label|Param|Field|Const|EnumField)Definition|Receiver|ImportPath|ImportAlias")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
+  extends("ModuleClause|Type|ImportName")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
+  extends("(Struct|TypeAlias|Union|Enum|Interface)Declaration|(Var|Label|Param|Field|Const|EnumField)Definition|Receiver|Import(Alias)")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
 
-  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum|Interface)Declaration|.*Type|(Var|Label|Field|Param|Const|EnumField)Definition|Receiver|ImportPath|ImportAlias")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
+  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum|Interface)Declaration|.*Type|(Var|Label|Field|Param|Const|EnumField)Definition|Receiver|Import(Alias|Name)")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
 
   extends(".*Statement")=Statement
   extends(".*Type|TypeList")=Type
@@ -138,18 +138,21 @@ ImportDeclaration ::= import ImportSpec {
 // <part1> { <ref> }
 // <part1> as <alias>
 ImportSpec ::= ImportPath (SelectiveImportList | ImportAlias)? {
-  methods=[getIdentifier getReference getAlias getLastPart getLocalPackageName shouldGoDeeper isForSideEffects isDot getPath getName isCImport]
+  methods=[getIdentifier getReference getAlias getLastPart getLastPartPsi getLocalPackageName shouldGoDeeper isForSideEffects isDot getPath getName isCImport]
 }
 
 // <part1>
 // <part1>.<part2>
 ImportPath ::= ImportName ('.' ImportName)* {
-  stubClass="org.vlang.lang.stubs.VlangImportPathStub"
-  methods=[getIdentifier getQualifier getReference]
+  methods=[getQualifiedName getLastPart getLastPartPsi]
 }
 
 // just identifier
-ImportName ::= identifier
+ImportName ::= identifier {
+  stubClass="org.vlang.lang.stubs.VlangImportNameStub"
+  methods=[getQualifier getNameIdentifier setName getName getTextOffset getReference resolve]
+  implements="com.intellij.psi.PsiNameIdentifierOwner"
+}
 
 // { <ref>[, <ref2>] }
 SelectiveImportList ::= '{' ReferenceExpression (',' ReferenceExpression)* '}' {pin(".*")=2}
@@ -689,7 +692,7 @@ left QualifiedReferenceExpression ::= '.' identifier {elementType=ReferenceExpre
 private RightHandExprs ::= RightHandExpr*
 
 private RightHandExpr ::=
-  CallExpr
+    CallExpr
   | IndexOrSliceExpr
   | QualifiedReferenceExpression
   | OrBlockExpr

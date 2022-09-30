@@ -30,6 +30,9 @@ public interface VlangImportSpec extends VlangCompositeElement {
   @NotNull
   String getLastPart();
 
+  @NotNull
+  PsiElement getLastPartPsi();
+
   //WARNING: getLocalPackageName(...) is skipped
   //matching getLocalPackageName(VlangImportSpec, ...)
   //methods are not found in VlangPsiImplUtil

@@ -39,7 +39,7 @@ object VlangElementTypeFactory {
         if ("ENUM_DECLARATION" == name) return VlangEnumDeclarationStubElementType(name)
         if ("INTERFACE_DECLARATION" == name) return VlangInterfaceDeclarationStubElementType(name)
         if ("TYPE_ALIAS_DECLARATION" == name) return VlangTypeAliasDeclarationStubElementType(name)
-        if ("IMPORT_PATH" == name) return VlangImportPathStubElementType(name)
+        if ("IMPORT_NAME" == name) return VlangImportNameStubElementType(name)
         if ("IMPORT_ALIAS" == name) return VlangImportAliasStubElementType(name)
         if ("PARAM_DEFINITION" == name) return VlangParamDefinitionStubElementType(name)
         if ("RECEIVER" == name) return VlangReceiverStubElementType(name)

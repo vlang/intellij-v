@@ -16,12 +16,12 @@ class VlangUnusedImportInspection : VlangBaseInspection() {
 
                 for (importDeclaration in o.importDeclarationList) {
                     val importSpec = importDeclaration.importSpec ?: continue
-                    if (importSpec.selectiveImportList != null || importSpec.importPath.importNameList.size > 1) {
-                        // TODO: support selective and foo.bar imports
+                    if (importSpec.selectiveImportList != null) {
+                        // TODO: support selective imports
                         continue
                     }
 
-                    val search = ReferencesSearch.search(importSpec.importPath, GlobalSearchScope.allScope(holder.project))
+                    val search = ReferencesSearch.search(importSpec.importPath.lastPartPsi, GlobalSearchScope.allScope(holder.project))
                     if (search.findFirst() != null)
                         continue
 

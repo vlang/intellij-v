@@ -3600,7 +3600,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // CallExpr
   //   | IndexOrSliceExpr
   //   | QualifiedReferenceExpression
-  //   | OrBlockExpr 
+  //   | OrBlockExpr
   //   | ErrorPropagationExpression
   //   | ForceNoErrorPropagationExpression
   static boolean RightHandExpr(PsiBuilder b, int l) {
@@ -3616,25 +3616,15 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (RightHandExpr)*
+  // RightHandExpr*
   static boolean RightHandExprs(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RightHandExprs")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!RightHandExprs_0(b, l + 1)) break;
+      if (!RightHandExpr(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "RightHandExprs", c)) break;
     }
     return true;
-  }
-
-  // (RightHandExpr)
-  private static boolean RightHandExprs_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "RightHandExprs_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = RightHandExpr(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */

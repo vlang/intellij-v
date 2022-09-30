@@ -56,6 +56,12 @@ public class VlangImportSpecImpl extends VlangCompositeElementImpl implements Vl
 
   @Override
   @NotNull
+  public PsiElement getLastPartPsi() {
+    return VlangPsiImplUtil.getLastPartPsi(this);
+  }
+
+  @Override
+  @NotNull
   public String getName() {
     return VlangPsiImplUtil.getName(this);
   }

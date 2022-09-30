@@ -9,9 +9,9 @@ import com.intellij.util.indexing.IdFilter
 import org.vlang.lang.VlangFileElementType
 import org.vlang.lang.psi.VlangFile
 
-class VlangPackagesIndex : StringStubIndexExtension<VlangFile>() {
+class VlangModulesIndex : StringStubIndexExtension<VlangFile>() {
     companion object {
-        val KEY = StubIndexKey.createIndexKey<String, VlangFile>("vlang.packages")
+        val KEY = StubIndexKey.createIndexKey<String, VlangFile>("vlang.modules")
 
         fun find(
             name: String,
@@ -27,7 +27,7 @@ class VlangPackagesIndex : StringStubIndexExtension<VlangFile>() {
                     KEY,
                     key,
                     project,
-                    GlobalSearchScope.allScope(project),
+                    scope,
                     idFilter,
                     VlangFile::class.java
                 )
