@@ -11,7 +11,7 @@ fn main() {
 	println('[${int(x):X}]')
 
 	println('[${10.0000:.2}]')
-	println('[${10.0000:.2f}]')
+	println('[${10.0000:+.2f}]')
 
 	args := ['']
 	res := 100

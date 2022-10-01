@@ -245,6 +245,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitFormatSpecifierRightAlignFlag(@NotNull VlangFormatSpecifierRightAlignFlag o) {
+    visitCompositeElement(o);
+  }
+
   public void visitFormatSpecifierWidthAndPrecision(@NotNull VlangFormatSpecifierWidthAndPrecision o) {
     visitCompositeElement(o);
   }

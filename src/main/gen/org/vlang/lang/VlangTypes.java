@@ -67,6 +67,7 @@ public interface VlangTypes {
   IElementType FORMAT_SPECIFIER_EXPRESSION = new VlangCompositeElementType("FORMAT_SPECIFIER_EXPRESSION");
   IElementType FORMAT_SPECIFIER_LEFT_ALIGN_FLAG = new VlangCompositeElementType("FORMAT_SPECIFIER_LEFT_ALIGN_FLAG");
   IElementType FORMAT_SPECIFIER_LETTER = new VlangCompositeElementType("FORMAT_SPECIFIER_LETTER");
+  IElementType FORMAT_SPECIFIER_RIGHT_ALIGN_FLAG = new VlangCompositeElementType("FORMAT_SPECIFIER_RIGHT_ALIGN_FLAG");
   IElementType FORMAT_SPECIFIER_WIDTH_AND_PRECISION = new VlangCompositeElementType("FORMAT_SPECIFIER_WIDTH_AND_PRECISION");
   IElementType FOR_CLAUSE = new VlangCompositeElementType("FOR_CLAUSE");
   IElementType FOR_STATEMENT = new VlangCompositeElementType("FOR_STATEMENT");
@@ -471,6 +472,9 @@ public interface VlangTypes {
       }
       else if (type == FORMAT_SPECIFIER_LETTER) {
         return new VlangFormatSpecifierLetterImpl(node);
+      }
+      else if (type == FORMAT_SPECIFIER_RIGHT_ALIGN_FLAG) {
+        return new VlangFormatSpecifierRightAlignFlagImpl(node);
       }
       else if (type == FORMAT_SPECIFIER_WIDTH_AND_PRECISION) {
         return new VlangFormatSpecifierWidthAndPrecisionImpl(node);

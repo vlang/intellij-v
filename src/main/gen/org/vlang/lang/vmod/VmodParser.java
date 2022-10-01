@@ -1,15 +1,15 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.vmod;
 
+import com.intellij.lang.ASTNode;
+import com.intellij.lang.LightPsiParser;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
-import static org.vlang.lang.vmod.VmodTypes.*;
-import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.tree.TokenSet;
 import com.intellij.lang.PsiParser;
-import com.intellij.lang.LightPsiParser;
+import com.intellij.psi.tree.IElementType;
+
+import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
+import static org.vlang.lang.vmod.VmodTypes.*;
 
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
 public class VmodParser implements PsiParser, LightPsiParser {
@@ -212,9 +212,11 @@ public class VmodParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ModuleDeclaration
+  // ModuleDeclaration?
   static boolean File(PsiBuilder b, int l) {
-    return ModuleDeclaration(b, l + 1);
+    if (!recursion_guard_(b, l, "File")) return false;
+    ModuleDeclaration(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */

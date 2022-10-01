@@ -137,7 +137,7 @@ class VlangAnnotator : Annotator {
         }
 
         if (element.parent is VlangPlainAttribute) {
-            if (element.elementType == VlangTypes.IDENTIFIER || element.elementType == VlangTypes.UNSAFE || element.elementType == VlangTypes.SQL) {
+            if (element.elementType == VlangTypes.IDENTIFIER || element.elementType == VlangTypes.UNSAFE || element.elementType == VlangTypes.SQL || element.elementType == VlangTypes.DEFAULT) {
                 holder.textAttributes(element, JavaHighlightingColors.ANNOTATION_NAME_ATTRIBUTES)
             }
         }

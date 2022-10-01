@@ -243,7 +243,7 @@ AttributeExpression ::= IfAttribute | PlainAttribute
 // if <ident>
 IfAttribute ::= if '!'? identifier '?'? {pin=1}
 // <ident> or 10 or "string" [: <ident> or "string"]
-PlainAttribute ::= (identifier | unsafe | sql | int | string | StringLiteral) (':' (identifier | StringLiteral))?
+PlainAttribute ::= (identifier | unsafe | default | sql | int | string | StringLiteral) (':' (identifier | StringLiteral))?
 // end of attributes
 
 // simple statements
@@ -520,7 +520,7 @@ Expression ::=
   | UnaryExpr
   | SendExpr
   | RangeExpr
-  | LiteralValueExpression
+//  | LiteralValueExpression
   | MatchExpression
   | IfExpression
   | CompileTimeIfExpression
@@ -682,7 +682,8 @@ VarDefinition ::= VarModifiers? identifier {
 DotExpression ::= DotPrimaryExpr RightHandExprs {extends=Expression}
 
 private DotPrimaryExpr ::=
-    ReferenceExpression
+    LiteralValueExpression
+  | ReferenceExpression
   | Literal
   | FunctionLit
   | ArrayCreation
@@ -855,8 +856,9 @@ private StringTemplatePart ::=
 LongStringTemplateEntry ::= LONG_TEMPLATE_ENTRY_START Expression FormatSpecifier? LONG_TEMPLATE_ENTRY_END {pin=1}
 
 FormatSpecifier ::= ':' FormatSpecifierExpression
-FormatSpecifierExpression ::= FormatSpecifierLeftAlignFlag? FormatSpecifierWidthAndPrecision? FormatSpecifierLetter?
+FormatSpecifierExpression ::= (FormatSpecifierLeftAlignFlag | FormatSpecifierRightAlignFlag)? FormatSpecifierWidthAndPrecision? FormatSpecifierLetter?
 FormatSpecifierLeftAlignFlag ::= '-'
+FormatSpecifierRightAlignFlag ::= '+'
 FormatSpecifierWidthAndPrecision ::= int | float
 FormatSpecifierLetter ::= identifier
 

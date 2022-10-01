@@ -3,7 +3,7 @@ package org.vlang.lang.utils
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parentOfType
-import org.vlang.lang.psi.VlangFunctionDeclaration
+import org.vlang.lang.psi.VlangFunctionOrMethodDeclaration
 import org.vlang.lang.psi.VlangLabelDefinition
 
 object LabelUtil {
@@ -18,7 +18,7 @@ object LabelUtil {
     }
 
     fun collectContextLabels(context: PsiElement): List<VlangLabelDefinition> {
-        val containingFunction = context.parentOfType<VlangFunctionDeclaration>() ?: return emptyList()
+        val containingFunction = context.parentOfType<VlangFunctionOrMethodDeclaration>() ?: return emptyList()
         val labels = mutableListOf<VlangLabelDefinition>()
 
         PsiTreeUtil.processElements(containingFunction) { element ->

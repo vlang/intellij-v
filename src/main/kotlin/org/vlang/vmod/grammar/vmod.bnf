@@ -29,7 +29,7 @@
   generateTokenAccessors=true
 }
 
-File ::= ModuleDeclaration
+File ::= ModuleDeclaration?
 
 ModuleDeclaration ::= module '{' Fields? semi '}'
 

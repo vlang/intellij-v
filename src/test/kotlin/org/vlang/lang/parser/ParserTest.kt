@@ -8,6 +8,7 @@ class ParserTest : ParserTestBase("parser", "v", VlangParserDefinition()) {
     fun `test imports`() = doTest(true)
     fun `test semantic analyzer`() = doTest(true)
     fun `test big integer`() = doTest(true)
+    fun `test path tracing`() = doTest(true)
     fun `test string interpolation`() = doTest(true)
     fun `test match`() = doTest(true)
     fun `test literal value after match`() = doTest(true)

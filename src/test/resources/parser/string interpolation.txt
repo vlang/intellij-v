@@ -290,6 +290,8 @@ V Language file
                         FORMAT_SPECIFIER
                           PsiElement(VlangTokenType.:)(':')
                           FORMAT_SPECIFIER_EXPRESSION
+                            FORMAT_SPECIFIER_RIGHT_ALIGN_FLAG
+                              PsiElement(VlangTokenType.+)('+')
                             FORMAT_SPECIFIER_WIDTH_AND_PRECISION
                               PsiElement(VlangTokenType.float)('.2')
                             FORMAT_SPECIFIER_LETTER
