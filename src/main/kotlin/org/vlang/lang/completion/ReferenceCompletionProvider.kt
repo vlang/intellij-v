@@ -224,7 +224,7 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
             is VlangInterfaceDeclaration -> VlangCompletionUtil.createInterfaceLookupElement(element, moduleName)
             is VlangTypeAliasDeclaration -> VlangCompletionUtil.createTypeAliasLookupElement(element, moduleName)
             is VlangFieldDefinition      -> VlangCompletionUtil.createFieldLookupElement(element)
-            is VlangConstDefinition      -> VlangCompletionUtil.createConstantLookupElement(element)
+            is VlangConstDefinition      -> VlangCompletionUtil.createConstantLookupElement(element, moduleName)
             is VlangEnumFieldDefinition  -> VlangCompletionUtil.createEnumFieldLookupElement(element)
             else                         -> VlangCompletionUtil.createVariableLikeLookupElement(element)
         }

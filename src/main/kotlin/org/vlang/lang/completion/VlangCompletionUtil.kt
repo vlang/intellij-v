@@ -109,13 +109,14 @@ object VlangCompletionUtil {
         )
     }
 
-    fun createConstantLookupElement(element: VlangNamedElement): LookupElement? {
+    fun createConstantLookupElement(element: VlangNamedElement, moduleName: String?): LookupElement? {
         val name = element.name
         if (name.isNullOrEmpty()) {
             return null
         }
         return createConstantLookupElement(
-            element, name,
+            element, name, moduleName,
+            insertHandler = ConstantInsertHandler(moduleName),
             priority = CONSTANT_PRIORITY,
         )
     }
@@ -272,13 +273,14 @@ object VlangCompletionUtil {
     }
 
     private fun createConstantLookupElement(
-        element: VlangNamedElement, lookupString: String,
+        element: VlangNamedElement, lookupString: String, moduleName: String?,
         insertHandler: InsertHandler<LookupElement>? = null,
         priority: Int = 0,
     ): LookupElement {
+        val qualifiedName = createQualifiedName(moduleName, lookupString)
         return PrioritizedLookupElement.withPriority(
-            LookupElementBuilder.createWithSmartPointer(lookupString, element)
-                .withRenderer(CONST_RENDERER)
+            LookupElementBuilder.createWithSmartPointer(qualifiedName, element)
+                .withRenderer(ConstantRenderer(moduleName))
                 .withInsertHandler(insertHandler), priority.toDouble()
         )
     }
@@ -312,7 +314,7 @@ object VlangCompletionUtil {
     }
 
     abstract class ElementInsertHandler(private val moduleName: String?) : InsertHandler<LookupElement> {
-        abstract fun handleInsertion(context: InsertionContext, item: LookupElement)
+        open fun handleInsertion(context: InsertionContext, item: LookupElement) {}
 
         override fun handleInsert(context: InsertionContext, item: LookupElement) {
             val caretOffset = context.editor.caretModel.offset
@@ -342,6 +344,8 @@ object VlangCompletionUtil {
             context.editor.caretModel.moveToOffset(caretOffset + 1)
         }
     }
+
+    class ConstantInsertHandler(moduleName: String?) : ElementInsertHandler(moduleName)
 
     class StructInsertHandler(moduleName: String?) : ElementInsertHandler(moduleName) {
         override fun handleInsertion(context: InsertionContext, item: LookupElement) {
@@ -458,8 +462,8 @@ object VlangCompletionUtil {
         }
     }
 
-    private val CONST_RENDERER = object : LookupElementRenderer<LookupElement>() {
-        override fun renderElement(element: LookupElement, p: LookupElementPresentation) {
+    class ConstantRenderer(moduleName: String?) : ElementRenderer(moduleName) {
+        override fun render(element: LookupElement, p: LookupElementPresentation) {
             val elem = element.psiElement as? VlangConstDefinition ?: return
             p.icon = VIcons.Constant
             p.itemText = element.lookupString
