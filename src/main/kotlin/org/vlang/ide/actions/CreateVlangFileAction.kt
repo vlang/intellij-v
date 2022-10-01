@@ -27,7 +27,7 @@ class CreateVlangFileAction : CreateFileFromTemplateAction(
     ) {
         builder
             .setTitle("New V File")
-            .addKind("V File", VIcons.Vlang, "V File")
-            .addKind("V Simple Application", VIcons.Vlang, "V Simple Application")
+            .addKind("V file", VIcons.Vlang, "V File")
+            .addKind("V simple application", VIcons.Vlang, "V Simple Application")
     }
 }

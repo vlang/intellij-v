@@ -207,6 +207,8 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
         <liveTemplateContext implementation="org.vlang.ide.templates.VlangTemplateContextType$TopLevel"/>
         <liveTemplateContext implementation="org.vlang.ide.templates.VlangTemplateContextType$Statement"/>
         <liveTemplateContext implementation="org.vlang.ide.templates.VlangTemplateContextType$Comment"/>
+
+        <defaultTemplatePropertiesProvider implementation="org.vlang.ide.templates.VlangDefaultTemplatePropertiesProvider"/>
     </extensions>
 
     <actions>
