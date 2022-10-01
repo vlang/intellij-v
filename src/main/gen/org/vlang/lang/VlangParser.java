@@ -977,13 +977,14 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ReferenceExpression | Literal | ParenthesesExpr
+  // ReferenceExpression | Literal | ParenthesesExpr | UnsafeExpression
   static boolean DotPrimaryExpr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DotPrimaryExpr")) return false;
     boolean r;
     r = ReferenceExpression(b, l + 1);
     if (!r) r = Literal(b, l + 1);
     if (!r) r = ParenthesesExpr(b, l + 1);
+    if (!r) r = UnsafeExpression(b, l + 1);
     return r;
   }
 
@@ -4569,6 +4570,20 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // unsafe Block
+  public static boolean UnsafeExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UnsafeExpression")) return false;
+    if (!nextTokenIs(b, UNSAFE)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, UNSAFE_EXPRESSION, null);
+    r = consumeToken(b, UNSAFE);
+    p = r; // pin = 1
+    r = r && Block(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
   // UnsafeExpression
   public static boolean UnsafeStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "UnsafeStatement")) return false;
@@ -4792,28 +4807,27 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // 6: BINARY(SendExpr)
   // 7: BINARY(RangeExpr)
   // 8: ATOM(LiteralValueExpression)
-  // 9: ATOM(UnsafeExpression)
-  // 10: ATOM(MatchExpression)
-  // 11: ATOM(IfExpression)
-  // 12: ATOM(CompileTimeIfExpression)
-  // 13: ATOM(ArrayCreation)
-  // 14: BINARY(InExpression)
-  // 15: BINARY(NotInExpression)
-  // 16: BINARY(IsExpression)
-  // 17: BINARY(NotIsExpression)
-  // 18: POSTFIX(AsExpression)
-  // 19: ATOM(DotExpression) ATOM(Literal) ATOM(FunctionLit)
-  // 20: PREFIX(EnumFetch)
-  // 21: PREFIX(MutExpression)
-  // 22: PREFIX(SharedExpression)
-  // 23: ATOM(ConstexprIdentifierExpression)
-  // 24: ATOM(SqlExpression)
-  // 25: ATOM(MapInitExpr)
-  // 26: PREFIX(GoExpression)
-  // 27: ATOM(LockExpression)
-  // 28: POSTFIX(IncDecExpression)
-  // 29: ATOM(UnpackingExpression)
-  // 30: ATOM(ParenthesesExpr)
+  // 9: ATOM(MatchExpression)
+  // 10: ATOM(IfExpression)
+  // 11: ATOM(CompileTimeIfExpression)
+  // 12: ATOM(ArrayCreation)
+  // 13: BINARY(InExpression)
+  // 14: BINARY(NotInExpression)
+  // 15: BINARY(IsExpression)
+  // 16: BINARY(NotIsExpression)
+  // 17: POSTFIX(AsExpression)
+  // 18: ATOM(DotExpression) ATOM(Literal) ATOM(FunctionLit)
+  // 19: PREFIX(EnumFetch)
+  // 20: PREFIX(MutExpression)
+  // 21: PREFIX(SharedExpression)
+  // 22: ATOM(ConstexprIdentifierExpression)
+  // 23: ATOM(SqlExpression)
+  // 24: ATOM(MapInitExpr)
+  // 25: PREFIX(GoExpression)
+  // 26: ATOM(LockExpression)
+  // 27: POSTFIX(IncDecExpression)
+  // 28: ATOM(UnpackingExpression)
+  // 29: ATOM(ParenthesesExpr)
   public static boolean Expression(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "Expression")) return false;
     addVariant(b, "<expression>");
@@ -4821,7 +4835,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, "<expression>");
     r = UnaryExpr(b, l + 1);
     if (!r) r = LiteralValueExpression(b, l + 1);
-    if (!r) r = UnsafeExpression(b, l + 1);
     if (!r) r = MatchExpression(b, l + 1);
     if (!r) r = IfExpression(b, l + 1);
     if (!r) r = CompileTimeIfExpression(b, l + 1);
@@ -4878,27 +4891,27 @@ public class VlangParser implements PsiParser, LightPsiParser {
         r = Expression(b, l, 7);
         exit_section_(b, l, m, RANGE_EXPR, r, true, null);
       }
-      else if (g < 14 && consumeTokenSmart(b, IN)) {
-        r = Expression(b, l, 14);
+      else if (g < 13 && consumeTokenSmart(b, IN)) {
+        r = Expression(b, l, 13);
         exit_section_(b, l, m, IN_EXPRESSION, r, true, null);
       }
-      else if (g < 15 && consumeTokenSmart(b, NOT_IN)) {
-        r = Expression(b, l, 15);
+      else if (g < 14 && consumeTokenSmart(b, NOT_IN)) {
+        r = Expression(b, l, 14);
         exit_section_(b, l, m, NOT_IN_EXPRESSION, r, true, null);
       }
-      else if (g < 16 && consumeTokenSmart(b, IS)) {
-        r = Expression(b, l, 16);
+      else if (g < 15 && consumeTokenSmart(b, IS)) {
+        r = Expression(b, l, 15);
         exit_section_(b, l, m, IS_EXPRESSION, r, true, null);
       }
-      else if (g < 17 && consumeTokenSmart(b, NOT_IS)) {
-        r = Expression(b, l, 17);
+      else if (g < 16 && consumeTokenSmart(b, NOT_IS)) {
+        r = Expression(b, l, 16);
         exit_section_(b, l, m, NOT_IS_EXPRESSION, r, true, null);
       }
-      else if (g < 18 && AsExpression_0(b, l + 1)) {
+      else if (g < 17 && AsExpression_0(b, l + 1)) {
         r = true;
         exit_section_(b, l, m, AS_EXPRESSION, r, true, null);
       }
-      else if (g < 28 && IncDecExpression_0(b, l + 1)) {
+      else if (g < 27 && IncDecExpression_0(b, l + 1)) {
         r = true;
         exit_section_(b, l, m, INC_DEC_EXPRESSION, r, true, null);
       }
@@ -5018,19 +5031,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "LiteralValueExpression_3")) return false;
     ElementList(b, l + 1);
     return true;
-  }
-
-  // unsafe Block
-  public static boolean UnsafeExpression(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "UnsafeExpression")) return false;
-    if (!nextTokenIsSmart(b, UNSAFE)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, UNSAFE_EXPRESSION, null);
-    r = consumeTokenSmart(b, UNSAFE);
-    p = r; // pin = 1
-    r = r && Block(b, l + 1);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
   }
 
   // match <<enterMode "BLOCK?">> Expression '{' MatchArms '}' <<exitModeSafe "BLOCK?">>
@@ -5235,7 +5235,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeTokenSmart(b, DOT);
     p = r;
-    r = p && Expression(b, l, 20);
+    r = p && Expression(b, l, 19);
     exit_section_(b, l, m, ENUM_FETCH, r, p, null);
     return r || p;
   }
@@ -5247,7 +5247,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeTokenSmart(b, MUT);
     p = r;
-    r = p && Expression(b, l, 21);
+    r = p && Expression(b, l, 20);
     exit_section_(b, l, m, MUT_EXPRESSION, r, p, null);
     return r || p;
   }
@@ -5259,7 +5259,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeTokenSmart(b, SHARED);
     p = r;
-    r = p && Expression(b, l, 22);
+    r = p && Expression(b, l, 21);
     exit_section_(b, l, m, SHARED_EXPRESSION, r, p, null);
     return r || p;
   }
@@ -5308,7 +5308,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeTokenSmart(b, GO);
     p = r;
-    r = p && Expression(b, l, 26);
+    r = p && Expression(b, l, 25);
     exit_section_(b, l, m, GO_EXPRESSION, r, p, null);
     return r || p;
   }

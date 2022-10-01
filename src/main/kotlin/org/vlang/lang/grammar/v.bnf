@@ -521,7 +521,6 @@ Expression ::=
   | SendExpr
   | RangeExpr
   | LiteralValueExpression
-  | UnsafeExpression
   | MatchExpression
   | IfExpression
   | CompileTimeIfExpression
@@ -685,7 +684,7 @@ VarDefinition ::= VarModifiers? identifier {
 // <ident>[.<ident>]*
 DotExpression ::= DotPrimaryExpr RightHandExprs {extends=Expression}
 
-private DotPrimaryExpr ::= ReferenceExpression | Literal | ParenthesesExpr
+private DotPrimaryExpr ::= ReferenceExpression | Literal | ParenthesesExpr | UnsafeExpression
 
 // just <ident> with ref
 ReferenceExpression ::= identifier { methods=[getReference getQualifier resolve getReadWriteAccess] extends=Expression}
