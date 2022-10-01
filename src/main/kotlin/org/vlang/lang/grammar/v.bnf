@@ -299,7 +299,7 @@ RangeClause ::= in Expression | VarDefinitionList in Expression {
 }
 
 // $for (...)  { ... }
-CompileTimeForStatement ::= FOR_COMPILE_TIME (ForOrRangeClause Block | Block | Expression Block) {pin=1}
+CompileTimeForStatement ::= FOR_COMPILE_TIME <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) <<exitModeSafe "BLOCK?">> {pin(".*")="FOR_COMPILE_TIME|ForOrRangeClause"}
 
 // (r)lock <var> { ... }
 LockStatement ::= LockExpression
@@ -524,7 +524,6 @@ Expression ::=
   | MatchExpression
   | IfExpression
   | CompileTimeIfExpression
-  | ArrayCreation
   | InExpression
   | NotInExpression
   | IsExpression
@@ -534,8 +533,6 @@ Expression ::=
   | EnumFetch
   | MutExpression
   | SharedExpression
-//  | ErrorPropagationExpression
-//  | ForceNoErrorPropagationExpression
   | ConstexprIdentifierExpression
   | SqlExpression
   | MapInitExpr
@@ -559,7 +556,7 @@ KeyValues ::= KeyValue ((semi | ',') KeyValue)* (semi | ',')? {pin=1}
 KeyValue ::= (Literal | ReferenceExpression) ':' Expression {pin=1}
 
 // <type> {...}
-LiteralValueExpression ::= Type (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">>) '{' ElementList? '}' {pin=3}
+LiteralValueExpression ::= Type ((<<isModeOff "BLOCK?">> | <<isModeOn "PAR">> | <<prevIsType>>) & <<prevIsNotFunType>>) '{' ElementList? '}' {pin=3}
 private ElementList ::= ElementInner ((',' | semi) ElementInner?)*
 private ElementInner ::= Element | (!() Element) {recoverWhile=ElementInnerRecover}
 private ElementInnerRecover ::= !('}' | ',' | semi | ')')
@@ -578,7 +575,7 @@ private MaxGroup ::=
 //| CompositeLit
 
 // fn (...) {...}
-FunctionLit ::= fn <<enterMode "BLOCK?">> CaptureList? Signature Block <<exitModeSafe "BLOCK?">> {pin=1 methods=[processDeclarations]}
+FunctionLit ::= fn CaptureList? Signature Block {pin=1 methods=[processDeclarations]}
 // [<var1>, <var2>, ...]
 CaptureList ::= '[' (Capture | ',' Capture)* ']' {pin=3}
 // [mut] <ident>
@@ -684,7 +681,13 @@ VarDefinition ::= VarModifiers? identifier {
 // <ident>[.<ident>]*
 DotExpression ::= DotPrimaryExpr RightHandExprs {extends=Expression}
 
-private DotPrimaryExpr ::= ReferenceExpression | Literal | ParenthesesExpr | UnsafeExpression
+private DotPrimaryExpr ::=
+    ReferenceExpression
+  | Literal
+  | FunctionLit
+  | ArrayCreation
+  | ParenthesesExpr
+  | UnsafeExpression
 
 // just <ident> with ref
 ReferenceExpression ::= identifier { methods=[getReference getQualifier resolve getReadWriteAccess] extends=Expression}
@@ -708,7 +711,7 @@ left CallExpr ::= ArgumentList
 // <expr>[0..10]
 // <expr>[..10]
 // <expr>[0..]
-left IndexOrSliceExpr ::= ('[' | HASH_LBRACK) (SliceExprBody | IndexExprBody) '..'? ']'
+left IndexOrSliceExpr ::= ('[' | HASH_LBRACK) (SliceExprBody | IndexExprBody) '..'? ']' !identifier
 private IndexExprBody ::= Expression SliceExprBodyInner?
 private inner SliceExprBodyInner ::= SliceExprBody
 private SliceExprBody ::= &'..' '..' Expression
@@ -774,14 +777,16 @@ ArrayCreationList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &']'))
 ArgumentList ::= '(' ElementList? '...'? ','? ')' {pin=1}
 
 // match <expr> { ... }
-MatchExpression ::= match <<enterMode "BLOCK?">> Expression '{' MatchArms '}' <<exitModeSafe "BLOCK?">> {pin=1}
+MatchExpression ::= match <<enterMode "BLOCK?">> Expression '{' MatchArms '}' <<exitAllModeSafe "BLOCK?">> {pin=1}
 // <expr>[, <expr2>] { ... }
 // else { ... }
 MatchArms ::= (MatchArm | MatchElseArmClause)*
 // <expr>[, <expr2>] { ... }
-MatchArm ::= <<enterMode "BLOCK?">> MatchExpressionList Block <<exitModeSafe "BLOCK?">> semi {pin=3}
+MatchArm ::= <<enterMode "BLOCK?">> MatchExpressionList Block <<exitModeSafe "BLOCK?">> semi {pin=2}
 // <expr>[, <expr2>]
-private MatchExpressionList ::= Expression (',' Expression)* {pin(".*")=1}
+private MatchExpressionList ::= MatchArmExpression (',' MatchArmExpression)* {pin(".*")=1}
+// <expr> or <type>
+private MatchArmExpression ::= Type | Expression
 // else { ... }
 MatchElseArmClause ::= else Block semi {pin=1}
 
@@ -791,9 +796,9 @@ InExpression ::= Expression in Expression {pin=2}
 NotInExpression ::= Expression NOT_IN Expression {pin=2}
 
 // <expr> is <expr>
-IsExpression ::= Expression is Expression {pin=2}
+IsExpression ::= Expression is Type {pin=2}
 // <expr> !is <expr>
-NotIsExpression ::= Expression NOT_IS Expression {pin=2}
+NotIsExpression ::= Expression NOT_IS Type {pin=2}
 
 // <expr> as <expr>
 AsExpression ::= Expression as Type {pin=2}

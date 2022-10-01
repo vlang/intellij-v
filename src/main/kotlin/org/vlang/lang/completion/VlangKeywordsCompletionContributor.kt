@@ -197,6 +197,7 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
             "goto",
             "mut",
             "return",
+            "lock",
             "rlock",
             "select",
             "shared",

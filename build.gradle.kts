@@ -52,6 +52,10 @@ tasks {
         }
     }
 
+    runIde {
+        maxHeapSize = "2g"
+    }
+
     wrapper {
         gradleVersion = properties("gradleVersion")
     }

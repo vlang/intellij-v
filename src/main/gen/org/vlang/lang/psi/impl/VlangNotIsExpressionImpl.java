@@ -1,14 +1,14 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import org.vlang.lang.psi.VlangPsiTreeUtil;
-import static org.vlang.lang.VlangTypes.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.*;
+
+import static org.vlang.lang.VlangTypes.NOT_IS;
 
 public class VlangNotIsExpressionImpl extends VlangExpressionImpl implements VlangNotIsExpression {
 
@@ -29,8 +29,14 @@ public class VlangNotIsExpressionImpl extends VlangExpressionImpl implements Vla
 
   @Override
   @NotNull
-  public List<VlangExpression> getExpressionList() {
-    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangExpression.class);
+  public VlangExpression getExpression() {
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class));
+  }
+
+  @Override
+  @Nullable
+  public VlangType getType() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangType.class);
   }
 
   @Override

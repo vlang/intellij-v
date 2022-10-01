@@ -111,12 +111,20 @@ object VlangParserUtil : GeneratedParserUtilBase() {
         return getParsingModes(builder)[mode] == 0
     }
 
-    //    fun prevIsType(builder: PsiBuilder, level: Int): Boolean {
-//        val marker = builder.latestDoneMarker
-//        val type = marker?.tokenType
-//        return type === VlangTypes.ARRAY_OR_SLICE_TYPE || type === VlangTypes.MAP_TYPE || type === VlangTypes.STRUCT_TYPE
-//    }
-//
+    @JvmStatic
+    fun prevIsType(builder: PsiBuilder, level: Int): Boolean {
+        val marker = builder.latestDoneMarker
+        val type = marker?.tokenType
+        return type === VlangTypes.ARRAY_OR_SLICE_TYPE || type === VlangTypes.MAP_TYPE || type === VlangTypes.STRUCT_TYPE
+    }
+
+    @JvmStatic
+    fun prevIsNotFunType(builder: PsiBuilder, level: Int): Boolean {
+        val marker = builder.latestDoneMarker
+        val type = marker?.tokenType
+        return type !== VlangTypes.FUNCTION_TYPE
+    }
+
     @JvmStatic
     fun keyOrValueExpression(builder: PsiBuilder, level: Int): Boolean {
         val m = enter_section_(builder)
@@ -134,17 +142,23 @@ object VlangParserUtil : GeneratedParserUtilBase() {
     @JvmStatic
     fun enterMode(builder: PsiBuilder, level: Int, mode: String?): Boolean {
         val flags = getParsingModes(builder)
-        if (!flags.increment(mode)) flags.put(mode, 1)
+        if (!flags.increment(mode)) {
+            flags.put(mode, 1)
+        }
         return true
     }
 
-    private fun exitMode(builder: PsiBuilder, level: Int, mode: String, safe: Boolean): Boolean {
+    private fun exitMode(builder: PsiBuilder, level: Int, mode: String, safe: Boolean, all: Boolean = false): Boolean {
         val flags = getParsingModes(builder)
         val count = flags[mode]
         if (count == 1) {
             flags.remove(mode)
         } else if (count > 1) {
-            flags.put(mode, count - 1)
+            if (all) {
+                flags.remove(mode)
+            } else {
+                flags.put(mode, count - 1)
+            }
         } else if (!safe) {
             builder.error("Could not exit inactive '" + mode + "' mode at offset " + builder.currentOffset)
         }
@@ -159,6 +173,11 @@ object VlangParserUtil : GeneratedParserUtilBase() {
     @JvmStatic
     fun exitModeSafe(builder: PsiBuilder, level: Int, mode: String): Boolean {
         return exitMode(builder, level, mode, safe = true)
+    }
+
+    @JvmStatic
+    fun exitAllModeSafe(builder: PsiBuilder, level: Int, mode: String): Boolean {
+        return exitMode(builder, level, mode, safe = true, all = true)
     }
 
 //    fun isBuiltin(builder: PsiBuilder, level: Int): Boolean {

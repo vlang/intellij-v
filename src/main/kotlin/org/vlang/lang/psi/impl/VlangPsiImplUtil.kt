@@ -539,7 +539,7 @@ object VlangPsiImplUtil {
 //            return commonType
 //        }
 
-        return parent.expressionList.first().getType(context)
+        return parent.expressionList.firstOrNull()?.getType(context)
 
 //        val varList: List<VlangVarDefinition> = parent.varDefinitionList
 //        var i = varList.indexOf(o)
