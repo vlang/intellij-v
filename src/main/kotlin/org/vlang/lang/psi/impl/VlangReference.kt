@@ -459,6 +459,13 @@ class VlangReference(el: VlangReferenceExpressionBase) :
     }
 
     private fun processModulesEntities(file: VlangFile, processor: VlangScopeProcessor, state: ResolveState): Boolean {
+        if (!processor.isCompletion()) {
+            // This method is only for autocompletion when a user writes
+            // a symbol (from another module) name, and we want to import
+            // the symbol, and the module that contains it.
+            return true
+        }
+
         val currentModule = file.getModuleName()
         val modules = VlangModulesIndex.getAll(element.project)
         for (moduleFile in modules) {

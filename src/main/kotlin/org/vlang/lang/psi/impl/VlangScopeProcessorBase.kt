@@ -8,7 +8,7 @@ import org.vlang.lang.psi.VlangNamedElement
 abstract class VlangScopeProcessorBase(
     private val requestedNameElement: PsiElement,
     val origin: PsiElement,
-    private val myIsCompletion: Boolean,
+    private val isForCompletion: Boolean,
 ) : VlangScopeProcessor() {
 
     private val result = mutableSetOf<VlangNamedElement>()
@@ -25,7 +25,7 @@ abstract class VlangScopeProcessorBase(
         }
 
         val name = e.name ?: return false
-        if (name.isEmpty() || !myIsCompletion && !requestedNameElement.textMatches(name)) {
+        if (name.isEmpty() || !isForCompletion && !requestedNameElement.textMatches(name)) {
             return true
         }
         if (crossOff(e)) {
@@ -36,7 +36,7 @@ abstract class VlangScopeProcessorBase(
             return true
         }
 
-        return add(e) || myIsCompletion
+        return add(e) || isForCompletion
     }
 
     protected open fun add(psiElement: VlangNamedElement): Boolean {
@@ -48,4 +48,6 @@ abstract class VlangScopeProcessorBase(
     fun getVariants() = result
 
     protected abstract fun crossOff(e: PsiElement): Boolean
+
+    override fun isCompletion() = isForCompletion
 }
