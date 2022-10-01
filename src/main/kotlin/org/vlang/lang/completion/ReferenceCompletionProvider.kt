@@ -11,10 +11,7 @@ import com.intellij.psi.ResolveState
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
 import org.vlang.lang.psi.*
-import org.vlang.lang.psi.impl.VlangCachedReference
-import org.vlang.lang.psi.impl.VlangFieldNameReference
-import org.vlang.lang.psi.impl.VlangReference
-import org.vlang.lang.psi.impl.VlangScopeProcessor
+import org.vlang.lang.psi.impl.*
 
 class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
     override fun addCompletions(
@@ -216,14 +213,16 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
             //                    if (name != null) return VlangCompletionUtil.createLabelLookupElement(o as VlangLabelDefinition, name)
         }
 
+        val moduleName = state.get(VlangReferenceBase.MODULE_NAME)
+
         return when (element) {
-            is VlangFunctionDeclaration  -> VlangCompletionUtil.createFunctionLookupElement(element)
+            is VlangFunctionDeclaration  -> VlangCompletionUtil.createFunctionLookupElement(element, moduleName)
             is VlangMethodDeclaration    -> VlangCompletionUtil.createMethodLookupElement(element)
-            is VlangStructDeclaration    -> VlangCompletionUtil.createStructLookupElement(element)
-            is VlangUnionDeclaration     -> VlangCompletionUtil.createUnionLookupElement(element)
-            is VlangEnumDeclaration      -> VlangCompletionUtil.createEnumLookupElement(element)
-            is VlangInterfaceDeclaration -> VlangCompletionUtil.createInterfaceLookupElement(element)
-            is VlangTypeAliasDeclaration -> VlangCompletionUtil.createTypeAliasLookupElement(element)
+            is VlangStructDeclaration    -> VlangCompletionUtil.createStructLookupElement(element, moduleName)
+            is VlangUnionDeclaration     -> VlangCompletionUtil.createUnionLookupElement(element, moduleName)
+            is VlangEnumDeclaration      -> VlangCompletionUtil.createEnumLookupElement(element, moduleName)
+            is VlangInterfaceDeclaration -> VlangCompletionUtil.createInterfaceLookupElement(element, moduleName)
+            is VlangTypeAliasDeclaration -> VlangCompletionUtil.createTypeAliasLookupElement(element, moduleName)
             is VlangFieldDefinition      -> VlangCompletionUtil.createFieldLookupElement(element)
             is VlangConstDefinition      -> VlangCompletionUtil.createConstantLookupElement(element)
             is VlangEnumFieldDefinition  -> VlangCompletionUtil.createEnumFieldLookupElement(element)

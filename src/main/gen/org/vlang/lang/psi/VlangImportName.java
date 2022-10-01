@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.impl.imports.VlangImportReference;
 import org.vlang.lang.stubs.VlangImportNameStub;
 
-public interface VlangImportName extends PsiNameIdentifierOwner, StubBasedPsiElement<VlangImportNameStub> {
+public interface VlangImportName extends PsiNameIdentifierOwner, VlangCompositeElement, StubBasedPsiElement<VlangImportNameStub> {
 
   @NotNull
   PsiElement getIdentifier();

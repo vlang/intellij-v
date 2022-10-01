@@ -209,9 +209,6 @@ class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, H
                     return@runWriteAction
                 }
 
-                if (file.getImportedModulesMap().containsKey(pathToImport)) {
-                    return@runWriteAction
-                }
                 file.addImport(pathToImport, null)
             }
         }, "Add Import", null)

@@ -16,6 +16,7 @@ abstract class VlangReferenceBase<T : VlangReferenceExpressionBase>(element: T, 
         val IMPORT_USERS = Key.create<List<PsiElement>>("IMPORT_USERS")
         val ACTUAL_NAME = Key.create<String>("ACTUAL_NAME")
         val SEARCH_NAME = Key.create<String>("SEARCH_NAME")
+        val MODULE_NAME = Key.create<String>("MODULE_NAME")
 
         @JvmStatic
         protected fun getPath(file: PsiFile?): String? {

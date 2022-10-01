@@ -151,7 +151,7 @@ ImportPath ::= ImportName ('.' ImportName)* {
 ImportName ::= identifier {
   stubClass="org.vlang.lang.stubs.VlangImportNameStub"
   methods=[getQualifier getNameIdentifier setName getName getTextOffset getReference resolve]
-  implements="com.intellij.psi.PsiNameIdentifierOwner"
+  implements=["com.intellij.psi.PsiNameIdentifierOwner"; "org.vlang.lang.psi.VlangCompositeElement"]
 }
 
 // { <ref>[, <ref2>] }

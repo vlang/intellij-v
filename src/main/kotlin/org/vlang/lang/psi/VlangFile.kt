@@ -40,6 +40,10 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
     fun isTestFile(): Boolean = name.split(".").first().endsWith("_test")
 
     fun addImport(path: String, alias: String?): VlangImportSpec {
+        if (getImportedModulesMap().containsKey(path)) {
+            return getImportedModulesMap()[path]!!
+        }
+
         return VlangPsiImplUtil.addImport(this, getImportList(), path, alias)
     }
 

@@ -214,7 +214,7 @@ object VlangPsiImplUtil {
             return type
         }
 
-        val resolved = type.typeReferenceExpressionList.firstOrNull()?.resolve()
+        val resolved = type.typeReferenceExpressionList.lastOrNull()?.resolve()
         val typeChild = resolved?.childrenOfType<VlangStructType>()?.firstOrNull()
         if (typeChild != null) {
             return typeChild

@@ -97,14 +97,14 @@ object VlangCompletionUtil {
         )
     }
 
-    fun createFunctionLookupElement(element: VlangNamedElement): LookupElement? {
+    fun createFunctionLookupElement(element: VlangNamedElement, moduleName: String?): LookupElement? {
         val name = element.name
         if (name.isNullOrEmpty()) {
             return null
         }
         return createFunctionLookupElement(
-            element, name,
-            insertHandler = FunctionInsertHandler(),
+            element, name, moduleName,
+            insertHandler = FunctionInsertHandler(moduleName),
             priority = FUNCTION_PRIORITY,
         )
     }
@@ -156,15 +156,15 @@ object VlangCompletionUtil {
         )
     }
 
-    fun createStructLookupElement(element: VlangNamedElement): LookupElement? {
+    fun createStructLookupElement(element: VlangNamedElement, moduleName: String?): LookupElement? {
         val name = element.name
         if (name.isNullOrEmpty()) {
             return null
         }
         return createStructLookupElement(
-            element, name,
+            element, name, moduleName,
             priority = STRUCT_PRIORITY,
-            insertHandler = StructInsertHandler()
+            insertHandler = StructInsertHandler(moduleName)
         )
     }
 
@@ -176,54 +176,55 @@ object VlangCompletionUtil {
         )
     }
 
-    fun createUnionLookupElement(element: VlangNamedElement): LookupElement? =
-        createLookupElement(element, AllIcons.Nodes.AnonymousClass, STRUCT_PRIORITY)
+    fun createUnionLookupElement(element: VlangNamedElement, moduleName: String?): LookupElement? =
+        createClassLikeLookupElement(element, moduleName, AllIcons.Nodes.AnonymousClass, STRUCT_PRIORITY)
 
-    fun createEnumLookupElement(element: VlangNamedElement): LookupElement? =
-        createLookupElement(element, AllIcons.Nodes.Enum, STRUCT_PRIORITY)
+    fun createEnumLookupElement(element: VlangNamedElement, moduleName: String?): LookupElement? =
+        createClassLikeLookupElement(element, moduleName, AllIcons.Nodes.Enum, STRUCT_PRIORITY)
 
-    fun createInterfaceLookupElement(element: VlangNamedElement): LookupElement? =
-        createLookupElement(element, AllIcons.Nodes.Interface, STRUCT_PRIORITY)
+    fun createInterfaceLookupElement(element: VlangNamedElement, moduleName: String?): LookupElement? =
+        createClassLikeLookupElement(element, moduleName, AllIcons.Nodes.Interface, STRUCT_PRIORITY)
 
-    fun createTypeAliasLookupElement(element: VlangNamedElement): LookupElement? =
-        createLookupElement(element, AllIcons.Nodes.Alias, TYPE_ALIAS_PRIORITY)
+    fun createTypeAliasLookupElement(element: VlangNamedElement, moduleName: String?): LookupElement? =
+        createClassLikeLookupElement(element, moduleName, AllIcons.Nodes.Alias, TYPE_ALIAS_PRIORITY)
 
     fun createDirectoryLookupElement(dir: PsiDirectory): LookupElementBuilder {
         return LookupElementBuilder.createWithSmartPointer(dir.name, dir).withIcon(VIcons.Directory)
     }
 
-    fun createLookupElement(element: VlangNamedElement, icon: Icon, priority: Int): LookupElement? {
+    private fun createClassLikeLookupElement(element: VlangNamedElement, moduleName: String?, icon: Icon, priority: Int): LookupElement? {
         val name = element.name
         if (name.isNullOrEmpty()) {
             return null
         }
-        return createLookupElement(
-            element, name, icon,
+        return createClassLikeLookupElement(
+            element, name, icon, moduleName,
             priority = priority,
         )
     }
 
-    private fun createLookupElement(
+    private fun createClassLikeLookupElement(
         element: VlangNamedElement, lookupString: String,
-        icon: Icon,
-        insertHandler: InsertHandler<LookupElement>? = null,
+        icon: Icon, moduleName: String?,
         priority: Int = 0,
     ): LookupElement {
+//        val qualifiedName = createQualifiedName(moduleName, lookupString)
         return PrioritizedLookupElement.withPriority(
             LookupElementBuilder.createWithSmartPointer(lookupString, element)
-                .withIcon(icon)
-                .withInsertHandler(insertHandler), priority.toDouble()
+                .withRenderer(ClassLikeRenderer(icon, moduleName))
+                .withInsertHandler(ClassLikeInsertHandler(moduleName)), priority.toDouble()
         )
     }
 
     private fun createStructLookupElement(
-        element: VlangNamedElement, lookupString: String,
+        element: VlangNamedElement, lookupString: String, moduleName: String?,
         insertHandler: InsertHandler<LookupElement>? = null,
         priority: Int = 0,
     ): LookupElement {
+        val qualifiedName = createQualifiedName(moduleName, lookupString)
         return PrioritizedLookupElement.withPriority(
-            LookupElementBuilder.createWithSmartPointer(lookupString, element)
-                .withIcon(AllIcons.Nodes.Class)
+            LookupElementBuilder.createWithSmartPointer(qualifiedName, element)
+                .withRenderer(ClassLikeRenderer(AllIcons.Nodes.Class, moduleName))
                 .withInsertHandler(insertHandler), priority.toDouble()
         )
     }
@@ -241,15 +242,21 @@ object VlangCompletionUtil {
     }
 
     private fun createFunctionLookupElement(
-        element: VlangNamedElement, lookupString: String,
+        element: VlangNamedElement, lookupString: String, moduleName: String?,
         insertHandler: InsertHandler<LookupElement>? = null,
         priority: Int = 0,
     ): LookupElement {
+        val qualifiedName = createQualifiedName(moduleName, lookupString)
         return PrioritizedLookupElement.withPriority(
-            LookupElementBuilder.createWithSmartPointer(lookupString, element)
-                .withRenderer(FUNCTION_RENDERER)
+            LookupElementBuilder.createWithSmartPointer(qualifiedName, element)
+                .withRenderer(FunctionRenderer(moduleName))
                 .withInsertHandler(insertHandler), priority.toDouble()
         )
+    }
+
+    private fun createQualifiedName(moduleName: String?, lookupString: String): String {
+        val lastPart = moduleName?.substringAfterLast('.') ?: moduleName
+        return if (moduleName != null) "$lastPart.$lookupString" else lookupString
     }
 
     private fun createMethodLookupElement(
@@ -304,17 +311,50 @@ object VlangCompletionUtil {
         AutoPopupController.getInstance(editor.project!!).autoPopupMemberLookup(editor, null)
     }
 
-    class FunctionInsertHandler : InsertHandler<LookupElement> {
+    abstract class ElementInsertHandler(private val moduleName: String?) : InsertHandler<LookupElement> {
+        abstract fun handleInsertion(context: InsertionContext, item: LookupElement)
+
         override fun handleInsert(context: InsertionContext, item: LookupElement) {
             val caretOffset = context.editor.caretModel.offset
-            val element = context.file.findElementAt(caretOffset - 1) ?: return
+            val file = context.file as VlangFile
+            val element = file.findElementAt(caretOffset - 1) ?: return
             if (element.parentOfType<VlangSelectiveImportList>() != null) {
                 return
             }
 
+            context.commitDocument()
+
+            handleInsertion(context, item)
+
+            context.commitDocument()
+
+            if (moduleName != null) {
+                file.addImport(moduleName, null)
+            }
+        }
+    }
+
+    class FunctionInsertHandler(moduleName: String?) : ElementInsertHandler(moduleName) {
+        override fun handleInsertion(context: InsertionContext, item: LookupElement) {
+            val caretOffset = context.editor.caretModel.offset
+
             context.document.insertString(caretOffset, "()")
             context.editor.caretModel.moveToOffset(caretOffset + 1)
         }
+    }
+
+    class StructInsertHandler(moduleName: String?) : ElementInsertHandler(moduleName) {
+        override fun handleInsertion(context: InsertionContext, item: LookupElement) {
+            val caretOffset = context.editor.caretModel.offset
+            context.document.insertString(caretOffset, "{}")
+            context.editor.caretModel.moveToOffset(caretOffset + 1)
+
+            showCompletion(context.editor)
+        }
+    }
+
+    class ClassLikeInsertHandler(moduleName: String?) : ElementInsertHandler(moduleName) {
+        override fun handleInsertion(context: InsertionContext, item: LookupElement) {}
     }
 
     class StringInsertHandler(val string: String, val shift: Int) : InsertHandler<LookupElement> {
@@ -323,21 +363,6 @@ object VlangCompletionUtil {
 
             context.document.insertString(caretOffset, string)
             context.editor.caretModel.moveToOffset(caretOffset + shift)
-        }
-    }
-
-    class StructInsertHandler : InsertHandler<LookupElement> {
-        override fun handleInsert(context: InsertionContext, item: LookupElement) {
-            val caretOffset = context.editor.caretModel.offset
-            val element = context.file.findElementAt(caretOffset - 1) ?: return
-            if (element.parentOfType<VlangSelectiveImportList>() != null) {
-                return
-            }
-
-            context.document.insertString(caretOffset, "{}")
-            context.editor.caretModel.moveToOffset(caretOffset + 1)
-
-            showCompletion(context.editor)
         }
     }
 
@@ -417,12 +442,19 @@ object VlangCompletionUtil {
         }
     }
 
-    private val FUNCTION_RENDERER = object : LookupElementRenderer<LookupElement>() {
-        override fun renderElement(element: LookupElement, p: LookupElementPresentation) {
+    class ClassLikeRenderer(private val icon: Icon, moduleName: String?) : ElementRenderer(moduleName) {
+        override fun render(element: LookupElement, p: LookupElementPresentation) {
+            p.icon = icon
+            p.itemText = element.lookupString
+        }
+    }
+
+    class FunctionRenderer(moduleName: String?) : ElementRenderer(moduleName) {
+        override fun render(element: LookupElement, p: LookupElementPresentation) {
             val elem = element.psiElement as? VlangFunctionDeclaration ?: return
             p.icon = VIcons.Function
-            p.itemText = element.lookupString
-            p.tailText = elem.getSignature()?.text
+            val signature = elem.getSignature()?.text ?: ""
+            p.itemText = element.lookupString + signature
         }
     }
 
@@ -450,6 +482,18 @@ object VlangCompletionUtil {
                 p.tailText = " = $valueText"
             }
             p.typeText = parent.expression?.getType(null)?.text
+        }
+    }
+
+    abstract class ElementRenderer(private val moduleName: String?) : LookupElementRenderer<LookupElement>() {
+        abstract fun render(element: LookupElement, p: LookupElementPresentation)
+
+        override fun renderElement(element: LookupElement, p: LookupElementPresentation) {
+            render(element, p)
+
+            if (moduleName != null) {
+                p.tailText = " from $moduleName"
+            }
         }
     }
 }

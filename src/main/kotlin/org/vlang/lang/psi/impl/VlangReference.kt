@@ -331,6 +331,7 @@ class VlangReference(el: VlangReferenceExpressionBase) :
         if (!processImports(file, processor, state, myElement)) return false
         if (!processFileEntities(file, processor, state, true)) return false
         if (!processDirectory(file.originalFile.parent, file, file.packageName, processor, state, true)) return false
+        if (!processModulesEntities(file, processor, state)) return false
 
         return processBuiltin(processor, state, myElement)
     }
@@ -455,6 +456,21 @@ class VlangReference(el: VlangReferenceExpressionBase) :
         }
 
         return !processor.execute(import.lastPartPsi, state.put(ACTUAL_NAME, searchName))
+    }
+
+    private fun processModulesEntities(file: VlangFile, processor: VlangScopeProcessor, state: ResolveState): Boolean {
+        val currentModule = file.getModuleName()
+        val modules = VlangModulesIndex.getAll(element.project)
+        for (moduleFile in modules) {
+            if (moduleFile.getModuleName() == currentModule) {
+                continue
+            }
+            if (!processFileEntities(moduleFile, processor, state.put(MODULE_NAME, moduleFile.getModuleQualifiedName()), false)) {
+                return false
+            }
+        }
+
+        return true
     }
 
     // TODO: redone

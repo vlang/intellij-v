@@ -1,6 +1,5 @@
 package org.vlang.lang.psi.impl
 
-import com.intellij.openapi.util.text.StringUtil
 import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveState
 import org.vlang.lang.psi.VlangFunctionOrMethodDeclaration
@@ -26,7 +25,7 @@ abstract class VlangScopeProcessorBase(
         }
 
         val name = e.name ?: return false
-        if (StringUtil.isEmpty(name) || !myIsCompletion && !requestedNameElement.textMatches(name)) {
+        if (name.isEmpty() || !myIsCompletion && !requestedNameElement.textMatches(name)) {
             return true
         }
         if (crossOff(e)) {
