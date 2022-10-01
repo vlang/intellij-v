@@ -20,7 +20,12 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         extend(
             CompletionType.BASIC,
             topLevelPattern(),
-            KeywordsCompletionProvider("const", "struct", "enum", "union", "interface", "fn", "import", "module", "pub", "static", "type")
+            KeywordsCompletionProvider("const", "struct", "enum", "union", "interface", "fn", "module", "pub", "static", "type")
+        )
+        extend(
+            CompletionType.BASIC,
+            topLevelPattern(),
+            ImportKeywordCompletionProvider()
         )
         extend(
             CompletionType.BASIC,
@@ -35,6 +40,26 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
             insideForStatement(VlangTypes.IDENTIFIER),
             KeywordsCompletionProvider("continue", "break")
         )
+    }
+
+    private class ImportKeywordCompletionProvider : CompletionProvider<CompletionParameters>() {
+        override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
+            result.addElement(
+                PrioritizedLookupElement.withPriority(
+                    LookupElementBuilder.create("import")
+                        .withInsertHandler { ctx, _ ->
+                            val document = ctx.document
+                            val editor = ctx.editor
+                            val offset = editor.caretModel.offset
+                            document.insertString(offset, " ")
+                            editor.caretModel.moveToOffset(offset + 1)
+
+                            VlangCompletionUtil.showCompletion(editor)
+                        }
+                        .bold(), KEYWORD_PRIORITY.toDouble()
+                )
+            )
+        }
     }
 
     private class KeywordsCompletionProvider(private vararg val keywords: String) : CompletionProvider<CompletionParameters>() {

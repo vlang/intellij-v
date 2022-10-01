@@ -38,6 +38,27 @@ class VlangModulesIndex : StringStubIndexExtension<VlangFile>() {
 //            return StubIndex.getElements(KEY, name, project, scope, idFilter, VlangFile::class.java)
         }
 
+        fun getSubmodules(project: Project, module: String): List<VlangFile> {
+            val result = mutableListOf<VlangFile>()
+            val keys = StubIndex.getInstance().getAllKeys(KEY, project)
+            for (key in keys) {
+                val prefix = key.substringBeforeLast('.', "")
+                if (prefix != module) continue
+
+                val els = StubIndex.getElements(
+                    KEY,
+                    key,
+                    project,
+                    GlobalSearchScope.allScope(project),
+                    IdFilter.getProjectIdFilter(project, true),
+                    VlangFile::class.java
+                )
+                result.addAll(els)
+            }
+
+            return result.toSet().toList()
+        }
+
         fun getAll(project: Project): List<VlangFile> {
             val result = mutableListOf<VlangFile>()
             for (key in StubIndex.getInstance().getAllKeys(KEY, project)) {

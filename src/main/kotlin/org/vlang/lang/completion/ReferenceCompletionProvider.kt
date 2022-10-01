@@ -143,9 +143,9 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
     }
 
     private open inner class MyScopeProcessor(
-        private val myResult: CompletionResultSet,
+        private val result: CompletionResultSet,
         originalFile: PsiFile,
-        private val myForTypes: Boolean,
+        private val forTypes: Boolean,
     ) : VlangScopeProcessor() {
 
         private val processedNames = mutableSetOf<String>()
@@ -155,9 +155,9 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
                 addElement(
                     o,
                     state,
-                    myForTypes,
+                    forTypes,
                     processedNames,
-                    myResult
+                    result
                 )
             }
             return true
