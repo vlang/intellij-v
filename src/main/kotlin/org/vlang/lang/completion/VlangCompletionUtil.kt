@@ -419,7 +419,7 @@ object VlangCompletionUtil {
             val typeText = signature?.result?.text ?: "void"
             val icon = VIcons.Method
 
-            val parentStruct = elem.receiverType?.typeReferenceExpressionList?.firstOrNull()?.resolve() as? VlangStructDeclaration
+            val parentStruct = elem.receiverType.typeReferenceExpression?.resolve() as? VlangStructDeclaration
             p.tailText = signature?.parameters?.text + " of " + parentStruct?.name
 
             p.icon = icon
