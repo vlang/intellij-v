@@ -85,7 +85,7 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
         <localInspection language="vlang" groupName="V" shortName="VlangLabelOutsideUnsafeInspection"
                          displayName="Go to statement outside unsafe block"
                          enabledByDefault="true" level="WARNING"
-                         implementationClass="org.vlang.ide.inspections.VlangLabelOutsideInspection"/>
+                         implementationClass="org.vlang.ide.inspections.VlangLabelOutsideUnsafeInspection"/>
 
         <localInspection language="vlang" groupName="V" shortName="VlangVariableRedeclaration"
                          displayName="Variable redeclaration"
@@ -95,7 +95,7 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
         <localInspection language="vlang" groupName="V" shortName="VlangUnresolvedReferenceUnsafeInspection"
                          displayName="Unresolved reference inspection"
                          enabledByDefault="true" level="ERROR"
-                         implementationClass="org.vlang.ide.inspections.VlangUnresolvedReferenceUnsafeInspection"/>
+                         implementationClass="org.vlang.ide.inspections.VlangUnresolvedReferenceInspection"/>
 
         <!-- Unused inspections -->
         <localInspection language="vlang" groupName="V" shortName="VlangUnusedParameterInspection"

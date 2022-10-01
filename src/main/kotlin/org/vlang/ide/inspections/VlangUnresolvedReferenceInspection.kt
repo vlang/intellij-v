@@ -14,7 +14,7 @@ import org.vlang.lang.psi.VlangReferenceExpression
 import org.vlang.lang.psi.VlangVisitor
 import org.vlang.lang.psi.impl.VlangPsiImplUtil
 
-class VlangUnresolvedReferenceUnsafeInspection : VlangBaseInspection() {
+class VlangUnresolvedReferenceInspection : VlangBaseInspection() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
         return object : VlangVisitor() {
             override fun visitReferenceExpression(o: VlangReferenceExpression) {

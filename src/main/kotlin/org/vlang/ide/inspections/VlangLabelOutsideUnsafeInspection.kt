@@ -7,7 +7,7 @@ import org.vlang.lang.psi.VlangGotoStatement
 import org.vlang.lang.psi.VlangVisitor
 import org.vlang.lang.utils.UnsafeUtil
 
-class VlangLabelOutsideInspection : VlangBaseInspection() {
+class VlangLabelOutsideUnsafeInspection : VlangBaseInspection() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
         return object : VlangVisitor() {
             override fun visitGotoStatement(goto: VlangGotoStatement) {
