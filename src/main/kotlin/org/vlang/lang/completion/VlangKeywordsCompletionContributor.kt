@@ -20,7 +20,19 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         extend(
             CompletionType.BASIC,
             topLevelPattern(),
-            KeywordsCompletionProvider("const", "struct", "enum", "union", "interface", "fn", "module", "pub", "static", "type")
+            KeywordsCompletionProvider(
+                "const",
+                "struct",
+                "enum",
+                "union",
+                "interface",
+                "fn",
+                "module",
+                "pub",
+                "static",
+                "type",
+                needSpace = true
+            )
         )
         extend(
             CompletionType.BASIC,
@@ -62,7 +74,8 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         }
     }
 
-    private class KeywordsCompletionProvider(private vararg val keywords: String) : CompletionProvider<CompletionParameters>() {
+    private class KeywordsCompletionProvider(private vararg val keywords: String, private val needSpace: Boolean = false) :
+        CompletionProvider<CompletionParameters>() {
         override fun addCompletions(
             parameters: CompletionParameters,
             context: ProcessingContext,
@@ -86,7 +99,17 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
             for (keyword in keywords) {
                 result.addElement(
                     PrioritizedLookupElement.withPriority(
-                        LookupElementBuilder.create(keyword).bold(), KEYWORD_PRIORITY.toDouble()
+                        LookupElementBuilder.create(keyword)
+                            .withInsertHandler { ctx, _ ->
+                                if (needSpace) {
+                                    val document = ctx.document
+                                    val editor = ctx.editor
+                                    val offset = editor.caretModel.offset
+                                    document.insertString(offset, " ")
+                                    editor.caretModel.moveToOffset(offset + 1)
+                                }
+                            }
+                            .bold(), KEYWORD_PRIORITY.toDouble()
                     )
                 )
             }
