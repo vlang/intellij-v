@@ -19,11 +19,6 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
         context: ProcessingContext,
         result: CompletionResultSet,
     ) {
-//        if (parameters.position.text == CompletionUtilCore.DUMMY_IDENTIFIER_TRIMMED) {
-//            result.stopHere()
-//            return
-//        }
-
         val element = parameters.position
 
         if (VlangCompletionUtil.isCompileTimeIdentifier(element)) {

@@ -597,7 +597,9 @@ Type ::= (TypeLit | TypeName) GenericDeclaration? {
 //  }
 //ParType ::= '(' Type ')' {methods=[getActualType]}
 
-private TypeName ::= TypeReferenceExpression ('.' TypeReferenceExpression)*
+private TypeName ::= TypeReferenceExpression QualifiedTypeReferenceExpression*
+
+left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
 TypeReferenceExpression ::= identifier { methods=[getReference getQualifier resolve getType] }
 
 private TypeLit ::=

@@ -3432,6 +3432,18 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // '.' identifier
+  public static boolean QualifiedTypeReferenceExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "QualifiedTypeReferenceExpression")) return false;
+    if (!nextTokenIs(b, DOT)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _LEFT_, TYPE_REFERENCE_EXPRESSION, null);
+    r = consumeTokens(b, 0, DOT, IDENTIFIER);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
   // in Expression | VarDefinitionList in Expression
   public static boolean RangeClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RangeClause")) return false;
@@ -4415,7 +4427,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // TypeReferenceExpression ('.' TypeReferenceExpression)*
+  // TypeReferenceExpression QualifiedTypeReferenceExpression*
   static boolean TypeName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeName")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
@@ -4427,26 +4439,15 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ('.' TypeReferenceExpression)*
+  // QualifiedTypeReferenceExpression*
   private static boolean TypeName_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeName_1")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!TypeName_1_0(b, l + 1)) break;
+      if (!QualifiedTypeReferenceExpression(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "TypeName_1", c)) break;
     }
     return true;
-  }
-
-  // '.' TypeReferenceExpression
-  private static boolean TypeName_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "TypeName_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, DOT);
-    r = r && TypeReferenceExpression(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */

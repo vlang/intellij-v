@@ -101,6 +101,18 @@ class VlangReference(el: VlangReferenceExpressionBase) :
             if (processImportPath(qualifier, processor, state)) return false
         }
 
+        if (qualifier is VlangTypeReferenceExpression) {
+            val importSpec = when (val resolved = qualifier.resolve()) {
+                is VlangImportAlias -> resolved.parent
+                is VlangImportName  -> resolved.parent.parent
+                else                -> null
+            }
+
+            if (importSpec is VlangImportSpec) {
+                if (processImportPath(importSpec.importPath, processor, state)) return false
+            }
+        }
+
 //        if (target is VlangImportSpec) {
 //            if (target.isCImport()) return processor.execute(myElement, state)
 //            target = target.getImportString().resolve()
@@ -265,7 +277,7 @@ class VlangReference(el: VlangReferenceExpressionBase) :
         if (type == null) {
             return true
         }
-        return processInTypeRef(type.typeReferenceExpressionList.firstOrNull(), processor, state)
+        return processInTypeRef(type.typeReferenceExpression, processor, state)
     }
 
     private fun processInTypeRef(e: VlangTypeReferenceExpression?, processor: VlangScopeProcessor, state: ResolveState): Boolean {
@@ -353,7 +365,7 @@ class VlangReference(el: VlangReferenceExpressionBase) :
             val fieldDeclaration = fetch.parent.parent
             if (fieldDeclaration is VlangFieldDeclaration) {
                 // TODO: support multi fields
-                val fieldDefinitionType = fieldDeclaration.type?.typeReferenceExpressionList?.firstOrNull() ?: return true
+                val fieldDefinitionType = fieldDeclaration.type?.typeReferenceExpression ?: return true
                 return processQualifierExpression(file, fieldDefinitionType, processor, state)
             }
         }

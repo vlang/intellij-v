@@ -10,8 +10,6 @@ import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.*;
 import org.vlang.lang.stubs.VlangTypeStub;
 
-import java.util.List;
-
 public class VlangTypeImpl extends VlangStubbedElementImpl<VlangTypeStub> implements VlangType {
 
   public VlangTypeImpl(@NotNull VlangTypeStub stub, @NotNull IStubElementType<?, ?> type) {
@@ -45,9 +43,9 @@ public class VlangTypeImpl extends VlangStubbedElementImpl<VlangTypeStub> implem
   }
 
   @Override
-  @NotNull
-  public List<VlangTypeReferenceExpression> getTypeReferenceExpressionList() {
-    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangTypeReferenceExpression.class);
+  @Nullable
+  public VlangTypeReferenceExpression getTypeReferenceExpression() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeReferenceExpression.class);
   }
 
   @Override

@@ -93,7 +93,7 @@ public class VlangMethodDeclarationImpl extends VlangFunctionOrMethodDeclaration
   }
 
   @Override
-  @Nullable
+  @NotNull
   public VlangType getReceiverType() {
     return VlangPsiImplUtil.getReceiverType(this);
   }

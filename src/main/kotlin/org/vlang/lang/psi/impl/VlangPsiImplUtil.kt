@@ -111,7 +111,7 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getIdentifier(o: VlangType): PsiElement? {
-        return o.typeReferenceExpressionList.lastOrNull()?.getIdentifier()
+        return o.typeReferenceExpression?.getIdentifier()
     }
 
     @JvmStatic
@@ -186,18 +186,11 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getQualifier(o: VlangTypeReferenceExpression): VlangCompositeElement? {
-        val sibling = PsiTreeUtil.findSiblingBackward(o, VlangTypes.TYPE_REFERENCE_EXPRESSION, null)
-        // TODO
-        val qualifier = sibling as? VlangTypeReferenceExpression
-        if (qualifier == o) {
-            return null
-        }
-
-        return qualifier
+        return PsiTreeUtil.getChildOfType(o, VlangTypeReferenceExpression::class.java)
     }
 
     @JvmStatic
-    fun getReceiverType(o: VlangMethodDeclaration): VlangType? {
+    fun getReceiverType(o: VlangMethodDeclaration): VlangType {
         return o.receiver.type
     }
 
@@ -205,7 +198,7 @@ object VlangPsiImplUtil {
         if (o is VlangPointerType) {
             return PsiTreeUtil.findChildOfAnyType(o, VlangTypeReferenceExpression::class.java)
         }
-        return o?.typeReferenceExpressionList?.firstOrNull()
+        return o?.typeReferenceExpression
     }
 
     @JvmStatic
@@ -214,7 +207,8 @@ object VlangPsiImplUtil {
             return type
         }
 
-        val resolved = type.typeReferenceExpressionList.lastOrNull()?.resolve()
+        // TODO:
+        val resolved = type.typeReferenceExpression?.resolve()
         val typeChild = resolved?.childrenOfType<VlangStructType>()?.firstOrNull()
         if (typeChild != null) {
             return typeChild
@@ -225,7 +219,7 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun resolve(o: VlangTypeReferenceExpression): PsiElement? {
-        return o.getReference().resolve()
+        return o.reference.resolve()
     }
 
     @JvmStatic
@@ -444,7 +438,7 @@ object VlangPsiImplUtil {
         }
 
         if (expr is VlangLiteralValueExpression) {
-            val type = expr.type.typeReferenceExpressionList.firstOrNull()?.resolve()
+            val type = expr.type.typeReferenceExpression?.resolve()
             if (type?.firstChild is VlangStructType) {
                 return type.firstChild as VlangStructType
             }

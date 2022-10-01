@@ -39,7 +39,7 @@ public interface VlangMethodDeclaration extends VlangSignatureOwner, VlangFuncti
   @NotNull
   PsiElement getFn();
 
-  @Nullable
+  @NotNull
   VlangType getReceiverType();
 
   @Nullable
