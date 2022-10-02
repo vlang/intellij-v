@@ -483,6 +483,8 @@ VarModifiers ::= (mut | shared)*
 
 SymbolVisibility ::= pub | BUILTIN_GLOBAL
 
+GenericTypeArguments ::= '<' TypeListNoPin? '>' {pin=3}
+
 GenericDeclaration ::= '<' GenericDeclarationList '>'
 
 GenericDeclarationList ::= GenericName (',' GenericName)*
@@ -561,10 +563,10 @@ LockExpression ::= (lock | rlock) <<enterMode "BLOCK?">> ExpressionList Block <<
 GoExpression ::= go Expression
 
 // { ... }
-MapInitExpr ::= <<isModeOff "BLOCK?">> '{' KeyValues '}' {pin=4}
+MapInitExpr ::= <<isModeOff "BLOCK?">> & <<prevIsNotType>> '{' KeyValues '}' {pin=4}
 KeyValues ::= KeyValue ((semi | ',') KeyValue)* (semi | ',')? {pin=1}
 // <key> : <value>
-KeyValue ::= (Literal | ReferenceExpression) ':' Expression {pin=1}
+KeyValue ::= Expression ':' Expression {pin=2}
 
 // <type> {...}
 LiteralValueExpression ::= Type ((<<isModeOff "BLOCK?">> | <<isModeOn "PAR">> | <<prevIsType>>) & <<prevIsNotFunType>>) '{' ElementList? '}' {pin=3}
@@ -715,8 +717,8 @@ private RightHandExpr ::=
   | ErrorPropagationExpression
   | ForceNoErrorPropagationExpression
 
-// <expr>(...)
-left CallExpr ::= ArgumentList
+// <expr>[<<generics>>](...)
+left CallExpr ::= GenericTypeArguments? ArgumentList
 
 // <expr>[<expr>]
 // <expr>#[<exr>]
@@ -781,9 +783,9 @@ MutExpression ::= mut Expression
 SharedExpression ::= shared Expression
 
 // [<list>]
-ArrayCreation ::= '[' ArrayCreationList? (']' '!'?) {pin=1}
+ArrayCreation ::= '[' ArrayCreationList? semi? (']' '!'?) {pin=1}
 // <expr1>, <expr2>, ..., <exprN>
-ArrayCreationList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &']'))* {pin(".*")=1}
+ArrayCreationList ::= ExpressionWithRecover (','? ExpressionWithRecover)* ','? {pin(".*")=0}
 
 // ([<arg1>, <arg2>[...], ...])
 ArgumentList ::= '(' ElementList? '...'? ','? ')' {pin=1}

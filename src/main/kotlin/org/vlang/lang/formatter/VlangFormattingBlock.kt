@@ -37,6 +37,7 @@ class VlangFormattingBlock(
                 is VlangMatchArms                 -> true
                 is VlangMapInitExpr               -> true
                 is VlangGlobalVariableDeclaration -> true
+                is VlangArrayCreation             -> true
                 else                              -> false
             } && child !is LeafPsiElement
 

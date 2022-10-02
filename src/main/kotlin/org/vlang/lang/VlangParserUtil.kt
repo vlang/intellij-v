@@ -119,6 +119,11 @@ object VlangParserUtil : GeneratedParserUtilBase() {
     }
 
     @JvmStatic
+    fun prevIsNotType(builder: PsiBuilder, level: Int): Boolean {
+        return !prevIsType(builder, level)
+    }
+
+    @JvmStatic
     fun prevIsNotFunType(builder: PsiBuilder, level: Int): Boolean {
         val marker = builder.latestDoneMarker
         val type = marker?.tokenType

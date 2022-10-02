@@ -279,6 +279,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitGenericTypeArguments(@NotNull VlangGenericTypeArguments o) {
+    visitCompositeElement(o);
+  }
+
   public void visitGlobalVariableDeclaration(@NotNull VlangGlobalVariableDeclaration o) {
     visitCompositeElement(o);
   }

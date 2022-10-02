@@ -5,15 +5,15 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface VlangMapInitExpr extends VlangExpression {
-
-  @NotNull
-  VlangKeyValues getKeyValues();
-
-  @NotNull
-  PsiElement getLbrace();
+public interface VlangGenericTypeArguments extends VlangCompositeElement {
 
   @Nullable
-  PsiElement getRbrace();
+  VlangTypeListNoPin getTypeListNoPin();
+
+  @NotNull
+  PsiElement getGreater();
+
+  @NotNull
+  PsiElement getLess();
 
 }

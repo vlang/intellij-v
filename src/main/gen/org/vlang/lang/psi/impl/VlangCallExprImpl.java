@@ -48,4 +48,10 @@ public class VlangCallExprImpl extends VlangExpressionImpl implements VlangCallE
     return VlangPsiTreeUtil.getChildOfType(this, VlangForceNoErrorPropagationExpression.class);
   }
 
+  @Override
+  @Nullable
+  public VlangGenericTypeArguments getGenericTypeArguments() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangGenericTypeArguments.class);
+  }
+
 }
