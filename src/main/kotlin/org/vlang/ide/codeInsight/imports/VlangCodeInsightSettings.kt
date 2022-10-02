@@ -11,9 +11,7 @@ class VlangCodeInsightSettings : PersistentStateComponent<VlangCodeInsightSettin
     var isShowImportPopup = true
     var isAddUnambiguousImportsOnTheFly = true
 
-    override fun getState(): VlangCodeInsightSettings {
-        return this
-    }
+    override fun getState() = this
 
     override fun loadState(state: VlangCodeInsightSettings) {
         XmlSerializerUtil.copyBean(state, this)

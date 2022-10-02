@@ -9,11 +9,11 @@ import com.intellij.psi.impl.source.resolve.ResolveCache
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ArrayUtil
+import org.vlang.configurations.VlangConfiguration
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangPsiImplUtil.processNamedElements
 import org.vlang.lang.stubs.index.VlangModulesIndex
 import org.vlang.lang.stubs.index.VlangNamesIndex
-import org.vlang.sdk.VlangSdkUtil
 
 class VlangReference(el: VlangReferenceExpressionBase) :
     VlangReferenceBase<VlangReferenceExpressionBase>(
@@ -240,7 +240,7 @@ class VlangReference(el: VlangReferenceExpressionBase) :
         }
 
         if (typ is VlangArrayOrSliceType) {
-            val builtin = VlangSdkUtil.findBuiltinDir(typ)
+            val builtin = VlangConfiguration.getInstance(type.project).builtinLocation
             val arrayVirtualFile = builtin?.findChild("array.v") ?: return false
             val arrayFile = PsiManager.getInstance(typ.project).findFile(arrayVirtualFile) as? VlangFile ?: return false
             val arrayStruct = arrayFile.getStructs()
@@ -316,7 +316,7 @@ class VlangReference(el: VlangReferenceExpressionBase) :
 
         // expr or { err }
         if (identifier!!.text == "err" && identifier!!.parentOfType<VlangOrBlockExpr>() != null) {
-            return !processBuiltin( processor, state.put(SEARCH_NAME, "IError"), myElement)
+            return !processBuiltin( processor, state.put(SEARCH_NAME, "IError"))
         }
 
         when (val parent = myElement.parent) {
@@ -345,7 +345,7 @@ class VlangReference(el: VlangReferenceExpressionBase) :
         if (!processDirectory(file.originalFile.parent, file, file.packageName, processor, state, true)) return false
         if (!processModulesEntities(file, processor, state)) return false
 
-        return processBuiltin(processor, state, myElement)
+        return processBuiltin(processor, state)
     }
 
     private fun handleEnumFetch(
@@ -374,6 +374,14 @@ class VlangReference(el: VlangReferenceExpressionBase) :
             if (binaryExpr.right != null && binaryExpr.right!!.isEquivalentTo(fetch)) {
                 val left = binaryExpr.left ?: return true
                 return processQualifierExpression(file, left, processor, state)
+            }
+        }
+
+        if (fetch.parent.parent is VlangElement) {
+            val element = fetch.parent.parent as VlangElement
+            val key = element.key?.firstChild?.firstChild as? VlangReferenceExpression
+            if (key != null) {
+                return processQualifierExpression(file, key, processor, state)
             }
         }
 
@@ -416,9 +424,9 @@ class VlangReference(el: VlangReferenceExpressionBase) :
         return true
     }
 
-    private fun processBuiltin(processor: VlangScopeProcessor, state: ResolveState, element: VlangReferenceExpressionBase?): Boolean {
-        val builtin = VlangSdkUtil.findBuiltinDir(element!!) ?: return true
-        val psiManager = PsiManager.getInstance(element.project)
+    private fun processBuiltin(processor: VlangScopeProcessor, state: ResolveState): Boolean {
+        val builtin = VlangConfiguration.getInstance(myElement.project).builtinLocation ?: return true
+        val psiManager = PsiManager.getInstance(myElement.project)
         builtin.children
             .map { psiManager.findFile(it) }
             .filterIsInstance<VlangFile>()

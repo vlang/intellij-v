@@ -10,7 +10,6 @@ import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VfsUtilCore
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VirtualFileManager
-import com.intellij.psi.PsiElement
 import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.CachedValuesManager
 import com.intellij.util.ObjectUtils
@@ -102,11 +101,5 @@ object VlangSdkUtil {
             return "vlib"
         }
         return "vlib"
-    }
-
-    fun findBuiltinDir(context: PsiElement): VirtualFile? {
-        val project = context.project
-
-        return getSdkSrcDir(project, null)?.findChild("builtin")
     }
 }

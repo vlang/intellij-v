@@ -12,11 +12,11 @@ import com.intellij.psi.*
 import com.intellij.psi.impl.source.tree.LeafElement
 import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.util.*
+import org.vlang.configurations.VlangConfiguration
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.imports.VlangImportReference
-import org.vlang.sdk.VlangSdkUtil
 
 object VlangPsiImplUtil {
     @JvmStatic
@@ -488,7 +488,7 @@ object VlangPsiImplUtil {
     }
 
     fun getBuiltinType(name: String, context: PsiElement): VlangType? {
-        val builtin = VlangSdkUtil.findBuiltinDir(context)
+        val builtin = VlangConfiguration.getInstance(context.project).builtinLocation
         if (builtin != null) {
             print("")
         }

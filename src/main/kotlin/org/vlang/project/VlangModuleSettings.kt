@@ -16,7 +16,6 @@ import com.intellij.util.xmlb.XmlSerializerUtil
 import com.intellij.util.xmlb.annotations.OptionTag
 import com.intellij.util.xmlb.annotations.Property
 import org.vlang.configurations.VlangModuleSettingsConfigurable
-import org.vlang.configurations.VlangProjectConfigurableProvider.VlangProjectSettingsConfigurable
 
 @State(name = "VlangModuleSettings", storages = [Storage(file = StoragePathMacros.MODULE_FILE)])
 class VlangModuleSettings(private val myModule: Module) : PersistentStateComponent<VlangModuleSettings.VlangModuleSettingsState?> {
@@ -84,9 +83,9 @@ class VlangModuleSettings(private val myModule: Module) : PersistentStateCompone
         fun showModulesConfigurable(project: Project) {
             ApplicationManager.getApplication().assertIsDispatchThread()
             if (!project.isDisposed) {
-                ShowSettingsUtil.getInstance().editConfigurable(project,
-                    VlangProjectSettingsConfigurable(project)
-                )
+//                ShowSettingsUtil.getInstance().editConfigurable(project,
+//                    VlangProjectSettingsConfigurable(project)
+//                )
             }
         }
 

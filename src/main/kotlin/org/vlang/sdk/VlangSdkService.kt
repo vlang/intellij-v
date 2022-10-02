@@ -42,10 +42,6 @@ class VlangSdkService(private val project: Project) : SimpleModificationTracker(
         return getSdk(module)?.homePath
     }
 
-    fun getExecutable(): String? {
-        return getExecutablePath(getSdkHomePath(null))
-    }
-
     fun getSdk(module: Module?): Sdk? {
         if (module != null) {
             val sdk = ModuleRootManager.getInstance(module).sdk

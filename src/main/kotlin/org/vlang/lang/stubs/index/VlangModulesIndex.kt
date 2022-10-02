@@ -27,7 +27,7 @@ class VlangModulesIndex : StringStubIndexExtension<VlangFile>() {
                     KEY,
                     key,
                     project,
-                    scope,
+                    null,
                     idFilter,
                     VlangFile::class.java
                 )

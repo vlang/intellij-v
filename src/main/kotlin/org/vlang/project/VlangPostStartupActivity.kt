@@ -1,28 +1,31 @@
 package org.vlang.project
 
-import com.intellij.ProjectTopics
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.roots.ModuleRootEvent
-import com.intellij.openapi.roots.ModuleRootListener
 import com.intellij.openapi.vcs.changes.shelf.ShelveChangesManager.PostStartupActivity
-import com.intellij.util.indexing.FileBasedIndexImpl
-import org.vlang.sdk.VlangSdkUtil
 
 class VlangPostStartupActivity : PostStartupActivity() {
     override fun runActivity(project: Project) {
-        val connection = project.messageBus.connect()
 
-        // TODO:
-        connection.subscribe(ProjectTopics.PROJECT_ROOTS, object : ModuleRootListener {
-            override fun rootsChanged(event: ModuleRootEvent) {
-                if (event.isCausedByWorkspaceModelChangesOnly) {
-                    val sdk = VlangSdkUtil.getSdkSrcDir(project, null)
-                    val root = sdk?.findChild("vlib") ?: return
+        // TODO: think about how to handle this better
+//        val stdlib = VlangConfiguration.getInstance(project).stdlibLocation ?: return
+//        val table = LibraryTablesRegistrar.getInstance().getLibraryTable(project)
+//
+//        val stdLibrary = table.libraries.find { it.name == "V Standard Library" }
+//        if (stdLibrary != null) {
+//            return
+//        }
+//
+//        runWriteActionAndWait {
+//            val lib = table.createLibrary("V Standard library")
+//            val model = lib.modifiableModel
+//            model.addRoot(stdlib, OrderRootType.SOURCES)
+//            model.commit()
+//
+//            val modules = ModuleManager.getInstance(project).modules
+//            modules.forEach {
+//                ModuleRootModificationUtil.addDependency(it, lib)
+//            }
+//        }
 
-                    FileBasedIndexImpl.getInstance().requestReindex(root)
-                    return
-                }
-            }
-        })
     }
 }

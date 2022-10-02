@@ -5,7 +5,7 @@ import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.execution.process.KillableColoredProcessHandler
 import com.intellij.execution.process.ProcessHandler
 import com.intellij.execution.runners.ExecutionEnvironment
-import org.vlang.sdk.VlangSdkService
+import org.vlang.configurations.VlangProjectSettingsState
 import java.io.File
 
 class VlangRunConfigurationRunState(
@@ -17,8 +17,9 @@ class VlangRunConfigurationRunState(
         val file = File(conf.scriptName)
         val workingDir = file.parentFile
 
-        val exe = VlangSdkService.getInstance(conf.project).getExecutable()
-            ?: throw RuntimeException("V executable not found, SDK not setup correctly?")
+        // TODO: show notification with link to setup toolchain
+        val exe = VlangProjectSettingsState.getInstance(conf.project).compilerLocation
+            ?: throw RuntimeException("V executable not found, toolchain not setup correctly?")
 
         val commandLine = GeneralCommandLine()
             .withExePath(exe)
