@@ -12,7 +12,7 @@ import org.vlang.lang.psi.VlangMethodDeclaration
 
 class VlangMethodToFunctionIntention : BaseIntentionAction() {
     override fun startInWriteAction() = true
-    override fun getFamilyName() = "Functions"
+    override fun getFamilyName() = "Method to function"
     override fun getText() = "Convert method with receiver to function with parameter"
 
     override fun isAvailable(project: Project, editor: Editor, file: PsiFile): Boolean {
