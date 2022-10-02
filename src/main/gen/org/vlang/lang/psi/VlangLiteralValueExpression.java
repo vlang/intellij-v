@@ -12,6 +12,9 @@ public interface VlangLiteralValueExpression extends VlangExpression {
   @NotNull
   List<VlangElement> getElementList();
 
+  @Nullable
+  VlangGenericTypeArguments getGenericTypeArguments();
+
   @NotNull
   VlangType getType();
 

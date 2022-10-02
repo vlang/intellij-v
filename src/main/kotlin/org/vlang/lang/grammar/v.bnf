@@ -373,7 +373,7 @@ FieldsGroup ::= WithModifiersFieldsGroup | WithoutModifiersFieldsGroup
 private WithModifiersFieldsGroup ::= MemberModifiers semi? FieldDeclaration+ {pin=1}
 private WithoutModifiersFieldsGroup ::= !MemberModifiers FieldDeclaration+
 
-FieldDeclaration ::= (FieldDefinitionList shared? Type | AnonymousFieldDefinition) DefaultFieldValue? Attribute? Tag? semi
+FieldDeclaration ::= (FieldDefinitionList shared? Type | AnonymousFieldDefinition) Attribute? DefaultFieldValue? Tag? semi
 DefaultFieldValue ::= '=' Expression
 Tag ::= StringLiteral
 private FieldDefinitionList ::= FieldDefinition (',' FieldDefinition)*
@@ -533,7 +533,6 @@ Expression ::=
   | UnaryExpr
   | SendExpr
   | RangeExpr
-//  | LiteralValueExpression
   | MatchExpression
   | IfExpression
   | CompileTimeIfExpression
@@ -569,7 +568,7 @@ KeyValues ::= KeyValue ((semi | ',') KeyValue)* (semi | ',')? {pin=1}
 KeyValue ::= Expression ':' Expression {pin=2}
 
 // <type> {...}
-LiteralValueExpression ::= Type ((<<isModeOff "BLOCK?">> | <<isModeOn "PAR">> | <<prevIsType>>) & <<prevIsNotFunType>>) '{' ElementList? '}' {pin=3}
+LiteralValueExpression ::= Type GenericTypeArguments? ((<<isLastNotIs "BLOCK?">> | <<isLastIs "PAR">> | <<prevIsType>>) & <<prevIsNotFunType>>) '{' ElementList? '}' {pin=4}
 private ElementList ::= ElementInner ((',' | semi) ElementInner?)*
 private ElementInner ::= Element | (!() Element) {recoverWhile=ElementInnerRecover}
 private ElementInnerRecover ::= !('}' | ',' | semi | ')')
@@ -623,7 +622,7 @@ private TypeLit ::=
   | InterfaceType
 
 // [<expr>]<type>
-ArrayOrSliceType ::= '[' Expression? ']' Type {pin=1}
+ArrayOrSliceType ::= '[' Expression? ']' Type {pin=3}
 
 // &<type>
 // &&<type>
@@ -783,20 +782,20 @@ MutExpression ::= mut Expression
 SharedExpression ::= shared Expression
 
 // [<list>]
-ArrayCreation ::= '[' ArrayCreationList? semi? (']' '!'?) {pin=1}
+ArrayCreation ::= '[' <<enterMode "PAR">> ArrayCreationList? semi? (<<exitModeSafe "PAR">> ']' '!'?) {pin=1}
 // <expr1>, <expr2>, ..., <exprN>
 ArrayCreationList ::= ExpressionWithRecover (','? ExpressionWithRecover)* ','? {pin(".*")=0}
 
 // ([<arg1>, <arg2>[...], ...])
-ArgumentList ::= '(' ElementList? '...'? ','? ')' {pin=1}
+ArgumentList ::= '(' <<enterMode "PAR">> ElementList? '...'? ','? <<exitModeSafe "PAR">> ')' {pin=1}
 
 // match <expr> { ... }
-MatchExpression ::= match <<enterMode "BLOCK?">> Expression '{' MatchArms '}' <<exitAllModeSafe "BLOCK?">> {pin=1}
+MatchExpression ::= match <<enterMode "BLOCK?">> Expression <<exitModeSafe "BLOCK?">> '{' MatchArms '}' <<exitAllModeSafe "BLOCK?">> {pin=1}
 // <expr>[, <expr2>] { ... }
 // else { ... }
 MatchArms ::= (MatchArm | MatchElseArmClause)*
 // <expr>[, <expr2>] { ... }
-MatchArm ::= <<enterMode "BLOCK?">> MatchExpressionList Block <<exitModeSafe "BLOCK?">> semi {pin=2}
+MatchArm ::= <<enterMode "BLOCK?">> MatchExpressionList <<exitModeSafe "BLOCK?">> Block semi {pin=2}
 // <expr>[, <expr2>]
 private MatchExpressionList ::= MatchArmExpression (',' MatchArmExpression)* {pin(".*")=1}
 // <expr> or <type>

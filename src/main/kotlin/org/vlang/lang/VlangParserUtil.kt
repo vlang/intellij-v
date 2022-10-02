@@ -4,15 +4,27 @@ import com.intellij.lang.PsiBuilder
 import com.intellij.lang.parser.GeneratedParserUtilBase
 import com.intellij.openapi.util.Key
 import gnu.trove.TObjectIntHashMap
+import java.util.*
 
 object VlangParserUtil : GeneratedParserUtilBase() {
     private val MODES_KEY = Key.create<TObjectIntHashMap<String>>("MODES_KEY")
+    private val MODES_LIST_KEY = Key.create<Stack<String>>("MODES_KEY")
 
     private fun getParsingModes(builder: PsiBuilder): TObjectIntHashMap<String> {
         var flags = builder.getUserData(MODES_KEY)
         if (flags == null) {
             flags = TObjectIntHashMap<String>()
             builder.putUserData(MODES_KEY, flags)
+        }
+        return flags
+    }
+
+    private fun getParsingModesStack(builder: PsiBuilder): Stack<String> {
+        var flags = builder.getUserData(MODES_LIST_KEY)
+        if (flags == null) {
+            flags = Stack<String>()
+            flags.push("DEFAULT_MODE")
+            builder.putUserData(MODES_LIST_KEY, flags)
         }
         return flags
     }
@@ -74,18 +86,32 @@ object VlangParserUtil : GeneratedParserUtilBase() {
     ): Boolean {
         val map = getParsingModes(builder)
         val prev = TObjectIntHashMap<String>()
+
+        val nowStack = getParsingModesStack(builder)
+        val prevStack =  Stack<String>()
+        prevStack.addAll(nowStack)
+
         for (mode in modes) {
             val p = map[mode]
             if (p > 0) {
                 map.put(mode, 0)
                 prev.put(mode, p)
             }
+
+            if (nowStack.contains(mode)) {
+                nowStack.remove(mode)
+            }
         }
-        val result: Boolean = parser.parse(builder, level_)
-        prev.forEachEntry { mode: String?, p: Int ->
-            map.put(mode, p)
+
+        val result = parser.parse(builder, level_)
+        prev.forEachEntry { mode, count ->
+            map.put(mode, count)
             true
         }
+
+        nowStack.clear()
+        nowStack.addAll(prevStack)
+
         return result
     }
 
@@ -109,6 +135,16 @@ object VlangParserUtil : GeneratedParserUtilBase() {
     @JvmStatic
     fun isModeOff(builder: PsiBuilder, level: Int, mode: String?): Boolean {
         return getParsingModes(builder)[mode] == 0
+    }
+
+    @JvmStatic
+    fun isLastIs(builder: PsiBuilder, level: Int, mode: String?): Boolean {
+        return getParsingModesStack(builder).peek() == mode
+    }
+
+    @JvmStatic
+    fun isLastNotIs(builder: PsiBuilder, level: Int, mode: String?): Boolean {
+        return getParsingModesStack(builder).peek() != mode
     }
 
     @JvmStatic
@@ -150,6 +186,8 @@ object VlangParserUtil : GeneratedParserUtilBase() {
         if (!flags.increment(mode)) {
             flags.put(mode, 1)
         }
+        val stack = getParsingModesStack(builder)
+        stack.push(mode)
         return true
     }
 
@@ -167,6 +205,24 @@ object VlangParserUtil : GeneratedParserUtilBase() {
         } else if (!safe) {
             builder.error("Could not exit inactive '" + mode + "' mode at offset " + builder.currentOffset)
         }
+
+        val stack = getParsingModesStack(builder)
+        if (stack.isEmpty() && !safe) {
+            builder.error("Could not exit '" + mode + "' mode at offset " + builder.currentOffset + ": stack is empty")
+            return true
+        }
+
+        val top = stack.peek()
+        if (top == mode) {
+            stack.pop()
+
+            if (all) {
+                while (!stack.isEmpty() && stack.peek() == mode) {
+                    stack.pop()
+                }
+            }
+        }
+
         return true
     }
 

@@ -37,6 +37,12 @@ public class VlangLiteralValueExpressionImpl extends VlangExpressionImpl impleme
   }
 
   @Override
+  @Nullable
+  public VlangGenericTypeArguments getGenericTypeArguments() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangGenericTypeArguments.class);
+  }
+
+  @Override
   @NotNull
   public VlangType getType() {
     return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangType.class));
