@@ -48,6 +48,11 @@ class VlangAnnotator : Annotator {
                 return
             }
 
+            if (resolvedElement is VlangMethodDeclaration) {
+                holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES)
+                return
+            }
+
             if (resolvedElement is VlangStructDeclaration) {
                 holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.CLASS_NAME_ATTRIBUTES)
                 return
