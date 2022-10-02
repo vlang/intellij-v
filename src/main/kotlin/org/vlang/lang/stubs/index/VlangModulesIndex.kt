@@ -66,7 +66,7 @@ class VlangModulesIndex : StringStubIndexExtension<VlangFile>() {
                     KEY,
                     key,
                     project,
-                    GlobalSearchScope.allScope(project),
+                    null,
                     null,
                     VlangFile::class.java
                 )

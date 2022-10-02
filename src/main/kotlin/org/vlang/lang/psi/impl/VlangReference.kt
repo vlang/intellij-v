@@ -529,6 +529,16 @@ class VlangReference(el: VlangReferenceExpressionBase) :
         if (!processNamedElements(
                 processor,
                 state,
+                file.getFunctions(),
+                Conditions.alwaysTrue(),
+                localProcessing,
+                false
+            )
+        ) return false
+
+        if (!processNamedElements(
+                processor,
+                state,
                 file.getStructs(),
                 Conditions.alwaysTrue(),
                 localProcessing,
@@ -579,7 +589,7 @@ class VlangReference(el: VlangReferenceExpressionBase) :
         return processNamedElements(
             processor,
             state,
-            file.getFunctions(),
+            file.getGlobalVariables(),
             Conditions.alwaysTrue(),
             localProcessing,
             false

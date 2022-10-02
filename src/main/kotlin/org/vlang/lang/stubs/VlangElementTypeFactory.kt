@@ -46,6 +46,7 @@ object VlangElementTypeFactory {
 //        if ("TYPE" == name) return VlangTypeStubElementType(name)
 //        if ("METHOD_SPEC" == name) return VlangMethodSpecStubElementType(name)
         if ("CONST_DEFINITION" == name) return VlangConstDefinitionStubElementType(name)
+        if ("GLOBAL_VARIABLE_DEFINITION" == name) return VlangGlobalVariableDefinitionStubElementType(name)
         if ("MODULE_CLAUSE" == name) return VlangModuleClauseStubElementType.INSTANCE
 //        if ("VAR_SPEC" == name) return VlangVarSpecStubElementType(name)
 //        if ("SHORT_VAR_DECLARATION" == name) return object : VlangVarSpecStubElementType(name) {

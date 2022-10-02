@@ -31,6 +31,7 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
                 "pub",
                 "static",
                 "type",
+                "__global",
                 needSpace = true
             )
         )

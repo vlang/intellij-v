@@ -211,17 +211,18 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
         val moduleName = state.get(VlangReferenceBase.MODULE_NAME)
 
         return when (element) {
-            is VlangFunctionDeclaration  -> VlangCompletionUtil.createFunctionLookupElement(element, moduleName)
-            is VlangMethodDeclaration    -> VlangCompletionUtil.createMethodLookupElement(element)
-            is VlangStructDeclaration    -> VlangCompletionUtil.createStructLookupElement(element, moduleName)
-            is VlangUnionDeclaration     -> VlangCompletionUtil.createUnionLookupElement(element, moduleName)
-            is VlangEnumDeclaration      -> VlangCompletionUtil.createEnumLookupElement(element, moduleName)
-            is VlangInterfaceDeclaration -> VlangCompletionUtil.createInterfaceLookupElement(element, moduleName)
-            is VlangTypeAliasDeclaration -> VlangCompletionUtil.createTypeAliasLookupElement(element, moduleName)
-            is VlangFieldDefinition      -> VlangCompletionUtil.createFieldLookupElement(element)
-            is VlangConstDefinition      -> VlangCompletionUtil.createConstantLookupElement(element, moduleName)
-            is VlangEnumFieldDefinition  -> VlangCompletionUtil.createEnumFieldLookupElement(element)
-            else                         -> VlangCompletionUtil.createVariableLikeLookupElement(element)
+            is VlangFunctionDeclaration      -> VlangCompletionUtil.createFunctionLookupElement(element, moduleName)
+            is VlangMethodDeclaration        -> VlangCompletionUtil.createMethodLookupElement(element)
+            is VlangStructDeclaration        -> VlangCompletionUtil.createStructLookupElement(element, moduleName)
+            is VlangUnionDeclaration         -> VlangCompletionUtil.createUnionLookupElement(element, moduleName)
+            is VlangEnumDeclaration          -> VlangCompletionUtil.createEnumLookupElement(element, moduleName)
+            is VlangInterfaceDeclaration     -> VlangCompletionUtil.createInterfaceLookupElement(element, moduleName)
+            is VlangTypeAliasDeclaration     -> VlangCompletionUtil.createTypeAliasLookupElement(element, moduleName)
+            is VlangFieldDefinition          -> VlangCompletionUtil.createFieldLookupElement(element)
+            is VlangConstDefinition          -> VlangCompletionUtil.createConstantLookupElement(element, moduleName)
+            is VlangEnumFieldDefinition      -> VlangCompletionUtil.createEnumFieldLookupElement(element)
+            is VlangGlobalVariableDefinition -> VlangCompletionUtil.createVariableLikeLookupElement(element)
+            else                             -> VlangCompletionUtil.createVariableLikeLookupElement(element)
         }
     }
 }

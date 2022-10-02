@@ -16,4 +16,5 @@ class ParserTest : ParserTestBase("parser", "v", VlangParserDefinition()) {
     fun `test is as expression`() = doTest(true)
     fun `test function literal`() = doTest(true)
     fun `test dot expression`() = doTest(true)
+    fun `test globals`() = doTest(true)
 }

@@ -283,6 +283,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitGlobalVariableDefinition(@NotNull VlangGlobalVariableDefinition o) {
+    visitNamedElement(o);
+  }
+
   public void visitGoExpression(@NotNull VlangGoExpression o) {
     visitExpression(o);
   }

@@ -27,16 +27,17 @@ class VlangFormattingBlock(
             }
 
             val needIdent = when (parent) {
-                is VlangBlock                  -> true
-                is VlangInterfaceType          -> true
-                is VlangStructType             -> true
-                is VlangEnumFields             -> true
-                is VlangUnionDeclaration       -> true
-                is VlangConstDeclaration       -> true
-                is VlangLiteralValueExpression -> true
-                is VlangMatchArms              -> true
-                is VlangMapInitExpr            -> true
-                else                           -> false
+                is VlangBlock                     -> true
+                is VlangInterfaceType             -> true
+                is VlangStructType                -> true
+                is VlangEnumFields                -> true
+                is VlangUnionDeclaration          -> true
+                is VlangConstDeclaration          -> true
+                is VlangLiteralValueExpression    -> true
+                is VlangMatchArms                 -> true
+                is VlangMapInitExpr               -> true
+                is VlangGlobalVariableDeclaration -> true
+                else                              -> false
             } && child !is LeafPsiElement
 
             val block = VlangFormattingBlock(child, spacingBuilder = spacingBuilder, withIdent = needIdent)

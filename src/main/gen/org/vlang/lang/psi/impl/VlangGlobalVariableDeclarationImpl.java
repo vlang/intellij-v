@@ -1,14 +1,16 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import org.vlang.lang.psi.VlangPsiTreeUtil;
-import static org.vlang.lang.VlangTypes.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.*;
+
+import java.util.List;
+
+import static org.vlang.lang.VlangTypes.*;
 
 public class VlangGlobalVariableDeclarationImpl extends VlangCompositeElementImpl implements VlangGlobalVariableDeclaration {
 
@@ -33,21 +35,9 @@ public class VlangGlobalVariableDeclarationImpl extends VlangCompositeElementImp
   }
 
   @Override
-  @Nullable
-  public VlangExpression getExpression() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class);
-  }
-
-  @Override
-  @Nullable
-  public VlangType getType() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangType.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getAssign() {
-    return findChildByType(ASSIGN);
+  @NotNull
+  public List<VlangGlobalVariableDefinition> getGlobalVariableDefinitionList() {
+    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangGlobalVariableDefinition.class);
   }
 
   @Override
@@ -57,9 +47,15 @@ public class VlangGlobalVariableDeclarationImpl extends VlangCompositeElementImp
   }
 
   @Override
-  @NotNull
-  public PsiElement getIdentifier() {
-    return notNullChild(findChildByType(IDENTIFIER));
+  @Nullable
+  public PsiElement getLparen() {
+    return findChildByType(LPAREN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRparen() {
+    return findChildByType(RPAREN);
   }
 
 }

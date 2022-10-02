@@ -188,6 +188,22 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
     fun getInterfaces(): List<VlangInterfaceDeclaration> =
         getNamedElements(VlangTypes.INTERFACE_DECLARATION, VlangInterfaceDeclarationStubElementType.ARRAY_FACTORY)
 
+    fun getGlobalVariables(): List<VlangGlobalVariableDefinition> {
+        val value = {
+            if (stub != null) {
+                val decls = getChildrenByType(stub!!, VlangTypes.GLOBAL_VARIABLE_DECLARATION) { arrayOfNulls<VlangGlobalVariableDeclaration>(it) }
+                decls.filterNotNull().flatMap { it.globalVariableDefinitionList }
+            } else {
+                val decls = children.filterIsInstance<VlangGlobalVariableDeclaration>()
+                decls.flatMap { it.globalVariableDefinitionList }
+            }
+        }
+
+        return CachedValuesManager.getCachedValue(this) {
+            CachedValueProvider.Result.create(value(), this)
+        }
+    }
+
     fun getConstants(): List<VlangConstDefinition> {
         val value = {
             if (stub != null) {

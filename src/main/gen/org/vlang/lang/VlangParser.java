@@ -2099,16 +2099,16 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Attributes? BUILTIN_GLOBAL identifier ('=' Expression | Type)
+  // Attributes? BUILTIN_GLOBAL ( GlobalVariableDefinition | '(' GlobalVariableDefinitions? ')' )
   public static boolean GlobalVariableDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "GlobalVariableDeclaration")) return false;
     if (!nextTokenIs(b, "<global variable declaration>", BUILTIN_GLOBAL, LBRACK)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, GLOBAL_VARIABLE_DECLARATION, "<global variable declaration>");
     r = GlobalVariableDeclaration_0(b, l + 1);
-    r = r && consumeTokens(b, 2, BUILTIN_GLOBAL, IDENTIFIER);
-    p = r; // pin = 3
-    r = r && GlobalVariableDeclaration_3(b, l + 1);
+    r = r && consumeToken(b, BUILTIN_GLOBAL);
+    p = r; // pin = 2
+    r = r && GlobalVariableDeclaration_2(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -2120,26 +2120,166 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // '=' Expression | Type
-  private static boolean GlobalVariableDeclaration_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "GlobalVariableDeclaration_3")) return false;
+  // GlobalVariableDefinition | '(' GlobalVariableDefinitions? ')'
+  private static boolean GlobalVariableDeclaration_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GlobalVariableDeclaration_2")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = GlobalVariableDeclaration_3_0(b, l + 1);
-    if (!r) r = Type(b, l + 1);
+    r = GlobalVariableDefinition(b, l + 1);
+    if (!r) r = GlobalVariableDeclaration_2_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // '=' Expression
-  private static boolean GlobalVariableDeclaration_3_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "GlobalVariableDeclaration_3_0")) return false;
+  // '(' GlobalVariableDefinitions? ')'
+  private static boolean GlobalVariableDeclaration_2_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GlobalVariableDeclaration_2_1")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = consumeToken(b, LPAREN);
+    r = r && GlobalVariableDeclaration_2_1_1(b, l + 1);
+    p = r; // pin = 2
+    r = r && consumeToken(b, RPAREN);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // GlobalVariableDefinitions?
+  private static boolean GlobalVariableDeclaration_2_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GlobalVariableDeclaration_2_1_1")) return false;
+    GlobalVariableDefinitions(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // identifier (VarModifiers Type | GlobalVariableValue)
+  public static boolean GlobalVariableDefinition(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GlobalVariableDefinition")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, GLOBAL_VARIABLE_DEFINITION, null);
+    r = consumeToken(b, IDENTIFIER);
+    p = r; // pin = 1
+    r = r && GlobalVariableDefinition_1(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // VarModifiers Type | GlobalVariableValue
+  private static boolean GlobalVariableDefinition_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GlobalVariableDefinition_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
+    r = GlobalVariableDefinition_1_0(b, l + 1);
+    if (!r) r = GlobalVariableValue(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // VarModifiers Type
+  private static boolean GlobalVariableDefinition_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GlobalVariableDefinition_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = VarModifiers(b, l + 1);
+    r = r && Type(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // GlobalVariableDefinition (semi GlobalVariableDefinition)* semi?
+  static boolean GlobalVariableDefinitions(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GlobalVariableDefinitions")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = GlobalVariableDefinition(b, l + 1);
+    p = r; // pin = 1
+    r = r && report_error_(b, GlobalVariableDefinitions_1(b, l + 1));
+    r = p && GlobalVariableDefinitions_2(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // (semi GlobalVariableDefinition)*
+  private static boolean GlobalVariableDefinitions_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GlobalVariableDefinitions_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!GlobalVariableDefinitions_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "GlobalVariableDefinitions_1", c)) break;
+    }
+    return true;
+  }
+
+  // semi GlobalVariableDefinition
+  private static boolean GlobalVariableDefinitions_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GlobalVariableDefinitions_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = semi(b, l + 1);
+    r = r && GlobalVariableDefinition(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // semi?
+  private static boolean GlobalVariableDefinitions_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GlobalVariableDefinitions_2")) return false;
+    semi(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // '=' (<<withOff Expression "BLOCK?">> | (!() Expression))
+  static boolean GlobalVariableValue(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GlobalVariableValue")) return false;
+    if (!nextTokenIs(b, ASSIGN)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
     r = consumeToken(b, ASSIGN);
+    p = r; // pin = 1
+    r = r && GlobalVariableValue_1(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // <<withOff Expression "BLOCK?">> | (!() Expression)
+  private static boolean GlobalVariableValue_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GlobalVariableValue_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = withOff(b, l + 1, Expression_parser_, "BLOCK?");
+    if (!r) r = GlobalVariableValue_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // !() Expression
+  private static boolean GlobalVariableValue_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GlobalVariableValue_1_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = GlobalVariableValue_1_1_0(b, l + 1);
     r = r && Expression(b, l + 1, -1);
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  // !()
+  private static boolean GlobalVariableValue_1_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GlobalVariableValue_1_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NOT_);
+    r = !GlobalVariableValue_1_1_0_0(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // ()
+  private static boolean GlobalVariableValue_1_1_0_0(PsiBuilder b, int l) {
+    return true;
   }
 
   /* ********************************************************** */

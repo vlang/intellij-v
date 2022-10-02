@@ -39,6 +39,8 @@ object VlangCompletionUtil {
     const val TYPE_PRIORITY = NOT_IMPORTED_TYPE_PRIORITY + 10
     const val NOT_IMPORTED_TYPE_CONVERSION = 1
     const val TYPE_CONVERSION = NOT_IMPORTED_TYPE_CONVERSION + 10
+    const val NOT_IMPORTED_GLOBAL_VAR_PRIORITY = 15
+    const val GLOBAL_VAR_PRIORITY = NOT_IMPORTED_GLOBAL_VAR_PRIORITY + 5
     const val NOT_IMPORTED_VAR_PRIORITY = 15
     const val VAR_PRIORITY = NOT_IMPORTED_VAR_PRIORITY + 10
     const val FIELD_PRIORITY = CONTEXT_KEYWORD_PRIORITY + 1
@@ -398,6 +400,7 @@ object VlangCompletionUtil {
             val typeText = type?.text ?: ""
             val icon = when (elem) {
                 is VlangVarDefinition            -> VIcons.Variable
+                is VlangGlobalVariableDefinition -> VIcons.Variable
                 is VlangParamDefinition          -> VIcons.Parameter
                 is VlangReceiver                 -> VIcons.Receiver
                 is VlangAnonymousFieldDefinition -> VIcons.Field
