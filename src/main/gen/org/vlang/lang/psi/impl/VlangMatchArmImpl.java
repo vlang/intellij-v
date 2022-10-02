@@ -6,9 +6,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.vlang.lang.psi.*;
-
-import java.util.List;
+import org.vlang.lang.psi.VlangBlock;
+import org.vlang.lang.psi.VlangMatchArm;
+import org.vlang.lang.psi.VlangPsiTreeUtil;
+import org.vlang.lang.psi.VlangVisitor;
 
 import static org.vlang.lang.VlangTypes.SEMICOLON;
 import static org.vlang.lang.VlangTypes.SEMICOLON_SYNTHETIC;
@@ -33,18 +34,6 @@ public class VlangMatchArmImpl extends VlangCompositeElementImpl implements Vlan
   @Nullable
   public VlangBlock getBlock() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangBlock.class);
-  }
-
-  @Override
-  @NotNull
-  public List<VlangExpression> getExpressionList() {
-    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangExpression.class);
-  }
-
-  @Override
-  @NotNull
-  public List<VlangType> getTypeList() {
-    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangType.class);
   }
 
   @Override

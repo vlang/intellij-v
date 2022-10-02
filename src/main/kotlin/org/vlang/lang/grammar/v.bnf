@@ -790,16 +790,16 @@ ArrayCreationList ::= ExpressionWithRecover (','? ExpressionWithRecover)* ','? {
 ArgumentList ::= '(' <<enterMode "PAR">> ElementList? '...'? ','? <<exitModeSafe "PAR">> ')' {pin=1}
 
 // match <expr> { ... }
-MatchExpression ::= match <<enterMode "BLOCK?">> Expression <<exitModeSafe "BLOCK?">> '{' MatchArms '}' <<exitAllModeSafe "BLOCK?">> {pin=1}
+MatchExpression ::= match <<enterMode "BLOCK?">> Expression '{' MatchArms '}' <<exitAllModeSafe "BLOCK?">> {pin=1}
 // <expr>[, <expr2>] { ... }
 // else { ... }
 MatchArms ::= (MatchArm | MatchElseArmClause)*
 // <expr>[, <expr2>] { ... }
 MatchArm ::= <<enterMode "BLOCK?">> MatchExpressionList <<exitModeSafe "BLOCK?">> Block semi {pin=2}
 // <expr>[, <expr2>]
-private MatchExpressionList ::= MatchArmExpression (',' MatchArmExpression)* {pin(".*")=1}
+private MatchExpressionList ::= MatchArmExpression (',' MatchArmExpression)* {pin=0}
 // <expr> or <type>
-private MatchArmExpression ::= Type | Expression
+private MatchArmExpression ::= <<typeOrExpression>>
 // else { ... }
 MatchElseArmClause ::= else Block semi {pin=1}
 

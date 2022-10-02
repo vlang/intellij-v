@@ -88,7 +88,7 @@ object VlangParserUtil : GeneratedParserUtilBase() {
         val prev = TObjectIntHashMap<String>()
 
         val nowStack = getParsingModesStack(builder)
-        val prevStack =  Stack<String>()
+        val prevStack = Stack<String>()
         prevStack.addAll(nowStack)
 
         for (mode in modes) {
@@ -170,6 +170,7 @@ object VlangParserUtil : GeneratedParserUtilBase() {
     fun keyOrValueExpression(builder: PsiBuilder, level: Int): Boolean {
         val m = enter_section_(builder)
         var r = VlangParser.Expression(builder, level + 1, -1)
+
         if (!r)
             r = VlangParser.LiteralValueExpression(builder, level + 1)
         val type = if (r && builder.tokenType === VlangTypes.COLON)
@@ -177,6 +178,32 @@ object VlangParserUtil : GeneratedParserUtilBase() {
         else
             VlangTypes.VALUE
         exit_section_(builder, m, type, r)
+        return r
+    }
+
+    @JvmStatic
+    fun typeOrExpression(builder: PsiBuilder, level: Int): Boolean {
+        val m = builder.mark()
+        var r = VlangParser.Type(builder, level + 1)
+        if (r) {
+            if (builder.tokenType === VlangTypes.COMMA || builder.tokenType === VlangTypes.LBRACE) {
+                m.drop()
+                return true
+            }
+        }
+
+        m.rollbackTo()
+        val m1 = builder.mark()
+        r = VlangParser.Expression(builder, level + 1, -1)
+
+        if (r) {
+            if (builder.tokenType === VlangTypes.COMMA || builder.tokenType === VlangTypes.LBRACE) {
+                m1.drop()
+                return true
+            }
+        }
+        m1.rollbackTo()
+
         return r
     }
 

@@ -3150,13 +3150,9 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Type | Expression
+  // <<typeOrExpression>>
   static boolean MatchArmExpression(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MatchArmExpression")) return false;
-    boolean r;
-    r = Type(b, l + 1);
-    if (!r) r = Expression(b, l + 1, -1);
-    return r;
+    return typeOrExpression(b, l + 1);
   }
 
   /* ********************************************************** */
@@ -3201,13 +3197,12 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // MatchArmExpression (',' MatchArmExpression)*
   static boolean MatchExpressionList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MatchExpressionList")) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_);
+    boolean r;
+    Marker m = enter_section_(b);
     r = MatchArmExpression(b, l + 1);
-    p = r; // pin = 1
     r = r && MatchExpressionList_1(b, l + 1);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+    exit_section_(b, m, null, r);
+    return r;
   }
 
   // (',' MatchArmExpression)*
@@ -3224,13 +3219,12 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // ',' MatchArmExpression
   private static boolean MatchExpressionList_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MatchExpressionList_1_0")) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_);
+    boolean r;
+    Marker m = enter_section_(b);
     r = consumeToken(b, COMMA);
-    p = r; // pin = 1
     r = r && MatchArmExpression(b, l + 1);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+    exit_section_(b, m, null, r);
+    return r;
   }
 
   /* ********************************************************** */
@@ -5320,7 +5314,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // match <<enterMode "BLOCK?">> Expression <<exitModeSafe "BLOCK?">> '{' MatchArms '}' <<exitAllModeSafe "BLOCK?">>
+  // match <<enterMode "BLOCK?">> Expression '{' MatchArms '}' <<exitAllModeSafe "BLOCK?">>
   public static boolean MatchExpression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MatchExpression")) return false;
     if (!nextTokenIsSmart(b, MATCH)) return false;
@@ -5330,7 +5324,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
     p = r; // pin = 1
     r = r && report_error_(b, enterMode(b, l + 1, "BLOCK?"));
     r = p && report_error_(b, Expression(b, l + 1, -1)) && r;
-    r = p && report_error_(b, exitModeSafe(b, l + 1, "BLOCK?")) && r;
     r = p && report_error_(b, consumeToken(b, LBRACE)) && r;
     r = p && report_error_(b, MatchArms(b, l + 1)) && r;
     r = p && report_error_(b, consumeToken(b, RBRACE)) && r;
