@@ -90,6 +90,7 @@ object VlangTokenTypes {
         ASM,
         VOLATILE,
         SQL,
+        NIL,
     )
 
     val OPERATORS = TokenSet.create(

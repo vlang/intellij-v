@@ -187,6 +187,7 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
             "true",
             "typeof",
             "unsafe",
+            "nil",
         )
 
         val BLOCK_KEYWORDS = arrayOf(
@@ -202,7 +203,6 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
             "rlock",
             "select",
             "shared",
-            "sizeof",
             "volatile",
             "__offsetof",
         ) + BLOCK_EXPRESSION_KEYWORDS

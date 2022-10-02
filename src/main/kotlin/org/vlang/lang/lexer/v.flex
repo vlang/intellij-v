@@ -328,6 +328,7 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 "$if"                                     { return IF_COMPILE_TIME ; }
 "$else"                                   { return ELSE_COMPILE_TIME ; }
 
+"nil"                                     { yybegin(MAYBE_SEMICOLON); return NIL; }
 "true"                                    { yybegin(MAYBE_SEMICOLON); return TRUE; }
 "false"                                   { yybegin(MAYBE_SEMICOLON); return FALSE; }
 

@@ -112,8 +112,8 @@ V Language file
           PsiElement(VlangTokenType.{)('{')
           SIMPLE_STATEMENT
             LEFT_HAND_EXPR_LIST
-              REFERENCE_EXPRESSION
-                PsiElement(VlangTokenType.identifier)('nil')
+              LITERAL
+                PsiElement(VlangTokenType.nil)('nil')
           PsiElement(VlangTokenType.})('}')
   GLOBAL_VARIABLE_DECLARATION
     PsiElement(VlangTokenType.BUILTIN_GLOBAL)('__global')

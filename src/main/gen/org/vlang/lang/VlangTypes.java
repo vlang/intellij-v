@@ -256,6 +256,7 @@ public interface VlangTypes {
   IElementType MUL = new VlangTokenType("*");
   IElementType MUL_ASSIGN = new VlangTokenType("*=");
   IElementType MUT = new VlangTokenType("mut");
+  IElementType NIL = new VlangTokenType("nil");
   IElementType NOT = new VlangTokenType("!");
   IElementType NOT_EQ = new VlangTokenType("!=");
   IElementType NOT_IN = new VlangTokenType("NOT_IN");
