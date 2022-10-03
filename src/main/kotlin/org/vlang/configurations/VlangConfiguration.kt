@@ -6,6 +6,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VfsUtilCore
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VirtualFileManager
+import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
 
 @Service
 class VlangConfiguration(private val project: Project) {
@@ -14,7 +15,7 @@ class VlangConfiguration(private val project: Project) {
     }
 
     private val settings
-        get() = VlangProjectSettingsState.getInstance(project)
+        get() = project.projectSettings
 
     val toolchainLocation: VirtualFile?
         get() = findFile(settings.toolchainLocation)

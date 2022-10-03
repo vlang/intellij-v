@@ -4,14 +4,14 @@ import com.intellij.openapi.components.*
 import com.intellij.openapi.project.Project
 import com.intellij.util.xmlb.XmlSerializerUtil
 
-@Service
 @State(
-    name = "com.vk.admstorm.settings.AdmStormSettingsState",
-    storages = [Storage("AdmStormPlugin.xml")]
+    name = "VlangProjectSettingsState",
+    storages = [Storage(StoragePathMacros.WORKSPACE_FILE)]
 )
 class VlangProjectSettingsState : PersistentStateComponent<VlangProjectSettingsState?> {
     companion object {
-        fun getInstance(project: Project) = project.service<VlangProjectSettingsState>()
+        val Project.projectSettings
+            get() = service<VlangProjectSettingsState>()
     }
 
     var toolchainLocation: String = ""

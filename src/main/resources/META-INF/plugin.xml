@@ -163,15 +163,23 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
 
         <!-- Project -->
         <projectConfigurable groupId="language" instance="org.vlang.configurations.VlangProjectSettingsConfigurable"
-                             id="org.vlang.configurations.VlangProjectSettingsConfigurable"
+                             id="MainVlangSettings"
                              dynamic="true" displayName="V"/>
+        <projectConfigurable parentId="MainVlangSettings" instance="org.vlang.configurations.VlangFmtSettingsConfigurable"
+                             id="org.vlang.configurations.VlangProjectSettingsConfigurable"
+                             dynamic="true" displayName="Vfmt"/>
         <projectService serviceImplementation="org.vlang.configurations.VlangConfiguration"/>
         <projectService serviceImplementation="org.vlang.configurations.VlangProjectSettingsState"/>
+        <projectService serviceImplementation="org.vlang.configurations.VlangFmtSettingsState"/>
         <moduleBuilder builderClass="org.vlang.projectWizard.VlangModuleBuilder"/>
         <postStartupActivity implementation="org.vlang.project.VlangPostStartupActivity"/>
         <indexableFilesContributor implementation="org.vlang.project.VlangIndexableFilesContributor"/>
+
+        <fileDocumentManagerListener implementation="org.vlang.project.VlangFmtWatcher$VlangFmtListener"/>
+
         <!-- End of Project -->
 
+        <notificationGroup id="V Plugin" displayType="BALLOON"/>
 
         <!-- SDK -->
         <sdkType implementation="org.vlang.sdk.VlangSdkType"/>

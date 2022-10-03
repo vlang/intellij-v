@@ -5,7 +5,8 @@ import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.execution.process.KillableColoredProcessHandler
 import com.intellij.execution.process.ProcessHandler
 import com.intellij.execution.runners.ExecutionEnvironment
-import org.vlang.configurations.VlangProjectSettingsState
+import org.vlang.configurations.VlangConfigurationUtil
+import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
 import java.io.File
 
 class VlangRunConfigurationRunState(
@@ -17,9 +18,8 @@ class VlangRunConfigurationRunState(
         val file = File(conf.scriptName)
         val workingDir = file.parentFile
 
-        // TODO: show notification with link to setup toolchain
-        val exe = VlangProjectSettingsState.getInstance(conf.project).compilerLocation
-            ?: throw RuntimeException("V executable not found, toolchain not setup correctly?")
+        val exe = conf.project.projectSettings.compilerLocation
+            ?: throw RuntimeException(VlangConfigurationUtil.TOOLCHAIN_NOT_SETUP)
 
         val commandLine = GeneralCommandLine()
             .withExePath(exe)

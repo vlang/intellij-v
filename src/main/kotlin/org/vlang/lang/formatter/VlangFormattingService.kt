@@ -8,6 +8,8 @@ import com.intellij.formatting.service.AsyncDocumentFormattingService
 import com.intellij.formatting.service.AsyncFormattingRequest
 import com.intellij.formatting.service.FormattingService
 import com.intellij.psi.PsiFile
+import org.vlang.configurations.VlangConfigurationUtil
+import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
 import org.vlang.lang.psi.VlangFile
 import java.nio.charset.StandardCharsets
 import java.util.*
@@ -33,9 +35,15 @@ class VlangFormattingService : AsyncDocumentFormattingService() {
         params.add(ioFile.path)
 
         return try {
+            val exe = request.context.project.projectSettings.compilerLocation
+            if (exe == null) {
+                request.onError("Can't format", VlangConfigurationUtil.TOOLCHAIN_NOT_SETUP)
+                return null
+            }
+
             val commandLine = GeneralCommandLine()
                 .withParentEnvironmentType(GeneralCommandLine.ParentEnvironmentType.CONSOLE)
-                .withExePath("v")
+                .withExePath(exe)
                 .withParameters(params)
             val handler = OSProcessHandler(commandLine.withCharset(StandardCharsets.UTF_8))
 

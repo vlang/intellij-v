@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit
 object VlangConfigurationUtil {
     private val LOG = logger<VlangConfigurationUtil>()
 
+    const val TOOLCHAIN_NOT_SETUP = "V executable not found, toolchain not setup correctly?"
     const val UNDEFINED_VERSION = "N/A"
     const val STANDARD_LIB_PATH = "vlib"
     private const val STANDARD_V_COMPILER = "v"
@@ -59,8 +60,6 @@ object VlangConfigurationUtil {
             }
             future.get(300, TimeUnit.MILLISECONDS)
         } catch (e: ExecutionException) {
-            LOG.warn("Can't execute command for getting V toolchain version", e)
-        } catch (e: Throwable) {
             LOG.warn("Can't execute command for getting V toolchain version", e)
         }
         val result = processOutput.toString()

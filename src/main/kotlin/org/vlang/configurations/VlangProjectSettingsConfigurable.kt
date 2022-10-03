@@ -11,6 +11,7 @@ import com.intellij.ui.dsl.builder.bindText
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.dsl.builder.toMutableProperty
 import com.intellij.ui.dsl.gridLayout.HorizontalAlign
+import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
 import java.io.File
 import javax.swing.JLabel
 
@@ -92,7 +93,7 @@ class VlangProjectSettingsConfigurable(private val project: Project) : Configura
     override fun isModified(): Boolean {
         mainPanel.apply()
 
-        val settings = VlangProjectSettingsState.getInstance(project)
+        val settings = project.projectSettings
         return model.toolchainLocation != settings.toolchainLocation ||
                 model.toolchainVersion != settings.toolchainVersion ||
                 model.stdlibLocation != settings.stdlibLocation
@@ -122,7 +123,7 @@ class VlangProjectSettingsConfigurable(private val project: Project) : Configura
             }
         }
 
-        val settings = VlangProjectSettingsState.getInstance(project)
+        val settings = project.projectSettings
         with(settings) {
             toolchainLocation = model.toolchainLocation
             toolchainVersion = model.toolchainVersion
@@ -131,7 +132,7 @@ class VlangProjectSettingsConfigurable(private val project: Project) : Configura
     }
 
     override fun reset() {
-        val settings = VlangProjectSettingsState.getInstance(project)
+        val settings = project.projectSettings
 
         with(model) {
             toolchainLocation = settings.toolchainLocation
