@@ -30,6 +30,7 @@ class VlangConfiguration(private val project: Project) {
         get() = stdlibLocation?.findChild("builtin")
 
     private fun findFile(path: String): VirtualFile? {
+        if (path.isEmpty()) return null
         return VirtualFileManager.getInstance().findFileByUrl(VfsUtilCore.pathToUrl(path))
     }
 }
