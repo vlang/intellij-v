@@ -144,7 +144,7 @@ V Language file
                         CALL_EXPR
                           REFERENCE_EXPRESSION
                             PsiElement(VlangTokenType.identifier)('is_sorted')
-                          GENERIC_TYPE_ARGUMENTS
+                          GENERIC_ARGUMENTS
                             PsiElement(VlangTokenType.<)('<')
                             TYPE_LIST_NO_PIN
                               TYPE
@@ -166,7 +166,7 @@ V Language file
           CALL_EXPR
             REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('quick_sort')
-            GENERIC_TYPE_ARGUMENTS
+            GENERIC_ARGUMENTS
               PsiElement(VlangTokenType.<)('<')
               TYPE_LIST_NO_PIN
                 TYPE
@@ -229,7 +229,7 @@ V Language file
                         CALL_EXPR
                           REFERENCE_EXPRESSION
                             PsiElement(VlangTokenType.identifier)('is_sorted')
-                          GENERIC_TYPE_ARGUMENTS
+                          GENERIC_ARGUMENTS
                             PsiElement(VlangTokenType.<)('<')
                             TYPE_LIST_NO_PIN
                               TYPE
@@ -250,11 +250,11 @@ V Language file
   FUNCTION_DECLARATION
     PsiElement(VlangTokenType.fn)('fn')
     PsiElement(VlangTokenType.identifier)('quick_sort')
-    GENERIC_DECLARATION
+    GENERIC_ARGUMENTS
       PsiElement(VlangTokenType.<)('<')
-      GENERIC_DECLARATION_LIST
-        GENERIC_NAME
-          REFERENCE_EXPRESSION
+      TYPE_LIST_NO_PIN
+        TYPE
+          TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('T')
       PsiElement(VlangTokenType.>)('>')
     SIGNATURE
@@ -448,7 +448,7 @@ V Language file
           CALL_EXPR
             REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('quick_sort')
-            GENERIC_TYPE_ARGUMENTS
+            GENERIC_ARGUMENTS
               PsiElement(VlangTokenType.<)('<')
               TYPE_LIST_NO_PIN
                 TYPE
@@ -483,7 +483,7 @@ V Language file
           CALL_EXPR
             REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('quick_sort')
-            GENERIC_TYPE_ARGUMENTS
+            GENERIC_ARGUMENTS
               PsiElement(VlangTokenType.<)('<')
               TYPE_LIST_NO_PIN
                 TYPE
@@ -517,11 +517,11 @@ V Language file
   FUNCTION_DECLARATION
     PsiElement(VlangTokenType.fn)('fn')
     PsiElement(VlangTokenType.identifier)('is_sorted')
-    GENERIC_DECLARATION
+    GENERIC_ARGUMENTS
       PsiElement(VlangTokenType.<)('<')
-      GENERIC_DECLARATION_LIST
-        GENERIC_NAME
-          REFERENCE_EXPRESSION
+      TYPE_LIST_NO_PIN
+        TYPE
+          TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('T')
       PsiElement(VlangTokenType.>)('>')
     SIGNATURE

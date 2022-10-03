@@ -4271,20 +4271,21 @@ V Language file
               PsiElement(VlangTokenType.identifier)('int')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        PsiElement(VlangTokenType.()('(')
-        TYPE_LIST_NO_PIN
-          TYPE
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(VlangTokenType.identifier)('bool')
-          PsiElement(VlangTokenType.,)(',')
-          TYPE
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(VlangTokenType.identifier)('f64')
-          PsiElement(VlangTokenType.,)(',')
-          TYPE
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(VlangTokenType.identifier)('int')
-        PsiElement(VlangTokenType.))(')')
+        TUPLE_TYPE
+          PsiElement(VlangTokenType.()('(')
+          TYPE_LIST_NO_PIN
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(VlangTokenType.identifier)('bool')
+            PsiElement(VlangTokenType.,)(',')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(VlangTokenType.identifier)('f64')
+            PsiElement(VlangTokenType.,)(',')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(VlangTokenType.identifier)('int')
+          PsiElement(VlangTokenType.))(')')
     BLOCK
       PsiElement(VlangTokenType.{)('{')
       SIMPLE_STATEMENT
