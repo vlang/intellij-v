@@ -4,12 +4,11 @@ import com.intellij.ide.highlighter.JavaHighlightingColors
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase
 import com.intellij.psi.tree.IElementType
-import org.vlang.lang.lexer.VlangLexer
 import org.vlang.lang.psi.VlangDocTokenTypes
 import org.vlang.lang.psi.VlangTokenTypes
 
 class VlangSyntaxHighlighter : SyntaxHighlighterBase() {
-    override fun getHighlightingLexer() = VlangLexer()
+    override fun getHighlightingLexer() = VlangHighlightingLexer()
 
     override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> {
         val attr = when {

@@ -10,10 +10,15 @@ import static org.vlang.lang.psi.VlangDocTokenTypes.*;
 %%
 
 %{
-  private volatile boolean insideDoubleQuoteString = false;
   private Stack<Integer> stack = new Stack<Integer>();
+  private Stack<Integer> quotesStack = new Stack<Integer>();
+  private Stack<Integer> prevQuotesStack = new Stack<Integer>();
+  private int SINGLE_QUOTE = 0;
+  private int DOUBLE_QUOTE = 1;
 
   public void yy_push_state(int state) {
+    prevQuotesStack.addAll(quotesStack);
+    quotesStack.clear();
     stack.push(state);
     yybegin(state);
   }
@@ -21,10 +26,42 @@ import static org.vlang.lang.psi.VlangDocTokenTypes.*;
   public void yy_pop_state() {
     stack.pop();
     yybegin(stack.lastElement());
+    quotesStack.addAll(prevQuotesStack);
+    prevQuotesStack.clear();
+  }
+
+  public void yy_start_string(int type) {
+    quotesStack.push(type);
+  }
+
+  public void yy_end_string(int type) {
+    if (quotesStack.peek() != type) {
+      throw new IllegalStateException("Unmatched quotes");
+    }
+    quotesStack.pop();
+  }
+
+  public IElementType handle_string_end(boolean isDoubleQuote) {
+    if (inside_string_with_quote(isDoubleQuote ? SINGLE_QUOTE : DOUBLE_QUOTE)) {
+       return LITERAL_STRING_TEMPLATE_ENTRY;
+    }
+
+    yy_pop_state();
+    yy_end_string(isDoubleQuote ? DOUBLE_QUOTE : SINGLE_QUOTE);
+    yybegin(MAYBE_SEMICOLON);
+    return CLOSING_QUOTE;
+  }
+
+  public boolean inside_string_with_quote(int type) {
+    return !quotesStack.isEmpty() && quotesStack.peek() == type;
   }
 
   public boolean inside_interpolation() {
     return stack.size() > 2 && stack.get(1) == TEMPLATE_STRING;
+  }
+
+  public boolean is_interpolation_state() {
+    return stack.peek() == TEMPLATE_STRING;
   }
 
   public _VlangLexer() {
@@ -112,74 +149,30 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 "${"              { yy_push_state(YYINITIAL); return LONG_TEMPLATE_ENTRY_START; }
 {IDENT}           { return IDENTIFIER; }
 "."               { yybegin(SHORT_TEMPLATE_ENTRY_FIELD_NAME); return DOT; }
-{STR_DOUBLE} {
-    if (!insideDoubleQuoteString) {
-        return LITERAL_STRING_TEMPLATE_ENTRY;
-    }
-    insideDoubleQuoteString = false;
-    yy_pop_state();
-    yybegin(MAYBE_SEMICOLON);
-    return CLOSING_QUOTE;
-}
-{STR_SINGLE} {
-   if (insideDoubleQuoteString) {
-       return LITERAL_STRING_TEMPLATE_ENTRY;
-   }
-   yy_pop_state();
-   yybegin(MAYBE_SEMICOLON);
-   return CLOSING_QUOTE;
-}
+{STR_DOUBLE}      { return handle_string_end(true); }
+{STR_SINGLE}      { return handle_string_end(false); }
 "\\" (. | "\\")   { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY; }
 .                 { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ENTRY; }
 }
 
 <SHORT_TEMPLATE_ENTRY_FIELD_NAME> {
-{IDENT}           { return IDENTIFIER; }
-"."               { return DOT; }
-{STR_DOUBLE} {
-    if (!insideDoubleQuoteString) {
-        return LITERAL_STRING_TEMPLATE_ENTRY;
-    }
-    insideDoubleQuoteString = false;
-    yy_pop_state();
-    yybegin(MAYBE_SEMICOLON);
-    return CLOSING_QUOTE;
-}
-{STR_SINGLE} {
-   if (insideDoubleQuoteString) {
-       return LITERAL_STRING_TEMPLATE_ENTRY;
-   }
-   yy_pop_state();
-   yybegin(MAYBE_SEMICOLON);
-   return CLOSING_QUOTE;
-}
+{IDENT}         { return IDENTIFIER; }
+"."             { return DOT; }
+{STR_DOUBLE}    { return handle_string_end(true); }
+{STR_SINGLE}    { return handle_string_end(false); }
 "\\" (. | "\\") { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY; }
 .               { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ENTRY; }
 }
 
 <TEMPLATE_STRING> {
-"${"         { yy_push_state(YYINITIAL); return LONG_TEMPLATE_ENTRY_START; }
+"${"         { yy_push_state(YYINITIAL);      return LONG_TEMPLATE_ENTRY_START; }
 "$"          { yybegin(SHORT_TEMPLATE_ENTRY); return SHORT_TEMPLATE_ENTRY_START; }
 
-{STR_DOUBLE} {
-    if (!insideDoubleQuoteString) {
-        return LITERAL_STRING_TEMPLATE_ENTRY;
-    }
-    insideDoubleQuoteString = false;
-    yy_pop_state();
-    yybegin(MAYBE_SEMICOLON);
-    return CLOSING_QUOTE;
-}
-{STR_SINGLE} {
-   if (insideDoubleQuoteString) {
-       return LITERAL_STRING_TEMPLATE_ENTRY;
-   }
-   yy_pop_state();
-   yybegin(MAYBE_SEMICOLON);
-   return CLOSING_QUOTE;
-}
+{STR_DOUBLE} { return handle_string_end(true); }
+{STR_SINGLE} { return handle_string_end(false); }
+
 "\\" (. | "\\") { return LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY; }
-[^\"\'\\$]+    { return LITERAL_STRING_TEMPLATE_ENTRY; }
+[^\"\'\\$]+     { return LITERAL_STRING_TEMPLATE_ENTRY; }
 }
 
 <YYINITIAL> {
@@ -206,37 +199,15 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 {RAW_DOUBLE_QUOTE_STRING}                 { yybegin(MAYBE_SEMICOLON); return RAW_STRING; }
 {RAW_SINGLE_QUOTE_STRING}                 { yybegin(MAYBE_SEMICOLON); return RAW_STRING; }
 
-{STR_MODIFIER} {STR_DOUBLE} {
+{STR_MODIFIER}? {STR_DOUBLE} {
     yy_push_state(TEMPLATE_STRING);
-    insideDoubleQuoteString = true;
+    yy_start_string(DOUBLE_QUOTE);
     return OPEN_QUOTE;
 }
 
-{STR_MODIFIER} {STR_SINGLE} {
+{STR_MODIFIER}? {STR_SINGLE} {
     yy_push_state(TEMPLATE_STRING);
-    insideDoubleQuoteString = false;
-    return OPEN_QUOTE;
-}
-
-{STR_DOUBLE} {
-    if (inside_interpolation()) {
-        yy_pop_state();
-        insideDoubleQuoteString = false;
-        return CLOSING_QUOTE;
-    }
-    yy_push_state(TEMPLATE_STRING);
-    insideDoubleQuoteString = true;
-    return OPEN_QUOTE;
-}
-
-{STR_SINGLE} {
-    if (inside_interpolation()) {
-        yy_pop_state();
-        insideDoubleQuoteString = false;
-        return CLOSING_QUOTE;
-    }
-    yy_push_state(TEMPLATE_STRING);
-    insideDoubleQuoteString = false;
+    yy_start_string(SINGLE_QUOTE);
     return OPEN_QUOTE;
 }
 
