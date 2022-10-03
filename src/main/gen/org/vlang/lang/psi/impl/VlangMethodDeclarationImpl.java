@@ -46,8 +46,8 @@ public class VlangMethodDeclarationImpl extends VlangFunctionOrMethodDeclaration
 
   @Override
   @Nullable
-  public VlangGenericDeclaration getGenericDeclaration() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangGenericDeclaration.class);
+  public VlangGenericArguments getGenericArguments() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangGenericArguments.class);
   }
 
   @Override

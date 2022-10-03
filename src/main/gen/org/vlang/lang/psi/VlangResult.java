@@ -1,29 +1,12 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
-import com.intellij.psi.PsiElement;
+import org.jetbrains.annotations.NotNull;
 
 public interface VlangResult extends VlangCompositeElement {
 
-  @Nullable
-  VlangParameters getParameters();
-
-  @Nullable
+  @NotNull
   VlangType getType();
-
-  @Nullable
-  VlangTypeListNoPin getTypeListNoPin();
-
-  @Nullable
-  PsiElement getLparen();
-
-  @Nullable
-  PsiElement getQuestion();
-
-  @Nullable
-  PsiElement getRparen();
 
   //WARNING: isVoid(...) is skipped
   //matching isVoid(VlangResult, ...)

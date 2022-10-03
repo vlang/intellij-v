@@ -1,16 +1,16 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.stubs.VlangTypeAliasDeclarationStub;
 
 public interface VlangTypeAliasDeclaration extends VlangNamedElement, StubBasedPsiElement<VlangTypeAliasDeclarationStub> {
 
   @Nullable
-  VlangGenericDeclaration getGenericDeclaration();
+  VlangGenericArguments getGenericArguments();
 
   @Nullable
   VlangSymbolVisibility getSymbolVisibility();

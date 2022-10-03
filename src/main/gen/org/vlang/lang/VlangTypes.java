@@ -74,10 +74,7 @@ public interface VlangTypes {
   IElementType FUNCTION_DECLARATION = VlangElementTypeFactory.stubFactory("FUNCTION_DECLARATION");
   IElementType FUNCTION_LIT = new VlangCompositeElementType("FUNCTION_LIT");
   IElementType FUNCTION_TYPE = VlangElementTypeFactory.stubFactory("FUNCTION_TYPE");
-  IElementType GENERIC_DECLARATION = new VlangCompositeElementType("GENERIC_DECLARATION");
-  IElementType GENERIC_DECLARATION_LIST = new VlangCompositeElementType("GENERIC_DECLARATION_LIST");
-  IElementType GENERIC_NAME = new VlangCompositeElementType("GENERIC_NAME");
-  IElementType GENERIC_TYPE_ARGUMENTS = new VlangCompositeElementType("GENERIC_TYPE_ARGUMENTS");
+  IElementType GENERIC_ARGUMENTS = new VlangCompositeElementType("GENERIC_ARGUMENTS");
   IElementType GLOBAL_VARIABLE_DECLARATION = new VlangCompositeElementType("GLOBAL_VARIABLE_DECLARATION");
   IElementType GLOBAL_VARIABLE_DEFINITION = VlangElementTypeFactory.stubFactory("GLOBAL_VARIABLE_DEFINITION");
   IElementType GOTO_STATEMENT = new VlangCompositeElementType("GOTO_STATEMENT");
@@ -162,6 +159,7 @@ public interface VlangTypes {
   IElementType STRUCT_TYPE = VlangElementTypeFactory.stubFactory("STRUCT_TYPE");
   IElementType SYMBOL_VISIBILITY = new VlangCompositeElementType("SYMBOL_VISIBILITY");
   IElementType TAG = new VlangCompositeElementType("TAG");
+  IElementType TUPLE_TYPE = VlangElementTypeFactory.stubFactory("TUPLE_TYPE");
   IElementType TYPE = VlangElementTypeFactory.stubFactory("TYPE");
   IElementType TYPE_ALIAS_DECLARATION = VlangElementTypeFactory.stubFactory("TYPE_ALIAS_DECLARATION");
   IElementType TYPE_LIST_NO_PIN = new VlangCompositeElementType("TYPE_LIST_NO_PIN");
@@ -497,17 +495,8 @@ public interface VlangTypes {
       else if (type == FUNCTION_TYPE) {
         return new VlangFunctionTypeImpl(node);
       }
-      else if (type == GENERIC_DECLARATION) {
-        return new VlangGenericDeclarationImpl(node);
-      }
-      else if (type == GENERIC_DECLARATION_LIST) {
-        return new VlangGenericDeclarationListImpl(node);
-      }
-      else if (type == GENERIC_NAME) {
-        return new VlangGenericNameImpl(node);
-      }
-      else if (type == GENERIC_TYPE_ARGUMENTS) {
-        return new VlangGenericTypeArgumentsImpl(node);
+      else if (type == GENERIC_ARGUMENTS) {
+        return new VlangGenericArgumentsImpl(node);
       }
       else if (type == GLOBAL_VARIABLE_DECLARATION) {
         return new VlangGlobalVariableDeclarationImpl(node);
@@ -760,6 +749,9 @@ public interface VlangTypes {
       }
       else if (type == TAG) {
         return new VlangTagImpl(node);
+      }
+      else if (type == TUPLE_TYPE) {
+        return new VlangTupleTypeImpl(node);
       }
       else if (type == TYPE) {
         return new VlangTypeImpl(node);

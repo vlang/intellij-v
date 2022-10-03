@@ -50,8 +50,8 @@ public class VlangCallExprImpl extends VlangExpressionImpl implements VlangCallE
 
   @Override
   @Nullable
-  public VlangGenericTypeArguments getGenericTypeArguments() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangGenericTypeArguments.class);
+  public VlangGenericArguments getGenericArguments() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangGenericArguments.class);
   }
 
 }

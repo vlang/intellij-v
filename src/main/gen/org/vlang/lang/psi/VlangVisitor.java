@@ -267,19 +267,7 @@ public class VlangVisitor extends PsiElementVisitor {
     visitType(o);
   }
 
-  public void visitGenericDeclaration(@NotNull VlangGenericDeclaration o) {
-    visitCompositeElement(o);
-  }
-
-  public void visitGenericDeclarationList(@NotNull VlangGenericDeclarationList o) {
-    visitCompositeElement(o);
-  }
-
-  public void visitGenericName(@NotNull VlangGenericName o) {
-    visitCompositeElement(o);
-  }
-
-  public void visitGenericTypeArguments(@NotNull VlangGenericTypeArguments o) {
+  public void visitGenericArguments(@NotNull VlangGenericArguments o) {
     visitCompositeElement(o);
   }
 
@@ -620,6 +608,10 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitTag(@NotNull VlangTag o) {
     visitCompositeElement(o);
+  }
+
+  public void visitTupleType(@NotNull VlangTupleType o) {
+    visitType(o);
   }
 
   public void visitType(@NotNull VlangType o) {

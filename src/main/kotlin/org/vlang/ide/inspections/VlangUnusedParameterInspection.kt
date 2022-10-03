@@ -30,10 +30,6 @@ class VlangUnusedParameterInspection : VlangBaseInspection() {
                     val parameters = signature.parameters
                     visitParameterList(parameters.parameterDeclarationList, "parameter")
                 }
-                val returnParameters = signature.result?.parameters
-                if (returnParameters != null) {
-                    visitParameterList(returnParameters.parameterDeclarationList, "named return parameter")
-                }
             }
 
             private fun visitParameterList(parameters: List<VlangParameterDeclaration>, what: String) {

@@ -4,6 +4,8 @@ import com.intellij.lang.PsiBuilder
 import com.intellij.lang.parser.GeneratedParserUtilBase
 import com.intellij.openapi.util.Key
 import gnu.trove.TObjectIntHashMap
+import org.vlang.lang.VlangTypes.GREATER
+import org.vlang.lang.VlangTypes.SHIFT_RIGHT
 import java.util.*
 
 object VlangParserUtil : GeneratedParserUtilBase() {
@@ -179,6 +181,21 @@ object VlangParserUtil : GeneratedParserUtilBase() {
             VlangTypes.VALUE
         exit_section_(builder, m, type, r)
         return r
+    }
+
+    @JvmStatic
+    fun gtGt(builder: PsiBuilder, level: Int): Boolean {
+        val marker = builder.mark()
+        if (!consumeToken(builder, GREATER)) {
+            marker.rollbackTo()
+            return false
+        }
+        if (!consumeToken(builder, GREATER)) {
+            marker.rollbackTo()
+            return false
+        }
+        marker.collapse(SHIFT_RIGHT)
+        return true
     }
 
     @JvmStatic

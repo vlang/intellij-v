@@ -16,7 +16,7 @@ public interface VlangFunctionDeclaration extends VlangSignatureOwner, VlangFunc
   VlangBlock getBlock();
 
   @Nullable
-  VlangGenericDeclaration getGenericDeclaration();
+  VlangGenericArguments getGenericArguments();
 
   @Nullable
   VlangSignature getSignature();

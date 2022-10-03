@@ -313,7 +313,7 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 "@"                                       { return AT; }
 
 ">>="                                     { return SHIFT_RIGHT_ASSIGN; }
-">>"                                      { return SHIFT_RIGHT; }
+// ">>"                                      { return SHIFT_RIGHT; }
 ">="                                      { return GREATER_OR_EQUAL; }
 ">"                                       { yybegin(MAYBE_SEMICOLON); return GREATER; }
 

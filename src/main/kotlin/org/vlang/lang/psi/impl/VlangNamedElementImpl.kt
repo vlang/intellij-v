@@ -57,8 +57,8 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
 
     override fun getQualifiedName(): String? {
         val name = name ?: return null
-        val packageName = containingFile.packageName
-        return VlangPsiImplUtil.getFqn(packageName, name)
+        val moduleName = containingFile.getModuleQualifiedName()
+        return VlangPsiImplUtil.getFqn(moduleName, name)
     }
 
     override fun setName(name: String): PsiElement? {

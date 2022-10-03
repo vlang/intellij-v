@@ -1,23 +1,26 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import org.jetbrains.annotations.NotNull;
+import org.vlang.lang.psi.VlangGenericArguments;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
-import static org.vlang.lang.VlangTypes.*;
-import org.vlang.lang.psi.*;
+import org.vlang.lang.psi.VlangTypeListNoPin;
+import org.vlang.lang.psi.VlangVisitor;
 
-public class VlangGenericDeclarationImpl extends VlangCompositeElementImpl implements VlangGenericDeclaration {
+import static org.vlang.lang.VlangTypes.GREATER;
+import static org.vlang.lang.VlangTypes.LESS;
 
-  public VlangGenericDeclarationImpl(@NotNull ASTNode node) {
+public class VlangGenericArgumentsImpl extends VlangCompositeElementImpl implements VlangGenericArguments {
+
+  public VlangGenericArgumentsImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitGenericDeclaration(this);
+    visitor.visitGenericArguments(this);
   }
 
   @Override
@@ -28,8 +31,8 @@ public class VlangGenericDeclarationImpl extends VlangCompositeElementImpl imple
 
   @Override
   @NotNull
-  public VlangGenericDeclarationList getGenericDeclarationList() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangGenericDeclarationList.class));
+  public VlangTypeListNoPin getTypeListNoPin() {
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangTypeListNoPin.class));
   }
 
   @Override

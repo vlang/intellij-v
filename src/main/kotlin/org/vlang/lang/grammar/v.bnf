@@ -363,7 +363,7 @@ StructDeclaration ::= Attributes? SymbolVisibility? StructType {
   methods=[getIdentifier getName]
 }
 
-StructType ::= struct identifier GenericDeclaration? '{' FieldsGroup* '}' {pin=1}
+StructType ::= struct identifier GenericArguments? '{' FieldsGroup* '}' {pin=1}
 
 MemberModifiers ::= MemberModifier* ':' {pin=2}
 MemberModifier ::= mut | pub | shared | BUILTIN_GLOBAL
@@ -394,9 +394,9 @@ InterfaceDeclaration ::= Attributes? SymbolVisibility? InterfaceType {
   methods=[getName getIdentifier]
 }
 
-InterfaceType ::= interface identifier GenericDeclaration? '{' InterfaceMembers? '}' {pin=1}
+InterfaceType ::= interface identifier GenericArguments? '{' InterfaceMembers? '}' {pin=1}
 
-private InterfaceMembers ::= MemberModifiers? (InterfaceFieldDeclaration | InterfaceMethodDeclaration | AnonymousInterfaceDefinition)? (semi InterfaceMembers)* semi? {pin=1}
+private InterfaceMembers ::= MemberModifiers? (InterfaceMethodDeclaration | InterfaceFieldDeclaration | AnonymousInterfaceDefinition)? (semi InterfaceMembers)* semi? {pin=1}
 InterfaceFieldDeclaration ::= (FieldDefinitionList Type) Attribute? Tag?
 InterfaceMethodDeclaration ::= identifier Signature Attribute? Tag?
 
@@ -412,7 +412,7 @@ EnumDeclaration ::= Attributes? SymbolVisibility? EnumType {
   methods=[getName getIdentifier getTypeInner]
 }
 
-EnumType ::= enum identifier GenericDeclaration? '{' EnumFields? '}' {pin=1}
+EnumType ::= enum identifier GenericArguments? '{' EnumFields? '}' {pin=1}
 
 EnumFields ::= EnumFieldDeclaration (semi EnumFieldDeclaration)* semi?
 EnumFieldDeclaration ::= EnumFieldDefinition ('=' Expression)? {pin=1}
@@ -422,7 +422,7 @@ EnumFieldDefinition ::= identifier {
 }
 
 // union
-UnionDeclaration ::= Attributes? SymbolVisibility? union identifier GenericDeclaration? '{' FieldsGroup? '}' {
+UnionDeclaration ::= Attributes? SymbolVisibility? union identifier GenericArguments? '{' FieldsGroup? '}' {
   pin=3
   stubClass="org.vlang.lang.stubs.VlangUnionDeclarationStub"
   methods=[getName]
@@ -430,7 +430,7 @@ UnionDeclaration ::= Attributes? SymbolVisibility? union identifier GenericDecla
 
 
 // [<visibility>] type <ident> = <types>
-TypeAliasDeclaration ::= SymbolVisibility? 'type' identifier GenericDeclaration? '=' TypeUnionList {
+TypeAliasDeclaration ::= SymbolVisibility? 'type' identifier GenericArguments? '=' TypeUnionList {
   pin=2
   stubClass="org.vlang.lang.stubs.VlangTypeAliasDeclarationStub"
   methods=[getName]
@@ -483,24 +483,15 @@ VarModifiers ::= (mut | shared)*
 
 SymbolVisibility ::= pub | BUILTIN_GLOBAL
 
-GenericTypeArguments ::= '<' TypeListNoPin? '>' {pin=3}
+GenericArguments ::= '<' TypeListNoPin '>' {pin=3}
 
-GenericDeclaration ::= '<' GenericDeclarationList '>'
-
-GenericDeclarationList ::= GenericName (',' GenericName)*
-
-GenericName ::= DotExpression | ReferenceExpression {
-//  stubClass="org.vlang.lang.stubs.GoGenericNameStub"
-//  methods=[getName]
-}
-
-FunctionDeclaration ::= Attributes? SymbolVisibility? fn identifier GenericDeclaration? Signature BlockWithConsume? {
+FunctionDeclaration ::= Attributes? SymbolVisibility? fn identifier GenericArguments? Signature BlockWithConsume? {
   pin=4
   stubClass="org.vlang.lang.stubs.VlangFunctionDeclarationStub"
   methods=[getName isDefinition]
 }
 
-MethodDeclaration ::= Attributes? SymbolVisibility? fn '(' Receiver ')' MethodName GenericDeclaration? Signature BlockWithConsume? {
+MethodDeclaration ::= Attributes? SymbolVisibility? fn '(' Receiver ')' MethodName GenericArguments? Signature BlockWithConsume? {
   pin=7
   stubClass="org.vlang.lang.stubs.VlangMethodDeclarationStub"
   methods=[getReceiverType getIdentifier]
@@ -568,7 +559,7 @@ KeyValues ::= KeyValue ((semi | ',') KeyValue)* (semi | ',')? {pin=1}
 KeyValue ::= Expression ':' Expression {pin=2}
 
 // <type> {...}
-LiteralValueExpression ::= Type GenericTypeArguments? ((<<isLastNotIs "BLOCK?">> | <<isLastIs "PAR">> | <<prevIsType>>) & <<prevIsNotFunType>>) '{' ElementList? '}' {pin=4}
+LiteralValueExpression ::= Type GenericArguments? ((<<isLastNotIs "BLOCK?">> | <<isLastIs "PAR">> | <<prevIsType>>) & <<prevIsNotFunType>>) '{' ElementList? '}' {pin=4}
 private ElementList ::= ElementInner ((',' | semi) ElementInner?)*
 private ElementInner ::= Element | (!() Element) {recoverWhile=ElementInnerRecover}
 private ElementInnerRecover ::= !('}' | ',' | semi | ')')
@@ -595,7 +586,7 @@ Capture ::= VarDefinition {pin=1}
 
 ////// TYPES //////
 
-Type ::= (TypeLit | TypeName) GenericDeclaration? {
+Type ::= (TypeLit | TypeName) GenericArguments? {
   stubClass="org.vlang.lang.stubs.VlangTypeStub"
   methods=[getIdentifier getUnderlyingType resolveType]
 }
@@ -612,6 +603,7 @@ TypeReferenceExpression ::= identifier { methods=[getReference getQualifier reso
 
 private TypeLit ::=
     ArrayOrSliceType
+  | TupleType
   | PointerType
   | NullableType
   | NotNullableType
@@ -623,6 +615,8 @@ private TypeLit ::=
 
 // [<expr>]<type>
 ArrayOrSliceType ::= '[' Expression? ']' Type {pin=3}
+
+TupleType ::= '(' TypeListNoPin ')' {pin=3}
 
 // &<type>
 // &&<type>
@@ -641,7 +635,7 @@ FunctionType ::= fn Signature {pin=1}
 // signature
 // (...) ...
 Signature ::= Parameters Result? {pin=1 /*stubClass="org.vlang.lang.stubs.GoSignatureStub"*/}
-Result ::= '?'? '(' TypeListNoPin ')' | Type | Parameters { // todo: reorder and pin (
+Result ::= Type {
   methods=[isVoid]
 //  stubClass="org.vlang.lang.stubs.GoResultStub"
 }
@@ -650,7 +644,7 @@ Parameters ::= '(' [ (ParameterList ','?| TypeListNoPin) ] ')' {
 //  stubClass="org.vlang.lang.stubs.GoParametersStub"
 }
 private ParameterList ::= ParameterDeclaration (',' (ParameterDeclaration | &')'))* {pin(".*")=1}
-ParameterDeclaration ::= ParamDefinitionListNoPin? '...'? Type | Type { // todo: use left rule
+ParameterDeclaration ::= (ParamDefinitionListNoPin? '...'? Type) | Type { // todo: use left rule
 //  stubClass="org.vlang.lang.stubs.GoParameterDeclarationStub"
   methods = [isVariadic]
 }
@@ -659,7 +653,7 @@ ParamDefinition ::= VarModifiers? identifier {
   stubClass="org.vlang.lang.stubs.VlangParamDefinitionStub"
   methods = [isVariadic getName]
 }
-TypeListNoPin ::= Type ( ',' Type )* ','?
+TypeListNoPin ::= Type (',' Type)* ','?
 // end of signature
 
 // map[<type>]<type>
@@ -717,7 +711,7 @@ private RightHandExpr ::=
   | ForceNoErrorPropagationExpression
 
 // <expr>[<<generics>>](...)
-left CallExpr ::= GenericTypeArguments? ArgumentList
+left CallExpr ::= GenericArguments? ArgumentList
 
 // <expr>[<expr>]
 // <expr>#[<exr>]
@@ -741,9 +735,9 @@ ConditionalExpr ::= Expression RelOp Expression
 AddExpr ::= Expression AddOp Expression
 MulExpr ::= Expression MulOp Expression
 
-private RelOp ::= '==' | '!=' | '<' | '<=' | '>' | '>='
+private RelOp ::= '==' | '!=' | '<' | '<=' | '>' !'>' | '>='
 private AddOp ::= '+' | '-' | '|' | '^'
-private MulOp ::= '*' | '/' | '%' | '<<' | '>>' | '&' | '&^'
+private MulOp ::= '*' | '/' | '%' | '<<' | <<gtGt>> | '&' | '&^'
 private UnaryOp ::= '+' | '-' | '!' | '^' | '~' | '*' | '&' | '&&' | '<-'
 
 fake BinaryExpr ::= Expression+ {

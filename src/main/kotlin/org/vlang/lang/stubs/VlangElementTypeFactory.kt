@@ -10,6 +10,7 @@ object VlangElementTypeFactory {
     private val TYPES: Map<String, Class<*>> = object : HashMap<String, Class<*>>() {
         init {
             put("ARRAY_OR_SLICE_TYPE", VlangArrayOrSliceTypeImpl::class.java)
+            put("TUPLE_TYPE", VlangTupleTypeImpl::class.java)
             put("CHANNEL_TYPE", VlangChannelTypeImpl::class.java)
             put("FUNCTION_TYPE", VlangFunctionTypeImpl::class.java)
             put("INTERFACE_TYPE", VlangInterfaceTypeImpl::class.java)

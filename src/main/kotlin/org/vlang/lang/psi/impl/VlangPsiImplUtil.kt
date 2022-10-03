@@ -445,6 +445,15 @@ object VlangPsiImplUtil {
             return expr.type
         }
 
+        if (expr is VlangCallExpr) {
+            val callRef = expr.expression as? VlangReferenceExpression
+            val resolved = callRef?.reference?.resolve()
+            if (resolved !is VlangFunctionOrMethodDeclaration) return null
+
+            val result = resolved.getSignature()?.result ?: return null
+            return result.type
+        }
+
         return null
     }
 
@@ -502,13 +511,12 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getTypeInner(o: VlangVarDefinition, context: ResolveState?): VlangType? {
-        // see http://Vlanglang.org/ref/spec#RangeClause
         val parent = PsiTreeUtil.getStubOrPsiParent(o)
 //        if (parent is VlangRangeClause) {
 //            return processRangeClause(o, parent as VlangRangeClause?, context)
 //        }
         if (parent is VlangVarDeclaration) {
-            return findTypeInVarSpec(o, context)
+            return getTypeInVarSpec(o, parent, context)
         }
         val literal = PsiTreeUtil.getNextSiblingOfType(o, VlangLiteral::class.java)
         if (literal != null) {
@@ -532,37 +540,26 @@ object VlangPsiImplUtil {
         return null
     }
 
-    private fun findTypeInVarSpec(o: VlangVarDefinition, context: ResolveState?): VlangType? {
-        val parent = PsiTreeUtil.getStubOrPsiParent(o) as? VlangVarDeclaration ?: return null
-//        val commonType = (parent.varAssign as VlangTypeOwner).getType(context)
-//        if (commonType != null) {
-//            return commonType
-//        }
+    private fun getTypeInVarSpec(o: VlangVarDefinition, decl: VlangVarDeclaration, context: ResolveState?): VlangType? {
+        val defineIndex = decl.varDefinitionList.indexOf(o)
+        val exprList = decl.expressionList
 
-        return parent.expressionList.firstOrNull()?.getType(context)
+        // if a, b = call()
+        if (exprList.size == 1) {
+            val expr = exprList.first()
+            val type = expr.getType(context)
+            if (type is VlangTupleType) {
+                return type.typeListNoPin.typeList.getOrNull(defineIndex)
+            }
+        }
 
-//        val varList: List<VlangVarDefinition> = parent.varDefinitionList
-//        var i = varList.indexOf(o)
-//        i = if (i == -1) 0 else i
-//        val exprs: List<VlangExpression> = parent.expressionList
-//
-//        if (exprs.size == 1 && exprs[0] is VlangCallExpr) {
-//            val call: VlangExpression = exprs[0]
-//            val fromCall: VlangType = call.getVlangType(context)
-//            val canDecouple = varList.size > 1
-//            val underlyingType: VlangType = if (canDecouple && fromCall is VlangSpecType) (fromCall as VlangSpecType).getType() else fromCall
-//            val byRef: VlangType = typeFromRefOrType(underlyingType)
-//            val type: VlangType =
-//                funcType(if (canDecouple && byRef is VlangSpecType) (byRef as VlangSpecType).getType() else byRef)
-//                    ?: return fromCall
-//            if (type is VlangTypeList) {
-//                if ((type as VlangTypeList).getTypeList().size() > i) {
-//                    return (type as VlangTypeList).getTypeList().get(i)
-//                }
-//            }
-//            return type
-//        }
-//        return if (exprs.size <= i) null else exprs[i].getVlangType(context)
+        // if a, b := 10, 20
+        val neededExpr = exprList.getOrNull(defineIndex)
+        if (neededExpr != null) {
+            return neededExpr.getType(context)
+        }
+
+        return null
     }
 
     fun processSignatureOwner(o: VlangSignatureOwner, processor: VlangScopeProcessorBase): Boolean {
@@ -571,8 +568,7 @@ object VlangPsiImplUtil {
             return false
         }
 
-        val resultParameters = signature.result?.parameters
-        return resultParameters == null || processParameters(processor, resultParameters)
+        return true
     }
 
     private fun processParameters(processor: VlangScopeProcessorBase, parameters: VlangParameters): Boolean {

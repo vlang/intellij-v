@@ -3,11 +3,10 @@ package org.vlang.lang.psi;
 
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public interface VlangGenericTypeArguments extends VlangCompositeElement {
+public interface VlangGenericArguments extends VlangCompositeElement {
 
-  @Nullable
+  @NotNull
   VlangTypeListNoPin getTypeListNoPin();
 
   @NotNull

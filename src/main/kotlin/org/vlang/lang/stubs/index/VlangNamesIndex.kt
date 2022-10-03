@@ -64,7 +64,7 @@ class VlangNamesIndex : StringStubIndexExtension<VlangNamedElement>() {
                     continue
                 }
 
-                val els = StubIndex.getElements(KEY, key, project, scope, idFilter, VlangNamedElement::class.java)
+                val els = StubIndex.getElements(KEY, key, project, null, idFilter, VlangNamedElement::class.java)
                 for (el in els) {
                     if (!processor.process(el)) {
                         return false

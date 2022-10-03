@@ -55,34 +55,25 @@ object DocumentationGenerator {
     fun VlangNullableType.generateDoc(): String {
         return buildString {
             append("?")
-            append(type?.generateDoc())
+            appendNotNull(type?.generateDoc())
         }
     }
 
     fun VlangResult.generateDoc(): String {
-        return when {
-            parameters != null    -> {
-                ""
+        val typeInner = type as? VlangTupleType
+        if (typeInner != null) {
+            return buildString {
+                append("(")
+                append(
+                    typeInner.typeListNoPin.typeList.joinToString(", ") {
+                        it.generateDoc()
+                    }
+                )
+                append(")")
             }
-
-            type != null          -> {
-                type!!.generateDoc()
-            }
-
-            typeListNoPin != null -> {
-                buildString {
-                    append("(")
-                    append(
-                        typeListNoPin!!.typeList.joinToString(", ") {
-                            it.generateDoc()
-                        }
-                    )
-                    append(")")
-                }
-            }
-
-            else                  -> ""
         }
+
+        return type.generateDoc()
     }
 
     private fun VlangVarModifiers.generateDoc(noHtml: Boolean = false): String {

@@ -3,7 +3,6 @@ package org.vlang.lang.stubs.types
 import com.intellij.lang.ASTNode
 import com.intellij.openapi.util.text.StringUtil
 import com.intellij.psi.stubs.IndexSink
-import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.stubs.StubIndexKey
 import org.vlang.lang.psi.VlangNamedElement
 import org.vlang.lang.stubs.VlangFileStub
@@ -23,21 +22,21 @@ abstract class VlangNamedStubElementType<S : VlangNamedStub<T>, T : VlangNamedEl
     override fun indexStub(stub: S, sink: IndexSink) {
         val name = stub.name ?: return
         if (shouldIndex() && name.isNotEmpty()) {
-            var packageName: String? = null
-            var parent: StubElement<*>? = stub.parentStub
+            var moduleName: String? = null
+            var parent = stub.parentStub
             while (parent != null) {
                 if (parent is VlangFileStub) {
-                    packageName = parent.getModuleName()
+                    moduleName = parent.getModuleQualifiedName()
                     break
                 }
                 parent = parent.parentStub
             }
-            val indexingName = if (packageName != null && packageName.isNotEmpty()) "$packageName.$name" else name
+            val indexingName = if (!moduleName.isNullOrEmpty()) "$moduleName.$name" else name
 
             if (stub is VlangMethodDeclarationStub) {
                 val typeName = stub.typeName ?: return
                 if (typeName.isNotEmpty()) {
-                    sink.occurrence(VlangNamesIndex.KEY, "$packageName.$typeName.$name")
+                    sink.occurrence(VlangNamesIndex.KEY, "$moduleName.$typeName.$name")
                 }
             }
 

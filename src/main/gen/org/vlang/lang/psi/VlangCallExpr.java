@@ -19,6 +19,6 @@ public interface VlangCallExpr extends VlangExpression {
   VlangForceNoErrorPropagationExpression getForceNoErrorPropagationExpression();
 
   @Nullable
-  VlangGenericTypeArguments getGenericTypeArguments();
+  VlangGenericArguments getGenericArguments();
 
 }
