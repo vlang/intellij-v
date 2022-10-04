@@ -1,10 +1,13 @@
 package org.vlang.lang.types
 
-import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import org.vlang.lang.psi.*
+import org.vlang.lang.psi.VlangCallExpr
+import org.vlang.lang.psi.VlangStringLiteral
+import org.vlang.lang.psi.VlangTypeOwner
+import org.vlang.lang.psi.VlangVisitor
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
+import org.vlang.utils.line
 
 abstract class TypeTestBase : BasePlatformTestCase() {
     override fun getTestDataPath() = "src/test/resources/types"
@@ -85,15 +88,5 @@ abstract class TypeTestBase : BasePlatformTestCase() {
                 first is VlangTypeOwner && last is VlangStringLiteral
             }
         }.flatten()
-    }
-
-    private fun VlangCompositeElement.line(): Int {
-        val document = PsiDocumentManager.getInstance(project).getDocument(containingFile)
-        val lineNumber = if (document != null) {
-            document.getLineNumber(textRange.startOffset) + 1
-        } else {
-            0
-        }
-        return lineNumber
     }
 }

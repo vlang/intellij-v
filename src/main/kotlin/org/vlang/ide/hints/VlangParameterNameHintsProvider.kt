@@ -9,6 +9,7 @@ import com.intellij.refactoring.suggested.startOffset
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangUnknownTypeEx
+import org.vlang.utils.line
 import kotlin.math.min
 
 @Suppress("UnstableApiUsage")
@@ -19,6 +20,7 @@ class VlangParameterNameHintsProvider : InlayParameterHintsProvider {
         when (element) {
             is VlangCallExpr      -> handleCallExpr(element, hints)
             is VlangVarDefinition -> handleVarDefinition(element, hints)
+            is VlangOrBlockExpr   -> handleOrBlockExpr(element, hints)
         }
 
         return hints
@@ -28,7 +30,22 @@ class VlangParameterNameHintsProvider : InlayParameterHintsProvider {
         if (inlayText.endsWith(" p")) {
             return inlayText.substring(0, inlayText.length - 2) + ":"
         }
+        if (inlayText.endsWith(" ->")) {
+            return inlayText
+        }
         return ": $inlayText"
+    }
+
+    private fun handleOrBlockExpr(element: VlangOrBlockExpr, hints: MutableList<InlayInfo>) {
+        val right = element.block
+        val openBracket = right.lbrace
+        val closeBracket = right.rbrace
+        if (openBracket.line() == closeBracket?.line()) {
+            // don't show hint if 'or { ... }'
+            return
+        }
+        val inlayInfo = InlayInfo("err: IError ->", openBracket.endOffset)
+        hints.add(inlayInfo)
     }
 
     private fun handleVarDefinition(element: VlangVarDefinition, hints: MutableList<InlayInfo>) {

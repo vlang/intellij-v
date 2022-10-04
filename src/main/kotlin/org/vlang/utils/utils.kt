@@ -8,6 +8,7 @@ import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.project.ProjectLocator
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
 import org.vlang.lang.VlangFileType
 
@@ -43,4 +44,14 @@ fun CapturingProcessHandler.runProcess(
         timeoutInMilliseconds != null -> runProcess(timeoutInMilliseconds)
         else -> runProcess()
     }
+}
+
+fun PsiElement.line(): Int {
+    val document = PsiDocumentManager.getInstance(project).getDocument(containingFile)
+    val lineNumber = if (document != null) {
+        document.getLineNumber(textRange.startOffset) + 1
+    } else {
+        0
+    }
+    return lineNumber
 }
