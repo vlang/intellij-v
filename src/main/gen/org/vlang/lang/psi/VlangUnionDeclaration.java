@@ -13,27 +13,15 @@ public interface VlangUnionDeclaration extends VlangNamedElement, StubBasedPsiEl
   VlangAttributes getAttributes();
 
   @Nullable
-  VlangFieldsGroup getFieldsGroup();
-
-  @Nullable
-  VlangGenericArguments getGenericArguments();
-
-  @Nullable
   VlangSymbolVisibility getSymbolVisibility();
 
-  @Nullable
-  PsiElement getLbrace();
-
-  @Nullable
-  PsiElement getRbrace();
-
-  @Nullable
-  PsiElement getIdentifier();
-
   @NotNull
-  PsiElement getUnion();
+  VlangUnionType getUnionType();
 
   @NotNull
   String getName();
+
+  @Nullable
+  PsiElement getIdentifier();
 
 }

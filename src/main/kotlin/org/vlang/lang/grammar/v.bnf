@@ -422,12 +422,12 @@ EnumFieldDefinition ::= identifier {
 }
 
 // union
-UnionDeclaration ::= Attributes? SymbolVisibility? union identifier GenericArguments? '{' FieldsGroup? '}' {
-  pin=3
+UnionDeclaration ::= Attributes? SymbolVisibility? UnionType {
   stubClass="org.vlang.lang.stubs.VlangUnionDeclarationStub"
-  methods=[getName]
+  methods=[getName getIdentifier]
 }
 
+UnionType ::= union identifier GenericArguments? '{' FieldsGroup? '}' {pin=1}
 
 // [<visibility>] type <ident> = <types>
 TypeAliasDeclaration ::= SymbolVisibility? 'type' AliasType {

@@ -61,7 +61,7 @@ public class VlangTypeImpl extends VlangStubbedElementImpl<VlangTypeStub> implem
   }
 
   @Override
-  @Nullable
+  @NotNull
   public VlangType resolveType() {
     return VlangPsiImplUtil.resolveType(this);
   }

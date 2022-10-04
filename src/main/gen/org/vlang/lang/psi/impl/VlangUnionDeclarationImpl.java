@@ -10,8 +10,6 @@ import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.*;
 import org.vlang.lang.stubs.VlangUnionDeclarationStub;
 
-import static org.vlang.lang.VlangTypes.*;
-
 public class VlangUnionDeclarationImpl extends VlangNamedElementImpl<VlangUnionDeclarationStub> implements VlangUnionDeclaration {
 
   public VlangUnionDeclarationImpl(@NotNull VlangUnionDeclarationStub stub, @NotNull IStubElementType<?, ?> type) {
@@ -40,50 +38,26 @@ public class VlangUnionDeclarationImpl extends VlangNamedElementImpl<VlangUnionD
 
   @Override
   @Nullable
-  public VlangFieldsGroup getFieldsGroup() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangFieldsGroup.class);
-  }
-
-  @Override
-  @Nullable
-  public VlangGenericArguments getGenericArguments() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangGenericArguments.class);
-  }
-
-  @Override
-  @Nullable
   public VlangSymbolVisibility getSymbolVisibility() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangSymbolVisibility.class);
   }
 
   @Override
-  @Nullable
-  public PsiElement getLbrace() {
-    return findChildByType(LBRACE);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getRbrace() {
-    return findChildByType(RBRACE);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
-  }
-
-  @Override
   @NotNull
-  public PsiElement getUnion() {
-    return notNullChild(findChildByType(UNION));
+  public VlangUnionType getUnionType() {
+    return notNullChild(VlangPsiTreeUtil.getStubChildOfType(this, VlangUnionType.class));
   }
 
   @Override
   @NotNull
   public String getName() {
     return VlangPsiImplUtil.getName(this);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getIdentifier() {
+    return VlangPsiImplUtil.getIdentifier(this);
   }
 
 }

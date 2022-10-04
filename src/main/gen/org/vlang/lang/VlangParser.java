@@ -41,7 +41,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     create_token_set_(ALIAS_TYPE, ARRAY_OR_SLICE_TYPE, CHANNEL_TYPE, ENUM_TYPE,
       FUNCTION_TYPE, INTERFACE_TYPE, MAP_TYPE, NOT_NULLABLE_TYPE,
       NULLABLE_TYPE, POINTER_TYPE, STRUCT_TYPE, TUPLE_TYPE,
-      TYPE),
+      TYPE, UNION_TYPE),
     create_token_set_(ASM_BLOCK_STATEMENT, ASSERT_STATEMENT, ASSIGNMENT_STATEMENT, BREAK_STATEMENT,
       COMPILE_ELSE_STATEMENT, COMPILE_TIME_FOR_STATEMENT, COMPILE_TIME_IF_STATEMENT, CONTINUE_STATEMENT,
       C_FLAG_STATEMENT, C_INCLUDE_STATEMENT, DEFER_STATEMENT, ELSE_STATEMENT,
@@ -4826,21 +4826,16 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Attributes? SymbolVisibility? union identifier GenericArguments? '{' FieldsGroup? '}'
+  // Attributes? SymbolVisibility? UnionType
   public static boolean UnionDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "UnionDeclaration")) return false;
-    boolean r, p;
+    boolean r;
     Marker m = enter_section_(b, l, _NONE_, UNION_DECLARATION, "<union declaration>");
     r = UnionDeclaration_0(b, l + 1);
     r = r && UnionDeclaration_1(b, l + 1);
-    r = r && consumeTokens(b, 1, UNION, IDENTIFIER);
-    p = r; // pin = 3
-    r = r && report_error_(b, UnionDeclaration_4(b, l + 1));
-    r = p && report_error_(b, consumeToken(b, LBRACE)) && r;
-    r = p && report_error_(b, UnionDeclaration_6(b, l + 1)) && r;
-    r = p && consumeToken(b, RBRACE) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+    r = r && UnionType(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
   }
 
   // Attributes?
@@ -4857,16 +4852,33 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
+  /* ********************************************************** */
+  // union identifier GenericArguments? '{' FieldsGroup? '}'
+  public static boolean UnionType(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UnionType")) return false;
+    if (!nextTokenIs(b, UNION)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, UNION_TYPE, null);
+    r = consumeTokens(b, 1, UNION, IDENTIFIER);
+    p = r; // pin = 1
+    r = r && report_error_(b, UnionType_2(b, l + 1));
+    r = p && report_error_(b, consumeToken(b, LBRACE)) && r;
+    r = p && report_error_(b, UnionType_4(b, l + 1)) && r;
+    r = p && consumeToken(b, RBRACE) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
   // GenericArguments?
-  private static boolean UnionDeclaration_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "UnionDeclaration_4")) return false;
+  private static boolean UnionType_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UnionType_2")) return false;
     GenericArguments(b, l + 1);
     return true;
   }
 
   // FieldsGroup?
-  private static boolean UnionDeclaration_6(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "UnionDeclaration_6")) return false;
+  private static boolean UnionType_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UnionType_4")) return false;
     FieldsGroup(b, l + 1);
     return true;
   }

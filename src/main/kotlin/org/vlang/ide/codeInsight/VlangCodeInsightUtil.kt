@@ -22,7 +22,12 @@ object VlangCodeInsightUtil {
             return name.removePrefix("$contextModule.")
         }
 
-        return name
+        if (name.count { it == '.' } == 1) {
+            return name
+        }
+
+        val parts = name.split('.')
+        return parts[parts.size - 2] + "." + parts[parts.size - 1]
     }
 
     fun sameModule(first: VlangCompositeElement, second: VlangCompositeElement): Boolean {

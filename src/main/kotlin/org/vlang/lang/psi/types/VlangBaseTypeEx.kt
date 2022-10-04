@@ -25,12 +25,14 @@ abstract class VlangBaseTypeEx<T : VlangType>(protected val raw: T) : VlangTypeE
     }
 
     companion object {
+        protected val primitivesMap = VlangPrimitiveTypes.values().associateBy { it.value }
+
         fun VlangType.toEx(): VlangTypeEx<*>? {
-            val type = resolveType()
-            return when (type) {
+            return when (val type = resolveType()) {
                 is VlangStructType       -> VlangStructTypeEx(type)
                 is VlangEnumType         -> VlangEnumTypeEx(type)
                 is VlangInterfaceType    -> VlangInterfaceTypeEx(type)
+                is VlangUnionType        -> VlangUnionTypeEx(type)
                 is VlangNullableType     -> VlangNullableTypeEx(type)
                 is VlangNotNullableType  -> VlangNotNullableTypeEx(type)
                 is VlangPointerType      -> VlangPointerTypeEx(type)
@@ -39,7 +41,14 @@ abstract class VlangBaseTypeEx<T : VlangType>(protected val raw: T) : VlangTypeE
                 is VlangTupleType        -> VlangTupleTypeEx(type)
                 is VlangFunctionType     -> VlangFunctionTypeEx(type)
                 is VlangAliasType        -> VlangAliasTypeEx(type)
-                else                     -> null
+                else                     -> {
+                    val primitive = primitivesMap[type.text]
+                    if (primitive != null) {
+                        VlangPrimitiveTypeEx(type, primitive)
+                    } else {
+                        null
+                    }
+                }
             }
         }
     }

@@ -55,6 +55,11 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getIdentifier(o: VlangUnionDeclaration): PsiElement? {
+        return o.unionType.identifier
+    }
+
+    @JvmStatic
     fun getName(o: VlangEnumDeclaration): String {
         return o.getIdentifier()?.text ?: ""
     }
@@ -212,19 +217,33 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun resolveType(type: VlangType): VlangType? {
+    fun resolveType(type: VlangType): VlangType {
         if (type.javaClass != VlangTypeImpl::class.java) {
             return type
         }
 
-        // TODO:
-        val resolved = type.typeReferenceExpression?.resolve()
-        val typeChild = resolved?.childrenOfType<VlangStructType>()?.firstOrNull()
-        if (typeChild != null) {
-            return typeChild
+        val resolved = type.typeReferenceExpression?.resolve() ?: return type
+        val structType = resolved.childrenOfType<VlangStructType>().firstOrNull()
+        if (structType != null) {
+            return structType
         }
 
-        val aliasType = resolved?.childrenOfType<VlangAliasType>()?.firstOrNull()
+        val interfaceType = resolved.childrenOfType<VlangInterfaceType>().firstOrNull()
+        if (interfaceType != null) {
+            return interfaceType
+        }
+
+        val enumType = resolved.childrenOfType<VlangEnumType>().firstOrNull()
+        if (enumType != null) {
+            return enumType
+        }
+
+        val unionType = resolved.childrenOfType<VlangUnionType>().firstOrNull()
+        if (unionType != null) {
+            return unionType
+        }
+
+        val aliasType = resolved.childrenOfType<VlangAliasType>().firstOrNull()
         if (aliasType is VlangAliasType) {
             return aliasType
         }

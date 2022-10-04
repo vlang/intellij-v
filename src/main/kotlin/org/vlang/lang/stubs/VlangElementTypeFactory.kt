@@ -15,6 +15,7 @@ object VlangElementTypeFactory {
             put("FUNCTION_TYPE", VlangFunctionTypeImpl::class.java)
             put("INTERFACE_TYPE", VlangInterfaceTypeImpl::class.java)
             put("ENUM_TYPE", VlangEnumTypeImpl::class.java)
+            put("UNION_TYPE", VlangUnionTypeImpl::class.java)
             put("MAP_TYPE", VlangMapTypeImpl::class.java)
             put("POINTER_TYPE", VlangPointerTypeImpl::class.java)
             put("STRUCT_TYPE", VlangStructTypeImpl::class.java)
