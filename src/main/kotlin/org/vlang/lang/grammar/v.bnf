@@ -538,7 +538,6 @@ Expression ::=
   | SharedExpression
   | ConstexprIdentifierExpression
   | SqlExpression
-  | MapInitExpr
   | GoExpression
   | LockExpression
   | IncDecExpression
@@ -553,7 +552,7 @@ LockExpression ::= (lock | rlock) <<enterMode "BLOCK?">> ExpressionList Block <<
 GoExpression ::= go Expression
 
 // { ... }
-MapInitExpr ::= <<isModeOff "BLOCK?">> & <<prevIsNotType>> '{' KeyValues '}' {pin=4}
+MapInitExpr ::= (<<isLastNotIs "BLOCK?">> | <<isLastIs "PAR">>) & <<prevIsNotType>> '{' KeyValues? '}' {pin=4}
 KeyValues ::= KeyValue ((semi | ',') KeyValue)* (semi | ',')? {pin=1}
 // <key> : <value>
 KeyValue ::= Expression ':' Expression {pin=2}
@@ -695,10 +694,11 @@ private DotPrimaryExpr ::=
   | ArrayCreation
   | ParenthesesExpr
   | UnsafeExpression
+  | MapInitExpr
 
 // just <ident> with ref
 ReferenceExpression ::= identifier { methods=[getReference getQualifier resolve getReadWriteAccess] extends=Expression}
-left QualifiedReferenceExpression ::= '.' identifier {elementType=ReferenceExpression}
+left QualifiedReferenceExpression ::= semi? '.' identifier {elementType=ReferenceExpression}
 
 private RightHandExprs ::= RightHandExpr*
 
@@ -814,7 +814,7 @@ AsExpression ::= Expression as Type {pin=2}
 UnsafeExpression ::= unsafe Block {pin=1}
 
 // if <condition> { ... }
-IfExpression ::= if Condition Block (semi? ElseStatement)? {pin=1}
+IfExpression ::= if Condition semi? Block (semi? ElseStatement)? {pin=1}
 
 //  $if <condition> { ... }
 CompileTimeIfExpression ::= IF_COMPILE_TIME Condition Block CompileElseStatement? {pin=1}

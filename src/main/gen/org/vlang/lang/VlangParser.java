@@ -1039,6 +1039,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   //   | ArrayCreation
   //   | ParenthesesExpr
   //   | UnsafeExpression
+  //   | MapInitExpr
   static boolean DotPrimaryExpr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DotPrimaryExpr")) return false;
     boolean r;
@@ -1049,6 +1050,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = ArrayCreation(b, l + 1);
     if (!r) r = ParenthesesExpr(b, l + 1);
     if (!r) r = UnsafeExpression(b, l + 1);
+    if (!r) r = MapInitExpr(b, l + 1);
     return r;
   }
 
@@ -3024,6 +3026,50 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // (<<isLastNotIs "BLOCK?">> | <<isLastIs "PAR">>) & <<prevIsNotType>> '{' KeyValues? '}'
+  public static boolean MapInitExpr(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MapInitExpr")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, MAP_INIT_EXPR, "<map init expr>");
+    r = MapInitExpr_0(b, l + 1);
+    r = r && MapInitExpr_1(b, l + 1);
+    r = r && consumeToken(b, LBRACE);
+    r = r && MapInitExpr_3(b, l + 1);
+    p = r; // pin = 4
+    r = r && consumeToken(b, RBRACE);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // <<isLastNotIs "BLOCK?">> | <<isLastIs "PAR">>
+  private static boolean MapInitExpr_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MapInitExpr_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = isLastNotIs(b, l + 1, "BLOCK?");
+    if (!r) r = isLastIs(b, l + 1, "PAR");
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // & <<prevIsNotType>>
+  private static boolean MapInitExpr_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MapInitExpr_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _AND_);
+    r = prevIsNotType(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // KeyValues?
+  private static boolean MapInitExpr_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MapInitExpr_3")) return false;
+    KeyValues(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
   // 'map' '[' Type ']' Type
   public static boolean MapType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MapType")) return false;
@@ -3647,15 +3693,22 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '.' identifier
+  // semi? '.' identifier
   public static boolean QualifiedReferenceExpression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "QualifiedReferenceExpression")) return false;
-    if (!nextTokenIs(b, DOT)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _LEFT_, REFERENCE_EXPRESSION, null);
-    r = consumeTokens(b, 0, DOT, IDENTIFIER);
+    Marker m = enter_section_(b, l, _LEFT_, REFERENCE_EXPRESSION, "<qualified reference expression>");
+    r = QualifiedReferenceExpression_0(b, l + 1);
+    r = r && consumeTokens(b, 0, DOT, IDENTIFIER);
     exit_section_(b, l, m, r, false, null);
     return r;
+  }
+
+  // semi?
+  private static boolean QualifiedReferenceExpression_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "QualifiedReferenceExpression_0")) return false;
+    semi(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -5063,12 +5116,11 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // 19: PREFIX(SharedExpression)
   // 20: ATOM(ConstexprIdentifierExpression)
   // 21: ATOM(SqlExpression)
-  // 22: ATOM(MapInitExpr)
-  // 23: PREFIX(GoExpression)
-  // 24: ATOM(LockExpression)
-  // 25: POSTFIX(IncDecExpression)
-  // 26: ATOM(UnpackingExpression)
-  // 27: ATOM(ParenthesesExpr)
+  // 22: PREFIX(GoExpression)
+  // 23: ATOM(LockExpression)
+  // 24: POSTFIX(IncDecExpression)
+  // 25: ATOM(UnpackingExpression)
+  // 26: ATOM(ParenthesesExpr)
   public static boolean Expression(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "Expression")) return false;
     addVariant(b, "<expression>");
@@ -5086,7 +5138,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = SharedExpression(b, l + 1);
     if (!r) r = ConstexprIdentifierExpression(b, l + 1);
     if (!r) r = SqlExpression(b, l + 1);
-    if (!r) r = MapInitExpr(b, l + 1);
     if (!r) r = GoExpression(b, l + 1);
     if (!r) r = LockExpression(b, l + 1);
     if (!r) r = UnpackingExpression(b, l + 1);
@@ -5150,7 +5201,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
         r = true;
         exit_section_(b, l, m, AS_EXPRESSION, r, true, null);
       }
-      else if (g < 25 && IncDecExpression_0(b, l + 1)) {
+      else if (g < 24 && IncDecExpression_0(b, l + 1)) {
         r = true;
         exit_section_(b, l, m, INC_DEC_EXPRESSION, r, true, null);
       }
@@ -5257,7 +5308,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // if Condition Block (semi? ElseStatement)?
+  // if Condition semi? Block (semi? ElseStatement)?
   public static boolean IfExpression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IfExpression")) return false;
     if (!nextTokenIsSmart(b, IF)) return false;
@@ -5266,33 +5317,41 @@ public class VlangParser implements PsiParser, LightPsiParser {
     r = consumeTokenSmart(b, IF);
     p = r; // pin = 1
     r = r && report_error_(b, Condition(b, l + 1));
+    r = p && report_error_(b, IfExpression_2(b, l + 1)) && r;
     r = p && report_error_(b, Block(b, l + 1)) && r;
-    r = p && IfExpression_3(b, l + 1) && r;
+    r = p && IfExpression_4(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
+  // semi?
+  private static boolean IfExpression_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IfExpression_2")) return false;
+    semi(b, l + 1);
+    return true;
+  }
+
   // (semi? ElseStatement)?
-  private static boolean IfExpression_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "IfExpression_3")) return false;
-    IfExpression_3_0(b, l + 1);
+  private static boolean IfExpression_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IfExpression_4")) return false;
+    IfExpression_4_0(b, l + 1);
     return true;
   }
 
   // semi? ElseStatement
-  private static boolean IfExpression_3_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "IfExpression_3_0")) return false;
+  private static boolean IfExpression_4_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IfExpression_4_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = IfExpression_3_0_0(b, l + 1);
+    r = IfExpression_4_0_0(b, l + 1);
     r = r && ElseStatement(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // semi?
-  private static boolean IfExpression_3_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "IfExpression_3_0_0")) return false;
+  private static boolean IfExpression_4_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IfExpression_4_0_0")) return false;
     semi(b, l + 1);
     return true;
   }
@@ -5477,31 +5536,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // <<isModeOff "BLOCK?">> & <<prevIsNotType>> '{' KeyValues '}'
-  public static boolean MapInitExpr(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MapInitExpr")) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, MAP_INIT_EXPR, "<map init expr>");
-    r = isModeOff(b, l + 1, "BLOCK?");
-    r = r && MapInitExpr_1(b, l + 1);
-    r = r && consumeToken(b, LBRACE);
-    r = r && KeyValues(b, l + 1);
-    p = r; // pin = 4
-    r = r && consumeToken(b, RBRACE);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  // & <<prevIsNotType>>
-  private static boolean MapInitExpr_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MapInitExpr_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _AND_);
-    r = prevIsNotType(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
   public static boolean GoExpression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "GoExpression")) return false;
     if (!nextTokenIsSmart(b, GO)) return false;
@@ -5509,7 +5543,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeTokenSmart(b, GO);
     p = r;
-    r = p && Expression(b, l, 23);
+    r = p && Expression(b, l, 22);
     exit_section_(b, l, m, GO_EXPRESSION, r, p, null);
     return r || p;
   }

@@ -145,22 +145,24 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 %%
 
 <SHORT_TEMPLATE_ENTRY> {
-"$"               { return SHORT_TEMPLATE_ENTRY_START; }
-"${"              { yy_push_state(YYINITIAL); return LONG_TEMPLATE_ENTRY_START; }
-{IDENT}           { return IDENTIFIER; }
-"."               { yybegin(SHORT_TEMPLATE_ENTRY_FIELD_NAME); return DOT; }
-{STR_DOUBLE}      { return handle_string_end(true); }
-{STR_SINGLE}      { return handle_string_end(false); }
-"\\" (. | "\\")   { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY; }
-.                 { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ENTRY; }
+"$"             { return SHORT_TEMPLATE_ENTRY_START; }
+"${"            { yy_push_state(YYINITIAL); return LONG_TEMPLATE_ENTRY_START; }
+{IDENT}         { return IDENTIFIER; }
+"."             { yybegin(SHORT_TEMPLATE_ENTRY_FIELD_NAME); return DOT; }
+{STR_DOUBLE}    { yybegin(TEMPLATE_STRING); return handle_string_end(true); }
+{STR_SINGLE}    { yybegin(TEMPLATE_STRING); return handle_string_end(false); }
+"\\" (. | "\\") { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY; }
+\n              { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ENTRY; }
+.               { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ENTRY; }
 }
 
 <SHORT_TEMPLATE_ENTRY_FIELD_NAME> {
 {IDENT}         { return IDENTIFIER; }
 "."             { return DOT; }
-{STR_DOUBLE}    { return handle_string_end(true); }
-{STR_SINGLE}    { return handle_string_end(false); }
+{STR_DOUBLE}    { yybegin(TEMPLATE_STRING); return handle_string_end(true); }
+{STR_SINGLE}    { yybegin(TEMPLATE_STRING); return handle_string_end(false); }
 "\\" (. | "\\") { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY; }
+\n              { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ENTRY; }
 .               { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ENTRY; }
 }
 

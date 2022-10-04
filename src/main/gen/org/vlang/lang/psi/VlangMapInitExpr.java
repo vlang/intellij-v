@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 public interface VlangMapInitExpr extends VlangExpression {
 
-  @NotNull
+  @Nullable
   VlangKeyValues getKeyValues();
 
   @NotNull

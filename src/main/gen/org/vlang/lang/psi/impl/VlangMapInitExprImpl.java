@@ -32,9 +32,9 @@ public class VlangMapInitExprImpl extends VlangExpressionImpl implements VlangMa
   }
 
   @Override
-  @NotNull
+  @Nullable
   public VlangKeyValues getKeyValues() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangKeyValues.class));
+    return VlangPsiTreeUtil.getChildOfType(this, VlangKeyValues.class);
   }
 
   @Override
