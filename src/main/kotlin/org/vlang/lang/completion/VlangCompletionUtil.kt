@@ -188,8 +188,17 @@ object VlangCompletionUtil {
     fun createInterfaceLookupElement(element: VlangNamedElement, moduleName: String?): LookupElement? =
         createClassLikeLookupElement(element, moduleName, AllIcons.Nodes.Interface, STRUCT_PRIORITY)
 
-    fun createTypeAliasLookupElement(element: VlangNamedElement, moduleName: String?): LookupElement? =
-        createClassLikeLookupElement(element, moduleName, AllIcons.Nodes.Alias, TYPE_ALIAS_PRIORITY)
+    fun createTypeAliasLookupElement(element: VlangNamedElement, moduleName: String?): LookupElement? {
+        val name = element.name
+        if (name.isNullOrEmpty()) {
+            return null
+        }
+        return createTypeAliasLookupElement(
+            element, name, moduleName,
+            priority = TYPE_ALIAS_PRIORITY,
+            insertHandler = ClassLikeInsertHandler(moduleName)
+        )
+    }
 
     fun createDirectoryLookupElement(dir: PsiDirectory): LookupElementBuilder {
         return LookupElementBuilder.createWithSmartPointer(dir.name, dir).withIcon(VIcons.Directory)
@@ -218,6 +227,20 @@ object VlangCompletionUtil {
                 .withInsertHandler(ClassLikeInsertHandler(moduleName)), priority.toDouble()
         )
     }
+
+    private fun createTypeAliasLookupElement(
+        element: VlangNamedElement, lookupString: String, moduleName: String?,
+        insertHandler: InsertHandler<LookupElement>? = null,
+        priority: Int = 0,
+    ): LookupElement {
+        val qualifiedName = createQualifiedName(moduleName, lookupString)
+        return PrioritizedLookupElement.withPriority(
+            LookupElementBuilder.createWithSmartPointer(qualifiedName, element)
+                .withRenderer(ClassLikeRenderer(AllIcons.Nodes.Alias, moduleName))
+                .withInsertHandler(insertHandler), priority.toDouble()
+        )
+    }
+
 
     private fun createStructLookupElement(
         element: VlangNamedElement, lookupString: String, moduleName: String?,
@@ -422,8 +445,8 @@ object VlangCompletionUtil {
             val typeText = signature?.result?.text ?: "void"
             val icon = VIcons.Method
 
-            val parentStruct = elem.receiverType.typeReferenceExpression?.resolve() as? VlangStructDeclaration
-            p.tailText = signature?.parameters?.text + " of " + parentStruct?.name
+            val resolved = elem.receiverType.typeReferenceExpression?.resolve() as? VlangNamedElement
+            p.tailText = signature?.parameters?.text + " of " + resolved?.name
 
             p.icon = icon
             p.typeText = typeText

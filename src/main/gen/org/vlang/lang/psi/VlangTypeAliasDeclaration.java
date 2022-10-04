@@ -10,16 +10,10 @@ import org.vlang.lang.stubs.VlangTypeAliasDeclarationStub;
 public interface VlangTypeAliasDeclaration extends VlangNamedElement, StubBasedPsiElement<VlangTypeAliasDeclarationStub> {
 
   @Nullable
-  VlangGenericArguments getGenericArguments();
+  VlangAliasType getAliasType();
 
   @Nullable
   VlangSymbolVisibility getSymbolVisibility();
-
-  @Nullable
-  VlangTypeUnionList getTypeUnionList();
-
-  @Nullable
-  PsiElement getAssign();
 
   @NotNull
   PsiElement getType_();

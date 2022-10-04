@@ -183,6 +183,19 @@ class VlangReference(el: VlangReferenceExpressionBase) :
 
         val typ = type.resolveType()
 
+        if (typ is VlangAliasType) {
+            val decl = typ.parent as? VlangTypeAliasDeclaration ?: return true
+            val aliasFqn = decl.getQualifiedName()
+            if (!processMethods(aliasFqn, processor, state)) return false
+
+            val types = typ.typeUnionList?.typeList ?: return true
+            for (unionType in types) {
+                if (!processType(unionType, processor, state)) {
+                    return false
+                }
+            }
+        }
+
         if (typ is VlangPointerType) {
             val baseType = typ.type
             if (baseType != null) {
@@ -215,15 +228,8 @@ class VlangReference(el: VlangReferenceExpressionBase) :
 
             if (!processNamedElements(processor, state, fields, localResolve)) return false
 
-//            val method = VlangNamesIndex.find("main", "", myElement.project, myElement.resolveScope, null)
-
             val fqn = (typ.parent as VlangStructDeclaration).getQualifiedName()
-//            val methodName = fqn + "." + identifier!!.text
-
-            VlangNamesIndex.processPrefix("$fqn.", myElement.project, GlobalSearchScope.allScope(myElement.project), null) {
-                if (!processor.execute(it, state)) return@processPrefix false
-                true
-            }
+            if (!processMethods(fqn, processor, state)) return false
 
             if (!processCollectedRefs(
                     interfaceRefs,
@@ -258,6 +264,13 @@ class VlangReference(el: VlangReferenceExpressionBase) :
 //            if (resultType != null && !processVlangType(resultType, processor, state)) return false
 //        }
         return true
+    }
+
+    private fun processMethods(fqn: String?, processor: VlangScopeProcessor, state: ResolveState): Boolean {
+        return VlangNamesIndex.processPrefix("$fqn.", myElement.project, GlobalSearchScope.allScope(myElement.project), null) {
+            if (!processor.execute(it, state)) return@processPrefix false
+            true
+        }
     }
 
     private fun processCollectedRefs(
@@ -553,6 +566,16 @@ class VlangReference(el: VlangReferenceExpressionBase) :
                 processor,
                 state,
                 file.getStructs(),
+                Conditions.alwaysTrue(),
+                localProcessing,
+                false
+            )
+        ) return false
+
+        if (!processNamedElements(
+                processor,
+                state,
+                file.getTypes(),
                 Conditions.alwaysTrue(),
                 localProcessing,
                 false

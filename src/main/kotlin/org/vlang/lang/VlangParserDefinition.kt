@@ -55,6 +55,7 @@ class VlangParserDefinition : ParserDefinition {
             "u128",
 
             "rune",
+            "u8",
 
             "f32",
             "f64",

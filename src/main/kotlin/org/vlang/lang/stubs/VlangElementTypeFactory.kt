@@ -21,6 +21,7 @@ object VlangElementTypeFactory {
             put("TYPE", VlangTypeImpl::class.java)
             put("NOT_NULLABLE_TYPE", VlangNotNullableTypeImpl::class.java)
             put("NULLABLE_TYPE", VlangNullableTypeImpl::class.java)
+            put("ALIAS_TYPE", VlangAliasTypeImpl::class.java)
 //            put("PAR_TYPE", VlangParTypeImpl::class.java)
 //            put("SPEC_TYPE", VlangSpecTypeImpl::class.java)
 //            put("TYPE_LIST", VlangTypeListImpl::class.java)

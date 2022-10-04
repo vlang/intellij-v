@@ -38,9 +38,10 @@ public class VlangParser implements PsiParser, LightPsiParser {
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
     create_token_set_(RANGE_CLAUSE, VAR_DECLARATION),
-    create_token_set_(ARRAY_OR_SLICE_TYPE, CHANNEL_TYPE, ENUM_TYPE, FUNCTION_TYPE,
-      INTERFACE_TYPE, MAP_TYPE, NOT_NULLABLE_TYPE, NULLABLE_TYPE,
-      POINTER_TYPE, STRUCT_TYPE, TUPLE_TYPE, TYPE),
+    create_token_set_(ALIAS_TYPE, ARRAY_OR_SLICE_TYPE, CHANNEL_TYPE, ENUM_TYPE,
+      FUNCTION_TYPE, INTERFACE_TYPE, MAP_TYPE, NOT_NULLABLE_TYPE,
+      NULLABLE_TYPE, POINTER_TYPE, STRUCT_TYPE, TUPLE_TYPE,
+      TYPE),
     create_token_set_(ASM_BLOCK_STATEMENT, ASSERT_STATEMENT, ASSIGNMENT_STATEMENT, BREAK_STATEMENT,
       COMPILE_ELSE_STATEMENT, COMPILE_TIME_FOR_STATEMENT, COMPILE_TIME_IF_STATEMENT, CONTINUE_STATEMENT,
       C_FLAG_STATEMENT, C_INCLUDE_STATEMENT, DEFER_STATEMENT, ELSE_STATEMENT,
@@ -70,6 +71,20 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, BIT_OR);
     if (!r) r = consumeToken(b, BIT_XOR);
     return r;
+  }
+
+  /* ********************************************************** */
+  // Type '=' TypeUnionList
+  public static boolean AliasType(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AliasType")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, ALIAS_TYPE, "<alias type>");
+    r = Type(b, l + 1);
+    r = r && consumeToken(b, ASSIGN);
+    p = r; // pin = 2
+    r = r && TypeUnionList(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -4625,17 +4640,15 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // SymbolVisibility? 'type' identifier GenericArguments? '=' TypeUnionList
+  // SymbolVisibility? 'type' AliasType
   public static boolean TypeAliasDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeAliasDeclaration")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, TYPE_ALIAS_DECLARATION, "<type alias declaration>");
     r = TypeAliasDeclaration_0(b, l + 1);
-    r = r && consumeTokens(b, 1, TYPE_, IDENTIFIER);
+    r = r && consumeToken(b, TYPE_);
     p = r; // pin = 2
-    r = r && report_error_(b, TypeAliasDeclaration_3(b, l + 1));
-    r = p && report_error_(b, consumeToken(b, ASSIGN)) && r;
-    r = p && TypeUnionList(b, l + 1) && r;
+    r = r && AliasType(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -4644,13 +4657,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
   private static boolean TypeAliasDeclaration_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeAliasDeclaration_0")) return false;
     SymbolVisibility(b, l + 1);
-    return true;
-  }
-
-  // GenericArguments?
-  private static boolean TypeAliasDeclaration_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "TypeAliasDeclaration_3")) return false;
-    GenericArguments(b, l + 1);
     return true;
   }
 

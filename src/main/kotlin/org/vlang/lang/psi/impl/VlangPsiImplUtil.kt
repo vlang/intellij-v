@@ -12,7 +12,6 @@ import com.intellij.psi.*
 import com.intellij.psi.impl.source.tree.LeafElement
 import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.util.*
-import io.ktor.util.*
 import org.vlang.configurations.VlangConfiguration
 import org.vlang.ide.codeInsight.VlangTypeInfoProvider
 import org.vlang.lang.VlangTypes
@@ -74,6 +73,16 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun getName(o: VlangTypeAliasDeclaration): String {
         return o.getIdentifier()?.text ?: ""
+    }
+
+    @JvmStatic
+    fun getIdentifier(o: VlangTypeAliasDeclaration): PsiElement? {
+        return o.aliasType?.identifier
+    }
+
+    @JvmStatic
+    fun getIdentifier(o: VlangAliasType): PsiElement? {
+        return o.type.typeReferenceExpression?.getIdentifier()
     }
 
     @JvmStatic
@@ -213,7 +222,11 @@ object VlangPsiImplUtil {
             return type.identifier?.text ?: VlangTypeInfoProvider.UNKNOWN_TYPE
         }
 
-        return type.text?.escapeHTML() ?: VlangTypeInfoProvider.UNKNOWN_TYPE
+        if (type is VlangAliasType) {
+            return type.identifier?.text ?: VlangTypeInfoProvider.UNKNOWN_TYPE
+        }
+
+        return type.text ?: VlangTypeInfoProvider.UNKNOWN_TYPE
     }
 
     @JvmStatic
@@ -227,6 +240,11 @@ object VlangPsiImplUtil {
         val typeChild = resolved?.childrenOfType<VlangStructType>()?.firstOrNull()
         if (typeChild != null) {
             return typeChild
+        }
+
+        val aliasType = resolved?.childrenOfType<VlangAliasType>()?.firstOrNull()
+        if (aliasType is VlangAliasType) {
+            return aliasType
         }
 
         return type
@@ -397,6 +415,12 @@ object VlangPsiImplUtil {
     }
 
     private fun getTypeInner(expr: VlangExpression, context: ResolveState?): VlangType? {
+        when (expr) {
+            is VlangConditionalExpr, is VlangInExpression, is VlangNotInExpression -> {
+                return getBuiltinType("bool", expr)
+            }
+        }
+
         if (expr is VlangUnaryExpr) {
             val e = expr.expression ?: return null
             val type = e.getType(context)
@@ -431,24 +455,34 @@ object VlangPsiImplUtil {
             return expr.expression?.getType(context)
         } else if (expr is VlangStringLiteral) {
             return getBuiltinType("string", expr)
-        } else if (expr is VlangLiteral) {
-            if (expr.char != null) return getBuiltinType("rune", expr)
+        }
+
+        if (expr is VlangLiteral) {
+            if (expr.char != null) return getBuiltinType("u8", expr)
             if (expr.int != null || expr.hex != null || expr.oct != null)
                 return getBuiltinType("i64", expr)
             if (expr.float != null) return getBuiltinType("f64", expr)
             if (expr.floati != null) return getBuiltinType("complex64", expr)
             if (expr.decimali != null) return getBuiltinType("complex128", expr)
-        } else if (expr is VlangConditionalExpr) {
-            return getBuiltinType("bool", expr)
         }
 
         if (expr is VlangIndexOrSliceExpr) {
-            val inner = expr.expressionList.firstOrNull()?.getType(null)
+            val indexExpr = expr.expressionList.firstOrNull() ?: return null
+            val lbrack = expr.lbrack ?: return null
+            val isRange = PsiTreeUtil.findSiblingForward(lbrack, VlangTypes.RANGE, false, null) != null
+            if (isRange) {
+                return indexExpr.getType(null)
+            }
+
+            val inner = indexExpr.getType(null)
             if (inner is VlangArrayOrSliceType) {
                 return inner.type
             }
             if (inner is VlangMapType) {
                 return inner.valueType
+            }
+            if (inner?.text == "string") {
+                return getBuiltinType("u8", expr)
             }
         }
 
@@ -463,10 +497,31 @@ object VlangPsiImplUtil {
         if (expr is VlangCallExpr) {
             val callRef = expr.expression as? VlangReferenceExpression
             val resolved = callRef?.reference?.resolve()
-            if (resolved !is VlangFunctionOrMethodDeclaration) return null
+            if (resolved !is VlangFunctionOrMethodDeclaration) {
+                if (callRef is VlangReferenceExpression) {
+                    return getTypeInner(callRef, null)
+                }
+                return null
+            }
 
             val result = resolved.getSignature()?.result ?: return null
             return result.type
+        }
+
+        if (expr is VlangLiteral) {
+            return when {
+                expr.`true` != null   -> getBuiltinType("bool", expr)
+                expr.`false` != null  -> getBuiltinType("bool", expr)
+                expr.int != null      -> getBuiltinType("i64", expr)
+                expr.hex != null      -> getBuiltinType("i64", expr)
+                expr.oct != null      -> getBuiltinType("i64", expr)
+                expr.float != null    -> getBuiltinType("f64", expr)
+                expr.floati != null   -> getBuiltinType("complex64", expr)
+                expr.decimali != null -> getBuiltinType("complex128", expr)
+                expr.char != null     -> getBuiltinType("u8", expr)
+                expr.nil != null      -> getBuiltinType("nil", expr)
+                else                  -> null
+            }
         }
 
         return null
@@ -519,9 +574,7 @@ object VlangPsiImplUtil {
 
         val file = VlangElementFactory.createFileFromText(context.project, "fn f(a $name)")
 
-        val type = file.findElementAt(9)?.parent?.parent as? VlangType
-
-        return type
+        return file.findElementAt(8)?.parent?.parent as? VlangType
     }
 
     @JvmStatic

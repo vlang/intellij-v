@@ -11,6 +11,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitBinaryExpr(o);
   }
 
+  public void visitAliasType(@NotNull VlangAliasType o) {
+    visitType(o);
+  }
+
   public void visitAndExpr(@NotNull VlangAndExpr o) {
     visitBinaryExpr(o);
   }

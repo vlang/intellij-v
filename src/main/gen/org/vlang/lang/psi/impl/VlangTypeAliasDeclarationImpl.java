@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.*;
 import org.vlang.lang.stubs.VlangTypeAliasDeclarationStub;
 
-import static org.vlang.lang.VlangTypes.*;
+import static org.vlang.lang.VlangTypes.TYPE_;
 
 public class VlangTypeAliasDeclarationImpl extends VlangNamedElementImpl<VlangTypeAliasDeclarationStub> implements VlangTypeAliasDeclaration {
 
@@ -34,26 +34,14 @@ public class VlangTypeAliasDeclarationImpl extends VlangNamedElementImpl<VlangTy
 
   @Override
   @Nullable
-  public VlangGenericArguments getGenericArguments() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangGenericArguments.class);
+  public VlangAliasType getAliasType() {
+    return VlangPsiTreeUtil.getStubChildOfType(this, VlangAliasType.class);
   }
 
   @Override
   @Nullable
   public VlangSymbolVisibility getSymbolVisibility() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangSymbolVisibility.class);
-  }
-
-  @Override
-  @Nullable
-  public VlangTypeUnionList getTypeUnionList() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeUnionList.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getAssign() {
-    return findChildByType(ASSIGN);
   }
 
   @Override
@@ -65,7 +53,7 @@ public class VlangTypeAliasDeclarationImpl extends VlangNamedElementImpl<VlangTy
   @Override
   @Nullable
   public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
+    return VlangPsiImplUtil.getIdentifier(this);
   }
 
   @Override

@@ -19,22 +19,25 @@ V Language file
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
     PsiElement(VlangTokenType.type)('type')
-    PsiElement(VlangTokenType.identifier)('ImportsMap')
-    PsiElement(VlangTokenType.=)('=')
-    TYPE_UNION_LIST
-      MAP_TYPE
-        PsiElement(VlangTokenType.identifier)('map')
-        PsiElement(VlangTokenType.[)('[')
-        TYPE
-          TYPE_REFERENCE_EXPRESSION
-            PsiElement(VlangTokenType.identifier)('string')
-        PsiElement(VlangTokenType.])(']')
-        ARRAY_OR_SLICE_TYPE
+    ALIAS_TYPE
+      TYPE
+        TYPE_REFERENCE_EXPRESSION
+          PsiElement(VlangTokenType.identifier)('ImportsMap')
+      PsiElement(VlangTokenType.=)('=')
+      TYPE_UNION_LIST
+        MAP_TYPE
+          PsiElement(VlangTokenType.identifier)('map')
           PsiElement(VlangTokenType.[)('[')
-          PsiElement(VlangTokenType.])(']')
           TYPE
             TYPE_REFERENCE_EXPRESSION
-              PsiElement(VlangTokenType.identifier)('Import')
+              PsiElement(VlangTokenType.identifier)('string')
+          PsiElement(VlangTokenType.])(']')
+          ARRAY_OR_SLICE_TYPE
+            PsiElement(VlangTokenType.[)('[')
+            PsiElement(VlangTokenType.])(']')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(VlangTokenType.identifier)('Import')
   STRUCT_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')

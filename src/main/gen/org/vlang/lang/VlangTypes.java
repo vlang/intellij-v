@@ -12,6 +12,7 @@ import org.vlang.lang.stubs.VlangElementTypeFactory;
 public interface VlangTypes {
 
   IElementType ADD_EXPR = new VlangCompositeElementType("ADD_EXPR");
+  IElementType ALIAS_TYPE = VlangElementTypeFactory.stubFactory("ALIAS_TYPE");
   IElementType AND_EXPR = new VlangCompositeElementType("AND_EXPR");
   IElementType ANONYMOUS_FIELD_DEFINITION = new VlangCompositeElementType("ANONYMOUS_FIELD_DEFINITION");
   IElementType ANONYMOUS_INTERFACE_DEFINITION = new VlangCompositeElementType("ANONYMOUS_INTERFACE_DEFINITION");
@@ -311,6 +312,9 @@ public interface VlangTypes {
       IElementType type = node.getElementType();
       if (type == ADD_EXPR) {
         return new VlangAddExprImpl(node);
+      }
+      else if (type == ALIAS_TYPE) {
+        return new VlangAliasTypeImpl(node);
       }
       else if (type == AND_EXPR) {
         return new VlangAndExprImpl(node);

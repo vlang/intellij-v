@@ -62,7 +62,7 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
     fun getImportList(): VlangImportList? {
         return findChildByClass(VlangImportList::class.java)
     }
-    
+
     fun getModule(): VlangModuleClause? {
         return findChildByClass(VlangModuleClause::class.java)
     }
@@ -191,7 +191,8 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
     fun getGlobalVariables(): List<VlangGlobalVariableDefinition> {
         val value = {
             if (stub != null) {
-                val decls = getChildrenByType(stub!!, VlangTypes.GLOBAL_VARIABLE_DECLARATION) { arrayOfNulls<VlangGlobalVariableDeclaration>(it) }
+                val decls =
+                    getChildrenByType(stub!!, VlangTypes.GLOBAL_VARIABLE_DECLARATION) { arrayOfNulls<VlangGlobalVariableDeclaration>(it) }
                 decls.filterNotNull().flatMap { it.globalVariableDefinitionList }
             } else {
                 val decls = children.filterIsInstance<VlangGlobalVariableDeclaration>()
@@ -220,9 +221,19 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
         }
     }
 
-    // TODO
-    fun getTypes(): List<VlangStructDeclaration> =
-        getNamedElements(VlangTypes.TYPE_ALIAS_DECLARATION, VlangStructDeclarationStubElementType.ARRAY_FACTORY)
+    fun getTypes(): List<VlangTypeAliasDeclaration> {
+        val value = {
+            if (stub != null) {
+                getChildrenByType(stub!!, VlangTypes.TYPE_ALIAS_DECLARATION) { arrayOfNulls<VlangTypeAliasDeclaration>(it) }.filterNotNull()
+            } else {
+                children.filterIsInstance<VlangTypeAliasDeclaration>()
+            }
+        }
+
+        return CachedValuesManager.getCachedValue(this) {
+            CachedValueProvider.Result.create(value(), this)
+        }
+    }
 
     private inline fun <reified T : PsiElement> getNamedElements(elementType: IElementType, arrayFactory: ArrayFactory<T>): List<T> {
         return CachedValuesManager.getCachedValue(this) {

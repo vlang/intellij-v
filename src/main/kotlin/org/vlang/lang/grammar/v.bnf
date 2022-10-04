@@ -430,11 +430,17 @@ UnionDeclaration ::= Attributes? SymbolVisibility? union identifier GenericArgum
 
 
 // [<visibility>] type <ident> = <types>
-TypeAliasDeclaration ::= SymbolVisibility? 'type' identifier GenericArguments? '=' TypeUnionList {
+TypeAliasDeclaration ::= SymbolVisibility? 'type' AliasType {
   pin=2
   stubClass="org.vlang.lang.stubs.VlangTypeAliasDeclarationStub"
-  methods=[getName]
+  methods=[getIdentifier getName]
 }
+
+AliasType ::= Type '=' TypeUnionList {
+  pin=2
+  methods=[getIdentifier]
+}
+
 // <type> [ | <type2>]...
 TypeUnionList ::= Type (semi? '|' Type)* {pin=1}
 

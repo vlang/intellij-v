@@ -13,11 +13,11 @@ import org.vlang.lang.psi.VlangTypeOwner
 
 class VlangTypeInfoProvider : ExpressionTypeProvider<VlangTypeOwner>() {
     companion object {
-        val UNKNOWN_TYPE = "<unknown>".escapeHTML()
+        val UNKNOWN_TYPE = "<unknown>"
     }
 
     override fun getInformationHint(element: VlangTypeOwner): String {
-        return element.getType(null)?.readableName ?: UNKNOWN_TYPE
+        return element.getType(null)?.readableName ?: UNKNOWN_TYPE.escapeHTML()
     }
 
     override fun getErrorHint(): String {
