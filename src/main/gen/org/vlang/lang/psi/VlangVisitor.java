@@ -269,6 +269,7 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitFunctionType(@NotNull VlangFunctionType o) {
     visitType(o);
+    // visitSignatureOwner(o);
   }
 
   public void visitGenericArguments(@NotNull VlangGenericArguments o) {

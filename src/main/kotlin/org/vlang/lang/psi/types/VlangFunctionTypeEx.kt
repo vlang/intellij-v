@@ -4,7 +4,7 @@ import org.vlang.lang.psi.VlangCompositeElement
 import org.vlang.lang.psi.VlangFunctionType
 
 class VlangFunctionTypeEx(raw: VlangFunctionType) : VlangBaseTypeEx<VlangFunctionType>(raw) {
-    private val signature = raw.signature
+    private val signature = raw.getSignature()
     private val params = signature?.parameters?.parametersListWithTypes?.map { (_, type) -> type.toEx() } ?: emptyList()
     private val result = signature?.result?.type?.toEx()
 

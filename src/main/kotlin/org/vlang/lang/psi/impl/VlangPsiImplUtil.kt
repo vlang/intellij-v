@@ -373,6 +373,11 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun isVariadic(o: VlangParameterDeclaration): Boolean {
+        return o.tripleDot != null
+    }
+
+    @JvmStatic
     fun getParameters(o: VlangCallExpr): List<VlangExpression> {
         return o.argumentList.elementList.mapNotNull { it?.value?.expression }
     }
@@ -632,6 +637,35 @@ object VlangPsiImplUtil {
 
         val element = file.findElementAt(8)
         return element?.findTopmostParentOfType()
+    }
+
+    @JvmStatic
+    fun getTypeInner(o: VlangSignatureOwner, context: ResolveState?): VlangType? {
+        val signature = o.getSignature() ?: return null
+        val parameters = signature.parameters.parametersListWithTypes
+        val result = signature.result
+
+        val text = buildString {
+            append("fn ")
+            append(
+                parameters.joinToString(",", "(", ")") { (def, type) ->
+                    buildString {
+                        if (def != null) {
+                            append(def.text)
+                            append(" ")
+                        }
+                        append(type.text)
+                    }
+                }
+            )
+            val resultType = result?.type?.text
+            if (resultType != null) {
+                append("")
+                append(resultType)
+            }
+        }
+
+        return getBuiltinType(text, o)
     }
 
     @JvmStatic

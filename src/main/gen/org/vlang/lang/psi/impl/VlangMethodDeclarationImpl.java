@@ -4,6 +4,7 @@ package org.vlang.lang.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.ResolveState;
 import com.intellij.psi.stubs.IStubElementType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -96,6 +97,12 @@ public class VlangMethodDeclarationImpl extends VlangFunctionOrMethodDeclaration
   @NotNull
   public VlangType getReceiverType() {
     return VlangPsiImplUtil.getReceiverType(this);
+  }
+
+  @Override
+  @Nullable
+  public VlangType getTypeInner(@Nullable ResolveState context) {
+    return VlangPsiImplUtil.getTypeInner(this, context);
   }
 
   @Override

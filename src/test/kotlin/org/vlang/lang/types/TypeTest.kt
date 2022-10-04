@@ -6,4 +6,5 @@ class TypeTest : TypeTestBase() {
     fun `test loops`() = doTest("loops.v")
     fun `test conditional`() = doTest("conditional.v")
     fun `test if expression`() = doTest("if_expression.v")
+    fun `test func type`() = doTest("func_type.v")
 }

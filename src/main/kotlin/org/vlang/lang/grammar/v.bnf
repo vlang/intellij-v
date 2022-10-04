@@ -494,13 +494,13 @@ GenericArguments ::= '<' TypeListNoPin '>' {pin=3}
 FunctionDeclaration ::= Attributes? SymbolVisibility? fn identifier GenericArguments? Signature BlockWithConsume? {
   pin=4
   stubClass="org.vlang.lang.stubs.VlangFunctionDeclarationStub"
-  methods=[getName isDefinition]
+  methods=[getName getTypeInner isDefinition]
 }
 
 MethodDeclaration ::= Attributes? SymbolVisibility? fn '(' Receiver ')' MethodName GenericArguments? Signature BlockWithConsume? {
   pin=7
   stubClass="org.vlang.lang.stubs.VlangMethodDeclarationStub"
-  methods=[getReceiverType getIdentifier]
+  methods=[getReceiverType getTypeInner getIdentifier]
 }
 // <ident> or <ops> for overload
 MethodName ::= identifier | AddOp | MulOp | RelOp
@@ -635,7 +635,10 @@ NotNullableType ::= '!' Type? {pin=1}
 NullableType ::= '?' Type? {pin=1}
 // fn (...) <type>
 // fn (...) (<type1>, <type2>, ...)
-FunctionType ::= fn Signature {pin=1}
+FunctionType ::= fn Signature {
+  pin=1
+  implements="org.vlang.lang.psi.VlangSignatureOwner"
+}
 
 // signature
 // (...) ...
