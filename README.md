@@ -1,6 +1,6 @@
 
 <p align="center">
-<img width="300" src="src/main/resources/icons/vl.svg">
+<img src="docs/cover.png">
 </p>
 
 ![Build](https://github.com/i582/vlang-idea/workflows/Build/badge.svg)
