@@ -1,9 +1,12 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import kotlin.Pair;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public interface VlangParameters extends VlangCompositeElement {
 
@@ -18,5 +21,11 @@ public interface VlangParameters extends VlangCompositeElement {
 
   @Nullable
   PsiElement getRparen();
+
+  @NotNull
+  List<VlangParamDefinition> getParametersList();
+
+  @NotNull
+  List<Pair<VlangParamDefinition, VlangType>> getParametersListWithTypes();
 
 }

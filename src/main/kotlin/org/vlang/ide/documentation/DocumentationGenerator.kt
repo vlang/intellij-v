@@ -135,7 +135,7 @@ object DocumentationGenerator {
     }
 
     private fun VlangParameters.generateDoc(): String {
-        val params = parameterDeclarationList.flatMap { decl -> decl.paramDefinitionList.map { it to decl.type } }
+        val params = parametersListWithTypes
 
         if (params.isEmpty()) {
             return "()"

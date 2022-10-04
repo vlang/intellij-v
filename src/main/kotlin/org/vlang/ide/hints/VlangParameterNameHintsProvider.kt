@@ -42,8 +42,8 @@ class VlangParameterNameHintsProvider : InlayParameterHintsProvider {
         val resolved = reference.resolve() ?: return
         if (resolved !is VlangFunctionOrMethodDeclaration) return
 
-        val parameterDeclarationList = resolved.getSignature()?.parameters?.parameterDeclarationList ?: return
-        val params = parameterDeclarationList.flatMap { decl -> decl.paramDefinitionList }
+        val parameters = resolved.getSignature()?.parameters ?: return
+        val params = parameters.parametersList
 
         val argsList = element.argumentList.elementList
         val args = argsList

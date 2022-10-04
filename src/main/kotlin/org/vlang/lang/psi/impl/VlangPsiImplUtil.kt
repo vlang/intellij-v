@@ -281,6 +281,21 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getParametersList(o: VlangParameters): List<VlangParamDefinition> {
+        return o.parameterDeclarationList.flatMap { decl -> decl.paramDefinitionList }
+    }
+
+    @JvmStatic
+    fun getParametersListWithTypes(o: VlangParameters): List<Pair<VlangParamDefinition?, VlangType>> {
+        return o.parameterDeclarationList.flatMap { decl ->
+            if (decl.paramDefinitionList.isEmpty()) {
+                return@flatMap listOf(null to decl.type)
+            }
+            decl.paramDefinitionList.map { it to decl.type }
+        }
+    }
+
+    @JvmStatic
     fun getIdentifier(o: VlangImportSpec): PsiElement {
         return o.firstChild
     }

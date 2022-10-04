@@ -23,6 +23,7 @@ import javax.swing.Icon
 
 object VlangCompletionUtil {
     const val KEYWORD_PRIORITY = 20
+    const val CONTEXT_COMPLETION_PRIORITY = 35
     const val CONTEXT_KEYWORD_PRIORITY = 25
     const val NOT_IMPORTED_METHOD_PRIORITY = 4
     const val METHOD_PRIORITY = NOT_IMPORTED_METHOD_PRIORITY + 10

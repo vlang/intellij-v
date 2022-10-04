@@ -8,6 +8,7 @@ import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.project.ProjectLocator
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.psi.PsiElement
 import org.vlang.lang.VlangFileType
 
 val Document.virtualFile: VirtualFile?
@@ -20,6 +21,14 @@ val VirtualFile.guessProjectForFile get() = ProjectLocator.getInstance().guessPr
 
 fun CapturingProcessHandler.runProcessWithGlobalProgress(timeoutInMilliseconds: Int? = null): ProcessOutput {
     return runProcess(ProgressManager.getGlobalProgressIndicator(), timeoutInMilliseconds)
+}
+
+inline fun <reified T: PsiElement> PsiElement.parentNum(depth: Int): T? {
+    var parent: PsiElement? = this
+    repeat(depth) {
+        parent = parent?.parent
+    }
+    return parent as? T
 }
 
 fun CapturingProcessHandler.runProcess(

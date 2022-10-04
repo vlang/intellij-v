@@ -396,8 +396,8 @@ class VlangReference(el: VlangReferenceExpressionBase) :
             val index = callExpr.argumentList.elementList.indexOf(element)
             val funcRef = callExpr.expression as? VlangReferenceExpression ?: return true
             val func = funcRef.resolve() as? VlangFunctionOrMethodDeclaration ?: return true
-            val parameterDeclarationList = func.getSignature()?.parameters?.parameterDeclarationList ?: return true
-            val params = parameterDeclarationList.flatMap { decl -> decl.paramDefinitionList.map { it to decl.type } }
+            val parameters = func.getSignature()?.parameters ?: return true
+            val params = parameters.parametersListWithTypes
             val param = params.getOrNull(index) ?: return true
             val type = param.second
             return processType(type, processor, state)
