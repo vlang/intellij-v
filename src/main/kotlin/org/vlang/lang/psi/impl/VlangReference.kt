@@ -321,7 +321,7 @@ class VlangReference(el: VlangReferenceExpressionBase) :
 
         when (val parent = myElement.parent) {
             is VlangEnumFetch -> {
-                if (!handleEnumFetch(parent, file, processor, state)) return false
+                if (!processEnumFetch(parent, file, processor, state)) return false
             }
 
             is VlangFieldName -> {
@@ -348,7 +348,7 @@ class VlangReference(el: VlangReferenceExpressionBase) :
         return processBuiltin(processor, state)
     }
 
-    private fun handleEnumFetch(
+    private fun processEnumFetch(
         fetch: VlangEnumFetch,
         file: VlangFile,
         processor: VlangScopeProcessor,
@@ -375,6 +375,19 @@ class VlangReference(el: VlangReferenceExpressionBase) :
                 val left = binaryExpr.left ?: return true
                 return processQualifierExpression(file, left, processor, state)
             }
+        }
+
+        val callExpr = fetch.parentOfType<VlangCallExpr>()
+        if (callExpr != null) {
+            val element = fetch.parentOfType<VlangElement>()
+            val index = callExpr.argumentList.elementList.indexOf(element)
+            val funcRef = callExpr.expression as? VlangReferenceExpression ?: return true
+            val func = funcRef.resolve() as? VlangFunctionOrMethodDeclaration ?: return true
+            val parameterDeclarationList = func.getSignature()?.parameters?.parameterDeclarationList ?: return true
+            val params = parameterDeclarationList.flatMap { decl -> decl.paramDefinitionList.map { it to decl.type } }
+            val param = params.getOrNull(index) ?: return true
+            val type = param.second
+            return processType(type, processor, state)
         }
 
         if (fetch.parent.parent is VlangElement) {
