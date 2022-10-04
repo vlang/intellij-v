@@ -540,6 +540,30 @@ object VlangPsiImplUtil {
             return getBuiltinType("[]$type", expr)
         }
 
+        if (expr is VlangIfExpression) {
+            val ifBody = expr.block
+            val elseBody = expr.elseStatement?.block
+
+            val lastIfStatement = ifBody?.statementList?.lastOrNull()
+            val lastElseStatement = elseBody?.statementList?.lastOrNull()
+
+            val lastIfExpressionList = lastIfStatement?.childrenOfType<VlangLeftHandExprList>()?.lastOrNull()
+            val lastElseExpressionList = lastElseStatement?.childrenOfType<VlangLeftHandExprList>()?.lastOrNull()
+
+            val lastIfExpression = lastIfExpressionList?.expressionList?.lastOrNull()
+            val lastElseExpression = lastElseExpressionList?.expressionList?.lastOrNull()
+
+            val ifType = lastIfExpression?.getType(context)
+            val elseType = lastElseExpression?.getType(context)
+
+            if (ifType == null) return elseType
+            if (elseType == null) return ifType
+            if (ifType.text == elseType.text) return ifType
+
+            // TODO: union type of if and else types
+            return getBuiltinType("any", expr)
+        }
+
         if (expr is VlangLiteral) {
             return when {
                 expr.`true` != null   -> getBuiltinType("bool", expr)
