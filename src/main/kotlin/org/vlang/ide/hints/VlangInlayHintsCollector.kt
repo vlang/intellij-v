@@ -42,7 +42,7 @@ class VlangInlayHintsCollector(
 
     private fun showAnnotation(element: VlangVarDefinition) {
         val type = element.getTypeInner(null)?.resolveType() ?: return
-        val readableName = type.toEx()?.readableName(element) ?: return
+        val readableName = type.toEx().readableName(element)
         val visibilityPresentation = withInlayAttributes(
             container(factory.smallText(": $readableName")),
             DefaultLanguageHighlighterColors.INLINE_PARAMETER_HINT

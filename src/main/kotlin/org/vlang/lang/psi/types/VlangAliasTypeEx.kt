@@ -9,7 +9,7 @@ class VlangAliasTypeEx(raw: VlangAliasType) : VlangBaseTypeEx<VlangAliasType>(ra
     private val decl = raw.parent as VlangTypeAliasDeclaration
     private val name = decl.getQualifiedName() ?: ANON
     private val left = VlangSimpleTypeEx(raw.type)
-    private val rightList = raw.typeUnionList?.typeList?.mapNotNull { it.toEx() } ?: emptyList()
+    private val rightList = raw.typeUnionList?.typeList?.map { it.toEx() } ?: emptyList()
 
     override fun toString() = buildString {
         append(name)

@@ -4,21 +4,21 @@ import org.vlang.lang.psi.VlangCompositeElement
 import org.vlang.lang.psi.VlangMapType
 
 class VlangMapTypeEx(raw: VlangMapType): VlangBaseTypeEx<VlangMapType>(raw) {
-    private val key = raw.keyType?.toEx()
-    private val value = raw.valueType?.toEx()
+    private val key = raw.keyType.toEx()
+    private val value = raw.valueType.toEx()
 
     override fun toString() = buildString {
         append("map[")
-        key?.let { append(it) }
+        append(key)
         append("]")
-        value?.let { append(it) }
+        append(value)
     }
 
     override fun readableName(context: VlangCompositeElement) = buildString {
         append("map[")
-        key?.let { append(it.readableName(context)) }
+        append(key.readableName(context))
         append("]")
-        value?.let { append(it.readableName(context)) }
+        append(value.readableName(context))
     }
 
     override fun accept(visitor: VlangTypeVisitor) {
@@ -26,16 +26,12 @@ class VlangMapTypeEx(raw: VlangMapType): VlangBaseTypeEx<VlangMapType>(raw) {
             return
         }
 
-        if (key != null) {
-            if (!visitor.enter(key)) {
-                return
-            }
+        if (!visitor.enter(key)) {
+            return
         }
 
-        if (value != null) {
-            if (!visitor.enter(value)) {
-                return
-            }
+        if (!visitor.enter(value)) {
+            return
         }
     }
 }

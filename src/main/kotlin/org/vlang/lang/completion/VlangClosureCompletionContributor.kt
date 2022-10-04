@@ -85,7 +85,7 @@ class VlangClosureCompletionContributor : CompletionContributor() {
 
                 val typesToImport = mutableSetOf<VlangTypeEx<*>>()
                 params.forEach { (_, type) ->
-                    type.toEx()?.accept(object : VlangTypeVisitor {
+                    type.toEx().accept(object : VlangTypeVisitor {
                         override fun enter(type: VlangTypeEx<*>): Boolean {
                             if (type is VlangImportableType) {
                                 // type from current module no need to import
@@ -113,7 +113,7 @@ class VlangClosureCompletionContributor : CompletionContributor() {
                 }
 
                 val paramsMap = params.mapIndexed { index, (_, type) ->
-                    "\$PARAM_${templateVariables[index]}\$ " + (type.toEx()?.readableName(position) ?: "void")
+                    "\$PARAM_${templateVariables[index]}\$ " + (type.toEx().readableName(position))
                 }
 
                 val paramsString = buildString {
@@ -129,7 +129,7 @@ class VlangClosureCompletionContributor : CompletionContributor() {
                     append(paramsString)
                     if (result != null) {
                         append(" ")
-                        append(result.type.toEx()?.readableName(position) ?: "void")
+                        append(result.type.toEx().readableName(position))
                     }
                     append(" {\n\$END\$\n}")
                 }

@@ -5,6 +5,8 @@ import org.vlang.lang.psi.VlangFile
 import org.vlang.lang.psi.VlangNamedElement
 
 object VlangCodeInsightUtil {
+    private const val BUILTIN_MODULE = "builtin"
+
     fun getQualifiedName(context: VlangCompositeElement, element: VlangNamedElement): String {
         val name = element.getQualifiedName() ?: return element.name ?: ""
 
@@ -23,6 +25,9 @@ object VlangCodeInsightUtil {
         }
 
         if (name.count { it == '.' } == 1) {
+            if (name.startsWith("$BUILTIN_MODULE.")) {
+                return name.removePrefix("$BUILTIN_MODULE.")
+            }
             return name
         }
 

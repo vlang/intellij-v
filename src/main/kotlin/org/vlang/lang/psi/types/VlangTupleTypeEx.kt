@@ -4,7 +4,7 @@ import org.vlang.lang.psi.VlangCompositeElement
 import org.vlang.lang.psi.VlangTupleType
 
 class VlangTupleTypeEx(raw: VlangTupleType) : VlangBaseTypeEx<VlangTupleType>(raw) {
-    private val types = raw.typeListNoPin.typeList.mapNotNull { it.toEx() }
+    private val types = raw.typeListNoPin.typeList.map { it.toEx() }
 
     override fun toString() = buildString {
         append("(")

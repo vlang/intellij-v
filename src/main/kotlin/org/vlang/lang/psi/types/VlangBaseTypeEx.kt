@@ -3,10 +3,10 @@ package org.vlang.lang.psi.types
 import org.vlang.lang.psi.*
 
 @Suppress("PropertyName")
-abstract class VlangBaseTypeEx<T : VlangType>(protected val raw: T) : VlangTypeEx<T> {
+abstract class VlangBaseTypeEx<T : VlangType?>(protected val raw: T) : VlangTypeEx<T> {
     protected val UNKNOWN_TYPE = "unknown"
     protected val ANON = "anon"
-    protected val moduleName = (raw.containingFile as VlangFile).getModuleQualifiedName()
+    protected val moduleName = (raw?.containingFile as? VlangFile)?.getModuleQualifiedName() ?: ""
 
     override fun raw() = raw
 
@@ -27,7 +27,11 @@ abstract class VlangBaseTypeEx<T : VlangType>(protected val raw: T) : VlangTypeE
     companion object {
         protected val primitivesMap = VlangPrimitiveTypes.values().associateBy { it.value }
 
-        fun VlangType.toEx(): VlangTypeEx<*>? {
+        fun VlangType?.toEx(): VlangTypeEx<*> {
+            if (this == null) {
+                return VlangUnknownTypeEx(null)
+            }
+
             return when (val type = resolveType()) {
                 is VlangStructType       -> VlangStructTypeEx(type)
                 is VlangEnumType         -> VlangEnumTypeEx(type)
@@ -46,7 +50,7 @@ abstract class VlangBaseTypeEx<T : VlangType>(protected val raw: T) : VlangTypeE
                     if (primitive != null) {
                         VlangPrimitiveTypeEx(type, primitive)
                     } else {
-                        null
+                        VlangUnknownTypeEx(type)
                     }
                 }
             }

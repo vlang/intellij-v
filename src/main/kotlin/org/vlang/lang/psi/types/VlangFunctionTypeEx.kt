@@ -3,15 +3,15 @@ package org.vlang.lang.psi.types
 import org.vlang.lang.psi.VlangCompositeElement
 import org.vlang.lang.psi.VlangFunctionType
 
-class VlangFunctionTypeEx(raw: VlangFunctionType): VlangBaseTypeEx<VlangFunctionType>(raw) {
-    private val signature =  raw.signature
-    private val params = signature?.parameters?.parametersListWithTypes?.mapNotNull { (_, type) -> type.toEx() }
+class VlangFunctionTypeEx(raw: VlangFunctionType) : VlangBaseTypeEx<VlangFunctionType>(raw) {
+    private val signature = raw.signature
+    private val params = signature?.parameters?.parametersListWithTypes?.map { (_, type) -> type.toEx() } ?: emptyList()
     private val result = signature?.result?.type?.toEx()
 
     override fun toString() = buildString {
         append("fn ")
         append("(")
-        append(params?.joinToString(", ") { it.toString() })
+        append(params.joinToString(", ") { it.toString() })
         append(")")
         append(" ")
         append(result)
@@ -20,7 +20,7 @@ class VlangFunctionTypeEx(raw: VlangFunctionType): VlangBaseTypeEx<VlangFunction
     override fun readableName(context: VlangCompositeElement) = buildString {
         append("fn ")
         append("(")
-        append(params?.joinToString(", ") { it.readableName(context) })
+        append(params.joinToString(", ") { it.readableName(context) })
         append(")")
         append(" ")
         append(result?.readableName(context))
@@ -31,11 +31,9 @@ class VlangFunctionTypeEx(raw: VlangFunctionType): VlangBaseTypeEx<VlangFunction
             return
         }
 
-        if (params != null) {
-            for (param in params) {
-                if (!visitor.enter(param)) {
-                    return
-                }
+        for (param in params) {
+            if (!visitor.enter(param)) {
+                return
             }
         }
 
