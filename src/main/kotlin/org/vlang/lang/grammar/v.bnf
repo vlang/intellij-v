@@ -718,7 +718,9 @@ private RightHandExpr ::=
   | ForceNoErrorPropagationExpression
 
 // <expr>[<<generics>>](...)
-left CallExpr ::= GenericArguments? ArgumentList
+left CallExpr ::= GenericArguments? ArgumentList {
+  methods=[getParameters]
+}
 
 // <expr>[<expr>]
 // <expr>#[<exr>]
@@ -855,7 +857,7 @@ Literal ::=
 // just different strings
 StringLiteral ::= string | 'raw_string' | StringTemplate {
 //  implements = "com.intellij.psi.PsiLanguageInjectionHost"
-  methods = [isValidHost updateText createLiteralTextEscaper getDecodedText]
+  methods = [isValidHost updateText createLiteralTextEscaper getDecodedText getContents]
 }
 
 StringTemplate ::= OPEN_QUOTE StringTemplatePart* CLOSING_QUOTE {pin=1}

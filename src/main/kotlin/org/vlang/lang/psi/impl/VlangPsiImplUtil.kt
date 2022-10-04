@@ -368,6 +368,16 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getContents(o: VlangStringLiteral): String {
+        return o.text.substring(1, o.text.length - 1)
+    }
+
+    @JvmStatic
+    fun getParameters(o: VlangCallExpr): List<VlangExpression> {
+        return o.argumentList.elementList.mapNotNull { it?.value?.expression }
+    }
+
+    @JvmStatic
     fun getName(o: VlangReceiver): String? {
         return o.getIdentifier()?.text
     }
@@ -474,7 +484,7 @@ object VlangPsiImplUtil {
         }
 
         if (expr is VlangLiteral) {
-            if (expr.char != null) return getBuiltinType("u8", expr)
+            if (expr.char != null) return getBuiltinType("rune", expr)
             if (expr.int != null || expr.hex != null || expr.oct != null)
                 return getBuiltinType("i64", expr)
             if (expr.float != null) return getBuiltinType("f64", expr)
@@ -498,7 +508,7 @@ object VlangPsiImplUtil {
                 return inner.valueType
             }
             if (inner?.text == "string") {
-                return getBuiltinType("u8", expr)
+                return getBuiltinType("rune", expr)
             }
         }
 
@@ -524,6 +534,12 @@ object VlangPsiImplUtil {
             return result.type
         }
 
+        if (expr is VlangArrayCreation) {
+            val firstItem = expr.arrayCreationList?.expressionList?.firstOrNull()
+            val type = firstItem?.getType(context)?.text ?: "any"
+            return getBuiltinType("[]$type", expr)
+        }
+
         if (expr is VlangLiteral) {
             return when {
                 expr.`true` != null   -> getBuiltinType("bool", expr)
@@ -534,7 +550,7 @@ object VlangPsiImplUtil {
                 expr.float != null    -> getBuiltinType("f64", expr)
                 expr.floati != null   -> getBuiltinType("complex64", expr)
                 expr.decimali != null -> getBuiltinType("complex128", expr)
-                expr.char != null     -> getBuiltinType("u8", expr)
+                expr.char != null     -> getBuiltinType("rune", expr)
                 expr.nil != null      -> getBuiltinType("nil", expr)
                 else                  -> null
             }
@@ -590,7 +606,8 @@ object VlangPsiImplUtil {
 
         val file = VlangElementFactory.createFileFromText(context.project, "fn f(a $name)")
 
-        return file.findElementAt(8)?.parent?.parent as? VlangType
+        val element = file.findElementAt(8)
+        return element?.findTopmostParentOfType()
     }
 
     @JvmStatic
@@ -625,10 +642,42 @@ object VlangPsiImplUtil {
     }
 
     private fun getTypeInVarSpec(o: VlangVarDefinition, decl: VlangVarDeclaration, context: ResolveState?): VlangType? {
+        if (decl is VlangRangeClause) {
+            val rightType = decl.expression?.getType(context)
+            val varList = decl.varDefinitionList
+            if (varList.size == 1) {
+                if (rightType is VlangArrayOrSliceType) {
+                    return rightType.type
+                }
+
+                return getBuiltinType("any", o)
+            }
+
+            val defineIndex = varList.indexOf(o)
+            if (defineIndex == 0) {
+                return getBuiltinType("i64", o)
+            } else if (defineIndex == 1) {
+                if (rightType is VlangArrayOrSliceType) {
+                    return rightType.type
+                }
+
+                return getBuiltinType("any", o)
+            }
+
+            return getBuiltinType("any", o)
+        }
+
+
         val defineIndex = decl.varDefinitionList.indexOf(o)
+        val varList = decl.varDefinitionList
         val exprList = decl.expressionList
 
-        // if a, b = call()
+        // if a := call()
+        if (varList.size == 1 && exprList.size == 1) {
+            return exprList[0].getType(context)
+        }
+
+        // if a, b := call()
         if (exprList.size == 1) {
             val expr = exprList.first()
             val type = expr.getType(context)

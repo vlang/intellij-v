@@ -4,6 +4,8 @@ package org.vlang.lang.psi;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public interface VlangCallExpr extends VlangExpression {
 
   @NotNull
@@ -20,5 +22,8 @@ public interface VlangCallExpr extends VlangExpression {
 
   @Nullable
   VlangGenericArguments getGenericArguments();
+
+  @NotNull
+  List<VlangExpression> getParameters();
 
 }

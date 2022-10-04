@@ -7,6 +7,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.*;
 
+import java.util.List;
+
 public class VlangCallExprImpl extends VlangExpressionImpl implements VlangCallExpr {
 
   public VlangCallExprImpl(@NotNull ASTNode node) {
@@ -52,6 +54,12 @@ public class VlangCallExprImpl extends VlangExpressionImpl implements VlangCallE
   @Nullable
   public VlangGenericArguments getGenericArguments() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangGenericArguments.class);
+  }
+
+  @Override
+  @NotNull
+  public List<VlangExpression> getParameters() {
+    return VlangPsiImplUtil.getParameters(this);
   }
 
 }
