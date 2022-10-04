@@ -12,7 +12,9 @@ import com.intellij.psi.*
 import com.intellij.psi.impl.source.tree.LeafElement
 import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.util.*
+import io.ktor.util.*
 import org.vlang.configurations.VlangConfiguration
+import org.vlang.ide.codeInsight.VlangTypeInfoProvider
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.*
@@ -199,6 +201,19 @@ object VlangPsiImplUtil {
             return PsiTreeUtil.findChildOfAnyType(o, VlangTypeReferenceExpression::class.java)
         }
         return o?.typeReferenceExpression
+    }
+
+    @JvmStatic
+    fun getReadableName(type: VlangType): String {
+        if (type is VlangStructType) {
+            return type.identifier?.text ?: VlangTypeInfoProvider.UNKNOWN_TYPE
+        }
+
+        if (type is VlangEnumType) {
+            return type.identifier?.text ?: VlangTypeInfoProvider.UNKNOWN_TYPE
+        }
+
+        return type.text?.escapeHTML() ?: VlangTypeInfoProvider.UNKNOWN_TYPE
     }
 
     @JvmStatic

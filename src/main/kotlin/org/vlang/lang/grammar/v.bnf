@@ -587,7 +587,7 @@ Capture ::= VarDefinition {pin=1}
 
 Type ::= (TypeLit | TypeName) GenericArguments? {
   stubClass="org.vlang.lang.stubs.VlangTypeStub"
-  methods=[getIdentifier getUnderlyingType resolveType]
+  methods=[getIdentifier getUnderlyingType resolveType getReadableName]
 }
 //  | ParType {
 //  stubClass="org.vlang.lang.stubs.GoTypeStub"

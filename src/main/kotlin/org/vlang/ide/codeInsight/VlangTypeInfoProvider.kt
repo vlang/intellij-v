@@ -7,25 +7,17 @@ import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.SyntaxTraverser
 import com.intellij.psi.util.PsiTreeUtil
 import io.ktor.util.*
-import org.vlang.lang.psi.*
+import org.vlang.lang.psi.VlangFile
+import org.vlang.lang.psi.VlangFunctionOrMethodDeclaration
+import org.vlang.lang.psi.VlangTypeOwner
 
 class VlangTypeInfoProvider : ExpressionTypeProvider<VlangTypeOwner>() {
     companion object {
-        private val UNKNOWN_TYPE = "<unknown>".escapeHTML()
+        val UNKNOWN_TYPE = "<unknown>".escapeHTML()
     }
 
     override fun getInformationHint(element: VlangTypeOwner): String {
-        val type = element.getType(null) ?: return UNKNOWN_TYPE
-
-        if (type is VlangStructType) {
-            return type.identifier?.text ?: UNKNOWN_TYPE
-        }
-
-        if (type is VlangEnumType) {
-            return type.identifier?.text ?: UNKNOWN_TYPE
-        }
-
-        return type.text?.escapeHTML() ?: UNKNOWN_TYPE
+        return element.getType(null)?.readableName ?: UNKNOWN_TYPE
     }
 
     override fun getErrorHint(): String {
