@@ -1,5 +1,6 @@
 package org.vlang.lang.psi.types
 
+import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.VlangCompositeElement
 import org.vlang.lang.psi.VlangUnionDeclaration
 import org.vlang.lang.psi.VlangUnionType
@@ -12,7 +13,7 @@ class VlangUnionTypeEx(raw: VlangUnionType): VlangBaseTypeEx<VlangUnionType>(raw
 
     override fun qualifiedName() = name
 
-    override fun readableName(context: VlangCompositeElement) = name
+    override fun readableName(context: VlangCompositeElement) = VlangCodeInsightUtil.getQualifiedName(context, decl)
 
     override fun accept(visitor: VlangTypeVisitor) {
         visitor.enter(this)
