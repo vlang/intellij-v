@@ -3,7 +3,6 @@ package org.vlang.lang.psi;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.stubs.VlangTypeStub;
 
@@ -26,8 +25,5 @@ public interface VlangType extends VlangCompositeElement, StubBasedPsiElement<Vl
 
   @Nullable
   VlangType resolveType();
-
-  @NotNull
-  String getReadableName();
 
 }

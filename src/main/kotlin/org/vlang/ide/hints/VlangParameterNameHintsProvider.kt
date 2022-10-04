@@ -7,6 +7,7 @@ import com.intellij.psi.PsiFile
 import com.intellij.refactoring.suggested.endOffset
 import com.intellij.refactoring.suggested.startOffset
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import kotlin.math.min
 
 @Suppress("UnstableApiUsage")
@@ -31,7 +32,7 @@ class VlangParameterNameHintsProvider : InlayParameterHintsProvider {
 
     private fun handleVarDefinition(element: VlangVarDefinition, hints: MutableList<InlayInfo>) {
         val type = element.getTypeInner(null)?.resolveType() ?: return
-        val readableName = type.readableName
+        val readableName = type.toEx()?.readableName(element) ?: return
         val inlayInfo = InlayInfo(readableName, element.endOffset)
         hints.add(inlayInfo)
     }

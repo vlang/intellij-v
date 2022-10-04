@@ -13,6 +13,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.refactoring.suggested.endOffset
 import org.vlang.lang.psi.VlangVarDefinition
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 
 @Suppress("UnstableApiUsage")
 class VlangInlayHintsCollector(
@@ -41,7 +42,7 @@ class VlangInlayHintsCollector(
 
     private fun showAnnotation(element: VlangVarDefinition) {
         val type = element.getTypeInner(null)?.resolveType() ?: return
-        val readableName = type.readableName
+        val readableName = type.toEx()?.readableName(element) ?: return
         val visibilityPresentation = withInlayAttributes(
             container(factory.smallText(": $readableName")),
             DefaultLanguageHighlighterColors.INLINE_PARAMETER_HINT

@@ -66,10 +66,4 @@ public class VlangTypeImpl extends VlangStubbedElementImpl<VlangTypeStub> implem
     return VlangPsiImplUtil.resolveType(this);
   }
 
-  @Override
-  @NotNull
-  public String getReadableName() {
-    return VlangPsiImplUtil.getReadableName(this);
-  }
-
 }

@@ -13,7 +13,6 @@ import com.intellij.psi.impl.source.tree.LeafElement
 import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.util.*
 import org.vlang.configurations.VlangConfiguration
-import org.vlang.ide.codeInsight.VlangTypeInfoProvider
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.*
@@ -213,25 +212,8 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getReadableName(type: VlangType): String {
-        if (type is VlangStructType) {
-            return type.identifier?.text ?: VlangTypeInfoProvider.UNKNOWN_TYPE
-        }
-
-        if (type is VlangEnumType) {
-            return type.identifier?.text ?: VlangTypeInfoProvider.UNKNOWN_TYPE
-        }
-
-        if (type is VlangAliasType) {
-            return type.identifier?.text ?: VlangTypeInfoProvider.UNKNOWN_TYPE
-        }
-
-        return type.text ?: VlangTypeInfoProvider.UNKNOWN_TYPE
-    }
-
-    @JvmStatic
     fun resolveType(type: VlangType): VlangType? {
-        if (type !is VlangTypeImpl) {
+        if (type.javaClass != VlangTypeImpl::class.java) {
             return type
         }
 

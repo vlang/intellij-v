@@ -6,10 +6,15 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.codeInsight.template.TemplateManager
 import com.intellij.codeInsight.template.impl.ConstantNode
 import com.intellij.patterns.PlatformPatterns.psiElement
+import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
+import org.vlang.lang.psi.types.VlangImportableType
+import org.vlang.lang.psi.types.VlangTypeEx
+import org.vlang.lang.psi.types.VlangTypeVisitor
 import org.vlang.utils.parentNum
 
 class VlangClosureCompletionContributor : CompletionContributor() {
@@ -62,25 +67,53 @@ class VlangClosureCompletionContributor : CompletionContributor() {
                 PrioritizedLookupElement.withPriority(
                     LookupElementBuilder.create("fn")
                         .withPresentableText(presentationText)
-                        .withInsertHandler(MyInsertHandler(litSignature)),
+                        .withInsertHandler(MyInsertHandler(litSignature, callExpr)),
                     VlangCompletionUtil.CONTEXT_COMPLETION_PRIORITY.toDouble()
                 )
             )
         }
 
-        class MyInsertHandler(private val signature: VlangSignature) : InsertHandler<LookupElement> {
+        class MyInsertHandler(private val signature: VlangSignature, private val position: VlangCompositeElement) : InsertHandler<LookupElement> {
             override fun handleInsert(context: InsertionContext, item: LookupElement) {
                 val editor = context.editor
+                val file = context.file as VlangFile
+                val module = file.getModuleQualifiedName()
+
                 val project = signature.project
                 val params = signature.parameters.parametersListWithTypes
                 val result = signature.result
+
+                val typesToImport = mutableSetOf<VlangTypeEx<*>>()
+                params.forEach { (_, type) ->
+                    type.toEx()?.accept(object : VlangTypeVisitor {
+                        override fun enter(type: VlangTypeEx<*>): Boolean {
+                            if (type is VlangImportableType) {
+                                // type from current module no need to import
+                                if (module == type.module()) {
+                                    return true
+                                }
+
+                                typesToImport.add(type)
+                            }
+
+                            return true
+                        }
+                    })
+                }
+
+                typesToImport.forEach {
+                    val name = it.module()
+                    file.addImport(name, null)
+                }
+
+                PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(context.document)
 
                 val templateVariables = params.mapIndexed { index, (def, _) ->
                     def?.name ?: "arg$index"
                 }
 
                 val paramsMap = params.mapIndexed { index, (_, type) ->
-                    "\$PARAM_${templateVariables[index]}\$ " + type.readableName
+                    "\$PARAM_${templateVariables[index]}\$ " + (type.toEx()?.readableName(position) ?: "void")
                 }
 
                 val paramsString = buildString {
@@ -96,7 +129,7 @@ class VlangClosureCompletionContributor : CompletionContributor() {
                     append(paramsString)
                     if (result != null) {
                         append(" ")
-                        append(result.type.readableName)
+                        append(result.type.toEx()?.readableName(position) ?: "void")
                     }
                     append(" {\n\$END\$\n}")
                 }
