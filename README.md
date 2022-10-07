@@ -1,3 +1,5 @@
+> **Note!** The project is in the early stages of development, the first beta release is scheduled for January 1, 2023.
+> The first alpha release is scheduled for November 1, 2022.
 
 <p align="center">
 <img src="docs/cover.png">
