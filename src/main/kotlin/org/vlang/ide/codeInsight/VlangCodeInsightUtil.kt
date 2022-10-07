@@ -17,6 +17,10 @@ object VlangCodeInsightUtil {
         return file.isTranslatedFile()
     }
 
+    fun nonVlangName(name: String): Boolean {
+        return name.startsWith("JS.") || name.startsWith("C.")
+    }
+
     fun getQualifiedName(context: VlangCompositeElement, element: VlangNamedElement): String {
         val name = element.getQualifiedName() ?: return element.name ?: ""
 

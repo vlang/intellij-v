@@ -15,11 +15,13 @@ import org.vlang.lang.psi.VlangNamedElement
 
 abstract class VlangNamingConventionInspectionBase : VlangBaseInspection() {
     protected fun ProblemsHolder.checkName(named: VlangNamedElement, elementKind: String, checkLen: Boolean = true) {
+        val name = named.name ?: return
+
         if (VlangCodeInsightUtil.insideBuiltinModule(named)) return
         if (VlangCodeInsightUtil.insideTranslatedFile(named)) return
+        if (VlangCodeInsightUtil.nonVlangName(name)) return
 
         val identifier = named.getIdentifier() ?: return
-        val name = named.name ?: return
 
         if (name.length == 1 && checkLen) {
             registerProblem(
@@ -39,11 +41,12 @@ abstract class VlangNamingConventionInspectionBase : VlangBaseInspection() {
     }
 
     protected fun ProblemsHolder.checkFunctionName(named: VlangFunctionOrMethodDeclaration) {
+        val name = named.name ?: return
         if (VlangCodeInsightUtil.insideBuiltinModule(named)) return
         if (VlangCodeInsightUtil.insideTranslatedFile(named)) return
+        if (VlangCodeInsightUtil.nonVlangName(name)) return
 
         val identifier = named.getIdentifier() ?: return
-        val name = named.name ?: return
 
         if (name.startsWith("_")) {
             registerProblem(
