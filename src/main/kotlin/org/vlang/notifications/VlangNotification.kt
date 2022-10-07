@@ -14,13 +14,7 @@ import java.util.function.BiConsumer
 open class VlangNotification(
     content: String = "",
     type: NotificationType = NotificationType.INFORMATION,
-) : Notification(
-    ID,
-    "AdmStorm",
-    content,
-    type,
-), NotificationFullContent {
-
+) : Notification(ID, content, type), NotificationFullContent {
     companion object {
         const val ID = "V Plugin"
         private val LOG = logger<VlangNotification>()
