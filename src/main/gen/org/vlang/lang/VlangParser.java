@@ -826,31 +826,37 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // <<enterMode "BLOCK?">> SimpleStatementOpt? Expression? <<exitModeSafe "BLOCK?">>
+  // <<enterMode "BLOCK?">> VarDeclaration | Expression <<exitModeSafe "BLOCK?">>
   static boolean Condition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Condition")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = enterMode(b, l + 1, "BLOCK?");
-    r = r && Condition_1(b, l + 1);
-    r = r && Condition_2(b, l + 1);
-    r = r && exitModeSafe(b, l + 1, "BLOCK?");
+    r = Condition_0(b, l + 1);
+    if (!r) r = Condition_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // SimpleStatementOpt?
-  private static boolean Condition_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Condition_1")) return false;
-    SimpleStatementOpt(b, l + 1);
-    return true;
+  // <<enterMode "BLOCK?">> VarDeclaration
+  private static boolean Condition_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Condition_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = enterMode(b, l + 1, "BLOCK?");
+    r = r && VarDeclaration(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
   }
 
-  // Expression?
-  private static boolean Condition_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Condition_2")) return false;
-    Expression(b, l + 1, -1);
-    return true;
+  // Expression <<exitModeSafe "BLOCK?">>
+  private static boolean Condition_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Condition_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Expression(b, l + 1, -1);
+    r = r && exitModeSafe(b, l + 1, "BLOCK?");
+    exit_section_(b, m, null, r);
+    return r;
   }
 
   /* ********************************************************** */
@@ -4061,25 +4067,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
   private static boolean SimpleStatement_1_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SimpleStatement_1_0_1")) return false;
     AssignmentStatement(b, l + 1);
-    return true;
-  }
-
-  /* ********************************************************** */
-  // SimpleStatement ';'?
-  static boolean SimpleStatementOpt(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SimpleStatementOpt")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = SimpleStatement(b, l + 1);
-    r = r && SimpleStatementOpt_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // ';'?
-  private static boolean SimpleStatementOpt_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SimpleStatementOpt_1")) return false;
-    consumeToken(b, SEMICOLON);
     return true;
   }
 

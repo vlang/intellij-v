@@ -830,8 +830,7 @@ IfExpression ::= if Condition semi? Block (semi? ElseStatement)? {pin=1}
 
 //  $if <condition> { ... }
 CompileTimeIfExpression ::= IF_COMPILE_TIME Condition Block CompileElseStatement? {pin=1}
-private Condition ::= <<enterMode "BLOCK?">> SimpleStatementOpt? Expression? <<exitModeSafe "BLOCK?">>
-private SimpleStatementOpt ::= SimpleStatement ';'?
+private Condition ::= <<enterMode "BLOCK?">> VarDeclaration | Expression <<exitModeSafe "BLOCK?">>
 
 // sql <ident> { ... }
 SqlExpression ::= sql identifier SqlBlock {pin=1}

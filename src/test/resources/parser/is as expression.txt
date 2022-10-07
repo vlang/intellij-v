@@ -35,18 +35,16 @@ V Language file
         LEFT_HAND_EXPR_LIST
           IF_EXPRESSION
             PsiElement(VlangTokenType.if)('if')
-            SIMPLE_STATEMENT
-              LEFT_HAND_EXPR_LIST
-                IS_EXPRESSION
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('a')
-                  PsiElement(VlangTokenType.is)('is')
-                  ARRAY_OR_SLICE_TYPE
-                    PsiElement(VlangTokenType.[)('[')
-                    PsiElement(VlangTokenType.])(']')
-                    TYPE
-                      TYPE_REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('Any')
+            IS_EXPRESSION
+              REFERENCE_EXPRESSION
+                PsiElement(VlangTokenType.identifier)('a')
+              PsiElement(VlangTokenType.is)('is')
+              ARRAY_OR_SLICE_TYPE
+                PsiElement(VlangTokenType.[)('[')
+                PsiElement(VlangTokenType.])(']')
+                TYPE
+                  TYPE_REFERENCE_EXPRESSION
+                    PsiElement(VlangTokenType.identifier)('Any')
             BLOCK
               PsiElement(VlangTokenType.{)('{')
               RETURN_STATEMENT
@@ -59,22 +57,20 @@ V Language file
               IF_STATEMENT
                 IF_EXPRESSION
                   PsiElement(VlangTokenType.if)('if')
-                  SIMPLE_STATEMENT
-                    LEFT_HAND_EXPR_LIST
-                      IS_EXPRESSION
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('a')
-                        PsiElement(VlangTokenType.is)('is')
-                        MAP_TYPE
-                          PsiElement(VlangTokenType.identifier)('map')
-                          PsiElement(VlangTokenType.[)('[')
-                          TYPE
-                            TYPE_REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('string')
-                          PsiElement(VlangTokenType.])(']')
-                          TYPE
-                            TYPE_REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('Any')
+                  IS_EXPRESSION
+                    REFERENCE_EXPRESSION
+                      PsiElement(VlangTokenType.identifier)('a')
+                    PsiElement(VlangTokenType.is)('is')
+                    MAP_TYPE
+                      PsiElement(VlangTokenType.identifier)('map')
+                      PsiElement(VlangTokenType.[)('[')
+                      TYPE
+                        TYPE_REFERENCE_EXPRESSION
+                          PsiElement(VlangTokenType.identifier)('string')
+                      PsiElement(VlangTokenType.])(']')
+                      TYPE
+                        TYPE_REFERENCE_EXPRESSION
+                          PsiElement(VlangTokenType.identifier)('Any')
                   BLOCK
                     PsiElement(VlangTokenType.{)('{')
                     SIMPLE_STATEMENT

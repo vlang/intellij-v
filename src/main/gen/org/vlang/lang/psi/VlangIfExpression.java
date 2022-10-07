@@ -17,7 +17,7 @@ public interface VlangIfExpression extends VlangExpression {
   VlangExpression getExpression();
 
   @Nullable
-  VlangStatement getStatement();
+  VlangVarDeclaration getVarDeclaration();
 
   @NotNull
   PsiElement getIf();

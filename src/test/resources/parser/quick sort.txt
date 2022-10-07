@@ -296,14 +296,12 @@ V Language file
         LEFT_HAND_EXPR_LIST
           IF_EXPRESSION
             PsiElement(VlangTokenType.if)('if')
-            SIMPLE_STATEMENT
-              LEFT_HAND_EXPR_LIST
-                CONDITIONAL_EXPR
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('l')
-                  PsiElement(VlangTokenType.>=)('>=')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('r')
+            CONDITIONAL_EXPR
+              REFERENCE_EXPRESSION
+                PsiElement(VlangTokenType.identifier)('l')
+              PsiElement(VlangTokenType.>=)('>=')
+              REFERENCE_EXPRESSION
+                PsiElement(VlangTokenType.identifier)('r')
             BLOCK
               PsiElement(VlangTokenType.{)('{')
               RETURN_STATEMENT
@@ -347,24 +345,22 @@ V Language file
             LEFT_HAND_EXPR_LIST
               IF_EXPRESSION
                 PsiElement(VlangTokenType.if)('if')
-                SIMPLE_STATEMENT
-                  LEFT_HAND_EXPR_LIST
-                    CONDITIONAL_EXPR
-                      INDEX_OR_SLICE_EXPR
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('arr')
-                        PsiElement(VlangTokenType.[)('[')
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('i')
-                        PsiElement(VlangTokenType.])(']')
-                      PsiElement(VlangTokenType.<)('<')
-                      INDEX_OR_SLICE_EXPR
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('arr')
-                        PsiElement(VlangTokenType.[)('[')
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('l')
-                        PsiElement(VlangTokenType.])(']')
+                CONDITIONAL_EXPR
+                  INDEX_OR_SLICE_EXPR
+                    REFERENCE_EXPRESSION
+                      PsiElement(VlangTokenType.identifier)('arr')
+                    PsiElement(VlangTokenType.[)('[')
+                    REFERENCE_EXPRESSION
+                      PsiElement(VlangTokenType.identifier)('i')
+                    PsiElement(VlangTokenType.])(']')
+                  PsiElement(VlangTokenType.<)('<')
+                  INDEX_OR_SLICE_EXPR
+                    REFERENCE_EXPRESSION
+                      PsiElement(VlangTokenType.identifier)('arr')
+                    PsiElement(VlangTokenType.[)('[')
+                    REFERENCE_EXPRESSION
+                      PsiElement(VlangTokenType.identifier)('l')
+                    PsiElement(VlangTokenType.])(']')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   SIMPLE_STATEMENT
@@ -572,28 +568,26 @@ V Language file
             LEFT_HAND_EXPR_LIST
               IF_EXPRESSION
                 PsiElement(VlangTokenType.if)('if')
-                SIMPLE_STATEMENT
-                  LEFT_HAND_EXPR_LIST
-                    CONDITIONAL_EXPR
-                      INDEX_OR_SLICE_EXPR
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('arr')
-                        PsiElement(VlangTokenType.[)('[')
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('i')
-                        PsiElement(VlangTokenType.])(']')
-                      PsiElement(VlangTokenType.>)('>')
-                      INDEX_OR_SLICE_EXPR
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('arr')
-                        PsiElement(VlangTokenType.[)('[')
-                        ADD_EXPR
-                          REFERENCE_EXPRESSION
-                            PsiElement(VlangTokenType.identifier)('i')
-                          PsiElement(VlangTokenType.+)('+')
-                          LITERAL
-                            PsiElement(VlangTokenType.int)('1')
-                        PsiElement(VlangTokenType.])(']')
+                CONDITIONAL_EXPR
+                  INDEX_OR_SLICE_EXPR
+                    REFERENCE_EXPRESSION
+                      PsiElement(VlangTokenType.identifier)('arr')
+                    PsiElement(VlangTokenType.[)('[')
+                    REFERENCE_EXPRESSION
+                      PsiElement(VlangTokenType.identifier)('i')
+                    PsiElement(VlangTokenType.])(']')
+                  PsiElement(VlangTokenType.>)('>')
+                  INDEX_OR_SLICE_EXPR
+                    REFERENCE_EXPRESSION
+                      PsiElement(VlangTokenType.identifier)('arr')
+                    PsiElement(VlangTokenType.[)('[')
+                    ADD_EXPR
+                      REFERENCE_EXPRESSION
+                        PsiElement(VlangTokenType.identifier)('i')
+                      PsiElement(VlangTokenType.+)('+')
+                      LITERAL
+                        PsiElement(VlangTokenType.int)('1')
+                    PsiElement(VlangTokenType.])(']')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   RETURN_STATEMENT
