@@ -10,7 +10,6 @@ import com.intellij.psi.util.parentOfType
 import com.intellij.refactoring.RefactoringFactory
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.ide.inspections.VlangBaseInspection
-import org.vlang.lang.psi.VlangFunctionOrMethodDeclaration
 import org.vlang.lang.psi.VlangNamedElement
 
 abstract class VlangNamingConventionInspectionBase : VlangBaseInspection() {
@@ -40,7 +39,7 @@ abstract class VlangNamingConventionInspectionBase : VlangBaseInspection() {
         }
     }
 
-    protected fun ProblemsHolder.checkFunctionName(named: VlangFunctionOrMethodDeclaration) {
+    protected fun ProblemsHolder.checkSnakeCase(named: VlangNamedElement, elementKind: String) {
         val name = named.name ?: return
         if (VlangCodeInsightUtil.insideBuiltinModule(named)) return
         if (VlangCodeInsightUtil.insideTranslatedFile(named)) return
@@ -50,14 +49,14 @@ abstract class VlangNamingConventionInspectionBase : VlangBaseInspection() {
 
         if (name.startsWith("_")) {
             registerProblem(
-                identifier, "Function names cannot start with '_'",
+                identifier, "$elementKind name cannot start with '_'",
                 ProblemHighlightType.GENERIC_ERROR, TO_SNAKE_CASE_FIX
             )
         }
 
         if (name.indexOfFirst { it.isUpperCase() } != -1) {
             registerProblem(
-                identifier, "Function names cannot contain uppercase letters, use snake_case instead",
+                identifier, "$elementKind name cannot contain uppercase letters, use snake_case instead",
                 ProblemHighlightType.GENERIC_ERROR, TO_SNAKE_CASE_FIX
             )
         }

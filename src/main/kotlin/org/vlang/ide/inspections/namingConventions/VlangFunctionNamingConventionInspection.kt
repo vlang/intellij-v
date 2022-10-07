@@ -9,7 +9,7 @@ class VlangFunctionNamingConventionInspection : VlangNamingConventionInspectionB
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
         return object : VlangVisitor() {
             override fun visitFunctionDeclaration(o: VlangFunctionDeclaration) {
-                holder.checkFunctionName(o)
+                holder.checkSnakeCase(o, "Function")
             }
         }
     }
