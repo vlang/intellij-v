@@ -42,7 +42,10 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         )
         extend(
             CompletionType.BASIC,
-            insideBlockPattern(VlangTypes.IDENTIFIER),
+            insideBlockPattern(VlangTypes.IDENTIFIER)
+                .andNot(
+                    insideWithLabelStatement(VlangTypes.IDENTIFIER)
+                ),
             PureBlockKeywordCompletionProvider("or", "defer", "unsafe")
         )
         extend(

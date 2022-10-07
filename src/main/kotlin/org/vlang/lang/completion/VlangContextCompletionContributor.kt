@@ -43,8 +43,6 @@ class VlangContextCompletionContributor : CompletionContributor() {
             context: ProcessingContext,
             resultSet: CompletionResultSet,
         ) {
-            if (parameters.position.text == CompletionUtilCore.DUMMY_IDENTIFIER_TRIMMED) return
-
             val element = parameters.originalFile.findElementAt(parameters.offset)
                 ?: return
 
