@@ -1,10 +1,11 @@
-package org.vlang.ide.inspections
+package org.vlang.ide.inspections.unused
 
 import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.psi.PsiElementVisitor
 import com.intellij.psi.search.searches.ReferencesSearch
+import org.vlang.ide.inspections.VlangBaseInspection
 import org.vlang.lang.psi.*
 
 class VlangUnusedParameterInspection : VlangBaseInspection() {

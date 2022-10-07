@@ -1,8 +1,9 @@
-package org.vlang.ide.inspections
+package org.vlang.ide.inspections.general
 
 import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.psi.PsiElementVisitor
+import org.vlang.ide.inspections.VlangBaseInspection
 import org.vlang.lang.psi.*
 
 class VlangDuplicateFieldInspection : VlangBaseInspection() {

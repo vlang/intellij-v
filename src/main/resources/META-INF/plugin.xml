@@ -80,46 +80,53 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
         <lang.inspectionSuppressor language="vlang"
                                    implementationClass="org.vlang.ide.inspections.suppression.VlangInspectionSuppressor"/>
 
-        <localInspection language="vlang" groupName="V" shortName="VlangUndefinedFunctionInspection"
-                         displayName="Undefined function"
-                         enabledByDefault="false" level="ERROR"
-                         implementationClass="org.vlang.ide.inspections.VlangUndefinedFunctionInspection"/>
+        <!-- General inspections -->
+       <localInspection language="vlang" groupPath="V"
+                        groupName="General" shortName="VlangUnresolvedReferenceUnsafeInspection"
+                        displayName="Unresolved reference"
+                        enabledByDefault="true" level="ERROR"
+                        implementationClass="org.vlang.ide.inspections.general.VlangUnresolvedReferenceInspection"/>
 
-        <localInspection language="vlang" groupName="V" shortName="VlangUnresolvedLabelInspection"
+        <localInspection language="vlang" groupPath="V"
+                         groupName="General" shortName="VlangUnresolvedLabelInspection"
                          displayName="Unresolved label"
                          enabledByDefault="true" level="ERROR"
-                         implementationClass="org.vlang.ide.inspections.VlangUnresolvedLabelInspection"/>
+                         implementationClass="org.vlang.ide.inspections.general.VlangUnresolvedLabelInspection"/>
 
-        <localInspection language="vlang" groupName="V" shortName="VlangLabelOutsideUnsafeInspection"
-                         displayName="Go to statement outside unsafe block"
-                         enabledByDefault="true" level="WARNING"
-                         implementationClass="org.vlang.ide.inspections.VlangLabelOutsideUnsafeInspection"/>
-
-        <localInspection language="vlang" groupName="V" shortName="VlangNilOutsideUnsafeInspection"
-                         displayName="'nil' usage outside unsafe block"
-                         enabledByDefault="true" level="WARNING"
-                         implementationClass="org.vlang.ide.inspections.VlangNilOutsideUnsafeInspection"/>
-
-        <localInspection language="vlang" groupName="V" shortName="VlangVariableRedeclaration"
+        <localInspection language="vlang" groupPath="V"
+                         groupName="General" shortName="VlangVariableRedeclaration"
                          displayName="Variable redeclaration"
                          enabledByDefault="false" level="ERROR"
-                         implementationClass="org.vlang.ide.inspections.VlangVariableRedeclarationInspection"/>
-
-        <localInspection language="vlang" groupName="V" shortName="VlangUnresolvedReferenceUnsafeInspection"
-                         displayName="Unresolved reference inspection"
-                         enabledByDefault="true" level="ERROR"
-                         implementationClass="org.vlang.ide.inspections.VlangUnresolvedReferenceInspection"/>
-
-        <localInspection language="vlang" groupName="V" shortName="VlangRedundantParenthesesInspection"
-                         displayName="Redundant parentheses"
-                         enabledByDefault="true" level="WARNING"
-                         implementationClass="org.vlang.ide.inspections.VlangRedundantParenthesesInspection"/>
+                         implementationClass="org.vlang.ide.inspections.general.VlangVariableRedeclarationInspection"/>
 
         <localInspection language="vlang" groupPath="V"
                          groupName="General" shortName="VlangDuplicateFieldInspection"
                          displayName="Duplicate field in struct/interface/enum/union"
                          enabledByDefault="true" level="ERROR"
-                         implementationClass="org.vlang.ide.inspections.VlangDuplicateFieldInspection"/>
+                         implementationClass="org.vlang.ide.inspections.general.VlangDuplicateFieldInspection"/>
+        <!-- General inspections End -->
+
+        <!-- Unsafe inspections -->
+        <localInspection language="vlang" groupPath="V"
+                         groupName="Unsafe" shortName="VlangLabelOutsideUnsafeInspection"
+                         displayName="'go to' statement outside unsafe block"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="org.vlang.ide.inspections.unsafe.VlangLabelOutsideUnsafeInspection"/>
+
+        <localInspection language="vlang" groupPath="V"
+                         groupName="Unsafe" shortName="VlangNilOutsideUnsafeInspection"
+                         displayName="'nil' usage outside unsafe block"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="org.vlang.ide.inspections.unsafe.VlangNilOutsideUnsafeInspection"/>
+        <!-- Unsafe inspections End -->
+
+        <!-- Style issue -->
+        <localInspection language="vlang" groupPath="V"
+                         groupName="Style issues" shortName="VlangRedundantParenthesesInspection"
+                         displayName="Redundant parentheses"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="org.vlang.ide.inspections.style.VlangRedundantParenthesesInspection"/>
+        <!-- Style issue End -->
 
         <!-- Naming conventions -->
         <localInspection language="vlang" groupPath="V"
@@ -145,22 +152,27 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
                          displayName="Field naming convention"
                          enabledByDefault="true" level="ERROR"
                          implementationClass="org.vlang.ide.inspections.namingConventions.VlangFieldNamingConventionInspection"/>
+        <!-- Naming conventions End -->
 
         <!-- Unused inspections -->
-        <localInspection language="vlang" groupName="V" shortName="VlangUnusedParameterInspection"
+        <localInspection language="vlang" groupPath="V"
+                         groupName="Unused" shortName="VlangUnusedParameterInspection"
                          displayName="Unused parameter inspection"
                          enabledByDefault="true" level="WARNING"
-                         implementationClass="org.vlang.ide.inspections.VlangUnusedParameterInspection"/>
+                         implementationClass="org.vlang.ide.inspections.unused.VlangUnusedParameterInspection"/>
 
-       <localInspection language="vlang" groupName="V" shortName="VlangUnusedLabelInspection"
+        <localInspection language="vlang" groupPath="V"
+                         groupName="Unused" shortName="VlangUnusedLabelInspection"
                          displayName="Unused label inspection"
                          enabledByDefault="true" level="WARNING"
-                         implementationClass="org.vlang.ide.inspections.VlangUnusedLabelInspection"/>
+                         implementationClass="org.vlang.ide.inspections.unused.VlangUnusedLabelInspection"/>
 
-       <localInspection language="vlang" groupName="V" shortName="VlangUnusedImportInspection"
+        <localInspection language="vlang" groupPath="V"
+                         groupName="Unused" shortName="VlangUnusedImportInspection"
                          displayName="Unused import inspection"
                          enabledByDefault="true" level="WARNING"
-                         implementationClass="org.vlang.ide.inspections.VlangUnusedImportInspection"/>
+                         implementationClass="org.vlang.ide.inspections.unused.VlangUnusedImportInspection"/>
+        <!-- Unused inspections End -->
 
         <!-- Intentions -->
         <intentionAction>

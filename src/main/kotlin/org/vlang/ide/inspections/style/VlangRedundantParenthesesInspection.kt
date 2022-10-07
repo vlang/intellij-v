@@ -1,4 +1,4 @@
-package org.vlang.ide.inspections
+package org.vlang.ide.inspections.style
 
 import com.intellij.codeInspection.LocalQuickFix
 import com.intellij.codeInspection.ProblemDescriptor
@@ -6,6 +6,7 @@ import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElementVisitor
+import org.vlang.ide.inspections.VlangBaseInspection
 import org.vlang.lang.psi.*
 
 class VlangRedundantParenthesesInspection : VlangBaseInspection() {

@@ -1,7 +1,8 @@
-package org.vlang.ide.inspections
+package org.vlang.ide.inspections.general
 
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.psi.PsiElementVisitor
+import org.vlang.ide.inspections.VlangBaseInspection
 import org.vlang.lang.psi.VlangVarDefinition
 import org.vlang.lang.psi.VlangVisitor
 

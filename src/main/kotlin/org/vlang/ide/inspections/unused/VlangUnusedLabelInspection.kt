@@ -1,8 +1,9 @@
-package org.vlang.ide.inspections
+package org.vlang.ide.inspections.unused
 
 import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.psi.search.searches.ReferencesSearch
+import org.vlang.ide.inspections.VlangBaseInspection
 import org.vlang.lang.psi.VlangLabelDefinition
 import org.vlang.lang.psi.VlangVisitor
 

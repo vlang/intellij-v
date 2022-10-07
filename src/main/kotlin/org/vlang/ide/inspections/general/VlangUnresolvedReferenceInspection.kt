@@ -1,4 +1,4 @@
-package org.vlang.ide.inspections
+package org.vlang.ide.inspections.general
 
 import com.intellij.codeInspection.LocalQuickFix
 import com.intellij.codeInspection.ProblemHighlightType
@@ -8,6 +8,7 @@ import com.intellij.psi.PsiElementVisitor
 import com.intellij.psi.PsiReference
 import com.intellij.psi.formatter.FormatterUtil
 import org.vlang.ide.codeInsight.imports.VlangImportModuleQuickFix
+import org.vlang.ide.inspections.VlangBaseInspection
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.VlangCompositeElement
 import org.vlang.lang.psi.VlangReferenceExpression
