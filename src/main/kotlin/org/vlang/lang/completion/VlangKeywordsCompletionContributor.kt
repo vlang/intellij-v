@@ -42,6 +42,11 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         )
         extend(
             CompletionType.BASIC,
+            insideBlockPattern(VlangTypes.IDENTIFIER),
+            PureBlockKeywordCompletionProvider("or", "defer", "unsafe")
+        )
+        extend(
+            CompletionType.BASIC,
             insideBlockPattern(VlangTypes.IDENTIFIER)
                 .andNot(
                     insideWithLabelStatement(VlangTypes.IDENTIFIER)
@@ -53,6 +58,26 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
             insideForStatement(VlangTypes.IDENTIFIER),
             KeywordsCompletionProvider("continue", "break")
         )
+    }
+
+    private class PureBlockKeywordCompletionProvider(private vararg val keywords: String) : CompletionProvider<CompletionParameters>() {
+        override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
+            result.addAllElements(
+                keywords.map {
+                    PrioritizedLookupElement.withPriority(
+                        LookupElementBuilder.create(it)
+                            .withInsertHandler { ctx, _ ->
+                                val document = ctx.document
+                                val editor = ctx.editor
+                                val offset = editor.caretModel.offset
+                                document.insertString(offset, " {  }")
+                                editor.caretModel.moveToOffset(offset + 3)
+                            }
+                            .bold(), KEYWORD_PRIORITY.toDouble()
+                    )
+                }
+            )
+        }
     }
 
     private class ImportKeywordCompletionProvider : CompletionProvider<CompletionParameters>() {
@@ -182,11 +207,9 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
             "isreftype",
             "match",
             "none",
-            "or",
             "sizeof",
             "true",
             "typeof",
-            "unsafe",
             "nil",
         )
 
@@ -194,7 +217,6 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
             "asm",
             "assert",
             "atomic",
-            "defer",
             "for",
             "goto",
             "mut",
