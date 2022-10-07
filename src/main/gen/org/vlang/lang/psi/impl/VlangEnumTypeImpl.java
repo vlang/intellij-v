@@ -7,11 +7,10 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.stubs.IStubElementType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.vlang.lang.psi.VlangEnumFields;
-import org.vlang.lang.psi.VlangEnumType;
-import org.vlang.lang.psi.VlangPsiTreeUtil;
-import org.vlang.lang.psi.VlangVisitor;
+import org.vlang.lang.psi.*;
 import org.vlang.lang.stubs.VlangTypeStub;
+
+import java.util.List;
 
 import static org.vlang.lang.VlangTypes.*;
 
@@ -64,6 +63,12 @@ public class VlangEnumTypeImpl extends VlangTypeImpl implements VlangEnumType {
   @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);
+  }
+
+  @Override
+  @NotNull
+  public List<VlangEnumFieldDefinition> getFieldList() {
+    return VlangPsiImplUtil.getFieldList(this);
   }
 
 }

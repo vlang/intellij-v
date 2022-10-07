@@ -195,6 +195,26 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getFieldList(o: VlangStructType): List<VlangFieldDefinition> {
+        return o.fieldsGroupList.flatMap { it.fieldDeclarationList }.flatMap { it.fieldDefinitionList }
+    }
+
+    @JvmStatic
+    fun getFieldList(o: VlangUnionType): List<VlangFieldDefinition> {
+        return o.fieldsGroupList.flatMap { it.fieldDeclarationList }.flatMap { it.fieldDefinitionList }
+    }
+
+    @JvmStatic
+    fun getFieldList(o: VlangInterfaceType): List<VlangFieldDefinition> {
+        return o.interfaceFieldDeclaration?.fieldDefinitionList ?: emptyList()
+    }
+
+    @JvmStatic
+    fun getFieldList(o: VlangEnumType): List<VlangEnumFieldDefinition> {
+        return o.enumFields?.enumFieldDeclarationList?.map { it.enumFieldDefinition } ?: emptyList()
+    }
+
+    @JvmStatic
     fun getQualifier(o: VlangReferenceExpression): VlangCompositeElement? {
         return PsiTreeUtil.getChildOfType(o, VlangExpression::class.java)
     }

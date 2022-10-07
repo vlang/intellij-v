@@ -5,10 +5,12 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface VlangUnionType extends VlangType {
+import java.util.List;
 
-  @Nullable
-  VlangFieldsGroup getFieldsGroup();
+public interface VlangUnionType extends VlangType, VlangFieldListOwner {
+
+  @NotNull
+  List<VlangFieldsGroup> getFieldsGroupList();
 
   @Nullable
   PsiElement getLbrace();
@@ -21,5 +23,8 @@ public interface VlangUnionType extends VlangType {
 
   @NotNull
   PsiElement getUnion();
+
+  @NotNull
+  List<VlangFieldDefinition> getFieldList();
 
 }

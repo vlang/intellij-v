@@ -1,11 +1,13 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public interface VlangInterfaceType extends VlangType {
+import java.util.List;
+
+public interface VlangInterfaceType extends VlangType, VlangFieldListOwner {
 
   @Nullable
   VlangAnonymousInterfaceDefinition getAnonymousInterfaceDefinition();
@@ -30,5 +32,8 @@ public interface VlangInterfaceType extends VlangType {
 
   @NotNull
   PsiElement getInterface();
+
+  @NotNull
+  List<VlangFieldDefinition> getFieldList();
 
 }

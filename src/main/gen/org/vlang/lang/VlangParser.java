@@ -4828,7 +4828,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // union identifier GenericArguments? '{' FieldsGroup? '}'
+  // union identifier GenericArguments? '{' FieldsGroup* '}'
   public static boolean UnionType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "UnionType")) return false;
     if (!nextTokenIs(b, UNION)) return false;
@@ -4851,10 +4851,14 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // FieldsGroup?
+  // FieldsGroup*
   private static boolean UnionType_4(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "UnionType_4")) return false;
-    FieldsGroup(b, l + 1);
+    while (true) {
+      int c = current_position_(b);
+      if (!FieldsGroup(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "UnionType_4", c)) break;
+    }
     return true;
   }
 

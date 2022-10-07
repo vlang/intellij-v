@@ -363,6 +363,7 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitInterfaceType(@NotNull VlangInterfaceType o) {
     visitType(o);
+    // visitFieldListOwner(o);
   }
 
   public void visitIsExpression(@NotNull VlangIsExpression o) {
@@ -605,6 +606,7 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitStructType(@NotNull VlangStructType o) {
     visitType(o);
+    // visitFieldListOwner(o);
   }
 
   public void visitSymbolVisibility(@NotNull VlangSymbolVisibility o) {
@@ -649,6 +651,7 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitUnionType(@NotNull VlangUnionType o) {
     visitType(o);
+    // visitFieldListOwner(o);
   }
 
   public void visitUnpackingExpression(@NotNull VlangUnpackingExpression o) {

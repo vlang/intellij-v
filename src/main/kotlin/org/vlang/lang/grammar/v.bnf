@@ -363,7 +363,11 @@ StructDeclaration ::= Attributes? SymbolVisibility? StructType {
   methods=[getIdentifier getName]
 }
 
-StructType ::= struct identifier GenericArguments? '{' FieldsGroup* '}' {pin=1}
+StructType ::= struct identifier GenericArguments? '{' FieldsGroup* '}' {
+  pin=1
+  implements="org.vlang.lang.psi.VlangFieldListOwner"
+  methods=[getFieldList]
+}
 
 MemberModifiers ::= MemberModifier* ':' {pin=2}
 MemberModifier ::= mut | pub | shared | BUILTIN_GLOBAL
@@ -394,7 +398,11 @@ InterfaceDeclaration ::= Attributes? SymbolVisibility? InterfaceType {
   methods=[getName getIdentifier]
 }
 
-InterfaceType ::= interface identifier GenericArguments? '{' InterfaceMembers? '}' {pin=1}
+InterfaceType ::= interface identifier GenericArguments? '{' InterfaceMembers? '}' {
+  pin=1
+  implements="org.vlang.lang.psi.VlangFieldListOwner"
+  methods=[getFieldList]
+}
 
 private InterfaceMembers ::= MemberModifiers? (InterfaceMethodDeclaration | InterfaceFieldDeclaration | AnonymousInterfaceDefinition)? (semi InterfaceMembers)* semi? {pin=1}
 InterfaceFieldDeclaration ::= (FieldDefinitionList Type) Attribute? Tag?
@@ -412,7 +420,10 @@ EnumDeclaration ::= Attributes? SymbolVisibility? EnumType {
   methods=[getName getIdentifier getTypeInner]
 }
 
-EnumType ::= enum identifier GenericArguments? '{' EnumFields? '}' {pin=1}
+EnumType ::= enum identifier GenericArguments? '{' EnumFields? '}' {
+  pin=1
+  methods=[getFieldList]
+}
 
 EnumFields ::= EnumFieldDeclaration (semi EnumFieldDeclaration)* semi?
 EnumFieldDeclaration ::= EnumFieldDefinition ('=' Expression)? {pin=1}
@@ -427,7 +438,11 @@ UnionDeclaration ::= Attributes? SymbolVisibility? UnionType {
   methods=[getName getIdentifier]
 }
 
-UnionType ::= union identifier GenericArguments? '{' FieldsGroup? '}' {pin=1}
+UnionType ::= union identifier GenericArguments? '{' FieldsGroup* '}' {
+  pin=1
+  implements="org.vlang.lang.psi.VlangFieldListOwner"
+  methods=[getFieldList]
+}
 
 // [<visibility>] type <ident> = <types>
 TypeAliasDeclaration ::= SymbolVisibility? 'type' AliasType {

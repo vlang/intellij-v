@@ -5,6 +5,8 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public interface VlangEnumType extends VlangType {
 
   @Nullable
@@ -21,5 +23,8 @@ public interface VlangEnumType extends VlangType {
 
   @Nullable
   PsiElement getIdentifier();
+
+  @NotNull
+  List<VlangEnumFieldDefinition> getFieldList();
 
 }

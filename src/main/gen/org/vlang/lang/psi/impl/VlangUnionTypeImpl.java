@@ -7,11 +7,10 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.stubs.IStubElementType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.vlang.lang.psi.VlangFieldsGroup;
-import org.vlang.lang.psi.VlangPsiTreeUtil;
-import org.vlang.lang.psi.VlangUnionType;
-import org.vlang.lang.psi.VlangVisitor;
+import org.vlang.lang.psi.*;
 import org.vlang.lang.stubs.VlangTypeStub;
+
+import java.util.List;
 
 import static org.vlang.lang.VlangTypes.*;
 
@@ -37,9 +36,9 @@ public class VlangUnionTypeImpl extends VlangTypeImpl implements VlangUnionType 
   }
 
   @Override
-  @Nullable
-  public VlangFieldsGroup getFieldsGroup() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangFieldsGroup.class);
+  @NotNull
+  public List<VlangFieldsGroup> getFieldsGroupList() {
+    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangFieldsGroup.class);
   }
 
   @Override
@@ -64,6 +63,12 @@ public class VlangUnionTypeImpl extends VlangTypeImpl implements VlangUnionType 
   @NotNull
   public PsiElement getUnion() {
     return notNullChild(findChildByType(UNION));
+  }
+
+  @Override
+  @NotNull
+  public List<VlangFieldDefinition> getFieldList() {
+    return VlangPsiImplUtil.getFieldList(this);
   }
 
 }
