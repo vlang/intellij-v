@@ -826,36 +826,24 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // <<enterMode "BLOCK?">> VarDeclaration | Expression <<exitModeSafe "BLOCK?">>
+  // <<enterMode "BLOCK?">> (VarDeclaration | Expression) <<exitModeSafe "BLOCK?">>
   static boolean Condition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Condition")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = Condition_0(b, l + 1);
-    if (!r) r = Condition_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // <<enterMode "BLOCK?">> VarDeclaration
-  private static boolean Condition_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Condition_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
     r = enterMode(b, l + 1, "BLOCK?");
-    r = r && VarDeclaration(b, l + 1);
+    r = r && Condition_1(b, l + 1);
+    r = r && exitModeSafe(b, l + 1, "BLOCK?");
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // Expression <<exitModeSafe "BLOCK?">>
+  // VarDeclaration | Expression
   private static boolean Condition_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Condition_1")) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = Expression(b, l + 1, -1);
-    r = r && exitModeSafe(b, l + 1, "BLOCK?");
-    exit_section_(b, m, null, r);
+    r = VarDeclaration(b, l + 1);
+    if (!r) r = Expression(b, l + 1, -1);
     return r;
   }
 
@@ -4909,7 +4897,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // VarDefinitionList ':=' (ExpressionList)
+  // VarDefinitionList ':=' ExpressionList
   public static boolean VarDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "VarDeclaration")) return false;
     boolean r, p;
@@ -4917,19 +4905,9 @@ public class VlangParser implements PsiParser, LightPsiParser {
     r = VarDefinitionList(b, l + 1);
     r = r && consumeToken(b, VAR_ASSIGN);
     p = r; // pin = 2
-    r = r && VarDeclaration_2(b, l + 1);
+    r = r && ExpressionList(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
-  }
-
-  // (ExpressionList)
-  private static boolean VarDeclaration_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "VarDeclaration_2")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = ExpressionList(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */

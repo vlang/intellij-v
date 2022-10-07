@@ -168,30 +168,30 @@ V Language file
                 REFERENCE_EXPRESSION
                   PsiElement(VlangTokenType.identifier)('idxs')
                 PsiElement(VlangTokenType.<<)('<<')
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('RepIndex')
-          PsiErrorElement:<assign op>, VlangTokenType.,, VlangTokenType.;, VlangTokenType.<NL> or VlangTokenType.} expected, got '{'
-            <empty list>
-          STATEMENT
-            BLOCK
-              PsiElement(VlangTokenType.{)('{')
-              LABELED_STATEMENT
-                LABEL_DEFINITION
-                  PsiElement(VlangTokenType.identifier)('idx')
-                  PsiElement(VlangTokenType.:)(':')
-                SIMPLE_STATEMENT
-                  LEFT_HAND_EXPR_LIST
-                    REFERENCE_EXPRESSION
-                      PsiElement(VlangTokenType.identifier)('idx')
-              LABELED_STATEMENT
-                LABEL_DEFINITION
-                  PsiElement(VlangTokenType.identifier)('val_idx')
-                  PsiElement(VlangTokenType.:)(':')
-                SIMPLE_STATEMENT
-                  LEFT_HAND_EXPR_LIST
-                    REFERENCE_EXPRESSION
-                      PsiElement(VlangTokenType.identifier)('rep_i')
-              PsiElement(VlangTokenType.})('}')
+                LITERAL_VALUE_EXPRESSION
+                  TYPE
+                    TYPE_REFERENCE_EXPRESSION
+                      PsiElement(VlangTokenType.identifier)('RepIndex')
+                  PsiElement(VlangTokenType.{)('{')
+                  ELEMENT
+                    KEY
+                      FIELD_NAME
+                        REFERENCE_EXPRESSION
+                          PsiElement(VlangTokenType.identifier)('idx')
+                    PsiElement(VlangTokenType.:)(':')
+                    VALUE
+                      REFERENCE_EXPRESSION
+                        PsiElement(VlangTokenType.identifier)('idx')
+                  ELEMENT
+                    KEY
+                      FIELD_NAME
+                        REFERENCE_EXPRESSION
+                          PsiElement(VlangTokenType.identifier)('val_idx')
+                    PsiElement(VlangTokenType.:)(':')
+                    VALUE
+                      REFERENCE_EXPRESSION
+                        PsiElement(VlangTokenType.identifier)('rep_i')
+                  PsiElement(VlangTokenType.})('}')
           PsiElement(VlangTokenType.})('}')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
@@ -217,30 +217,30 @@ V Language file
                         REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('idxs')
                         PsiElement(VlangTokenType.<<)('<<')
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('RepIndex')
-                  PsiErrorElement:<assign op>, VlangTokenType.,, VlangTokenType.;, VlangTokenType.<NL> or VlangTokenType.} expected, got '{'
-                    <empty list>
-                  STATEMENT
-                    BLOCK
-                      PsiElement(VlangTokenType.{)('{')
-                      LABELED_STATEMENT
-                        LABEL_DEFINITION
-                          PsiElement(VlangTokenType.identifier)('idx')
-                          PsiElement(VlangTokenType.:)(':')
-                        SIMPLE_STATEMENT
-                          LEFT_HAND_EXPR_LIST
-                            REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('idx')
-                      LABELED_STATEMENT
-                        LABEL_DEFINITION
-                          PsiElement(VlangTokenType.identifier)('val_idx')
-                          PsiElement(VlangTokenType.:)(':')
-                        SIMPLE_STATEMENT
-                          LEFT_HAND_EXPR_LIST
-                            REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('rep_i')
-                      PsiElement(VlangTokenType.})('}')
+                        LITERAL_VALUE_EXPRESSION
+                          TYPE
+                            TYPE_REFERENCE_EXPRESSION
+                              PsiElement(VlangTokenType.identifier)('RepIndex')
+                          PsiElement(VlangTokenType.{)('{')
+                          ELEMENT
+                            KEY
+                              FIELD_NAME
+                                REFERENCE_EXPRESSION
+                                  PsiElement(VlangTokenType.identifier)('idx')
+                            PsiElement(VlangTokenType.:)(':')
+                            VALUE
+                              REFERENCE_EXPRESSION
+                                PsiElement(VlangTokenType.identifier)('idx')
+                          ELEMENT
+                            KEY
+                              FIELD_NAME
+                                REFERENCE_EXPRESSION
+                                  PsiElement(VlangTokenType.identifier)('val_idx')
+                            PsiElement(VlangTokenType.:)(':')
+                            VALUE
+                              REFERENCE_EXPRESSION
+                                PsiElement(VlangTokenType.identifier)('rep_i')
+                          PsiElement(VlangTokenType.})('}')
                   PsiElement(VlangTokenType.})('}')
               MATCH_ELSE_ARM_CLAUSE
                 PsiElement(VlangTokenType.else)('else')
