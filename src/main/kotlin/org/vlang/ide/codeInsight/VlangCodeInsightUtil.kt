@@ -7,6 +7,16 @@ import org.vlang.lang.psi.VlangNamedElement
 object VlangCodeInsightUtil {
     private const val BUILTIN_MODULE = "builtin"
 
+    fun insideBuiltinModule(element: VlangCompositeElement): Boolean {
+        val file = element.containingFile as VlangFile
+        return file.getModuleQualifiedName() == BUILTIN_MODULE
+    }
+
+    fun insideTranslatedFile(element: VlangCompositeElement): Boolean {
+        val file = element.containingFile as VlangFile
+        return file.isTranslatedFile()
+    }
+
     fun getQualifiedName(context: VlangCompositeElement, element: VlangNamedElement): String {
         val name = element.getQualifiedName() ?: return element.name ?: ""
 

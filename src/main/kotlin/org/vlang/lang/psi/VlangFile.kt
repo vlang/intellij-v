@@ -10,6 +10,7 @@ import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.CachedValuesManager
 import com.intellij.util.ArrayFactory
 import org.vlang.configurations.VlangConfiguration
+import org.vlang.ide.codeInsight.VlangAttributesUtil
 import org.vlang.ide.ui.VIcons
 import org.vlang.lang.VlangFileType
 import org.vlang.lang.VlangLanguage
@@ -39,6 +40,17 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
     override fun importClass(aClass: PsiClass) = false
 
     fun isTestFile(): Boolean = name.split(".").first().endsWith("_test")
+
+    fun isTranslatedFile(): Boolean {
+        return getFileAttributes().any {
+            VlangAttributesUtil.isTranslated(it)
+        }
+    }
+
+    private fun getFileAttributes(): List<VlangAttribute> {
+        val moduleStatement = this.getModule() ?: return emptyList()
+        return moduleStatement.attributes?.attributeList ?: emptyList()
+    }
 
     fun addImport(path: String, alias: String?): VlangImportSpec {
         if (getImportedModulesMap().containsKey(path)) {

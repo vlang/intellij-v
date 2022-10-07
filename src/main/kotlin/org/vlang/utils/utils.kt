@@ -24,7 +24,7 @@ fun CapturingProcessHandler.runProcessWithGlobalProgress(timeoutInMilliseconds: 
     return runProcess(ProgressManager.getGlobalProgressIndicator(), timeoutInMilliseconds)
 }
 
-inline fun <reified T: PsiElement> PsiElement.parentNum(depth: Int): T? {
+inline fun <reified T: PsiElement> PsiElement.parentNth(depth: Int): T? {
     var parent: PsiElement? = this
     repeat(depth) {
         parent = parent?.parent

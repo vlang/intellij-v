@@ -15,7 +15,7 @@ import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangImportableType
 import org.vlang.lang.psi.types.VlangTypeEx
 import org.vlang.lang.psi.types.VlangTypeVisitor
-import org.vlang.utils.parentNum
+import org.vlang.utils.parentNth
 
 class VlangClosureCompletionContributor : CompletionContributor() {
     init {
@@ -31,7 +31,7 @@ class VlangClosureCompletionContributor : CompletionContributor() {
             val pos = parameters.position
 
             // don't use parentOfType because it will return call expr even in body of closure
-            val callExpr = pos.parentNum<VlangCallExpr>(5) ?: return
+            val callExpr = pos.parentNth<VlangCallExpr>(5) ?: return
             val element = pos.parentOfType<VlangElement>()
             val args = callExpr.argumentList.elementList
             val index = args.indexOf(element)
@@ -61,7 +61,7 @@ class VlangClosureCompletionContributor : CompletionContributor() {
             }
 
             val presentationText = functionType.text + " {...}"
-            val litSignature = functionType.signature ?: return
+            val litSignature = functionType.getSignature() ?: return
 
             result.addElement(
                 PrioritizedLookupElement.withPriority(
