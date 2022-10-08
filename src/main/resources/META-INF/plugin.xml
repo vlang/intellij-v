@@ -154,6 +154,14 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
                          implementationClass="org.vlang.ide.inspections.namingConventions.VlangFieldNamingConventionInspection"/>
         <!-- Naming conventions End -->
 
+        <!-- Types Mismatch -->
+        <localInspection language="vlang" groupPath="V"
+                         groupName="Types mismatch" shortName="VlangAssignTypeMismatchInspection"
+                         displayName="Type mismatch in assignment"
+                         enabledByDefault="false" level="ERROR"
+                         implementationClass="org.vlang.ide.inspections.typeMismatch.VlangAssignTypeMismatchInspection"/>
+        <!-- Types Mismatch End -->
+
         <!-- Unused inspections -->
         <localInspection language="vlang" groupPath="V"
                          groupName="Unused" shortName="VlangUnusedParameterInspection"

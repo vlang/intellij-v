@@ -1,5 +1,6 @@
 package org.vlang.lang.psi.types
 
+import com.intellij.openapi.project.Project
 import org.vlang.lang.psi.VlangCompositeElement
 import org.vlang.lang.psi.VlangTupleType
 
@@ -16,6 +17,10 @@ class VlangTupleTypeEx(raw: VlangTupleType) : VlangBaseTypeEx<VlangTupleType>(ra
         append("(")
         append(types.joinToString(", ") { it.readableName(context) })
         append(")")
+    }
+
+    override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {
+        return true // TODO: implement this
     }
 
     override fun accept(visitor: VlangTypeVisitor) {

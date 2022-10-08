@@ -13,10 +13,15 @@ import com.intellij.psi.impl.source.tree.LeafElement
 import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.util.*
 import org.vlang.configurations.VlangConfiguration
+import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.imports.VlangImportReference
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
+import org.vlang.lang.psi.types.VlangNotNullableTypeEx
+import org.vlang.lang.psi.types.VlangNullableTypeEx
+import org.vlang.lang.psi.types.VlangPointerTypeEx
 
 object VlangPsiImplUtil {
     @JvmStatic
@@ -87,6 +92,11 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun getIdentifier(o: VlangAliasType): PsiElement? {
         return o.type.typeReferenceExpression?.getIdentifier()
+    }
+
+    @JvmStatic
+    fun isAlias(o: VlangAliasType): Boolean {
+        return o.typeUnionList?.typeList?.size == 1
     }
 
     @JvmStatic
@@ -393,6 +403,11 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun isVariadic(o: VlangParamDefinition): Boolean {
+        return (o.parent as? VlangParameterDeclaration)?.isVariadic ?: false
+    }
+
+    @JvmStatic
     fun isVariadic(o: VlangParameterDeclaration): Boolean {
         return o.tripleDot != null
     }
@@ -467,9 +482,65 @@ object VlangPsiImplUtil {
 
     private fun getTypeInner(expr: VlangExpression, context: ResolveState?): VlangType? {
         when (expr) {
-            is VlangConditionalExpr, is VlangInExpression, is VlangNotInExpression -> {
+            is VlangConditionalExpr, is VlangInExpression, is VlangNotInExpression, is VlangAndExpr, is VlangOrExpr -> {
                 return getBuiltinType("bool", expr)
             }
+
+            is VlangUnaryExpr                                                                                       -> {
+                if (expr.not != null) {
+                    return getBuiltinType("bool", expr)
+                }
+                if (expr.bitAnd != null) {
+                    if (expr.expression == null) return null
+                    val inner = getType(expr.expression!!, context)?.text ?: return null
+                    return getBuiltinType("&$inner", expr)
+                }
+
+                if (expr.mul != null) {
+                    if (expr.expression == null) return null
+                    val inner = getType(expr.expression!!, context)
+                    val innerEx = inner.toEx()
+                    if (innerEx is VlangPointerTypeEx) {
+                        return innerEx.inner?.raw()
+                    }
+
+                    return inner
+                }
+
+                if (expr.expression == null) return null
+                return getType(expr.expression!!, context)
+            }
+        }
+
+        if (expr is VlangOrBlockExpr) {
+            if (expr.expression == null) return null
+
+            val type = getType(expr.expression!!, context) ?: return null
+            val exType = type.toEx()
+
+            if (exType is VlangNullableTypeEx) {
+                val inner = exType.inner ?: return getBuiltinType("void", expr)
+                return inner.raw()
+            }
+            if (exType is VlangNotNullableTypeEx) {
+                val inner = exType.inner ?: return getBuiltinType("void", expr)
+                return inner.raw()
+            }
+
+//            val isEndCall = lastExpression is VlangCallExpr && (VlangCodeInsightUtil.isExitCall(lastExpression) || VlangCodeInsightUtil.isPanicCall(lastExpression))
+//            if (lastStatement is VlangReturnStatement || isEndCall) {
+//                if (exType is VlangNullableTypeEx) {
+//                    val inner = exType.inner ?: return getBuiltinType("void", expr)
+//                    return inner.raw()
+//                }
+//                if (exType is VlangNotNullableTypeEx) {
+//                    val inner = exType.inner ?: return getBuiltinType("void", expr)
+//                    return inner.raw()
+//                }
+//                return null
+//            }
+//
+            return null
         }
 
         if (expr is VlangUnaryExpr) {
@@ -511,7 +582,7 @@ object VlangPsiImplUtil {
         if (expr is VlangLiteral) {
             if (expr.char != null) return getBuiltinType("rune", expr)
             if (expr.int != null || expr.hex != null || expr.oct != null)
-                return getBuiltinType("i64", expr)
+                return getBuiltinType("int", expr)
             if (expr.float != null) return getBuiltinType("f64", expr)
             if (expr.floati != null) return getBuiltinType("complex64", expr)
             if (expr.decimali != null) return getBuiltinType("complex128", expr)
@@ -520,7 +591,8 @@ object VlangPsiImplUtil {
         if (expr is VlangIndexOrSliceExpr) {
             val indexExpr = expr.expressionList.firstOrNull() ?: return null
             val lbrack = expr.lbrack ?: return null
-            val isRange = PsiTreeUtil.findSiblingForward(lbrack, VlangTypes.RANGE, false, null) != null
+            val isRange = PsiTreeUtil.findSiblingForward(lbrack, VlangTypes.RANGE, false, null) != null ||
+                    PsiTreeUtil.findSiblingForward(lbrack, VlangTypes.RANGE_EXPR, false, null) != null
             if (isRange) {
                 return indexExpr.getType(null)
             }
@@ -547,7 +619,20 @@ object VlangPsiImplUtil {
 
         if (expr is VlangCallExpr) {
             val callRef = expr.expression as? VlangReferenceExpression
+            if (VlangCodeInsightUtil.isTypeCast(expr)) {
+                val callName = callRef?.getIdentifier()?.text
+                if (callName != null) {
+                    val builtinType = getBuiltinType(callName, expr)?.resolveType()
+                    if (builtinType is VlangAliasType) {
+                        // TODO:
+                        return builtinType.typeUnionList?.typeList?.firstOrNull()
+                    }
+                    return builtinType
+                }
+            }
+
             val resolved = callRef?.reference?.resolve()
+
             if (resolved !is VlangFunctionOrMethodDeclaration) {
                 if (callRef is VlangReferenceExpression) {
                     return getTypeInner(callRef, null)
@@ -555,8 +640,33 @@ object VlangPsiImplUtil {
                 return null
             }
 
-            val result = resolved.getSignature()?.result ?: return null
+            val result = resolved.getSignature()?.result ?: return getBuiltinType("void", expr)
             return result.type
+        }
+
+        if (expr is VlangDotExpression) {
+            if (expr.errorPropagationExpression != null || expr.forceNoErrorPropagationExpression != null) {
+                val type = expr.expression.getType(context)
+                val exType = type.toEx()
+
+                if (exType is VlangNullableTypeEx) {
+                    val inner = exType.inner ?: return getBuiltinType("void", expr)
+                    return inner.raw()
+                }
+                if (exType is VlangNotNullableTypeEx) {
+                    val inner = exType.inner ?: return getBuiltinType("void", expr)
+                    return inner.raw()
+                }
+                return type
+            }
+        }
+
+        if (expr is VlangUnsafeExpression) {
+            val block = expr.block
+            val lastStatement = block?.statementList?.lastOrNull() ?: return null
+            val lastExpressionList = lastStatement.childrenOfType<VlangLeftHandExprList>().lastOrNull()
+            val lastExpression = lastExpressionList?.expressionList?.lastOrNull()
+            return lastExpression?.getType(context)
         }
 
         if (expr is VlangArrayCreation) {
@@ -593,9 +703,10 @@ object VlangPsiImplUtil {
             return when {
                 expr.`true` != null   -> getBuiltinType("bool", expr)
                 expr.`false` != null  -> getBuiltinType("bool", expr)
-                expr.int != null      -> getBuiltinType("i64", expr)
-                expr.hex != null      -> getBuiltinType("i64", expr)
-                expr.oct != null      -> getBuiltinType("i64", expr)
+                expr.int != null      -> getBuiltinType("int", expr)
+                expr.bin != null      -> getBuiltinType("int", expr)
+                expr.hex != null      -> getBuiltinType("int", expr)
+                expr.oct != null      -> getBuiltinType("int", expr)
                 expr.float != null    -> getBuiltinType("f64", expr)
                 expr.floati != null   -> getBuiltinType("complex64", expr)
                 expr.decimali != null -> getBuiltinType("complex128", expr)
@@ -610,13 +721,18 @@ object VlangPsiImplUtil {
 
     private fun typeOrParameterType(resolve: VlangTypeOwner, context: ResolveState?): VlangType? {
         val type = resolve.getType(context)
-//        if (resolve is VlangParamDefinition && (resolve as VlangParamDefinition).isVariadic()) {
-//            return if (type == null) null else LightArrayType(type)
-//        }
+        if (resolve is VlangParamDefinition && resolve.isVariadic) {
+            return if (type == null) null else getBuiltinType("[]${type.text}", resolve)
+        }
 //        return if (resolve is VlangSignatureOwner) {
 //            LightFunctionType(resolve as VlangSignatureOwner)
 //        } else type
         return type
+    }
+
+    @JvmStatic
+    fun isNumeric(o: VlangLiteral): Boolean {
+        return o.int != null || o.bin != null || o.hex != null || o.oct != null || o.float != null || o.floati != null || o.decimali != null
     }
 
     @JvmStatic
@@ -733,7 +849,7 @@ object VlangPsiImplUtil {
 
             val defineIndex = varList.indexOf(o)
             if (defineIndex == 0) {
-                return getBuiltinType("i64", o)
+                return getBuiltinType("int", o)
             } else if (defineIndex == 1) {
                 if (rightType is VlangArrayOrSliceType) {
                     return rightType.type

@@ -19,6 +19,7 @@ import com.intellij.psi.util.parentOfType
 import org.vlang.ide.ui.VIcons
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import javax.swing.Icon
 
 object VlangCompletionUtil {
@@ -420,8 +421,7 @@ object VlangCompletionUtil {
     private val VARIABLE_RENDERER = object : LookupElementRenderer<LookupElement>() {
         override fun renderElement(element: LookupElement, p: LookupElementPresentation) {
             val elem = element.psiElement as? VlangNamedElement ?: return
-            val type = elem.getType(null)?.resolveType()
-            val typeText = type?.text ?: ""
+            val type = elem.getType(null)?.toEx()?.readableName(elem)
             val icon = when (elem) {
                 is VlangVarDefinition            -> VIcons.Variable
                 is VlangGlobalVariableDefinition -> VIcons.Variable
@@ -432,7 +432,7 @@ object VlangCompletionUtil {
             }
 
             p.icon = icon
-            p.typeText = typeText
+            p.typeText = type
             p.isTypeGrayed = true
             p.itemText = element.lookupString
         }
@@ -446,8 +446,8 @@ object VlangCompletionUtil {
             val typeText = signature?.result?.text ?: "void"
             val icon = VIcons.Method
 
-            val resolved = elem.receiverType.typeReferenceExpression?.resolve() as? VlangNamedElement
-            p.tailText = signature?.parameters?.text + " of " + resolved?.name
+            val type = elem.receiverType.toEx().readableName(elem)
+            p.tailText = signature?.parameters?.text + " of " + type
 
             p.icon = icon
             p.typeText = typeText
@@ -459,15 +459,14 @@ object VlangCompletionUtil {
     private val FIELD_RENDERER = object : LookupElementRenderer<LookupElement>() {
         override fun renderElement(element: LookupElement, p: LookupElementPresentation) {
             val elem = element.psiElement as? VlangNamedElement ?: return
-            val type = elem.getType(null)
-            val typeText = type?.text ?: ""
+            val type = elem.getType(null)?.toEx()?.readableName(elem)
             val icon = VIcons.Field
 
             val parentStruct = elem.parentOfType<VlangStructDeclaration>()
             p.tailText = " of " + parentStruct?.name
 
             p.icon = icon
-            p.typeText = typeText
+            p.typeText = type
             p.isTypeGrayed = true
             p.itemText = element.lookupString
         }
@@ -497,7 +496,7 @@ object VlangCompletionUtil {
 
             val valueText = elem.expression?.text
             p.tailText = " = $valueText"
-            p.typeText = elem.expression?.getType(null)?.text
+            p.typeText = elem.expression?.getType(null)?.toEx()?.readableName(elem)
         }
     }
 
@@ -512,7 +511,7 @@ object VlangCompletionUtil {
             if (valueText != null) {
                 p.tailText = " = $valueText"
             }
-            p.typeText = parent.expression?.getType(null)?.text
+            p.typeText = parent.expression?.getType(null)?.toEx()?.readableName(elem)
         }
     }
 

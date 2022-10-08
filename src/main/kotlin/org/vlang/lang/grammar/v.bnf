@@ -444,6 +444,7 @@ UnionType ::= union identifier GenericArguments? '{' FieldsGroup* '}' {
   methods=[getFieldList]
 }
 
+// TODO: split for type alias and sum type?
 // [<visibility>] type <ident> = <types>
 TypeAliasDeclaration ::= SymbolVisibility? 'type' AliasType {
   pin=2
@@ -453,7 +454,7 @@ TypeAliasDeclaration ::= SymbolVisibility? 'type' AliasType {
 
 AliasType ::= Type '=' TypeUnionList {
   pin=2
-  methods=[getIdentifier]
+  methods=[getIdentifier isAlias]
 }
 
 // <type> [ | <type2>]...
@@ -869,7 +870,9 @@ Literal ::=
   | false
   | StringLiteral
   | char
-  | nil
+  | nil {
+  methods=[isNumeric]
+}
 
 // just different strings
 StringLiteral ::= string | 'raw_string' | StringTemplate {

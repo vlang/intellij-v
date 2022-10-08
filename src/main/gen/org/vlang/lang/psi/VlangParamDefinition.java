@@ -15,9 +15,7 @@ public interface VlangParamDefinition extends VlangNamedElement, StubBasedPsiEle
   @NotNull
   PsiElement getIdentifier();
 
-  //WARNING: isVariadic(...) is skipped
-  //matching isVariadic(VlangParamDefinition, ...)
-  //methods are not found in VlangPsiImplUtil
+  boolean isVariadic();
 
   @NotNull
   String getName();

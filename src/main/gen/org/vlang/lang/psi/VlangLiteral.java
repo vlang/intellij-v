@@ -39,4 +39,6 @@ public interface VlangLiteral extends VlangExpression {
   @Nullable
   PsiElement getTrue();
 
+  boolean isNumeric();
+
 }

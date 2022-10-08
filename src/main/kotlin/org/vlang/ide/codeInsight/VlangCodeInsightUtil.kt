@@ -1,8 +1,7 @@
 package org.vlang.ide.codeInsight
 
-import org.vlang.lang.psi.VlangCompositeElement
-import org.vlang.lang.psi.VlangFile
-import org.vlang.lang.psi.VlangNamedElement
+import org.vlang.lang.psi.*
+import org.vlang.lang.psi.types.VlangPrimitiveTypes
 
 object VlangCodeInsightUtil {
     private const val BUILTIN_MODULE = "builtin"
@@ -15,6 +14,15 @@ object VlangCodeInsightUtil {
     fun insideTranslatedFile(element: VlangCompositeElement): Boolean {
         val file = element.containingFile as VlangFile
         return file.isTranslatedFile()
+    }
+
+    fun isExitCall(call: VlangCallExpr) = isBuiltinCall(call, "builtin.exit")
+
+    fun isPanicCall(call: VlangCallExpr) = isBuiltinCall(call, "builtin.panic")
+
+    private fun isBuiltinCall(call: VlangCallExpr, name: String): Boolean {
+        val ref = call.reference?.resolve() ?: return false
+        return ref is VlangFunctionDeclaration && ref.getQualifiedName() == name
     }
 
     fun nonVlangName(name: String): Boolean {
@@ -57,5 +65,12 @@ object VlangCodeInsightUtil {
         val secondModule = secondFile.getModuleQualifiedName()
 
         return firstModule == secondModule
+    }
+
+    fun isTypeCast(call: VlangCallExpr): Boolean {
+        val expr = call.expression as? VlangReferenceExpression ?: return false
+        val name = expr.getIdentifier().text ?: return false
+
+        return VlangPrimitiveTypes.values().find { it.value == name } != null
     }
 }

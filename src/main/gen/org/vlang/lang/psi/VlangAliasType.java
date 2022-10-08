@@ -19,4 +19,6 @@ public interface VlangAliasType extends VlangType {
   @Nullable
   PsiElement getIdentifier();
 
+  boolean isAlias();
+
 }

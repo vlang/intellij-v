@@ -6,16 +6,16 @@ import org.vlang.lang.psi.VlangAliasType
 import org.vlang.lang.psi.VlangCompositeElement
 import org.vlang.lang.psi.VlangTypeAliasDeclaration
 
-class VlangAliasTypeEx(raw: VlangAliasType) : VlangBaseTypeEx<VlangAliasType>(raw), VlangImportableType {
+class VlangSumTypeEx(raw: VlangAliasType) : VlangBaseTypeEx<VlangAliasType>(raw), VlangImportableType {
     private val decl = raw.parent as VlangTypeAliasDeclaration
     private val name = decl.getQualifiedName() ?: ANON
     private val left = VlangSimpleTypeEx(raw.type)
-    private val right = raw.typeUnionList?.typeList?.firstOrNull().toEx()
+    private val rightList = raw.typeUnionList?.typeList?.map { it.toEx() } ?: emptyList()
 
     override fun toString() = buildString {
         append(name)
         append(" = ")
-        append(right)
+        append(rightList.joinToString(" | ") { it.toString() })
     }
 
     override fun qualifiedName() = name
@@ -35,8 +35,10 @@ class VlangAliasTypeEx(raw: VlangAliasType) : VlangBaseTypeEx<VlangAliasType>(ra
             return
         }
 
-        if (!visitor.enter(right)) {
-            return
+        for (right in rightList) {
+            if (!visitor.enter(right)) {
+                return
+            }
         }
     }
 }

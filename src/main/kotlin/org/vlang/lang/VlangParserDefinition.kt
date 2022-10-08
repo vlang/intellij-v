@@ -42,9 +42,10 @@ class VlangParserDefinition : ParserDefinition {
             "bool",
             "string",
 
+            "int",
             "i8",
             "i16",
-            "int",
+            "i32",
             "i64",
             "i128",
 
@@ -55,7 +56,7 @@ class VlangParserDefinition : ParserDefinition {
             "u128",
 
             "rune",
-            "u8",
+            "byte",
 
             "f32",
             "f64",

@@ -2,7 +2,7 @@ module types
 
 fn main() {
 	a := if true { 1 } else { 2 }
-	expr_type(a, 'i64')
+	expr_type(a, 'int')
 
 	b := if true { 1 } else { 2.0 }
 	// expr_type(b, 'f64') TODO: fix this
@@ -17,7 +17,7 @@ fn main() {
 		val := 200
 		val
 	}
-	expr_type(d, 'i64')
+	expr_type(d, 'int')
 
 	e := if true {
 		val := 100
@@ -30,5 +30,5 @@ fn main() {
 		val := 200
 		val
 	}
-	expr_type(e, 'i64')
+	expr_type(e, 'int')
 }

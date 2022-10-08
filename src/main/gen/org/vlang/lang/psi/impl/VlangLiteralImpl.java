@@ -94,4 +94,9 @@ public class VlangLiteralImpl extends VlangExpressionImpl implements VlangLitera
     return findChildByType(TRUE);
   }
 
+  @Override
+  public boolean isNumeric() {
+    return VlangPsiImplUtil.isNumeric(this);
+  }
+
 }

@@ -1,5 +1,6 @@
 package org.vlang.lang.psi.types
 
+import com.intellij.openapi.project.Project
 import org.vlang.lang.psi.VlangCompositeElement
 import org.vlang.lang.psi.VlangFunctionType
 
@@ -24,6 +25,10 @@ class VlangFunctionTypeEx(raw: VlangFunctionType) : VlangBaseTypeEx<VlangFunctio
         append(")")
         append(" ")
         append(result?.readableName(context))
+    }
+
+    override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {
+        return true // TODO: implement this
     }
 
     override fun accept(visitor: VlangTypeVisitor) {

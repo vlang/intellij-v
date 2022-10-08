@@ -48,6 +48,11 @@ public class VlangParamDefinitionImpl extends VlangNamedElementImpl<VlangParamDe
   }
 
   @Override
+  public boolean isVariadic() {
+    return VlangPsiImplUtil.isVariadic(this);
+  }
+
+  @Override
   @NotNull
   public String getName() {
     return VlangPsiImplUtil.getName(this);

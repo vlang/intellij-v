@@ -32,8 +32,16 @@ abstract class VlangBaseTypeEx<T : VlangType?>(protected val raw: T) : VlangType
                 return VlangUnknownTypeEx(null)
             }
 
-            return when (val type = resolveType()) {
-                is VlangStructType       -> VlangStructTypeEx(type)
+            val type = resolveType()
+            if (type is VlangStructType) {
+                return when ((type.parent as VlangStructDeclaration).getQualifiedName()) {
+                    "builtin.array"  -> VlangBuiltinArrayTypeEx(type)
+                    "builtin.string" -> VlangBuiltinStringTypeEx(type)
+                    else             -> VlangStructTypeEx(type)
+                }
+            }
+
+            return when (type) {
                 is VlangEnumType         -> VlangEnumTypeEx(type)
                 is VlangInterfaceType    -> VlangInterfaceTypeEx(type)
                 is VlangUnionType        -> VlangUnionTypeEx(type)
@@ -44,8 +52,24 @@ abstract class VlangBaseTypeEx<T : VlangType?>(protected val raw: T) : VlangType
                 is VlangMapType          -> VlangMapTypeEx(type)
                 is VlangTupleType        -> VlangTupleTypeEx(type)
                 is VlangFunctionType     -> VlangFunctionTypeEx(type)
-                is VlangAliasType        -> VlangAliasTypeEx(type)
+                is VlangAliasType        -> {
+                    if (type.isAlias) {
+                        VlangAliasTypeEx(type)
+                    } else {
+                        VlangSumTypeEx(type)
+                    }
+                }
                 else                     -> {
+                    if (type.text == "any") {
+                        return VlangAnyTypeEx(this)
+                    }
+                    if (type.text == "void") {
+                        return VlangVoidTypeEx(this)
+                    }
+                    if (type.text == "voidptr") {
+                        return VlangVoidPtrTypeEx(this)
+                    }
+
                     val primitive = primitivesMap[type.text]
                     if (primitive != null) {
                         VlangPrimitiveTypeEx(type, primitive)

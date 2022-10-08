@@ -1,5 +1,6 @@
 package org.vlang.lang.psi.types
 
+import com.intellij.openapi.project.Project
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.VlangCompositeElement
 import org.vlang.lang.psi.VlangStructDeclaration
@@ -14,6 +15,30 @@ class VlangStructTypeEx(raw: VlangStructType) : VlangBaseTypeEx<VlangStructType>
     override fun qualifiedName() = name
 
     override fun readableName(context: VlangCompositeElement) = VlangCodeInsightUtil.getQualifiedName(context, decl)
+
+    override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {
+        return when (rhs) {
+            is VlangAnyTypeEx         -> true
+            is VlangUnknownTypeEx     -> true
+            is VlangVoidPtrTypeEx     -> true
+            is VlangNullableTypeEx    -> if (rhs.inner == null) true else isAssignableFrom(rhs.inner, project)
+            is VlangNotNullableTypeEx -> if (rhs.inner == null) true else isAssignableFrom(rhs.inner, project)
+            is VlangPointerTypeEx     -> if (rhs.inner == null) true else isAssignableFrom(rhs.inner, project)
+            is VlangInterfaceTypeEx   -> {
+                // TODO: Check for interface implementation
+                true
+            }
+
+            is VlangStructTypeEx      -> {
+                val otherFqn = rhs.name
+
+                // Temp approach
+                return name == otherFqn
+            }
+
+            else                      -> false
+        }
+    }
 
     override fun accept(visitor: VlangTypeVisitor) {
         visitor.enter(this)

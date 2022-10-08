@@ -1,5 +1,6 @@
 package org.vlang.lang.psi.types
 
+import com.intellij.openapi.project.Project
 import org.vlang.lang.psi.VlangCompositeElement
 import org.vlang.lang.psi.VlangMapType
 
@@ -19,6 +20,10 @@ class VlangMapTypeEx(raw: VlangMapType): VlangBaseTypeEx<VlangMapType>(raw) {
         append(key.readableName(context))
         append("]")
         append(value.readableName(context))
+    }
+
+    override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {
+        return true // TODO: implement this
     }
 
     override fun accept(visitor: VlangTypeVisitor) {
