@@ -40,6 +40,10 @@ class VlangStructTypeEx(raw: VlangStructType) : VlangBaseTypeEx<VlangStructType>
         }
     }
 
+    override fun isEqual(rhs: VlangTypeEx<*>): Boolean {
+        return rhs is VlangStructTypeEx && name == rhs.name
+    }
+
     override fun accept(visitor: VlangTypeVisitor) {
         visitor.enter(this)
     }

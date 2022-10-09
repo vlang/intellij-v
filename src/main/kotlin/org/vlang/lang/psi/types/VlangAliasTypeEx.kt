@@ -26,6 +26,10 @@ class VlangAliasTypeEx(raw: VlangAliasType) : VlangBaseTypeEx<VlangAliasType>(ra
         return true // TODO: implement this
     }
 
+    override fun isEqual(rhs: VlangTypeEx<*>): Boolean {
+        return rhs is VlangAliasTypeEx && name == rhs.name
+    }
+
     override fun accept(visitor: VlangTypeVisitor) {
         if (!visitor.enter(this)) {
             return

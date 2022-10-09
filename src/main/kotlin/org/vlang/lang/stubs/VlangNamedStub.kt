@@ -9,17 +9,14 @@ import org.vlang.lang.psi.VlangNamedElement
 
 abstract class VlangNamedStub<T : VlangNamedElement> : NamedStubBase<T> {
     val isPublic: Boolean
-    val isGlobal: Boolean
 
     constructor(
         parent: StubElement<*>?,
         elementType: IStubElementType<*, *>,
         name: StringRef?,
         isPublic: Boolean,
-        isGlobal: Boolean,
     ) : super(parent, elementType, name) {
         this.isPublic = isPublic
-        this.isGlobal = isGlobal
     }
 
     constructor(
@@ -27,10 +24,8 @@ abstract class VlangNamedStub<T : VlangNamedElement> : NamedStubBase<T> {
         elementType: IStubElementType<*, *>,
         name: String?,
         isPublic: Boolean,
-        isGlobal: Boolean,
     ) : super(parent, elementType, name) {
         this.isPublic = isPublic
-        this.isGlobal = isGlobal
     }
 
     override fun toString(): String {

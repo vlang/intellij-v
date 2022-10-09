@@ -161,6 +161,19 @@ object VlangCompletionUtil {
         )
     }
 
+    fun createInterfaceMethodLookupElement(element: VlangNamedElement): LookupElement? {
+        val name = element.name
+        if (name.isNullOrEmpty()) {
+            return null
+        }
+
+        return createInterfaceMethodLookupElement(
+            element, name,
+            priority = METHOD_PRIORITY,
+            insertHandler = FunctionInsertHandler(null)
+        )
+    }
+
     fun createStructLookupElement(element: VlangNamedElement, moduleName: String?): LookupElement? {
         val name = element.name
         if (name.isNullOrEmpty()) {
@@ -222,9 +235,9 @@ object VlangCompletionUtil {
         icon: Icon, moduleName: String?,
         priority: Int = 0,
     ): LookupElement {
-//        val qualifiedName = createQualifiedName(moduleName, lookupString)
+        val qualifiedName = createQualifiedName(moduleName, lookupString)
         return PrioritizedLookupElement.withPriority(
-            LookupElementBuilder.createWithSmartPointer(lookupString, element)
+            LookupElementBuilder.createWithSmartPointer(qualifiedName, element)
                 .withRenderer(ClassLikeRenderer(icon, moduleName))
                 .withInsertHandler(ClassLikeInsertHandler(moduleName)), priority.toDouble()
         )
@@ -265,6 +278,18 @@ object VlangCompletionUtil {
         return PrioritizedLookupElement.withPriority(
             LookupElementBuilder.createWithSmartPointer(lookupString, element)
                 .withRenderer(FIELD_RENDERER)
+                .withInsertHandler(insertHandler), priority.toDouble()
+        )
+    }
+
+    private fun createInterfaceMethodLookupElement(
+        element: VlangNamedElement, lookupString: String,
+        insertHandler: InsertHandler<LookupElement>? = null,
+        priority: Int = 0,
+    ): LookupElement {
+        return PrioritizedLookupElement.withPriority(
+            LookupElementBuilder.createWithSmartPointer(lookupString, element)
+                .withRenderer(INTERFACE_METHOD_RENDERER)
                 .withInsertHandler(insertHandler), priority.toDouble()
         )
     }
@@ -456,14 +481,33 @@ object VlangCompletionUtil {
         }
     }
 
+    private val INTERFACE_METHOD_RENDERER = object : LookupElementRenderer<LookupElement>() {
+        override fun renderElement(element: LookupElement, p: LookupElementPresentation) {
+            val elem = element.psiElement as? VlangInterfaceMethodDefinition ?: return
+            val signature = elem.getSignature()
+
+            val typeText = signature.result?.text ?: "void"
+            val icon = VIcons.Method
+
+            val parent = elem.parentOfType<VlangNamedElement>()
+            p.tailText = signature.parameters.text + " of " + parent?.name
+
+            p.icon = icon
+            p.typeText = typeText
+            p.isTypeGrayed = true
+            p.itemText = element.lookupString
+        }
+    }
+
     private val FIELD_RENDERER = object : LookupElementRenderer<LookupElement>() {
         override fun renderElement(element: LookupElement, p: LookupElementPresentation) {
             val elem = element.psiElement as? VlangNamedElement ?: return
             val type = elem.getType(null)?.toEx()?.readableName(elem)
             val icon = VIcons.Field
 
-            val parentStruct = elem.parentOfType<VlangStructDeclaration>()
-            p.tailText = " of " + parentStruct?.name
+            // TODO: show fqn?
+            val parent = elem.parentOfType<VlangNamedElement>()
+            p.tailText = " of " + parent?.name
 
             p.icon = icon
             p.typeText = type

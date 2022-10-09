@@ -82,7 +82,7 @@
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional|OrBlock)Expr")=BinaryExpr
   extends(".*(Expr|Literal|Lit|OperandName)|TypeInitExpr|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|SharedExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression|LockExpression|IncDecExpression|LiteralValueExpression")=Expression
 
-  implements("(Var|Param|Field|Label|Var|Const|EnumField|GlobalVariable)Definition|(Struct|TypeAlias|Union|Enum|Interface)Declaration|Receiver|Import(Alias)")="org.vlang.lang.psi.VlangNamedElement"
+  implements("(Var|Param|Field|Label|Var|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|(Struct|TypeAlias|Union|Enum|Interface)Declaration|Receiver|Import(Alias)")="org.vlang.lang.psi.VlangNamedElement"
   implements("FunctionLit|(Function|Method)Declaration")="org.vlang.lang.psi.VlangSignatureOwner"
 //  implements("InterfaceMethodDeclaration")="org.vlang.lang.psi.VlangNamedSignatureOwner"
   implements("(Function|Method)Declaration")="org.vlang.lang.psi.VlangFunctionOrMethodDeclaration"
@@ -93,9 +93,9 @@
 
   extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
   extends("ModuleClause|Type|ImportName")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
-  extends("(Struct|TypeAlias|Union|Enum|Interface)Declaration|(Var|Label|Param|Field|Const|EnumField|GlobalVariable)Definition|Receiver|Import(Alias)")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
+  extends("(Struct|TypeAlias|Union|Enum|Interface)Declaration|(Var|Label|Param|Field|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias)")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
 
-  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum|Interface)Declaration|.*Type|(Var|Label|Field|Param|Const|EnumField|GlobalVariable)Definition|Receiver|Import(Alias|Name)")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
+  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum|Interface)Declaration|.*Type|(Var|Label|Field|Param|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
 
   extends(".*Statement")=Statement
   extends(".*Type|TypeList")=Type
@@ -398,15 +398,25 @@ InterfaceDeclaration ::= Attributes? SymbolVisibility? InterfaceType {
   methods=[getName getIdentifier]
 }
 
-InterfaceType ::= interface identifier GenericArguments? '{' InterfaceMembers? '}' {
+InterfaceType ::= interface identifier GenericArguments? '{' MembersGroup* '}' {
   pin=1
   implements="org.vlang.lang.psi.VlangFieldListOwner"
-  methods=[getFieldList]
+  methods=[getFieldList getMethodList]
 }
 
-private InterfaceMembers ::= MemberModifiers? (InterfaceMethodDeclaration | InterfaceFieldDeclaration | AnonymousInterfaceDefinition)? (semi InterfaceMembers)* semi? {pin=1}
-InterfaceFieldDeclaration ::= (FieldDefinitionList Type) Attribute? Tag?
-InterfaceMethodDeclaration ::= identifier Signature Attribute? Tag?
+MembersGroup ::= WithModifiersMembersGroup | WithoutModifiersMemberGroup
+
+private WithModifiersMembersGroup ::= MemberModifiers semi? InterfaceMember+ {pin=1}
+private WithoutModifiersMemberGroup ::= !MemberModifiers InterfaceMember+
+
+private InterfaceMember ::= InterfaceMethodDeclaration | FieldDeclaration | AnonymousInterfaceDefinition
+
+InterfaceMethodDeclaration ::= InterfaceMethodDefinition Attribute? DefaultFieldValue? Tag? semi
+InterfaceMethodDefinition ::= identifier Signature {
+  implements="org.vlang.lang.psi.VlangSignatureOwner"
+  stubClass="org.vlang.lang.stubs.VlangInterfaceMethodDefinitionStub"
+  methods=[getTypeInner]
+}
 
 AnonymousInterfaceDefinition ::= Type {
 //  stubClass="org.vlang.lang.stubs.GoAnonymousFieldDefinitionStub"
@@ -522,9 +532,9 @@ MethodDeclaration ::= Attributes? SymbolVisibility? fn '(' Receiver ')' MethodNa
 MethodName ::= identifier | AddOp | MulOp | RelOp
 
 // [mut|shared] <ident> <type>
-Receiver ::= (VarModifiers? identifier ReceiverTail) | ReceiverTail {
+Receiver ::= VarModifiers? identifier ReceiverTail {
+  pin=3
   methods=[getTypeInner getName]
-  pin=1
   stubClass="org.vlang.lang.stubs.VlangReceiverStub"
 }
 private ReceiverTail ::= Type ','?

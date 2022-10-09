@@ -6,10 +6,11 @@ import com.intellij.psi.stubs.StubInputStream
 import com.intellij.psi.stubs.StubOutputStream
 import com.intellij.util.ArrayFactory
 import org.vlang.lang.psi.VlangMethodDeclaration
+import org.vlang.lang.psi.VlangPointerType
 import org.vlang.lang.psi.impl.VlangMethodDeclarationImpl
-import org.vlang.lang.psi.impl.VlangPsiImplUtil
 import org.vlang.lang.stubs.VlangFileStub
 import org.vlang.lang.stubs.VlangMethodDeclarationStub
+import org.vlang.lang.stubs.index.VlangMethodFingerprintIndex
 import org.vlang.lang.stubs.index.VlangMethodIndex
 
 class VlangMethodDeclarationStubElementType(name: String) :
@@ -20,13 +21,12 @@ class VlangMethodDeclarationStubElementType(name: String) :
     }
 
     override fun createStub(psi: VlangMethodDeclaration, parentStub: StubElement<*>?): VlangMethodDeclarationStub {
-        return VlangMethodDeclarationStub(parentStub, this, psi.name, psi.isPublic(), psi.isGlobal(), calcTypeText(psi))
+        return VlangMethodDeclarationStub(parentStub, this, psi.name, psi.isPublic(), calcTypeText(psi))
     }
 
     override fun serialize(stub: VlangMethodDeclarationStub, dataStream: StubOutputStream) {
         dataStream.writeName(stub.name)
         dataStream.writeBoolean(stub.isPublic)
-        dataStream.writeBoolean(stub.isGlobal)
         dataStream.writeName(stub.typeName)
     }
 
@@ -36,19 +36,28 @@ class VlangMethodDeclarationStubElementType(name: String) :
             this,
             dataStream.readName(),
             dataStream.readBoolean(),
-            dataStream.readBoolean(),
             dataStream.readName()
         )
     }
 
     override fun indexStub(stub: VlangMethodDeclarationStub, sink: IndexSink) {
         super.indexStub(stub, sink)
+
+        val name = stub.name
+        if (name != null) {
+            sink.occurrence(VlangMethodFingerprintIndex.KEY, name)
+        }
+
         val typeName = stub.typeName ?: return
         if (typeName.isNotEmpty()) {
-            val parent: StubElement<*> = stub.parentStub
+            val parent = stub.parentStub
             if (parent is VlangFileStub) {
-                val packageName = parent.getModuleName()
-                sink.occurrence(VlangMethodIndex.KEY, "$packageName.$typeName")
+                val moduleName = parent.getModuleQualifiedName()
+                if (moduleName.isNullOrEmpty()) {
+                    sink.occurrence(VlangMethodIndex.KEY, typeName)
+                } else {
+                    sink.occurrence(VlangMethodIndex.KEY, "$moduleName.$typeName")
+                }
             }
         }
     }
@@ -60,8 +69,14 @@ class VlangMethodDeclarationStubElementType(name: String) :
         }
 
         fun calcTypeText(psi: VlangMethodDeclaration): String? {
-            val reference = VlangPsiImplUtil.getTypeReference(psi.receiverType)
-            return reference?.getIdentifier()?.text
+            val type = psi.receiverType
+            val underlyingType = if (type is VlangPointerType) {
+                type.type
+            } else {
+                type
+            }
+
+            return underlyingType?.text
         }
     }
 }

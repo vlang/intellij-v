@@ -19,9 +19,8 @@ class VlangNamesIndex : StringStubIndexExtension<VlangNamedElement>() {
             name: String,
             project: Project,
             scope: GlobalSearchScope?,
-            idFilter: IdFilter?
         ): Collection<VlangNamedElement> {
-            val res = StubIndex.getElements(KEY, fqn, project, scope, idFilter, VlangNamedElement::class.java)
+            val res = StubIndex.getElements(KEY, fqn, project, scope, VlangNamedElement::class.java)
             if (res.isNotEmpty()) {
                 return res
             }
@@ -33,7 +32,6 @@ class VlangNamesIndex : StringStubIndexExtension<VlangNamedElement>() {
                 builtinName,
                 project,
                 scope,
-                idFilter,
                 VlangNamedElement::class.java
             )
         }
@@ -43,7 +41,7 @@ class VlangNamesIndex : StringStubIndexExtension<VlangNamedElement>() {
             project: Project,
             scope: GlobalSearchScope?,
             idFilter: IdFilter?,
-            processor: Processor<VlangNamedElement>
+            processor: Processor<VlangNamedElement>,
         ): Boolean {
             return StubIndex.getInstance().processElements(
                 KEY, name, project, scope, idFilter,
@@ -55,8 +53,7 @@ class VlangNamesIndex : StringStubIndexExtension<VlangNamedElement>() {
             prefix: String,
             project: Project,
             scope: GlobalSearchScope?,
-            idFilter: IdFilter?,
-            processor: Processor<VlangNamedElement>
+            processor: Processor<VlangNamedElement>,
         ): Boolean {
             val keys = StubIndex.getInstance().getAllKeys(KEY, project)
             for (key in keys) {
@@ -64,7 +61,7 @@ class VlangNamesIndex : StringStubIndexExtension<VlangNamedElement>() {
                     continue
                 }
 
-                val els = StubIndex.getElements(KEY, key, project, null, idFilter, VlangNamedElement::class.java)
+                val els = StubIndex.getElements(KEY, key, project, null, null, VlangNamedElement::class.java)
                 for (el in els) {
                     if (!processor.process(el)) {
                         return false
@@ -75,6 +72,17 @@ class VlangNamesIndex : StringStubIndexExtension<VlangNamedElement>() {
             return true
         }
 
+        fun getAllPrefix(prefix: String, project: Project): Collection<VlangNamedElement> {
+            val keys = StubIndex.getInstance().getAllKeys(KEY, project)
+            return keys.flatMap { key ->
+                if (!key.startsWith(prefix)) {
+                    return@flatMap emptyList()
+                }
+
+                StubIndex.getElements(KEY, key, project, null, null, VlangNamedElement::class.java)
+            }
+        }
+
         fun getAll(project: Project): List<VlangNamedElement> {
             val result = mutableListOf<VlangNamedElement>()
             for (key in StubIndex.getInstance().getAllKeys(KEY, project)) {
@@ -82,7 +90,7 @@ class VlangNamesIndex : StringStubIndexExtension<VlangNamedElement>() {
                     KEY,
                     key,
                     project,
-                    GlobalSearchScope.allScope(project),
+                    null,
                     null,
                     VlangNamedElement::class.java
                 )

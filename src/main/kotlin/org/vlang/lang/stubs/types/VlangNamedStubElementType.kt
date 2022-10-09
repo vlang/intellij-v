@@ -10,6 +10,7 @@ import org.vlang.lang.stubs.VlangMethodDeclarationStub
 import org.vlang.lang.stubs.VlangNamedStub
 import org.vlang.lang.stubs.index.VlangNamesIndex
 
+@OptIn(ExperimentalStdlibApi::class)
 abstract class VlangNamedStubElementType<S : VlangNamedStub<T>, T : VlangNamedElement>(debugName: String) :
     VlangStubElementType<S, T>(debugName) {
 
@@ -35,8 +36,17 @@ abstract class VlangNamedStubElementType<S : VlangNamedStub<T>, T : VlangNamedEl
 
             if (stub is VlangMethodDeclarationStub) {
                 val typeName = stub.typeName ?: return
+                val parts = buildList<String> {
+                    if (moduleName != null) {
+                        add(moduleName)
+                    }
+                    if (typeName.isNotEmpty()) {
+                        add(typeName)
+                    }
+                    add(name)
+                }
                 if (typeName.isNotEmpty()) {
-                    sink.occurrence(VlangNamesIndex.KEY, "$moduleName.$typeName.$name")
+                    sink.occurrence(VlangNamesIndex.KEY, parts.joinToString("."))
                 }
             }
 

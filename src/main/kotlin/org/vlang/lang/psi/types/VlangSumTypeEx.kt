@@ -10,7 +10,7 @@ class VlangSumTypeEx(raw: VlangAliasType) : VlangBaseTypeEx<VlangAliasType>(raw)
     private val decl = raw.parent as VlangTypeAliasDeclaration
     private val name = decl.getQualifiedName() ?: ANON
     private val left = VlangSimpleTypeEx(raw.type)
-    private val rightList = raw.typeUnionList?.typeList?.map { it.toEx() } ?: emptyList()
+    private val rightList = emptyList<VlangTypeEx<*>>() // TODO
 
     override fun toString() = buildString {
         append(name)
@@ -23,6 +23,10 @@ class VlangSumTypeEx(raw: VlangAliasType) : VlangBaseTypeEx<VlangAliasType>(raw)
     override fun readableName(context: VlangCompositeElement) = VlangCodeInsightUtil.getQualifiedName(context, decl)
 
     override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {
+        return true // TODO: implement this
+    }
+
+    override fun isEqual(rhs: VlangTypeEx<*>): Boolean {
         return true // TODO: implement this
     }
 

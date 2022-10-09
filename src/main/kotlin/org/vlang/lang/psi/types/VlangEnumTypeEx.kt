@@ -32,6 +32,10 @@ class VlangEnumTypeEx(raw: VlangEnumType) : VlangBaseTypeEx<VlangEnumType>(raw),
         }
     }
 
+    override fun isEqual(rhs: VlangTypeEx<*>): Boolean {
+        return rhs is VlangEnumTypeEx && name == rhs.name
+    }
+
     override fun accept(visitor: VlangTypeVisitor) {
         visitor.enter(this)
     }

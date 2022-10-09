@@ -19,6 +19,10 @@ class VlangSimpleTypeEx(raw: VlangType) : VlangBaseTypeEx<VlangType>(raw) {
         }
     }
 
+    override fun isEqual(rhs: VlangTypeEx<*>): Boolean {
+        return rhs is VlangSimpleTypeEx && raw.text == rhs.raw().text
+    }
+
     override fun accept(visitor: VlangTypeVisitor) {
         if (!visitor.enter(this)) {
             return

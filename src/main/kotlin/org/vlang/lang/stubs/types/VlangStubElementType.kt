@@ -12,9 +12,7 @@ import org.vlang.lang.psi.VlangCompositeElement
 abstract class VlangStubElementType<S : StubBase<T>, T : VlangCompositeElement>(debugName: String) :
     IStubElementType<S, T>(debugName, VlangLanguage.INSTANCE) {
 
-    override fun getExternalId(): String {
-        return "vlang." + super.toString()
-    }
+    override fun getExternalId() = "vlang." + super.toString()
 
     override fun indexStub(stub: S, sink: IndexSink) {}
 

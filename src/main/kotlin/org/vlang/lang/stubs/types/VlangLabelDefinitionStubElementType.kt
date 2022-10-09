@@ -1,6 +1,5 @@
 package org.vlang.lang.stubs.types
 
-import com.intellij.lang.ASTNode
 import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.stubs.StubInputStream
 import com.intellij.psi.stubs.StubOutputStream
@@ -14,20 +13,14 @@ class VlangLabelDefinitionStubElementType(name: String) : VlangNamedStubElementT
     }
 
     override fun createStub(psi: VlangLabelDefinition, parentStub: StubElement<*>?): VlangLabelDefinitionStub {
-        return VlangLabelDefinitionStub(parentStub, this, psi.getName(), psi.isPublic(), psi.isGlobal())
+        return VlangLabelDefinitionStub(parentStub, this, psi.name)
     }
 
     override fun serialize(stub: VlangLabelDefinitionStub, dataStream: StubOutputStream) {
-        dataStream.writeName(stub.getName())
-        dataStream.writeBoolean(stub.isPublic)
-        dataStream.writeBoolean(stub.isGlobal)
-    }
-
-    override fun shouldCreateStub(node: ASTNode): Boolean {
-        return false // todo
+        dataStream.writeName(stub.name)
     }
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): VlangLabelDefinitionStub {
-        return VlangLabelDefinitionStub(parentStub, this, dataStream.readName(), dataStream.readBoolean(), dataStream.readBoolean())
+        return VlangLabelDefinitionStub(parentStub, this, dataStream.readName())
     }
 }

@@ -13,9 +13,8 @@ class VlangMethodDeclarationStub : VlangFunctionOrMethodDeclarationStub<VlangMet
         elementType: IStubElementType<*, *>,
         name: StringRef?,
         isPublic: Boolean,
-        isGlobal: Boolean,
         typeName: StringRef?
-    ) : super(parent, elementType, name, isPublic, isGlobal) {
+    ) : super(parent, elementType, name, isPublic) {
         myTypeName = typeName
     }
 
@@ -24,9 +23,8 @@ class VlangMethodDeclarationStub : VlangFunctionOrMethodDeclarationStub<VlangMet
         elementType: IStubElementType<*, *>,
         name: String?,
         isPublic: Boolean,
-        isGlobal: Boolean,
         typeName: String?
-    ) : super(parent, elementType, name, isPublic, isGlobal) {
+    ) : super(parent, elementType, name, isPublic) {
         myTypeName = StringRef.fromString(typeName)
     }
 

@@ -218,26 +218,15 @@ class VlangReference(el: VlangReferenceExpressionBase) :
         }
 
         if (typ is VlangStructType) {
-            val delegate = createDelegate(processor)
-            typ.processDeclarations(delegate, ResolveState.initial(), null, myElement)
-            val interfaceRefs = mutableListOf<VlangTypeReferenceExpression>()
-            val structRefs = mutableListOf<VlangTypeReferenceExpression>()
-
-            val groups = typ.fieldsGroupList
-            val fields = groups.flatMap { it.fieldDeclarationList }.flatMap { it.fieldDefinitionList }
-
-            if (!processNamedElements(processor, state, fields, localResolve)) return false
+            if (!processNamedElements(processor, state, typ.getFieldList(), localResolve)) return false
 
             val fqn = (typ.parent as VlangStructDeclaration).getQualifiedName()
             if (!processMethods(fqn, processor, state)) return false
+        }
 
-            if (!processCollectedRefs(
-                    interfaceRefs,
-                    processor,
-                    state.put(POINTER, null)
-                )
-            ) return false
-            if (!processCollectedRefs(structRefs, processor, state)) return false
+        if (typ is VlangInterfaceType) {
+            if (!processNamedElements(processor, state, typ.getFieldList(), localResolve)) return false
+            if (!processNamedElements(processor, state, typ.methodList, localResolve)) return false
         }
 
         if (typ is VlangEnumType) {
@@ -267,7 +256,7 @@ class VlangReference(el: VlangReferenceExpressionBase) :
     }
 
     private fun processMethods(fqn: String?, processor: VlangScopeProcessor, state: ResolveState): Boolean {
-        return VlangNamesIndex.processPrefix("$fqn.", myElement.project, GlobalSearchScope.allScope(myElement.project), null) {
+        return VlangNamesIndex.processPrefix("$fqn.", myElement.project, GlobalSearchScope.allScope(myElement.project)) {
             if (!processor.execute(it, state)) return@processPrefix false
             true
         }

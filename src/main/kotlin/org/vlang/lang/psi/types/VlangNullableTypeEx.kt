@@ -21,6 +21,18 @@ class VlangNullableTypeEx(raw: VlangNullableType) : VlangBaseTypeEx<VlangNullabl
         }
     }
 
+    override fun isEqual(rhs: VlangTypeEx<*>): Boolean {
+        if (rhs !is VlangNullableTypeEx) {
+            return false
+        }
+
+        if (rhs.inner == null && inner == null) {
+            return true
+        }
+
+        return inner!!.isEqual(rhs.inner!!)
+    }
+
     override fun accept(visitor: VlangTypeVisitor) {
         if (!visitor.enter(this)) {
             return

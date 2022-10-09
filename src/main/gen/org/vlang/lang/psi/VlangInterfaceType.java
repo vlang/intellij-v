@@ -9,17 +9,8 @@ import java.util.List;
 
 public interface VlangInterfaceType extends VlangType, VlangFieldListOwner {
 
-  @Nullable
-  VlangAnonymousInterfaceDefinition getAnonymousInterfaceDefinition();
-
-  @Nullable
-  VlangInterfaceFieldDeclaration getInterfaceFieldDeclaration();
-
-  @Nullable
-  VlangInterfaceMethodDeclaration getInterfaceMethodDeclaration();
-
-  @Nullable
-  VlangMemberModifiers getMemberModifiers();
+  @NotNull
+  List<VlangMembersGroup> getMembersGroupList();
 
   @Nullable
   PsiElement getLbrace();
@@ -35,5 +26,8 @@ public interface VlangInterfaceType extends VlangType, VlangFieldListOwner {
 
   @NotNull
   List<VlangFieldDefinition> getFieldList();
+
+  @NotNull
+  List<VlangInterfaceMethodDefinition> getMethodList();
 
 }

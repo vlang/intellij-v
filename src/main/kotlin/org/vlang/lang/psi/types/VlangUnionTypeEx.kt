@@ -20,6 +20,10 @@ class VlangUnionTypeEx(raw: VlangUnionType): VlangBaseTypeEx<VlangUnionType>(raw
         return true // TODO: implement this
     }
 
+    override fun isEqual(rhs: VlangTypeEx<*>): Boolean {
+        return true // TODO: implement this
+    }
+
     override fun accept(visitor: VlangTypeVisitor) {
         visitor.enter(this)
     }

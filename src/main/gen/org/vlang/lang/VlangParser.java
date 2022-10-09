@@ -2543,131 +2543,43 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (FieldDefinitionList Type) Attribute? Tag?
-  public static boolean InterfaceFieldDeclaration(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "InterfaceFieldDeclaration")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = InterfaceFieldDeclaration_0(b, l + 1);
-    r = r && InterfaceFieldDeclaration_1(b, l + 1);
-    r = r && InterfaceFieldDeclaration_2(b, l + 1);
-    exit_section_(b, m, INTERFACE_FIELD_DECLARATION, r);
-    return r;
-  }
-
-  // FieldDefinitionList Type
-  private static boolean InterfaceFieldDeclaration_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "InterfaceFieldDeclaration_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = FieldDefinitionList(b, l + 1);
-    r = r && Type(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // Attribute?
-  private static boolean InterfaceFieldDeclaration_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "InterfaceFieldDeclaration_1")) return false;
-    Attribute(b, l + 1);
-    return true;
-  }
-
-  // Tag?
-  private static boolean InterfaceFieldDeclaration_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "InterfaceFieldDeclaration_2")) return false;
-    Tag(b, l + 1);
-    return true;
-  }
-
-  /* ********************************************************** */
-  // MemberModifiers? (InterfaceMethodDeclaration | InterfaceFieldDeclaration | AnonymousInterfaceDefinition)? (semi InterfaceMembers)* semi?
-  static boolean InterfaceMembers(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "InterfaceMembers")) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_);
-    r = InterfaceMembers_0(b, l + 1);
-    p = r; // pin = 1
-    r = r && report_error_(b, InterfaceMembers_1(b, l + 1));
-    r = p && report_error_(b, InterfaceMembers_2(b, l + 1)) && r;
-    r = p && InterfaceMembers_3(b, l + 1) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  // MemberModifiers?
-  private static boolean InterfaceMembers_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "InterfaceMembers_0")) return false;
-    MemberModifiers(b, l + 1);
-    return true;
-  }
-
-  // (InterfaceMethodDeclaration | InterfaceFieldDeclaration | AnonymousInterfaceDefinition)?
-  private static boolean InterfaceMembers_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "InterfaceMembers_1")) return false;
-    InterfaceMembers_1_0(b, l + 1);
-    return true;
-  }
-
-  // InterfaceMethodDeclaration | InterfaceFieldDeclaration | AnonymousInterfaceDefinition
-  private static boolean InterfaceMembers_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "InterfaceMembers_1_0")) return false;
+  // InterfaceMethodDeclaration | FieldDeclaration | AnonymousInterfaceDefinition
+  static boolean InterfaceMember(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "InterfaceMember")) return false;
     boolean r;
     r = InterfaceMethodDeclaration(b, l + 1);
-    if (!r) r = InterfaceFieldDeclaration(b, l + 1);
+    if (!r) r = FieldDeclaration(b, l + 1);
     if (!r) r = AnonymousInterfaceDefinition(b, l + 1);
     return r;
   }
 
-  // (semi InterfaceMembers)*
-  private static boolean InterfaceMembers_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "InterfaceMembers_2")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!InterfaceMembers_2_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "InterfaceMembers_2", c)) break;
-    }
-    return true;
-  }
-
-  // semi InterfaceMembers
-  private static boolean InterfaceMembers_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "InterfaceMembers_2_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = semi(b, l + 1);
-    r = r && InterfaceMembers(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // semi?
-  private static boolean InterfaceMembers_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "InterfaceMembers_3")) return false;
-    semi(b, l + 1);
-    return true;
-  }
-
   /* ********************************************************** */
-  // identifier Signature Attribute? Tag?
+  // InterfaceMethodDefinition Attribute? DefaultFieldValue? Tag? semi
   public static boolean InterfaceMethodDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "InterfaceMethodDeclaration")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, IDENTIFIER);
-    r = r && Signature(b, l + 1);
+    r = InterfaceMethodDefinition(b, l + 1);
+    r = r && InterfaceMethodDeclaration_1(b, l + 1);
     r = r && InterfaceMethodDeclaration_2(b, l + 1);
     r = r && InterfaceMethodDeclaration_3(b, l + 1);
+    r = r && semi(b, l + 1);
     exit_section_(b, m, INTERFACE_METHOD_DECLARATION, r);
     return r;
   }
 
   // Attribute?
+  private static boolean InterfaceMethodDeclaration_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "InterfaceMethodDeclaration_1")) return false;
+    Attribute(b, l + 1);
+    return true;
+  }
+
+  // DefaultFieldValue?
   private static boolean InterfaceMethodDeclaration_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "InterfaceMethodDeclaration_2")) return false;
-    Attribute(b, l + 1);
+    DefaultFieldValue(b, l + 1);
     return true;
   }
 
@@ -2679,7 +2591,20 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // interface identifier GenericArguments? '{' InterfaceMembers? '}'
+  // identifier Signature
+  public static boolean InterfaceMethodDefinition(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "InterfaceMethodDefinition")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, IDENTIFIER);
+    r = r && Signature(b, l + 1);
+    exit_section_(b, m, INTERFACE_METHOD_DEFINITION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // interface identifier GenericArguments? '{' MembersGroup* '}'
   public static boolean InterfaceType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "InterfaceType")) return false;
     if (!nextTokenIs(b, INTERFACE)) return false;
@@ -2702,10 +2627,14 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // InterfaceMembers?
+  // MembersGroup*
   private static boolean InterfaceType_4(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "InterfaceType_4")) return false;
-    InterfaceMembers(b, l + 1);
+    while (true) {
+      int c = current_position_(b);
+      if (!MembersGroup(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "InterfaceType_4", c)) break;
+    }
     return true;
   }
 
@@ -3223,6 +3152,18 @@ public class VlangParser implements PsiParser, LightPsiParser {
       if (!empty_element_parsed_guard_(b, "MemberModifiers_0", c)) break;
     }
     return true;
+  }
+
+  /* ********************************************************** */
+  // WithModifiersMembersGroup | WithoutModifiersMemberGroup
+  public static boolean MembersGroup(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MembersGroup")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, MEMBERS_GROUP, "<members group>");
+    r = WithModifiersMembersGroup(b, l + 1);
+    if (!r) r = WithoutModifiersMemberGroup(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
   }
 
   /* ********************************************************** */
@@ -3769,32 +3710,21 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (VarModifiers? identifier ReceiverTail) | ReceiverTail
+  // VarModifiers? identifier ReceiverTail
   public static boolean Receiver(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Receiver")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, RECEIVER, "<receiver>");
     r = Receiver_0(b, l + 1);
-    if (!r) r = ReceiverTail(b, l + 1);
+    r = r && consumeToken(b, IDENTIFIER);
+    r = r && ReceiverTail(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // VarModifiers? identifier ReceiverTail
+  // VarModifiers?
   private static boolean Receiver_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Receiver_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = Receiver_0_0(b, l + 1);
-    r = r && consumeToken(b, IDENTIFIER);
-    r = r && ReceiverTail(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // VarModifiers?
-  private static boolean Receiver_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Receiver_0_0")) return false;
     VarModifiers(b, l + 1);
     return true;
   }
@@ -5029,6 +4959,42 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // MemberModifiers semi? InterfaceMember+
+  static boolean WithModifiersMembersGroup(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "WithModifiersMembersGroup")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = MemberModifiers(b, l + 1);
+    p = r; // pin = 1
+    r = r && report_error_(b, WithModifiersMembersGroup_1(b, l + 1));
+    r = p && WithModifiersMembersGroup_2(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // semi?
+  private static boolean WithModifiersMembersGroup_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "WithModifiersMembersGroup_1")) return false;
+    semi(b, l + 1);
+    return true;
+  }
+
+  // InterfaceMember+
+  private static boolean WithModifiersMembersGroup_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "WithModifiersMembersGroup_2")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = InterfaceMember(b, l + 1);
+    while (r) {
+      int c = current_position_(b);
+      if (!InterfaceMember(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "WithModifiersMembersGroup_2", c)) break;
+    }
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // !MemberModifiers FieldDeclaration+
   static boolean WithoutModifiersFieldsGroup(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "WithoutModifiersFieldsGroup")) return false;
@@ -5060,6 +5026,43 @@ public class VlangParser implements PsiParser, LightPsiParser {
       int c = current_position_(b);
       if (!FieldDeclaration(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "WithoutModifiersFieldsGroup_1", c)) break;
+    }
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // !MemberModifiers InterfaceMember+
+  static boolean WithoutModifiersMemberGroup(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "WithoutModifiersMemberGroup")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = WithoutModifiersMemberGroup_0(b, l + 1);
+    r = r && WithoutModifiersMemberGroup_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // !MemberModifiers
+  private static boolean WithoutModifiersMemberGroup_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "WithoutModifiersMemberGroup_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NOT_);
+    r = !MemberModifiers(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // InterfaceMember+
+  private static boolean WithoutModifiersMemberGroup_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "WithoutModifiersMemberGroup_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = InterfaceMember(b, l + 1);
+    while (r) {
+      int c = current_position_(b);
+      if (!InterfaceMember(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "WithoutModifiersMemberGroup_1", c)) break;
     }
     exit_section_(b, m, null, r);
     return r;

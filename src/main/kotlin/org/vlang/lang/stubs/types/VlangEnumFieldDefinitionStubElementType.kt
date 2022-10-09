@@ -7,22 +7,22 @@ import org.vlang.lang.psi.VlangEnumFieldDefinition
 import org.vlang.lang.psi.impl.VlangEnumFieldDefinitionImpl
 import org.vlang.lang.stubs.VlangEnumFieldDefinitionStub
 
-class VlangEnumFieldDefinitionStubElementType(name: String) : VlangNamedStubElementType<VlangEnumFieldDefinitionStub, VlangEnumFieldDefinition>(name) {
+class VlangEnumFieldDefinitionStubElementType(name: String) :
+    VlangNamedStubElementType<VlangEnumFieldDefinitionStub, VlangEnumFieldDefinition>(name) {
+
     override fun createPsi(stub: VlangEnumFieldDefinitionStub): VlangEnumFieldDefinition {
         return VlangEnumFieldDefinitionImpl(stub, this)
     }
 
     override fun createStub(psi: VlangEnumFieldDefinition, parentStub: StubElement<*>?): VlangEnumFieldDefinitionStub {
-        return VlangEnumFieldDefinitionStub(parentStub, this, psi.name, psi.isPublic(), psi.isGlobal())
+        return VlangEnumFieldDefinitionStub(parentStub, this, psi.name)
     }
 
     override fun serialize(stub: VlangEnumFieldDefinitionStub, dataStream: StubOutputStream) {
         dataStream.writeName(stub.name)
-        dataStream.writeBoolean(stub.isPublic)
-        dataStream.writeBoolean(stub.isGlobal)
     }
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): VlangEnumFieldDefinitionStub {
-        return VlangEnumFieldDefinitionStub(parentStub, this, dataStream.readName(), dataStream.readBoolean(), dataStream.readBoolean())
+        return VlangEnumFieldDefinitionStub(parentStub, this, dataStream.readName())
     }
 }

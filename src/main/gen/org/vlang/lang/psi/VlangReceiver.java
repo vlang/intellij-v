@@ -19,7 +19,7 @@ public interface VlangReceiver extends VlangNamedElement, StubBasedPsiElement<Vl
   @Nullable
   PsiElement getComma();
 
-  @Nullable
+  @NotNull
   PsiElement getIdentifier();
 
   @NotNull

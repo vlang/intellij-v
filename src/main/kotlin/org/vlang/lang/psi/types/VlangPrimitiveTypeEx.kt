@@ -48,6 +48,10 @@ class VlangPrimitiveTypeEx(raw: VlangType, private val name: VlangPrimitiveTypes
         }
     }
 
+    override fun isEqual(rhs: VlangTypeEx<*>): Boolean {
+        return rhs is VlangPrimitiveTypeEx && name == rhs.name
+    }
+
     override fun accept(visitor: VlangTypeVisitor) {
         if (!visitor.enter(this)) {
             return

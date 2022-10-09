@@ -1,6 +1,5 @@
 package org.vlang.lang.stubs.types
 
-import com.intellij.lang.ASTNode
 import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.stubs.StubInputStream
 import com.intellij.psi.stubs.StubOutputStream
@@ -14,10 +13,6 @@ abstract class VlangTypeStubElementType(name: String) : VlangStubElementType<Vla
 
     override fun serialize(stub: VlangTypeStub, dataStream: StubOutputStream) {
         dataStream.writeName(stub.getText())
-    }
-
-    override fun shouldCreateStubInBlock(node: ASTNode): Boolean {
-        return /*PsiTreeUtil.getParentOfType(node.psi, VlangTypeSpec::class.java) != null || */super.shouldCreateStubInBlock(node)
     }
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): VlangTypeStub {

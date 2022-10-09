@@ -94,8 +94,8 @@ public interface VlangTypes {
   IElementType INC_DEC_EXPRESSION = new VlangCompositeElementType("INC_DEC_EXPRESSION");
   IElementType INDEX_OR_SLICE_EXPR = new VlangCompositeElementType("INDEX_OR_SLICE_EXPR");
   IElementType INTERFACE_DECLARATION = VlangElementTypeFactory.stubFactory("INTERFACE_DECLARATION");
-  IElementType INTERFACE_FIELD_DECLARATION = new VlangCompositeElementType("INTERFACE_FIELD_DECLARATION");
   IElementType INTERFACE_METHOD_DECLARATION = new VlangCompositeElementType("INTERFACE_METHOD_DECLARATION");
+  IElementType INTERFACE_METHOD_DEFINITION = VlangElementTypeFactory.stubFactory("INTERFACE_METHOD_DEFINITION");
   IElementType INTERFACE_TYPE = VlangElementTypeFactory.stubFactory("INTERFACE_TYPE");
   IElementType IN_EXPRESSION = new VlangCompositeElementType("IN_EXPRESSION");
   IElementType IS_EXPRESSION = new VlangCompositeElementType("IS_EXPRESSION");
@@ -118,6 +118,7 @@ public interface VlangTypes {
   IElementType MATCH_ARMS = new VlangCompositeElementType("MATCH_ARMS");
   IElementType MATCH_ELSE_ARM_CLAUSE = new VlangCompositeElementType("MATCH_ELSE_ARM_CLAUSE");
   IElementType MATCH_EXPRESSION = new VlangCompositeElementType("MATCH_EXPRESSION");
+  IElementType MEMBERS_GROUP = new VlangCompositeElementType("MEMBERS_GROUP");
   IElementType MEMBER_MODIFIER = new VlangCompositeElementType("MEMBER_MODIFIER");
   IElementType MEMBER_MODIFIERS = new VlangCompositeElementType("MEMBER_MODIFIERS");
   IElementType METHOD_DECLARATION = VlangElementTypeFactory.stubFactory("METHOD_DECLARATION");
@@ -557,11 +558,11 @@ public interface VlangTypes {
       else if (type == INTERFACE_DECLARATION) {
         return new VlangInterfaceDeclarationImpl(node);
       }
-      else if (type == INTERFACE_FIELD_DECLARATION) {
-        return new VlangInterfaceFieldDeclarationImpl(node);
-      }
       else if (type == INTERFACE_METHOD_DECLARATION) {
         return new VlangInterfaceMethodDeclarationImpl(node);
+      }
+      else if (type == INTERFACE_METHOD_DEFINITION) {
+        return new VlangInterfaceMethodDefinitionImpl(node);
       }
       else if (type == INTERFACE_TYPE) {
         return new VlangInterfaceTypeImpl(node);
@@ -628,6 +629,9 @@ public interface VlangTypes {
       }
       else if (type == MATCH_EXPRESSION) {
         return new VlangMatchExpressionImpl(node);
+      }
+      else if (type == MEMBERS_GROUP) {
+        return new VlangMembersGroupImpl(node);
       }
       else if (type == MEMBER_MODIFIER) {
         return new VlangMemberModifierImpl(node);

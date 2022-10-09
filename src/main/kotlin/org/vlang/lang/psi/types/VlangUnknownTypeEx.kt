@@ -9,9 +9,9 @@ class VlangUnknownTypeEx(raw: VlangType?): VlangBaseTypeEx<VlangType?>(raw) {
 
     override fun readableName(context: VlangCompositeElement): String = "any"
 
-    override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {
-        return true
-    }
+    override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean = true
+
+    override fun isEqual(rhs: VlangTypeEx<*>): Boolean = true
 
     override fun accept(visitor: VlangTypeVisitor) {
         if (!visitor.enter(this)) {

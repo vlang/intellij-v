@@ -18,6 +18,10 @@ class VlangVoidTypeEx(raw: VlangType) : VlangBaseTypeEx<VlangType>(raw) {
         }
     }
 
+    override fun isEqual(rhs: VlangTypeEx<*>): Boolean {
+        return rhs is VlangVoidTypeEx
+    }
+
     override fun accept(visitor: VlangTypeVisitor) {
         if (!visitor.enter(this)) {
             return

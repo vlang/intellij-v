@@ -21,6 +21,8 @@ class VlangBuiltinArrayTypeEx(raw: VlangStructType) : VlangBaseTypeEx<VlangType>
         }
     }
 
+    override fun isEqual(rhs: VlangTypeEx<*>): Boolean = true
+
     override fun accept(visitor: VlangTypeVisitor) {
         if (!visitor.enter(this)) {
             return

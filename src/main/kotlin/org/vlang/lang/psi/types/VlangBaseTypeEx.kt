@@ -33,7 +33,7 @@ abstract class VlangBaseTypeEx<T : VlangType?>(protected val raw: T) : VlangType
             }
 
             val type = resolveType()
-            if (type is VlangStructType) {
+            if (type is VlangStructType && type.parent is VlangStructDeclaration) {
                 return when ((type.parent as VlangStructDeclaration).getQualifiedName()) {
                     "builtin.array"  -> VlangBuiltinArrayTypeEx(type)
                     "builtin.string" -> VlangBuiltinStringTypeEx(type)

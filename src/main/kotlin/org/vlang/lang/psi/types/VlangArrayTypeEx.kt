@@ -26,6 +26,10 @@ class VlangArrayTypeEx(raw: VlangArrayOrSliceType) : VlangBaseTypeEx<VlangArrayO
         }
     }
 
+    override fun isEqual(rhs: VlangTypeEx<*>): Boolean {
+        return rhs is VlangArrayTypeEx && rhs.inner?.let { inner?.isEqual(it) } ?: false
+    }
+
     override fun accept(visitor: VlangTypeVisitor) {
         if (!visitor.enter(this)) {
             return

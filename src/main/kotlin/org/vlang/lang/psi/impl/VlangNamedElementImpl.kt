@@ -1,6 +1,7 @@
 package org.vlang.lang.psi.impl
 
 import com.intellij.lang.ASTNode
+import com.intellij.navigation.ItemPresentation
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference
 import com.intellij.psi.ResolveState
@@ -11,10 +12,16 @@ import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.CachedValuesManager
 import com.intellij.psi.util.PsiModificationTracker
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.ui.IconManager
+import com.intellij.util.PlatformIcons
+import org.vlang.ide.ui.VIcons
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.VlangPsiTreeUtil.getChildOfType
+import org.vlang.lang.psi.VlangPsiTreeUtil.parentStubOfType
+import org.vlang.lang.stubs.VlangFileStub
 import org.vlang.lang.stubs.VlangNamedStub
+import javax.swing.Icon
 
 abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
     VlangStubbedElementImpl<T>,
@@ -28,14 +35,14 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
 
     override fun isPublic(): Boolean {
         val stub = stub
-        val isPublic = getSymbolVisibility()?.pub != null
-        return stub?.isPublic ?: isPublic
+        if (stub != null) {
+            return stub.isPublic
+        }
+        return getSymbolVisibility()?.pub != null
     }
 
     override fun isGlobal(): Boolean {
-        val stub = stub
-        val isGlobal = getSymbolVisibility()?.builtinGlobal != null
-        return stub?.isGlobal ?: isGlobal
+        return getSymbolVisibility()?.builtinGlobal != null
     }
 
     override fun getSymbolVisibility(): VlangSymbolVisibility? {
@@ -56,6 +63,14 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
     }
 
     override fun getQualifiedName(): String? {
+        val stub = stub
+        if (stub != null) {
+            val name = stub.name ?: "anon"
+            val fileStub = stub.parentStubOfType<VlangFileStub>()
+            val moduleName = fileStub?.getModuleQualifiedName()
+            return VlangPsiImplUtil.getFqn(moduleName, name)
+        }
+
         val name = name ?: return null
         val moduleName = containingFile.getModuleQualifiedName()
         return VlangPsiImplUtil.getFqn(moduleName, name)
@@ -91,6 +106,47 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
         } else {
             PsiTreeUtil.getNextSiblingOfType(this, VlangType::class.java)
         }
+    }
+
+    override fun getPresentation(): ItemPresentation? {
+        return object : VlangItemPresentation<VlangNamedElement>(this) {
+            override fun getPresentableText() = element.name
+        }
+    }
+
+    override fun getIcon(flags: Int): Icon? {
+        val icon = when (this) {
+            is VlangStructDeclaration         -> VIcons.Struct
+            is VlangInterfaceDeclaration      -> VIcons.Interface
+            is VlangEnumDeclaration           -> VIcons.Enum
+            is VlangUnionDeclaration          -> VIcons.Union
+            is VlangMethodDeclaration         -> VIcons.Method
+            is VlangFunctionDeclaration       -> VIcons.Function
+            is VlangVarDefinition             -> VIcons.Variable
+            is VlangConstDefinition           -> VIcons.Constant
+            is VlangInterfaceMethodDefinition -> VIcons.Method
+            is VlangFieldDefinition           -> VIcons.Field
+            is VlangEnumFieldDefinition       -> VIcons.Field
+            is VlangParamDefinition           -> VIcons.Parameter
+            is VlangLabelDefinition           -> null
+            else                              -> null
+        } ?: return super.getIcon(flags)
+
+        if (flags and ICON_FLAG_VISIBILITY == 0) {
+            return icon
+        }
+
+        val rowIcon = IconManager.getInstance().createLayeredIcon(this, icon, flags)
+        if (rowIcon.iconCount <= 1) return rowIcon
+
+        rowIcon.setIcon(
+            if (isPublic())
+                PlatformIcons.PUBLIC_ICON
+            else
+                PlatformIcons.PRIVATE_ICON, 1
+        )
+
+        return rowIcon
     }
 
     override fun getTextOffset(): Int {

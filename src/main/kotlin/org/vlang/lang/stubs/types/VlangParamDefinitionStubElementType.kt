@@ -13,16 +13,15 @@ class VlangParamDefinitionStubElementType(name: String) : VlangNamedStubElementT
     }
 
     override fun createStub(psi: VlangParamDefinition, parentStub: StubElement<*>?): VlangParamDefinitionStub {
-        return VlangParamDefinitionStub(parentStub, this, psi.name, psi.isPublic(), psi.isGlobal())
+        return VlangParamDefinitionStub(parentStub, this, psi.name, psi.isPublic())
     }
 
     override fun serialize(stub: VlangParamDefinitionStub, dataStream: StubOutputStream) {
         dataStream.writeName(stub.name)
         dataStream.writeBoolean(stub.isPublic)
-        dataStream.writeBoolean(stub.isGlobal)
     }
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): VlangParamDefinitionStub {
-        return VlangParamDefinitionStub(parentStub, this, dataStream.readName(), dataStream.readBoolean(), dataStream.readBoolean())
+        return VlangParamDefinitionStub(parentStub, this, dataStream.readName(), dataStream.readBoolean())
     }
 }

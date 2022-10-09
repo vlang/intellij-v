@@ -65,6 +65,11 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
 
     private class PureBlockKeywordCompletionProvider(private vararg val keywords: String) : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
+            if (VlangCompletionUtil.shouldSuppressCompletion(parameters.position)) {
+                result.stopHere()
+                return
+            }
+
             result.addAllElements(
                 keywords.map {
                     PrioritizedLookupElement.withPriority(

@@ -7,6 +7,10 @@ object VIcons {
     val Vlang = IconLoader.getIcon("/icons/vlang.svg", this::class.java)
     val Module = AllIcons.FileTypes.Config
 
+    var Struct = AllIcons.Nodes.Class
+    var Interface = AllIcons.Nodes.Interface
+    var Enum = AllIcons.Nodes.Enum
+    var Union = AllIcons.Nodes.AbstractClass // TODO: change
     var Method = AllIcons.Nodes.Method
     var Function = AllIcons.Nodes.Function
     var Variable = AllIcons.Nodes.Variable

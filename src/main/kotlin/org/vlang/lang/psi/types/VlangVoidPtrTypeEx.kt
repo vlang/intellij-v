@@ -11,6 +11,10 @@ class VlangVoidPtrTypeEx(raw: VlangType) : VlangBaseTypeEx<VlangType>(raw) {
 
     override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project) = true
 
+    override fun isEqual(rhs: VlangTypeEx<*>): Boolean {
+        return rhs is VlangVoidPtrTypeEx
+    }
+
     override fun accept(visitor: VlangTypeVisitor) {
         if (!visitor.enter(this)) {
             return

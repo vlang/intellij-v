@@ -17,7 +17,9 @@ class VlangMethodIndex : StringStubIndexExtension<VlangMethodDeclaration>() {
         fun find(
             name: String, project: Project,
             scope: GlobalSearchScope?, idFilter: IdFilter?
-        ): Collection<VlangMethodDeclaration?> {
+        ): Collection<VlangMethodDeclaration> {
+            val allKeys = StubIndex.getInstance().getAllKeys(KEY, project)
+
             return StubIndex.getElements(KEY, name, project, scope, idFilter, VlangMethodDeclaration::class.java)
         }
 
@@ -26,7 +28,7 @@ class VlangMethodIndex : StringStubIndexExtension<VlangMethodDeclaration>() {
             project: Project,
             scope: GlobalSearchScope?,
             idFilter: IdFilter?,
-            processor: Processor<VlangMethodDeclaration?>
+            processor: Processor<VlangMethodDeclaration>
         ): Boolean {
             return StubIndex.getInstance().processElements(
                 KEY, name, project, scope, idFilter,

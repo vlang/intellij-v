@@ -96,6 +96,8 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
             return moduleQualifiedName
         }
 
+        val moduleName = getModuleName() ?: return ""
+
         val projectDir = project.guessProjectDir() ?: return ""
         val stdlib = VlangConfiguration.getInstance(project).stdlibLocation
 
@@ -110,7 +112,6 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
         }
 
         val qualifier = moduleNames.reversed().joinToString(".").removePrefix("builtin.")
-        val moduleName = getModuleName()
         if (qualifier.isNotEmpty()) {
             return "$qualifier.$moduleName"
         }

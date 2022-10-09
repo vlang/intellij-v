@@ -331,13 +331,43 @@ object DocumentationGenerator {
         }
     }
 
+    fun VlangInterfaceMethodDefinition.generateDoc(): String {
+        val parameters = getSignature().parameters
+        val returnType = getSignature().result
+
+        return buildString {
+            generateModuleName(containingFile)
+            append(DocumentationMarkup.DEFINITION_START)
+            val parent = parent as? VlangInterfaceMethodDeclaration
+            val parentGroup = parent?.parent as? VlangMembersGroup
+            val owner = parent?.parentOfType<VlangNamedElement>()
+
+            line(parent?.attribute?.generateDoc())
+
+            val modifiersDoc = parentGroup?.memberModifiers.generateDoc()
+            if (modifiersDoc.isNotEmpty()) {
+                append(modifiersDoc)
+            }
+
+            part("interface method", asKeyword)
+            colorize(owner?.name ?: "anon", asDeclaration)
+            append(".")
+            colorize(name ?: "anon", asDeclaration)
+            part(parameters.generateDoc())
+            append(returnType?.generateDoc() ?: DocumentationUtils.colorize("void", asDeclaration))
+
+            append(DocumentationMarkup.DEFINITION_END)
+            generateCommentsPart(this@generateDoc)
+        }
+    }
+
     fun VlangFieldDefinition.generateDoc(): String {
         return buildString {
             generateModuleName(containingFile)
             append(DocumentationMarkup.DEFINITION_START)
             val parent = parent as? VlangFieldDeclaration
             val parentGroup = parent?.parent as? VlangFieldsGroup
-            val parentStruct = parent?.parentOfType<VlangStructDeclaration>()
+            val owner = parent?.parentOfType<VlangNamedElement>()
             val type = parent?.type
 
             line(parent?.attribute?.generateDoc())
@@ -348,7 +378,7 @@ object DocumentationGenerator {
             }
 
             part("field", asKeyword)
-            colorize(parentStruct?.name ?: "anon", asDeclaration)
+            colorize(owner?.name ?: "anon", asDeclaration)
             append(".")
             part(name, asDeclaration)
             append(type?.generateDoc() ?: DocumentationUtils.colorize("unknown", asDeclaration))

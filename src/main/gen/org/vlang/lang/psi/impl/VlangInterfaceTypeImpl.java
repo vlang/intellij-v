@@ -36,27 +36,9 @@ public class VlangInterfaceTypeImpl extends VlangTypeImpl implements VlangInterf
   }
 
   @Override
-  @Nullable
-  public VlangAnonymousInterfaceDefinition getAnonymousInterfaceDefinition() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangAnonymousInterfaceDefinition.class);
-  }
-
-  @Override
-  @Nullable
-  public VlangInterfaceFieldDeclaration getInterfaceFieldDeclaration() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangInterfaceFieldDeclaration.class);
-  }
-
-  @Override
-  @Nullable
-  public VlangInterfaceMethodDeclaration getInterfaceMethodDeclaration() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangInterfaceMethodDeclaration.class);
-  }
-
-  @Override
-  @Nullable
-  public VlangMemberModifiers getMemberModifiers() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangMemberModifiers.class);
+  @NotNull
+  public List<VlangMembersGroup> getMembersGroupList() {
+    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangMembersGroup.class);
   }
 
   @Override
@@ -87,6 +69,12 @@ public class VlangInterfaceTypeImpl extends VlangTypeImpl implements VlangInterf
   @NotNull
   public List<VlangFieldDefinition> getFieldList() {
     return VlangPsiImplUtil.getFieldList(this);
+  }
+
+  @Override
+  @NotNull
+  public List<VlangInterfaceMethodDefinition> getMethodList() {
+    return VlangPsiImplUtil.getMethodList(this);
   }
 
 }

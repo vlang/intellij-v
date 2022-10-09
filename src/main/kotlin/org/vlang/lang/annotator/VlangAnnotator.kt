@@ -53,6 +53,12 @@ class VlangAnnotator : Annotator {
                 return
             }
 
+            if (resolvedElement is VlangInterfaceMethodDefinition) {
+                // TODO: separate styles?
+                holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES)
+                return
+            }
+
             if (resolvedElement is VlangStructDeclaration) {
                 holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.CLASS_NAME_ATTRIBUTES)
                 return
@@ -126,6 +132,7 @@ class VlangAnnotator : Annotator {
                 is VlangParamDefinition            -> holder.textAttributes(element, JavaHighlightingColors.PARAMETER_ATTRIBUTES)
                 is VlangReceiver                   -> holder.textAttributes(element, JavaHighlightingColors.PARAMETER_ATTRIBUTES)
                 is VlangConstDefinition            -> holder.textAttributes(element, DefaultLanguageHighlighterColors.CONSTANT)
+                is VlangInterfaceMethodDefinition  -> holder.textAttributes(element, JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES)
                 is VlangLabelDefinition            -> {
                     val parent = element.parent
                     val search = ReferencesSearch.search(parent, parent.useScope)

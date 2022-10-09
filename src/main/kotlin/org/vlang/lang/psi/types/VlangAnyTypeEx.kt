@@ -11,6 +11,8 @@ class VlangAnyTypeEx(raw: VlangType): VlangBaseTypeEx<VlangType>(raw) {
 
     override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean = true
 
+    override fun isEqual(rhs: VlangTypeEx<*>): Boolean = true
+
     override fun accept(visitor: VlangTypeVisitor) {
         if (!visitor.enter(this)) {
             return

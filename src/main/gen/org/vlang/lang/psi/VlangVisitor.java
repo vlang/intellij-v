@@ -353,12 +353,13 @@ public class VlangVisitor extends PsiElementVisitor {
     visitNamedElement(o);
   }
 
-  public void visitInterfaceFieldDeclaration(@NotNull VlangInterfaceFieldDeclaration o) {
+  public void visitInterfaceMethodDeclaration(@NotNull VlangInterfaceMethodDeclaration o) {
     visitCompositeElement(o);
   }
 
-  public void visitInterfaceMethodDeclaration(@NotNull VlangInterfaceMethodDeclaration o) {
-    visitCompositeElement(o);
+  public void visitInterfaceMethodDefinition(@NotNull VlangInterfaceMethodDefinition o) {
+    visitSignatureOwner(o);
+    // visitNamedElement(o);
   }
 
   public void visitInterfaceType(@NotNull VlangInterfaceType o) {
@@ -451,6 +452,10 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitMemberModifiers(@NotNull VlangMemberModifiers o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitMembersGroup(@NotNull VlangMembersGroup o) {
     visitCompositeElement(o);
   }
 

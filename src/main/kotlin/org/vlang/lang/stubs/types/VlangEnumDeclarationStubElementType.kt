@@ -12,28 +12,22 @@ import org.vlang.lang.psi.impl.VlangEnumDeclarationImpl
 import org.vlang.lang.stubs.VlangEnumDeclarationStub
 import org.vlang.lang.stubs.index.VlangEnumIndex
 
-class VlangEnumDeclarationStubElementType(name: String) :
-    VlangNamedStubElementType<VlangEnumDeclarationStub, VlangEnumDeclaration>(name) {
+class VlangEnumDeclarationStubElementType(name: String) : VlangNamedStubElementType<VlangEnumDeclarationStub, VlangEnumDeclaration>(name) {
+    override fun createPsi(stub: VlangEnumDeclarationStub): VlangEnumDeclaration {
+        return VlangEnumDeclarationImpl(stub, this)
+    }
 
-    override fun createPsi(stub: VlangEnumDeclarationStub) = VlangEnumDeclarationImpl(stub, this)
-
-    override fun createStub(psi: VlangEnumDeclaration, parentStub: StubElement<*>?) =
-        VlangEnumDeclarationStub(parentStub, this, psi.name, psi.isPublic(), psi.isGlobal())
+    override fun createStub(psi: VlangEnumDeclaration, parentStub: StubElement<*>?): VlangEnumDeclarationStub {
+        return VlangEnumDeclarationStub(parentStub, this, psi.name, psi.isPublic())
+    }
 
     override fun serialize(stub: VlangEnumDeclarationStub, dataStream: StubOutputStream) {
         dataStream.writeName(stub.name)
         dataStream.writeBoolean(stub.isPublic)
-        dataStream.writeBoolean(stub.isGlobal)
     }
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): VlangEnumDeclarationStub {
-        return VlangEnumDeclarationStub(
-            parentStub,
-            this,
-            dataStream.readName(),
-            dataStream.readBoolean(),
-            dataStream.readBoolean()
-        )
+        return VlangEnumDeclarationStub(parentStub, this, dataStream.readName(), dataStream.readBoolean())
     }
 
     override fun getExtraIndexKeys() = EXTRA_KEYS

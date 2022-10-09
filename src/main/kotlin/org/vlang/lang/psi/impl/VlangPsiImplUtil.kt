@@ -7,7 +7,6 @@ import com.intellij.openapi.util.Condition
 import com.intellij.openapi.util.Conditions
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.RecursionManager
-import com.intellij.openapi.util.text.StringUtil
 import com.intellij.psi.*
 import com.intellij.psi.impl.source.tree.LeafElement
 import com.intellij.psi.scope.PsiScopeProcessor
@@ -216,7 +215,12 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getFieldList(o: VlangInterfaceType): List<VlangFieldDefinition> {
-        return o.interfaceFieldDeclaration?.fieldDefinitionList ?: emptyList()
+        return o.membersGroupList.flatMap { it.fieldDeclarationList }.flatMap { it.fieldDefinitionList }
+    }
+
+    @JvmStatic
+    fun getMethodList(o: VlangInterfaceType): List<VlangInterfaceMethodDefinition> {
+        return o.membersGroupList.flatMap { it.interfaceMethodDeclarationList }.map { it.interfaceMethodDefinition }
     }
 
     @JvmStatic
@@ -447,8 +451,8 @@ object VlangPsiImplUtil {
         return null
     }
 
-    fun getFqn(packageName: String?, elementName: String): String {
-        return if (StringUtil.isNotEmpty(packageName)) "$packageName.$elementName" else elementName
+    fun getFqn(moduleName: String?, elementName: String): String {
+        return if (moduleName.isNullOrEmpty()) elementName else "$moduleName.$elementName"
     }
 
     @JvmStatic
@@ -632,8 +636,7 @@ object VlangPsiImplUtil {
             }
 
             val resolved = callRef?.reference?.resolve()
-
-            if (resolved !is VlangFunctionOrMethodDeclaration) {
+            if (resolved !is VlangSignatureOwner) {
                 if (callRef is VlangReferenceExpression) {
                     return getTypeInner(callRef, null)
                 }

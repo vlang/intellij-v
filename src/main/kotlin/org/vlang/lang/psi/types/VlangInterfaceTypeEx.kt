@@ -20,6 +20,10 @@ class VlangInterfaceTypeEx(raw: VlangInterfaceType) : VlangBaseTypeEx<VlangInter
         return true // TODO: Implement this
     }
 
+    override fun isEqual(rhs: VlangTypeEx<*>): Boolean {
+        return rhs is VlangInterfaceTypeEx && name == rhs.name
+    }
+
     override fun accept(visitor: VlangTypeVisitor) {
         visitor.enter(this)
     }
