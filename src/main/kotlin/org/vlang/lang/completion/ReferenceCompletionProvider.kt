@@ -161,7 +161,17 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
             return true
         }
 
-        private fun accept(e: PsiElement) = true
+        private fun accept(e: PsiElement): Boolean {
+            if (e is VlangFile) {
+                return true
+            }
+
+            if (e is VlangNamedElement) {
+                return e.isPublic()
+            }
+
+            return false
+        }
 
         override fun isCompletion(): Boolean = true
     }
@@ -188,6 +198,10 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
         state: ResolveState,
         forTypes: Boolean,
     ): LookupElement? {
+        if (element is VlangFile) {
+            return VlangCompletionUtil.createModuleLookupElement(element)
+        }
+
         if (element !is VlangNamedElement || element.isBlank()) return null
 
         if (element is VlangImportSpec) {

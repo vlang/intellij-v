@@ -30,9 +30,14 @@ class VlangFileElementType : IStubFileElementType<VlangFileStub>("VLANG_FILE", V
         super.indexStub(stub, sink)
         if (stub !is VlangFileStub) return
 
-        val moduleName = stub.getModuleQualifiedName() ?: return
-        if (moduleName.isNotEmpty()) {
-            sink.occurrence(VlangModulesIndex.KEY, moduleName)
+        val fqn = stub.getModuleQualifiedName() ?: return
+        if (fqn.isNotEmpty()) {
+            sink.occurrence(VlangModulesIndex.KEY, fqn)
+        }
+
+        val name = stub.getModuleName() ?: return
+        if (name.isNotEmpty()) {
+            sink.occurrence(VlangModulesFingerprintIndex.KEY, name)
         }
     }
 
@@ -48,6 +53,6 @@ class VlangFileElementType : IStubFileElementType<VlangFileStub>("VLANG_FILE", V
 
     companion object {
         val INSTANCE = VlangFileElementType()
-        const val VERSION = 39
+        const val VERSION = 40
     }
 }
