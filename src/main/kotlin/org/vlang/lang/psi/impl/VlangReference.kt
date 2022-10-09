@@ -1,5 +1,6 @@
 package org.vlang.lang.psi.impl
 
+import com.intellij.codeInsight.completion.CompletionUtilCore
 import com.intellij.openapi.util.Conditions
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.RecursionManager
@@ -12,6 +13,7 @@ import com.intellij.util.ArrayUtil
 import org.vlang.configurations.VlangConfiguration
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangPsiImplUtil.processNamedElements
+import org.vlang.lang.stubs.index.VlangModulesFingerprintIndex
 import org.vlang.lang.stubs.index.VlangModulesIndex
 import org.vlang.lang.stubs.index.VlangNamesIndex
 
@@ -143,8 +145,12 @@ class VlangReference(el: VlangReferenceExpressionBase) :
             VlangModulesIndex.find(moduleName, myElement.project, GlobalSearchScope.allScope(myElement.project), null)
 
         if (moduleFiles.isNotEmpty()) {
-            val moduleDir = moduleFiles.first().parent
-            if (!processDirectory(moduleDir, null, null, processor, state, false)) {
+            val moduleFile = moduleFiles.first()
+            val moduleDir = moduleFile.parent
+            val newState = state
+                .put(MODULE_NAME, moduleFile.getModuleQualifiedName())
+                .put(NEED_QUALIFIER_NAME, false)
+            if (!processDirectory(moduleDir, null, null, processor, newState, false)) {
                 return true
             }
         }
@@ -230,7 +236,7 @@ class VlangReference(el: VlangReferenceExpressionBase) :
         }
 
         if (typ is VlangEnumType) {
-            val fields = typ.enumFields?.enumFieldDeclarationList?.map { it.enumFieldDefinition } ?: emptyList()
+            val fields = typ.fieldList
             if (!processNamedElements(processor, state, fields, localResolve)) return false
         }
 
@@ -318,7 +324,7 @@ class VlangReference(el: VlangReferenceExpressionBase) :
 
         // expr or { err }
         if (identifier!!.text == "err" && identifier!!.parentOfType<VlangOrBlockExpr>() != null) {
-            return !processBuiltin( processor, state.put(SEARCH_NAME, "IError"))
+            return !processBuiltin(processor, state.put(SEARCH_NAME, "IError"))
         }
 
         when (val parent = myElement.parent) {
@@ -341,7 +347,8 @@ class VlangReference(el: VlangReferenceExpressionBase) :
         }
 
         if (!processBlock(processor, state, true)) return false
-        if (!processModules(file, processor, state, true)) return false
+        if (!processImportModules(file, processor, state, true)) return false
+        if (!processModules(processor, state)) return false
         if (!processImports(file, processor, state, myElement)) return false
         if (!processFileEntities(file, processor, state, true)) return false
         if (!processDirectory(file.originalFile.parent, file, file.packageName, processor, state, true)) return false
@@ -515,8 +522,25 @@ class VlangReference(el: VlangReferenceExpressionBase) :
         return true
     }
 
+    private fun processModules(processor: VlangScopeProcessor, state: ResolveState): Boolean {
+        if (!processor.isCompletion()) {
+            // This method is only for autocompletion when a user writes
+            // a symbol (from another module) name, and we want to import
+            // the symbol, and the module that contains it.
+            return true
+        }
+
+        val prefix = identifier?.text?.removeSuffix(CompletionUtilCore.DUMMY_IDENTIFIER_TRIMMED) ?: return true
+        val modules = VlangModulesFingerprintIndex.getPrefixed(element.project, prefix)
+        modules.forEach {
+            if (!processor.execute(it, state)) return false
+        }
+
+        return true
+    }
+
     // TODO: redone
-    private fun processModules(file: VlangFile, processor: VlangScopeProcessor, state: ResolveState, localResolve: Boolean): Boolean {
+    private fun processImportModules(file: VlangFile, processor: VlangScopeProcessor, state: ResolveState, localResolve: Boolean): Boolean {
         if (identifier?.parentOfType<VlangImportSpec>() == null) {
             return true
         }
@@ -651,7 +675,6 @@ class VlangReference(el: VlangReferenceExpressionBase) :
     ): VlangScopeProcessor {
         return object : VlangScopeProcessor() {
             override fun execute(element: PsiElement, state: ResolveState): Boolean {
-                // TODO: only public
                 if (element == reference) {
                     return !result.add(PsiElementResolveResult(element))
                 }

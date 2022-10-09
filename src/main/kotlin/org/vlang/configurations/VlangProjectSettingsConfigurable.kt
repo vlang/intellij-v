@@ -1,86 +1,25 @@
 package org.vlang.configurations
 
 import com.intellij.openapi.diagnostic.logger
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.options.Configurable
+import com.intellij.openapi.options.ShowSettingsUtil
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.openapi.util.Disposer
 import com.intellij.psi.stubs.StubIndexImpl
-import com.intellij.ui.dsl.builder.bindText
-import com.intellij.ui.dsl.builder.panel
-import com.intellij.ui.dsl.builder.toMutableProperty
-import com.intellij.ui.dsl.gridLayout.HorizontalAlign
 import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
-import java.io.File
-import javax.swing.JLabel
 
 class VlangProjectSettingsConfigurable(private val project: Project) : Configurable {
-    data class Model(
-        var toolchainLocation: String,
-        var toolchainVersion: String,
-        var stdlibLocation: String,
-    )
-
     private val mainPanel: DialogPanel
-    private val model = Model(
+    private val model = VlangProjectSettingsForm.Model(
         toolchainLocation = "",
         toolchainVersion = "",
         stdlibLocation = "",
+        modulesLocation = "",
     )
 
     init {
-        mainPanel = panel {
-            row("Toolchain location:") {
-                textFieldWithBrowseButton(
-                    "Select V Toolchain Folder",
-                    project,
-                    FileChooserDescriptorFactory.createSingleFolderDescriptor()
-                )
-                    .horizontalAlign(HorizontalAlign.FILL)
-                    .bindText(model::toolchainLocation)
-                    .onApply {
-                        onToolchainApply()
-                    }
-                    .validationOnApply {
-                        if (it.text.isBlank()) {
-                            return@validationOnApply error("Toolchain location is required")
-                        }
-
-                        val version = VlangConfigurationUtil.guessToolchainVersion(model.toolchainLocation)
-                        if (version == VlangConfigurationUtil.UNDEFINED_VERSION) {
-                            return@validationOnApply error("Toolchain location is invalid")
-                        }
-
-                        null
-                    }
-            }
-            row("Toolchain version:") {
-                label(VlangConfigurationUtil.UNDEFINED_VERSION)
-                    .bind(JLabel::getText, JLabel::setText, model::toolchainVersion.toMutableProperty())
-            }
-            row("Standard library location:") {
-                textFieldWithBrowseButton(
-                    "Select V Standard Library Folder",
-                    project,
-                    FileChooserDescriptorFactory.createSingleFolderDescriptor()
-                )
-                    .horizontalAlign(HorizontalAlign.FILL)
-                    .bindText(model::stdlibLocation)
-                    .validationOnApply {
-                        if (it.text.isBlank()) {
-                            return@validationOnApply error("Standard library location cannot be empty")
-                        }
-
-                        val file = File(model.stdlibLocation)
-                        if (!file.exists() || !file.isDirectory) {
-                            return@validationOnApply error("Standard library location is invalid")
-                        }
-
-                        null
-                    }
-            }
-        }
+        mainPanel = VlangProjectSettingsForm(project, model, false) { onToolchainApply(model) }.createComponent()
 
         val disposable = Disposer.newDisposable()
         mainPanel.registerValidators(disposable)
@@ -96,20 +35,10 @@ class VlangProjectSettingsConfigurable(private val project: Project) : Configura
         val settings = project.projectSettings
         return model.toolchainLocation != settings.toolchainLocation ||
                 model.toolchainVersion != settings.toolchainVersion ||
-                model.stdlibLocation != settings.stdlibLocation
+                model.stdlibLocation != settings.stdlibLocation ||
+                model.modulesLocation != settings.modulesLocation
     }
 
-    private fun onToolchainApply() {
-        if (isModified) {
-            model.toolchainVersion = VlangConfigurationUtil.guessToolchainVersion(model.toolchainLocation)
-
-            if (model.stdlibLocation.isEmpty() && model.toolchainVersion != VlangConfigurationUtil.UNDEFINED_VERSION) {
-                model.stdlibLocation = VlangConfigurationUtil.getStdlibLocation(model.toolchainLocation) ?: ""
-            }
-
-            mainPanel.reset()
-        }
-    }
 
     override fun apply() {
         mainPanel.apply()
@@ -128,6 +57,7 @@ class VlangProjectSettingsConfigurable(private val project: Project) : Configura
             toolchainLocation = model.toolchainLocation
             toolchainVersion = model.toolchainVersion
             stdlibLocation = model.stdlibLocation
+            modulesLocation = model.modulesLocation
         }
     }
 
@@ -138,6 +68,7 @@ class VlangProjectSettingsConfigurable(private val project: Project) : Configura
             toolchainLocation = settings.toolchainLocation
             toolchainVersion = settings.toolchainVersion
             stdlibLocation = settings.stdlibLocation
+            modulesLocation = settings.modulesLocation
         }
 
         mainPanel.reset()
@@ -145,5 +76,17 @@ class VlangProjectSettingsConfigurable(private val project: Project) : Configura
 
     companion object {
         private val LOG = logger<VlangProjectSettingsConfigurable>()
+
+        fun onToolchainApply(model: VlangProjectSettingsForm.Model) {
+            model.toolchainVersion = VlangConfigurationUtil.guessToolchainVersion(model.toolchainLocation)
+
+            if (model.stdlibLocation.isEmpty() && model.toolchainVersion != VlangConfigurationUtil.UNDEFINED_VERSION) {
+                model.stdlibLocation = VlangConfigurationUtil.getStdlibLocation(model.toolchainLocation) ?: ""
+            }
+        }
+
+        fun show(project: Project) {
+            ShowSettingsUtil.getInstance().showSettingsDialog(project, VlangProjectSettingsConfigurable::class.java)
+        }
     }
 }

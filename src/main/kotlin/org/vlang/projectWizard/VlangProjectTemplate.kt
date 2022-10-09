@@ -24,8 +24,8 @@ class VlangProjectTemplate {
             """.trimIndent().toByteArray(StandardCharsets.UTF_8)
         )
 
-        val binDir = VfsUtil.createDirectoryIfMissing(baseDir, "src")
-        val mainFile = binDir.createChildData(this, "main.v")
+        VfsUtil.createDirectoryIfMissing(baseDir, "src")
+        val mainFile = baseDir.createChildData(this, "main.v")
         mainFile.setBinaryContent(
             """
                 module main

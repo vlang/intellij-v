@@ -17,6 +17,7 @@ class VlangProjectSettingsState : PersistentStateComponent<VlangProjectSettingsS
     var toolchainLocation: String = ""
     var toolchainVersion: String = ""
     var stdlibLocation: String = ""
+    var modulesLocation: String = ""
 
     val compilerLocation: String?
         get() = VlangConfigurationUtil.getCompilerExeLocation(toolchainLocation)

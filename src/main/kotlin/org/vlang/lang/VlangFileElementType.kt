@@ -8,6 +8,7 @@ import com.intellij.psi.tree.IStubFileElementType
 import com.intellij.util.io.StringRef
 import org.vlang.lang.psi.VlangFile
 import org.vlang.lang.stubs.VlangFileStub
+import org.vlang.lang.stubs.index.VlangModulesFingerprintIndex
 import org.vlang.lang.stubs.index.VlangModulesIndex
 
 class VlangFileElementType : IStubFileElementType<VlangFileStub>("VLANG_FILE", VlangLanguage.INSTANCE) {
@@ -47,6 +48,6 @@ class VlangFileElementType : IStubFileElementType<VlangFileStub>("VLANG_FILE", V
 
     companion object {
         val INSTANCE = VlangFileElementType()
-        const val VERSION = 43
+        const val VERSION = 39
     }
 }

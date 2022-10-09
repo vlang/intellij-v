@@ -19,4 +19,6 @@ public interface VlangInterfaceMethodDefinition extends VlangSignatureOwner, Vla
   @Nullable
   VlangType getTypeInner(@Nullable ResolveState context);
 
+  boolean isPublic();
+
 }

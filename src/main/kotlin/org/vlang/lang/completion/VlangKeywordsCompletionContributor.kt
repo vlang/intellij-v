@@ -70,6 +70,16 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
                 return
             }
 
+            if (parameters.position.parentOfType<VlangLiteralValueExpression>() != null) {
+                result.stopHere()
+                return
+            }
+
+            if (VlangPsiImplUtil.prevDot(parameters.position)) {
+                result.stopHere()
+                return
+            }
+
             result.addAllElements(
                 keywords.map {
                     PrioritizedLookupElement.withPriority(

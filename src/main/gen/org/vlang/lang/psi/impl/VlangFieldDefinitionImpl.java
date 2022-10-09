@@ -46,4 +46,9 @@ public class VlangFieldDefinitionImpl extends VlangNamedElementImpl<VlangFieldDe
     return VlangPsiImplUtil.getQualifier(this);
   }
 
+  @Override
+  public boolean isPublic() {
+    return VlangPsiImplUtil.isPublic(this);
+  }
+
 }

@@ -38,4 +38,9 @@ public class VlangEnumFieldDefinitionImpl extends VlangNamedElementImpl<VlangEnu
     return notNullChild(findChildByType(IDENTIFIER));
   }
 
+  @Override
+  public boolean isPublic() {
+    return VlangPsiImplUtil.isPublic(this);
+  }
+
 }

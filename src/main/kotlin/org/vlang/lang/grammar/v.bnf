@@ -382,7 +382,7 @@ DefaultFieldValue ::= '=' Expression
 Tag ::= StringLiteral
 private FieldDefinitionList ::= FieldDefinition (',' FieldDefinition)*
 FieldDefinition ::= identifier {
-  methods=[getQualifier]
+  methods=[getQualifier isPublic]
   stubClass="org.vlang.lang.stubs.VlangFieldDefinitionStub"
 }
 
@@ -415,7 +415,7 @@ InterfaceMethodDeclaration ::= InterfaceMethodDefinition Attribute? DefaultField
 InterfaceMethodDefinition ::= identifier Signature {
   implements="org.vlang.lang.psi.VlangSignatureOwner"
   stubClass="org.vlang.lang.stubs.VlangInterfaceMethodDefinitionStub"
-  methods=[getTypeInner]
+  methods=[getTypeInner isPublic]
 }
 
 AnonymousInterfaceDefinition ::= Type {
@@ -438,7 +438,7 @@ EnumType ::= enum identifier GenericArguments? '{' EnumFields? '}' {
 EnumFields ::= EnumFieldDeclaration (semi EnumFieldDeclaration)* semi?
 EnumFieldDeclaration ::= EnumFieldDefinition ('=' Expression)? {pin=1}
 EnumFieldDefinition ::= identifier {
-//  methods=[getQualifier]
+  methods=[isPublic]
   stubClass="org.vlang.lang.stubs.VlangEnumFieldDefinitionStub"
 }
 

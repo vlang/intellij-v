@@ -26,6 +26,9 @@ class VlangConfiguration(private val project: Project) {
     val stdlibLocation: VirtualFile?
         get() = findFile(settings.stdlibLocation)
 
+    val modulesLocation: VirtualFile?
+        get() = findFile(settings.modulesLocation)
+
     val builtinLocation: VirtualFile?
         get() = stdlibLocation?.findChild("builtin")
 

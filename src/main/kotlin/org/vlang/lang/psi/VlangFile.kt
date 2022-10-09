@@ -100,11 +100,12 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
 
         val projectDir = project.guessProjectDir() ?: return ""
         val stdlib = VlangConfiguration.getInstance(project).stdlibLocation
+        val modules = VlangConfiguration.getInstance(project).modulesLocation
 
         val moduleNames = mutableListOf<String>()
         var dir = virtualFile?.parent?.parent // parent directory for directory with this file
         var depth = 0
-        while (dir != projectDir && dir != stdlib && dir != null && dir.name != "src" && depth < 10) {
+        while (dir != projectDir && dir != stdlib && dir != modules && dir != null && depth < 10) {
             moduleNames.add(dir.name)
 
             dir = dir.parent

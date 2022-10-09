@@ -15,4 +15,6 @@ public interface VlangFieldDefinition extends VlangNamedElement, StubBasedPsiEle
   @Nullable
   VlangCompositeElement getQualifier();
 
+  boolean isPublic();
+
 }

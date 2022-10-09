@@ -51,4 +51,9 @@ public class VlangInterfaceMethodDefinitionImpl extends VlangNamedElementImpl<Vl
     return VlangPsiImplUtil.getTypeInner(this, context);
   }
 
+  @Override
+  public boolean isPublic() {
+    return VlangPsiImplUtil.isPublic(this);
+  }
+
 }

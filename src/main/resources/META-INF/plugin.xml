@@ -53,6 +53,7 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
         <applicationService serviceImplementation="org.vlang.ide.codeInsight.imports.VlangCodeInsightSettings"/>
 
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangModulesIndex"/>
+        <stubIndex implementation="org.vlang.lang.stubs.index.VlangModulesFingerprintIndex"/>
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangFunctionIndex"/>
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangFieldIndex"/>
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangMethodIndex"/>
@@ -221,7 +222,7 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
           order="last"
           implementationClass="org.vlang.lang.completion.VlangKeywordsCompletionContributor"/>
 
-      <typedHandler implementation="org.vlang.lang.completion.VlangTypedHandler"/>
+        <typedHandler implementation="org.vlang.lang.completion.VlangTypedHandler"/>
         <enterHandlerDelegate implementation="org.vlang.lang.completion.VlangEnterHandlerDelegate"/>
         <backspaceHandlerDelegate order="first" implementation="org.vlang.lang.completion.VlangBackspaceHandlerDelegate"/>
 
@@ -248,10 +249,10 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
         <projectService serviceImplementation="org.vlang.configurations.VlangFmtSettingsState"/>
         <moduleBuilder builderClass="org.vlang.projectWizard.VlangModuleBuilder"/>
         <postStartupActivity implementation="org.vlang.project.VlangPostStartupActivity"/>
-        <indexableFilesContributor implementation="org.vlang.project.VlangIndexableFilesContributor"/>
+        <additionalLibraryRootsProvider implementation="org.vlang.project.VlangAdditionalLibraryRootsProvider"/>
 
         <fileDocumentManagerListener implementation="org.vlang.project.VlangFmtWatcher$VlangFmtListener"/>
-
+        <editorNotificationProvider implementation="org.vlang.project.VlangEditorNotificationProvider"/>
         <!-- End of Project -->
 
         <notificationGroup id="V Plugin" displayType="BALLOON"/>

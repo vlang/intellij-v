@@ -229,6 +229,27 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun isPublic(o: VlangEnumFieldDefinition): Boolean {
+        return o.parentOfType<VlangEnumDeclaration>()?.isPublic() ?: false
+    }
+
+    @JvmStatic
+    fun isPublic(o: VlangInterfaceMethodDefinition): Boolean {
+        return true
+    }
+
+    @JvmStatic
+    fun isPublic(o: VlangFieldDefinition): Boolean {
+        if (o.parentOfType<VlangInterfaceType>() != null) {
+            return true
+        }
+
+        val group = o.parentOfType<VlangFieldsGroup>() ?: return false
+        val modifiers = group.memberModifiers?.memberModifierList ?: return false
+        return modifiers.any { it.text == "pub" }
+    }
+
+    @JvmStatic
     fun getQualifier(o: VlangReferenceExpression): VlangCompositeElement? {
         return PsiTreeUtil.getChildOfType(o, VlangExpression::class.java)
     }
@@ -954,7 +975,7 @@ object VlangPsiImplUtil {
                 module
             )*/
             ) continue
-            if ((localResolve || definition.isPublic()) && !processor.execute(definition, state))
+            if (!processor.execute(definition, state))
                 return false
         }
         return true

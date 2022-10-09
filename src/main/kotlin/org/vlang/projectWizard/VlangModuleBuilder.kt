@@ -1,8 +1,7 @@
 package org.vlang.projectWizard
 
-import com.intellij.ide.util.projectWizard.ModuleBuilder
-import com.intellij.ide.util.projectWizard.ModuleBuilderListener
-import com.intellij.ide.util.projectWizard.WizardInputField
+import com.intellij.ide.util.projectWizard.*
+import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.application.invokeLater
@@ -14,13 +13,22 @@ import com.intellij.openapi.module.ModuleType
 import com.intellij.openapi.roots.ModifiableRootModel
 import com.intellij.openapi.startup.StartupManager
 import com.intellij.openapi.vfs.VirtualFile
+import org.vlang.configurations.VlangProjectSettingsForm
+import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
 import org.vlang.ide.ui.VIcons
 import java.io.IOException
 
 class VlangModuleBuilder : ModuleBuilder(), ModuleBuilderListener {
-    override fun getPresentableName() = "V Project"
+    private val model = VlangProjectSettingsForm.Model(
+        toolchainLocation = "",
+        toolchainVersion = "",
+        stdlibLocation = "",
+        modulesLocation = "",
+    )
 
-    override fun getName() = "V Project"
+    override fun getPresentableName() = "V"
+
+    override fun getName() = "V"
 
     override fun getDescription() = "Simple V project"
 
@@ -29,6 +37,10 @@ class VlangModuleBuilder : ModuleBuilder(), ModuleBuilderListener {
     override fun getWeight() = 2100
 
     override fun getModuleType(): ModuleType<*> = ModuleType.EMPTY
+
+    override fun getCustomOptionsStep(context: WizardContext, parentDisposable: Disposable): ModuleWizardStep {
+        return VlangConfigurationWizardStep(context, model)
+    }
 
     override fun getAdditionalFields(): MutableList<WizardInputField<*>> {
         val field = BasePackageParameterFactory().createField("other") ?: return mutableListOf()
@@ -57,9 +69,22 @@ class VlangModuleBuilder : ModuleBuilder(), ModuleBuilderListener {
                     if (!filesToOpen.isEmpty()) {
                         scheduleFilesOpening(modifiableRootModel.module, filesToOpen)
                     }
+
+                    setToolchainInfo(modifiableRootModel)
                 } catch (ignore: IOException) {
                 }
             }
+        }
+    }
+
+    private fun setToolchainInfo(modifiableRootModel: ModifiableRootModel) {
+        val project = modifiableRootModel.module.project
+        val settings = project.projectSettings
+        with(settings) {
+            toolchainLocation = model.toolchainLocation
+            toolchainVersion = model.toolchainVersion
+            stdlibLocation = model.stdlibLocation
+            modulesLocation = model.modulesLocation
         }
     }
 

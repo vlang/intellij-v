@@ -11,4 +11,6 @@ public interface VlangEnumFieldDefinition extends VlangNamedElement, StubBasedPs
   @NotNull
   PsiElement getIdentifier();
 
+  boolean isPublic();
+
 }
