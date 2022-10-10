@@ -4,6 +4,7 @@ import com.intellij.codeInsight.highlighting.ReadWriteAccessDetector.Access
 import com.intellij.lang.parser.GeneratedParserUtilBase
 import com.intellij.openapi.module.Module
 import com.intellij.openapi.module.ModuleUtilCore
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Condition
 import com.intellij.openapi.util.Conditions
 import com.intellij.openapi.util.Key
@@ -22,6 +23,7 @@ import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangNotNullableTypeEx
 import org.vlang.lang.psi.types.VlangNullableTypeEx
 import org.vlang.lang.psi.types.VlangPointerTypeEx
+import org.vlang.utils.parentNth
 
 object VlangPsiImplUtil {
     @JvmStatic
@@ -345,7 +347,7 @@ object VlangPsiImplUtil {
             if (grandParent is VlangSendStatement) {
                 return Access.Write
             }
-            
+
             return Access.Read
         }
 
@@ -828,6 +830,22 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun makeMutable(o: VlangVarDefinition) {
+        makeMutable(o.project, o.varModifiers)
+    }
+
+    @JvmStatic
+    fun isMutable(o: VlangVarDefinition): Boolean {
+        val inFor = o.parentNth<VlangForClause>(3) != null
+        if (inFor) {
+            // in for, variable is mutable
+            return true
+        }
+        val modifiers = o.varModifiers ?: return false
+        return modifiers.text.contains("mut")
+    }
+
+    @JvmStatic
     fun getReference(o: VlangVarDefinition): PsiReference? {
         val createRef = PsiTreeUtil.getParentOfType(
             o,
@@ -838,6 +856,30 @@ object VlangPsiImplUtil {
 //            VlangSelectStatement::class.java
         ) is VlangBlock
         return if (createRef) VlangVarReference(o) else null
+    }
+
+    @JvmStatic
+    fun makeMutable(o: VlangReceiver) {
+        makeMutable(o.project, o.varModifiers)
+    }
+
+    private fun makeMutable(project: Project, varModifiers: VlangVarModifiers?) {
+        val modifiers = varModifiers ?: return
+        val mutModifier = VlangElementFactory.createVarModifiers(project, "mut")
+        val space = VlangElementFactory.createSpace(project)
+        if (modifiers.firstChild == null) {
+            modifiers.add(mutModifier.firstChild)
+            modifiers.add(space)
+        } else {
+            modifiers.add(space)
+            modifiers.add(mutModifier.firstChild)
+        }
+    }
+
+    @JvmStatic
+    fun isMutable(o: VlangReceiver): Boolean {
+        val modifiers = o.varModifiers ?: return false
+        return modifiers.text.contains("mut")
     }
 
     fun getBuiltinType(name: String, context: PsiElement): VlangType? {

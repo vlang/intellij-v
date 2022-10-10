@@ -28,4 +28,8 @@ public interface VlangReceiver extends VlangNamedElement, StubBasedPsiElement<Vl
   @Nullable
   String getName();
 
+  boolean isMutable();
+
+  void makeMutable();
+
 }

@@ -1,18 +1,18 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import org.vlang.lang.psi.VlangPsiTreeUtil;
-import static org.vlang.lang.VlangTypes.*;
-import org.vlang.lang.stubs.VlangVarDefinitionStub;
-import org.vlang.lang.psi.*;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.stubs.IStubElementType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.vlang.lang.psi.*;
+import org.vlang.lang.stubs.VlangVarDefinitionStub;
+
+import static org.vlang.lang.VlangTypes.IDENTIFIER;
 
 public class VlangVarDefinitionImpl extends VlangNamedElementImpl<VlangVarDefinitionStub> implements VlangVarDefinition {
 
@@ -62,6 +62,16 @@ public class VlangVarDefinitionImpl extends VlangNamedElementImpl<VlangVarDefini
   @Nullable
   public PsiReference getReference() {
     return VlangPsiImplUtil.getReference(this);
+  }
+
+  @Override
+  public boolean isMutable() {
+    return VlangPsiImplUtil.isMutable(this);
+  }
+
+  @Override
+  public void makeMutable() {
+    VlangPsiImplUtil.makeMutable(this);
   }
 
   @Override

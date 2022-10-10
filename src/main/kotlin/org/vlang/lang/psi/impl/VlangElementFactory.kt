@@ -4,10 +4,12 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.PsiParserFacade
+import com.intellij.psi.util.PsiTreeUtil
 import org.vlang.lang.VlangLanguage
 import org.vlang.lang.psi.VlangFile
 import org.vlang.lang.psi.VlangImportDeclaration
 import org.vlang.lang.psi.VlangImportList
+import org.vlang.lang.psi.VlangVarModifiers
 
 object VlangElementFactory {
     fun createFileFromText(project: Project, text: String): VlangFile {
@@ -23,8 +25,27 @@ object VlangElementFactory {
         return createImportList(project, name, alias)?.importDeclarationList?.firstOrNull()
     }
 
+    fun createVarModifiers(project: Project, name: String): VlangVarModifiers {
+        val file = createFileFromText(project, "fn main() { $name a := 100 }")
+
+        var modifiers: VlangVarModifiers? = null
+        PsiTreeUtil.processElements(file) { element ->
+            if (element is VlangVarModifiers) {
+                modifiers = element
+                return@processElements false
+            }
+            true
+        }
+
+        return modifiers!!
+    }
+
     fun createNewLine(project: Project): PsiElement {
         return PsiParserFacade.getInstance(project).createWhiteSpaceFromText("\n")
+    }
+
+    fun createSpace(project: Project): PsiElement {
+        return PsiParserFacade.getInstance(project).createWhiteSpaceFromText(" ")
     }
 
     fun createDoubleNewLine(project: Project): PsiElement {

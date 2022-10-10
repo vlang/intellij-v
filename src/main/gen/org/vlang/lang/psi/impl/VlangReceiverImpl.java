@@ -70,4 +70,14 @@ public class VlangReceiverImpl extends VlangNamedElementImpl<VlangReceiverStub> 
     return VlangPsiImplUtil.getName(this);
   }
 
+  @Override
+  public boolean isMutable() {
+    return VlangPsiImplUtil.isMutable(this);
+  }
+
+  @Override
+  public void makeMutable() {
+    VlangPsiImplUtil.makeMutable(this);
+  }
+
 }

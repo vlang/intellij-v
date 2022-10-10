@@ -534,7 +534,7 @@ MethodName ::= identifier | AddOp | MulOp | RelOp
 // [mut|shared] <ident> <type>
 Receiver ::= VarModifiers? identifier ReceiverTail {
   pin=3
-  methods=[getTypeInner getName]
+  methods=[getTypeInner getName isMutable makeMutable]
   stubClass="org.vlang.lang.stubs.VlangReceiverStub"
 }
 private ReceiverTail ::= Type ','?
@@ -715,7 +715,7 @@ private ExpressionListRecover ::= !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' |
 private VarDefinitionList ::= VarDefinition (',' VarDefinition)*
 VarDefinition ::= VarModifiers? identifier {
   pin=2
-  methods=[getTypeInner getName getReference getValue getSymbolVisibility]
+  methods=[getTypeInner getName getReference isMutable makeMutable getValue getSymbolVisibility]
   stubClass="org.vlang.lang.stubs.VlangVarDefinitionStub"
 }
 

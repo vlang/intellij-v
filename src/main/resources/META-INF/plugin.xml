@@ -121,6 +121,14 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
                          implementationClass="org.vlang.ide.inspections.general.VlangAmbiguousImportInspection"/>
         <!-- General inspections End -->
 
+        <!-- Validity issues inspections -->
+        <localInspection language="vlang" groupPath="V"
+                         groupName="Validity issues" shortName="VlangReassignImmutableSymbolInspection"
+                         displayName="Attempt to assign to immutable variable/receiver or constant"
+                         enabledByDefault="true" level="ERROR"
+                         implementationClass="org.vlang.ide.inspections.validityIssues.VlangReassignImmutableSymbolInspection"/>
+        <!-- Validity issues inspections End -->
+
         <!-- Unsafe inspections -->
         <localInspection language="vlang" groupPath="V"
                          groupName="Unsafe" shortName="VlangLabelOutsideUnsafeInspection"
