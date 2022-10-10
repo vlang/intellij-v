@@ -19,45 +19,16 @@ public interface VlangImportSpec extends VlangCompositeElement {
   @NotNull
   PsiElement getIdentifier();
 
-  //WARNING: getReference(...) is skipped
-  //matching getReference(VlangImportSpec, ...)
-  //methods are not found in VlangPsiImplUtil
-
-  //WARNING: getAlias(...) is skipped
-  //matching getAlias(VlangImportSpec, ...)
-  //methods are not found in VlangPsiImplUtil
-
   @NotNull
   String getLastPart();
 
   @NotNull
   PsiElement getLastPartPsi();
 
-  //WARNING: getLocalPackageName(...) is skipped
-  //matching getLocalPackageName(VlangImportSpec, ...)
-  //methods are not found in VlangPsiImplUtil
-
-  //WARNING: shouldGoDeeper(...) is skipped
-  //matching shouldGoDeeper(VlangImportSpec, ...)
-  //methods are not found in VlangPsiImplUtil
-
-  //WARNING: isForSideEffects(...) is skipped
-  //matching isForSideEffects(VlangImportSpec, ...)
-  //methods are not found in VlangPsiImplUtil
-
-  //WARNING: isDot(...) is skipped
-  //matching isDot(VlangImportSpec, ...)
-  //methods are not found in VlangPsiImplUtil
-
-  //WARNING: getPath(...) is skipped
-  //matching getPath(VlangImportSpec, ...)
-  //methods are not found in VlangPsiImplUtil
-
   @NotNull
   String getName();
 
-  //WARNING: isCImport(...) is skipped
-  //matching isCImport(VlangImportSpec, ...)
-  //methods are not found in VlangPsiImplUtil
+  @NotNull
+  String getImportedName();
 
 }

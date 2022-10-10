@@ -111,6 +111,12 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
                          displayName="Duplicate field in struct/interface/enum/union"
                          enabledByDefault="true" level="ERROR"
                          implementationClass="org.vlang.ide.inspections.general.VlangDuplicateFieldInspection"/>
+
+        <localInspection language="vlang" groupPath="V"
+                         groupName="General" shortName="VlangAmbiguousImportInspection"
+                         displayName="Ambiguous import"
+                         enabledByDefault="true" level="ERROR"
+                         implementationClass="org.vlang.ide.inspections.general.VlangAmbiguousImportInspection"/>
         <!-- General inspections End -->
 
         <!-- Unsafe inspections -->

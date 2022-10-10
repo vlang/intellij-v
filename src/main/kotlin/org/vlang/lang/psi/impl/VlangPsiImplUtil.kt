@@ -104,6 +104,11 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getImportedName(o: VlangImportSpec): String {
+        return o.importAlias?.name ?: o.importPath.lastPart
+    }
+
+    @JvmStatic
     fun getQualifiedName(o: VlangImportPath): String {
         return o.importNameList.joinToString(".") { it.text }
     }

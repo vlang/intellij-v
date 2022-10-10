@@ -536,6 +536,12 @@ class VlangReference(el: VlangReferenceExpressionBase) :
             if (!processor.execute(it, state)) return false
         }
 
+        val containingFile = identifier?.containingFile as? VlangFile ?: return true
+        val aliases = containingFile.getImports().mapNotNull { it.importAlias }
+        aliases.forEach {
+            if (!processor.execute(it, state)) return false
+        }
+
         return true
     }
 

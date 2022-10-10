@@ -166,6 +166,10 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
                 return true
             }
 
+            if (e is VlangImportAlias) {
+                return true
+            }
+
             if (e is VlangNamedElement) {
                 return e.isPublic()
             }
@@ -238,6 +242,7 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
             is VlangConstDefinition           -> VlangCompletionUtil.createConstantLookupElement(element, state)
             is VlangEnumFieldDefinition       -> VlangCompletionUtil.createEnumFieldLookupElement(element)
             is VlangGlobalVariableDefinition  -> VlangCompletionUtil.createVariableLikeLookupElement(element)
+            is VlangImportAlias               -> VlangCompletionUtil.createImportAliasLookupElement(element)
             else                              -> VlangCompletionUtil.createVariableLikeLookupElement(element)
         }
     }

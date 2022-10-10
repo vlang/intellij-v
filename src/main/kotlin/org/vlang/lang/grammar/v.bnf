@@ -138,7 +138,7 @@ ImportDeclaration ::= import ImportSpec {
 // <part1> { <ref> }
 // <part1> as <alias>
 ImportSpec ::= ImportPath (SelectiveImportList | ImportAlias)? {
-  methods=[getIdentifier getReference getAlias getLastPart getLastPartPsi getLocalPackageName shouldGoDeeper isForSideEffects isDot getPath getName isCImport]
+  methods=[getIdentifier getLastPart getLastPartPsi getName getImportedName]
 }
 
 // <part1>

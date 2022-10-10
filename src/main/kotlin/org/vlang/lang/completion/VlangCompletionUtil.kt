@@ -106,6 +106,17 @@ object VlangCompletionUtil {
         )
     }
 
+    fun createImportAliasLookupElement(element: VlangImportAlias): LookupElement? {
+        val name = element.name
+        if (name.isEmpty()) {
+            return null
+        }
+        return createImportAliasLookupElement(
+            element, name,
+            priority = MODULE_PRIORITY
+        )
+    }
+
     fun createVariableLikeLookupElement(element: VlangNamedElement): LookupElement? {
         val name = element.name
         if (name.isNullOrEmpty()) {
@@ -395,6 +406,18 @@ object VlangCompletionUtil {
         )
     }
 
+    private fun createImportAliasLookupElement(
+        element: VlangImportAlias, lookupString: String,
+        insertHandler: InsertHandler<LookupElement>? = null,
+        priority: Int = 0,
+    ): LookupElement {
+        return PrioritizedLookupElement.withPriority(
+            LookupElementBuilder.createWithSmartPointer(lookupString, element)
+                .withRenderer(IMPORT_ALIAS_RENDERER)
+                .withInsertHandler(insertHandler), priority.toDouble()
+        )
+    }
+
     private fun createVariableLikeLookupElement(
         element: VlangNamedElement, lookupString: String,
         insertHandler: InsertHandler<LookupElement>? = null,
@@ -510,6 +533,18 @@ object VlangCompletionUtil {
             p.tailText = " $qualifier"
             p.isTypeGrayed = true
             p.itemText = moduleName
+        }
+    }
+
+    private val IMPORT_ALIAS_RENDERER = object : LookupElementRenderer<LookupElement>() {
+        override fun renderElement(element: LookupElement, p: LookupElementPresentation) {
+            val elem = element.psiElement as? VlangImportAlias ?: return
+            val importSpec = elem.parent as? VlangImportSpec ?: return
+
+            p.icon = VIcons.Directory
+            p.tailText = " alias for ${importSpec.name}"
+            p.isTypeGrayed = true
+            p.itemText = element.lookupString
         }
     }
 

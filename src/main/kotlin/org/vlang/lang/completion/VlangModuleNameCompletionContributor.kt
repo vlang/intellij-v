@@ -19,31 +19,6 @@ class VlangModuleNameCompletionContributor : CompletionContributor() {
     }
 
     private class ModuleNameCompletionProvider : CompletionProvider<CompletionParameters>() {
-        companion object {
-            val VLIB_PACKAGES = listOf(
-                "arrays",
-                "benchmark", "bitfield",
-                "cli", "clipboard", "compress", "context", "crypto",
-                "darwin", "datatypes", "dl", "dlmalloc",
-                "encoding", "eventbus",
-                "flag", "fontstash",
-                "gg", "gx",
-                "hash",
-                "io",
-                "js", "json",
-                "log",
-                "math", "mssql", "mysql",
-                "net",
-                "orm", "os",
-                "pg", "picoev", "picohttpparser",
-                "rand", "readline", "regex", "runtime",
-                "semver", "sokol", "sqlite", "stbi", "strconv", "strings", "sync", "szip",
-                "term", "time", "toml",
-                "v", "vweb",
-                "x",
-            )
-        }
-
         override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
             val element = parameters.position.parent as? VlangImportName ?: return
             val qualifier = element.qualifier
@@ -60,15 +35,6 @@ class VlangModuleNameCompletionContributor : CompletionContributor() {
                         .withIcon(AllIcons.Nodes.Module)
                 }
             )
-
-            if (qualifier.isEmpty()) {
-                // TODO: remove this when VlangModulesIndex.getSubmodules() wil be return vlib modules
-                VLIB_PACKAGES.forEach {
-                    result.addElement(
-                        LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.Module)
-                    )
-                }
-            }
         }
     }
 }

@@ -1,5 +1,10 @@
 package org.vlang.ide.codeInsight
 
+import com.intellij.psi.search.GlobalSearchScope
+import com.intellij.psi.search.searches.ReferencesSearch
+import com.intellij.psi.util.CachedValueProvider
+import com.intellij.psi.util.CachedValuesManager
+import com.intellij.psi.util.PsiModificationTracker
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.types.VlangPrimitiveTypes
 
@@ -19,6 +24,57 @@ object VlangCodeInsightUtil {
     fun isExitCall(call: VlangCallExpr) = isBuiltinCall(call, "builtin.exit")
 
     fun isPanicCall(call: VlangCallExpr) = isBuiltinCall(call, "builtin.panic")
+
+    fun findDuplicateImports(imports: List<VlangImportSpec>): MutableSet<VlangImportSpec> {
+        val importsToDelete = mutableSetOf<VlangImportSpec>()
+        val importsAsSet = imports.map { it.importedName to it }
+
+        importsAsSet.forEach { (importName, spec) ->
+            if (importsToDelete.contains(spec)) {
+                return@forEach
+            }
+
+            val importsWithSameName = imports.filter { it.importedName == importName }
+            if (importsWithSameName.size > 1) {
+                importsWithSameName.subList(1, importsWithSameName.size).forEach { specToDelete ->
+                    importsToDelete.add(specToDelete)
+                }
+            }
+        }
+
+        return importsToDelete
+    }
+
+    fun isImportUsed(import: VlangImportSpec): Boolean {
+        return CachedValuesManager.getCachedValue(import) {
+            CachedValueProvider.Result
+                .create(
+                    isImportUsedImpl(import),
+                    PsiModificationTracker.MODIFICATION_COUNT
+                )
+        }
+    }
+
+    private fun isImportUsedImpl(import: VlangImportSpec): Boolean {
+        if (import.selectiveImportList != null) {
+            // TODO: support selective imports
+            return true
+        }
+
+        val search = ReferencesSearch.search(import.importPath.lastPartPsi, GlobalSearchScope.allScope(import.project))
+        if (search.findFirst() != null) {
+            return true
+        }
+
+        if (import.importAlias != null) {
+            val searchAlias = ReferencesSearch.search(import.importAlias!!, import.useScope)
+            if (searchAlias.findFirst() != null) {
+                return true
+            }
+        }
+
+        return false
+    }
 
     private fun isBuiltinCall(call: VlangCallExpr, name: String): Boolean {
         val ref = call.reference?.resolve() ?: return false

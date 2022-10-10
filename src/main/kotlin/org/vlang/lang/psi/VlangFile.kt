@@ -119,7 +119,7 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
         return moduleName ?: ""
     }
 
-    private fun getImports(): List<VlangImportSpec> {
+    fun getImports(): List<VlangImportSpec> {
         return findChildByClass(VlangImportList::class.java)?.importDeclarationList?.mapNotNull {
             it.importSpec
         } ?: emptyList()
