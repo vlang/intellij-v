@@ -1,5 +1,11 @@
 module types
 
+import io
+
+interface IFoo {}
+
+struct Foo {}
+
 fn main() {
 	expr_type(isize(100), 'isize')
 	expr_type(i8(100), 'i8')
@@ -20,4 +26,6 @@ fn main() {
     expr_type(rune(1), 'rune')
     expr_type(byte(1), 'byte')
     expr_type(voidptr(1), 'voidptr')
+
+	expr_type(IFoo(Foo{}), 'IFoo')
 }

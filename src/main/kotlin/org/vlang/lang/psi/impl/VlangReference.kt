@@ -2,7 +2,6 @@ package org.vlang.lang.psi.impl
 
 import com.intellij.codeInsight.completion.CompletionUtilCore
 import com.intellij.openapi.util.Conditions
-import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.RecursionManager
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
@@ -11,6 +10,7 @@ import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ArrayUtil
 import org.vlang.configurations.VlangConfiguration
+import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangPsiImplUtil.processNamedElements
 import org.vlang.lang.stubs.index.VlangModulesFingerprintIndex
@@ -27,10 +27,8 @@ class VlangReference(el: VlangReferenceExpressionBase) :
     ) {
 
     companion object {
-        private val POINTER = Key.create<Any>("POINTER")
-
         private val MY_RESOLVER: ResolveCache.PolyVariantResolver<VlangReference> =
-            ResolveCache.PolyVariantResolver { r: VlangReference, _: Boolean -> r.resolveInner() }
+            ResolveCache.PolyVariantResolver { ref, _ -> ref.resolveInner() }
 
         private fun getContextElement(state: ResolveState?): PsiElement? {
             val context = state?.get(VlangPsiImplUtil.CONTEXT)
@@ -41,6 +39,9 @@ class VlangReference(el: VlangReferenceExpressionBase) :
             return getContextElement(state)?.containingFile
         }
     }
+
+    private val identifier: PsiElement?
+        get() = myElement?.getIdentifier()
 
     private fun resolveInner(): Array<ResolveResult> {
         if (!myElement.isValid) return ResolveResult.EMPTY_ARRAY
@@ -115,23 +116,6 @@ class VlangReference(el: VlangReferenceExpressionBase) :
             }
         }
 
-//        if (target is VlangImportSpec) {
-//            if (target.isCImport()) return processor.execute(myElement, state)
-//            target = target.getImportString().resolve()
-//        }
-//        if (target is PsiDirectory && !processDirectory(target, file, null, processor, state, false)) return false
-//        if (target is VlangTypeOwner) {
-//            val type = typeOrParameterType(target, createContextOnElement(myElement))
-//
-//            if (type != null) {
-//                if (!processType(type, processor, state)) return false
-////                val ref = getTypeRefExpression(type)
-////                if (ref != null && ref.resolve() === ref) return processor.execute(
-////                    myElement,
-////                    state
-////                ) // a bit hacky resolve for: var a C.foo; a.b
-//            }
-//        }
         return false
     }
 
@@ -173,19 +157,6 @@ class VlangReference(el: VlangReferenceExpressionBase) :
             return true
         }
         val localResolve = true //isLocalResolve(myFile, file)
-//        val parent: VlangTypeSpec = getTypeSpecSafe(type)
-//        val canProcessMethods = state.get<Any?>(com.Vlangide.psi.impl.VlangReference.DONT_PROCESS_METHODS) == null
-//        if (canProcessMethods && parent != null && !processNamedElements(
-//                processor,
-//                state,
-//                parent.getMethods(),
-//                localResolve,
-//                true
-//            )
-//        ) return false
-//        if (type is VlangSpecType) {
-//            type = type.getUnderlyingType()
-//        }
 
         val typ = type.resolveType()
 
@@ -225,7 +196,6 @@ class VlangReference(el: VlangReferenceExpressionBase) :
 
         if (typ is VlangStructType) {
             if (!processNamedElements(processor, state, typ.getFieldList(), localResolve)) return false
-
             val fqn = (typ.parent as VlangStructDeclaration).getQualifiedName()
             if (!processMethods(fqn, processor, state)) return false
         }
@@ -233,6 +203,8 @@ class VlangReference(el: VlangReferenceExpressionBase) :
         if (typ is VlangInterfaceType) {
             if (!processNamedElements(processor, state, typ.getFieldList(), localResolve)) return false
             if (!processNamedElements(processor, state, typ.methodList, localResolve)) return false
+            val fqn = (typ.parent as VlangInterfaceDeclaration).getQualifiedName()
+            if (!processMethods(fqn, processor, state)) return false
         }
 
         if (typ is VlangEnumType) {
@@ -249,15 +221,6 @@ class VlangReference(el: VlangReferenceExpressionBase) :
             return processExistingType(arrayStruct.structType, processor, state)
         }
 
-//        else if (state.get<Any?>(com.Vlangide.psi.impl.VlangReference.POINTER) == null && type is VlangInterfaceType) {
-//            if (!processNamedElements(processor, state, (type as VlangInterfaceType).getMethods(), localResolve, true)) return false
-//            if (!processCollectedRefs((type as VlangInterfaceType).getBaseTypesReferences(), processor, state)) return false
-//        } else if (type is VlangFunctionType) {
-//            val signature: VlangSignature = (type as VlangFunctionType).getSignature()
-//            val result: VlangResult? = if (signature != null) signature.getResult() else null
-//            val resultType: VlangType? = if (result != null) result.getType() else null
-//            if (resultType != null && !processVlangType(resultType, processor, state)) return false
-//        }
         return true
     }
 
@@ -266,19 +229,6 @@ class VlangReference(el: VlangReferenceExpressionBase) :
             if (!processor.execute(it, state)) return@processPrefix false
             true
         }
-    }
-
-    private fun processCollectedRefs(
-        refs: List<VlangTypeReferenceExpression>,
-        processor: VlangScopeProcessor,
-        state: ResolveState,
-    ): Boolean {
-        for (ref in refs) {
-            if (!processInTypeRef(ref, processor, state)) {
-                return false
-            }
-        }
-        return true
     }
 
     private fun processTypeRef(type: VlangType?, processor: VlangScopeProcessor, state: ResolveState): Boolean {
@@ -293,24 +243,9 @@ class VlangReference(el: VlangReferenceExpressionBase) :
         if (resolve is VlangTypeOwner) {
             val type = resolve.getType(state) ?: return true
             if (!processType(type, processor, state)) return false
-
-//            if (type is VlangSpecType) {
-//                val inner: VlangType = (type as VlangSpecType).getType()
-//                if (inner is VlangPointerType && state.get<Any?>(com.Vlangide.psi.impl.VlangReference.POINTER) != null) return true
-//                if (inner != null && !processVlangType(
-//                        inner,
-//                        processor,
-//                        state.put<Any>(com.Vlangide.psi.impl.VlangReference.DONT_PROCESS_METHODS, true)
-//                    )
-//                ) return false
-//            }
             return true
         }
         return true
-    }
-
-    private fun typeOrParameterType(resolve: VlangTypeOwner, context: ResolveState?): VlangType? {
-        return resolve.getType(context)
     }
 
     private fun processUnqualifiedResolve(
@@ -381,7 +316,7 @@ class VlangReference(el: VlangReferenceExpressionBase) :
         if (fetch.parent is VlangBinaryExpr) {
             val binaryExpr = fetch.parent as VlangBinaryExpr
             if (binaryExpr.right != null && binaryExpr.right!!.isEquivalentTo(fetch)) {
-                val left = binaryExpr.left ?: return true
+                val left = binaryExpr.left
                 return processQualifierExpression(file, left, processor, state)
             }
         }
@@ -417,7 +352,7 @@ class VlangReference(el: VlangReferenceExpressionBase) :
         return true
     }
 
-    protected fun processDirectory(
+    private fun processDirectory(
         dir: PsiDirectory?,
         file: VlangFile?,
         packageName: String?,
@@ -463,7 +398,7 @@ class VlangReference(el: VlangReferenceExpressionBase) :
     }
 
     // TODO: redone
-    protected fun processImports(
+    private fun processImports(
         file: VlangFile,
         processor: VlangScopeProcessor,
         state: ResolveState,
@@ -564,7 +499,7 @@ class VlangReference(el: VlangReferenceExpressionBase) :
         }
     }
 
-    protected fun processFileEntities(
+    private fun processFileEntities(
         file: VlangFile,
         processor: VlangScopeProcessor,
         state: ResolveState,
@@ -675,7 +610,7 @@ class VlangReference(el: VlangReferenceExpressionBase) :
         )
     }
 
-    protected fun createResolveProcessor(
+    private fun createResolveProcessor(
         result: MutableCollection<ResolveResult>,
         reference: VlangReferenceExpressionBase,
     ): VlangScopeProcessor {
@@ -702,7 +637,7 @@ class VlangReference(el: VlangReferenceExpressionBase) :
         }
     }
 
-    override fun isReferenceTo(element: PsiElement) = couldBeReferenceTo(element, myElement) && super.isReferenceTo(element);
+    override fun isReferenceTo(element: PsiElement) = couldBeReferenceTo(element, myElement) && super.isReferenceTo(element)
 
     private fun couldBeReferenceTo(definition: PsiElement, reference: PsiElement): Boolean {
         if (definition is PsiDirectory && reference is VlangReferenceExpressionBase) return true
@@ -713,27 +648,11 @@ class VlangReference(el: VlangReferenceExpressionBase) :
 
         val inSameFile = definitionFile.isEquivalentTo(referenceFile)
         if (inSameFile) return true
-        return if (inSamePackage(referenceFile, definitionFile))
+        return if (VlangCodeInsightUtil.sameModule(referenceFile, definitionFile))
             true
         else
             reference !is VlangNamedElement || !reference.isPublic()
     }
-
-    private fun inSamePackage(firstFile: PsiFile, secondFile: PsiFile): Boolean {
-        val containingDirectory = firstFile.containingDirectory
-        if (containingDirectory == null || containingDirectory != secondFile.containingDirectory) {
-            return false
-        }
-        if (firstFile is VlangFile && secondFile is VlangFile) {
-            val referencePackage = firstFile.packageName
-            val definitionPackage = secondFile.packageName
-            return referencePackage != null && referencePackage == definitionPackage
-        }
-        return true
-    }
-
-    private val identifier: PsiElement?
-        get() = myElement?.getIdentifier()
 
     override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult?> {
         return if (!myElement.isValid)

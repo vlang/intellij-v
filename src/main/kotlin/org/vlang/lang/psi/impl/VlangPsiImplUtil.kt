@@ -1,5 +1,6 @@
 package org.vlang.lang.psi.impl
 
+import com.intellij.codeInsight.highlighting.ReadWriteAccessDetector.Access
 import com.intellij.lang.parser.GeneratedParserUtilBase
 import com.intellij.openapi.module.Module
 import com.intellij.openapi.module.ModuleUtilCore
@@ -41,6 +42,11 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun getIdentifier(o: VlangInterfaceDeclaration): PsiElement? {
         return o.interfaceType.identifier
+    }
+
+    @JvmStatic
+    fun getTypeInner(o: VlangInterfaceDeclaration, context: ResolveState?): VlangType {
+        return o.interfaceType
     }
 
     @JvmStatic
@@ -324,6 +330,48 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun resolve(o: VlangReferenceExpression): PsiElement? {
         return o.reference.resolve()
+    }
+
+    @JvmStatic
+    fun getReadWriteAccess(o: VlangReferenceExpression): Access {
+        val expression = getConsiderableExpression(o)
+        val parent = expression.parent
+
+        if (parent is VlangLeftHandExprList) {
+            val grandParent = parent.getParent()
+            if (grandParent is VlangAssignmentStatement) {
+                return if (grandParent.assignOp.assign == null) Access.ReadWrite else Access.Write
+            }
+            if (grandParent is VlangSendStatement) {
+                return Access.Write
+            }
+            
+            return Access.Read
+        }
+
+        if (parent is VlangRangeClause) {
+            return if (expression == parent.expression) Access.Read else Access.Write
+        }
+
+        return Access.Read
+    }
+
+    private fun getConsiderableExpression(element: VlangExpression): VlangExpression {
+        var result = element
+        while (true) {
+            val parent = result.parent ?: return result
+            if (parent is VlangParenthesesExpr) {
+                result = parent
+                continue
+            }
+            if (parent is VlangUnaryExpr) {
+                if (parent.mul != null || parent.bitAnd != null || parent.sendChannel != null) {
+                    result = parent
+                    continue
+                }
+            }
+            return result
+        }
     }
 
     @JvmStatic

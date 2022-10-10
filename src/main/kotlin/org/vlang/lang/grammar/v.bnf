@@ -395,7 +395,7 @@ AnonymousFieldDefinition ::= Type {
 // interface
 InterfaceDeclaration ::= Attributes? SymbolVisibility? InterfaceType {
   stubClass="org.vlang.lang.stubs.VlangInterfaceDeclarationStub"
-  methods=[getName getIdentifier]
+  methods=[getName getIdentifier getTypeInner]
 }
 
 InterfaceType ::= interface identifier GenericArguments? '{' MembersGroup* '}' {

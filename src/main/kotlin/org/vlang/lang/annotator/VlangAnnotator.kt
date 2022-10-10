@@ -43,6 +43,13 @@ class VlangAnnotator : Annotator {
             val ref = element.reference
             val resolvedElement = ref.multiResolve(false).firstOrNull()?.element ?: return
 
+            if (element.parent is VlangCallExpr) {
+                if (resolvedElement is VlangInterfaceDeclaration) {
+                    holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.INTERFACE_NAME_ATTRIBUTES)
+                    return
+                }
+            }
+
             if (resolvedElement is VlangFunctionDeclaration) {
                 holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES)
                 return

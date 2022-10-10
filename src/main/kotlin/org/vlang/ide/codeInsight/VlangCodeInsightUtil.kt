@@ -1,5 +1,6 @@
 package org.vlang.ide.codeInsight
 
+import com.intellij.psi.PsiFile
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.CachedValueProvider
@@ -111,6 +112,19 @@ object VlangCodeInsightUtil {
 
         val parts = name.split('.')
         return parts[parts.size - 2] + "." + parts[parts.size - 1]
+    }
+
+    fun sameModule(firstFile: PsiFile, secondFile: PsiFile): Boolean {
+        val containingDirectory = firstFile.containingDirectory
+        if (containingDirectory == null || containingDirectory != secondFile.containingDirectory) {
+            return false
+        }
+        if (firstFile is VlangFile && secondFile is VlangFile) {
+            val referencePackage = firstFile.packageName
+            val definitionPackage = secondFile.packageName
+            return referencePackage != null && referencePackage == definitionPackage
+        }
+        return true
     }
 
     fun sameModule(first: VlangCompositeElement, second: VlangCompositeElement): Boolean {

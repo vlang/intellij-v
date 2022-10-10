@@ -1,6 +1,7 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi.impl;
 
+import com.intellij.codeInsight.highlighting.ReadWriteAccessDetector.Access;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
@@ -51,6 +52,12 @@ public class VlangReferenceExpressionImpl extends VlangExpressionImpl implements
   @Nullable
   public PsiElement resolve() {
     return VlangPsiImplUtil.resolve(this);
+  }
+
+  @Override
+  @NotNull
+  public Access getReadWriteAccess() {
+    return VlangPsiImplUtil.getReadWriteAccess(this);
   }
 
 }
