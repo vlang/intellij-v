@@ -1,6 +1,6 @@
 package org.vlang.lang.resolve
 
-open class ResolveTest : ResolveTestBase() {
+class ResolveTest : ResolveTestBase() {
     fun `test struct with same field and method`() {
         file("struct.v", """
             struct Test {

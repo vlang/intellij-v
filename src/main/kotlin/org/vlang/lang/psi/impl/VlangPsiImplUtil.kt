@@ -3,7 +3,6 @@ package org.vlang.lang.psi.impl
 import com.intellij.codeInsight.highlighting.ReadWriteAccessDetector.Access
 import com.intellij.lang.parser.GeneratedParserUtilBase
 import com.intellij.openapi.module.Module
-import com.intellij.openapi.module.ModuleUtilCore
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Condition
 import com.intellij.openapi.util.Conditions
@@ -18,6 +17,7 @@ import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.impl.VlangReferenceBase.Companion.LOCAL_RESOLVE
 import org.vlang.lang.psi.impl.imports.VlangImportReference
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangNotNullableTypeEx
@@ -378,7 +378,7 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getReference(o: VlangTypeReferenceExpression): VlangReference {
-        return VlangReference(o)
+        return VlangReference(o, forTypes = true)
     }
 
     @JvmStatic
@@ -1066,17 +1066,16 @@ object VlangPsiImplUtil {
         checkContainingFile: Boolean,
     ): Boolean {
         val contextFile = if (checkContainingFile) VlangReference.getContextFile(state) else null
-        val module = if (contextFile != null) ModuleUtilCore.findModuleForPsiElement(contextFile) else null
         for (definition in elements) {
             if (!condition.value(definition)) continue
-            if (!definition.isValid() || checkContainingFile
+            if (!definition.isValid || checkContainingFile
             /*&& !VlangPsiImplUtil.allowed(
                 definition.getContainingFile(),
                 contextFile,
                 module
             )*/
             ) continue
-            if (!processor.execute(definition, state))
+            if (!processor.execute(definition, state.put(LOCAL_RESOLVE, localResolve)))
                 return false
         }
         return true

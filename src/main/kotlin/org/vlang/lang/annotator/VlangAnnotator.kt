@@ -33,11 +33,6 @@ class VlangAnnotator : Annotator {
                     holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.TYPE_PARAMETER_NAME_ATTRIBUTES)
                     return
                 }
-
-                if (name in arrayOf("sizeof", "__offsetof")) {
-                    holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.KEYWORD)
-                    return
-                }
             }
 
             val ref = element.reference
@@ -151,6 +146,8 @@ class VlangAnnotator : Annotator {
 
             when (element.text) {
                 "_likely_", "_unlikely_" ->
+                    holder.textAttributes(element, JavaHighlightingColors.KEYWORD)
+                "sizeof", "__offsetof", "typeof" ->
                     holder.textAttributes(element, JavaHighlightingColors.KEYWORD)
             }
         }

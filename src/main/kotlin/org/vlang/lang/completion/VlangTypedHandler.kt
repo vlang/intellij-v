@@ -44,5 +44,4 @@ class VlangTypedHandler : TypedHandlerDelegate() {
 
         return Result.DEFAULT
     }
-
 }

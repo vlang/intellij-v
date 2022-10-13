@@ -1,7 +1,6 @@
 package org.vlang.lang.completion
 
 import com.intellij.codeInsight.AutoPopupController
-import com.intellij.codeInsight.completion.CompletionUtilCore
 import com.intellij.codeInsight.completion.InsertHandler
 import com.intellij.codeInsight.completion.InsertionContext
 import com.intellij.codeInsight.completion.PrioritizedLookupElement
@@ -28,7 +27,7 @@ import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import javax.swing.Icon
 
 object VlangCompletionUtil {
-    const val KEYWORD_PRIORITY = 20
+    const val KEYWORD_PRIORITY = 10
     const val CONTEXT_COMPLETION_PRIORITY = 35
     const val CONTEXT_KEYWORD_PRIORITY = 25
     const val NOT_IMPORTED_METHOD_PRIORITY = 4
@@ -46,8 +45,7 @@ object VlangCompletionUtil {
     const val TYPE_PRIORITY = NOT_IMPORTED_TYPE_PRIORITY + 10
     const val NOT_IMPORTED_TYPE_CONVERSION = 1
     const val TYPE_CONVERSION = NOT_IMPORTED_TYPE_CONVERSION + 10
-    const val NOT_IMPORTED_GLOBAL_VAR_PRIORITY = 15
-    const val GLOBAL_VAR_PRIORITY = NOT_IMPORTED_GLOBAL_VAR_PRIORITY + 5
+    const val GLOBAL_VAR_PRIORITY = 5
     const val NOT_IMPORTED_VAR_PRIORITY = 15
     const val VAR_PRIORITY = NOT_IMPORTED_VAR_PRIORITY + 10
     const val FIELD_PRIORITY = CONTEXT_KEYWORD_PRIORITY + 1
@@ -75,10 +73,6 @@ object VlangCompletionUtil {
     }
 
     fun shouldSuppressCompletion(element: PsiElement): Boolean {
-        if (element.text == CompletionUtilCore.DUMMY_IDENTIFIER_TRIMMED) {
-            return true
-        }
-
         val parent = element.parent
         if (parent.parent is VlangVarDeclaration) {
             return true
@@ -127,6 +121,17 @@ object VlangCompletionUtil {
         return createVariableLikeLookupElement(
             element, name,
             priority = VAR_PRIORITY
+        )
+    }
+
+    fun createGlobalVariableLikeLookupElement(element: VlangNamedElement): LookupElement? {
+        val name = element.name
+        if (name.isNullOrEmpty()) {
+            return null
+        }
+        return createVariableLikeLookupElement(
+            element, name,
+            priority = GLOBAL_VAR_PRIORITY
         )
     }
 
@@ -208,7 +213,7 @@ object VlangCompletionUtil {
         )
     }
 
-    fun createStructLookupElement(element: VlangNamedElement, state: ResolveState): LookupElement? {
+    fun createStructLookupElement(element: VlangNamedElement, state: ResolveState, needBrackets: Boolean): LookupElement? {
         val name = element.name
         if (name.isNullOrEmpty()) {
             return null
@@ -218,7 +223,7 @@ object VlangCompletionUtil {
         return createStructLookupElement(
             element, name, moduleName, state,
             priority = STRUCT_PRIORITY,
-            insertHandler = StructInsertHandler(moduleName)
+            insertHandler = StructInsertHandler(moduleName, needBrackets)
         )
     }
 
@@ -459,7 +464,7 @@ object VlangCompletionUtil {
         }
     }
 
-    class ModuleInsertHandler(moduleName: String?) : ElementInsertHandler(moduleName)  {
+    class ModuleInsertHandler(moduleName: String?) : ElementInsertHandler(moduleName) {
         override fun handleInsertion(context: InsertionContext, item: LookupElement) {
             val caretOffset = context.editor.caretModel.offset
 
@@ -481,13 +486,15 @@ object VlangCompletionUtil {
 
     class ConstantInsertHandler(moduleName: String?) : ElementInsertHandler(moduleName)
 
-    class StructInsertHandler(moduleName: String?) : ElementInsertHandler(moduleName) {
+    class StructInsertHandler(moduleName: String?, private val needBrackets: Boolean = true) : ElementInsertHandler(moduleName) {
         override fun handleInsertion(context: InsertionContext, item: LookupElement) {
             val caretOffset = context.editor.caretModel.offset
-            context.document.insertString(caretOffset, "{}")
-            context.editor.caretModel.moveToOffset(caretOffset + 1)
+            if (needBrackets) {
+                context.document.insertString(caretOffset, "{}")
+                context.editor.caretModel.moveToOffset(caretOffset + 1)
 
-            showCompletion(context.editor)
+                showCompletion(context.editor)
+            }
         }
     }
 
@@ -495,8 +502,10 @@ object VlangCompletionUtil {
         override fun handleInsertion(context: InsertionContext, item: LookupElement) {}
     }
 
-    class StringInsertHandler(val string: String, val shift: Int) : InsertHandler<LookupElement> {
+    class StringInsertHandler(val string: String, val shift: Int, val enable: Boolean = true) : InsertHandler<LookupElement> {
         override fun handleInsert(context: InsertionContext, item: LookupElement) {
+            if (!enable) return
+
             val caretOffset = context.editor.caretModel.offset
 
             context.document.insertString(caretOffset, string)
@@ -504,11 +513,11 @@ object VlangCompletionUtil {
         }
     }
 
-    class TemplateStringInsertHandler(val string: String, vararg val variables: Pair<String, Expression>) : InsertHandler<LookupElement> {
+    class TemplateStringInsertHandler(val string: String, private val reformat: Boolean = true, vararg val variables: Pair<String, Expression>) : InsertHandler<LookupElement> {
         override fun handleInsert(context: InsertionContext, item: LookupElement) {
             val template = TemplateManager.getInstance(context.project)
                 .createTemplate("templateInsertHandler", "vlang", string)
-            template.isToReformat = true
+            template.isToReformat = reformat
 
             variables.forEach { (name, expression) ->
                 template.addVariable(name, expression, true)
@@ -649,14 +658,14 @@ object VlangCompletionUtil {
             val elem = element.psiElement as? VlangTypeAliasDeclaration ?: return
             val types = elem.aliasType?.typeUnionList?.typeList ?: emptyList()
             val tail = if (types.size == 1) {
-                " " + types.first().text
+                " = " + types.first().text
             } else {
                 ""
             }
 
             p.icon = AllIcons.Nodes.Alias
-            p.typeText = tail
             p.itemText = element.lookupString
+            p.tailText = tail
         }
     }
 
@@ -664,8 +673,12 @@ object VlangCompletionUtil {
         override fun render(element: LookupElement, p: LookupElementPresentation) {
             val elem = element.psiElement as? VlangFunctionDeclaration ?: return
             p.icon = VIcons.Function
-            val signature = elem.getSignature()?.text ?: ""
-            p.itemText = element.lookupString + signature
+            val signature = elem.getSignature()
+            val parameters = signature?.parameters?.text ?: ""
+            val result = signature?.result?.text
+
+            p.itemText = element.lookupString + parameters
+            p.typeText = result
         }
     }
 

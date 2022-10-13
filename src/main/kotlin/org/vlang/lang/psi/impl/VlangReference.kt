@@ -1,6 +1,6 @@
 package org.vlang.lang.psi.impl
 
-import com.intellij.codeInsight.completion.CompletionUtilCore
+import com.intellij.codeInsight.completion.CompletionUtil
 import com.intellij.openapi.util.Conditions
 import com.intellij.openapi.util.RecursionManager
 import com.intellij.openapi.util.TextRange
@@ -17,7 +17,7 @@ import org.vlang.lang.stubs.index.VlangModulesFingerprintIndex
 import org.vlang.lang.stubs.index.VlangModulesIndex
 import org.vlang.lang.stubs.index.VlangNamesIndex
 
-class VlangReference(el: VlangReferenceExpressionBase) :
+class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = false) :
     VlangReferenceBase<VlangReferenceExpressionBase>(
         el,
         TextRange.from(
@@ -153,22 +153,24 @@ class VlangReference(el: VlangReferenceExpressionBase) :
     private fun processExistingType(type: VlangType, processor: VlangScopeProcessor, state: ResolveState): Boolean {
         val file = type.containingFile as? VlangFile ?: return true
         val moduleName = file.getModuleQualifiedName()
-        val myFile = getContextFile(state) ?: myElement.containingFile
-        if (myFile !is VlangFile) {
+        val contextFile = getContextFile(state) ?: myElement.containingFile
+        if (contextFile !is VlangFile) {
             return true
         }
-        val localResolve = true //isLocalResolve(myFile, file)
+
+        val localResolve = isLocalResolve(contextFile, file)
+        val newState = state.put(LOCAL_RESOLVE, localResolve)
 
         val typ = type.resolveType()
 
         if (typ is VlangAliasType) {
             val decl = typ.parent as? VlangTypeAliasDeclaration ?: return true
             val aliasFqn = decl.getQualifiedName()
-            if (!processMethods(aliasFqn, processor, state)) return false
+            if (!processMethods(aliasFqn, processor, newState)) return false
 
             val types = typ.typeUnionList?.typeList ?: return true
             for (unionType in types) {
-                if (!processType(unionType, processor, state)) {
+                if (!processType(unionType, processor, newState)) {
                     return false
                 }
             }
@@ -177,71 +179,77 @@ class VlangReference(el: VlangReferenceExpressionBase) :
         if (typ is VlangPointerType) {
             val baseType = typ.type
             if (baseType != null) {
-                return processType(baseType, processor, state)
+                return processType(baseType, processor, newState)
             }
         }
 
         if (typ is VlangNullableType) {
             val baseType = typ.type
             if (baseType != null) {
-                return processType(baseType, processor, state)
+                return processType(baseType, processor, newState)
             }
         }
 
         if (typ is VlangNotNullableType) {
             val baseType = typ.type
             if (baseType != null) {
-                return processType(baseType, processor, state)
+                return processType(baseType, processor, newState)
             }
         }
 
         if (typ is VlangStructType) {
             val isMethodRef = element.parent is VlangCallExpr
 
-            if (!isMethodRef && !processNamedElements(processor, state, typ.getFieldList(), localResolve)) return false
+            if (!isMethodRef && !processNamedElements(processor, newState, typ.getFieldList(), localResolve)) return false
             val fqn = (typ.parent as VlangStructDeclaration).getQualifiedName()
-            if (!processMethods(fqn, processor, state)) return false
+            if (!processMethods(fqn, processor, newState)) return false
         }
 
         if (typ is VlangUnionType) {
             val isMethodRef = element.parent is VlangCallExpr
 
-            if (!isMethodRef && !processNamedElements(processor, state, typ.getFieldList(), localResolve)) return false
+            if (!isMethodRef && !processNamedElements(processor, newState, typ.getFieldList(), localResolve)) return false
             val fqn = (typ.parent as VlangUnionDeclaration).getQualifiedName()
-            if (!processMethods(fqn, processor, state)) return false
+            if (!processMethods(fqn, processor, newState)) return false
         }
 
         if (typ is VlangInterfaceType) {
             val isMethodRef = element.parent is VlangCallExpr
 
-            if (!isMethodRef && !processNamedElements(processor, state, typ.getFieldList(), localResolve)) return false
-            if (!processNamedElements(processor, state, typ.methodList, localResolve)) return false
+            if (!isMethodRef && !processNamedElements(processor, newState, typ.getFieldList(), localResolve)) return false
+            if (!processNamedElements(processor, newState, typ.methodList, localResolve)) return false
             val fqn = (typ.parent as VlangInterfaceDeclaration).getQualifiedName()
-            if (!processMethods(fqn, processor, state)) return false
+            if (!processMethods(fqn, processor, newState)) return false
         }
 
         if (typ is VlangEnumType) {
-            if (!processNamedElements(processor, state, typ.fieldList, localResolve)) return false
+            if (!processNamedElements(processor, newState, typ.fieldList, localResolve)) return false
         }
 
         if (typ is VlangArrayOrSliceType) {
             val fqn = VlangPsiImplUtil.getFqn(moduleName, typ.text)
-            if (!processMethods(fqn, processor, state)) return false
+            if (!processMethods(fqn, processor, newState)) return false
 
             val builtin = VlangConfiguration.getInstance(type.project).builtinLocation
             val arrayVirtualFile = builtin?.findChild("array.v") ?: return false
             val arrayFile = PsiManager.getInstance(typ.project).findFile(arrayVirtualFile) as? VlangFile ?: return false
             val arrayStruct = arrayFile.getStructs()
                 .firstOrNull { it.name == "array" } ?: return false
-            return processExistingType(arrayStruct.structType, processor, state)
+            return processExistingType(arrayStruct.structType, processor, newState)
         }
 
         if (typ is VlangMapType) {
             val fqn = VlangPsiImplUtil.getFqn(moduleName, typ.text)
-            if (!processMethods(fqn, processor, state)) return false
+            if (!processMethods(fqn, processor, newState)) return false
         }
 
         return true
+    }
+
+    private fun isLocalResolve(origin: VlangFile, external: VlangFile): Boolean {
+        val originModule = origin.getModuleQualifiedName()
+        val externalModule = external.getModuleQualifiedName()
+        return originModule == externalModule
     }
 
     private fun processMethods(fqn: String?, processor: VlangScopeProcessor, state: ResolveState): Boolean {
@@ -303,7 +311,7 @@ class VlangReference(el: VlangReferenceExpressionBase) :
 
         if (!processBlock(processor, state, true)) return false
         if (!processImportModules(file, processor, state, true)) return false
-        if (!processModules(processor, state)) return false
+        if (!processImportedModules(file, processor, state)) return false
         if (!processImports(file, processor, state, myElement)) return false
         if (!processFileEntities(file, processor, state, true)) return false
         if (!processDirectory(file.originalFile.parent, file, file.packageName, processor, state, true)) return false
@@ -409,8 +417,7 @@ class VlangReference(el: VlangReferenceExpressionBase) :
             .filterIsInstance<VlangFile>()
             .filter { !it.isTestFile() }
             .forEach {
-                val res = processFileEntities(it, processor, state, true)
-                if (!res)
+                if (!processFileEntities(it, processor, state, false))
                     return false
             }
 
@@ -463,10 +470,15 @@ class VlangReference(el: VlangReferenceExpressionBase) :
             return true
         }
 
+        if (identifier?.textMatches(CompletionUtil.DUMMY_IDENTIFIER_TRIMMED) == true) {
+            return true
+        }
+
         val currentModule = file.getModuleName()
         val modules = VlangModulesIndex.getAll(element.project)
         for (moduleFile in modules) {
-            if (moduleFile.getModuleName() == currentModule) {
+            val moduleName = moduleFile.getModuleName()
+            if (moduleName == currentModule || moduleName == VlangCodeInsightUtil.BUILTIN_MODULE) {
                 continue
             }
             if (!processFileEntities(moduleFile, processor, state.put(MODULE_NAME, moduleFile.getModuleQualifiedName()), false)) {
@@ -477,7 +489,7 @@ class VlangReference(el: VlangReferenceExpressionBase) :
         return true
     }
 
-    private fun processModules(processor: VlangScopeProcessor, state: ResolveState): Boolean {
+    private fun processImportedModules(file: VlangFile, processor: VlangScopeProcessor, state: ResolveState): Boolean {
         if (!processor.isCompletion()) {
             // This method is only for autocompletion when a user writes
             // a symbol (from another module) name, and we want to import
@@ -485,17 +497,21 @@ class VlangReference(el: VlangReferenceExpressionBase) :
             return true
         }
 
-        val prefix = identifier?.text?.removeSuffix(CompletionUtilCore.DUMMY_IDENTIFIER_TRIMMED) ?: return true
-        val modules = VlangModulesFingerprintIndex.getPrefixed(element.project, prefix)
-        modules.forEach {
-            if (!processor.execute(it, state)) return false
-        }
+        val currentModule = file.getModuleQualifiedName()
+        file.getImports()
+            .filter { it.importAlias == null }
+            .map { it.importPath.qualifiedName }
+            .flatMap { VlangModulesFingerprintIndex.find(it, element.project, null) }
+            .forEach {
+                if (it.getModuleQualifiedName() == currentModule) return@forEach
+                if (!processor.execute(it, state)) return false
+            }
 
-        val containingFile = identifier?.containingFile as? VlangFile ?: return true
-        val aliases = containingFile.getImports().mapNotNull { it.importAlias }
-        aliases.forEach {
-            if (!processor.execute(it, state)) return false
-        }
+        file.getImports()
+            .mapNotNull { it.importAlias }
+            .forEach {
+                if (!processor.execute(it, state)) return false
+            }
 
         return true
     }

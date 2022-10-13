@@ -10,7 +10,7 @@ import org.vlang.lang.psi.*
 import org.vlang.lang.psi.types.VlangPrimitiveTypes
 
 object VlangCodeInsightUtil {
-    private const val BUILTIN_MODULE = "builtin"
+    const val BUILTIN_MODULE = "builtin"
 
     fun insideBuiltinModule(element: VlangCompositeElement): Boolean {
         val file = element.containingFile as VlangFile

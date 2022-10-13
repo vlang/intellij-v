@@ -53,8 +53,65 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         )
         extend(
             CompletionType.BASIC,
+            insideStruct(),
+            StructKeywordsCompletionProvider("pub", "mut", "shared")
+        )
+        extend(
+            CompletionType.BASIC,
             identifier(),
-            KeywordsCompletionProvider(*BLOCK_KEYWORDS)
+            ConditionBlockKeywordCompletionProvider("match", "if", "lock", "rlock", "select")
+        )
+        extend(
+            CompletionType.BASIC,
+            identifier(),
+            ReturnKeywordCompletionProvider()
+        )
+        extend(
+            CompletionType.BASIC,
+            identifier(),
+            KeywordsCompletionProvider(
+                "else",
+                "isreftype",
+                "atomic",
+                "for",
+                "mut",
+                "shared",
+                "volatile",
+                needSpace = true,
+            )
+        )
+        extend(
+            CompletionType.BASIC,
+            identifier(),
+            CompletionAfterKeywordsCompletionProvider(
+                "as",
+                "go",
+                "in",
+                "is",
+                "assert",
+                "goto",
+            )
+        )
+        extend(
+            CompletionType.BASIC,
+            identifier(),
+            KeywordsCompletionProvider(
+                "none",
+                "true",
+                "false",
+                "nil",
+                "static",
+                needSpace = false,
+            )
+        )
+        extend(
+            CompletionType.BASIC,
+            identifier(),
+            FunctionsLikeCompletionProvider(
+                "sizeof",
+                "typeof",
+                "__offsetof",
+            )
         )
         extend(
             CompletionType.BASIC,
@@ -70,6 +127,7 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
             result.addElement(
                 PrioritizedLookupElement.withPriority(
                     LookupElementBuilder.create("or")
+                        .withTailText(" {...}")
                         .withInsertHandler(VlangCompletionUtil.StringInsertHandler(" {  }", 3))
                         .bold(), KEYWORD_PRIORITY.toDouble()
                 )
@@ -81,11 +139,51 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
                         .withTailText(" { panic(err) }")
                         .withInsertHandler(
                             VlangCompletionUtil.TemplateStringInsertHandler(
-                                " { panic(\$err\$) }",
+                                " { panic(\$err$) }", false,
                                 "err" to ConstantNode("err")
                             )
-                        ),
-                    KEYWORD_PRIORITY.toDouble() - 1
+                        )
+                        .bold(),
+                    KEYWORD_PRIORITY.toDouble()
+                )
+            )
+        }
+    }
+
+    private inner class StructKeywordsCompletionProvider(private vararg val keywords: String) : CompletionProvider<CompletionParameters>() {
+        override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
+            if (shouldSuppress(parameters, result)) return
+
+            result.addAllElements(
+                keywords.map {
+                    PrioritizedLookupElement.withPriority(
+                        LookupElementBuilder.create(it)
+                            .withInsertHandler(VlangCompletionUtil.StringInsertHandler(" ", 1))
+                            .bold(), KEYWORD_PRIORITY.toDouble()
+                    )
+                }
+            )
+        }
+    }
+
+    private inner class ReturnKeywordCompletionProvider : CompletionProvider<CompletionParameters>() {
+        override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
+            if (shouldSuppress(parameters, result)) return
+
+            val signatureOwner = parameters.position.parentOfType<VlangSignatureOwner>() ?: return
+
+            val resultType = signatureOwner.getSignature()?.result
+
+            result.addElement(
+                PrioritizedLookupElement.withPriority(
+                    LookupElementBuilder.create("return")
+                        .withInsertHandler { ctx, item ->
+                            if (resultType != null) {
+                                VlangCompletionUtil.StringInsertHandler(" ", 1).handleInsert(ctx, item)
+                                VlangCompletionUtil.showCompletion(ctx.editor)
+                            }
+                        }
+                        .bold(), KEYWORD_PRIORITY.toDouble()
                 )
             )
         }
@@ -100,7 +198,31 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
                 keywords.map {
                     PrioritizedLookupElement.withPriority(
                         LookupElementBuilder.create(it)
+                            .withTailText(" {...}")
                             .withInsertHandler(VlangCompletionUtil.StringInsertHandler(" {  }", 3))
+                            .bold(), KEYWORD_PRIORITY.toDouble()
+                    )
+                }
+            )
+        }
+    }
+
+    private inner class ConditionBlockKeywordCompletionProvider(private vararg val keywords: String) :
+        CompletionProvider<CompletionParameters>() {
+        override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
+            if (shouldSuppress(parameters, result)) return
+
+            result.addAllElements(
+                keywords.map {
+                    PrioritizedLookupElement.withPriority(
+                        LookupElementBuilder.create(it)
+                            .withTailText(" expr {...}")
+                            .withInsertHandler(
+                                VlangCompletionUtil.TemplateStringInsertHandler(
+                                    " \$expr$ {\n\$END$\n}", true,
+                                    "expr" to ConstantNode("expr")
+                                )
+                            )
                             .bold(), KEYWORD_PRIORITY.toDouble()
                     )
                 }
@@ -144,15 +266,52 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
                 result.addElement(
                     PrioritizedLookupElement.withPriority(
                         LookupElementBuilder.create(keyword)
-                            .withInsertHandler { ctx, _ ->
-                                if (needSpace) {
-                                    val document = ctx.document
-                                    val editor = ctx.editor
-                                    val offset = editor.caretModel.offset
-                                    document.insertString(offset, " ")
-                                    editor.caretModel.moveToOffset(offset + 1)
-                                }
+                            .withInsertHandler(VlangCompletionUtil.StringInsertHandler(" ", 1, needSpace))
+                            .bold(), KEYWORD_PRIORITY.toDouble()
+                    )
+                )
+            }
+        }
+    }
+
+    private inner class CompletionAfterKeywordsCompletionProvider(private vararg val keywords: String) :
+        CompletionProvider<CompletionParameters>() {
+        override fun addCompletions(
+            parameters: CompletionParameters,
+            context: ProcessingContext,
+            result: CompletionResultSet,
+        ) {
+            if (shouldSuppress(parameters, result)) return
+
+            for (keyword in keywords) {
+                result.addElement(
+                    PrioritizedLookupElement.withPriority(
+                        LookupElementBuilder.create(keyword)
+                            .withInsertHandler { ctx, item ->
+                                VlangCompletionUtil.StringInsertHandler(" ", 1).handleInsert(ctx, item)
+                                VlangCompletionUtil.showCompletion(ctx.editor)
                             }
+                            .bold(), KEYWORD_PRIORITY.toDouble()
+                    )
+                )
+            }
+        }
+    }
+
+    private inner class FunctionsLikeCompletionProvider(private vararg val keywords: String) : CompletionProvider<CompletionParameters>() {
+        override fun addCompletions(
+            parameters: CompletionParameters,
+            context: ProcessingContext,
+            result: CompletionResultSet,
+        ) {
+            if (shouldSuppress(parameters, result)) return
+
+            for (keyword in keywords) {
+                result.addElement(
+                    PrioritizedLookupElement.withPriority(
+                        LookupElementBuilder.create(keyword)
+                            .withTailText("()")
+                            .withInsertHandler(VlangCompletionUtil.StringInsertHandler("()", 1))
                             .bold(), KEYWORD_PRIORITY.toDouble()
                     )
                 )
@@ -186,6 +345,14 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
     private fun identifier() = insideBlockPattern(VlangTypes.IDENTIFIER)
         .andNot(
             insideWithLabelStatement(VlangTypes.IDENTIFIER)
+        )
+
+    private fun insideStruct() = onStatementBeginning(VlangTypes.IDENTIFIER)
+        .inside(
+            StandardPatterns.or(
+                psiElement(VlangStructDeclaration::class.java),
+                psiElement(VlangUnionDeclaration::class.java),
+            )
         )
 
     private fun insideBlockPattern(tokenType: IElementType): PsiElementPattern.Capture<PsiElement?> {
@@ -235,39 +402,5 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
             return true
         }
         return false
-    }
-
-    companion object {
-        val BLOCK_EXPRESSION_KEYWORDS = arrayOf(
-            "as",
-            "false",
-            "go",
-            "if",
-            "in",
-            "is",
-            "isreftype",
-            "match",
-            "none",
-            "sizeof",
-            "true",
-            "typeof",
-            "nil",
-        )
-
-        val BLOCK_KEYWORDS = arrayOf(
-            "asm",
-            "assert",
-            "atomic",
-            "for",
-            "goto",
-            "mut",
-            "return",
-            "lock",
-            "rlock",
-            "select",
-            "shared",
-            "volatile",
-            "__offsetof",
-        ) + BLOCK_EXPRESSION_KEYWORDS
     }
 }

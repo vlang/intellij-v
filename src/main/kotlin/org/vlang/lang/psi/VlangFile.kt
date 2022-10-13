@@ -41,6 +41,8 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
 
     fun isTestFile(): Boolean = name.split(".").first().endsWith("_test")
 
+    fun isCFile(): Boolean = name.endsWith(".c.v")
+
     fun isTranslatedFile(): Boolean {
         return getFileAttributes().any {
             VlangAttributesUtil.isTranslated(it)

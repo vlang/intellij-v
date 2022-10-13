@@ -4,9 +4,7 @@ import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.codeInsight.completion.CompletionProvider
 import com.intellij.codeInsight.completion.CompletionResultSet
 import com.intellij.codeInsight.lookup.LookupElement
-import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiFile
 import com.intellij.psi.ResolveState
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
@@ -14,6 +12,7 @@ import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangCachedReference
 import org.vlang.lang.psi.impl.VlangFieldNameReference
 import org.vlang.lang.psi.impl.VlangReference
+import org.vlang.lang.psi.impl.VlangReferenceBase.Companion.LOCAL_RESOLVE
 import org.vlang.lang.psi.impl.VlangScopeProcessor
 
 class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
@@ -29,32 +28,20 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
             return
         }
 
+        val file = element.containingFile as? VlangFile ?: return
         val expression = element.parentOfType<VlangReferenceExpressionBase>() ?: return
-        val originalFile = parameters.originalFile
         val ref = expression.reference
         if (ref is VlangReference) {
             val refExpression = ref.element as? VlangReferenceExpression
             val variants = VlangStructLiteralCompletion.allowedVariants(refExpression)
 
-            fillStructFieldNameVariants(originalFile, result, variants, refExpression)
+            fillStructFieldNameVariants(result, variants, refExpression)
 
             if (variants != VlangStructLiteralCompletion.Variants.FIELD_NAME_ONLY) {
-                ref.processResolveVariants(
-                    MyScopeProcessor(
-                        result,
-                        originalFile,
-                        false
-                    )
-                )
+                ref.processResolveVariants(MyScopeProcessor(result, file, ref.forTypes))
             }
         } else if (ref is VlangCachedReference<*>) {
-            ref.processResolveVariants(
-                MyScopeProcessor(
-                    result,
-                    originalFile,
-                    false
-                )
-            )
+            ref.processResolveVariants(MyScopeProcessor(result, file, false))
         }
     }
 
@@ -67,7 +54,6 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
     }
 
     private fun fillStructFieldNameVariants(
-        file: PsiFile,
         result: CompletionResultSet,
         variants: VlangStructLiteralCompletion.Variants,
         refExpression: VlangReferenceExpression?,
@@ -79,6 +65,7 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
             return
         }
 
+        val file = refExpression.containingFile as? VlangFile ?: return
         val fields = mutableSetOf<String>()
         val literal = refExpression.parentOfType<VlangLiteralValueExpression>()
         VlangFieldNameReference(refExpression).processResolveVariants(object : MyScopeProcessor(result, file, false) {
@@ -142,14 +129,14 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
 
     private open inner class MyScopeProcessor(
         private val result: CompletionResultSet,
-        originalFile: PsiFile,
+        private val file: VlangFile,
         private val forTypes: Boolean,
     ) : VlangScopeProcessor() {
 
         private val processedNames = mutableSetOf<String>()
 
         override fun execute(o: PsiElement, state: ResolveState): Boolean {
-            if (accept(o)) {
+            if (accept(o, state, file, forTypes)) {
                 addElement(
                     o,
                     state,
@@ -161,7 +148,19 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
             return true
         }
 
-        private fun accept(e: PsiElement): Boolean {
+        private fun accept(e: PsiElement, state: ResolveState, file: VlangFile, forTypes: Boolean): Boolean {
+            if (forTypes) {
+                if (e !is VlangNamedElement) return false
+                if (!e.isPublic() && !state.get(LOCAL_RESOLVE)) {
+                    return false
+                }
+
+                return e is VlangStructDeclaration ||
+                        e is VlangEnumDeclaration ||
+                        e is VlangTypeAliasDeclaration ||
+                        e is VlangInterfaceDeclaration
+            }
+
             if (e is VlangFile) {
                 return true
             }
@@ -171,7 +170,11 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
             }
 
             if (e is VlangNamedElement) {
-                return e.isPublic()
+                if (e.name?.startsWith("C.") == true) {
+                    return file.isCFile()
+                }
+
+                return state.get(LOCAL_RESOLVE) || e.isPublic()
             }
 
             return false
@@ -206,33 +209,10 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
             return VlangCompletionUtil.createModuleLookupElement(element)
         }
 
-        if (element !is VlangNamedElement || element.isBlank()) return null
-
-        if (element is VlangImportSpec) {
-            //                    return VlangCompletionUtil.createPackageLookupElement(
-            //                        o as VlangImportSpec,
-            //                        state[VlangReferenceBase.ACTUAL_NAME],
-            //                        vendoringEnabled
-            //                    )
-        } else if (element is VlangNamedSignatureOwner && element.name != null) {
-            val name = element.name
-            if (name != null) {
-                //                        return VlangCompletionUtil.createFunctionOrMethodLookupElement(
-                //                            o as VlangNamedSignatureOwner, name, null,
-                //                            VlangCompletionUtil.FUNCTION_PRIORITY
-                //                        )
-            }
-        } else if (element is PsiDirectory) {
-            //                    return VlangCompletionUtil.createPackageLookupElement(o.name, o, o, vendoringEnabled, true)
-        } else if (element is VlangLabelDefinition) {
-            val name = element.name
-            //                    if (name != null) return VlangCompletionUtil.createLabelLookupElement(o as VlangLabelDefinition, name)
-        }
-
         return when (element) {
             is VlangFunctionDeclaration       -> VlangCompletionUtil.createFunctionLookupElement(element, state)
             is VlangMethodDeclaration         -> VlangCompletionUtil.createMethodLookupElement(element)
-            is VlangStructDeclaration         -> VlangCompletionUtil.createStructLookupElement(element, state)
+            is VlangStructDeclaration         -> VlangCompletionUtil.createStructLookupElement(element, state, !forTypes)
             is VlangUnionDeclaration          -> VlangCompletionUtil.createUnionLookupElement(element, state)
             is VlangEnumDeclaration           -> VlangCompletionUtil.createEnumLookupElement(element, state)
             is VlangInterfaceDeclaration      -> VlangCompletionUtil.createInterfaceLookupElement(element, state)
@@ -241,9 +221,10 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
             is VlangInterfaceMethodDefinition -> VlangCompletionUtil.createInterfaceMethodLookupElement(element, state)
             is VlangConstDefinition           -> VlangCompletionUtil.createConstantLookupElement(element, state)
             is VlangEnumFieldDefinition       -> VlangCompletionUtil.createEnumFieldLookupElement(element)
-            is VlangGlobalVariableDefinition  -> VlangCompletionUtil.createVariableLikeLookupElement(element)
+            is VlangGlobalVariableDefinition  -> VlangCompletionUtil.createGlobalVariableLikeLookupElement(element)
             is VlangImportAlias               -> VlangCompletionUtil.createImportAliasLookupElement(element)
-            else                              -> VlangCompletionUtil.createVariableLikeLookupElement(element)
+            is VlangNamedElement              -> VlangCompletionUtil.createVariableLikeLookupElement(element)
+            else                              -> null
         }
     }
 }
