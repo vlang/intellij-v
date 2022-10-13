@@ -195,21 +195,32 @@ class VlangReference(el: VlangReferenceExpressionBase) :
         }
 
         if (typ is VlangStructType) {
-            if (!processNamedElements(processor, state, typ.getFieldList(), localResolve)) return false
+            val isMethodRef = element.parent is VlangCallExpr
+
+            if (!isMethodRef && !processNamedElements(processor, state, typ.getFieldList(), localResolve)) return false
             val fqn = (typ.parent as VlangStructDeclaration).getQualifiedName()
             if (!processMethods(fqn, processor, state)) return false
         }
 
+        if (typ is VlangUnionType) {
+            val isMethodRef = element.parent is VlangCallExpr
+
+            if (!isMethodRef && !processNamedElements(processor, state, typ.getFieldList(), localResolve)) return false
+            val fqn = (typ.parent as VlangUnionDeclaration).getQualifiedName()
+            if (!processMethods(fqn, processor, state)) return false
+        }
+
         if (typ is VlangInterfaceType) {
-            if (!processNamedElements(processor, state, typ.getFieldList(), localResolve)) return false
+            val isMethodRef = element.parent is VlangCallExpr
+
+            if (!isMethodRef && !processNamedElements(processor, state, typ.getFieldList(), localResolve)) return false
             if (!processNamedElements(processor, state, typ.methodList, localResolve)) return false
             val fqn = (typ.parent as VlangInterfaceDeclaration).getQualifiedName()
             if (!processMethods(fqn, processor, state)) return false
         }
 
         if (typ is VlangEnumType) {
-            val fields = typ.fieldList
-            if (!processNamedElements(processor, state, fields, localResolve)) return false
+            if (!processNamedElements(processor, state, typ.fieldList, localResolve)) return false
         }
 
         if (typ is VlangArrayOrSliceType) {
