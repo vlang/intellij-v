@@ -9,6 +9,8 @@ import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.codeInsight.lookup.LookupElementPresentation
 import com.intellij.codeInsight.lookup.LookupElementRenderer
+import com.intellij.codeInsight.template.Expression
+import com.intellij.codeInsight.template.TemplateManager
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiDirectory
@@ -499,6 +501,20 @@ object VlangCompletionUtil {
 
             context.document.insertString(caretOffset, string)
             context.editor.caretModel.moveToOffset(caretOffset + shift)
+        }
+    }
+
+    class TemplateStringInsertHandler(val string: String, vararg val variables: Pair<String, Expression>) : InsertHandler<LookupElement> {
+        override fun handleInsert(context: InsertionContext, item: LookupElement) {
+            val template = TemplateManager.getInstance(context.project)
+                .createTemplate("templateInsertHandler", "vlang", string)
+            template.isToReformat = true
+
+            variables.forEach { (name, expression) ->
+                template.addVariable(name, expression, true)
+            }
+
+            TemplateManager.getInstance(context.project).startTemplate(context.editor, template)
         }
     }
 

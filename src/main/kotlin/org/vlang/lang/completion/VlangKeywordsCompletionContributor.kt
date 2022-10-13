@@ -2,6 +2,7 @@ package org.vlang.lang.completion
 
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElementBuilder
+import com.intellij.codeInsight.template.impl.ConstantNode
 import com.intellij.patterns.*
 import com.intellij.patterns.PlatformPatterns.psiElement
 import com.intellij.psi.PsiElement
@@ -42,18 +43,17 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         )
         extend(
             CompletionType.BASIC,
-            insideBlockPattern(VlangTypes.IDENTIFIER)
-                .andNot(
-                    insideWithLabelStatement(VlangTypes.IDENTIFIER)
-                ),
-            PureBlockKeywordCompletionProvider("or", "defer", "unsafe")
+            identifier(),
+            PureBlockKeywordCompletionProvider("defer", "unsafe")
         )
         extend(
             CompletionType.BASIC,
-            insideBlockPattern(VlangTypes.IDENTIFIER)
-                .andNot(
-                    insideWithLabelStatement(VlangTypes.IDENTIFIER)
-                ),
+            identifier(),
+            OrKeywordCompletionProvider()
+        )
+        extend(
+            CompletionType.BASIC,
+            identifier(),
             KeywordsCompletionProvider(*BLOCK_KEYWORDS)
         )
         extend(
@@ -63,34 +63,44 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         )
     }
 
-    private class PureBlockKeywordCompletionProvider(private vararg val keywords: String) : CompletionProvider<CompletionParameters>() {
+    private inner class OrKeywordCompletionProvider : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
-            if (VlangCompletionUtil.shouldSuppressCompletion(parameters.position)) {
-                result.stopHere()
-                return
-            }
+            if (shouldSuppress(parameters, result)) return
 
-            if (parameters.position.parentOfType<VlangLiteralValueExpression>() != null) {
-                result.stopHere()
-                return
-            }
+            result.addElement(
+                PrioritizedLookupElement.withPriority(
+                    LookupElementBuilder.create("or")
+                        .withInsertHandler(VlangCompletionUtil.StringInsertHandler(" {  }", 3))
+                        .bold(), KEYWORD_PRIORITY.toDouble()
+                )
+            )
 
-            if (VlangPsiImplUtil.prevDot(parameters.position)) {
-                result.stopHere()
-                return
-            }
+            result.addElement(
+                PrioritizedLookupElement.withPriority(
+                    LookupElementBuilder.create("or")
+                        .withTailText(" { panic(err) }")
+                        .withInsertHandler(
+                            VlangCompletionUtil.TemplateStringInsertHandler(
+                                " { panic(\$err\$) }",
+                                "err" to ConstantNode("err")
+                            )
+                        ),
+                    KEYWORD_PRIORITY.toDouble() - 1
+                )
+            )
+        }
+    }
+
+    private inner class PureBlockKeywordCompletionProvider(private vararg val keywords: String) :
+        CompletionProvider<CompletionParameters>() {
+        override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
+            if (shouldSuppress(parameters, result)) return
 
             result.addAllElements(
                 keywords.map {
                     PrioritizedLookupElement.withPriority(
                         LookupElementBuilder.create(it)
-                            .withInsertHandler { ctx, _ ->
-                                val document = ctx.document
-                                val editor = ctx.editor
-                                val offset = editor.caretModel.offset
-                                document.insertString(offset, " {  }")
-                                editor.caretModel.moveToOffset(offset + 3)
-                            }
+                            .withInsertHandler(VlangCompletionUtil.StringInsertHandler(" {  }", 3))
                             .bold(), KEYWORD_PRIORITY.toDouble()
                     )
                 }
@@ -118,27 +128,17 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         }
     }
 
-    private class KeywordsCompletionProvider(private vararg val keywords: String, private val needSpace: Boolean = false) :
-        CompletionProvider<CompletionParameters>() {
+    private inner class KeywordsCompletionProvider(
+        private vararg val keywords: String,
+        private val needSpace: Boolean = false,
+    ) : CompletionProvider<CompletionParameters>() {
+
         override fun addCompletions(
             parameters: CompletionParameters,
             context: ProcessingContext,
             result: CompletionResultSet,
         ) {
-            if (VlangCompletionUtil.shouldSuppressCompletion(parameters.position)) {
-                result.stopHere()
-                return
-            }
-
-            if (parameters.position.parentOfType<VlangLiteralValueExpression>() != null) {
-                result.stopHere()
-                return
-            }
-
-            if (VlangPsiImplUtil.prevDot(parameters.position)) {
-                result.stopHere()
-                return
-            }
+            if (shouldSuppress(parameters, result)) return
 
             for (keyword in keywords) {
                 result.addElement(
@@ -183,6 +183,11 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
             )
     }
 
+    private fun identifier() = insideBlockPattern(VlangTypes.IDENTIFIER)
+        .andNot(
+            insideWithLabelStatement(VlangTypes.IDENTIFIER)
+        )
+
     private fun insideBlockPattern(tokenType: IElementType): PsiElementPattern.Capture<PsiElement?> {
         return onStatementBeginning(tokenType)
             .inside(VlangBlock::class.java)
@@ -212,6 +217,24 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
 
     private fun onStatementBeginning(vararg tokenTypes: IElementType): PsiElementPattern.Capture<PsiElement?> {
         return psiElement().withElementType(TokenSet.create(*tokenTypes))
+    }
+
+    private fun shouldSuppress(parameters: CompletionParameters, result: CompletionResultSet): Boolean {
+        if (VlangCompletionUtil.shouldSuppressCompletion(parameters.position)) {
+            result.stopHere()
+            return true
+        }
+
+        if (parameters.position.parentOfType<VlangLiteralValueExpression>() != null) {
+            result.stopHere()
+            return true
+        }
+
+        if (VlangPsiImplUtil.prevDot(parameters.position)) {
+            result.stopHere()
+            return true
+        }
+        return false
     }
 
     companion object {
