@@ -2,6 +2,7 @@
 package org.vlang.lang.psi;
 
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
 import com.intellij.psi.StubBasedPsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,6 +18,9 @@ public interface VlangConstDefinition extends VlangNamedElement, StubBasedPsiEle
 
   @NotNull
   PsiElement getIdentifier();
+
+  @Nullable
+  VlangType getTypeInner(@Nullable ResolveState context);
 
   //WARNING: deleteDefinition(...) is skipped
   //matching deleteDefinition(VlangConstDefinition, ...)

@@ -481,7 +481,7 @@ private ConstDefinitions ::= ConstDefinition (semi ConstDefinition)* semi? {pin=
 ConstDefinition ::= identifier '=' (<<withOff Expression "BLOCK?">> | (!() Expression)) {
   pin=2
   stubClass="org.vlang.lang.stubs.VlangConstDefinitionStub"
-  methods=[deleteDefinition getName getSymbolVisibility]
+  methods=[getTypeInner deleteDefinition getName getSymbolVisibility]
 }
 
 // TODO: when const declaration will support multiple assign

@@ -508,6 +508,12 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getTypeInner(o: VlangConstDefinition, context: ResolveState?): VlangType? {
+        val expr = o.expression ?: return null
+        return getTypeInner(expr, context)
+    }
+
+    @JvmStatic
     fun getTypeInner(o: VlangEnumDeclaration, context: ResolveState?): VlangType {
         return o.enumType
     }
@@ -572,8 +578,8 @@ object VlangPsiImplUtil {
                 }
                 if (expr.bitAnd != null) {
                     if (expr.expression == null) return null
-                    val inner = getType(expr.expression!!, context)?.text ?: return null
-                    return getBuiltinType("&$inner", expr)
+                    val innerEx = getType(expr.expression!!, context)?.toEx() ?: return null
+                    return getBuiltinType("&${innerEx.readableName(expr)}", expr)
                 }
 
                 if (expr.mul != null) {

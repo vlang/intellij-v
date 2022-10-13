@@ -11,4 +11,5 @@ class TypeTest : TypeTestBase() {
     fun `test type cast`() = doTest("type_cast.v")
     fun `test or block`() = doTest("or_block.v")
     fun `test arrays`() = doTest("arrays.v")
+    fun `test constants`() = doTest("constants.v")
 }
