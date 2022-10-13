@@ -152,6 +152,7 @@ class VlangReference(el: VlangReferenceExpressionBase) :
 
     private fun processExistingType(type: VlangType, processor: VlangScopeProcessor, state: ResolveState): Boolean {
         val file = type.containingFile as? VlangFile ?: return true
+        val moduleName = file.getModuleQualifiedName()
         val myFile = getContextFile(state) ?: myElement.containingFile
         if (myFile !is VlangFile) {
             return true
@@ -224,12 +225,20 @@ class VlangReference(el: VlangReferenceExpressionBase) :
         }
 
         if (typ is VlangArrayOrSliceType) {
+            val fqn = VlangPsiImplUtil.getFqn(moduleName, typ.text)
+            if (!processMethods(fqn, processor, state)) return false
+
             val builtin = VlangConfiguration.getInstance(type.project).builtinLocation
             val arrayVirtualFile = builtin?.findChild("array.v") ?: return false
             val arrayFile = PsiManager.getInstance(typ.project).findFile(arrayVirtualFile) as? VlangFile ?: return false
             val arrayStruct = arrayFile.getStructs()
                 .firstOrNull { it.name == "array" } ?: return false
             return processExistingType(arrayStruct.structType, processor, state)
+        }
+
+        if (typ is VlangMapType) {
+            val fqn = VlangPsiImplUtil.getFqn(moduleName, typ.text)
+            if (!processMethods(fqn, processor, state)) return false
         }
 
         return true
