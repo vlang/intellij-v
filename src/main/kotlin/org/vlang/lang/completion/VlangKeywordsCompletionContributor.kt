@@ -58,6 +58,11 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         )
         extend(
             CompletionType.BASIC,
+            identifier(),
+            AssertKeywordCompletionProvider()
+        )
+        extend(
+            CompletionType.BASIC,
             insideStruct(),
             StructKeywordsCompletionProvider("pub", "mut", "shared")
         )
@@ -93,7 +98,6 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
                 "go",
                 "in",
                 "is",
-                "assert",
                 "goto",
             )
         )
@@ -146,6 +150,40 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
                             VlangCompletionUtil.TemplateStringInsertHandler(
                                 " { panic(\$err$) }", false,
                                 "err" to ConstantNode("err")
+                            )
+                        )
+                        .bold(),
+                    KEYWORD_PRIORITY.toDouble()
+                )
+            )
+        }
+    }
+
+    private inner class AssertKeywordCompletionProvider : CompletionProvider<CompletionParameters>() {
+        override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
+            if (shouldSuppress(parameters, result)) return
+
+            result.addElement(
+                PrioritizedLookupElement.withPriority(
+                    LookupElementBuilder.create("assert")
+                        .withTailText(" expr")
+                        .withInsertHandler { ctx, item ->
+                            VlangCompletionUtil.StringInsertHandler(" ", 1).handleInsert(ctx, item)
+                            VlangCompletionUtil.showCompletion(ctx.editor)
+                        }
+                        .bold(), KEYWORD_PRIORITY.toDouble()
+                )
+            )
+
+            result.addElement(
+                PrioritizedLookupElement.withPriority(
+                    LookupElementBuilder.create("assert")
+                        .withTailText(" expr, 'message'")
+                        .withInsertHandler(
+                            VlangCompletionUtil.TemplateStringInsertHandler(
+                                " \$expr$, '\$message$'", false,
+                                "expr" to ConstantNode("expr"),
+                                "message" to ConstantNode("message"),
                             )
                         )
                         .bold(),

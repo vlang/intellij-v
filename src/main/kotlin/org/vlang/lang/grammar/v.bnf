@@ -320,7 +320,7 @@ ContinueStatement ::= continue LabelRef?
 GotoStatement ::= goto LabelRef
 
 // assert <expr>
-AssertStatement ::= assert Expression
+AssertStatement ::= assert Expression (',' Expression)?
 
 // unsafe { ... } as statement
 UnsafeStatement ::= UnsafeExpression

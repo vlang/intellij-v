@@ -343,7 +343,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // assert Expression
+  // assert Expression (',' Expression)?
   public static boolean AssertStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AssertStatement")) return false;
     if (!nextTokenIs(b, ASSERT)) return false;
@@ -351,7 +351,26 @@ public class VlangParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeToken(b, ASSERT);
     r = r && Expression(b, l + 1, -1);
+    r = r && AssertStatement_2(b, l + 1);
     exit_section_(b, m, ASSERT_STATEMENT, r);
+    return r;
+  }
+
+  // (',' Expression)?
+  private static boolean AssertStatement_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AssertStatement_2")) return false;
+    AssertStatement_2_0(b, l + 1);
+    return true;
+  }
+
+  // ',' Expression
+  private static boolean AssertStatement_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AssertStatement_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && Expression(b, l + 1, -1);
+    exit_section_(b, m, null, r);
     return r;
   }
 
