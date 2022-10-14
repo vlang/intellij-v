@@ -43,6 +43,11 @@ class VlangAnnotator : Annotator {
                     holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.INTERFACE_NAME_ATTRIBUTES)
                     return
                 }
+
+                if (resolvedElement is VlangTypeAliasDeclaration) {
+                    holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.TYPE_PARAMETER_NAME_ATTRIBUTES)
+                    return
+                }
             }
 
             if (resolvedElement is VlangFunctionDeclaration) {

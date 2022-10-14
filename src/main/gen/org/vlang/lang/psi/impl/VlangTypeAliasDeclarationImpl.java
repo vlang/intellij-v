@@ -4,6 +4,7 @@ package org.vlang.lang.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.ResolveState;
 import com.intellij.psi.stubs.IStubElementType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -60,6 +61,12 @@ public class VlangTypeAliasDeclarationImpl extends VlangNamedElementImpl<VlangTy
   @NotNull
   public String getName() {
     return VlangPsiImplUtil.getName(this);
+  }
+
+  @Override
+  @Nullable
+  public VlangType getTypeInner(@Nullable ResolveState context) {
+    return VlangPsiImplUtil.getTypeInner(this, context);
   }
 
 }

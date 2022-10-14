@@ -1,10 +1,10 @@
 module types
 
-import io
-
 interface IFoo {}
 
 struct Foo {}
+
+type Type = string
 
 fn main() {
 	expr_type(isize(100), 'isize')
@@ -28,4 +28,5 @@ fn main() {
     expr_type(voidptr(1), 'voidptr')
 
 	expr_type(IFoo(Foo{}), 'IFoo')
+	expr_type(Type(''), 'Type')
 }

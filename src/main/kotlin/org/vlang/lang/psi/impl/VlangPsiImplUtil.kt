@@ -92,6 +92,11 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getTypeInner(o: VlangTypeAliasDeclaration, context: ResolveState?): VlangType? {
+        return o.aliasType
+    }
+
+    @JvmStatic
     fun getIdentifier(o: VlangTypeAliasDeclaration): PsiElement? {
         return o.aliasType?.identifier
     }

@@ -459,7 +459,7 @@ UnionType ::= union identifier GenericArguments? '{' FieldsGroup* '}' {
 TypeAliasDeclaration ::= SymbolVisibility? 'type' AliasType {
   pin=2
   stubClass="org.vlang.lang.stubs.VlangTypeAliasDeclarationStub"
-  methods=[getIdentifier getName]
+  methods=[getIdentifier getName getTypeInner]
 }
 
 AliasType ::= Type '=' TypeUnionList {
