@@ -81,6 +81,11 @@ class VlangFoldingBuilder : FoldingBuilderEx(), DumbAware {
                 super.visitElement(el)
             }
 
+            override fun visitSelectExpression(el: VlangSelectExpression) {
+                genericFolding(el)
+                super.visitElement(el)
+            }
+
             override fun visitIfExpression(el: VlangIfExpression) {
                 genericFolding(el)
                 super.visitElement(el)

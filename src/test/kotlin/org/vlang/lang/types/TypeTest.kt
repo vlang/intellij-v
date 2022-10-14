@@ -13,4 +13,5 @@ class TypeTest : TypeTestBase() {
     fun `test arrays`() = doTest("arrays.v")
     fun `test constants`() = doTest("constants.v")
     fun `test if guard`() = doTest("if_guard.v")
+    fun `test select`() = doTest("select.v")
 }

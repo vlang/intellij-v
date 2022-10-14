@@ -49,6 +49,11 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         extend(
             CompletionType.BASIC,
             identifier(),
+            SelectCompletionProvider()
+        )
+        extend(
+            CompletionType.BASIC,
+            identifier(),
             OrKeywordCompletionProvider()
         )
         extend(
@@ -59,7 +64,7 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         extend(
             CompletionType.BASIC,
             identifier(),
-            ConditionBlockKeywordCompletionProvider("match", "if", "lock", "rlock", "select")
+            ConditionBlockKeywordCompletionProvider("match", "if", "lock", "rlock")
         )
         extend(
             CompletionType.BASIC,
@@ -203,6 +208,21 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
                             .bold(), KEYWORD_PRIORITY.toDouble()
                     )
                 }
+            )
+        }
+    }
+
+    private inner class SelectCompletionProvider() : CompletionProvider<CompletionParameters>() {
+        override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
+            if (shouldSuppress(parameters, result)) return
+
+            result.addElement(
+                PrioritizedLookupElement.withPriority(
+                    LookupElementBuilder.create("select")
+                        .withTailText(" {...}")
+                        .withInsertHandler(VlangCompletionUtil.TemplateStringInsertHandler(" {\n\$END$\n}"))
+                        .bold(), KEYWORD_PRIORITY.toDouble()
+                )
             )
         }
     }

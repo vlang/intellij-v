@@ -642,6 +642,10 @@ object VlangPsiImplUtil {
             }
         }
 
+        if (expr is VlangSelectExpression) {
+            return getBuiltinType("bool", expr)
+        }
+
         if (expr is VlangOrBlockExpr) {
             if (expr.expression == null) return null
 

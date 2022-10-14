@@ -145,6 +145,10 @@ public interface VlangTypes {
   IElementType RESULT = new VlangCompositeElementType("RESULT");
   IElementType RETURN_STATEMENT = new VlangCompositeElementType("RETURN_STATEMENT");
   IElementType SELECTIVE_IMPORT_LIST = new VlangCompositeElementType("SELECTIVE_IMPORT_LIST");
+  IElementType SELECT_ARM = new VlangCompositeElementType("SELECT_ARM");
+  IElementType SELECT_ARMS = new VlangCompositeElementType("SELECT_ARMS");
+  IElementType SELECT_ELSE_ARM_CLAUSE = new VlangCompositeElementType("SELECT_ELSE_ARM_CLAUSE");
+  IElementType SELECT_EXPRESSION = new VlangCompositeElementType("SELECT_EXPRESSION");
   IElementType SEND_EXPR = new VlangCompositeElementType("SEND_EXPR");
   IElementType SEND_STATEMENT = new VlangCompositeElementType("SEND_STATEMENT");
   IElementType SHARED_EXPRESSION = new VlangCompositeElementType("SHARED_EXPRESSION");
@@ -710,6 +714,18 @@ public interface VlangTypes {
       }
       else if (type == SELECTIVE_IMPORT_LIST) {
         return new VlangSelectiveImportListImpl(node);
+      }
+      else if (type == SELECT_ARM) {
+        return new VlangSelectArmImpl(node);
+      }
+      else if (type == SELECT_ARMS) {
+        return new VlangSelectArmsImpl(node);
+      }
+      else if (type == SELECT_ELSE_ARM_CLAUSE) {
+        return new VlangSelectElseArmClauseImpl(node);
+      }
+      else if (type == SELECT_EXPRESSION) {
+        return new VlangSelectExpressionImpl(node);
       }
       else if (type == SEND_EXPR) {
         return new VlangSendExprImpl(node);

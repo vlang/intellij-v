@@ -80,7 +80,7 @@
   ]
 
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional|OrBlock)Expr")=BinaryExpr
-  extends(".*(Expr|Literal|Lit|OperandName)|TypeInitExpr|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|SharedExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression|LockExpression|IncDecExpression|LiteralValueExpression")=Expression
+  extends(".*(Expr|Literal|Lit|OperandName)|TypeInitExpr|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|SharedExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression|LockExpression|IncDecExpression|LiteralValueExpression|SelectExpression")=Expression
 
   implements("(Var|Param|Field|Label|Var|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|(Struct|TypeAlias|Union|Enum|Interface)Declaration|Receiver|Import(Alias)")="org.vlang.lang.psi.VlangNamedElement"
   implements("FunctionLit|(Function|Method)Declaration")="org.vlang.lang.psi.VlangSignatureOwner"
@@ -205,7 +205,7 @@ private Statements ::= StatementWithSemi*
 
 private StatementWithSemi ::= Statement (semi | &'}') { pin=1 recoverWhile=StatementRecover }
 Statement ::=
-  ConstDeclaration
+    ConstDeclaration
   | SimpleStatement
   | LockStatement
   | GoStatement
@@ -227,7 +227,6 @@ Statement ::=
   | AsmBlockStatement
   | SqlStatement
   | LabeledStatement
-//| SelectStatement
   | DeferStatement {methods=[processDeclarations]}
 
 private StatementRecover ::= !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '&&' | '}' | break | case | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | shared | go | goto | hex | identifier | if | int | interface | oct | return | select | string | 'raw_string' | OPEN_QUOTE | char | struct | union | switch | var | unsafe | assert | match | lock | rlock | asm | sql | true | false | FOR_COMPILE_TIME | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG | LANGUAGE_INJECTION)
@@ -332,9 +331,16 @@ DeferStatement ::= defer Block
 // <label>:
 LabelRef ::= identifier { methods=[getReference getName] }
 
-// TODO
-//SelectStatement ::= select '{' CommClause* '}'
-//CommClause ::= CommCase ':' Statements? {pin=1}
+// select { ... }
+SelectExpression ::= select '{' SelectArms '}' {pin=2}
+// <stmt> { ... }
+// else { ... }
+SelectArms ::= (SelectArm | SelectElseArmClause)*
+// <stmt> { ... }
+SelectArm ::= <<enterMode "BLOCK?">> SimpleStatement <<exitModeSafe "BLOCK?">> Block semi {pin=2}
+// else { ... }
+SelectElseArmClause ::= else Block semi {pin=1}
+
 //CommCase ::= case ( Expression SendStatement | RecvStatement ) | default {pin(".*")="case"}
 //RecvStatement ::= ExpressionsOrVariables? Expression {pin=0 extends=VarSpec methods=[getRecvExpression getLeftExpressionsList getRightExpressionsList]}
 
@@ -557,6 +563,7 @@ Expression ::=
   | SendExpr
   | RangeExpr
   | MatchExpression
+  | SelectExpression
   | IfExpression
   | CompileTimeIfExpression
   | InExpression
@@ -716,7 +723,7 @@ LeftHandExprList ::= ExpressionList
 
 private ExpressionList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &')'))* {pin(".*")=1}
 private ExpressionWithRecover ::= Expression !':' {recoverWhile=ExpressionListRecover}
-private ExpressionListRecover ::= !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+'  | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | go | goto | hex | identifier | if | int | interface | oct | return | select | string | 'raw_string' | OPEN_QUOTE | char | struct | enum | union | switch | var | unsafe | assert | match | asm | sql | true | false | nil )
+private ExpressionListRecover ::= !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+'  | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | go | goto | hex | identifier | if | int | interface | oct | return | select | string | 'raw_string' | OPEN_QUOTE | char | struct | enum | union | var | unsafe | assert | match | asm | sql | true | false | nil )
 
 private VarDefinitionList ::= VarDefinition (',' VarDefinition)*
 VarDefinition ::= VarModifiers? identifier {

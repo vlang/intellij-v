@@ -35,6 +35,7 @@ class VlangFormattingBlock(
                 is VlangConstDeclaration          -> true
                 is VlangLiteralValueExpression    -> true
                 is VlangMatchArms                 -> true
+                is VlangSelectExpression          -> true
                 is VlangMapInitExpr               -> true
                 is VlangGlobalVariableDeclaration -> true
                 is VlangArrayCreation             -> true

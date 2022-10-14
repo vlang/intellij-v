@@ -553,6 +553,22 @@ public class VlangVisitor extends PsiElementVisitor {
     visitStatement(o);
   }
 
+  public void visitSelectArm(@NotNull VlangSelectArm o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitSelectArms(@NotNull VlangSelectArms o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitSelectElseArmClause(@NotNull VlangSelectElseArmClause o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitSelectExpression(@NotNull VlangSelectExpression o) {
+    visitExpression(o);
+  }
+
   public void visitSelectiveImportList(@NotNull VlangSelectiveImportList o) {
     visitCompositeElement(o);
   }
