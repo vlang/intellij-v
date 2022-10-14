@@ -54,6 +54,11 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         extend(
             CompletionType.BASIC,
             identifier(),
+            MatchCompletionProvider()
+        )
+        extend(
+            CompletionType.BASIC,
+            identifier(),
             OrKeywordCompletionProvider()
         )
         extend(
@@ -69,7 +74,7 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         extend(
             CompletionType.BASIC,
             identifier(),
-            ConditionBlockKeywordCompletionProvider("match", "if", "lock", "rlock")
+            ConditionBlockKeywordCompletionProvider("if", "lock", "rlock")
         )
         extend(
             CompletionType.BASIC,
@@ -250,7 +255,7 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         }
     }
 
-    private inner class SelectCompletionProvider() : CompletionProvider<CompletionParameters>() {
+    private inner class SelectCompletionProvider : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
             if (shouldSuppress(parameters, result)) return
 
@@ -258,7 +263,33 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
                 PrioritizedLookupElement.withPriority(
                     LookupElementBuilder.create("select")
                         .withTailText(" {...}")
-                        .withInsertHandler(VlangCompletionUtil.TemplateStringInsertHandler(" {\n\$END$\n}"))
+                        .withInsertHandler(
+                            VlangCompletionUtil.TemplateStringInsertHandler(
+                                " {\n \$expr$ { \$END$ }\n}", true,
+                                "expr" to ConstantNode("expr"),
+                            ),
+                        )
+                        .bold(), KEYWORD_PRIORITY.toDouble()
+                )
+            )
+        }
+    }
+
+    private inner class MatchCompletionProvider : CompletionProvider<CompletionParameters>() {
+        override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
+            if (shouldSuppress(parameters, result)) return
+
+            result.addElement(
+                PrioritizedLookupElement.withPriority(
+                    LookupElementBuilder.create("match")
+                        .withTailText(" {...}")
+                        .withInsertHandler(
+                            VlangCompletionUtil.TemplateStringInsertHandler(
+                                " \$expr$ {\n \$cond$ { \$END$ }\n}", true,
+                                "expr" to ConstantNode("expr"),
+                                "cond" to ConstantNode("cond"),
+                            ),
+                        )
                         .bold(), KEYWORD_PRIORITY.toDouble()
                 )
             )
