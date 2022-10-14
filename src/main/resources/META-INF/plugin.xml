@@ -89,6 +89,14 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
         <lang.inspectionSuppressor language="vlang"
                                    implementationClass="org.vlang.ide.inspections.suppression.VlangInspectionSuppressor"/>
 
+        <!-- Probable bugs inspections -->
+        <localInspection language="vlang" groupPath="V"
+                         groupName="Probable bugs" shortName="VlangControlFlowWithEmptyBodiesInspection"
+                         displayName="Control flow with empty body"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="org.vlang.ide.inspections.probableBugs.VlangControlFlowWithEmptyBodiesInspection"/>
+        <!-- Probable bugs inspections End -->
+
         <!-- General inspections -->
        <localInspection language="vlang" groupPath="V"
                         groupName="General" shortName="VlangUnresolvedReferenceUnsafeInspection"
