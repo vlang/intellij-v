@@ -174,6 +174,10 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
                     return file.isCFile()
                 }
 
+                if (e.name?.startsWith("JS.") == true) {
+                    return file.isJSFile()
+                }
+
                 return state.get(LOCAL_RESOLVE) || e.isPublic()
             }
 

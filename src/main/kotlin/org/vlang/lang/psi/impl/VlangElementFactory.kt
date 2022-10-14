@@ -6,14 +6,21 @@ import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.PsiParserFacade
 import com.intellij.psi.util.PsiTreeUtil
 import org.vlang.lang.VlangLanguage
-import org.vlang.lang.psi.VlangFile
-import org.vlang.lang.psi.VlangImportDeclaration
-import org.vlang.lang.psi.VlangImportList
-import org.vlang.lang.psi.VlangVarModifiers
+import org.vlang.lang.psi.*
 
 object VlangElementFactory {
     fun createFileFromText(project: Project, text: String): VlangFile {
         return PsiFileFactory.getInstance(project).createFileFromText("dummy.v", VlangLanguage.INSTANCE, text) as VlangFile
+    }
+
+    fun createVariableDeclarationStatement(project: Project, name: String, expr: PsiElement): VlangStatement {
+        val file = createFileFromText(project, "fn main() { $name := ${expr.text} }")
+        return PsiTreeUtil.findChildOfType(file, VlangSimpleStatement::class.java)!!
+    }
+
+    fun createReferenceExpression(project: Project, name: String): VlangReferenceExpression {
+        val file = createFileFromText(project, "fn main() { a := $name }")
+        return PsiTreeUtil.findChildOfType(file, VlangReferenceExpression::class.java)!!
     }
 
     fun createIdentifierFromText(project: Project, text: String): PsiElement {
