@@ -1,14 +1,22 @@
 package org.vlang.lang.completion
 
 import com.intellij.codeInsight.completion.CompletionType
+import com.intellij.codeInsight.lookup.Lookup.NORMAL_SELECT_CHAR
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
 abstract class CompletionTestBase : BasePlatformTestCase() {
     override fun getTestDataPath() = "src/test/resources/completion"
 
-    protected open fun doTestCompletion() {
-        val testName = getTestName(true).trim()
-        myFixture.testCompletion("$testName.v", "$testName.after.v")
+    protected open fun doTestCompletion(
+        txt: String,
+        after: String,
+    ) {
+        myFixture.configureByText("a.v", txt)
+        val variants = myFixture.complete(CompletionType.BASIC)
+        if (variants != null) {
+            myFixture.finishLookup(NORMAL_SELECT_CHAR)
+        }
+        myFixture.checkResult(after)
     }
 
     enum class CheckType {

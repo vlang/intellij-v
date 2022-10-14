@@ -6,10 +6,14 @@ import com.intellij.psi.scope.PsiScopeProcessor
 import org.vlang.lang.psi.VlangCompositeElement
 
 object ResolveUtil {
-    fun treeWalkUp(place: PsiElement?, processor: PsiScopeProcessor): Boolean {
+    fun treeWalkUp(place: PsiElement?, processor: PsiScopeProcessor, until: (PsiElement) -> Boolean = { false }): Boolean {
         var lastParent: PsiElement? = null
         var run = place
         while (run != null) {
+            if (until(run)) {
+                return true
+            }
+
             if (place !== run && !run.processDeclarations(processor, ResolveState.initial(), lastParent, place!!)) return false
             lastParent = run
             run = run.parent

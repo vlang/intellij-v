@@ -609,11 +609,17 @@ private MaxGroup ::=
 //| CompositeLit
 
 // fn (...) {...}
-FunctionLit ::= fn CaptureList? Signature Block {pin=1 methods=[processDeclarations]}
+FunctionLit ::= fn CaptureList? Signature Block {
+  pin=1
+  methods=[addCapture processDeclarations]
+}
 // [<var1>, <var2>, ...]
-CaptureList ::= '[' (Capture | ',' Capture)* ']' {pin=3}
+CaptureList ::= '[' (Capture | ',' Capture)* ']' {
+  pin=1
+  methods=[addCapture]
+}
 // [mut] <ident>
-Capture ::= VarDefinition {pin=1}
+Capture ::= VarModifiers? ReferenceExpression {pin=2}
 
 ////// TYPES //////
 

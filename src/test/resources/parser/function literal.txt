@@ -152,9 +152,9 @@ V Language file
             CAPTURE_LIST
               PsiElement(VlangTokenType.[)('[')
               CAPTURE
-                VAR_DEFINITION
-                  VAR_MODIFIERS
-                    PsiElement(VlangTokenType.mut)('mut')
+                VAR_MODIFIERS
+                  PsiElement(VlangTokenType.mut)('mut')
+                REFERENCE_EXPRESSION
                   PsiElement(VlangTokenType.identifier)('ctx')
               PsiElement(VlangTokenType.])(']')
             SIGNATURE

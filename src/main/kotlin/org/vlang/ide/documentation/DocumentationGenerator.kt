@@ -311,7 +311,7 @@ object DocumentationGenerator {
         }
     }
 
-    fun VlangVarDefinition.generateDoc(): String {
+    fun VlangVarDefinition.generateDoc(original: PsiElement?): String {
         return buildString {
             generateModuleName(containingFile)
             append(DocumentationMarkup.DEFINITION_START)
@@ -322,6 +322,11 @@ object DocumentationGenerator {
             if (!modifiersDoc.isNullOrEmpty()) {
                 append(modifiersDoc)
             }
+
+            if (isCapturedVariable(original)) {
+                part("captured", asKeyword)
+            }
+
             part("var", asKeyword)
             part(name, asDeclaration)
             append(type?.generateDoc() ?: DocumentationUtils.colorize("unknown", asDeclaration))
@@ -329,6 +334,12 @@ object DocumentationGenerator {
 
             generateCommentsPart(this@generateDoc)
         }
+    }
+
+    private fun VlangVarDefinition.isCapturedVariable(original: PsiElement?): Boolean {
+        val functionLit = original?.parentOfType<VlangFunctionLit>()
+        val captureList = functionLit?.captureList?.captureList ?: emptyList()
+        return captureList.find { it.referenceExpression.text == name } != null
     }
 
     fun VlangInterfaceMethodDefinition.generateDoc(): String {

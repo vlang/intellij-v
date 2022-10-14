@@ -217,6 +217,45 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun addCapture(o: VlangFunctionLit, name: String): PsiElement {
+        val captureList = o.captureList
+        if (captureList == null) {
+            val newCaptureList = VlangElementFactory.createCaptureList(o.project, name)
+            o.addAfter(newCaptureList, o.firstChild)
+            o.addAfter(VlangElementFactory.createSpace(o.project), o.firstChild)
+            return newCaptureList
+        }
+        return captureList.addCapture(name)
+    }
+
+    @JvmStatic
+    fun addCapture(o: VlangCaptureList, name: String): PsiElement {
+        val captureList = VlangElementFactory.createCaptureList(o.project, name)
+        val capture = captureList.captureList.first()
+        o.rbrack?.delete()
+
+        val lastChild = o.lastChild
+        if (lastChild.elementType == VlangTypes.COMMA) {
+            o.add(VlangElementFactory.createSpace(o.project))
+            o.add(capture)
+            o.add(VlangElementFactory.createRBrack(o.project))
+            return o
+        }
+
+        if (lastChild.elementType == VlangTypes.CAPTURE) {
+            o.add(VlangElementFactory.createComma(o.project))
+            o.add(VlangElementFactory.createSpace(o.project))
+            o.add(capture)
+            o.add(VlangElementFactory.createRBrack(o.project))
+            return o
+        }
+
+        o.add(capture)
+        o.add(VlangElementFactory.createRBrack(o.project))
+        return o
+    }
+
+    @JvmStatic
     fun getFieldList(o: VlangStructType): List<VlangFieldDefinition> {
         return o.fieldsGroupList.flatMap { it.fieldDeclarationList }.flatMap { it.fieldDefinitionList }
     }
@@ -601,18 +640,6 @@ object VlangPsiImplUtil {
         if (expr is VlangOrBlockExpr) {
             if (expr.expression == null) return null
 
-            val type = getType(expr.expression!!, context) ?: return null
-            val exType = type.toEx()
-
-            if (exType is VlangNullableTypeEx) {
-                val inner = exType.inner ?: return getBuiltinType("void", expr)
-                return inner.raw()
-            }
-            if (exType is VlangNotNullableTypeEx) {
-                val inner = exType.inner ?: return getBuiltinType("void", expr)
-                return inner.raw()
-            }
-
 //            val isEndCall = lastExpression is VlangCallExpr && (VlangCodeInsightUtil.isExitCall(lastExpression) || VlangCodeInsightUtil.isPanicCall(lastExpression))
 //            if (lastStatement is VlangReturnStatement || isEndCall) {
 //                if (exType is VlangNullableTypeEx) {
@@ -626,7 +653,7 @@ object VlangPsiImplUtil {
 //                return null
 //            }
 //
-            return null
+            return unwrapNullableType(getType(expr.expression!!, context))
         }
 
         if (expr is VlangUnaryExpr) {
@@ -804,6 +831,23 @@ object VlangPsiImplUtil {
         return null
     }
 
+    private fun unwrapNullableType(type: VlangType?): VlangType? {
+        if (type == null) return null
+
+        val exType = type.toEx()
+
+        if (exType is VlangNullableTypeEx) {
+            val inner = exType.inner ?: return getBuiltinType("void", type)
+            return inner.raw()
+        }
+        if (exType is VlangNotNullableTypeEx) {
+            val inner = exType.inner ?: return getBuiltinType("void", type)
+            return inner.raw()
+        }
+
+        return null
+    }
+
     private fun typeOrParameterType(resolve: VlangTypeOwner, context: ResolveState?): VlangType? {
         val type = resolve.getType(context)
         if (resolve is VlangParamDefinition && resolve.isVariadic) {
@@ -853,14 +897,11 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getReference(o: VlangVarDefinition): PsiReference? {
-        val createRef = PsiTreeUtil.getParentOfType(
-            o,
-            VlangBlock::class.java,
-            VlangForStatement::class.java,
-            VlangIfStatement::class.java,
-//            VlangSwitchStatement::class.java,
-//            VlangSelectStatement::class.java
-        ) is VlangBlock
+        val createRef = o.parentOfTypes(
+            VlangBlock::class,
+            VlangForStatement::class,
+            VlangIfStatement::class,
+        ) != null
         return if (createRef) VlangVarReference(o) else null
     }
 
@@ -932,12 +973,19 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun getTypeInner(o: VlangVarDefinition, context: ResolveState?): VlangType? {
         val parent = PsiTreeUtil.getStubOrPsiParent(o)
-//        if (parent is VlangRangeClause) {
-//            return processRangeClause(o, parent as VlangRangeClause?, context)
-//        }
+        if (parent is VlangRangeClause) {
+            return processRangeClause(o, parent, context)
+        }
+
         if (parent is VlangVarDeclaration) {
+            if (parent.parent is VlangIfExpression) {
+                val type = getTypeInVarSpec(o, parent, context)
+                return unwrapNullableType(type)
+            }
+
             return getTypeInVarSpec(o, parent, context)
         }
+
         val literal = PsiTreeUtil.getNextSiblingOfType(o, VlangLiteral::class.java)
         if (literal != null) {
             return literal.getType(context)
@@ -960,33 +1008,34 @@ object VlangPsiImplUtil {
         return null
     }
 
-    private fun getTypeInVarSpec(o: VlangVarDefinition, decl: VlangVarDeclaration, context: ResolveState?): VlangType? {
-        if (decl is VlangRangeClause) {
-            val rightType = decl.expression?.getType(context)
-            val varList = decl.varDefinitionList
-            if (varList.size == 1) {
-                if (rightType is VlangArrayOrSliceType) {
-                    return rightType.type
-                }
-
-                return getBuiltinType("any", o)
-            }
-
-            val defineIndex = varList.indexOf(o)
-            if (defineIndex == 0) {
-                return getBuiltinType("int", o)
-            } else if (defineIndex == 1) {
-                if (rightType is VlangArrayOrSliceType) {
-                    return rightType.type
-                }
-
-                return getBuiltinType("any", o)
+    private fun processRangeClause(o: VlangVarDefinition, decl: VlangRangeClause, context: ResolveState?): VlangType? {
+        val rightType = decl.expression?.getType(context)
+        val varList = decl.varDefinitionList
+        if (varList.size == 1) {
+            if (rightType is VlangArrayOrSliceType) {
+                return rightType.type
             }
 
             return getBuiltinType("any", o)
         }
 
+        val defineIndex = varList.indexOf(o)
+        if (defineIndex == 0) {
+            return getBuiltinType("int", o)
+        }
 
+        if (defineIndex == 1) {
+            if (rightType is VlangArrayOrSliceType) {
+                return rightType.type
+            }
+
+            return getBuiltinType("any", o)
+        }
+
+        return getBuiltinType("any", o)
+    }
+
+    private fun getTypeInVarSpec(o: VlangVarDefinition, decl: VlangVarDeclaration, context: ResolveState?): VlangType? {
         val defineIndex = decl.varDefinitionList.indexOf(o)
         val varList = decl.varDefinitionList
         val exprList = decl.expressionList

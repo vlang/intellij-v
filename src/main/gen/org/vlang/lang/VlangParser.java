@@ -661,14 +661,22 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // VarDefinition
+  // VarModifiers? ReferenceExpression
   public static boolean Capture(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Capture")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, CAPTURE, "<capture>");
-    r = VarDefinition(b, l + 1);
+    r = Capture_0(b, l + 1);
+    r = r && ReferenceExpression(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
+  }
+
+  // VarModifiers?
+  private static boolean Capture_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Capture_0")) return false;
+    VarModifiers(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -676,13 +684,14 @@ public class VlangParser implements PsiParser, LightPsiParser {
   public static boolean CaptureList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "CaptureList")) return false;
     if (!nextTokenIs(b, LBRACK)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, CAPTURE_LIST, null);
     r = consumeToken(b, LBRACK);
-    r = r && CaptureList_1(b, l + 1);
-    r = r && consumeToken(b, RBRACK);
-    exit_section_(b, m, CAPTURE_LIST, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, CaptureList_1(b, l + 1));
+    r = p && consumeToken(b, RBRACK) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // (Capture | ',' Capture)*

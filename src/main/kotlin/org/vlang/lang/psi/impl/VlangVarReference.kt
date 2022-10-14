@@ -5,6 +5,7 @@ import com.intellij.psi.ResolveState
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parentOfType
 import org.vlang.lang.psi.VlangBlock
+import org.vlang.lang.psi.VlangFunctionLit
 import org.vlang.lang.psi.VlangStatement
 import org.vlang.lang.psi.VlangVarDefinition
 
@@ -18,7 +19,7 @@ class VlangVarReference(element: VlangVarDefinition) : VlangCachedReference<Vlan
     }
 
     override fun processResolveVariants(processor: VlangScopeProcessor): Boolean {
-        if (contextBlock == null) {
+        if (contextBlock == null || element.isBlank()) {
             return false
         }
 
@@ -32,12 +33,33 @@ class VlangVarReference(element: VlangVarDefinition) : VlangCachedReference<Vlan
                     }
                 }
 
-        contextBlock.processDeclarations(
+        if (!contextBlock.processDeclarations(
             p,
             ResolveState.initial(),
             PsiTreeUtil.getParentOfType(myElement, VlangStatement::class.java),
             myElement
-        )
+        )) return false
+
+        if (!processCaptureList(p)) return false
+
+        if (!ResolveUtil.treeWalkUp(myElement, p) { it is VlangFunctionLit }) return false
+
+        return true
+    }
+
+    private fun processCaptureList(processor: VlangVarProcessor): Boolean {
+        val functionLit = myElement.parentOfType<VlangFunctionLit>() ?: return true
+        val captureList = functionLit.captureList?.captureList ?: return true
+
+        for (capture in captureList) {
+            if (capture.text != myElement.name) continue
+
+            val resolved = capture.referenceExpression.reference.resolve()
+            if (resolved != null) {
+                return processor.execute(resolved, ResolveState.initial())
+            }
+        }
+
         return true
     }
 }

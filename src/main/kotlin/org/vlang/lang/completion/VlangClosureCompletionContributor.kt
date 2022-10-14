@@ -112,8 +112,21 @@ class VlangClosureCompletionContributor : CompletionContributor() {
                     def?.name ?: "arg$index"
                 }
 
-                val paramsMap = params.mapIndexed { index, (_, type) ->
-                    "\$PARAM_${templateVariables[index]}\$ " + (type.toEx().readableName(position))
+                val paramsMap = params.mapIndexed { index, (def, type) ->
+                    val variadic = def.isVariadic
+                    val modifiers = def.varModifiers?.text ?: ""
+
+                    buildString {
+                        if (modifiers.isNotEmpty()) {
+                            append(modifiers)
+                            append(" ")
+                        }
+                        append("\$PARAM_${templateVariables[index]}\$ ")
+                        if (variadic) {
+                            append("...")
+                        }
+                        append(type.toEx().readableName(position))
+                    }
                 }
 
                 val paramsString = buildString {

@@ -19,6 +19,19 @@ open class VlangCompositeElementImpl(node: ASTNode) : ASTWrapperPsiElement(node)
         lastParent: PsiElement?,
         place: PsiElement,
     ): Boolean {
+        val isAncestor = PsiTreeUtil.isAncestor(this, place, false)
+
+        if (isAncestor) return processDeclarationsDefault(this, processor, state, lastParent, place)
+
+        if (this is VlangBlock ||
+            this is VlangIfExpression ||
+            this is VlangIfStatement ||
+            this is VlangForStatement ||
+            this is VlangFunctionLit
+        ) {
+            return processor.execute(this, state)
+        }
+
         return processDeclarationsDefault(this, processor, state, lastParent, place)
     }
 
@@ -36,7 +49,7 @@ open class VlangCompositeElementImpl(node: ASTNode) : ASTWrapperPsiElement(node)
             if (!processor.execute(o, state)) {
                 return false
             }
-            if ((o is VlangIfStatement || o is VlangForStatement || o is VlangBlock)
+            if ((o is VlangIfStatement || o is VlangIfExpression || o is VlangForStatement || o is VlangBlock)
                 && processor is VlangScopeProcessorBase
             ) {
                 if (!PsiTreeUtil.isAncestor(o, processor.origin, false)) {

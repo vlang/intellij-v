@@ -95,6 +95,12 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
                          displayName="Control flow with empty body"
                          enabledByDefault="true" level="WARNING"
                          implementationClass="org.vlang.ide.inspections.probableBugs.VlangControlFlowWithEmptyBodiesInspection"/>
+
+        <localInspection language="vlang" groupPath="V"
+                         groupName="Probable bugs" shortName="VlangVariableNotCapturedInspection"
+                         displayName="Usage of non captured variable"
+                         enabledByDefault="true" level="ERROR"
+                         implementationClass="org.vlang.ide.inspections.probableBugs.VlangVariableNotCapturedInspection"/>
         <!-- Probable bugs inspections End -->
 
         <!-- General inspections -->
@@ -111,9 +117,9 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
                          implementationClass="org.vlang.ide.inspections.general.VlangUnresolvedLabelInspection"/>
 
         <localInspection language="vlang" groupPath="V"
-                         groupName="General" shortName="VlangVariableRedeclaration"
+                         groupName="General" shortName="VlangVariableRedeclarationInspection"
                          displayName="Variable redeclaration"
-                         enabledByDefault="false" level="ERROR"
+                         enabledByDefault="true" level="ERROR"
                          implementationClass="org.vlang.ide.inspections.general.VlangVariableRedeclarationInspection"/>
 
         <localInspection language="vlang" groupPath="V"

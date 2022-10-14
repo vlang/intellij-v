@@ -1,9 +1,9 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface VlangFunctionLit extends VlangExpression, VlangSignatureOwner {
 
@@ -18,6 +18,9 @@ public interface VlangFunctionLit extends VlangExpression, VlangSignatureOwner {
 
   @NotNull
   PsiElement getFn();
+
+  @NotNull
+  PsiElement addCapture(@NotNull String name);
 
   //WARNING: processDeclarations(...) is skipped
   //matching processDeclarations(VlangFunctionLit, ...)

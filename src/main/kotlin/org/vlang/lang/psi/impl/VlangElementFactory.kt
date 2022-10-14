@@ -28,6 +28,11 @@ object VlangElementFactory {
         return file.getModule()?.identifier!!
     }
 
+    fun createCaptureList(project: Project, text: String): VlangCaptureList {
+        val file = createFileFromText(project, "fn main() { fn [$text]() {} }")
+        return PsiTreeUtil.findChildOfType(file, VlangFunctionLit::class.java)!!.captureList!!
+    }
+
     fun createImportDeclaration(project: Project, name: String, alias: String?): VlangImportDeclaration? {
         return createImportList(project, name, alias)?.importDeclarationList?.firstOrNull()
     }
@@ -45,6 +50,20 @@ object VlangElementFactory {
         }
 
         return modifiers!!
+    }
+
+    fun createComma(project: Project): PsiElement {
+        return PsiTreeUtil.findChildOfType(
+            createFileFromText(project, "fn main() { 1,2 }"),
+            VlangLiteral::class.java
+        )?.nextSibling!!
+    }
+
+    fun createRBrack(project: Project): PsiElement {
+        return PsiTreeUtil.findChildOfType(
+            createFileFromText(project, "fn main() { [1] }"),
+            VlangArrayCreation::class.java
+        )?.lastChild!!
     }
 
     fun createNewLine(project: Project): PsiElement {
