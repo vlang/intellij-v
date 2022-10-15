@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.stubs.VlangReceiverStub;
 
-public interface VlangReceiver extends VlangNamedElement, StubBasedPsiElement<VlangReceiverStub> {
+public interface VlangReceiver extends VlangMutable, VlangNamedElement, StubBasedPsiElement<VlangReceiverStub> {
 
   @NotNull
   VlangType getType();
@@ -27,6 +27,8 @@ public interface VlangReceiver extends VlangNamedElement, StubBasedPsiElement<Vl
 
   @Nullable
   String getName();
+
+  boolean isPublic();
 
   boolean isMutable();
 

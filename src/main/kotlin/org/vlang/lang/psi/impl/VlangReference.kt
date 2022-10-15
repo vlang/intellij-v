@@ -38,6 +38,12 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         fun getContextFile(state: ResolveState): PsiFile? {
             return getContextElement(state)?.containingFile
         }
+
+        fun isLocalResolve(origin: VlangFile, external: VlangFile): Boolean {
+            val originModule = origin.getModuleQualifiedName()
+            val externalModule = external.getModuleQualifiedName()
+            return originModule == externalModule
+        }
     }
 
     private val identifier: PsiElement?
@@ -244,12 +250,6 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         }
 
         return true
-    }
-
-    private fun isLocalResolve(origin: VlangFile, external: VlangFile): Boolean {
-        val originModule = origin.getModuleQualifiedName()
-        val externalModule = external.getModuleQualifiedName()
-        return originModule == externalModule
     }
 
     private fun processMethods(fqn: String?, processor: VlangScopeProcessor, state: ResolveState): Boolean {

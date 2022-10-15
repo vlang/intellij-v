@@ -20,4 +20,6 @@ public interface VlangParamDefinition extends VlangNamedElement, StubBasedPsiEle
   @NotNull
   String getName();
 
+  boolean isPublic();
+
 }

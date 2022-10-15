@@ -1,0 +1,5 @@
+module sub
+
+struct Sub {
+
+}

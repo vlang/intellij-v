@@ -7,6 +7,7 @@ import com.intellij.psi.ResolveState
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parentOfType
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.impl.VlangReferenceBase.Companion.LOCAL_RESOLVE
 
 class VlangFieldNameReference(element: VlangReferenceExpressionBase) :
     VlangCachedReference<VlangReferenceExpressionBase>(element) {
@@ -27,15 +28,21 @@ class VlangFieldNameReference(element: VlangReferenceExpressionBase) :
         if (key == null && (value == null || PsiTreeUtil.getPrevSiblingOfType(value, VlangKey::class.java) != null))
             return true
 
-        val type = myElement.parentOfType<VlangLiteralValueExpression>()?.getType(null)?.resolveType()
+        val type = myElement.parentOfType<VlangLiteralValueExpression>()?.getType(null)?.resolveType() ?: return true
 
-        return if (!processStructType(fieldProcessor, type))
+        val typeFile = type.containingFile as VlangFile
+        val originFile = element.containingFile as VlangFile
+        val localResolve = VlangReference.isLocalResolve(typeFile, originFile)
+
+        return if (!processStructType(fieldProcessor, type, localResolve))
             false
-        else !(type is VlangPointerType && !processStructType(fieldProcessor, type.getType()))
+        else
+            !(type is VlangPointerType && !processStructType(fieldProcessor, type.getType(), localResolve))
     }
 
-    private fun processStructType(fieldProcessor: VlangScopeProcessor, type: VlangType?): Boolean {
-        return !(type is VlangStructType && !type.processDeclarations(fieldProcessor, ResolveState.initial(), null, myElement))
+    private fun processStructType(fieldProcessor: VlangScopeProcessor, type: VlangType?, localResolve: Boolean): Boolean {
+        val state = if (localResolve) ResolveState.initial().put(LOCAL_RESOLVE, true) else ResolveState.initial()
+        return !(type is VlangStructType && !type.processDeclarations(fieldProcessor, state, null, myElement))
     }
 
     fun inStructTypeKey(): Boolean {
@@ -62,11 +69,10 @@ class VlangFieldNameReference(element: VlangReferenceExpressionBase) :
             if (e !is VlangFieldDefinition && e !is VlangAnonymousFieldDefinition)
                 return true
             val named = e as VlangNamedElement
-            val myFile = origin.containingFile
-            val file = e.containingFile
+            val originFile = origin.containingFile as VlangFile
+            val file = e.containingFile as VlangFile
 //            if (myFile !is VlangFile || !VlangPsiImplUtil.allowed(file, myFile, myModule)) return true
-//            val localResolve: Boolean = VlangReference.isLocalResolve(myFile, file)
-            val localResolve = false
+            val localResolve = VlangReference.isLocalResolve(originFile, file)
             return !e.isValid || !(named.isPublic() || localResolve)
         }
     }

@@ -210,7 +210,8 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitFieldDefinition(@NotNull VlangFieldDefinition o) {
-    visitNamedElement(o);
+    visitMutable(o);
+    // visitNamedElement(o);
   }
 
   public void visitFieldName(@NotNull VlangFieldName o) {
@@ -537,7 +538,8 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitReceiver(@NotNull VlangReceiver o) {
-    visitNamedElement(o);
+    visitMutable(o);
+    // visitNamedElement(o);
   }
 
   public void visitReferenceExpression(@NotNull VlangReferenceExpression o) {
@@ -696,7 +698,8 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitVarDefinition(@NotNull VlangVarDefinition o) {
-    visitNamedElement(o);
+    visitMutable(o);
+    // visitNamedElement(o);
   }
 
   public void visitVarModifiers(@NotNull VlangVarModifiers o) {
@@ -705,6 +708,10 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitPsiNameIdentifierOwner(@NotNull PsiNameIdentifierOwner o) {
     visitElement(o);
+  }
+
+  public void visitMutable(@NotNull VlangMutable o) {
+    visitCompositeElement(o);
   }
 
   public void visitNamedElement(@NotNull VlangNamedElement o) {

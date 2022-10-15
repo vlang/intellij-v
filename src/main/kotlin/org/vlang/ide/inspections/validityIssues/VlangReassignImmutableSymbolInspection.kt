@@ -19,7 +19,7 @@ class VlangReassignImmutableSymbolInspection : VlangBaseInspection() {
                     if (leftExpr !is VlangReferenceExpression) continue
 
                     val symbol = leftExpr.reference.resolve()
-                    if (symbol is VlangVarDefinition && !symbol.isMutable) {
+                    if (symbol is VlangVarDefinition && !symbol.isMutable()) {
                         holder.registerProblem(
                             leftExpr,
                             "Immutable variable '${symbol.name}' cannot be reassigned",
@@ -27,7 +27,7 @@ class VlangReassignImmutableSymbolInspection : VlangBaseInspection() {
                         )
                     }
 
-                    if (symbol is VlangReceiver && !symbol.isMutable) {
+                    if (symbol is VlangReceiver && !symbol.isMutable()) {
                         holder.registerProblem(
                             leftExpr,
                             "Immutable receiver '${symbol.name}' cannot be reassigned",

@@ -51,4 +51,9 @@ public class VlangFieldDefinitionImpl extends VlangNamedElementImpl<VlangFieldDe
     return VlangPsiImplUtil.isPublic(this);
   }
 
+  @Override
+  public boolean isMutable() {
+    return VlangPsiImplUtil.isMutable(this);
+  }
+
 }

@@ -71,6 +71,11 @@ public class VlangReceiverImpl extends VlangNamedElementImpl<VlangReceiverStub> 
   }
 
   @Override
+  public boolean isPublic() {
+    return VlangPsiImplUtil.isPublic(this);
+  }
+
+  @Override
   public boolean isMutable() {
     return VlangPsiImplUtil.isMutable(this);
   }

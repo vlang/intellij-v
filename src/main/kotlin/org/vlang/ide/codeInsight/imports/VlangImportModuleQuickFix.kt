@@ -34,16 +34,16 @@ import org.vlang.lang.psi.impl.VlangReference
 import org.vlang.lang.stubs.index.VlangModulesIndex
 
 class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, HintAction, HighPriorityAction {
-    private val myModuleName: String
-    private var myModulesToImport: List<String>? = null
+    private val moduleName: String
+    private var modulesToImport: List<String>? = null
 
     constructor(element: PsiElement, importPath: String) : super(element) {
-        myModuleName = ""
-        myModulesToImport = listOf(importPath)
+        moduleName = ""
+        modulesToImport = listOf(importPath)
     }
 
     constructor(reference: PsiReference) : super(reference.element) {
-        myModuleName = reference.canonicalText
+        moduleName = reference.canonicalText
     }
 
     fun getReference(element: PsiElement?): PsiReference? {
@@ -57,29 +57,25 @@ class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, H
         return null
     }
 
-    override fun showHint(editor: Editor): Boolean {
-        return doAutoImportOrShowHint(editor, true)
-    }
+    override fun showHint(editor: Editor) = doAutoImportOrShowHint(editor, true)
 
     override fun getText(): String {
         val element = startElement
         return if (element != null) {
-            "Import " + getText(getImportPathVariantsToImport(element))
+            "Import " + getText(getImportVariantsToImport(element))
         } else {
             "Import module"
         }
     }
 
-    override fun getFamilyName(): String {
-        return "Import module"
-    }
+    override fun getFamilyName() = "Import module"
 
     override operator fun invoke(
         project: Project, file: PsiFile, editor: Editor?,
         startElement: PsiElement, endElement: PsiElement,
     ) {
         if (!FileModificationService.getInstance().prepareFileForWrite(file)) return
-        perform(getImportPathVariantsToImport(startElement), file, editor)
+        perform(getImportVariantsToImport(startElement), file, editor)
     }
 
     override fun isAvailable(
@@ -89,16 +85,19 @@ class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, H
         endElement: PsiElement,
     ): Boolean {
         val reference = getReference(startElement)
-        return file is VlangFile && file.manager.isInProject(file) && reference != null && reference.resolve() == null && getImportPathVariantsToImport(
-            startElement
-        ).isNotEmpty() && notQualified(startElement)
+        return file is VlangFile &&
+                file.manager.isInProject(file) &&
+                reference != null &&
+                reference.resolve() == null &&
+                getImportVariantsToImport(startElement).isNotEmpty() &&
+                notQualified(startElement)
     }
 
-    private fun getImportPathVariantsToImport(element: PsiElement): List<String> {
-        if (myModulesToImport == null) {
-            myModulesToImport = getImportPathVariantsToImport(myModuleName, element)
+    private fun getImportVariantsToImport(element: PsiElement): List<String> {
+        if (modulesToImport == null) {
+            modulesToImport = getImportVariantsToImport(moduleName, element)
         }
-        return myModulesToImport!!
+        return modulesToImport!!
     }
 
     fun doAutoImportOrShowHint(editor: Editor, showHint: Boolean): Boolean {
@@ -111,7 +110,7 @@ class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, H
             return false
         }
 
-        val modulesToImport = getImportPathVariantsToImport(element)
+        val modulesToImport = getImportVariantsToImport(element)
         if (modulesToImport.isEmpty()) {
             return false
         }
@@ -214,29 +213,15 @@ class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, H
         }, "Add Import", null)
     }
 
-//    private class MyImportsComparator(context: PsiElement?, vendoringEnabled: Boolean) : Comparator<String> {
-//        private val myContextImportPath: String?
-//
-//        init {
-//            myContextImportPath = VlangCompletionUtil.getContextImportPath(context, vendoringEnabled)
-//        }
-//
-//        override fun compare(s1: String, s2: String): Int {
-//            val result: Int = Comparing.compare(
-//                VlangCompletionUtil.calculateModulePriority(s2, myContextImportPath),
-//                VlangCompletionUtil.calculateModulePriority(s1, myContextImportPath)
-//            )
-//            return if (result != 0) result else Comparing.compare(s1, s2)
-//        }
-//    }
-
     companion object {
-        private fun isSupportedReference(reference: PsiReference?): Boolean {
-            return reference is VlangReference
-        }
+        private fun isSupportedReference(reference: PsiReference?) = reference is VlangReference
 
-        private fun getText(modulesToImport: Collection<String>): String {
-            return ContainerUtil.getFirstItem(modulesToImport, "") + "? " + if (modulesToImport.size > 1) "(multiple choices...) " else ""
+        private fun getText(modulesToImport: List<String>): String {
+            if (modulesToImport.isEmpty()) {
+                return ""
+            }
+
+            return modulesToImport.first() + "? " + if (modulesToImport.size > 1) "(multiple choices...) " else ""
         }
 
         private fun notQualified(startElement: PsiElement?): Boolean {
@@ -244,7 +229,7 @@ class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, H
                     startElement is VlangTypeReferenceExpression && startElement.getQualifier() == null
         }
 
-        fun getImportPathVariantsToImport(moduleName: String, context: PsiElement): List<String> {
+        fun getImportVariantsToImport(moduleName: String, context: PsiElement): List<String> {
             val contextFile = context.containingFile
             val imported =
                 if (contextFile is VlangFile) contextFile.getImportedModulesMap().map { it.key }.toSet() else emptySet()

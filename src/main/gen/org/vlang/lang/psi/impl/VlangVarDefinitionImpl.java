@@ -70,6 +70,11 @@ public class VlangVarDefinitionImpl extends VlangNamedElementImpl<VlangVarDefini
   }
 
   @Override
+  public boolean isPublic() {
+    return VlangPsiImplUtil.isPublic(this);
+  }
+
+  @Override
   public void makeMutable() {
     VlangPsiImplUtil.makeMutable(this);
   }

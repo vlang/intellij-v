@@ -13,7 +13,7 @@ abstract class VlangScopeProcessorBase(
 
     private val result = mutableSetOf<VlangNamedElement>()
 
-    constructor(origin: PsiElement) : this(origin, origin, false) {}
+    constructor(origin: PsiElement) : this(origin, origin, false)
 
     override fun execute(e: PsiElement, state: ResolveState): Boolean {
         if (e is VlangFunctionOrMethodDeclaration) {

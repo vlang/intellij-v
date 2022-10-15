@@ -72,7 +72,7 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
             val alreadyAssignedFields: Set<String> = VlangStructLiteralCompletion.alreadyAssignedFields(literal)
 
             override fun execute(o: PsiElement, state: ResolveState): Boolean {
-                val structFieldName: String? =
+                val structFieldName =
                     if (o is VlangFieldDefinition)
                         o.name
                     else if (o is VlangAnonymousFieldDefinition)

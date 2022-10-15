@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.stubs.VlangFieldDefinitionStub;
 
-public interface VlangFieldDefinition extends VlangNamedElement, StubBasedPsiElement<VlangFieldDefinitionStub> {
+public interface VlangFieldDefinition extends VlangMutable, VlangNamedElement, StubBasedPsiElement<VlangFieldDefinitionStub> {
 
   @NotNull
   PsiElement getIdentifier();
@@ -16,5 +16,7 @@ public interface VlangFieldDefinition extends VlangNamedElement, StubBasedPsiEle
   VlangCompositeElement getQualifier();
 
   boolean isPublic();
+
+  boolean isMutable();
 
 }

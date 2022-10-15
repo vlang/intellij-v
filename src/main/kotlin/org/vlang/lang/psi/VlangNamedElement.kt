@@ -11,4 +11,5 @@ interface VlangNamedElement : VlangTypeOwner, VlangCompositeElement, PsiNameIden
     fun getIdentifier(): PsiElement?
     fun getQualifiedName(): String?
     fun getSymbolVisibility(): VlangSymbolVisibility?
+    fun getOwner(): PsiElement?
 }

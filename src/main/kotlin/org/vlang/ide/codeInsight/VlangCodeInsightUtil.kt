@@ -12,6 +12,17 @@ import org.vlang.lang.psi.types.VlangPrimitiveTypes
 object VlangCodeInsightUtil {
     const val BUILTIN_MODULE = "builtin"
 
+    fun ownerPresentableName(element: VlangNamedElement): String? {
+        val owner = element.getOwner()
+        if (owner is VlangFile) {
+            return "module " +  owner.getModuleQualifiedName()
+        } else if (owner !is VlangNamedElement) {
+            return null
+        }
+
+        return "'${owner.name}'"
+    }
+
     fun insideBuiltinModule(element: VlangCompositeElement): Boolean {
         val file = element.containingFile as VlangFile
         return file.getModuleQualifiedName() == BUILTIN_MODULE

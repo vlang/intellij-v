@@ -58,4 +58,9 @@ public class VlangParamDefinitionImpl extends VlangNamedElementImpl<VlangParamDe
     return VlangPsiImplUtil.getName(this);
   }
 
+  @Override
+  public boolean isPublic() {
+    return VlangPsiImplUtil.isPublic(this);
+  }
+
 }

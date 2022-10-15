@@ -94,12 +94,6 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
     }
 
     fun getModuleQualifiedName(): String {
-        val stub = stub as? VlangFileStub
-        val moduleQualifiedName = stub?.getModuleQualifiedName()
-        if (moduleQualifiedName != null) {
-            return moduleQualifiedName
-        }
-
         var moduleName = getModuleName()
 
         val projectDir = project.guessProjectDir() ?: return ""
@@ -122,8 +116,8 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
             moduleName = if (insideTopLevelDir) "main" else dirName
         }
 
-        if (moduleNames.lastOrNull() == dirName) {
-            moduleNames.removeAt(moduleNames.lastIndex)
+        if (moduleNames.firstOrNull() == dirName) {
+            moduleNames.removeAt(0)
         }
 
         val qualifier = moduleNames.reversed().joinToString(".").removePrefix("builtin.")

@@ -296,6 +296,13 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun isMutable(o: VlangFieldDefinition): Boolean {
+        val group = o.parentOfType<VlangFieldsGroup>() ?: return false
+        val modifiers = group.memberModifiers?.memberModifierList ?: return false
+        return modifiers.any { it.text == "mut" }
+    }
+
+    @JvmStatic
     fun isPublic(o: VlangFieldDefinition): Boolean {
         if (o.parentOfType<VlangInterfaceType>() != null) {
             return true
@@ -530,6 +537,9 @@ object VlangPsiImplUtil {
     fun getName(o: VlangParamDefinition): String {
         return o.getIdentifier().text ?: ""
     }
+
+    @JvmStatic
+    fun isPublic(o: VlangParamDefinition): Boolean = true
 
     @JvmStatic
     fun getContents(o: VlangStringLiteral): String {
@@ -902,6 +912,9 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun isPublic(o: VlangVarDefinition): Boolean  = true
+
+    @JvmStatic
     fun isMutable(o: VlangVarDefinition): Boolean {
         val inFor = o.parentNth<VlangForClause>(3) != null
         if (inFor) {
@@ -945,6 +958,9 @@ object VlangPsiImplUtil {
         val modifiers = o.varModifiers ?: return false
         return modifiers.text.contains("mut")
     }
+
+    @JvmStatic
+    fun isPublic(o: VlangReceiver): Boolean = true
 
     fun getBuiltinType(name: String, context: PsiElement): VlangType? {
         val builtin = VlangConfiguration.getInstance(context.project).builtinLocation

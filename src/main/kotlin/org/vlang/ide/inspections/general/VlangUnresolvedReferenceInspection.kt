@@ -12,21 +12,40 @@ import org.vlang.ide.inspections.VlangBaseInspection
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.VlangCompositeElement
 import org.vlang.lang.psi.VlangReferenceExpression
+import org.vlang.lang.psi.VlangTypeReferenceExpression
 import org.vlang.lang.psi.VlangVisitor
 import org.vlang.lang.psi.impl.VlangPsiImplUtil
+import org.vlang.lang.psi.impl.VlangReference
 
 class VlangUnresolvedReferenceInspection : VlangBaseInspection() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
         return object : VlangVisitor() {
+            override fun visitTypeReferenceExpression(o: VlangTypeReferenceExpression) {
+                super.visitTypeReferenceExpression(o)
+
+                val reference = o.reference
+                val qualifier = o.getQualifier()
+                val id = o.getIdentifier()
+                processReference(o, id, qualifier, reference)
+            }
+
             override fun visitReferenceExpression(o: VlangReferenceExpression) {
                 super.visitReferenceExpression(o)
 
                 val reference = o.reference
                 val qualifier = o.getQualifier()
+                val id = o.getIdentifier()
+                processReference(o, id, qualifier, reference)
+            }
+
+            private fun processReference(
+                expr: VlangCompositeElement,
+                id: PsiElement,
+                qualifier: VlangCompositeElement?,
+                reference: VlangReference,
+            ) {
                 val qualifierResolve = qualifier?.reference?.resolve()
                 if (qualifier != null && qualifierResolve == null) return
-                val results = reference.multiResolve(false)
-                val id = o.getIdentifier()
 
                 if (VlangPsiImplUtil.prevDot(id)) {
                     // TODO: remove this check when we have a better reference handling
@@ -37,8 +56,8 @@ class VlangUnresolvedReferenceInspection : VlangBaseInspection() {
                 val name = id.text
 
                 if (reference.resolve() == null) {
-                    if (isProhibited(o, qualifier)) {
-                        val fixes = createImportPackageFixes(o, reference, holder.isOnTheFly)
+                    if (isProhibited(expr, qualifier)) {
+                        val fixes = createImportPackageFixes(expr, reference, holder.isOnTheFly)
                         holder.registerProblem(id, "Unresolved reference '$name'", ProblemHighlightType.LIKE_UNKNOWN_SYMBOL, *fixes)
                     }
                 }
@@ -46,7 +65,7 @@ class VlangUnresolvedReferenceInspection : VlangBaseInspection() {
         }
     }
 
-    private fun createImportPackageFixes(target: PsiElement, reference: PsiReference, onTheFly: Boolean): Array<LocalQuickFix> {
+    private fun createImportPackageFixes(target: VlangCompositeElement, reference: PsiReference, onTheFly: Boolean): Array<LocalQuickFix> {
         if (onTheFly) {
             val importFix = VlangImportModuleQuickFix(reference)
             if (importFix.isAvailable(target.project, target.containingFile, target, target)) {
@@ -54,7 +73,7 @@ class VlangUnresolvedReferenceInspection : VlangBaseInspection() {
             }
         }
 
-        val packagesToImport = VlangImportModuleQuickFix.getImportPathVariantsToImport(reference.canonicalText, target)
+        val packagesToImport = VlangImportModuleQuickFix.getImportVariantsToImport(reference.canonicalText, target)
         if (packagesToImport.isNotEmpty()) {
             val result = mutableListOf<LocalQuickFix>()
             for (importPath in packagesToImport) {

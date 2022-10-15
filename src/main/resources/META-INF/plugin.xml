@@ -104,8 +104,8 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
         <!-- Probable bugs inspections End -->
 
         <!-- General inspections -->
-       <localInspection language="vlang" groupPath="V"
-                        groupName="General" shortName="VlangUnresolvedReferenceUnsafeInspection"
+        <localInspection language="vlang" groupPath="V"
+                        groupName="General" shortName="VlangUnresolvedReferenceInspection"
                         displayName="Unresolved reference"
                         enabledByDefault="true" level="ERROR"
                         implementationClass="org.vlang.ide.inspections.general.VlangUnresolvedReferenceInspection"/>
@@ -133,6 +133,12 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
                          displayName="Ambiguous import"
                          enabledByDefault="true" level="ERROR"
                          implementationClass="org.vlang.ide.inspections.general.VlangAmbiguousImportInspection"/>
+
+        <localInspection language="vlang" groupPath="V"
+                         groupName="General" shortName="VlangAccessingPrivateSymbolInspection"
+                         displayName="Accessing private symbol or member"
+                         enabledByDefault="false" level="ERROR"
+                         implementationClass="org.vlang.ide.inspections.general.VlangAccessingPrivateSymbolInspection"/>
         <!-- General inspections End -->
 
         <!-- Validity issues inspections -->

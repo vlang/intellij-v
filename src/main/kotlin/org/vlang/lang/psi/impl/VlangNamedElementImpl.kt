@@ -8,10 +8,7 @@ import com.intellij.psi.ResolveState
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
 import com.intellij.psi.stubs.IStubElementType
 import com.intellij.psi.tree.TokenSet
-import com.intellij.psi.util.CachedValueProvider
-import com.intellij.psi.util.CachedValuesManager
-import com.intellij.psi.util.PsiModificationTracker
-import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.util.*
 import com.intellij.ui.IconManager
 import com.intellij.util.PlatformIcons
 import org.vlang.ide.ui.VIcons
@@ -74,6 +71,15 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
         val name = name ?: return null
         val moduleName = containingFile.getModuleQualifiedName()
         return VlangPsiImplUtil.getFqn(moduleName, name)
+    }
+
+    override fun getOwner(): PsiElement? {
+        return parentOfTypes(
+            VlangInterfaceDeclaration::class,
+            VlangStructDeclaration::class,
+            VlangUnionDeclaration::class,
+            VlangFile::class,
+        )
     }
 
     override fun setName(name: String): PsiElement? {

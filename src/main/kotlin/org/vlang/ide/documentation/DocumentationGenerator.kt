@@ -96,17 +96,16 @@ object DocumentationGenerator {
         return sb.toString()
     }
 
-    private fun VlangMemberModifiers?.generateDoc(): String {
-        val isMutable = this?.memberModifierList?.find { it.text == "mut" } != null
-        val isPublic = this?.memberModifierList?.find { it.text == "pub" } != null
+    private fun VlangMemberModifiers?.generateDoc(element: VlangNamedElement): String {
         val isShared = this?.memberModifierList?.find { it.text == "shared" } != null
-        val isGlobal = this?.memberModifierList?.find { it.text == "__global" } != null
+
+        val isMutable = (element as? VlangMutable)?.isMutable() ?: false
 
         return buildString {
-            if (isPublic) {
+            if (element.isPublic()) {
                 part("public", asKeyword)
             } else {
-                part("private", asKeyword)
+                part("module private", asKeyword)
             }
             if (isMutable) {
                 part("mutable", asKeyword)
@@ -114,7 +113,7 @@ object DocumentationGenerator {
             if (isShared) {
                 part("shared", asKeyword)
             }
-            if (isGlobal) {
+            if (element.isGlobal()) {
                 part("global", asKeyword)
             }
         }
@@ -218,7 +217,7 @@ object DocumentationGenerator {
             generateModuleName(containingFile)
             append(DocumentationMarkup.DEFINITION_START)
             line(getAttributes()?.generateDoc())
-            generateSymbolVisibilityDoc(getSymbolVisibility())
+            generateVisibilityPart(this@generateDoc)
 
             if (this@generateDoc is VlangMethodDeclaration) {
                 part(receiver.generateMethodDoc())
@@ -239,7 +238,8 @@ object DocumentationGenerator {
             generateModuleName(containingFile)
             append(DocumentationMarkup.DEFINITION_START)
             line(attributes?.generateDoc())
-            generateSymbolVisibilityDoc(getSymbolVisibility())
+
+            generateVisibilityPart(this@generateDoc)
 
             part("struct", asKeyword)
             colorize(name, asDeclaration)
@@ -254,7 +254,7 @@ object DocumentationGenerator {
             generateModuleName(containingFile)
             append(DocumentationMarkup.DEFINITION_START)
             line(attributes?.generateDoc())
-            generateSymbolVisibilityDoc(getSymbolVisibility())
+            generateVisibilityPart(this@generateDoc)
 
             part("union", asKeyword)
             colorize(name, asDeclaration)
@@ -269,7 +269,7 @@ object DocumentationGenerator {
             generateModuleName(containingFile)
             append(DocumentationMarkup.DEFINITION_START)
             line(attributes?.generateDoc())
-            generateSymbolVisibilityDoc(getSymbolVisibility())
+            generateVisibilityPart(this@generateDoc)
 
             part("enum", asKeyword)
             colorize(name, asDeclaration)
@@ -284,7 +284,7 @@ object DocumentationGenerator {
             generateModuleName(containingFile)
             append(DocumentationMarkup.DEFINITION_START)
             line(attributes?.generateDoc())
-            generateSymbolVisibilityDoc(getSymbolVisibility())
+            generateVisibilityPart(this@generateDoc)
 
             part("interface", asKeyword)
             colorize(name, asDeclaration)
@@ -298,8 +298,7 @@ object DocumentationGenerator {
         return buildString {
             generateModuleName(containingFile)
             append(DocumentationMarkup.DEFINITION_START)
-            val parent = parent as? VlangConstDeclaration
-            generateSymbolVisibilityDoc(parent?.symbolVisibility)
+            generateVisibilityPart(this@generateDoc)
 
             part("const", asKeyword)
             part(name, asDeclaration)
@@ -351,17 +350,17 @@ object DocumentationGenerator {
             append(DocumentationMarkup.DEFINITION_START)
             val parent = parent as? VlangInterfaceMethodDeclaration
             val parentGroup = parent?.parent as? VlangMembersGroup
-            val owner = parent?.parentOfType<VlangNamedElement>()
+            val owner = parent?.parentOfType<VlangNamedElement>()!!
 
-            line(parent?.attribute?.generateDoc())
+            line(parent.attribute?.generateDoc())
 
-            val modifiersDoc = parentGroup?.memberModifiers.generateDoc()
+            val modifiersDoc = parentGroup?.memberModifiers.generateDoc(this@generateDoc)
             if (modifiersDoc.isNotEmpty()) {
                 append(modifiersDoc)
             }
 
             part("interface method", asKeyword)
-            colorize(owner?.name ?: "anon", asDeclaration)
+            colorize(owner.name ?: "anon", asDeclaration)
             append(".")
             colorize(name ?: "anon", asDeclaration)
             part(parameters.generateDoc())
@@ -378,23 +377,23 @@ object DocumentationGenerator {
             append(DocumentationMarkup.DEFINITION_START)
             val parent = parent as? VlangFieldDeclaration
             val parentGroup = parent?.parent as? VlangFieldsGroup
-            val owner = parent?.parentOfType<VlangNamedElement>()
-            val type = parent?.type
+            val owner = parent?.parentOfType<VlangNamedElement>()!!
+            val type = parent.type
 
-            line(parent?.attribute?.generateDoc())
+            line(parent.attribute?.generateDoc())
 
-            val modifiersDoc = parentGroup?.memberModifiers.generateDoc()
+            val modifiersDoc = parentGroup?.memberModifiers.generateDoc(this@generateDoc)
             if (modifiersDoc.isNotEmpty()) {
                 append(modifiersDoc)
             }
 
             part("field", asKeyword)
-            colorize(owner?.name ?: "anon", asDeclaration)
+            colorize(owner.name ?: "anon", asDeclaration)
             append(".")
             part(name, asDeclaration)
             append(type?.generateDoc() ?: DocumentationUtils.colorize("unknown", asDeclaration))
 
-            val valueDoc = parent?.defaultFieldValue?.expression?.generateDoc()
+            val valueDoc = parent.defaultFieldValue?.expression?.generateDoc()
             if (valueDoc != null) {
                 part(" =")
                 append(valueDoc)
@@ -444,8 +443,12 @@ object DocumentationGenerator {
         }
     }
 
-    private fun StringBuilder.generateSymbolVisibilityDoc(visibility: VlangSymbolVisibility?) {
-        part(visibility?.generateDoc() ?: DocumentationUtils.colorize("private", asKeyword))
+    private fun StringBuilder.generateVisibilityPart(element: VlangNamedElement) {
+        if (element.isPublic()) {
+            part("public", asKeyword)
+        } else {
+            part("private", asKeyword)
+        }
     }
 
     fun generateCompileTimeConstantDoc(element: VlangReferenceExpression): String? {
