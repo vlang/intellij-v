@@ -22,19 +22,33 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
             CompletionType.BASIC,
             topLevelPattern(),
             KeywordsCompletionProvider(
-                "const",
-                "struct",
-                "enum",
-                "union",
-                "interface",
                 "fn",
                 "module",
                 "pub",
                 "static",
-                "type",
                 "__global",
                 needSpace = true
             )
+        )
+        extend(
+            CompletionType.BASIC,
+            topLevelPattern(),
+            ClassLikeSymbolCompletionProvider(
+                "struct",
+                "enum",
+                "union",
+                "interface",
+            )
+        )
+        extend(
+            CompletionType.BASIC,
+            topLevelPattern(),
+            TypeAliasCompletionProvider()
+        )
+        extend(
+            CompletionType.BASIC,
+            topLevelPattern(),
+            ConstCompletionProvider()
         )
         extend(
             CompletionType.BASIC,
@@ -315,6 +329,71 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
                             .bold(), KEYWORD_PRIORITY.toDouble()
                     )
                 }
+            )
+        }
+    }
+
+    private inner class ClassLikeSymbolCompletionProvider(private vararg val keywords: String) :
+        CompletionProvider<CompletionParameters>() {
+        override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
+            if (shouldSuppress(parameters, result)) return
+
+            result.addAllElements(
+                keywords.map {
+                    PrioritizedLookupElement.withPriority(
+                        LookupElementBuilder.create(it)
+                            .withTailText(" Name {...}")
+                            .withInsertHandler(
+                                VlangCompletionUtil.TemplateStringInsertHandler(
+                                    " \$name$ {\n\$END$\n}", true,
+                                    "name" to ConstantNode("Name")
+                                )
+                            )
+                            .bold(), KEYWORD_PRIORITY.toDouble()
+                    )
+                }
+            )
+        }
+    }
+
+    private inner class TypeAliasCompletionProvider : CompletionProvider<CompletionParameters>() {
+        override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
+            if (shouldSuppress(parameters, result)) return
+
+            result.addElement(
+                PrioritizedLookupElement.withPriority(
+                    LookupElementBuilder.create("type")
+                        .withTailText(" Name = type")
+                        .withInsertHandler(
+                            VlangCompletionUtil.TemplateStringInsertHandler(
+                                " \$name$ = \$type$", true,
+                                "name" to ConstantNode("Name"),
+                                "type" to ConstantNode("int"),
+                            )
+                        )
+                        .bold(), KEYWORD_PRIORITY.toDouble()
+                )
+            )
+        }
+    }
+
+    private inner class ConstCompletionProvider : CompletionProvider<CompletionParameters>() {
+        override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
+            if (shouldSuppress(parameters, result)) return
+
+            result.addElement(
+                PrioritizedLookupElement.withPriority(
+                    LookupElementBuilder.create("const")
+                        .withTailText(" name = value")
+                        .withInsertHandler(
+                            VlangCompletionUtil.TemplateStringInsertHandler(
+                                " \$name$ = \$value$", true,
+                                "name" to ConstantNode("name"),
+                                "value" to ConstantNode("0"),
+                            )
+                        )
+                        .bold(), KEYWORD_PRIORITY.toDouble()
+                )
             )
         }
     }
