@@ -688,7 +688,7 @@ Result ::= Type {
 }
 Parameters ::= '(' [ (ParameterList ','?| TypeListNoPin) ] ')' {
   pin=1
-  methods=[getParametersList getParametersListWithTypes]
+  methods=[getParametersList getParametersListWithTypes getTypeList]
 //  stubClass="org.vlang.lang.stubs.GoParametersStub"
 }
 private ParameterList ::= ParameterDeclaration (',' (ParameterDeclaration | &')'))* {pin(".*")=1}

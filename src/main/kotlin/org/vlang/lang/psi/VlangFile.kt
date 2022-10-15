@@ -100,27 +100,38 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
             return moduleQualifiedName
         }
 
-        val moduleName = getModuleName() ?: return ""
+        var moduleName = getModuleName()
 
         val projectDir = project.guessProjectDir() ?: return ""
         val stdlib = VlangConfiguration.getInstance(project).stdlibLocation
         val modules = VlangConfiguration.getInstance(project).modulesLocation
 
         val moduleNames = mutableListOf<String>()
-        var dir = virtualFile?.parent?.parent // parent directory for directory with this file
+        var dir = virtualFile?.parent
+        val insideTopLevelDir = dir == projectDir
+        val dirName = dir?.name ?: ""
         var depth = 0
-        while (dir != projectDir && dir != stdlib && dir != modules && dir != null && depth < 10) {
+        while (dir != projectDir && dir != stdlib && dir != modules && dir != null && dir.name != "/" && depth < 10) {
             moduleNames.add(dir.name)
 
             dir = dir.parent
             depth++
         }
 
+        if (moduleName == null) {
+            moduleName = if (insideTopLevelDir) "main" else dirName
+        }
+
+        if (moduleNames.lastOrNull() == dirName) {
+            moduleNames.removeAt(moduleNames.lastIndex)
+        }
+
         val qualifier = moduleNames.reversed().joinToString(".").removePrefix("builtin.")
         if (qualifier.isNotEmpty()) {
             return "$qualifier.$moduleName"
         }
-        return moduleName ?: ""
+
+        return moduleName
     }
 
     fun getImports(): List<VlangImportSpec> {

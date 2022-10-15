@@ -13,9 +13,9 @@ import org.vlang.configurations.VlangConfiguration
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangPsiImplUtil.processNamedElements
+import org.vlang.lang.stubs.index.VlangMethodIndex
 import org.vlang.lang.stubs.index.VlangModulesFingerprintIndex
 import org.vlang.lang.stubs.index.VlangModulesIndex
-import org.vlang.lang.stubs.index.VlangNamesIndex
 
 class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = false) :
     VlangReferenceBase<VlangReferenceExpressionBase>(
@@ -253,7 +253,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
     }
 
     private fun processMethods(fqn: String?, processor: VlangScopeProcessor, state: ResolveState): Boolean {
-        return VlangNamesIndex.processPrefix("$fqn.", myElement.project, GlobalSearchScope.allScope(myElement.project)) {
+        return VlangMethodIndex.processPrefix("$fqn.", myElement.project, GlobalSearchScope.allScope(myElement.project)) {
             if (!processor.execute(it, state)) return@processPrefix false
             true
         }
@@ -310,6 +310,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         }
 
         if (!processBlock(processor, state, true)) return false
+//        if (!processPseudoParams(processor, state)) return false
         if (!processImportModules(file, processor, state, true)) return false
         if (!processImportedModules(file, processor, state)) return false
         if (!processImports(file, processor, state, myElement)) return false
@@ -627,6 +628,33 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         ResolveUtil.treeWalkUp(myElement, delegate)
         return processNamedElements(processor, state, delegate.getVariants(), localResolve)
     }
+
+//    private fun processPseudoParams(processor: VlangScopeProcessor, state: ResolveState): Boolean {
+//        if (myElement.parentOfType<VlangArgumentList>() == null) {
+//            return true
+//        }
+//
+//        val callExpr = myElement.parentNth<VlangCallExpr>(4) ?: return true
+//        val refExpr = callExpr.expression as VlangReferenceExpression
+//        val resolved = refExpr.resolve() as? VlangSignatureOwner ?: return true
+//        val params = resolved.getSignature()?.parameters?.parametersListWithTypes ?: return true
+//
+//        val index = VlangLangUtil.indexInCall(myElement) ?: return true
+//        val paramForIndex = params.getOrNull(index) ?: return true
+//
+//        val paramType = paramForIndex.second
+//        if (paramType !is VlangFunctionType) {
+//            return true
+//        }
+//
+//        val lambdaParams = paramType.getSignature()?.parameters?.parametersListWithTypes ?: return true
+//        if (lambdaParams.size == 1) {
+//            val param = paramForIndex.first
+//            return processNamedElements(processor, state.put(SEARCH_NAME, param.name), listOf(param), true)
+//        }
+//
+//        return true
+//    }
 
     private fun createDelegate(processor: VlangScopeProcessor): VlangVarProcessor {
         return object : VlangVarProcessor(identifier!!, myElement, processor.isCompletion(), true) {

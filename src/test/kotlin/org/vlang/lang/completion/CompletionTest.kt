@@ -35,6 +35,8 @@ class CompletionTest : CompletionTestBase() {
 
     fun `test struct methods completion`() = checkEquals(
         """
+        module main
+        
         struct Foo {}
         
         fn (f Foo) bar() {}
@@ -46,5 +48,21 @@ class CompletionTest : CompletionTestBase() {
         }
         """.trimIndent(),
         1, "bar", "baz",
+    )
+
+    fun `test struct method and field with same name completion`() = checkEquals(
+        """
+        struct Foo {
+            name string
+        }
+        
+        fn (f Foo) name() {}
+        
+        fn main() {
+            foo := Foo{}
+            foo.<caret>
+        }
+        """.trimIndent(),
+        1, "name", "name",
     )
 }

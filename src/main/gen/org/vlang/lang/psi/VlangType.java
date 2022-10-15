@@ -22,7 +22,7 @@ public interface VlangType extends VlangCompositeElement, StubBasedPsiElement<Vl
   PsiElement getIdentifier();
 
   @Nullable
-  PsiElement getUnderlyingType();
+  VlangType getUnderlyingType();
 
   @NotNull
   VlangType resolveType();

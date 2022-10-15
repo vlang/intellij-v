@@ -54,9 +54,9 @@ class VlangMethodDeclarationStubElementType(name: String) :
             if (parent is VlangFileStub) {
                 val moduleName = parent.getModuleQualifiedName()
                 if (moduleName.isNullOrEmpty()) {
-                    sink.occurrence(VlangMethodIndex.KEY, typeName)
+                    sink.occurrence(VlangMethodIndex.KEY, "$typeName.$name")
                 } else {
-                    sink.occurrence(VlangMethodIndex.KEY, "$moduleName.$typeName")
+                    sink.occurrence(VlangMethodIndex.KEY, "$moduleName.$typeName.$name")
                 }
             }
         }

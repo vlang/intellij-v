@@ -436,8 +436,18 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getParametersList(o: VlangParameters): List<VlangParamDefinition> {
-        return o.parameterDeclarationList.flatMap { decl -> decl.paramDefinitionList }
+    fun getParametersList(o: VlangParameters): List<VlangParamDefinition?> {
+        return o.parameterDeclarationList.flatMap { decl ->
+            if (decl.paramDefinitionList.isEmpty()) {
+                return@flatMap listOf(null)
+            }
+            decl.paramDefinitionList
+        }
+    }
+
+    @JvmStatic
+    fun getTypeList(o: VlangParameters): List<VlangType> {
+        return o.parameterDeclarationList.map { decl -> decl.type }
     }
 
     @JvmStatic
@@ -563,7 +573,7 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getUnderlyingType(o: VlangType): PsiElement? {
+    fun getUnderlyingType(o: VlangType): VlangType? {
         return null // TODO
     }
 
@@ -792,8 +802,9 @@ object VlangPsiImplUtil {
 
         if (expr is VlangArrayCreation) {
             val firstItem = expr.arrayCreationList?.expressionList?.firstOrNull()
-            val type = firstItem?.getType(context)?.text ?: "any"
-            return getBuiltinType("[]$type", expr)
+            val type = firstItem?.getType(context) ?: return null
+
+            return VlangLightType.LightArrayType(type)
         }
 
         if (expr is VlangIfExpression) {
@@ -858,13 +869,10 @@ object VlangPsiImplUtil {
     }
 
     private fun typeOrParameterType(resolve: VlangTypeOwner, context: ResolveState?): VlangType? {
-        val type = resolve.getType(context)
+        val type = resolve.getType(context) ?: return null
         if (resolve is VlangParamDefinition && resolve.isVariadic) {
-            return if (type == null) null else getBuiltinType("[]${type.text}", resolve)
+            return VlangLightType.LightArrayType(type)
         }
-//        return if (resolve is VlangSignatureOwner) {
-//            LightFunctionType(resolve as VlangSignatureOwner)
-//        } else type
         return type
     }
 

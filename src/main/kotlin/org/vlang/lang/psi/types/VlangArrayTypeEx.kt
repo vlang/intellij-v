@@ -5,7 +5,7 @@ import org.vlang.lang.psi.VlangArrayOrSliceType
 import org.vlang.lang.psi.VlangCompositeElement
 
 class VlangArrayTypeEx(raw: VlangArrayOrSliceType) : VlangBaseTypeEx<VlangArrayOrSliceType>(raw) {
-    private val inner = raw.type?.toEx()
+    val inner = raw.type?.toEx()
 
     override fun toString() = "[]".safeAppend(inner)
 

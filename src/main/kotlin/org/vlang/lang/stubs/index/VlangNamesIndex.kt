@@ -49,29 +49,6 @@ class VlangNamesIndex : StringStubIndexExtension<VlangNamedElement>() {
             )
         }
 
-        fun processPrefix(
-            prefix: String,
-            project: Project,
-            scope: GlobalSearchScope?,
-            processor: Processor<VlangNamedElement>,
-        ): Boolean {
-            val keys = StubIndex.getInstance().getAllKeys(KEY, project)
-            for (key in keys) {
-                if (!key.startsWith(prefix)) {
-                    continue
-                }
-
-                val els = StubIndex.getElements(KEY, key, project, null, null, VlangNamedElement::class.java)
-                for (el in els) {
-                    if (!processor.process(el)) {
-                        return false
-                    }
-                }
-            }
-
-            return true
-        }
-
         fun getAllPrefix(prefix: String, project: Project): Collection<VlangNamedElement> {
             val keys = StubIndex.getInstance().getAllKeys(KEY, project)
             return keys.flatMap { key ->

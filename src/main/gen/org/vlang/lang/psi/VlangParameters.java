@@ -28,4 +28,7 @@ public interface VlangParameters extends VlangCompositeElement {
   @NotNull
   List<Pair<VlangParamDefinition, VlangType>> getParametersListWithTypes();
 
+  @NotNull
+  List<VlangType> getTypeList();
+
 }

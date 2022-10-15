@@ -196,10 +196,10 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
     ) {
         val lookup = createLookupElement(o, state, forTypes)
         if (lookup != null) {
-            val lookupString = lookup.lookupString
-            if (!processedNames.contains(lookupString)) {
+            val key = lookup.lookupString + o.javaClass
+            if (!processedNames.contains(key)) {
                 set.addElement(lookup)
-                processedNames.add(lookupString)
+                processedNames.add(key)
             }
         }
     }

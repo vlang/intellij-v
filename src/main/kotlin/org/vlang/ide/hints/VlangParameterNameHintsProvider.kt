@@ -75,7 +75,7 @@ class VlangParameterNameHintsProvider : InlayParameterHintsProvider {
             .mapNotNull { it.value?.expression }
 
         for (i in 0 until min(params.size, args.size)) {
-            val parameter = params[i]
+            val parameter = params[i] ?: continue
             val arg = args[i]
 
             val argInner = when (arg) {

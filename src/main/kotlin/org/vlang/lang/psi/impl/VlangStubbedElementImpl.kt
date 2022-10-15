@@ -15,9 +15,7 @@ abstract class VlangStubbedElementImpl<T : StubBase<*>> : StubBasedPsiElementBas
     constructor(stub: T, nodeType: IStubElementType<*, *>) : super(stub, nodeType) {}
     constructor(node: ASTNode) : super(node) {}
 
-    override fun toString(): String {
-        return elementType.toString()
-    }
+    override fun toString() = elementType.toString()
 
     override fun getText(): String? {
         val stub = stub
@@ -28,9 +26,7 @@ abstract class VlangStubbedElementImpl<T : StubBase<*>> : StubBasedPsiElementBas
         return super.getText()
     }
 
-    override fun getParent(): PsiElement {
-        return parentByStub
-    }
+    override fun getParent(): PsiElement = parentByStub
 
     override fun processDeclarations(
         processor: PsiScopeProcessor,
@@ -41,7 +37,5 @@ abstract class VlangStubbedElementImpl<T : StubBase<*>> : StubBasedPsiElementBas
         return VlangCompositeElementImpl.processDeclarationsDefault(this, processor, state, lastParent, place)
     }
 
-    override fun getContainingFile(): VlangFile {
-        return super.getContainingFile() as VlangFile
-    }
+    override fun getContainingFile() = super.getContainingFile() as VlangFile
 }

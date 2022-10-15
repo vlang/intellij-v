@@ -1,11 +1,9 @@
 package org.vlang.lang
 
-import com.intellij.openapi.util.text.StringUtil
 import com.intellij.psi.PsiFile
 import com.intellij.psi.StubBuilder
 import com.intellij.psi.stubs.*
 import com.intellij.psi.tree.IStubFileElementType
-import com.intellij.util.io.StringRef
 import org.vlang.lang.psi.VlangFile
 import org.vlang.lang.stubs.VlangFileStub
 import org.vlang.lang.stubs.index.VlangModulesFingerprintIndex
@@ -41,18 +39,16 @@ class VlangFileElementType : IStubFileElementType<VlangFileStub>("VLANG_FILE", V
         }
     }
 
-    override fun serialize(stub: VlangFileStub, dataStream: StubOutputStream) {
-        dataStream.writeUTF(StringUtil.notNullize(stub.getBuildFlags()))
-    }
+    override fun serialize(stub: VlangFileStub, dataStream: StubOutputStream) {}
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): VlangFileStub {
-        return VlangFileStub(null, StringRef.fromNullableString(StringUtil.nullize(dataStream.readUTF())))
+        return VlangFileStub(null)
     }
 
     override fun getExternalId() = "vlang.FILE"
 
     companion object {
         val INSTANCE = VlangFileElementType()
-        const val VERSION = 40
+        const val VERSION = 45
     }
 }

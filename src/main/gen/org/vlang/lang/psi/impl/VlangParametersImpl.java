@@ -66,4 +66,10 @@ public class VlangParametersImpl extends VlangCompositeElementImpl implements Vl
     return VlangPsiImplUtil.getParametersListWithTypes(this);
   }
 
+  @Override
+  @NotNull
+  public List<VlangType> getTypeList() {
+    return VlangPsiImplUtil.getTypeList(this);
+  }
+
 }

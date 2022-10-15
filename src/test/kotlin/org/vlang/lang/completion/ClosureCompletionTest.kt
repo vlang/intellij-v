@@ -96,4 +96,52 @@ class ClosureCompletionTest : CompletionTestBase() {
         	})
         }
     """.trimIndent())
+
+    fun `test closure without param name`() = doTestCompletion("""
+        module completion
+
+        fn foo(cb fn (int)) ?int {
+        	return 0
+        }
+
+        fn main() {
+        	foo(fn<caret>)
+        }
+    """.trimIndent(), """
+        module completion
+
+        fn foo(cb fn (int)) ?int {
+        	return 0
+        }
+
+        fn main() {
+        	foo(fn (it int) {
+        		
+        	})
+        }
+    """.trimIndent())
+
+    fun `test closure without params name`() = doTestCompletion("""
+        module completion
+
+        fn foo(cb fn (int, string)) ?int {
+        	return 0
+        }
+
+        fn main() {
+        	foo(fn<caret>)
+        }
+    """.trimIndent(), """
+        module completion
+
+        fn foo(cb fn (int, string)) ?int {
+        	return 0
+        }
+
+        fn main() {
+        	foo(fn (it int, it1 string) {
+        		
+        	})
+        }
+    """.trimIndent())
 }
