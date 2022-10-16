@@ -1,0 +1,3 @@
+module builtin
+
+interface IError {}

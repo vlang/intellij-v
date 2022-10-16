@@ -57,4 +57,9 @@ public class VlangIfExpressionImpl extends VlangExpressionImpl implements VlangI
     return notNullChild(findChildByType(IF));
   }
 
+  @Override
+  public boolean isGuard() {
+    return VlangPsiImplUtil.isGuard(this);
+  }
+
 }

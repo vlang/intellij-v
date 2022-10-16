@@ -6,6 +6,7 @@ import com.intellij.psi.impl.FakePsiElement
 import com.intellij.psi.impl.light.LightElement
 import org.vlang.lang.psi.VlangArrayOrSliceType
 import org.vlang.lang.psi.VlangCompositeElement
+import org.vlang.lang.psi.VlangPointerType
 import org.vlang.lang.psi.VlangType
 import org.vlang.lang.psi.impl.VlangPsiImplUtil.getUnderlyingType
 import org.vlang.lang.psi.impl.VlangPsiImplUtil.resolveType
@@ -65,5 +66,11 @@ abstract class VlangLightType<E : VlangCompositeElement>(
                 }
             }
         }
+    }
+
+    class LightPointerType(type: VlangType) : VlangLightType<VlangType>(type), VlangPointerType {
+        override fun getText() = "&" + element.text
+
+        override fun getType() = element
     }
 }

@@ -5,6 +5,7 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiReference
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.intellij.lang.annotations.Language
+import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
 import org.vlang.lang.psi.VlangNamedElement
 
 abstract class ResolveTestBase : BasePlatformTestCase() {
@@ -36,6 +37,11 @@ abstract class ResolveTestBase : BasePlatformTestCase() {
     protected fun mainFile(path: String, @Language("vlang") text: String) {
         file(path, text)
         carets = myFixture.editor.caretModel.allCarets
+    }
+
+    protected fun setupBuiltin() {
+        myFixture.copyDirectoryToProject("builtin", "builtin")
+        myFixture.project.projectSettings.stdlibLocation = myFixture.testDataPath
     }
 
     protected fun findReferenceAtCaret(filePath: String): PsiReference? {

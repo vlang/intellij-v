@@ -22,4 +22,6 @@ public interface VlangIfExpression extends VlangExpression {
   @NotNull
   PsiElement getIf();
 
+  boolean isGuard();
+
 }

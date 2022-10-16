@@ -868,7 +868,10 @@ AsExpression ::= Expression as Type {pin=2}
 UnsafeExpression ::= unsafe Block {pin=1}
 
 // if <condition> { ... }
-IfExpression ::= if Condition semi? Block (semi? ElseStatement)? {pin=1}
+IfExpression ::= if Condition semi? Block (semi? ElseStatement)? {
+  pin=1
+  methods=[isGuard]
+}
 
 //  $if <condition> { ... }
 CompileTimeIfExpression ::= IF_COMPILE_TIME Condition Block CompileElseStatement? {pin=1}

@@ -1,11 +1,10 @@
 package org.vlang.ide.codeInsight
 
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.search.searches.ReferencesSearch
-import com.intellij.psi.util.CachedValueProvider
-import com.intellij.psi.util.CachedValuesManager
-import com.intellij.psi.util.PsiModificationTracker
+import com.intellij.psi.util.*
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.types.VlangPrimitiveTypes
 
@@ -21,6 +20,23 @@ object VlangCodeInsightUtil {
         }
 
         return "'${owner.name}'"
+    }
+
+    fun insideOrGuard(element: PsiElement): Boolean {
+        return element.parentOfType<VlangOrBlockExpr>() != null
+    }
+
+    fun insideElseBlockIfGuard(element: PsiElement): Boolean {
+        element.parentOfType<VlangElseStatement>(true) ?: return false
+        val parentIf = element.parentOfType<VlangIfExpression>() ?: return false
+
+        // if err used in nested if
+        if (PsiTreeUtil.isAncestor(parentIf.expression, element, false)) {
+            val secondParentIf = parentIf.parentOfType<VlangIfExpression>() ?: return false
+            return secondParentIf.isGuard
+        }
+
+        return parentIf.isGuard
     }
 
     fun insideBuiltinModule(element: VlangCompositeElement): Boolean {

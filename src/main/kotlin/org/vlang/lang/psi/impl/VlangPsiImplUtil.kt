@@ -562,6 +562,11 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun isGuard(o: VlangIfExpression): Boolean {
+        return o.varDeclaration != null
+    }
+
+    @JvmStatic
     fun getName(o: VlangReceiver): String? {
         return o.getIdentifier()?.text
     }
@@ -642,8 +647,8 @@ object VlangPsiImplUtil {
                 }
                 if (expr.bitAnd != null) {
                     if (expr.expression == null) return null
-                    val innerEx = getType(expr.expression!!, context)?.toEx() ?: return null
-                    return getBuiltinType("&${innerEx.readableName(expr)}", expr)
+                    val inner = getType(expr.expression!!, context) ?: return null
+                    return VlangLightType.LightPointerType(inner)
                 }
 
                 if (expr.mul != null) {
@@ -707,7 +712,10 @@ object VlangPsiImplUtil {
             }
 
             // expr or { err }
-            if (expr.getIdentifier().text == "err" && expr.parentOfType<VlangOrBlockExpr>() != null) {
+            // if a := foo() { ... } else { err }
+            if (expr.getIdentifier().text == "err" &&
+                (VlangCodeInsightUtil.insideOrGuard(expr) || VlangCodeInsightUtil.insideElseBlockIfGuard(expr))
+            ) {
                 return getBuiltinType("IError", expr)
             }
 
@@ -912,7 +920,7 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun isPublic(o: VlangVarDefinition): Boolean  = true
+    fun isPublic(o: VlangVarDefinition): Boolean = true
 
     @JvmStatic
     fun isMutable(o: VlangVarDefinition): Boolean {

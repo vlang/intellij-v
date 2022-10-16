@@ -286,7 +286,9 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         }
 
         // expr or { err }
-        if (identifier!!.text == "err" && identifier!!.parentOfType<VlangOrBlockExpr>() != null) {
+        if (identifier!!.text == "err" &&
+            (VlangCodeInsightUtil.insideOrGuard(identifier!!) || VlangCodeInsightUtil.insideElseBlockIfGuard(identifier!!))
+        ) {
             return !processBuiltin(processor, state.put(SEARCH_NAME, "IError"))
         }
 

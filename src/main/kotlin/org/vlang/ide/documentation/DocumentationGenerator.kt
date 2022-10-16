@@ -150,8 +150,8 @@ object DocumentationGenerator {
             }
         }
 
-        val modifierMaxWidth = params.mapNotNull { it.first.varModifiers?.generateDoc(noHtml = true)?.length }.maxOrNull() ?: 0
-        val paramNameMaxWidth = params.maxOfOrNull { it.first.name.length } ?: 0
+        val modifierMaxWidth = params.mapNotNull { it.first?.varModifiers?.generateDoc(noHtml = true)?.length }.maxOrNull() ?: 0
+        val paramNameMaxWidth = params.maxOfOrNull { it.first?.name?.length ?: 0 } ?: 0
 
         return buildString {
             append("(")
