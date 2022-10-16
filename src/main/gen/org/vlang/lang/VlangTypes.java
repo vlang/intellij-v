@@ -99,6 +99,8 @@ public interface VlangTypes {
   IElementType INTERFACE_TYPE = VlangElementTypeFactory.stubFactory("INTERFACE_TYPE");
   IElementType IN_EXPRESSION = new VlangCompositeElementType("IN_EXPRESSION");
   IElementType IS_EXPRESSION = new VlangCompositeElementType("IS_EXPRESSION");
+  IElementType JSON_ARGUMENT_LIST = new VlangCompositeElementType("JSON_ARGUMENT_LIST");
+  IElementType JSON_CALL_EXPR = new VlangCompositeElementType("JSON_CALL_EXPR");
   IElementType KEY = new VlangCompositeElementType("KEY");
   IElementType KEY_VALUE = new VlangCompositeElementType("KEY_VALUE");
   IElementType KEY_VALUES = new VlangCompositeElementType("KEY_VALUES");
@@ -577,6 +579,12 @@ public interface VlangTypes {
       }
       else if (type == IS_EXPRESSION) {
         return new VlangIsExpressionImpl(node);
+      }
+      else if (type == JSON_ARGUMENT_LIST) {
+        return new VlangJsonArgumentListImpl(node);
+      }
+      else if (type == JSON_CALL_EXPR) {
+        return new VlangJsonCallExprImpl(node);
       }
       else if (type == KEY) {
         return new VlangKeyImpl(node);

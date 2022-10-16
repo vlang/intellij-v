@@ -21,4 +21,5 @@ class ParserTest : ParserTestBase("parser", "v", VlangParserDefinition()) {
     fun `test globals`() = doTest(true)
     fun `test nil keyword`() = doTest(true)
     fun `test expr inside par`() = doTest(true)
+    fun `test decode`() = doTest(true)
 }

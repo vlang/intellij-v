@@ -38,6 +38,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
     create_token_set_(RANGE_CLAUSE, VAR_DECLARATION),
+    create_token_set_(ARGUMENT_LIST, JSON_ARGUMENT_LIST),
     create_token_set_(ALIAS_TYPE, ARRAY_OR_SLICE_TYPE, CHANNEL_TYPE, ENUM_TYPE,
       FUNCTION_TYPE, INTERFACE_TYPE, MAP_TYPE, NOT_NULLABLE_TYPE,
       NULLABLE_TYPE, POINTER_TYPE, STRUCT_TYPE, TUPLE_TYPE,
@@ -53,12 +54,13 @@ public class VlangParser implements PsiParser, LightPsiParser {
       CALL_EXPR, COMPILE_TIME_IF_EXPRESSION, CONDITIONAL_EXPR, CONSTEXPR_IDENTIFIER_EXPRESSION,
       DOT_EXPRESSION, ENUM_FETCH, EXPRESSION, FUNCTION_LIT,
       GO_EXPRESSION, IF_EXPRESSION, INC_DEC_EXPRESSION, INDEX_OR_SLICE_EXPR,
-      IN_EXPRESSION, IS_EXPRESSION, LITERAL, LITERAL_VALUE_EXPRESSION,
-      LOCK_EXPRESSION, MAP_INIT_EXPR, MATCH_EXPRESSION, MUL_EXPR,
-      MUT_EXPRESSION, NOT_IN_EXPRESSION, NOT_IS_EXPRESSION, OR_BLOCK_EXPR,
-      OR_EXPR, PARENTHESES_EXPR, RANGE_EXPR, REFERENCE_EXPRESSION,
-      SELECT_EXPRESSION, SEND_EXPR, SHARED_EXPRESSION, SQL_EXPRESSION,
-      STRING_LITERAL, UNARY_EXPR, UNPACKING_EXPRESSION, UNSAFE_EXPRESSION),
+      IN_EXPRESSION, IS_EXPRESSION, JSON_CALL_EXPR, LITERAL,
+      LITERAL_VALUE_EXPRESSION, LOCK_EXPRESSION, MAP_INIT_EXPR, MATCH_EXPRESSION,
+      MUL_EXPR, MUT_EXPRESSION, NOT_IN_EXPRESSION, NOT_IS_EXPRESSION,
+      OR_BLOCK_EXPR, OR_EXPR, PARENTHESES_EXPR, RANGE_EXPR,
+      REFERENCE_EXPRESSION, SELECT_EXPRESSION, SEND_EXPR, SHARED_EXPRESSION,
+      SQL_EXPRESSION, STRING_LITERAL, UNARY_EXPR, UNPACKING_EXPRESSION,
+      UNSAFE_EXPRESSION),
   };
 
   /* ********************************************************** */
@@ -2666,6 +2668,67 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // '(' <<enterMode "PAR">> Type ','? ElementList? '...'? ','? <<exitModeSafe "PAR">> ')'
+  public static boolean JsonArgumentList(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "JsonArgumentList")) return false;
+    if (!nextTokenIs(b, LPAREN)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, JSON_ARGUMENT_LIST, null);
+    r = consumeToken(b, LPAREN);
+    p = r; // pin = 1
+    r = r && report_error_(b, enterMode(b, l + 1, "PAR"));
+    r = p && report_error_(b, Type(b, l + 1)) && r;
+    r = p && report_error_(b, JsonArgumentList_3(b, l + 1)) && r;
+    r = p && report_error_(b, JsonArgumentList_4(b, l + 1)) && r;
+    r = p && report_error_(b, JsonArgumentList_5(b, l + 1)) && r;
+    r = p && report_error_(b, JsonArgumentList_6(b, l + 1)) && r;
+    r = p && report_error_(b, exitModeSafe(b, l + 1, "PAR")) && r;
+    r = p && consumeToken(b, RPAREN) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // ','?
+  private static boolean JsonArgumentList_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "JsonArgumentList_3")) return false;
+    consumeToken(b, COMMA);
+    return true;
+  }
+
+  // ElementList?
+  private static boolean JsonArgumentList_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "JsonArgumentList_4")) return false;
+    ElementList(b, l + 1);
+    return true;
+  }
+
+  // '...'?
+  private static boolean JsonArgumentList_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "JsonArgumentList_5")) return false;
+    consumeToken(b, TRIPLE_DOT);
+    return true;
+  }
+
+  // ','?
+  private static boolean JsonArgumentList_6(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "JsonArgumentList_6")) return false;
+    consumeToken(b, COMMA);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // JsonArgumentList
+  public static boolean JsonCallExpr(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "JsonCallExpr")) return false;
+    if (!nextTokenIs(b, LPAREN)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _LEFT_, JSON_CALL_EXPR, null);
+    r = JsonArgumentList(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
   // (FieldName &':') | !() Expression
   public static boolean Key(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Key")) return false;
@@ -3856,7 +3919,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // CallExpr
+  // (<<callExpr>> | (!() CallExpr))
   //   | IndexOrSliceExpr
   //   | QualifiedReferenceExpression
   //   | OrBlockExpr
@@ -3865,13 +3928,52 @@ public class VlangParser implements PsiParser, LightPsiParser {
   static boolean RightHandExpr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RightHandExpr")) return false;
     boolean r;
-    r = CallExpr(b, l + 1);
+    Marker m = enter_section_(b);
+    r = RightHandExpr_0(b, l + 1);
     if (!r) r = IndexOrSliceExpr(b, l + 1);
     if (!r) r = QualifiedReferenceExpression(b, l + 1);
     if (!r) r = OrBlockExpr(b, l + 1);
     if (!r) r = ErrorPropagationExpression(b, l + 1);
     if (!r) r = ForceNoErrorPropagationExpression(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
+  }
+
+  // <<callExpr>> | (!() CallExpr)
+  private static boolean RightHandExpr_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RightHandExpr_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = callExpr(b, l + 1);
+    if (!r) r = RightHandExpr_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // !() CallExpr
+  private static boolean RightHandExpr_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RightHandExpr_0_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = RightHandExpr_0_1_0(b, l + 1);
+    r = r && CallExpr(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // !()
+  private static boolean RightHandExpr_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RightHandExpr_0_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NOT_);
+    r = !RightHandExpr_0_1_0_0(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // ()
+  private static boolean RightHandExpr_0_1_0_0(PsiBuilder b, int l) {
+    return true;
   }
 
   /* ********************************************************** */

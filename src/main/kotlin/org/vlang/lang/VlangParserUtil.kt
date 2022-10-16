@@ -199,6 +199,20 @@ object VlangParserUtil : GeneratedParserUtilBase() {
     }
 
     @JvmStatic
+    fun callExpr(builder: PsiBuilder, level: Int): Boolean {
+        val m = builder.latestDoneMarker
+        if (m != null) {
+            val text = builder.originalText
+            val identifier = text.subSequence(m.startOffset, m.endOffset).toString()
+            if (identifier == "json.decode") {
+                return VlangParser.JsonCallExpr(builder, level + 1)
+            }
+        }
+
+        return VlangParser.CallExpr(builder, level + 1)
+    }
+
+    @JvmStatic
     fun typeOrExpression(builder: PsiBuilder, level: Int): Boolean {
         val m = builder.mark()
         var r = VlangParser.Type(builder, level + 1)

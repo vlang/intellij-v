@@ -1531,21 +1531,20 @@ V Language file
                                       PsiElement(VlangTokenType.identifier)('params')
                                     PsiElement(VlangTokenType.:=)(':=')
                                     DOT_EXPRESSION
-                                      CALL_EXPR
+                                      JSON_CALL_EXPR
                                         REFERENCE_EXPRESSION
                                           REFERENCE_EXPRESSION
                                             PsiElement(VlangTokenType.identifier)('json')
                                           PsiElement(VlangTokenType..)('.')
                                           PsiElement(VlangTokenType.identifier)('decode')
-                                        ARGUMENT_LIST
+                                        JSON_ARGUMENT_LIST
                                           PsiElement(VlangTokenType.()('(')
-                                          ELEMENT
-                                            VALUE
-                                              REFERENCE_EXPRESSION
-                                                REFERENCE_EXPRESSION
-                                                  PsiElement(VlangTokenType.identifier)('lsp')
-                                                PsiElement(VlangTokenType..)('.')
-                                                PsiElement(VlangTokenType.identifier)('DidOpenTextDocumentParams')
+                                          TYPE
+                                            TYPE_REFERENCE_EXPRESSION
+                                              TYPE_REFERENCE_EXPRESSION
+                                                PsiElement(VlangTokenType.identifier)('lsp')
+                                              PsiElement(VlangTokenType..)('.')
+                                              PsiElement(VlangTokenType.identifier)('DidOpenTextDocumentParams')
                                           PsiElement(VlangTokenType.,)(',')
                                           ELEMENT
                                             VALUE
@@ -1596,21 +1595,20 @@ V Language file
                                       PsiElement(VlangTokenType.identifier)('params')
                                     PsiElement(VlangTokenType.:=)(':=')
                                     DOT_EXPRESSION
-                                      CALL_EXPR
+                                      JSON_CALL_EXPR
                                         REFERENCE_EXPRESSION
                                           REFERENCE_EXPRESSION
                                             PsiElement(VlangTokenType.identifier)('json')
                                           PsiElement(VlangTokenType..)('.')
                                           PsiElement(VlangTokenType.identifier)('decode')
-                                        ARGUMENT_LIST
+                                        JSON_ARGUMENT_LIST
                                           PsiElement(VlangTokenType.()('(')
-                                          ELEMENT
-                                            VALUE
-                                              REFERENCE_EXPRESSION
-                                                REFERENCE_EXPRESSION
-                                                  PsiElement(VlangTokenType.identifier)('lsp')
-                                                PsiElement(VlangTokenType..)('.')
-                                                PsiElement(VlangTokenType.identifier)('DidSaveTextDocumentParams')
+                                          TYPE
+                                            TYPE_REFERENCE_EXPRESSION
+                                              TYPE_REFERENCE_EXPRESSION
+                                                PsiElement(VlangTokenType.identifier)('lsp')
+                                              PsiElement(VlangTokenType..)('.')
+                                              PsiElement(VlangTokenType.identifier)('DidSaveTextDocumentParams')
                                           PsiElement(VlangTokenType.,)(',')
                                           ELEMENT
                                             VALUE
@@ -1661,21 +1659,20 @@ V Language file
                                       PsiElement(VlangTokenType.identifier)('params')
                                     PsiElement(VlangTokenType.:=)(':=')
                                     DOT_EXPRESSION
-                                      CALL_EXPR
+                                      JSON_CALL_EXPR
                                         REFERENCE_EXPRESSION
                                           REFERENCE_EXPRESSION
                                             PsiElement(VlangTokenType.identifier)('json')
                                           PsiElement(VlangTokenType..)('.')
                                           PsiElement(VlangTokenType.identifier)('decode')
-                                        ARGUMENT_LIST
+                                        JSON_ARGUMENT_LIST
                                           PsiElement(VlangTokenType.()('(')
-                                          ELEMENT
-                                            VALUE
-                                              REFERENCE_EXPRESSION
-                                                REFERENCE_EXPRESSION
-                                                  PsiElement(VlangTokenType.identifier)('lsp')
-                                                PsiElement(VlangTokenType..)('.')
-                                                PsiElement(VlangTokenType.identifier)('DidChangeTextDocumentParams')
+                                          TYPE
+                                            TYPE_REFERENCE_EXPRESSION
+                                              TYPE_REFERENCE_EXPRESSION
+                                                PsiElement(VlangTokenType.identifier)('lsp')
+                                              PsiElement(VlangTokenType..)('.')
+                                              PsiElement(VlangTokenType.identifier)('DidChangeTextDocumentParams')
                                           PsiElement(VlangTokenType.,)(',')
                                           ELEMENT
                                             VALUE
@@ -1737,21 +1734,20 @@ V Language file
                                       PsiElement(VlangTokenType.identifier)('params')
                                     PsiElement(VlangTokenType.:=)(':=')
                                     DOT_EXPRESSION
-                                      CALL_EXPR
+                                      JSON_CALL_EXPR
                                         REFERENCE_EXPRESSION
                                           REFERENCE_EXPRESSION
                                             PsiElement(VlangTokenType.identifier)('json')
                                           PsiElement(VlangTokenType..)('.')
                                           PsiElement(VlangTokenType.identifier)('decode')
-                                        ARGUMENT_LIST
+                                        JSON_ARGUMENT_LIST
                                           PsiElement(VlangTokenType.()('(')
-                                          ELEMENT
-                                            VALUE
-                                              REFERENCE_EXPRESSION
-                                                REFERENCE_EXPRESSION
-                                                  PsiElement(VlangTokenType.identifier)('lsp')
-                                                PsiElement(VlangTokenType..)('.')
-                                                PsiElement(VlangTokenType.identifier)('DidCloseTextDocumentParams')
+                                          TYPE
+                                            TYPE_REFERENCE_EXPRESSION
+                                              TYPE_REFERENCE_EXPRESSION
+                                                PsiElement(VlangTokenType.identifier)('lsp')
+                                              PsiElement(VlangTokenType..)('.')
+                                              PsiElement(VlangTokenType.identifier)('DidCloseTextDocumentParams')
                                           PsiElement(VlangTokenType.,)(',')
                                           ELEMENT
                                             VALUE
@@ -1802,21 +1798,20 @@ V Language file
                                       PsiElement(VlangTokenType.identifier)('params')
                                     PsiElement(VlangTokenType.:=)(':=')
                                     DOT_EXPRESSION
-                                      CALL_EXPR
+                                      JSON_CALL_EXPR
                                         REFERENCE_EXPRESSION
                                           REFERENCE_EXPRESSION
                                             PsiElement(VlangTokenType.identifier)('json')
                                           PsiElement(VlangTokenType..)('.')
                                           PsiElement(VlangTokenType.identifier)('decode')
-                                        ARGUMENT_LIST
+                                        JSON_ARGUMENT_LIST
                                           PsiElement(VlangTokenType.()('(')
-                                          ELEMENT
-                                            VALUE
-                                              REFERENCE_EXPRESSION
-                                                REFERENCE_EXPRESSION
-                                                  PsiElement(VlangTokenType.identifier)('lsp')
-                                                PsiElement(VlangTokenType..)('.')
-                                                PsiElement(VlangTokenType.identifier)('WillSaveTextDocumentParams')
+                                          TYPE
+                                            TYPE_REFERENCE_EXPRESSION
+                                              TYPE_REFERENCE_EXPRESSION
+                                                PsiElement(VlangTokenType.identifier)('lsp')
+                                              PsiElement(VlangTokenType..)('.')
+                                              PsiElement(VlangTokenType.identifier)('WillSaveTextDocumentParams')
                                           PsiElement(VlangTokenType.,)(',')
                                           ELEMENT
                                             VALUE
@@ -1867,21 +1862,20 @@ V Language file
                                       PsiElement(VlangTokenType.identifier)('params')
                                     PsiElement(VlangTokenType.:=)(':=')
                                     OR_BLOCK_EXPR
-                                      CALL_EXPR
+                                      JSON_CALL_EXPR
                                         REFERENCE_EXPRESSION
                                           REFERENCE_EXPRESSION
                                             PsiElement(VlangTokenType.identifier)('json')
                                           PsiElement(VlangTokenType..)('.')
                                           PsiElement(VlangTokenType.identifier)('decode')
-                                        ARGUMENT_LIST
+                                        JSON_ARGUMENT_LIST
                                           PsiElement(VlangTokenType.()('(')
-                                          ELEMENT
-                                            VALUE
-                                              REFERENCE_EXPRESSION
-                                                REFERENCE_EXPRESSION
-                                                  PsiElement(VlangTokenType.identifier)('lsp')
-                                                PsiElement(VlangTokenType..)('.')
-                                                PsiElement(VlangTokenType.identifier)('DocumentFormattingParams')
+                                          TYPE
+                                            TYPE_REFERENCE_EXPRESSION
+                                              TYPE_REFERENCE_EXPRESSION
+                                                PsiElement(VlangTokenType.identifier)('lsp')
+                                              PsiElement(VlangTokenType..)('.')
+                                              PsiElement(VlangTokenType.identifier)('DocumentFormattingParams')
                                           PsiElement(VlangTokenType.,)(',')
                                           ELEMENT
                                             VALUE
@@ -1980,21 +1974,20 @@ V Language file
                                       PsiElement(VlangTokenType.identifier)('params')
                                     PsiElement(VlangTokenType.:=)(':=')
                                     OR_BLOCK_EXPR
-                                      CALL_EXPR
+                                      JSON_CALL_EXPR
                                         REFERENCE_EXPRESSION
                                           REFERENCE_EXPRESSION
                                             PsiElement(VlangTokenType.identifier)('json')
                                           PsiElement(VlangTokenType..)('.')
                                           PsiElement(VlangTokenType.identifier)('decode')
-                                        ARGUMENT_LIST
+                                        JSON_ARGUMENT_LIST
                                           PsiElement(VlangTokenType.()('(')
-                                          ELEMENT
-                                            VALUE
-                                              REFERENCE_EXPRESSION
-                                                REFERENCE_EXPRESSION
-                                                  PsiElement(VlangTokenType.identifier)('lsp')
-                                                PsiElement(VlangTokenType..)('.')
-                                                PsiElement(VlangTokenType.identifier)('DocumentSymbolParams')
+                                          TYPE
+                                            TYPE_REFERENCE_EXPRESSION
+                                              TYPE_REFERENCE_EXPRESSION
+                                                PsiElement(VlangTokenType.identifier)('lsp')
+                                              PsiElement(VlangTokenType..)('.')
+                                              PsiElement(VlangTokenType.identifier)('DocumentSymbolParams')
                                           PsiElement(VlangTokenType.,)(',')
                                           ELEMENT
                                             VALUE
@@ -2134,21 +2127,20 @@ V Language file
                                       PsiElement(VlangTokenType.identifier)('params')
                                     PsiElement(VlangTokenType.:=)(':=')
                                     OR_BLOCK_EXPR
-                                      CALL_EXPR
+                                      JSON_CALL_EXPR
                                         REFERENCE_EXPRESSION
                                           REFERENCE_EXPRESSION
                                             PsiElement(VlangTokenType.identifier)('json')
                                           PsiElement(VlangTokenType..)('.')
                                           PsiElement(VlangTokenType.identifier)('decode')
-                                        ARGUMENT_LIST
+                                        JSON_ARGUMENT_LIST
                                           PsiElement(VlangTokenType.()('(')
-                                          ELEMENT
-                                            VALUE
-                                              REFERENCE_EXPRESSION
-                                                REFERENCE_EXPRESSION
-                                                  PsiElement(VlangTokenType.identifier)('lsp')
-                                                PsiElement(VlangTokenType..)('.')
-                                                PsiElement(VlangTokenType.identifier)('SignatureHelpParams')
+                                          TYPE
+                                            TYPE_REFERENCE_EXPRESSION
+                                              TYPE_REFERENCE_EXPRESSION
+                                                PsiElement(VlangTokenType.identifier)('lsp')
+                                              PsiElement(VlangTokenType..)('.')
+                                              PsiElement(VlangTokenType.identifier)('SignatureHelpParams')
                                           PsiElement(VlangTokenType.,)(',')
                                           ELEMENT
                                             VALUE
@@ -2247,21 +2239,20 @@ V Language file
                                       PsiElement(VlangTokenType.identifier)('params')
                                     PsiElement(VlangTokenType.:=)(':=')
                                     OR_BLOCK_EXPR
-                                      CALL_EXPR
+                                      JSON_CALL_EXPR
                                         REFERENCE_EXPRESSION
                                           REFERENCE_EXPRESSION
                                             PsiElement(VlangTokenType.identifier)('json')
                                           PsiElement(VlangTokenType..)('.')
                                           PsiElement(VlangTokenType.identifier)('decode')
-                                        ARGUMENT_LIST
+                                        JSON_ARGUMENT_LIST
                                           PsiElement(VlangTokenType.()('(')
-                                          ELEMENT
-                                            VALUE
-                                              REFERENCE_EXPRESSION
-                                                REFERENCE_EXPRESSION
-                                                  PsiElement(VlangTokenType.identifier)('lsp')
-                                                PsiElement(VlangTokenType..)('.')
-                                                PsiElement(VlangTokenType.identifier)('CompletionParams')
+                                          TYPE
+                                            TYPE_REFERENCE_EXPRESSION
+                                              TYPE_REFERENCE_EXPRESSION
+                                                PsiElement(VlangTokenType.identifier)('lsp')
+                                              PsiElement(VlangTokenType..)('.')
+                                              PsiElement(VlangTokenType.identifier)('CompletionParams')
                                           PsiElement(VlangTokenType.,)(',')
                                           ELEMENT
                                             VALUE
@@ -2360,21 +2351,20 @@ V Language file
                                       PsiElement(VlangTokenType.identifier)('params')
                                     PsiElement(VlangTokenType.:=)(':=')
                                     OR_BLOCK_EXPR
-                                      CALL_EXPR
+                                      JSON_CALL_EXPR
                                         REFERENCE_EXPRESSION
                                           REFERENCE_EXPRESSION
                                             PsiElement(VlangTokenType.identifier)('json')
                                           PsiElement(VlangTokenType..)('.')
                                           PsiElement(VlangTokenType.identifier)('decode')
-                                        ARGUMENT_LIST
+                                        JSON_ARGUMENT_LIST
                                           PsiElement(VlangTokenType.()('(')
-                                          ELEMENT
-                                            VALUE
-                                              REFERENCE_EXPRESSION
-                                                REFERENCE_EXPRESSION
-                                                  PsiElement(VlangTokenType.identifier)('lsp')
-                                                PsiElement(VlangTokenType..)('.')
-                                                PsiElement(VlangTokenType.identifier)('HoverParams')
+                                          TYPE
+                                            TYPE_REFERENCE_EXPRESSION
+                                              TYPE_REFERENCE_EXPRESSION
+                                                PsiElement(VlangTokenType.identifier)('lsp')
+                                              PsiElement(VlangTokenType..)('.')
+                                              PsiElement(VlangTokenType.identifier)('HoverParams')
                                           PsiElement(VlangTokenType.,)(',')
                                           ELEMENT
                                             VALUE
@@ -2473,21 +2463,20 @@ V Language file
                                       PsiElement(VlangTokenType.identifier)('params')
                                     PsiElement(VlangTokenType.:=)(':=')
                                     OR_BLOCK_EXPR
-                                      CALL_EXPR
+                                      JSON_CALL_EXPR
                                         REFERENCE_EXPRESSION
                                           REFERENCE_EXPRESSION
                                             PsiElement(VlangTokenType.identifier)('json')
                                           PsiElement(VlangTokenType..)('.')
                                           PsiElement(VlangTokenType.identifier)('decode')
-                                        ARGUMENT_LIST
+                                        JSON_ARGUMENT_LIST
                                           PsiElement(VlangTokenType.()('(')
-                                          ELEMENT
-                                            VALUE
-                                              REFERENCE_EXPRESSION
-                                                REFERENCE_EXPRESSION
-                                                  PsiElement(VlangTokenType.identifier)('lsp')
-                                                PsiElement(VlangTokenType..)('.')
-                                                PsiElement(VlangTokenType.identifier)('FoldingRangeParams')
+                                          TYPE
+                                            TYPE_REFERENCE_EXPRESSION
+                                              TYPE_REFERENCE_EXPRESSION
+                                                PsiElement(VlangTokenType.identifier)('lsp')
+                                              PsiElement(VlangTokenType..)('.')
+                                              PsiElement(VlangTokenType.identifier)('FoldingRangeParams')
                                           PsiElement(VlangTokenType.,)(',')
                                           ELEMENT
                                             VALUE
@@ -2586,21 +2575,20 @@ V Language file
                                       PsiElement(VlangTokenType.identifier)('params')
                                     PsiElement(VlangTokenType.:=)(':=')
                                     OR_BLOCK_EXPR
-                                      CALL_EXPR
+                                      JSON_CALL_EXPR
                                         REFERENCE_EXPRESSION
                                           REFERENCE_EXPRESSION
                                             PsiElement(VlangTokenType.identifier)('json')
                                           PsiElement(VlangTokenType..)('.')
                                           PsiElement(VlangTokenType.identifier)('decode')
-                                        ARGUMENT_LIST
+                                        JSON_ARGUMENT_LIST
                                           PsiElement(VlangTokenType.()('(')
-                                          ELEMENT
-                                            VALUE
-                                              REFERENCE_EXPRESSION
-                                                REFERENCE_EXPRESSION
-                                                  PsiElement(VlangTokenType.identifier)('lsp')
-                                                PsiElement(VlangTokenType..)('.')
-                                                PsiElement(VlangTokenType.identifier)('TextDocumentPositionParams')
+                                          TYPE
+                                            TYPE_REFERENCE_EXPRESSION
+                                              TYPE_REFERENCE_EXPRESSION
+                                                PsiElement(VlangTokenType.identifier)('lsp')
+                                              PsiElement(VlangTokenType..)('.')
+                                              PsiElement(VlangTokenType.identifier)('TextDocumentPositionParams')
                                           PsiElement(VlangTokenType.,)(',')
                                           ELEMENT
                                             VALUE
@@ -2699,21 +2687,20 @@ V Language file
                                       PsiElement(VlangTokenType.identifier)('params')
                                     PsiElement(VlangTokenType.:=)(':=')
                                     OR_BLOCK_EXPR
-                                      CALL_EXPR
+                                      JSON_CALL_EXPR
                                         REFERENCE_EXPRESSION
                                           REFERENCE_EXPRESSION
                                             PsiElement(VlangTokenType.identifier)('json')
                                           PsiElement(VlangTokenType..)('.')
                                           PsiElement(VlangTokenType.identifier)('decode')
-                                        ARGUMENT_LIST
+                                        JSON_ARGUMENT_LIST
                                           PsiElement(VlangTokenType.()('(')
-                                          ELEMENT
-                                            VALUE
-                                              REFERENCE_EXPRESSION
-                                                REFERENCE_EXPRESSION
-                                                  PsiElement(VlangTokenType.identifier)('lsp')
-                                                PsiElement(VlangTokenType..)('.')
-                                                PsiElement(VlangTokenType.identifier)('TextDocumentPositionParams')
+                                          TYPE
+                                            TYPE_REFERENCE_EXPRESSION
+                                              TYPE_REFERENCE_EXPRESSION
+                                                PsiElement(VlangTokenType.identifier)('lsp')
+                                              PsiElement(VlangTokenType..)('.')
+                                              PsiElement(VlangTokenType.identifier)('TextDocumentPositionParams')
                                           PsiElement(VlangTokenType.,)(',')
                                           ELEMENT
                                             VALUE
@@ -2812,21 +2799,20 @@ V Language file
                                       PsiElement(VlangTokenType.identifier)('params')
                                     PsiElement(VlangTokenType.:=)(':=')
                                     DOT_EXPRESSION
-                                      CALL_EXPR
+                                      JSON_CALL_EXPR
                                         REFERENCE_EXPRESSION
                                           REFERENCE_EXPRESSION
                                             PsiElement(VlangTokenType.identifier)('json')
                                           PsiElement(VlangTokenType..)('.')
                                           PsiElement(VlangTokenType.identifier)('decode')
-                                        ARGUMENT_LIST
+                                        JSON_ARGUMENT_LIST
                                           PsiElement(VlangTokenType.()('(')
-                                          ELEMENT
-                                            VALUE
-                                              REFERENCE_EXPRESSION
-                                                REFERENCE_EXPRESSION
-                                                  PsiElement(VlangTokenType.identifier)('lsp')
-                                                PsiElement(VlangTokenType..)('.')
-                                                PsiElement(VlangTokenType.identifier)('DidChangeWatchedFilesParams')
+                                          TYPE
+                                            TYPE_REFERENCE_EXPRESSION
+                                              TYPE_REFERENCE_EXPRESSION
+                                                PsiElement(VlangTokenType.identifier)('lsp')
+                                              PsiElement(VlangTokenType..)('.')
+                                              PsiElement(VlangTokenType.identifier)('DidChangeWatchedFilesParams')
                                           PsiElement(VlangTokenType.,)(',')
                                           ELEMENT
                                             VALUE
@@ -3112,21 +3098,20 @@ V Language file
                                         PsiElement(VlangTokenType.identifier)('params')
                                       PsiElement(VlangTokenType.:=)(':=')
                                       DOT_EXPRESSION
-                                        CALL_EXPR
+                                        JSON_CALL_EXPR
                                           REFERENCE_EXPRESSION
                                             REFERENCE_EXPRESSION
                                               PsiElement(VlangTokenType.identifier)('json')
                                             PsiElement(VlangTokenType..)('.')
                                             PsiElement(VlangTokenType.identifier)('decode')
-                                          ARGUMENT_LIST
+                                          JSON_ARGUMENT_LIST
                                             PsiElement(VlangTokenType.()('(')
-                                            ELEMENT
-                                              VALUE
-                                                REFERENCE_EXPRESSION
-                                                  REFERENCE_EXPRESSION
-                                                    PsiElement(VlangTokenType.identifier)('lsp')
-                                                  PsiElement(VlangTokenType..)('.')
-                                                  PsiElement(VlangTokenType.identifier)('InitializeParams')
+                                            TYPE
+                                              TYPE_REFERENCE_EXPRESSION
+                                                TYPE_REFERENCE_EXPRESSION
+                                                  PsiElement(VlangTokenType.identifier)('lsp')
+                                                PsiElement(VlangTokenType..)('.')
+                                                PsiElement(VlangTokenType.identifier)('InitializeParams')
                                             PsiElement(VlangTokenType.,)(',')
                                             ELEMENT
                                               VALUE

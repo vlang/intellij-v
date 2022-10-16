@@ -763,7 +763,7 @@ left QualifiedReferenceExpression ::= semi? '.' identifier {elementType=Referenc
 private RightHandExprs ::= RightHandExpr*
 
 private RightHandExpr ::=
-    CallExpr
+    (<<callExpr>> | (!() CallExpr))
   | IndexOrSliceExpr
   | QualifiedReferenceExpression
   | OrBlockExpr
@@ -773,6 +773,18 @@ private RightHandExpr ::=
 // <expr>[<<generics>>](...)
 left CallExpr ::= GenericArguments? ArgumentList {
   methods=[getParameters]
+}
+
+// noinspection BnfUnusedRule
+// used in <<callExpr>>
+left JsonCallExpr ::= JsonArgumentList {
+  methods=[getParameters]
+  extends=CallExpr
+}
+
+JsonArgumentList ::= '(' <<enterMode "PAR">> Type ','? ElementList? '...'? ','? <<exitModeSafe "PAR">> ')' {
+  pin=1
+  extends=ArgumentList
 }
 
 // <expr>[<expr>]

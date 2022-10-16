@@ -15,4 +15,5 @@ class TypeTest : TypeTestBase() {
     fun `test if guard`() = doTest("if_guard.v")
     fun `test select`() = doTest("select.v")
     fun `test pointer`() = doTest("pointer.v")
+    fun `test json decode`() = doTestWithBuiltin("json_decode.v")
 }

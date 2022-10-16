@@ -372,6 +372,14 @@ public class VlangVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitJsonArgumentList(@NotNull VlangJsonArgumentList o) {
+    visitArgumentList(o);
+  }
+
+  public void visitJsonCallExpr(@NotNull VlangJsonCallExpr o) {
+    visitCallExpr(o);
+  }
+
   public void visitKey(@NotNull VlangKey o) {
     visitCompositeElement(o);
   }

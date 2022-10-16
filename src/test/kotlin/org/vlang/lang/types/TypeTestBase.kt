@@ -2,6 +2,7 @@ package org.vlang.lang.types
 
 import com.intellij.psi.PsiElement
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
 import org.vlang.lang.psi.VlangCallExpr
 import org.vlang.lang.psi.VlangStringLiteral
 import org.vlang.lang.psi.VlangTypeOwner
@@ -17,10 +18,21 @@ abstract class TypeTestBase : BasePlatformTestCase() {
         runTypeTest(fixtureFiles)
     }
 
+    protected open fun doTestWithBuiltin(vararg fixtureFiles: String) {
+        setupBuiltin()
+        myFixture.configureByFiles(*fixtureFiles)
+        runTypeTest(fixtureFiles)
+    }
+
     protected fun runTypeTest(fixtureFiles: Array<out String>) {
         findExprTypeCalls(fixtureFiles).forEach { call ->
             checkExprTypeCall(call)
         }
+    }
+
+    protected fun setupBuiltin() {
+        myFixture.copyDirectoryToProject("json", "json")
+        myFixture.project.projectSettings.stdlibLocation = myFixture.testDataPath
     }
 
     private inline fun <reified T> PsiElement.findChildren(crossinline condition: (PsiElement) -> Boolean): List<T> {

@@ -772,6 +772,11 @@ object VlangPsiImplUtil {
             return expr.type
         }
 
+        // json.decode() call
+        if (expr is VlangJsonCallExpr) {
+            return expr.jsonArgumentList.type
+        }
+
         if (expr is VlangCallExpr) {
             val callRef = expr.expression as? VlangReferenceExpression
             if (VlangCodeInsightUtil.isTypeCast(expr)) {
