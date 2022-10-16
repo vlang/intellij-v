@@ -77,7 +77,8 @@ V Language file
                       VAR_DECLARATION
                         VAR_DEFINITION
                           VAR_MODIFIERS
-                            PsiElement(VlangTokenType.mut)('mut')
+                            VAR_MODIFIER
+                              PsiElement(VlangTokenType.mut)('mut')
                           PsiElement(VlangTokenType.identifier)('arr')
                         PsiElement(VlangTokenType.:=)(':=')
                         LITERAL_VALUE_EXPRESSION

@@ -56,4 +56,9 @@ public class VlangFieldDefinitionImpl extends VlangNamedElementImpl<VlangFieldDe
     return VlangPsiImplUtil.isMutable(this);
   }
 
+  @Override
+  public void makeMutable() {
+    VlangPsiImplUtil.makeMutable(this);
+  }
+
 }

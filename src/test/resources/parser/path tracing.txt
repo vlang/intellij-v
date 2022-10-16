@@ -1060,7 +1060,8 @@ V Language file
         VAR_DECLARATION
           VAR_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('f_out')
           PsiElement(VlangTokenType.:=)(':=')
           OR_BLOCK_EXPR
@@ -1557,7 +1558,8 @@ V Language file
         VAR_DECLARATION
           VAR_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('det')
           PsiElement(VlangTokenType.:=)(':=')
           ADD_EXPR
@@ -1635,7 +1637,8 @@ V Language file
         VAR_DECLARATION
           VAR_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('t')
           PsiElement(VlangTokenType.:=)(':=')
           ADD_EXPR
@@ -4282,7 +4285,8 @@ V Language file
         VAR_DECLARATION
           VAR_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('d')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL
@@ -4291,7 +4295,8 @@ V Language file
         VAR_DECLARATION
           VAR_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('t')
           PsiElement(VlangTokenType.:=)(':=')
           REFERENCE_EXPRESSION
@@ -4300,7 +4305,8 @@ V Language file
         VAR_DECLARATION
           VAR_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('id')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL
@@ -4550,7 +4556,8 @@ V Language file
         VAR_DECLARATION
           VAR_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('c')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
@@ -4800,7 +4807,8 @@ V Language file
         VAR_DECLARATION
           VAR_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('depth')
           PsiElement(VlangTokenType.:=)(':=')
           REFERENCE_EXPRESSION
@@ -4810,7 +4818,8 @@ V Language file
         VAR_DECLARATION
           VAR_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('t')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL
@@ -4820,7 +4829,8 @@ V Language file
         VAR_DECLARATION
           VAR_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('id')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL
@@ -4830,7 +4840,8 @@ V Language file
         VAR_DECLARATION
           VAR_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('res')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL
@@ -5052,7 +5063,8 @@ V Language file
         VAR_DECLARATION
           VAR_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('f')
           PsiElement(VlangTokenType.:=)(':=')
           REFERENCE_EXPRESSION
@@ -5065,7 +5077,8 @@ V Language file
         VAR_DECLARATION
           VAR_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('p')
           PsiElement(VlangTokenType.:=)(':=')
           REFERENCE_EXPRESSION
@@ -5319,7 +5332,8 @@ V Language file
                 VAR_DECLARATION
                   VAR_DEFINITION
                     VAR_MODIFIERS
-                      PsiElement(VlangTokenType.mut)('mut')
+                      VAR_MODIFIER
+                        PsiElement(VlangTokenType.mut)('mut')
                     PsiElement(VlangTokenType.identifier)('u')
                   PsiElement(VlangTokenType.:=)(':=')
                   IF_EXPRESSION
@@ -6306,7 +6320,8 @@ V Language file
         VAR_DECLARATION
           VAR_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('tmp')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
@@ -6881,7 +6896,8 @@ V Language file
         VAR_DECLARATION
           VAR_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('r')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
@@ -7118,7 +7134,8 @@ V Language file
                 VAR_DECLARATION
                   VAR_DEFINITION
                     VAR_MODIFIERS
-                      PsiElement(VlangTokenType.mut)('mut')
+                      VAR_MODIFIER
+                        PsiElement(VlangTokenType.mut)('mut')
                     PsiElement(VlangTokenType.identifier)('ivec')
                   PsiElement(VlangTokenType.:=)(':=')
                   UNSAFE_EXPRESSION
@@ -7777,7 +7794,8 @@ V Language file
         VAR_DECLARATION
           VAR_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('width')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL
@@ -7787,7 +7805,8 @@ V Language file
         VAR_DECLARATION
           VAR_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('height')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL
@@ -7797,7 +7816,8 @@ V Language file
         VAR_DECLARATION
           VAR_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('samples')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL
@@ -7807,7 +7827,8 @@ V Language file
         VAR_DECLARATION
           VAR_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('scene_id')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL
@@ -7817,7 +7838,8 @@ V Language file
         VAR_DECLARATION
           VAR_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('file_name')
           PsiElement(VlangTokenType.:=)(':=')
           STRING_LITERAL

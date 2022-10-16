@@ -19,4 +19,6 @@ public interface VlangFieldDefinition extends VlangMutable, VlangNamedElement, S
 
   boolean isMutable();
 
+  void makeMutable();
+
 }

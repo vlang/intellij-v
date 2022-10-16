@@ -35,7 +35,8 @@ V Language file
         VAR_DECLARATION
           VAR_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('arr')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
@@ -263,7 +264,8 @@ V Language file
         PARAMETER_DECLARATION
           PARAM_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('arr')
           ARRAY_OR_SLICE_TYPE
             PsiElement(VlangTokenType.[)('[')
@@ -311,7 +313,8 @@ V Language file
         VAR_DECLARATION
           VAR_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('sep')
           PsiElement(VlangTokenType.:=)(':=')
           REFERENCE_EXPRESSION

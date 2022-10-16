@@ -506,7 +506,8 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitParamDefinition(@NotNull VlangParamDefinition o) {
-    visitNamedElement(o);
+    visitMutable(o);
+    // visitNamedElement(o);
   }
 
   public void visitParameterDeclaration(@NotNull VlangParameterDeclaration o) {
@@ -700,6 +701,10 @@ public class VlangVisitor extends PsiElementVisitor {
   public void visitVarDefinition(@NotNull VlangVarDefinition o) {
     visitMutable(o);
     // visitNamedElement(o);
+  }
+
+  public void visitVarModifier(@NotNull VlangVarModifier o) {
+    visitCompositeElement(o);
   }
 
   public void visitVarModifiers(@NotNull VlangVarModifiers o) {

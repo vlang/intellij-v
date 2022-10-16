@@ -41,7 +41,8 @@ V Language file
         VAR_DECLARATION
           VAR_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('f')
           PsiElement(VlangTokenType.:=)(':=')
           CALL_EXPR
@@ -117,7 +118,8 @@ V Language file
             VAR_DECLARATION
               VAR_DEFINITION
                 VAR_MODIFIERS
-                  PsiElement(VlangTokenType.mut)('mut')
+                  VAR_MODIFIER
+                    PsiElement(VlangTokenType.mut)('mut')
                 PsiElement(VlangTokenType.identifier)('j')
               PsiElement(VlangTokenType.:=)(':=')
               LITERAL
@@ -126,7 +128,8 @@ V Language file
             VAR_DECLARATION
               VAR_DEFINITION
                 VAR_MODIFIERS
-                  PsiElement(VlangTokenType.mut)('mut')
+                  VAR_MODIFIER
+                    PsiElement(VlangTokenType.mut)('mut')
                 PsiElement(VlangTokenType.identifier)('fj1')
               PsiElement(VlangTokenType.:=)(':=')
               INDEX_OR_SLICE_EXPR
@@ -163,7 +166,8 @@ V Language file
                 VAR_DECLARATION
                   VAR_DEFINITION
                     VAR_MODIFIERS
-                      PsiElement(VlangTokenType.mut)('mut')
+                      VAR_MODIFIER
+                        PsiElement(VlangTokenType.mut)('mut')
                     PsiElement(VlangTokenType.identifier)('mn')
                   PsiElement(VlangTokenType.:=)(':=')
                   IF_EXPRESSION
@@ -692,7 +696,8 @@ V Language file
         VAR_DECLARATION
           VAR_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('first_bigrams')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
@@ -811,7 +816,8 @@ V Language file
         VAR_DECLARATION
           VAR_DEFINITION
             VAR_MODIFIERS
-              PsiElement(VlangTokenType.mut)('mut')
+              VAR_MODIFIER
+                PsiElement(VlangTokenType.mut)('mut')
             PsiElement(VlangTokenType.identifier)('intersection_size')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL

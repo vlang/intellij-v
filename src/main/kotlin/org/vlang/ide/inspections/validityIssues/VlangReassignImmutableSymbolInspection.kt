@@ -35,6 +35,21 @@ class VlangReassignImmutableSymbolInspection : VlangBaseInspection() {
                         )
                     }
 
+                    if (symbol is VlangParamDefinition && !symbol.isMutable()) {
+                        holder.registerProblem(
+                            leftExpr,
+                            "Immutable parameter '${symbol.name}' cannot be reassigned",
+                            MAKE_MUTABLE_QUICK_FIX
+                        )
+                    }
+
+                    if (symbol is VlangFieldDefinition && !symbol.isMutable()) {
+                        holder.registerProblem(
+                            leftExpr.getIdentifier(),
+                            "Immutable field '${symbol.name}' cannot be reassigned",
+                        )
+                    }
+
                     if (symbol is VlangConstDefinition) {
                         holder.registerProblem(
                             leftExpr,
@@ -52,12 +67,8 @@ class VlangReassignImmutableSymbolInspection : VlangBaseInspection() {
 
             override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
                 val ref = descriptor.psiElement as? VlangReferenceExpression ?: return
-                val resolved = ref.resolve() ?: return
-                if (resolved is VlangVarDefinition) {
-                    resolved.makeMutable()
-                } else if (resolved is VlangReceiver) {
-                    resolved.makeMutable()
-                }
+                val resolved = ref.resolve() as? VlangMutable ?: return
+                resolved.makeMutable()
             }
         }
     }

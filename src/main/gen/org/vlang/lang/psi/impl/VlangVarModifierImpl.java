@@ -2,23 +2,24 @@
 package org.vlang.lang.psi.impl;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
-import org.vlang.lang.psi.VlangPsiTreeUtil;
+import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.VlangVarModifier;
-import org.vlang.lang.psi.VlangVarModifiers;
 import org.vlang.lang.psi.VlangVisitor;
 
-import java.util.List;
+import static org.vlang.lang.VlangTypes.MUT;
+import static org.vlang.lang.VlangTypes.SHARED;
 
-public class VlangVarModifiersImpl extends VlangCompositeElementImpl implements VlangVarModifiers {
+public class VlangVarModifierImpl extends VlangCompositeElementImpl implements VlangVarModifier {
 
-  public VlangVarModifiersImpl(@NotNull ASTNode node) {
+  public VlangVarModifierImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitVarModifiers(this);
+    visitor.visitVarModifier(this);
   }
 
   @Override
@@ -28,9 +29,15 @@ public class VlangVarModifiersImpl extends VlangCompositeElementImpl implements 
   }
 
   @Override
-  @NotNull
-  public List<VlangVarModifier> getVarModifierList() {
-    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangVarModifier.class);
+  @Nullable
+  public PsiElement getMut() {
+    return findChildByType(MUT);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getShared() {
+    return findChildByType(SHARED);
   }
 
 }

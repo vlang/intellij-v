@@ -180,6 +180,7 @@ public interface VlangTypes {
   IElementType VALUE = new VlangCompositeElementType("VALUE");
   IElementType VAR_DECLARATION = new VlangCompositeElementType("VAR_DECLARATION");
   IElementType VAR_DEFINITION = VlangElementTypeFactory.stubFactory("VAR_DEFINITION");
+  IElementType VAR_MODIFIER = new VlangCompositeElementType("VAR_MODIFIER");
   IElementType VAR_MODIFIERS = new VlangCompositeElementType("VAR_MODIFIERS");
 
   IElementType AS = new VlangTokenType("as");
@@ -819,6 +820,9 @@ public interface VlangTypes {
       }
       else if (type == VAR_DEFINITION) {
         return new VlangVarDefinitionImpl(node);
+      }
+      else if (type == VAR_MODIFIER) {
+        return new VlangVarModifierImpl(node);
       }
       else if (type == VAR_MODIFIERS) {
         return new VlangVarModifiersImpl(node);

@@ -39,17 +39,7 @@ object VlangElementFactory {
 
     fun createVarModifiers(project: Project, name: String): VlangVarModifiers {
         val file = createFileFromText(project, "fn main() { $name a := 100 }")
-
-        var modifiers: VlangVarModifiers? = null
-        PsiTreeUtil.processElements(file) { element ->
-            if (element is VlangVarModifiers) {
-                modifiers = element
-                return@processElements false
-            }
-            true
-        }
-
-        return modifiers!!
+        return PsiTreeUtil.findChildOfType(file, VlangVarModifiers::class.java)!!
     }
 
     fun createComma(project: Project): PsiElement {

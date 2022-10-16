@@ -84,7 +84,8 @@ V Language file
                             PARAMETER_DECLARATION
                               PARAM_DEFINITION
                                 VAR_MODIFIERS
-                                  PsiElement(VlangTokenType.mut)('mut')
+                                  VAR_MODIFIER
+                                    PsiElement(VlangTokenType.mut)('mut')
                                 PsiElement(VlangTokenType.identifier)('ctx')
                               TYPE
                                 TYPE_REFERENCE_EXPRESSION
@@ -153,7 +154,8 @@ V Language file
               PsiElement(VlangTokenType.[)('[')
               CAPTURE
                 VAR_MODIFIERS
-                  PsiElement(VlangTokenType.mut)('mut')
+                  VAR_MODIFIER
+                    PsiElement(VlangTokenType.mut)('mut')
                 REFERENCE_EXPRESSION
                   PsiElement(VlangTokenType.identifier)('ctx')
               PsiElement(VlangTokenType.])(']')

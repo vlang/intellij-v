@@ -3,7 +3,6 @@ package org.vlang.ide.documentation
 import com.intellij.lang.documentation.DocumentationMarkup
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.util.elementType
 import com.intellij.psi.util.parentOfType
 import io.ktor.util.*
@@ -77,23 +76,20 @@ object DocumentationGenerator {
     }
 
     private fun VlangVarModifiers.generateDoc(noHtml: Boolean = false): String {
-        var child = firstChild
-        val sb = StringBuilder()
-        while (child != null) {
-            if (child is PsiWhiteSpace) {
-                child = child.nextSibling
-                continue
-            }
+        val modifiers = varModifierList
+        val isMutable = modifiers.any { it.mut != null }
+        val isShared = modifiers.any { it.shared != null }
 
-            when (child.text) {
-                "mut"    -> sb.colorize("mutable", asKeyword, noHtml)
-                "shared" -> sb.colorize(child.text, asKeyword, noHtml)
+        return buildString {
+            if (isMutable) {
+                colorize("mutable", asKeyword, noHtml)
+                append(" ")
             }
-            sb.append(" ")
-            child = child.nextSibling
+            if (isShared) {
+                colorize("shared", asKeyword, noHtml)
+                append(" ")
+            }
         }
-
-        return sb.toString()
     }
 
     private fun VlangMemberModifiers?.generateDoc(element: VlangNamedElement): String {

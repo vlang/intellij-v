@@ -303,6 +303,11 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun makeMutable(o: VlangFieldDefinition) {
+        // TODO: implement
+    }
+
+    @JvmStatic
     fun isPublic(o: VlangFieldDefinition): Boolean {
         if (o.parentOfType<VlangInterfaceType>() != null) {
             return true
@@ -916,6 +921,17 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun getSymbolVisibility(o: VlangConstDefinition): VlangSymbolVisibility? {
         return (o.parent as? VlangConstDeclaration)?.symbolVisibility
+    }
+
+    @JvmStatic
+    fun isMutable(o: VlangParamDefinition): Boolean {
+        val modifiers = o.varModifiers ?: return false
+        return modifiers.text.contains("mut")
+    }
+
+    @JvmStatic
+    fun makeMutable(o: VlangParamDefinition) {
+        makeMutable(o.project, o.varModifiers)
     }
 
     @JvmStatic

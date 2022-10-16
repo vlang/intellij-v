@@ -462,7 +462,8 @@ V Language file
                     VAR_DECLARATION
                       VAR_DEFINITION
                         VAR_MODIFIERS
-                          PsiElement(VlangTokenType.mut)('mut')
+                          VAR_MODIFIER
+                            PsiElement(VlangTokenType.mut)('mut')
                         PsiElement(VlangTokenType.identifier)('str')
                       PsiElement(VlangTokenType.:=)(':=')
                       STRING_LITERAL
@@ -596,7 +597,8 @@ V Language file
                     VAR_DECLARATION
                       VAR_DEFINITION
                         VAR_MODIFIERS
-                          PsiElement(VlangTokenType.mut)('mut')
+                          VAR_MODIFIER
+                            PsiElement(VlangTokenType.mut)('mut')
                         PsiElement(VlangTokenType.identifier)('str')
                       PsiElement(VlangTokenType.:=)(':=')
                       STRING_LITERAL
@@ -1065,7 +1067,8 @@ V Language file
                     VAR_DECLARATION
                       VAR_DEFINITION
                         VAR_MODIFIERS
-                          PsiElement(VlangTokenType.mut)('mut')
+                          VAR_MODIFIER
+                            PsiElement(VlangTokenType.mut)('mut')
                         PsiElement(VlangTokenType.identifier)('jmap')
                       PsiElement(VlangTokenType.:=)(':=')
                       LITERAL_VALUE_EXPRESSION
@@ -1144,7 +1147,8 @@ V Language file
                     VAR_DECLARATION
                       VAR_DEFINITION
                         VAR_MODIFIERS
-                          PsiElement(VlangTokenType.mut)('mut')
+                          VAR_MODIFIER
+                            PsiElement(VlangTokenType.mut)('mut')
                         PsiElement(VlangTokenType.identifier)('jarr')
                       PsiElement(VlangTokenType.:=)(':=')
                       LITERAL_VALUE_EXPRESSION

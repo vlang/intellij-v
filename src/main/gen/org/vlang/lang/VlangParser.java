@@ -4980,26 +4980,30 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (mut | shared)*
+  // mut | shared
+  public static boolean VarModifier(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "VarModifier")) return false;
+    if (!nextTokenIs(b, "<var modifier>", MUT, SHARED)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, VAR_MODIFIER, "<var modifier>");
+    r = consumeToken(b, MUT);
+    if (!r) r = consumeToken(b, SHARED);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // VarModifier*
   public static boolean VarModifiers(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "VarModifiers")) return false;
     Marker m = enter_section_(b, l, _NONE_, VAR_MODIFIERS, "<var modifiers>");
     while (true) {
       int c = current_position_(b);
-      if (!VarModifiers_0(b, l + 1)) break;
+      if (!VarModifier(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "VarModifiers", c)) break;
     }
     exit_section_(b, l, m, true, false, null);
     return true;
-  }
-
-  // mut | shared
-  private static boolean VarModifiers_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "VarModifiers_0")) return false;
-    boolean r;
-    r = consumeToken(b, MUT);
-    if (!r) r = consumeToken(b, SHARED);
-    return r;
   }
 
   /* ********************************************************** */

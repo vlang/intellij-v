@@ -388,7 +388,7 @@ DefaultFieldValue ::= '=' Expression
 Tag ::= StringLiteral
 private FieldDefinitionList ::= FieldDefinition (',' FieldDefinition)*
 FieldDefinition ::= identifier {
-  methods=[getQualifier isPublic isMutable]
+  methods=[getQualifier isPublic isMutable makeMutable]
   implements="org.vlang.lang.psi.VlangMutable"
   stubClass="org.vlang.lang.stubs.VlangFieldDefinitionStub"
 }
@@ -518,7 +518,8 @@ GlobalVariableDefinition ::= identifier (VarModifiers Type | GlobalVariableValue
 
 private GlobalVariableValue ::= '=' (<<withOff Expression "BLOCK?">> | (!() Expression)) { pin=1 }
 
-VarModifiers ::= (mut | shared)*
+VarModifiers ::= VarModifier*
+VarModifier ::= mut | shared
 
 SymbolVisibility ::= pub | BUILTIN_GLOBAL
 
@@ -707,7 +708,8 @@ ParameterDeclaration ::= (ParamDefinitionListNoPin? '...'? Type) | Type { // tod
 private ParamDefinitionListNoPin ::= ParamDefinition &(!('.' | ')')) (',' ParamDefinition)* // todo
 ParamDefinition ::= VarModifiers? identifier {
   stubClass="org.vlang.lang.stubs.VlangParamDefinitionStub"
-  methods = [isVariadic getName isPublic]
+  implements="org.vlang.lang.psi.VlangMutable"
+  methods = [isVariadic getName isPublic isMutable makeMutable]
 }
 TypeListNoPin ::= Type (',' Type)* ','?
 // end of signature

@@ -51,7 +51,8 @@ V Language file
     GLOBAL_VARIABLE_DEFINITION
       PsiElement(VlangTokenType.identifier)('shmap')
       VAR_MODIFIERS
-        PsiElement(VlangTokenType.shared)('shared')
+        VAR_MODIFIER
+          PsiElement(VlangTokenType.shared)('shared')
       MAP_TYPE
         PsiElement(VlangTokenType.identifier)('map')
         PsiElement(VlangTokenType.[)('[')
@@ -165,7 +166,8 @@ V Language file
     GLOBAL_VARIABLE_DEFINITION
       PsiElement(VlangTokenType.identifier)('mys')
       VAR_MODIFIERS
-        PsiElement(VlangTokenType.shared)('shared')
+        VAR_MODIFIER
+          PsiElement(VlangTokenType.shared)('shared')
       TYPE
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('MyStruct')
@@ -182,7 +184,8 @@ V Language file
     GLOBAL_VARIABLE_DEFINITION
       PsiElement(VlangTokenType.identifier)('shmap')
       VAR_MODIFIERS
-        PsiElement(VlangTokenType.shared)('shared')
+        VAR_MODIFIER
+          PsiElement(VlangTokenType.shared)('shared')
       MAP_TYPE
         PsiElement(VlangTokenType.identifier)('map')
         PsiElement(VlangTokenType.[)('[')

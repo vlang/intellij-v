@@ -2,14 +2,22 @@ module validity
 
 const constant = 100
 
-struct Boo {}
-
-fn (mut b Boo) foo() {
-	b = Boo{}
+struct Boo {
+	name string
+mut:
+	age int
 }
 
-fn (mut b Boo) mut_foo() {
+fn (mut b Boo) foo(mut p string) {
 	b = Boo{}
+	p = ''
+	b.name = ''
+	b.age = 100
+}
+
+fn (mut b Boo) mut_foo(mut p string) {
+	b = Boo{}
+	p = ''
 }
 
 fn main() {
@@ -32,4 +40,8 @@ fn main() {
 	if mut mutable_assign := 100 {
 		mutable_assign = 200 // ok
 	}
+
+	boo := Boo{}
+	boo.name = ''
+	boo.age = 100
 }

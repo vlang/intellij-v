@@ -63,4 +63,14 @@ public class VlangParamDefinitionImpl extends VlangNamedElementImpl<VlangParamDe
     return VlangPsiImplUtil.isPublic(this);
   }
 
+  @Override
+  public boolean isMutable() {
+    return VlangPsiImplUtil.isMutable(this);
+  }
+
+  @Override
+  public void makeMutable() {
+    VlangPsiImplUtil.makeMutable(this);
+  }
+
 }

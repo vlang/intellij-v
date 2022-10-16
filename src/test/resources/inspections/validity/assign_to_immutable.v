@@ -2,14 +2,22 @@ module validity
 
 const constant = 100
 
-struct Boo {}
-
-fn (b Boo) foo() {
-	<warning descr="Immutable receiver 'b' cannot be reassigned">b</warning> = Boo{}
+struct Boo {
+	name string
+mut:
+	age int
 }
 
-fn (mut b Boo) mut_foo() {
+fn (b Boo) foo(p string) {
+	<warning descr="Immutable receiver 'b' cannot be reassigned">b</warning> = Boo{}
+	<warning descr="Immutable parameter 'p' cannot be reassigned">p</warning> = ''
+	b.<warning descr="Immutable field 'name' cannot be reassigned">name</warning> = ''
+	b.age = 100
+}
+
+fn (mut b Boo) mut_foo(mut p string) {
 	b = Boo{}
+	p = ''
 }
 
 fn main() {
@@ -32,4 +40,8 @@ fn main() {
 	if mut mutable_assign := 100 {
 		mutable_assign = 200 // ok
 	}
+
+	boo := Boo{}
+	boo.<warning descr="Immutable field 'name' cannot be reassigned">name</warning> = ''
+	boo.age = 100
 }

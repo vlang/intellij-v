@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.stubs.VlangParamDefinitionStub;
 
-public interface VlangParamDefinition extends VlangNamedElement, StubBasedPsiElement<VlangParamDefinitionStub> {
+public interface VlangParamDefinition extends VlangMutable, VlangNamedElement, StubBasedPsiElement<VlangParamDefinitionStub> {
 
   @Nullable
   VlangVarModifiers getVarModifiers();
@@ -21,5 +21,9 @@ public interface VlangParamDefinition extends VlangNamedElement, StubBasedPsiEle
   String getName();
 
   boolean isPublic();
+
+  boolean isMutable();
+
+  void makeMutable();
 
 }
