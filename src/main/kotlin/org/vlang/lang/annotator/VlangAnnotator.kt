@@ -11,6 +11,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.elementType
 import org.vlang.ide.highlight.VlangHighlightingData
+import org.vlang.ide.highlight.VlangHighlightingData.VLANG_MUTABLE_VARIABLE
 import org.vlang.lang.VlangParserDefinition
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.completion.VlangCompletionUtil
@@ -110,6 +111,12 @@ class VlangAnnotator : Annotator {
                 holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.INSTANCE_FIELD_ATTRIBUTES)
                 return
             }
+
+            if (resolvedElement is VlangVarDefinition) {
+                val attrs = if (resolvedElement.isMutable()) VLANG_MUTABLE_VARIABLE else DefaultLanguageHighlighterColors.LOCAL_VARIABLE
+                holder.textAttributes(element.getIdentifier(), attrs)
+                return
+            }
         }
 
         if (element is VlangType) {
@@ -140,6 +147,10 @@ class VlangAnnotator : Annotator {
                 is VlangReceiver                   -> holder.textAttributes(element, JavaHighlightingColors.PARAMETER_ATTRIBUTES)
                 is VlangConstDefinition            -> holder.textAttributes(element, DefaultLanguageHighlighterColors.CONSTANT)
                 is VlangInterfaceMethodDefinition  -> holder.textAttributes(element, JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES)
+                is VlangVarDefinition  -> {
+                    val attrs = if ((element.parent as VlangVarDefinition).isMutable()) VLANG_MUTABLE_VARIABLE else DefaultLanguageHighlighterColors.LOCAL_VARIABLE
+                    holder.textAttributes(element, attrs)
+                }
                 is VlangLabelDefinition            -> {
                     val parent = element.parent
                     val search = ReferencesSearch.search(parent, parent.useScope)
