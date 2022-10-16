@@ -18,4 +18,10 @@ object VlangHighlightingData {
             "VLANG_PUBLIC_FUNCTION_NAME",
             DefaultLanguageHighlighterColors.FUNCTION_DECLARATION
         )
+
+    val VLANG_MUTABLE_VARIABLE =
+        TextAttributesKey.createTextAttributesKey(
+            "VLANG_MUTABLE_VARIABLE",
+            DefaultLanguageHighlighterColors.LOCAL_VARIABLE
+        )
 }

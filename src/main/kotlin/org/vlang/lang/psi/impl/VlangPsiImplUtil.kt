@@ -825,6 +825,15 @@ object VlangPsiImplUtil {
             return VlangLightType.LightArrayType(type)
         }
 
+        if (expr is VlangMapInitExpr) {
+            val keyValues = expr.keyValues?.keyValueList ?: return null
+            val first = keyValues.firstOrNull() ?: return null
+            val value = first.valueExpr ?: return null
+            val type = value.getType(null) ?: return null
+
+            return VlangLightType.LightMapType(getBuiltinType("string", expr)!!, type)
+        }
+
         if (expr is VlangIfExpression) {
             val ifBody = expr.block
             val elseBody = expr.elseStatement?.block
@@ -1056,18 +1065,27 @@ object VlangPsiImplUtil {
             if (rightType is VlangArrayOrSliceType) {
                 return rightType.type
             }
+            if (rightType is VlangMapType) {
+                return rightType.valueType
+            }
 
             return getBuiltinType("any", o)
         }
 
         val defineIndex = varList.indexOf(o)
         if (defineIndex == 0) {
+            if (rightType is VlangMapType) {
+                return rightType.keyType
+            }
             return getBuiltinType("int", o)
         }
 
         if (defineIndex == 1) {
             if (rightType is VlangArrayOrSliceType) {
                 return rightType.type
+            }
+            if (rightType is VlangMapType) {
+                return rightType.valueType
             }
 
             return getBuiltinType("any", o)

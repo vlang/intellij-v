@@ -4,10 +4,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.impl.FakePsiElement
 import com.intellij.psi.impl.light.LightElement
-import org.vlang.lang.psi.VlangArrayOrSliceType
-import org.vlang.lang.psi.VlangCompositeElement
-import org.vlang.lang.psi.VlangPointerType
-import org.vlang.lang.psi.VlangType
+import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangPsiImplUtil.getUnderlyingType
 import org.vlang.lang.psi.impl.VlangPsiImplUtil.resolveType
 import org.vlang.lang.stubs.VlangTypeStub
@@ -50,6 +47,7 @@ abstract class VlangLightType<E : VlangCompositeElement>(
                 override fun getText(): String {
                     return "["
                 }
+
                 override fun getParent(): PsiElement {
                     return this@LightArrayType
                 }
@@ -61,8 +59,45 @@ abstract class VlangLightType<E : VlangCompositeElement>(
                 override fun getText(): String {
                     return "]"
                 }
+
                 override fun getParent(): PsiElement {
                     return this@LightArrayType
+                }
+            }
+        }
+    }
+
+    class LightMapType(private val keyType: VlangType, valueType: VlangType) : VlangLightType<VlangType>(valueType), VlangMapType {
+        override fun getText() = "[]" + element.text
+
+        override fun getType() = element
+
+        override fun getTypeList() = mutableListOf(keyType, element)
+
+        override fun getKeyType() = keyType
+
+        override fun getValueType() = element
+
+        override fun getLbrack(): PsiElement {
+            return object : FakePsiElement() {
+                override fun getText(): String {
+                    return "["
+                }
+
+                override fun getParent(): PsiElement {
+                    return this@LightMapType
+                }
+            }
+        }
+
+        override fun getRbrack(): PsiElement {
+            return object : FakePsiElement() {
+                override fun getText(): String {
+                    return "]"
+                }
+
+                override fun getParent(): PsiElement {
+                    return this@LightMapType
                 }
             }
         }

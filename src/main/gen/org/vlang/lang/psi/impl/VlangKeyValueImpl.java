@@ -5,6 +5,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.VlangExpression;
 import org.vlang.lang.psi.VlangKeyValue;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
@@ -40,6 +41,20 @@ public class VlangKeyValueImpl extends VlangCompositeElementImpl implements Vlan
   @NotNull
   public PsiElement getColon() {
     return notNullChild(findChildByType(COLON));
+  }
+
+  @Override
+  @NotNull
+  public VlangExpression getKeyExpr() {
+    List<VlangExpression> p1 = getExpressionList();
+    return p1.get(0);
+  }
+
+  @Override
+  @Nullable
+  public VlangExpression getValueExpr() {
+    List<VlangExpression> p1 = getExpressionList();
+    return p1.size() < 2 ? null : p1.get(1);
   }
 
 }

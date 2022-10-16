@@ -596,7 +596,13 @@ GoExpression ::= go Expression
 MapInitExpr ::= (<<isLastNotIs "BLOCK?">> | <<isLastIs "PAR">>) & <<prevIsNotType>> '{' KeyValues? '}' {pin=4}
 KeyValues ::= KeyValue ((semi | ',') KeyValue)* (semi | ',')? {pin=1}
 // <key> : <value>
-KeyValue ::= Expression ':' Expression {pin=2}
+KeyValue ::= Expression ':' Expression {
+  pin=2
+  methods = [
+    keyExpr="Expression[0]"
+    valueExpr="Expression[1]"
+  ]
+}
 
 // <type> {...}
 LiteralValueExpression ::= Type GenericArguments? ((<<isLastNotIs "BLOCK?">> | <<isLastIs "PAR">> | <<prevIsType>>) & <<prevIsNotFunType>>) '{' ElementList? '}' {pin=4}

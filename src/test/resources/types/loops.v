@@ -1,5 +1,7 @@
 module types
 
+struct Foo {}
+
 fn main() {
 	a := [1, 2, 3]
 	expr_type(a, '[]int')
@@ -16,5 +18,17 @@ fn main() {
 	for i, key in a {
 		expr_type(i, 'int')
 		expr_type(key, 'int')
+	}
+
+	map_value := {'': Foo{}}
+	expr_type(map_value, 'map[string]Foo')
+
+	for key in map_value {
+	    expr_type(key, 'Foo')
+	}
+
+	for key, value in map_value {
+		expr_type(key, 'string')
+		expr_type(value, 'Foo')
 	}
 }
