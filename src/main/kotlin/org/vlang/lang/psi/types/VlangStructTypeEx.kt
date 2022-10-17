@@ -6,7 +6,7 @@ import org.vlang.lang.psi.VlangCompositeElement
 import org.vlang.lang.psi.VlangStructDeclaration
 import org.vlang.lang.psi.VlangStructType
 
-class VlangStructTypeEx(raw: VlangStructType) : VlangBaseTypeEx<VlangStructType>(raw), VlangImportableType {
+class VlangStructTypeEx(raw: VlangStructType) : VlangBaseTypeEx<VlangStructType>(raw), VlangImportableTypeEx {
     private val decl = raw.parent as VlangStructDeclaration
     private val name = decl.getQualifiedName() ?: ANON
 

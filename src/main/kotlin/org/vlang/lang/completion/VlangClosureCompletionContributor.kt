@@ -9,6 +9,7 @@ import com.intellij.openapi.editor.Document
 import com.intellij.patterns.PlatformPatterns.psiElement
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.util.ProcessingContext
+import org.vlang.ide.codeInsight.VlangTypeInferenceUtil
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangLangUtil
@@ -169,9 +170,7 @@ class VlangClosureCompletionContributor : CompletionContributor() {
             }
 
             private fun tryInferTypeFromCaller(call: VlangCallExpr): VlangTypeEx<*>? {
-                val callExpression = call.expression as? VlangReferenceExpression ?: return null
-                val caller = callExpression.getQualifier() as? VlangReferenceExpression ?: return null
-                val callerType = caller.getType(null) ?: return null
+                val callerType = VlangTypeInferenceUtil.callerType(call)
                 val callerTypeEx = callerType.toEx()
                 if (callerTypeEx is VlangArrayTypeEx) {
                     return callerTypeEx.inner
@@ -216,7 +215,7 @@ class VlangClosureCompletionContributor : CompletionContributor() {
                 types.forEach { type ->
                     type.toEx().accept(object : VlangTypeVisitor {
                         override fun enter(type: VlangTypeEx<*>): Boolean {
-                            if (type is VlangImportableType) {
+                            if (type is VlangImportableTypeEx) {
                                 // type from current module no need to import
                                 if (currentModule == type.module()) {
                                     return true

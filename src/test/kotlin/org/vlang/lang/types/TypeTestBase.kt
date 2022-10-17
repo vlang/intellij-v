@@ -32,6 +32,7 @@ abstract class TypeTestBase : BasePlatformTestCase() {
 
     protected fun setupBuiltin() {
         myFixture.copyDirectoryToProject("json", "json")
+        myFixture.copyDirectoryToProject("builtin", "builtin")
         myFixture.project.projectSettings.stdlibLocation = myFixture.testDataPath
     }
 

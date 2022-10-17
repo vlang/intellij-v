@@ -108,4 +108,22 @@ abstract class VlangLightType<E : VlangCompositeElement>(
 
         override fun getType() = element
     }
+
+    class LightFunctionType(o: VlangSignatureOwner) : VlangLightType<VlangSignatureOwner>(o), VlangFunctionType {
+        override fun getSignature() = element.getSignature()
+
+        override fun getFn(): PsiElement {
+            return if (element is VlangFunctionOrMethodDeclaration)
+                (element as VlangFunctionOrMethodDeclaration).getFn()
+            else
+                element
+        }
+
+        override fun getText(): String {
+            val signature = element.getSignature()
+            return "fn " + if (signature != null) signature.text else "<null>"
+        }
+
+        override fun getType() = null
+    }
 }

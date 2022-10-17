@@ -15,8 +15,10 @@ class VlangFunctionTypeEx(raw: VlangFunctionType?, signature: VlangSignature? = 
         append("(")
         append(params.joinToString(", ") { it.toString() })
         append(")")
-        append(" ")
-        append(result)
+        if (result != null) {
+            append(" ")
+            append(result)
+        }
     }
 
     override fun readableName(context: VlangCompositeElement) = buildString {
@@ -24,8 +26,10 @@ class VlangFunctionTypeEx(raw: VlangFunctionType?, signature: VlangSignature? = 
         append("(")
         append(params.joinToString(", ") { it.readableName(context) })
         append(")")
-        append(" ")
-        append(result?.readableName(context))
+        if (result != null) {
+            append(" ")
+            append(result.readableName(context))
+        }
     }
 
     override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {

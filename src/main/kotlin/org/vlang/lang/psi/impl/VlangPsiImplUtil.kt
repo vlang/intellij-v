@@ -14,15 +14,14 @@ import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.util.*
 import org.vlang.configurations.VlangConfiguration
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
+import org.vlang.ide.codeInsight.VlangTypeInferenceUtil
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangReferenceBase.Companion.LOCAL_RESOLVE
 import org.vlang.lang.psi.impl.imports.VlangImportReference
+import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
-import org.vlang.lang.psi.types.VlangNotNullableTypeEx
-import org.vlang.lang.psi.types.VlangNullableTypeEx
-import org.vlang.lang.psi.types.VlangPointerTypeEx
 import org.vlang.utils.parentNth
 
 object VlangPsiImplUtil {
@@ -799,7 +798,14 @@ object VlangPsiImplUtil {
                 return null
             }
 
-            val result = resolved.getSignature()?.result ?: return getBuiltinType("void", expr)
+            val signature = resolved.getSignature()
+
+            val type = processArrayMethodCall(resolved, signature, expr)
+            if (type != null) {
+                return type
+            }
+
+            val result = signature?.result ?: return getBuiltinType("void", expr)
             return result.type
         }
 
@@ -818,6 +824,10 @@ object VlangPsiImplUtil {
                 }
                 return type
             }
+        }
+
+        if (expr is VlangFunctionLit) {
+            return VlangLightType.LightFunctionType(expr)
         }
 
         if (expr is VlangUnsafeExpression) {
@@ -883,6 +893,44 @@ object VlangPsiImplUtil {
                 expr.nil != null      -> getBuiltinType("nil", expr)
                 else                  -> null
             }
+        }
+
+        return null
+    }
+
+    private fun processArrayMethodCall(resolved: PsiElement?, signature: VlangSignature?, expr: VlangCallExpr): VlangType? {
+        if (resolved !is VlangMethodDeclaration) return null
+
+        val receiverTypeEx = resolved.receiverType.toEx()
+        if (receiverTypeEx !is VlangBuiltinArrayTypeEx && receiverTypeEx !is VlangPointerTypeEx) return null
+
+        if (!VlangTypeInferenceUtil.builtInArrayOrPointerTo(receiverTypeEx)) return null
+
+        val returnTypeEx = signature?.result?.type.toEx()
+
+        // like `first() voidptr`
+        if (returnTypeEx is VlangVoidPtrTypeEx) {
+            val callerTypeEx = VlangTypeInferenceUtil.callerType(expr).toEx()
+            if (callerTypeEx is VlangArrayTypeEx) {
+                return callerTypeEx.inner?.raw()
+            }
+        }
+
+        // like `filter(...) array`
+        if (returnTypeEx is VlangBuiltinArrayTypeEx) {
+            if (resolved.name == VlangTypeInferenceUtil.ARRAY_MAP_METHOD) {
+                val firstArg = expr.parameters.firstOrNull()
+                val firstArgTypeEx = firstArg?.getType(null).toEx()
+
+                if (firstArgTypeEx is VlangFunctionTypeEx) {
+                    val innerType = firstArgTypeEx.result?.raw()
+                    if (innerType != null) {
+                        return VlangLightType.LightArrayType(innerType)
+                    }
+                }
+            }
+
+            return VlangTypeInferenceUtil.callerType(expr)
         }
 
         return null

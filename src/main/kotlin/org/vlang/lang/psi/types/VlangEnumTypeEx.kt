@@ -6,7 +6,7 @@ import org.vlang.lang.psi.VlangCompositeElement
 import org.vlang.lang.psi.VlangEnumDeclaration
 import org.vlang.lang.psi.VlangEnumType
 
-class VlangEnumTypeEx(raw: VlangEnumType) : VlangBaseTypeEx<VlangEnumType>(raw), VlangImportableType {
+class VlangEnumTypeEx(raw: VlangEnumType) : VlangBaseTypeEx<VlangEnumType>(raw), VlangImportableTypeEx {
     private val decl = raw.parent as VlangEnumDeclaration
     private val name = decl.getQualifiedName() ?: ANON
 

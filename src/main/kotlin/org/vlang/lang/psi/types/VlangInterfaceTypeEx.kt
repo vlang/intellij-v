@@ -6,7 +6,7 @@ import org.vlang.lang.psi.VlangCompositeElement
 import org.vlang.lang.psi.VlangInterfaceDeclaration
 import org.vlang.lang.psi.VlangInterfaceType
 
-class VlangInterfaceTypeEx(raw: VlangInterfaceType) : VlangBaseTypeEx<VlangInterfaceType>(raw), VlangImportableType {
+class VlangInterfaceTypeEx(raw: VlangInterfaceType) : VlangBaseTypeEx<VlangInterfaceType>(raw), VlangImportableTypeEx {
     private val decl = raw.parent as VlangInterfaceDeclaration
     private val name = decl.getQualifiedName() ?: ANON
 

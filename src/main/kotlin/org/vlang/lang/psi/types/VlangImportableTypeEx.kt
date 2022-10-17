@@ -1,5 +1,5 @@
 package org.vlang.lang.psi.types
 
-interface VlangImportableType {
+interface VlangImportableTypeEx {
     fun qualifiedName(): String
 }
