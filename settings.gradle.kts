@@ -1,1 +1,1 @@
-rootProject.name = "vlang IDEA plugin"
+rootProject.name = "V IDEA plugin"
