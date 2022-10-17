@@ -54,6 +54,9 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
 
         <readWriteAccessDetector implementation="org.vlang.lang.usages.VlangReadWriteAccessDetector"/>
 
+        <vcs.codeVisionLanguageContext language="vlang"
+                                       implementationClass="org.vlang.ide.hints.VlangCodeVisionLanguageContext"/>
+
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangModulesIndex"/>
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangModulesFingerprintIndex"/>
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangFunctionIndex"/>
@@ -343,6 +346,9 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
 
         <completion.contributor language="vmod"
                                 implementationClass="org.vlang.vmod.completion.VmodCompletionContributor"/>
+
+        <vcs.codeVisionLanguageContext language="vmod"
+                                       implementationClass="org.vlang.vmod.hints.VmodCodeVisionLanguageContext"/>
         <!-- End of V Mod File -->
 
         <!-- Tests -->
