@@ -24,7 +24,8 @@ class VlangBackspaceHandlerDelegate : BackspaceHandlerDelegate() {
         }
 
         val prevSymbol = chars.subSequence(offset - 1, offset).first()
-        if (c == '{' && prevSymbol == '$') {
+        val nextSymbol = if (offset + 1 >= chars.length) ' ' else chars.subSequence(offset, offset + 1).first()
+        if (c == '{' && prevSymbol == '$' && nextSymbol == '}') {
             editor.document.deleteString(offset, offset + 1)
             return true
         }

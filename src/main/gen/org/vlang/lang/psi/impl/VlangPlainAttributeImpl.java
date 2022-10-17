@@ -63,12 +63,6 @@ public class VlangPlainAttributeImpl extends VlangCompositeElementImpl implement
 
   @Override
   @Nullable
-  public PsiElement getString() {
-    return findChildByType(STRING);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getUnsafe() {
     return findChildByType(UNSAFE);
   }

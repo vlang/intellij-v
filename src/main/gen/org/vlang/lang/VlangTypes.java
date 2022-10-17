@@ -216,6 +216,7 @@ public interface VlangTypes {
   IElementType C_FLAG = new VlangTokenType("C_FLAG");
   IElementType C_FLAG_VALUE = new VlangTokenType("C_FLAG_VALUE");
   IElementType C_INCLUDE = new VlangTokenType("C_INCLUDE");
+  IElementType C_STRING = new VlangTokenType("c_string");
   IElementType DECIMALI = new VlangTokenType("decimali");
   IElementType DEFAULT = new VlangTokenType("default");
   IElementType DEFER = new VlangTokenType("defer");
@@ -303,7 +304,6 @@ public interface VlangTypes {
   IElementType SINGLE_QUOTE = new VlangTokenType("'");
   IElementType SQL = new VlangTokenType("sql");
   IElementType SQL_LINE = new VlangTokenType("SQL_LINE");
-  IElementType STRING = new VlangTokenType("string");
   IElementType STRUCT = new VlangTokenType("struct");
   IElementType SWITCH = new VlangTokenType("switch");
   IElementType TILDA = new VlangTokenType("~");

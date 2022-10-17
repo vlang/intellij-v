@@ -20,7 +20,6 @@ object VlangTokenTypes {
     val IDENTIFIERS = TokenSet.create(IDENTIFIER)
     val COMMENTS = TokenSet.create(LINE_COMMENT, MULTILINE_COMMENT, VlangDocTokenTypes.DOC_COMMENT)
     val STRING_LITERALS = TokenSet.create(
-        STRING,
         RAW_STRING,
         CHAR,
         SINGLE_QUOTE,

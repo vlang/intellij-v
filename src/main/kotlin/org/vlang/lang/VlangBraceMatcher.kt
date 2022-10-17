@@ -11,7 +11,6 @@ class VlangBraceMatcher : PairedBraceMatcher {
         BracePair(VlangTypes.LBRACE, VlangTypes.RBRACE, true),
         BracePair(VlangTypes.LBRACK, VlangTypes.RBRACK, false),
         BracePair(VlangTypes.LPAREN, VlangTypes.RPAREN, false),
-        BracePair(VlangTypes.LONG_TEMPLATE_ENTRY_START, VlangTypes.LONG_TEMPLATE_ENTRY_END, false)
     )
 
     override fun isPairedBracesAllowedBeforeType(lbraceType: IElementType, type: IElementType?) =

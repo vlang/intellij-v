@@ -115,7 +115,6 @@ NUM_FLOAT = (
 IDENT = {LETTER} ({LETTER} | {DIGIT} )*
 SPECIAL_IDENT = ("JS." | "C.") {LETTER} ({LETTER} | {DIGIT} | "." )*
 
-DOLLAR = "$"
 STR_DOUBLE = "\""
 STR_SINGLE = "'"
 STR_MODIFIER = "c"
@@ -124,19 +123,10 @@ RAW_STR_MODIFIER = "r"
 RAW_DOUBLE_QUOTE_STRING = {RAW_STR_MODIFIER} {STR_DOUBLE} [^\"]* {STR_DOUBLE}
 RAW_SINGLE_QUOTE_STRING = {RAW_STR_MODIFIER} {STR_SINGLE} [^\']* {STR_SINGLE}
 
-ESCAPES = [abfnrtve] // TODO: need "e"?
-
-STR_ANGLE_OPEN =   "<"
-STR_ANGLE_CLOSE =  ">"
-C_STRING_DOUBLE = {STR_DOUBLE} ( [^\"\\\n\r] | "\\" ("\\" | {STR_DOUBLE} | {ESCAPES} | [0-8xuU] ) )* {STR_DOUBLE}
-C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
-
 %state MAYBE_SEMICOLON
 %state TEMPLATE_STRING
 %state SHORT_TEMPLATE_ENTRY
 %state SHORT_TEMPLATE_ENTRY_FIELD_NAME
-%state C_STRING_LITERAL
-%state C_FLAG_VALUE_EXPECTED
 %state ASM_BLOCK
 %state ASM_BLOCK_LINE
 %state SQL_BLOCK
@@ -186,11 +176,10 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 {MULTILINE_COMMENT}                       { return MULTILINE_COMMENT; }
 
 "`\\`"                                    { yybegin(MAYBE_SEMICOLON); return BAD_CHARACTER; }
-"`" [^\\] "`"?                            { yybegin(MAYBE_SEMICOLON); return CHAR; }
+"``"                                      { yybegin(MAYBE_SEMICOLON); return CHAR; }
+"`" [^\\] "`"                             { yybegin(MAYBE_SEMICOLON); return CHAR; }
 "`" \n "`"?                               { yybegin(MAYBE_SEMICOLON); return CHAR; }
-"`\\" [abfnrtv\\\`] "`"?                  { yybegin(MAYBE_SEMICOLON); return CHAR; }
-"`\\\"`"                                  { yybegin(MAYBE_SEMICOLON); return CHAR; }
-"`\\'`"                                   { yybegin(MAYBE_SEMICOLON); return CHAR; }
+"`\\" (. | "\\") "`"                      { yybegin(MAYBE_SEMICOLON); return CHAR; }
 
 // \141`, `\342\230\205`
 "`" ("\\" {OCT_DIGIT} {3}) {1,3} "`"?     { yybegin(MAYBE_SEMICOLON); return CHAR; }
@@ -294,9 +283,6 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 
 ":="                                      { return VAR_ASSIGN; }
 
-"#include"                                { yybegin(C_STRING_LITERAL); return C_INCLUDE; }
-"#flag"                                   { yybegin(C_FLAG_VALUE_EXPECTED); return C_FLAG; }
-
 "$for"                                    { return FOR_COMPILE_TIME ; }
 "$if"                                     { return IF_COMPILE_TIME ; }
 "$else"                                   { return ELSE_COMPILE_TIME ; }
@@ -381,23 +367,6 @@ C_STRING_ANGLE = {STR_ANGLE_OPEN} ([^\<\>\\\n\r])* {STR_ANGLE_CLOSE}
 {NL}                                      { yybegin(YYINITIAL); yypushback(yytext().length()); return SEMICOLON_SYNTHETIC; }
 {LINE_COMMENT}                            { return LINE_COMMENT; }
 {MULTILINE_COMMENT}                       { return MULTILINE_COMMENT; }
-.                                         { yybegin(YYINITIAL); yypushback(yytext().length()); }
-}
-
-<C_STRING_LITERAL> {
-{NL}+                                     { yybegin(YYINITIAL); return NLS; }
-{WS}{NL}                                  { yybegin(YYINITIAL); return WS; }
-{WS}                                      { return WS; }
-{C_STRING_DOUBLE}                         { yybegin(MAYBE_SEMICOLON); return STRING; }
-{C_STRING_ANGLE}                          { yybegin(MAYBE_SEMICOLON); return STRING; }
-.                                         { yybegin(YYINITIAL); yypushback(yytext().length()); }
-}
-
-<C_FLAG_VALUE_EXPECTED> {
-{NL}+                                     { yybegin(YYINITIAL); return NLS; }
-{WS}{NL}                                  { yybegin(YYINITIAL); return WS; }
-{WS}                                      { return WS; }
-[^\r\n]+                                  { yybegin(MAYBE_SEMICOLON); return C_FLAG_VALUE; }
 .                                         { yybegin(YYINITIAL); yypushback(yytext().length()); }
 }
 

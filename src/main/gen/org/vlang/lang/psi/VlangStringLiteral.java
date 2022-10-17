@@ -13,9 +13,6 @@ public interface VlangStringLiteral extends VlangExpression {
   @Nullable
   PsiElement getRawString();
 
-  @Nullable
-  PsiElement getString();
-
   //WARNING: isValidHost(...) is skipped
   //matching isValidHost(VlangStringLiteral, ...)
   //methods are not found in VlangPsiImplUtil

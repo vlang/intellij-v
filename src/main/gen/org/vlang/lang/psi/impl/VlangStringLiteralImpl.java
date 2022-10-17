@@ -12,7 +12,6 @@ import org.vlang.lang.psi.VlangStringTemplate;
 import org.vlang.lang.psi.VlangVisitor;
 
 import static org.vlang.lang.VlangTypes.RAW_STRING;
-import static org.vlang.lang.VlangTypes.STRING;
 
 public class VlangStringLiteralImpl extends VlangExpressionImpl implements VlangStringLiteral {
 
@@ -41,12 +40,6 @@ public class VlangStringLiteralImpl extends VlangExpressionImpl implements Vlang
   @Nullable
   public PsiElement getRawString() {
     return findChildByType(RAW_STRING);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getString() {
-    return findChildByType(STRING);
   }
 
   @Override

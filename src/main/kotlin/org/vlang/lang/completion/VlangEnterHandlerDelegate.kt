@@ -22,6 +22,13 @@ class VlangEnterHandlerDelegate : EnterHandlerDelegate {
 
     override fun postProcessEnter(file: PsiFile, editor: Editor, dataContext: DataContext): EnterHandlerDelegate.Result {
         val offset = editor.caretModel.currentCaret.offset
+        val document = editor.document
+        val line = document.getLineNumber(offset)
+        val startOffsetForLine = document.getLineStartOffset(line)
+        if (startOffsetForLine == offset) {
+            return EnterHandlerDelegate.Result.Continue
+        }
+
         val element = file.findElementAt(offset - 2) ?: return EnterHandlerDelegate.Result.Continue
         if (element.parent is VlangFile) {
             editor.document.deleteString(offset - 1, offset)
