@@ -6,8 +6,8 @@ import com.intellij.openapi.project.Project
 import org.vlang.ide.ui.VIcons
 
 class VlangRunConfigurationType : ConfigurationTypeBase(
-    ID, "Run",
-    "Run V script",
+    ID, "V Build",
+    "Run V project",
     VIcons.Vlang
 ) {
     companion object {
@@ -19,7 +19,7 @@ class VlangRunConfigurationType : ConfigurationTypeBase(
             override fun getId() = ID
 
             override fun createTemplateConfiguration(project: Project) =
-                VlangRunConfiguration(project, this, "Run Vlang script")
+                VlangRunConfiguration(project, this, "Run V project")
 
             override fun getOptionsClass() = VlangRunConfigurationOptions::class.java
         })

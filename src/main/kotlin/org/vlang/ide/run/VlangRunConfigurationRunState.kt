@@ -1,35 +1,48 @@
 package org.vlang.ide.run
 
+import com.intellij.execution.ExecutionResult
+import com.intellij.execution.Executor
 import com.intellij.execution.configurations.CommandLineState
 import com.intellij.execution.configurations.GeneralCommandLine
-import com.intellij.execution.process.KillableColoredProcessHandler
+import com.intellij.execution.configurations.RunProfileState
 import com.intellij.execution.process.ProcessHandler
 import com.intellij.execution.runners.ExecutionEnvironment
-import org.vlang.configurations.VlangConfigurationUtil
-import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
+import com.intellij.execution.runners.ProgramRunner
+import com.intellij.util.execution.ParametersListUtil
 import java.io.File
 
 class VlangRunConfigurationRunState(
-    env: ExecutionEnvironment,
-    private val conf: VlangRunConfiguration,
-) : CommandLineState(env) {
+    val env: ExecutionEnvironment,
+    val conf: VlangRunConfiguration,
+) : RunProfileState {
 
-    override fun startProcess(): ProcessHandler {
-        val file = File(conf.scriptName)
-        val workingDir = file.parentFile
+    override fun execute(executor: Executor, runner: ProgramRunner<*>): ExecutionResult? {
+        if (!conf.runAfterBuild) return null
 
-        val exe = conf.project.projectSettings.compilerLocation
-            ?: throw RuntimeException(VlangConfigurationUtil.TOOLCHAIN_NOT_SETUP)
+        val state = object : CommandLineState(env) {
+            override fun startProcess(): ProcessHandler {
+                val workingDir = conf.workingDir
+                val outputDir = if (conf.outputDir.isEmpty()) File(conf.workingDir) else File(conf.outputDir)
+                val exe = File(outputDir, "main")
 
-        val commandLine = GeneralCommandLine()
-            .withExePath(exe)
-            .withParameters("run", conf.scriptName)
-            .withWorkDirectory(workingDir)
+                val iofile = File(workingDir, "bin/main")
+                if (!iofile.exists()) {
+                    throw IllegalStateException("Can't run ${iofile.absolutePath}, file not found")
+                }
 
-        if (conf.additionalParameters.isNotEmpty()) {
-            commandLine.withParameters(conf.additionalParameters.split(" "))
+                val commandLine = GeneralCommandLine()
+                    .withExePath(exe.absolutePath)
+                    .withWorkDirectory(workingDir)
+                    .withCharset(Charsets.UTF_8)
+                    .withRedirectErrorStream(true)
+
+                val additionalArguments = ParametersListUtil.parse(conf.programArguments)
+                commandLine.addParameters(additionalArguments)
+
+                return VlangProcessHandler(commandLine)
+            }
         }
 
-        return KillableColoredProcessHandler(commandLine)
+        return state.execute(executor, runner)
     }
 }

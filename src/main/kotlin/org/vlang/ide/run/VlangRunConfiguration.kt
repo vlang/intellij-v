@@ -9,32 +9,101 @@ import com.intellij.openapi.project.Project
 import org.jdom.Element
 
 open class VlangRunConfiguration(project: Project, factory: ConfigurationFactory?, name: String?) :
-    RunConfigurationBase<VlangRunConfigurationOptions?>(project, factory, name) {
+    RunConfigurationBase<VlangRunConfigurationOptions>(project, factory, name) {
 
     override fun getOptions() = super.getOptions() as VlangRunConfigurationOptions
 
-    var scriptName: String
-        get() = options.scriptName
+    var runKind: VlangRunConfigurationEditor.RunKind
+        get() = options.runKind
         set(value) {
-            options.scriptName = value
+            options.runKind = value
         }
 
-    var additionalParameters: String
-        get() = options.additionalParameters
+    var fileName: String
+        get() = options.fileName
         set(value) {
-            options.additionalParameters = value
+            options.fileName = value
+        }
+
+    var directory: String
+        get() = options.directory
+        set(value) {
+            options.directory = value
+        }
+
+    var outputDir: String
+        get() = options.outputDir
+        set(value) {
+            options.outputDir = value
+        }
+
+    var runAfterBuild: Boolean
+        get() = options.runAfterBuild
+        set(value) {
+            options.runAfterBuild = value
+        }
+
+    var workingDir: String
+        get() = options.workingDir
+        set(value) {
+            options.workingDir = value
+        }
+
+    var envs: MutableMap<String, String>
+        get() = options.envs
+            .ifEmpty { null }
+            ?.split(";")
+            ?.map { it.split("=") }
+            ?.associate { it[0] to it[1] }
+            ?.toMutableMap() ?: mutableMapOf()
+        set(value) {
+            options.envs = value
+                .map { "${it.key}=${it.value}" }
+                .joinToString(";")
+        }
+
+    var buildArguments: String
+        get() = options.buildArguments
+        set(value) {
+            options.buildArguments = value
+        }
+
+    var programArguments: String
+        get() = options.programArguments
+        set(value) {
+            options.programArguments = value
         }
 
     override fun writeExternal(element: Element) {
         super.writeExternal(element)
-        element.writeString("scriptName", scriptName)
-        element.writeString("additionalParameters", additionalParameters)
+
+        with(element) {
+            writeString("runKind", runKind.name)
+            writeString("fileName", fileName)
+            writeString("directory", directory)
+            writeString("outputDir", outputDir)
+            writeBool("runAfterBuild", runAfterBuild)
+            writeString("workingDir", workingDir)
+            writeString("envs", options.envs)
+            writeString("buildArguments", buildArguments)
+            writeString("programArguments", programArguments)
+        }
     }
 
     override fun readExternal(element: Element) {
         super.readExternal(element)
-        element.readString("scriptName")?.let { scriptName = it }
-        element.readString("additionalParameters")?.let { additionalParameters = it }
+
+        with(element) {
+            readString("runKind")?.let { runKind = VlangRunConfigurationEditor.RunKind.fromString(it) }
+            readString("fileName")?.let { fileName = it }
+            readString("directory")?.let { directory = it }
+            readString("outputDir")?.let { outputDir = it }
+            readBool("runAfterBuild")?.let { runAfterBuild = it }
+            readString("workingDir")?.let { workingDir = it }
+            readString("envs")?.let { options.envs = it }
+            readString("buildArguments")?.let { buildArguments = it }
+            readString("programArguments")?.let { programArguments = it }
+        }
     }
 
     override fun getConfigurationEditor() = VlangRunConfigurationEditor(project)
@@ -59,4 +128,10 @@ open class VlangRunConfiguration(project: Project, factory: ConfigurationFactory
             .find { it.name == "option" && it.getAttributeValue("name") == name }
             ?.getAttributeValue("value")
 
+    private fun Element.writeBool(name: String, value: Boolean) {
+        writeString(name, value.toString())
+    }
+
+    private fun Element.readBool(name: String): Boolean? =
+        readString(name)?.toBoolean()
 }

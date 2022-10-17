@@ -3,18 +3,67 @@ package org.vlang.ide.run
 import com.intellij.execution.configurations.RunConfigurationOptions
 
 class VlangRunConfigurationOptions : RunConfigurationOptions() {
-    private val myScriptName = string("").provideDelegate(this, "vlangScriptName")
-    private val myAdditionalParameters = string("").provideDelegate(this, "vlangAdditionalParameters")
+    private var _runKind = string(VlangRunConfigurationEditor.RunKind.File.name).provideDelegate(this, "runKindRunConfiguration")
+    private var _fileName = string("").provideDelegate(this, "fileNameRunConfiguration")
+    private var _directory = string("").provideDelegate(this, "directoryRunConfiguration")
+    private var _outputDir = string("").provideDelegate(this, "outputDirRunConfiguration")
+    private var _runAfterBuild = property(true).provideDelegate(this, "runAfterBuildRunConfiguration")
+    private var _workingDir = string("").provideDelegate(this, "workingDirRunConfiguration")
+    private var _envs = string("").provideDelegate(this, "envsRunConfiguration")
+    private var _buildArguments = string("").provideDelegate(this, "buildArgumentsRunConfiguration")
+    private var _programArguments = string("").provideDelegate(this, "programArgumentsRunConfiguration")
 
-    var scriptName: String
-        get() = myScriptName.getValue(this) ?: ""
+    var runKind: VlangRunConfigurationEditor.RunKind
+        get() = VlangRunConfigurationEditor.RunKind.fromString(_runKind.getValue(this))
         set(value) {
-            myScriptName.setValue(this, value)
+            _runKind.setValue(this, value.name)
         }
 
-    var additionalParameters: String
-        get() = myAdditionalParameters.getValue(this) ?: ""
+    var fileName: String
+        get() = _fileName.getValue(this) ?: ""
         set(value) {
-            myAdditionalParameters.setValue(this, value)
+            _fileName.setValue(this, value)
+        }
+
+    var directory: String
+        get() = _directory.getValue(this) ?: ""
+        set(value) {
+            _directory.setValue(this, value)
+        }
+
+    var outputDir: String
+        get() = _outputDir.getValue(this) ?: ""
+        set(value) {
+            _outputDir.setValue(this, value)
+        }
+
+    var runAfterBuild: Boolean
+        get() = _runAfterBuild.getValue(this)
+        set(value) {
+            _runAfterBuild.setValue(this, value)
+        }
+
+    var workingDir: String
+        get() = _workingDir.getValue(this) ?: ""
+        set(value) {
+            _workingDir.setValue(this, value)
+        }
+
+    var envs: String
+        get() = _envs.getValue(this) ?: ""
+        set(value) {
+            _envs.setValue(this, value)
+        }
+
+    var buildArguments: String
+        get() = _buildArguments.getValue(this) ?: ""
+        set(value) {
+            _buildArguments.setValue(this, value)
+        }
+
+    var programArguments: String
+        get() = _programArguments.getValue(this) ?: ""
+        set(value) {
+            _programArguments.setValue(this, value)
         }
 }
