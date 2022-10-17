@@ -49,7 +49,7 @@ object VlangCompletionUtil {
     const val GLOBAL_VAR_PRIORITY = 5
     const val NOT_IMPORTED_VAR_PRIORITY = 15
     const val VAR_PRIORITY = NOT_IMPORTED_VAR_PRIORITY + 10
-    const val FIELD_PRIORITY = CONTEXT_KEYWORD_PRIORITY + 1
+    const val FIELD_PRIORITY = METHOD_PRIORITY - 1
     const val LABEL_PRIORITY = 15
     const val MODULE_PRIORITY = 20
 
