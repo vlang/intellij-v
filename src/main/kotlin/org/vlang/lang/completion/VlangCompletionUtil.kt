@@ -18,6 +18,7 @@ import com.intellij.psi.ResolveState
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.elementType
 import com.intellij.psi.util.parentOfType
+import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.ide.ui.VIcons
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.*
@@ -181,7 +182,7 @@ object VlangCompletionUtil {
         }
         return createMethodLookupElement(
             element, name,
-            insertHandler = StringInsertHandler("()", 1),
+            insertHandler = FunctionInsertHandler(null),
             priority = METHOD_PRIORITY,
         )
     }
@@ -478,11 +479,19 @@ object VlangCompletionUtil {
     class FunctionInsertHandler(moduleName: String?) : ElementInsertHandler(moduleName) {
         override fun handleInsertion(context: InsertionContext, item: LookupElement) {
             val caretOffset = context.editor.caretModel.offset
+            val element = context.file.findElementAt(caretOffset - 1)
+            val function = element?.parentOfType<VlangReferenceExpression>()?.resolve()
+            val takeZeroArguments = if (function is VlangSignatureOwner) VlangCodeInsightUtil.takeZeroArguments(function) else false
 
             val withParenAfterCursor = context.document.charsSequence[caretOffset] == '('
 
             if (!withParenAfterCursor) {
                 context.document.insertString(caretOffset, "()")
+            }
+            if (takeZeroArguments) {
+                // move after ()
+                context.editor.caretModel.moveToOffset(caretOffset + 2)
+                return
             }
             context.editor.caretModel.moveToOffset(caretOffset + 1)
         }
@@ -517,7 +526,11 @@ object VlangCompletionUtil {
         }
     }
 
-    class TemplateStringInsertHandler(val string: String, private val reformat: Boolean = true, vararg val variables: Pair<String, Expression>) : InsertHandler<LookupElement> {
+    class TemplateStringInsertHandler(
+        private val string: String,
+        private val reformat: Boolean = true,
+        vararg val variables: Pair<String, Expression>,
+    ) : InsertHandler<LookupElement> {
         override fun handleInsert(context: InsertionContext, item: LookupElement) {
             val template = TemplateManager.getInstance(context.project)
                 .createTemplate("templateInsertHandler", "vlang", string)

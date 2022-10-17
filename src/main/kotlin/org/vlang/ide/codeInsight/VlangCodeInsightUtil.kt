@@ -26,6 +26,10 @@ object VlangCodeInsightUtil {
         return element.parentOfType<VlangOrBlockExpr>() != null
     }
 
+    fun takeZeroArguments(owner: VlangSignatureOwner): Boolean {
+        return owner.getSignature()?.parameters?.parametersListWithTypes?.isEmpty() ?: false
+    }
+
     fun insideElseBlockIfGuard(element: PsiElement): Boolean {
         element.parentOfType<VlangElseStatement>(true) ?: return false
         val parentIf = element.parentOfType<VlangIfExpression>() ?: return false
