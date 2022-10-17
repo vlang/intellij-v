@@ -119,4 +119,88 @@ class CompletionTest : CompletionTestBase() {
         """.trimIndent(),
         1, "foo",
     )
+
+    fun `test function name completion`() = doTestCompletion(
+        """
+        module main
+        
+        fn foo() {}
+        
+        fn main() {
+            fo<caret>
+        }
+        """.trimIndent(),
+        """
+        module main
+        
+        fn foo() {}
+        
+        fn main() {
+            foo()
+        }
+        """.trimIndent()
+    )
+
+    fun `test function name before () completion`() = doTestCompletion(
+        """
+        module main
+        
+        fn foo() {}
+        
+        fn main() {
+            fo<caret>()
+        }
+        """.trimIndent(),
+        """
+        module main
+        
+        fn foo() {}
+        
+        fn main() {
+            foo()
+        }
+        """.trimIndent()
+    )
+
+    fun `test struct name completion`() = doTestCompletion(
+        """
+        module main
+        
+        struct Name {}
+        
+        fn main() {
+            Nam<caret>
+        }
+        """.trimIndent(),
+        """
+        module main
+        
+        struct Name {}
+        
+        fn main() {
+            Name{}
+        }
+        """.trimIndent()
+    )
+
+    fun `test struct name before {} completion`() = doTestCompletion(
+        """
+        module main
+        
+        struct Name {}
+        
+        fn main() {
+            Nam<caret>{}
+        }
+        """.trimIndent(),
+        """
+        module main
+        
+        struct Name {}
+        
+        fn main() {
+            Name{}
+        }
+        """.trimIndent()
+    )
 }

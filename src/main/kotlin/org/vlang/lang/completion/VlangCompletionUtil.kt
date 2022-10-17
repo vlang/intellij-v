@@ -479,7 +479,11 @@ object VlangCompletionUtil {
         override fun handleInsertion(context: InsertionContext, item: LookupElement) {
             val caretOffset = context.editor.caretModel.offset
 
-            context.document.insertString(caretOffset, "()")
+            val withParenAfterCursor = context.document.charsSequence[caretOffset] == '('
+
+            if (!withParenAfterCursor) {
+                context.document.insertString(caretOffset, "()")
+            }
             context.editor.caretModel.moveToOffset(caretOffset + 1)
         }
     }
