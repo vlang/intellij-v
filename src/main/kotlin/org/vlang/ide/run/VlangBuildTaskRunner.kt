@@ -11,6 +11,7 @@ import com.intellij.task.*
 import com.intellij.util.execution.ParametersListUtil
 import org.jetbrains.concurrency.AsyncPromise
 import org.jetbrains.concurrency.Promise
+import org.jetbrains.concurrency.rejectedPromise
 import org.jetbrains.concurrency.resolvedPromise
 import org.vlang.configurations.VlangConfigurationUtil
 import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
@@ -19,6 +20,10 @@ import java.io.File
 @Suppress("UnstableApiUsage")
 class VlangBuildTaskRunner : ProjectTaskRunner() {
     override fun run(project: Project, context: ProjectTaskContext, vararg tasks: ProjectTask): Promise<Result> {
+        if (project.isDisposed) {
+            return rejectedPromise("Project is already disposed")
+        }
+
         val resultPromise = AsyncPromise<Result>()
 
         tasks.forEach { task ->
