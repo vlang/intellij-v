@@ -1,11 +1,4 @@
 V Language file
-  IMPORT_LIST
-    IMPORT_DECLARATION
-      PsiElement(VlangTokenType.import)('import')
-      IMPORT_SPEC
-        IMPORT_PATH
-          IMPORT_NAME
-            PsiElement(VlangTokenType.identifier)('os')
   SIMPLE_STATEMENT
     VAR_DECLARATION
       VAR_DEFINITION

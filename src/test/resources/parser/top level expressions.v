@@ -1,5 +1,3 @@
-
-
 mut vls_exec_name := 'vls'
 $if windows {
 	vls_exec_name += '.exe'
