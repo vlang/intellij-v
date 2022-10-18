@@ -15,8 +15,8 @@ class VlangFormattingBlock(
     private val spacingBuilder: SpacingBuilder,
 ) : AbstractBlock(node, wrap, alignment) {
 
-    override fun buildChildren(): List<VlangFormattingBlock> {
-        val blocks = mutableListOf<VlangFormattingBlock>()
+    override fun buildChildren(): List<AbstractBlock> {
+        val blocks = mutableListOf<AbstractBlock>()
         val parent = node.psi ?: return emptyList()
 
         var child = myNode.firstChildNode
@@ -24,6 +24,12 @@ class VlangFormattingBlock(
             if (child.elementType == TokenType.WHITE_SPACE) {
                 child = child.treeNext
                 continue
+            }
+
+            if (child.elementType == VlangTokenTypes.LINE_COMMENT) {
+                val block = VlangLineCommentBlock(child)
+                blocks.add(block)
+                child = child.treeNext
             }
 
             val needIdent = when (parent) {
