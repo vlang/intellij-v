@@ -626,6 +626,7 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitStringLiteral(@NotNull VlangStringLiteral o) {
     visitExpression(o);
+    // visitPsiLanguageInjectionHost(o);
   }
 
   public void visitStringTemplate(@NotNull VlangStringTemplate o) {

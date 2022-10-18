@@ -4,6 +4,7 @@ package org.vlang.lang.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.impl.source.tree.injected.StringLiteralEscaper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
@@ -40,6 +41,23 @@ public class VlangStringLiteralImpl extends VlangExpressionImpl implements Vlang
   @Nullable
   public PsiElement getRawString() {
     return findChildByType(RAW_STRING);
+  }
+
+  @Override
+  public boolean isValidHost() {
+    return VlangPsiImplUtil.isValidHost(this);
+  }
+
+  @Override
+  @NotNull
+  public VlangStringLiteral updateText(@NotNull String text) {
+    return VlangPsiImplUtil.updateText(this, text);
+  }
+
+  @Override
+  @NotNull
+  public StringLiteralEscaper<VlangStringLiteral> createLiteralTextEscaper() {
+    return VlangPsiImplUtil.createLiteralTextEscaper(this);
   }
 
   @Override

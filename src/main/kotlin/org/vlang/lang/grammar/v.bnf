@@ -926,7 +926,7 @@ Literal ::=
 
 // just different strings
 StringLiteral ::= 'raw_string' | StringTemplate {
-//  implements = "com.intellij.psi.PsiLanguageInjectionHost"
+  implements = "com.intellij.psi.PsiLanguageInjectionHost"
   methods = [isValidHost updateText createLiteralTextEscaper getDecodedText getContents]
 }
 

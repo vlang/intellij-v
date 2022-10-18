@@ -2,10 +2,12 @@
 package org.vlang.lang.psi;
 
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiLanguageInjectionHost;
+import com.intellij.psi.impl.source.tree.injected.StringLiteralEscaper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface VlangStringLiteral extends VlangExpression {
+public interface VlangStringLiteral extends VlangExpression, PsiLanguageInjectionHost {
 
   @Nullable
   VlangStringTemplate getStringTemplate();
@@ -13,17 +15,13 @@ public interface VlangStringLiteral extends VlangExpression {
   @Nullable
   PsiElement getRawString();
 
-  //WARNING: isValidHost(...) is skipped
-  //matching isValidHost(VlangStringLiteral, ...)
-  //methods are not found in VlangPsiImplUtil
+  boolean isValidHost();
 
-  //WARNING: updateText(...) is skipped
-  //matching updateText(VlangStringLiteral, ...)
-  //methods are not found in VlangPsiImplUtil
+  @NotNull
+  VlangStringLiteral updateText(@NotNull String text);
 
-  //WARNING: createLiteralTextEscaper(...) is skipped
-  //matching createLiteralTextEscaper(VlangStringLiteral, ...)
-  //methods are not found in VlangPsiImplUtil
+  @NotNull
+  StringLiteralEscaper<VlangStringLiteral> createLiteralTextEscaper();
 
   //WARNING: getDecodedText(...) is skipped
   //matching getDecodedText(VlangStringLiteral, ...)

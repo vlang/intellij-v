@@ -10,6 +10,7 @@ import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.RecursionManager
 import com.intellij.psi.*
 import com.intellij.psi.impl.source.tree.LeafElement
+import com.intellij.psi.impl.source.tree.injected.StringLiteralEscaper
 import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.util.*
 import org.vlang.configurations.VlangConfiguration
@@ -544,6 +545,26 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun isPublic(o: VlangParamDefinition): Boolean = true
+
+    @JvmStatic
+    fun isValidHost(o: VlangStringLiteral): Boolean {
+        return true
+    }
+
+    @JvmStatic
+    fun updateText(o: VlangStringLiteral, text: String): VlangStringLiteral {
+        if (text.length <= 2) {
+            return o
+        }
+        val valueNode = o.node.firstChildNode as? LeafElement
+        valueNode?.replaceWithText(text)
+        return o
+    }
+
+    @JvmStatic
+    fun createLiteralTextEscaper(o: VlangStringLiteral): StringLiteralEscaper<VlangStringLiteral> {
+        return StringLiteralEscaper(o)
+    }
 
     @JvmStatic
     fun getContents(o: VlangStringLiteral): String {
