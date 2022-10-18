@@ -26,12 +26,6 @@ class VlangFormattingBlock(
                 continue
             }
 
-            if (child.elementType == VlangTokenTypes.LINE_COMMENT) {
-                val block = VlangLineCommentBlock(child)
-                blocks.add(block)
-                child = child.treeNext
-            }
-
             val needIdent = when (parent) {
                 is VlangBlock                     -> true
                 is VlangInterfaceType             -> true
