@@ -14,6 +14,9 @@ public interface VlangFunctionLit extends VlangExpression, VlangSignatureOwner {
   VlangCaptureList getCaptureList();
 
   @Nullable
+  VlangGenericArgumentsFirstPin getGenericArgumentsFirstPin();
+
+  @Nullable
   VlangSignature getSignature();
 
   @NotNull

@@ -173,6 +173,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitStatement(o);
   }
 
+  public void visitEmptySlice(@NotNull VlangEmptySlice o) {
+    visitCompositeElement(o);
+  }
+
   public void visitEnumDeclaration(@NotNull VlangEnumDeclaration o) {
     visitNamedElement(o);
   }
@@ -274,6 +278,10 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitGenericArguments(@NotNull VlangGenericArguments o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitGenericArgumentsFirstPin(@NotNull VlangGenericArgumentsFirstPin o) {
     visitCompositeElement(o);
   }
 
@@ -648,6 +656,10 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitTag(@NotNull VlangTag o) {
     visitCompositeElement(o);
+  }
+
+  public void visitThreadType(@NotNull VlangThreadType o) {
+    visitType(o);
   }
 
   public void visitTupleType(@NotNull VlangTupleType o) {

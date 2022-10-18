@@ -947,7 +947,7 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('typing_ch')
           CHANNEL_TYPE
-            PsiElement(VlangTokenType.chan)('chan')
+            PsiElement(VlangTokenType.identifier)('chan')
             TYPE
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('int')

@@ -9,8 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.VlangVarModifier;
 import org.vlang.lang.psi.VlangVisitor;
 
-import static org.vlang.lang.VlangTypes.MUT;
-import static org.vlang.lang.VlangTypes.SHARED;
+import static org.vlang.lang.VlangTypes.*;
 
 public class VlangVarModifierImpl extends VlangCompositeElementImpl implements VlangVarModifier {
 
@@ -38,6 +37,18 @@ public class VlangVarModifierImpl extends VlangCompositeElementImpl implements V
   @Nullable
   public PsiElement getShared() {
     return findChildByType(SHARED);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getStatic() {
+    return findChildByType(STATIC);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getVolatile() {
+    return findChildByType(VOLATILE);
   }
 
 }

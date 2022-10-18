@@ -41,6 +41,12 @@ public class VlangFunctionLitImpl extends VlangExpressionImpl implements VlangFu
 
   @Override
   @Nullable
+  public VlangGenericArgumentsFirstPin getGenericArgumentsFirstPin() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangGenericArgumentsFirstPin.class);
+  }
+
+  @Override
+  @Nullable
   public VlangSignature getSignature() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangSignature.class);
   }

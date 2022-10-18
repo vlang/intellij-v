@@ -5,23 +5,23 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.stubs.IStubElementType;
 import org.jetbrains.annotations.NotNull;
-import org.vlang.lang.psi.VlangChannelType;
+import org.vlang.lang.psi.VlangThreadType;
 import org.vlang.lang.psi.VlangVisitor;
 import org.vlang.lang.stubs.VlangTypeStub;
 
-public class VlangChannelTypeImpl extends VlangTypeImpl implements VlangChannelType {
+public class VlangThreadTypeImpl extends VlangTypeImpl implements VlangThreadType {
 
-  public VlangChannelTypeImpl(@NotNull VlangTypeStub stub, @NotNull IStubElementType<?, ?> type) {
+  public VlangThreadTypeImpl(@NotNull VlangTypeStub stub, @NotNull IStubElementType<?, ?> type) {
     super(stub, type);
   }
 
-  public VlangChannelTypeImpl(@NotNull ASTNode node) {
+  public VlangThreadTypeImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitChannelType(this);
+    visitor.visitThreadType(this);
   }
 
   @Override

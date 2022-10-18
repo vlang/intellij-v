@@ -2,32 +2,34 @@
 package org.vlang.lang.psi.impl;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.stubs.IStubElementType;
 import org.jetbrains.annotations.NotNull;
-import org.vlang.lang.psi.VlangChannelType;
+import org.vlang.lang.psi.VlangEmptySlice;
 import org.vlang.lang.psi.VlangVisitor;
-import org.vlang.lang.stubs.VlangTypeStub;
 
-public class VlangChannelTypeImpl extends VlangTypeImpl implements VlangChannelType {
+import static org.vlang.lang.VlangTypes.RANGE;
 
-  public VlangChannelTypeImpl(@NotNull VlangTypeStub stub, @NotNull IStubElementType<?, ?> type) {
-    super(stub, type);
-  }
+public class VlangEmptySliceImpl extends VlangCompositeElementImpl implements VlangEmptySlice {
 
-  public VlangChannelTypeImpl(@NotNull ASTNode node) {
+  public VlangEmptySliceImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitChannelType(this);
+    visitor.visitEmptySlice(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof VlangVisitor) accept((VlangVisitor)visitor);
     else super.accept(visitor);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getRange() {
+    return notNullChild(findChildByType(RANGE));
   }
 
 }

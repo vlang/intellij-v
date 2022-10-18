@@ -12,6 +12,7 @@ object VlangElementTypeFactory {
             put("ARRAY_OR_SLICE_TYPE", VlangArrayOrSliceTypeImpl::class.java)
             put("TUPLE_TYPE", VlangTupleTypeImpl::class.java)
             put("CHANNEL_TYPE", VlangChannelTypeImpl::class.java)
+            put("THREAD_TYPE", VlangThreadTypeImpl::class.java)
             put("FUNCTION_TYPE", VlangFunctionTypeImpl::class.java)
             put("INTERFACE_TYPE", VlangInterfaceTypeImpl::class.java)
             put("ENUM_TYPE", VlangEnumTypeImpl::class.java)
@@ -23,61 +24,35 @@ object VlangElementTypeFactory {
             put("NOT_NULLABLE_TYPE", VlangNotNullableTypeImpl::class.java)
             put("NULLABLE_TYPE", VlangNullableTypeImpl::class.java)
             put("ALIAS_TYPE", VlangAliasTypeImpl::class.java)
-//            put("PAR_TYPE", VlangParTypeImpl::class.java)
-//            put("SPEC_TYPE", VlangSpecTypeImpl::class.java)
-//            put("TYPE_LIST", VlangTypeListImpl::class.java)
         }
     }
 
     @JvmStatic
-    fun stubFactory(name: String): IStubElementType<*, *> {
-//        if ("CONST_DEFINITION" == name) return VlangConstDefinitionStubElementType(name)
-        if ("FIELD_DEFINITION" == name) return VlangFieldDefinitionStubElementType(name)
-        if ("ENUM_FIELD_DEFINITION" == name) return VlangEnumFieldDefinitionStubElementType(name)
-//        if ("ANONYMOUS_FIELD_DEFINITION" == name) return VlangAnonymousFieldDefinitionStubElementType(name)
-        if ("FUNCTION_DECLARATION" == name) return VlangFunctionDeclarationStubElementType(name)
-        if ("METHOD_DECLARATION" == name) return VlangMethodDeclarationStubElementType(name)
-        if ("STRUCT_DECLARATION" == name) return VlangStructDeclarationStubElementType(name)
-        if ("UNION_DECLARATION" == name) return VlangUnionDeclarationStubElementType(name)
-        if ("ENUM_DECLARATION" == name) return VlangEnumDeclarationStubElementType(name)
-        if ("INTERFACE_DECLARATION" == name) return VlangInterfaceDeclarationStubElementType(name)
-        if ("INTERFACE_METHOD_DEFINITION" == name) return VlangInterfaceMethodDefinitionStubElementType(name)
-        if ("TYPE_ALIAS_DECLARATION" == name) return VlangTypeAliasDeclarationStubElementType(name)
-        if ("IMPORT_NAME" == name) return VlangImportNameStubElementType(name)
-        if ("IMPORT_ALIAS" == name) return VlangImportAliasStubElementType(name)
-        if ("PARAM_DEFINITION" == name) return VlangParamDefinitionStubElementType(name)
-        if ("RECEIVER" == name)
-            return VlangReceiverStubElementType(name)
-//        if ("TYPE" == name) return VlangTypeStubElementType(name)
-//        if ("METHOD_SPEC" == name) return VlangMethodSpecStubElementType(name)
-        if ("CONST_DEFINITION" == name) return VlangConstDefinitionStubElementType(name)
-        if ("GLOBAL_VARIABLE_DEFINITION" == name) return VlangGlobalVariableDefinitionStubElementType(name)
-        if ("MODULE_CLAUSE" == name) return VlangModuleClauseStubElementType.INSTANCE
-//        if ("VAR_SPEC" == name) return VlangVarSpecStubElementType(name)
-//        if ("SHORT_VAR_DECLARATION" == name) return object : VlangVarSpecStubElementType(name) {
-//            fun createPsi(stub: VlangVarSpecStub): VlangVarSpec {
-//                return VlangShortVarDeclarationImpl(stub, this)
-//            }
-//        }
-//        if ("RECV_STATEMENT" == name) return object : VlangVarSpecStubElementType(name) {
-//            fun createPsi(stub: VlangVarSpecStub): VlangVarSpec {
-//                return VlangRecvStatementImpl(stub, this)
-//            }
-//        }
-//        if ("RANGE_CLAUSE" == name) return object : VlangVarSpecStubElementType(name) {
-//            fun createPsi(stub: VlangVarSpecStub): VlangVarSpec {
-//                return VlangRangeClauseImpl(stub, this)
-//            }
-//        }
-        if ("VAR_DEFINITION" == name) return VlangVarDefinitionStubElementType(name)
-        if ("LABEL_DEFINITION" == name) return VlangLabelDefinitionStubElementType(name)
-//        if ("PARAMETERS" == name) return VlangParametersStubElementType(name)
-//        if ("SIGNATURE" == name) return VlangSignatureStubElementType(name)
-//        if ("PARAMETER_DECLARATION" == name) return VlangParameterDeclarationStubElementType(name)
-//        if ("RESULT" == name) return VlangResultStubElementType(name)
-        val c = TYPES[name]
-        if (c != null) {
-            return object : VlangTypeStubElementType(name) {
+    fun stubFactory(name: String) = when (name) {
+        "FIELD_DEFINITION"            -> VlangFieldDefinitionStubElementType(name)
+        "ENUM_FIELD_DEFINITION"       -> VlangEnumFieldDefinitionStubElementType(name)
+        "FUNCTION_DECLARATION"        -> VlangFunctionDeclarationStubElementType(name)
+        "METHOD_DECLARATION"          -> VlangMethodDeclarationStubElementType(name)
+        "STRUCT_DECLARATION"          -> VlangStructDeclarationStubElementType(name)
+        "UNION_DECLARATION"           -> VlangUnionDeclarationStubElementType(name)
+        "ENUM_DECLARATION"            -> VlangEnumDeclarationStubElementType(name)
+        "INTERFACE_DECLARATION"       -> VlangInterfaceDeclarationStubElementType(name)
+        "INTERFACE_METHOD_DEFINITION" -> VlangInterfaceMethodDefinitionStubElementType(name)
+        "TYPE_ALIAS_DECLARATION"      -> VlangTypeAliasDeclarationStubElementType(name)
+        "IMPORT_NAME"                 -> VlangImportNameStubElementType(name)
+        "IMPORT_ALIAS"                -> VlangImportAliasStubElementType(name)
+        "PARAM_DEFINITION"            -> VlangParamDefinitionStubElementType(name)
+        "RECEIVER"                    -> VlangReceiverStubElementType(name)
+        "CONST_DEFINITION"            -> VlangConstDefinitionStubElementType(name)
+        "GLOBAL_VARIABLE_DEFINITION"  -> VlangGlobalVariableDefinitionStubElementType(name)
+        "MODULE_CLAUSE"               -> VlangModuleClauseStubElementType.INSTANCE
+        "VAR_DEFINITION"              -> VlangVarDefinitionStubElementType(name)
+        "LABEL_DEFINITION"            -> VlangLabelDefinitionStubElementType(name)
+
+        else                          -> {
+            val c = TYPES[name] ?: throw RuntimeException("Unknown element type: $name")
+
+            object : VlangTypeStubElementType(name) {
                 override fun createPsi(stub: VlangTypeStub): VlangType {
                     return try {
                         ReflectionUtil.createInstance(
@@ -91,6 +66,5 @@ object VlangElementTypeFactory {
                 }
             }
         }
-        throw RuntimeException("Unknown element type: $name")
     }
 }

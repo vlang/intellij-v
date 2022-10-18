@@ -275,7 +275,9 @@ RAW_SINGLE_QUOTE_STRING = {RAW_STR_MODIFIER} {STR_SINGLE} [^\']* {STR_SINGLE}
 "@"                                       { return AT; }
 
 ">>="                                     { return SHIFT_RIGHT_ASSIGN; }
-// ">>"                                      { return SHIFT_RIGHT; } // done in parser <<gtGt>>
+">>>="                                    { return UNSIGNED_SHIFT_RIGHT_ASSIGN; }
+// ">>"                                   { return SHIFT_RIGHT; } // done in parser <<gtGt>>
+// ">>>"                                  { return UNSIGNED_SHIFT_RIGHT; } // done in parser <<gtGtGt>>
 ">="                                      { return GREATER_OR_EQUAL; }
 ">"                                       { yybegin(MAYBE_SEMICOLON); return GREATER; }
 
@@ -298,7 +300,6 @@ RAW_SINGLE_QUOTE_STRING = {RAW_STR_MODIFIER} {STR_SINGLE} [^\']* {STR_SINGLE}
 "continue"                                { yybegin(MAYBE_SEMICOLON); return CONTINUE ; }
 
 "unsafe"                                  { return UNSAFE; }
-"default"                                 { return DEFAULT; }
 "module"                                  { return MODULE; }
 "pub"                                     { return PUB; }
 "fn"                                      { return FN; }
@@ -311,8 +312,6 @@ RAW_SINGLE_QUOTE_STRING = {RAW_STR_MODIFIER} {STR_SINGLE} [^\']* {STR_SINGLE}
 "shared"                                  { return SHARED; }
 "rlock"                                   { return RLOCK; }
 "lock"                                    { return LOCK; }
-
-"chan"                                    { return CHAN; }
 
 "union"                                   { return UNION; }
 "struct"                                  { return STRUCT; }
@@ -333,6 +332,7 @@ RAW_SINGLE_QUOTE_STRING = {RAW_STR_MODIFIER} {STR_SINGLE} [^\']* {STR_SINGLE}
 "is"                                      { return IS; }
 "type"                                    { return TYPE_; }
 "mut"                                     { return MUT; }
+"static"                                  { return STATIC; }
 
 "volatile"                                { return VOLATILE; }
 "asm"                                     { yybegin(ASM_BLOCK); return ASM; }

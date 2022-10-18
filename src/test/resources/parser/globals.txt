@@ -159,7 +159,7 @@ V Language file
       VAR_MODIFIERS
         <empty list>
       CHANNEL_TYPE
-        PsiElement(VlangTokenType.chan)('chan')
+        PsiElement(VlangTokenType.identifier)('chan')
         TYPE
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('f64')

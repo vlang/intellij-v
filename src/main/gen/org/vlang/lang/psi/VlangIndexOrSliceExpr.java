@@ -10,6 +10,9 @@ import java.util.List;
 public interface VlangIndexOrSliceExpr extends VlangExpression {
 
   @Nullable
+  VlangEmptySlice getEmptySlice();
+
+  @Nullable
   VlangErrorPropagationExpression getErrorPropagationExpression();
 
   @NotNull

@@ -51,6 +51,7 @@ public interface VlangTypes {
   IElementType DOT_EXPRESSION = new VlangCompositeElementType("DOT_EXPRESSION");
   IElementType ELEMENT = new VlangCompositeElementType("ELEMENT");
   IElementType ELSE_STATEMENT = new VlangCompositeElementType("ELSE_STATEMENT");
+  IElementType EMPTY_SLICE = new VlangCompositeElementType("EMPTY_SLICE");
   IElementType ENUM_DECLARATION = VlangElementTypeFactory.stubFactory("ENUM_DECLARATION");
   IElementType ENUM_FETCH = new VlangCompositeElementType("ENUM_FETCH");
   IElementType ENUM_FIELDS = new VlangCompositeElementType("ENUM_FIELDS");
@@ -76,6 +77,7 @@ public interface VlangTypes {
   IElementType FUNCTION_LIT = new VlangCompositeElementType("FUNCTION_LIT");
   IElementType FUNCTION_TYPE = VlangElementTypeFactory.stubFactory("FUNCTION_TYPE");
   IElementType GENERIC_ARGUMENTS = new VlangCompositeElementType("GENERIC_ARGUMENTS");
+  IElementType GENERIC_ARGUMENTS_FIRST_PIN = new VlangCompositeElementType("GENERIC_ARGUMENTS_FIRST_PIN");
   IElementType GLOBAL_VARIABLE_DECLARATION = new VlangCompositeElementType("GLOBAL_VARIABLE_DECLARATION");
   IElementType GLOBAL_VARIABLE_DEFINITION = VlangElementTypeFactory.stubFactory("GLOBAL_VARIABLE_DEFINITION");
   IElementType GOTO_STATEMENT = new VlangCompositeElementType("GOTO_STATEMENT");
@@ -167,6 +169,7 @@ public interface VlangTypes {
   IElementType STRUCT_TYPE = VlangElementTypeFactory.stubFactory("STRUCT_TYPE");
   IElementType SYMBOL_VISIBILITY = new VlangCompositeElementType("SYMBOL_VISIBILITY");
   IElementType TAG = new VlangCompositeElementType("TAG");
+  IElementType THREAD_TYPE = VlangElementTypeFactory.stubFactory("THREAD_TYPE");
   IElementType TUPLE_TYPE = VlangElementTypeFactory.stubFactory("TUPLE_TYPE");
   IElementType TYPE = VlangElementTypeFactory.stubFactory("TYPE");
   IElementType TYPE_ALIAS_DECLARATION = VlangElementTypeFactory.stubFactory("TYPE_ALIAS_DECLARATION");
@@ -204,7 +207,6 @@ public interface VlangTypes {
   IElementType BREAK = new VlangTokenType("break");
   IElementType BUILTIN_GLOBAL = new VlangTokenType("BUILTIN_GLOBAL");
   IElementType CASE = new VlangTokenType("case");
-  IElementType CHAN = new VlangTokenType("chan");
   IElementType CHAR = new VlangTokenType("char");
   IElementType CLOSING_QUOTE = new VlangTokenType("CLOSING_QUOTE");
   IElementType COLON = new VlangTokenType(":");
@@ -218,7 +220,6 @@ public interface VlangTypes {
   IElementType C_INCLUDE = new VlangTokenType("C_INCLUDE");
   IElementType C_STRING = new VlangTokenType("c_string");
   IElementType DECIMALI = new VlangTokenType("decimali");
-  IElementType DEFAULT = new VlangTokenType("default");
   IElementType DEFER = new VlangTokenType("defer");
   IElementType DOT = new VlangTokenType(".");
   IElementType DOUBLE_QUOTE = new VlangTokenType("\"");
@@ -304,6 +305,7 @@ public interface VlangTypes {
   IElementType SINGLE_QUOTE = new VlangTokenType("'");
   IElementType SQL = new VlangTokenType("sql");
   IElementType SQL_LINE = new VlangTokenType("SQL_LINE");
+  IElementType STATIC = new VlangTokenType("static");
   IElementType STRUCT = new VlangTokenType("struct");
   IElementType SWITCH = new VlangTokenType("switch");
   IElementType TILDA = new VlangTokenType("~");
@@ -312,6 +314,8 @@ public interface VlangTypes {
   IElementType TYPE_ = new VlangTokenType("type");
   IElementType UNION = new VlangTokenType("union");
   IElementType UNSAFE = new VlangTokenType("unsafe");
+  IElementType UNSIGNED_SHIFT_RIGHT = new VlangTokenType(">>>");
+  IElementType UNSIGNED_SHIFT_RIGHT_ASSIGN = new VlangTokenType(">>>=");
   IElementType VAR = new VlangTokenType("var");
   IElementType VAR_ASSIGN = new VlangTokenType(":=");
   IElementType VOLATILE = new VlangTokenType("volatile");
@@ -439,6 +443,9 @@ public interface VlangTypes {
       else if (type == ELSE_STATEMENT) {
         return new VlangElseStatementImpl(node);
       }
+      else if (type == EMPTY_SLICE) {
+        return new VlangEmptySliceImpl(node);
+      }
       else if (type == ENUM_DECLARATION) {
         return new VlangEnumDeclarationImpl(node);
       }
@@ -510,6 +517,9 @@ public interface VlangTypes {
       }
       else if (type == GENERIC_ARGUMENTS) {
         return new VlangGenericArgumentsImpl(node);
+      }
+      else if (type == GENERIC_ARGUMENTS_FIRST_PIN) {
+        return new VlangGenericArgumentsFirstPinImpl(node);
       }
       else if (type == GLOBAL_VARIABLE_DECLARATION) {
         return new VlangGlobalVariableDeclarationImpl(node);
@@ -783,6 +793,9 @@ public interface VlangTypes {
       }
       else if (type == TAG) {
         return new VlangTagImpl(node);
+      }
+      else if (type == THREAD_TYPE) {
+        return new VlangThreadTypeImpl(node);
       }
       else if (type == TUPLE_TYPE) {
         return new VlangTupleTypeImpl(node);

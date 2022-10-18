@@ -44,10 +44,9 @@ object VlangTokenTypes {
     val KEYWORDS = TokenSet.create(
         BREAK,
         CASE,
-        CHAN,
         CONST,
         CONTINUE,
-        DEFAULT,
+        STATIC,
         DEFER,
         ELSE,
         FALLTHROUGH,

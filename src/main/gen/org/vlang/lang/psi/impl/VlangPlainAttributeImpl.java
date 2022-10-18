@@ -45,12 +45,6 @@ public class VlangPlainAttributeImpl extends VlangCompositeElementImpl implement
 
   @Override
   @Nullable
-  public PsiElement getDefault() {
-    return findChildByType(DEFAULT);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getInt() {
     return findChildByType(INT);
   }

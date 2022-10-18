@@ -12,4 +12,10 @@ public interface VlangVarModifier extends VlangCompositeElement {
   @Nullable
   PsiElement getShared();
 
+  @Nullable
+  PsiElement getStatic();
+
+  @Nullable
+  PsiElement getVolatile();
+
 }

@@ -62,7 +62,9 @@
     REMAINDER            =  '%'
     AT                   =  '@'
     SHIFT_RIGHT_ASSIGN   =  '>>='
+    UNSIGNED_SHIFT_RIGHT_ASSIGN   =  '>>>='
     SHIFT_RIGHT          =  '>>'
+    UNSIGNED_SHIFT_RIGHT =  '>>>'
     GREATER_OR_EQUAL     =  '>='
     GREATER              =  '>'
     VAR_ASSIGN           =  ':='
@@ -230,7 +232,7 @@ Statement ::=
   | LabeledStatement
   | DeferStatement {methods=[processDeclarations]}
 
-private StatementRecover ::= !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '&&' | '}' | break | case | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | pub | mut | shared | go | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | union | switch | var | unsafe | assert | match | lock | rlock | asm | sql | true | false | FOR_COMPILE_TIME | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG | LANGUAGE_INJECTION)
+private StatementRecover ::= !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '&&' | '}' | break | case | const | continue | decimali | defer | else | fallthrough | float | floati | for | fn | pub | mut | shared | go | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | union | switch | var | unsafe | assert | match | lock | rlock | asm | sql | true | false | FOR_COMPILE_TIME | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG | LANGUAGE_INJECTION)
 
 // attributes start
 // [attr1]
@@ -243,7 +245,7 @@ AttributeExpression ::= IfAttribute | PlainAttribute
 // if <ident>
 IfAttribute ::= if '!'? identifier '?'? {pin=1}
 // <ident> or 10 or "string" [: <ident> or "string"]
-PlainAttribute ::= (identifier | unsafe | default | sql | int | StringLiteral) (':' (identifier | StringLiteral))?
+PlainAttribute ::= (identifier | unsafe | sql | int | StringLiteral) (':' (identifier | StringLiteral))?
 // end of attributes
 
 // simple statements
@@ -259,7 +261,7 @@ LabeledStatement ::= LabelDefinition Statement? {pin=2}
 
 // = <list>
 left AssignmentStatement ::= AssignOp (ExpressionList) {pin=1}
-AssignOp ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '&=' | '&^='
+AssignOp ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '>>>=' | '&=' | '&^='
 
 // <- <expr>
 left SendStatement ::= '<-' Expression {pin=1 methods=[getSendExpression]}
@@ -341,9 +343,6 @@ SelectArms ::= (SelectArm | SelectElseArmClause)*
 SelectArm ::= <<enterMode "BLOCK?">> SimpleStatement <<exitModeSafe "BLOCK?">> Block semi {pin=2}
 // else { ... }
 SelectElseArmClause ::= else Block semi {pin=1}
-
-//CommCase ::= case ( Expression SendStatement | RecvStatement ) | default {pin(".*")="case"}
-//RecvStatement ::= ExpressionsOrVariables? Expression {pin=0 extends=VarSpec methods=[getRecvExpression getLeftExpressionsList getRightExpressionsList]}
 
 // #...
 // Used for inject other language in code
@@ -520,11 +519,12 @@ GlobalVariableDefinition ::= identifier (VarModifiers Type | GlobalVariableValue
 private GlobalVariableValue ::= '=' (<<withOff Expression "BLOCK?">> | (!() Expression)) { pin=1 }
 
 VarModifiers ::= VarModifier*
-VarModifier ::= mut | shared
+VarModifier ::= mut | shared | volatile | static
 
 SymbolVisibility ::= pub | BUILTIN_GLOBAL
 
 GenericArguments ::= '<' TypeListNoPin '>' {pin=3}
+GenericArgumentsFirstPin ::= '<' TypeListNoPin '>' {pin=1}
 
 FunctionDeclaration ::= Attributes? SymbolVisibility? fn identifier GenericArguments? Signature BlockWithConsume? {
   pin=4
@@ -589,7 +589,7 @@ Expression ::=
 // end of expression rule
 
 // (r)lock <var> { ... }
-LockExpression ::= (lock | rlock) <<enterMode "BLOCK?">> ExpressionList Block <<exitModeSafe "BLOCK?">>  {pin=1}
+LockExpression ::= (lock | rlock) <<enterMode "BLOCK?">> ExpressionList? Block <<exitModeSafe "BLOCK?">>  {pin=1}
 
 // go <expr>
 GoExpression ::= go Expression
@@ -625,8 +625,8 @@ private MaxGroup ::=
   | FunctionLit
 //| CompositeLit
 
-// fn (...) {...}
-FunctionLit ::= fn CaptureList? Signature Block {
+// fn [[<captures>]] [<generics>] (...) {...}
+FunctionLit ::= fn CaptureList? GenericArgumentsFirstPin? Signature Block {
   pin=1
   methods=[addCapture processDeclarations]
 }
@@ -664,6 +664,7 @@ private TypeLit ::=
   | FunctionType
   | MapType
   | ChannelType
+  | ThreadType
   | StructType
   | InterfaceType
 
@@ -725,7 +726,10 @@ MapType ::= 'map' '[' Type ']' Type {
 }
 
 // chan <type>
-ChannelType ::= chan Type? {pin=1}
+ChannelType ::= 'chan' Type? {pin=1}
+
+// thread <type>
+ThreadType ::= 'thread' Type? {pin=1}
 
 ////// TYPES END //////
 
@@ -734,7 +738,7 @@ LeftHandExprList ::= ExpressionList
 
 private ExpressionList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &')'))* {pin(".*")=1}
 private ExpressionWithRecover ::= Expression !':' {recoverWhile=ExpressionListRecover}
-private ExpressionListRecover ::= !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+'  | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | fn | go | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | enum | union | var | unsafe | assert | match | asm | sql | true | false | nil )
+private ExpressionListRecover ::= !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+'  | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '>>>=' | '[' | ']' | '^' | '^=' | '{' | '|' | '|=' | '||' | '}' | 'type' | break | case | const | continue | decimali | defer | else | fallthrough | float | floati | for | fn | go | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | enum | union | var | unsafe | assert | match | asm | sql | true | false | nil )
 
 private VarDefinitionList ::= VarDefinition (',' VarDefinition)*
 VarDefinition ::= VarModifiers? identifier {
@@ -793,9 +797,10 @@ JsonArgumentList ::= '(' <<enterMode "PAR">> Type ','? ElementList? '...'? ','? 
 // <expr>[0..10]
 // <expr>[..10]
 // <expr>[0..]
-left IndexOrSliceExpr ::= ('[' | HASH_LBRACK) (SliceExprBody | IndexExprBody) '..'? ']' !identifier
-private IndexExprBody ::= Expression SliceExprBodyInner?
-private inner SliceExprBodyInner ::= SliceExprBody
+left IndexOrSliceExpr ::= ('[' | HASH_LBRACK) IndexOrSliceInner ']' !identifier
+private IndexOrSliceInner ::= EmptySlice | ((SliceExprBody | IndexExprBody) '..'?)
+EmptySlice ::= '..' &']'
+private IndexExprBody ::= Expression SliceExprBody?
 private SliceExprBody ::= &'..' '..' Expression
 
 // <expr> or { ... }
@@ -812,7 +817,7 @@ MulExpr ::= Expression MulOp Expression
 
 private RelOp ::= '==' | '!=' | '<' | '<=' | '>' !'>' | '>='
 private AddOp ::= '+' | '-' | '|' | '^'
-private MulOp ::= '*' | '/' | '%' | '<<' | <<gtGt>> | '&' | '&^'
+private MulOp ::= '*' | '/' | '%' | '<<' | <<gtGtGt>> | <<gtGt>> | '&' | '&^'
 private UnaryOp ::= '+' | '-' | '!' | '^' | '~' | '*' | '&' | '&&' | '<-'
 
 fake BinaryExpr ::= Expression+ {

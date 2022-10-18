@@ -77,10 +77,20 @@ object DocumentationGenerator {
 
     private fun VlangVarModifiers.generateDoc(noHtml: Boolean = false): String {
         val modifiers = varModifierList
+        val isVolatile = modifiers.any { it.volatile != null }
+        val isStatic = modifiers.any { it.static != null }
         val isMutable = modifiers.any { it.mut != null }
         val isShared = modifiers.any { it.shared != null }
 
         return buildString {
+            if (isVolatile) {
+                colorize("volatile", asKeyword, noHtml)
+                append(" ")
+            }
+            if (isStatic) {
+                colorize("static", asKeyword, noHtml)
+                append(" ")
+            }
             if (isMutable) {
                 colorize("mutable", asKeyword, noHtml)
                 append(" ")

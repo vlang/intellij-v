@@ -31,6 +31,12 @@ public class VlangIndexOrSliceExprImpl extends VlangExpressionImpl implements Vl
 
   @Override
   @Nullable
+  public VlangEmptySlice getEmptySlice() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangEmptySlice.class);
+  }
+
+  @Override
+  @Nullable
   public VlangErrorPropagationExpression getErrorPropagationExpression() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangErrorPropagationExpression.class);
   }
