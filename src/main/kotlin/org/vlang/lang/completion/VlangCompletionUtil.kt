@@ -483,7 +483,7 @@ object VlangCompletionUtil {
             val function = element?.parentOfType<VlangReferenceExpression>()?.resolve()
             val takeZeroArguments = if (function is VlangSignatureOwner) VlangCodeInsightUtil.takeZeroArguments(function) else false
 
-            val withParenAfterCursor = context.document.charsSequence[caretOffset] == '('
+            val withParenAfterCursor =  context.document.charsSequence.getOrNull(caretOffset) == '('
 
             if (!withParenAfterCursor) {
                 context.document.insertString(caretOffset, "()")

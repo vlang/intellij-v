@@ -4368,7 +4368,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '&&' | '}' | break | case | const | continue | decimali | defer | else | fallthrough | float | floati | for | fn | pub | mut | shared | go | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | union | switch | var | unsafe | assert | match | lock | rlock | asm | sql | true | false | FOR_COMPILE_TIME | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG | LANGUAGE_INJECTION)
+  // !('!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | '{' | '|' | '|=' | '||' | '&&' | '}' | type | break | case | const | continue | decimali | defer | else | fallthrough | float | floati | for | fn | pub | mut | shared | go | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | union | switch | var | unsafe | assert | match | lock | rlock | asm | sql | true | false | FOR_COMPILE_TIME | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG | LANGUAGE_INJECTION)
   static boolean StatementRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StatementRecover")) return false;
     boolean r;
@@ -4378,7 +4378,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // '!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '&&' | '}' | break | case | const | continue | decimali | defer | else | fallthrough | float | floati | for | fn | pub | mut | shared | go | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | union | switch | var | unsafe | assert | match | lock | rlock | asm | sql | true | false | FOR_COMPILE_TIME | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG | LANGUAGE_INJECTION
+  // '!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | '{' | '|' | '|=' | '||' | '&&' | '}' | type | break | case | const | continue | decimali | defer | else | fallthrough | float | floati | for | fn | pub | mut | shared | go | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | union | switch | var | unsafe | assert | match | lock | rlock | asm | sql | true | false | FOR_COMPILE_TIME | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG | LANGUAGE_INJECTION
   private static boolean StatementRecover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StatementRecover_0")) return false;
     boolean r;
@@ -4392,13 +4392,13 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, SEMICOLON);
     if (!r) r = consumeToken(b, SEND_CHANNEL);
     if (!r) r = consumeToken(b, BIT_XOR);
-    if (!r) r = consumeToken(b, TYPE_);
     if (!r) r = consumeToken(b, LBRACE);
     if (!r) r = consumeToken(b, BIT_OR);
     if (!r) r = consumeToken(b, BIT_OR_ASSIGN);
     if (!r) r = consumeToken(b, COND_OR);
     if (!r) r = consumeToken(b, COND_AND);
     if (!r) r = consumeToken(b, RBRACE);
+    if (!r) r = consumeToken(b, TYPE);
     if (!r) r = consumeToken(b, BREAK);
     if (!r) r = consumeToken(b, CASE);
     if (!r) r = consumeToken(b, CONST);
@@ -4674,6 +4674,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   //   | CFlagStatement
   //   | LanguageInjectionStatement
   //   | TypeAliasDeclaration
+  //   | Statement
   static boolean TopDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TopDeclaration")) return false;
     boolean r;
@@ -4691,6 +4692,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = CFlagStatement(b, l + 1);
     if (!r) r = LanguageInjectionStatement(b, l + 1);
     if (!r) r = TypeAliasDeclaration(b, l + 1);
+    if (!r) r = Statement(b, l + 1);
     return r;
   }
 
@@ -4719,7 +4721,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !(';' | 'type' | const | fn | pub | BUILTIN_GLOBAL | var | struct | enum | interface | union | import | C_INCLUDE | C_FLAG | FOR_COMPILE_TIME | IF_COMPILE_TIME | LANGUAGE_INJECTION | '[')
+  // !( 'type' | BUILTIN_GLOBAL | enum | import | C_INCLUDE | C_FLAG | FOR_COMPILE_TIME | IF_COMPILE_TIME | LANGUAGE_INJECTION | '[' | '!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | '{' | '|' | '|=' | '||' | '&&' | '}' | break | case | const | continue | decimali | defer | else | fallthrough | float | floati | for | fn | pub | mut | shared | go | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | union | switch | var | unsafe | assert | match | lock | rlock | asm | sql | true | false | ELSE_COMPILE_TIME)
   static boolean TopLevelDeclarationRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TopLevelDeclarationRecover")) return false;
     boolean r;
@@ -4729,21 +4731,13 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ';' | 'type' | const | fn | pub | BUILTIN_GLOBAL | var | struct | enum | interface | union | import | C_INCLUDE | C_FLAG | FOR_COMPILE_TIME | IF_COMPILE_TIME | LANGUAGE_INJECTION | '['
+  // 'type' | BUILTIN_GLOBAL | enum | import | C_INCLUDE | C_FLAG | FOR_COMPILE_TIME | IF_COMPILE_TIME | LANGUAGE_INJECTION | '[' | '!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | '{' | '|' | '|=' | '||' | '&&' | '}' | break | case | const | continue | decimali | defer | else | fallthrough | float | floati | for | fn | pub | mut | shared | go | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | union | switch | var | unsafe | assert | match | lock | rlock | asm | sql | true | false | ELSE_COMPILE_TIME
   private static boolean TopLevelDeclarationRecover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TopLevelDeclarationRecover_0")) return false;
     boolean r;
-    r = consumeToken(b, SEMICOLON);
-    if (!r) r = consumeToken(b, TYPE_);
-    if (!r) r = consumeToken(b, CONST);
-    if (!r) r = consumeToken(b, FN);
-    if (!r) r = consumeToken(b, PUB);
+    r = consumeToken(b, TYPE_);
     if (!r) r = consumeToken(b, BUILTIN_GLOBAL);
-    if (!r) r = consumeToken(b, VAR);
-    if (!r) r = consumeToken(b, STRUCT);
     if (!r) r = consumeToken(b, ENUM);
-    if (!r) r = consumeToken(b, INTERFACE);
-    if (!r) r = consumeToken(b, UNION);
     if (!r) r = consumeToken(b, IMPORT);
     if (!r) r = consumeToken(b, C_INCLUDE);
     if (!r) r = consumeToken(b, C_FLAG);
@@ -4751,6 +4745,64 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, IF_COMPILE_TIME);
     if (!r) r = consumeToken(b, LANGUAGE_INJECTION);
     if (!r) r = consumeToken(b, LBRACK);
+    if (!r) r = consumeToken(b, NOT);
+    if (!r) r = consumeToken(b, QUESTION);
+    if (!r) r = consumeToken(b, BIT_AND);
+    if (!r) r = consumeToken(b, LPAREN);
+    if (!r) r = consumeToken(b, MUL);
+    if (!r) r = consumeToken(b, PLUS);
+    if (!r) r = consumeToken(b, MINUS);
+    if (!r) r = consumeToken(b, SEMICOLON);
+    if (!r) r = consumeToken(b, SEND_CHANNEL);
+    if (!r) r = consumeToken(b, BIT_XOR);
+    if (!r) r = consumeToken(b, LBRACE);
+    if (!r) r = consumeToken(b, BIT_OR);
+    if (!r) r = consumeToken(b, BIT_OR_ASSIGN);
+    if (!r) r = consumeToken(b, COND_OR);
+    if (!r) r = consumeToken(b, COND_AND);
+    if (!r) r = consumeToken(b, RBRACE);
+    if (!r) r = consumeToken(b, BREAK);
+    if (!r) r = consumeToken(b, CASE);
+    if (!r) r = consumeToken(b, CONST);
+    if (!r) r = consumeToken(b, CONTINUE);
+    if (!r) r = consumeToken(b, DECIMALI);
+    if (!r) r = consumeToken(b, DEFER);
+    if (!r) r = consumeToken(b, ELSE);
+    if (!r) r = consumeToken(b, FALLTHROUGH);
+    if (!r) r = consumeToken(b, FLOAT);
+    if (!r) r = consumeToken(b, FLOATI);
+    if (!r) r = consumeToken(b, FOR);
+    if (!r) r = consumeToken(b, FN);
+    if (!r) r = consumeToken(b, PUB);
+    if (!r) r = consumeToken(b, MUT);
+    if (!r) r = consumeToken(b, SHARED);
+    if (!r) r = consumeToken(b, GO);
+    if (!r) r = consumeToken(b, GOTO);
+    if (!r) r = consumeToken(b, HEX);
+    if (!r) r = consumeToken(b, IDENTIFIER);
+    if (!r) r = consumeToken(b, IF);
+    if (!r) r = consumeToken(b, INT);
+    if (!r) r = consumeToken(b, INTERFACE);
+    if (!r) r = consumeToken(b, OCT);
+    if (!r) r = consumeToken(b, RETURN);
+    if (!r) r = consumeToken(b, SELECT);
+    if (!r) r = consumeToken(b, RAW_STRING);
+    if (!r) r = consumeToken(b, OPEN_QUOTE);
+    if (!r) r = consumeToken(b, CHAR);
+    if (!r) r = consumeToken(b, STRUCT);
+    if (!r) r = consumeToken(b, UNION);
+    if (!r) r = consumeToken(b, SWITCH);
+    if (!r) r = consumeToken(b, VAR);
+    if (!r) r = consumeToken(b, UNSAFE);
+    if (!r) r = consumeToken(b, ASSERT);
+    if (!r) r = consumeToken(b, MATCH);
+    if (!r) r = consumeToken(b, LOCK);
+    if (!r) r = consumeToken(b, RLOCK);
+    if (!r) r = consumeToken(b, ASM);
+    if (!r) r = consumeToken(b, SQL);
+    if (!r) r = consumeToken(b, TRUE);
+    if (!r) r = consumeToken(b, FALSE);
+    if (!r) r = consumeToken(b, ELSE_COMPILE_TIME);
     return r;
   }
 
