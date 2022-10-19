@@ -77,8 +77,8 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
 <!--        <definitionsScopedSearch implementation="org.vlang.lang.search.VlangInheritorsSearch"/>-->
         <codeInsight.lineMarkerProvider language="vlang"
                                         implementationClass="org.vlang.lang.search.VlangInheritorsLineMarkerProvider"/>
-<!--        <codeInsight.inlayProvider language="vlang"-->
-<!--                                   implementationClass="org.vlang.ide.hints.VlangInlayHintsProvider"/>-->
+        <codeInsight.inlayProvider language="vlang"
+                                   implementationClass="org.vlang.ide.hints.VlangInlayHintsProvider"/>
         <highlightUsagesHandlerFactory
           implementation="org.vlang.ide.highlight.exitpoint.VlangHighlightExitPointsHandlerFactory"/>
         <codeInsight.parameterInfo language="vlang"

@@ -4721,7 +4721,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !( 'type' | BUILTIN_GLOBAL | enum | import | C_INCLUDE | C_FLAG | FOR_COMPILE_TIME | IF_COMPILE_TIME | LANGUAGE_INJECTION | '[' | '!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | '{' | '|' | '|=' | '||' | '&&' | '}' | break | case | const | continue | decimali | defer | else | fallthrough | float | floati | for | fn | pub | mut | shared | go | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | union | switch | var | unsafe | assert | match | lock | rlock | asm | sql | true | false | ELSE_COMPILE_TIME)
+  // !('type' | BUILTIN_GLOBAL | enum | import | C_INCLUDE | C_FLAG | FOR_COMPILE_TIME | IF_COMPILE_TIME | LANGUAGE_INJECTION | '[' | '!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | '{' | '|' | '|=' | '||' | '&&' | '}' | break | case | const | continue | decimali | defer | else | fallthrough | float | floati | for | fn | pub | mut | shared | go | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | union | switch | var | unsafe | assert | match | lock | rlock | asm | sql | true | false | ELSE_COMPILE_TIME)
   static boolean TopLevelDeclarationRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TopLevelDeclarationRecover")) return false;
     boolean r;

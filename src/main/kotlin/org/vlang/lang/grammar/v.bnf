@@ -848,7 +848,10 @@ EnumFetch ::= '.' ReferenceExpression {pin=2}
 
 // <expr>..<expr>
 // <expr>...<expr> (inclusive)
-RangeExpr ::= Expression ('..' | '...') !']' Expression {pin=2}
+RangeExpr ::= Expression ('..' | '...') !']' Expression {
+  pin=2
+  methods=[left="Expression[0]" right="Expression[1]"]
+}
 
 // mut <expr>
 MutExpression ::= mut Expression

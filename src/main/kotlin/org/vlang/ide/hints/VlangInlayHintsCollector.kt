@@ -12,8 +12,8 @@ import com.intellij.openapi.project.DumbService
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.refactoring.suggested.endOffset
-import org.vlang.lang.psi.VlangVarDefinition
-import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
+import com.intellij.refactoring.suggested.startOffset
+import org.vlang.lang.psi.VlangRangeExpr
 
 @Suppress("UnstableApiUsage")
 class VlangInlayHintsCollector(
@@ -33,23 +33,29 @@ class VlangInlayHintsCollector(
         // If the indexing process is in progress.
         if (file.project.service<DumbService>().isDumb) return true
 
-        if (element is VlangVarDefinition) {
+        if (element is VlangRangeExpr && settings.ranges) {
             showAnnotation(element)
         }
 
         return true
     }
 
-    private fun showAnnotation(element: VlangVarDefinition) {
-        val type = element.getTypeInner(null)?.resolveType() ?: return
-        val readableName = type.toEx().readableName(element)
+    private fun showAnnotation(element: VlangRangeExpr) {
+        val op = element.range ?: element.tripleDot ?: return
+        val inclusive = element.tripleDot != null
+
+        addRangeHint(op.startOffset, true)
+        addRangeHint(op.endOffset, inclusive)
+    }
+
+    private fun addRangeHint(offset: Int, inclusive: Boolean) {
         val visibilityPresentation = withInlayAttributes(
-            container(factory.smallText(": $readableName")),
+            container(factory.smallText(if (inclusive) "≤" else "<")),
             DefaultLanguageHighlighterColors.INLINE_PARAMETER_HINT
         )
 
         sink.addInlineElement(
-            element.endOffset,
+            offset,
             relatesToPrecedingText = true,
             presentation = visibilityPresentation,
             placeAtTheEndOfLine = false
@@ -62,8 +68,8 @@ class VlangInlayHintsCollector(
                 base,
                 left = 4,
                 right = 4,
-                top = 2,
-                down = 1,
+                top = 0,
+                down = 0,
             ),
             8,
             8

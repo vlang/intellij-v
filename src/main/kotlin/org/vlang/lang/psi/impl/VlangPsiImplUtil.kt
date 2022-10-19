@@ -766,7 +766,8 @@ object VlangPsiImplUtil {
         if (expr is VlangIndexOrSliceExpr) {
             val indexExpr = expr.expressionList.firstOrNull() ?: return null
             val lbrack = expr.lbrack ?: return null
-            val isRange = PsiTreeUtil.findSiblingForward(lbrack, VlangTypes.RANGE, false, null) != null ||
+            val isRange =  expr.emptySlice != null ||
+                    PsiTreeUtil.findSiblingForward(lbrack, VlangTypes.RANGE, false, null) != null ||
                     PsiTreeUtil.findSiblingForward(lbrack, VlangTypes.RANGE_EXPR, false, null) != null
             if (isRange) {
                 return indexExpr.getType(null)
