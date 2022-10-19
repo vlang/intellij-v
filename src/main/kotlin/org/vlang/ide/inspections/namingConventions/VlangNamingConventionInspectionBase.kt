@@ -84,7 +84,7 @@ abstract class VlangNamingConventionInspectionBase : VlangBaseInspection() {
             val named = descriptor.psiElement.parentOfType<VlangNamedElement>()
 
             val name = named?.name ?: return
-            val newName = name.replace(Regex("([A-Z])"), "_$1").lowercase().trim('_')
+            val newName = name.replace(SNAKE_CASE_HELPER_REGEX, "_$1").lowercase().trim('_')
 
             invokeLater {
                 RefactoringFactory.getInstance(project).createRename(named, newName).run()
@@ -93,6 +93,7 @@ abstract class VlangNamingConventionInspectionBase : VlangBaseInspection() {
     }
 
     companion object {
+        private val SNAKE_CASE_HELPER_REGEX = Regex("([A-Z])")
         private val NAME_FIX = NameQuickFix()
         private val TO_SNAKE_CASE_FIX = ToSnakeCaseQuickFix()
     }
