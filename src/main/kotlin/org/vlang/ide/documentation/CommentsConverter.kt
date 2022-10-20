@@ -32,6 +32,18 @@ object CommentsConverter {
                 }
             } else if (element is VlangTypeAliasDeclaration) {
                 return getCommentsInner(element.parent) // type declaration
+            } else if (element is VlangFieldDefinition) {
+                // comments after field definition
+                // ```
+                // struct Foo {
+                //   name string // comment
+                // }
+                // ```
+                val parent = element.parent as? VlangFieldDeclaration
+                val lastChild = parent?.lastChild
+                if (lastChild is PsiComment) {
+                    return listOf(lastChild)
+                }
             }
         }
         return comments
