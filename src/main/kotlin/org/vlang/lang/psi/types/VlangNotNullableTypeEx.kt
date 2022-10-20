@@ -1,15 +1,15 @@
 package org.vlang.lang.psi.types
 
 import com.intellij.openapi.project.Project
-import org.vlang.lang.psi.VlangCompositeElement
+import com.intellij.psi.PsiElement
 import org.vlang.lang.psi.VlangNotNullableType
 
 class VlangNotNullableTypeEx(raw: VlangNotNullableType) : VlangBaseTypeEx<VlangNotNullableType>(raw) {
     val inner = raw.type?.toEx()
 
-    override fun toString() = inner.safeAppend("!")
+    override fun toString() = "!".safeAppend(inner)
 
-    override fun readableName(context: VlangCompositeElement) = inner?.readableName(context).safeAppend("!")
+    override fun readableName(context: PsiElement) = "!".safeAppend(inner?.readableName(context))
 
     override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {
         return when (rhs) {

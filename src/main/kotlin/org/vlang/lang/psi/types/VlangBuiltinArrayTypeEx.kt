@@ -1,14 +1,14 @@
 package org.vlang.lang.psi.types
 
 import com.intellij.openapi.project.Project
-import org.vlang.lang.psi.VlangCompositeElement
+import com.intellij.psi.PsiElement
 import org.vlang.lang.psi.VlangStructType
 import org.vlang.lang.psi.VlangType
 
 class VlangBuiltinArrayTypeEx(raw: VlangStructType) : VlangBaseTypeEx<VlangType>(raw) {
     override fun toString() = "array"
 
-    override fun readableName(context: VlangCompositeElement) = "array"
+    override fun readableName(context: PsiElement) = "array"
 
     override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {
         return when (rhs) {

@@ -2,6 +2,7 @@
 package org.vlang.lang.psi.impl;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -60,6 +61,17 @@ public class VlangCallExprImpl extends VlangExpressionImpl implements VlangCallE
   @NotNull
   public List<VlangExpression> getParameters() {
     return VlangPsiImplUtil.getParameters(this);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement resolve() {
+    return VlangPsiImplUtil.resolve(this);
+  }
+
+  @Override
+  public int paramIndexOf(@NotNull PsiElement pos) {
+    return VlangPsiImplUtil.paramIndexOf(this, pos);
   }
 
 }

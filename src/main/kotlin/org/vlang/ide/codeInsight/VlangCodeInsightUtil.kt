@@ -7,6 +7,7 @@ import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.*
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.types.VlangPrimitiveTypes
+import org.vlang.utils.parentNth
 
 object VlangCodeInsightUtil {
     const val BUILTIN_MODULE = "builtin"
@@ -20,6 +21,19 @@ object VlangCodeInsightUtil {
         }
 
         return "'${owner.name}'"
+    }
+
+    fun getCallExpr(element: PsiElement): VlangCallExpr? {
+        val parentValue = element.parentOfType<VlangValue>()
+        if (parentValue != null) {
+            return parentValue.parentNth(3)
+        }
+        return element.parentOfType()
+    }
+
+    fun isArrayMethodCall(callExpr: VlangCallExpr): Boolean {
+        val function = callExpr.resolve() ?: return false
+        return function is VlangMethodDeclaration && function.receiverType.textMatches("array")
     }
 
     fun insideOrGuard(element: PsiElement): Boolean {
@@ -117,7 +131,7 @@ object VlangCodeInsightUtil {
         return name.startsWith("JS.") || name.startsWith("C.")
     }
 
-    fun getQualifiedName(context: VlangCompositeElement, element: VlangNamedElement): String {
+    fun getQualifiedName(context: PsiElement, element: VlangNamedElement): String {
         val name = element.getQualifiedName() ?: return element.name ?: ""
 
         val contextFile = context.containingFile as VlangFile

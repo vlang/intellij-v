@@ -21,4 +21,7 @@ public interface VlangAliasType extends VlangType {
 
   boolean isAlias();
 
+  @Nullable
+  VlangType getAliasType();
+
 }

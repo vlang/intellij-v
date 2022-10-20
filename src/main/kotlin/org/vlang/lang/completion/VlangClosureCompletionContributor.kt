@@ -8,14 +8,14 @@ import com.intellij.codeInsight.template.impl.ConstantNode
 import com.intellij.openapi.editor.Document
 import com.intellij.patterns.PlatformPatterns.psiElement
 import com.intellij.psi.PsiDocumentManager
+import com.intellij.psi.PsiElement
 import com.intellij.util.ProcessingContext
+import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.ide.codeInsight.VlangTypeInferenceUtil
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.*
-import org.vlang.lang.psi.impl.VlangLangUtil
 import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
-import org.vlang.utils.parentNth
 
 class VlangClosureCompletionContributor : CompletionContributor() {
     init {
@@ -30,41 +30,23 @@ class VlangClosureCompletionContributor : CompletionContributor() {
         override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
             val pos = parameters.position
 
-            // don't use parentOfType because it will return call expr even in body of closure
-            val callExpr = pos.parentNth<VlangCallExpr>(5) ?: return
-            val index = VlangLangUtil.indexInCall(pos) ?: return
+            val contextType = VlangTypeInferenceUtil.getContextType(pos.parent)
 
-            val refExpr = callExpr.expression as? VlangReferenceExpression ?: return
-            val function = refExpr.resolve() as? VlangFunctionOrMethodDeclaration ?: return
-            val params = function.getSignature()?.parameters?.parametersListWithTypes ?: return
-
-            val isArrayMethod = function is VlangMethodDeclaration && function.receiverType.textMatches("array")
-
-            val param = params.getOrNull(index) ?: return
-            val type = param.second?.resolveType() ?: return
-            val functionType = if (type is VlangAliasType) {
-                val typeList = type.typeUnionList?.typeList ?: return
-                if (typeList.size != 1) {
-                    return
-                }
-
-                typeList.first() as? VlangFunctionType
+            val functionType = if (contextType is VlangAliasType) {
+                contextType.aliasType
             } else {
-                type as? VlangFunctionType
-            }
-
-            if (functionType == null) {
-                return
-            }
+                contextType
+            } as? VlangFunctionType ?: return
 
             val presentationText = functionType.text + " {...}"
-            val litSignature = functionType.getSignature() ?: return
+            val signature = functionType.getSignature() ?: return
 
+            val callExpr = VlangCodeInsightUtil.getCallExpr(pos)
             result.addElement(
                 PrioritizedLookupElement.withPriority(
                     LookupElementBuilder.create("fn")
                         .withPresentableText(presentationText)
-                        .withInsertHandler(MyInsertHandler(litSignature, callExpr, isArrayMethod)),
+                        .withInsertHandler(MyInsertHandler(signature, pos, callExpr)),
                     VlangCompletionUtil.CONTEXT_COMPLETION_PRIORITY.toDouble()
                 )
             )
@@ -72,8 +54,8 @@ class VlangClosureCompletionContributor : CompletionContributor() {
 
         class MyInsertHandler(
             private val signature: VlangSignature,
-            private val call: VlangCallExpr,
-            private val isArrayMethod: Boolean,
+            private val anchor: PsiElement,
+            private val call: VlangCallExpr?,
         ) : InsertHandler<LookupElement> {
 
             override fun handleInsert(context: InsertionContext, item: LookupElement) {
@@ -86,7 +68,7 @@ class VlangClosureCompletionContributor : CompletionContributor() {
                 processImportTypes(signature, currentModule, file, context.document)
 
                 val templateVariables = processTemplateVars(signature).toMutableList()
-                val paramsString = buildParamsPart(signature, call, isArrayMethod, templateVariables)
+                val paramsString = buildParamsPart(signature, call, templateVariables)
 
                 val resultTypeEx = result?.type.toEx()
                 if (resultTypeEx is VlangVoidPtrTypeEx) {
@@ -101,7 +83,7 @@ class VlangClosureCompletionContributor : CompletionContributor() {
                         if (resultTypeEx is VlangVoidPtrTypeEx) {
                             append("\$PARAM_T$")
                         } else {
-                            append(result.type.toEx().readableName(call))
+                            append(result.type.toEx().readableName(anchor))
                         }
                     }
                     append(" {\n\$END\$\n}")
@@ -120,8 +102,7 @@ class VlangClosureCompletionContributor : CompletionContributor() {
 
             private fun buildParamsPart(
                 signature: VlangSignature,
-                call: VlangCallExpr,
-                isArrayMethod: Boolean,
+                call: VlangCallExpr?,
                 templateVariables: List<String>,
             ): String {
                 val params = signature.parameters.parametersListWithTypes
@@ -140,7 +121,7 @@ class VlangClosureCompletionContributor : CompletionContributor() {
                         if (variadic) {
                             append("...")
                         }
-                        processParamType(type.toEx(), call, isArrayMethod)
+                        processParamType(type.toEx(), signature, call)
                     }
                 }
 
@@ -153,12 +134,8 @@ class VlangClosureCompletionContributor : CompletionContributor() {
                 }
             }
 
-            private fun StringBuilder.processParamType(
-                typeEx: VlangTypeEx<*>,
-                call: VlangCallExpr,
-                isArrayMethod: Boolean,
-            ) {
-                if (typeEx is VlangVoidPtrTypeEx && isArrayMethod) {
+            private fun StringBuilder.processParamType(typeEx: VlangTypeEx<*>, anchor: VlangCompositeElement, call: VlangCallExpr?) {
+                if (call != null && typeEx is VlangVoidPtrTypeEx && VlangCodeInsightUtil.isArrayMethodCall(call)) {
                     val type = tryInferTypeFromCaller(call)
                     if (type != null) {
                         append(type.readableName(call))
@@ -166,7 +143,7 @@ class VlangClosureCompletionContributor : CompletionContributor() {
                     }
                 }
 
-                append(typeEx.readableName(call))
+                append(typeEx.readableName(anchor))
             }
 
             private fun tryInferTypeFromCaller(call: VlangCallExpr): VlangTypeEx<*>? {

@@ -1,13 +1,13 @@
 package org.vlang.lang.psi.types
 
 import com.intellij.openapi.project.Project
-import org.vlang.lang.psi.VlangCompositeElement
+import com.intellij.psi.PsiElement
 import org.vlang.lang.psi.VlangType
 
 class VlangSimpleTypeEx(raw: VlangType) : VlangBaseTypeEx<VlangType>(raw) {
     override fun toString(): String = raw.text
 
-    override fun readableName(context: VlangCompositeElement): String = raw.text
+    override fun readableName(context: PsiElement): String = raw.text
 
     override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {
         return when (rhs) {

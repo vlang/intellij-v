@@ -62,4 +62,10 @@ public class VlangAliasTypeImpl extends VlangTypeImpl implements VlangAliasType 
     return VlangPsiImplUtil.isAlias(this);
   }
 
+  @Override
+  @Nullable
+  public VlangType getAliasType() {
+    return VlangPsiImplUtil.getAliasType(this);
+  }
+
 }

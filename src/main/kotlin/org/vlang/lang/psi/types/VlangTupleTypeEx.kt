@@ -1,7 +1,7 @@
 package org.vlang.lang.psi.types
 
 import com.intellij.openapi.project.Project
-import org.vlang.lang.psi.VlangCompositeElement
+import com.intellij.psi.PsiElement
 import org.vlang.lang.psi.VlangTupleType
 
 class VlangTupleTypeEx(raw: VlangTupleType) : VlangBaseTypeEx<VlangTupleType>(raw) {
@@ -13,7 +13,7 @@ class VlangTupleTypeEx(raw: VlangTupleType) : VlangBaseTypeEx<VlangTupleType>(ra
         append(")")
     }
 
-    override fun readableName(context: VlangCompositeElement) = buildString {
+    override fun readableName(context: PsiElement) = buildString {
         append("(")
         append(types.joinToString(", ") { it.readableName(context) })
         append(")")

@@ -1,7 +1,7 @@
 package org.vlang.lang.psi.types
 
 import com.intellij.openapi.project.Project
-import org.vlang.lang.psi.VlangCompositeElement
+import com.intellij.psi.PsiElement
 import org.vlang.lang.psi.VlangFunctionType
 import org.vlang.lang.psi.VlangSignature
 
@@ -21,7 +21,7 @@ class VlangFunctionTypeEx(raw: VlangFunctionType?, signature: VlangSignature? = 
         }
     }
 
-    override fun readableName(context: VlangCompositeElement) = buildString {
+    override fun readableName(context: PsiElement) = buildString {
         append("fn ")
         append("(")
         append(params.joinToString(", ") { it.readableName(context) })

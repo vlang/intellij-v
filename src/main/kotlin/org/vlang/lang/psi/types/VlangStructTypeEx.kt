@@ -1,8 +1,8 @@
 package org.vlang.lang.psi.types
 
 import com.intellij.openapi.project.Project
+import com.intellij.psi.PsiElement
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
-import org.vlang.lang.psi.VlangCompositeElement
 import org.vlang.lang.psi.VlangStructDeclaration
 import org.vlang.lang.psi.VlangStructType
 
@@ -14,7 +14,7 @@ class VlangStructTypeEx(raw: VlangStructType) : VlangBaseTypeEx<VlangStructType>
 
     override fun qualifiedName() = name
 
-    override fun readableName(context: VlangCompositeElement) = VlangCodeInsightUtil.getQualifiedName(context, decl)
+    override fun readableName(context: PsiElement) = VlangCodeInsightUtil.getQualifiedName(context, decl)
 
     override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {
         return when (rhs) {

@@ -4,9 +4,12 @@ package org.vlang.lang.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.ResolveState;
 import com.intellij.psi.stubs.IStubElementType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.VlangEnumFieldDefinition;
+import org.vlang.lang.psi.VlangType;
 import org.vlang.lang.psi.VlangVisitor;
 import org.vlang.lang.stubs.VlangEnumFieldDefinitionStub;
 
@@ -41,6 +44,12 @@ public class VlangEnumFieldDefinitionImpl extends VlangNamedElementImpl<VlangEnu
   @Override
   public boolean isPublic() {
     return VlangPsiImplUtil.isPublic(this);
+  }
+
+  @Override
+  @NotNull
+  public VlangType getTypeInner(@Nullable ResolveState context) {
+    return VlangPsiImplUtil.getTypeInner(this, context);
   }
 
 }

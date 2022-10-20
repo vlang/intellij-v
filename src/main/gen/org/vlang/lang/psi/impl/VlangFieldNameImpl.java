@@ -42,4 +42,10 @@ public class VlangFieldNameImpl extends VlangCompositeElementImpl implements Vla
     return VlangPsiImplUtil.getQualifier(this);
   }
 
+  @Override
+  @Nullable
+  public PsiElement resolve() {
+    return VlangPsiImplUtil.resolve(this);
+  }
+
 }

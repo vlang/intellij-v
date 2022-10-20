@@ -16,4 +16,7 @@ public interface VlangFieldName extends VlangReferenceExpressionBase {
   @Nullable
   VlangCompositeElement getQualifier();
 
+  @Nullable
+  PsiElement resolve();
+
 }

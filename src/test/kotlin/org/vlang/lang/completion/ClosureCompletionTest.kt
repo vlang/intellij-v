@@ -144,4 +144,68 @@ class ClosureCompletionTest : CompletionTestBase() {
         	})
         }
     """.trimIndent())
+
+    fun `test closure for struct key`() = doTestCompletion("""
+        module main
+
+        struct WithCallback {
+        	cb fn (foo int) ?bool
+        }
+        
+        fn main() {
+        	WithCallback{
+        		cb: fn<caret>
+        	}
+        }
+    """.trimIndent(), """
+        module main
+
+        struct WithCallback {
+        	cb fn (foo int) ?bool
+        }
+        
+        fn main() {
+        	WithCallback{
+        		cb: fn (foo int) ?bool {
+        			
+        		}
+        	}
+        }
+    """.trimIndent())
+
+    fun `test closure as default field value`() = doTestCompletion("""
+        module main
+
+        struct WithCallback {
+        	cb fn (foo int) ?bool = fn<caret>
+        }
+    """.trimIndent(), """
+        module main
+
+        struct WithCallback {
+        	cb fn (foo int) ?bool = fn (foo int) ?bool {
+        		
+        	}
+        }
+    """.trimIndent())
+
+    fun `test closure after assign`() = doTestCompletion("""
+        module main
+
+        fn main() {
+        	a := fn () {}
+            
+        	a = fn<caret>
+        }
+    """.trimIndent(), """
+        module main
+        
+        fn main() {
+        	a := fn () {}
+            
+        	a = fn () {
+        		
+        	}
+        }
+    """.trimIndent())
 }

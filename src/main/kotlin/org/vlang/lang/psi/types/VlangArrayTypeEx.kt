@@ -1,15 +1,15 @@
 package org.vlang.lang.psi.types
 
 import com.intellij.openapi.project.Project
+import com.intellij.psi.PsiElement
 import org.vlang.lang.psi.VlangArrayOrSliceType
-import org.vlang.lang.psi.VlangCompositeElement
 
 class VlangArrayTypeEx(raw: VlangArrayOrSliceType) : VlangBaseTypeEx<VlangArrayOrSliceType>(raw) {
     val inner = raw.type?.toEx()
 
     override fun toString() = "[]".safeAppend(inner)
 
-    override fun readableName(context: VlangCompositeElement) = "[]".safeAppend(inner?.readableName(context))
+    override fun readableName(context: PsiElement) = "[]".safeAppend(inner?.readableName(context))
 
     override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {
         return when (rhs) {

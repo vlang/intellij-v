@@ -1,13 +1,13 @@
 package org.vlang.lang.psi.types
 
 import com.intellij.openapi.project.Project
-import org.vlang.lang.psi.VlangCompositeElement
+import com.intellij.psi.PsiElement
 import org.vlang.lang.psi.VlangType
 
 class VlangPrimitiveTypeEx(raw: VlangType, private val name: VlangPrimitiveTypes) : VlangBaseTypeEx<VlangType>(raw) {
     override fun toString(): String = name.value
 
-    override fun readableName(context: VlangCompositeElement): String = name.value
+    override fun readableName(context: PsiElement): String = name.value
 
     fun isNumeric(): Boolean {
         return name.numeric

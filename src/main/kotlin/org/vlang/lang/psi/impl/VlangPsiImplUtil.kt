@@ -112,6 +112,11 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getAliasType(o: VlangAliasType): VlangType? {
+        return o.typeUnionList?.typeList?.firstOrNull()
+    }
+
+    @JvmStatic
     fun getName(o: VlangImportSpec): String {
         return o.importPath.qualifiedName
     }
@@ -164,6 +169,11 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun getQualifier(o: VlangFieldName): VlangCompositeElement? {
         return null
+    }
+
+    @JvmStatic
+    fun resolve(o: VlangFieldName): PsiElement? {
+        return o.referenceExpression.resolve()
     }
 
     @JvmStatic
@@ -288,6 +298,11 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun isPublic(o: VlangEnumFieldDefinition): Boolean {
         return o.parentOfType<VlangEnumDeclaration>()?.isPublic() ?: false
+    }
+
+    @JvmStatic
+    fun getTypeInner(o: VlangEnumFieldDefinition, context: ResolveState?): VlangType {
+        return o.parentOfType<VlangEnumType>()!!
     }
 
     @JvmStatic
@@ -584,6 +599,18 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun getParameters(o: VlangCallExpr): List<VlangExpression> {
         return o.argumentList.elementList.mapNotNull { it?.value?.expression }
+    }
+
+    @JvmStatic
+    fun resolve(o: VlangCallExpr): PsiElement? {
+        return (o.expression as? VlangReferenceExpression)?.resolve()
+    }
+
+    @JvmStatic
+    fun paramIndexOf(o: VlangCallExpr, pos: PsiElement): Int {
+        val element = pos.parentOfType<VlangElement>()
+        val args = o.argumentList.elementList
+        return args.indexOf(element)
     }
 
     @JvmStatic

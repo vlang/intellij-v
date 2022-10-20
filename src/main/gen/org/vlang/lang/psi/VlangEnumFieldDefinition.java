@@ -2,8 +2,10 @@
 package org.vlang.lang.psi;
 
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
 import com.intellij.psi.StubBasedPsiElement;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.stubs.VlangEnumFieldDefinitionStub;
 
 public interface VlangEnumFieldDefinition extends VlangNamedElement, StubBasedPsiElement<VlangEnumFieldDefinitionStub> {
@@ -12,5 +14,8 @@ public interface VlangEnumFieldDefinition extends VlangNamedElement, StubBasedPs
   PsiElement getIdentifier();
 
   boolean isPublic();
+
+  @NotNull
+  VlangType getTypeInner(@Nullable ResolveState context);
 
 }

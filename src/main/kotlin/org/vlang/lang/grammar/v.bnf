@@ -446,7 +446,7 @@ EnumType ::= enum identifier GenericArguments? '{' EnumFields? '}' {
 EnumFields ::= EnumFieldDeclaration (semi EnumFieldDeclaration)* semi?
 EnumFieldDeclaration ::= EnumFieldDefinition ('=' Expression)? {pin=1}
 EnumFieldDefinition ::= identifier {
-  methods=[isPublic]
+  methods=[isPublic getTypeInner]
   stubClass="org.vlang.lang.stubs.VlangEnumFieldDefinitionStub"
 }
 
@@ -472,7 +472,7 @@ TypeAliasDeclaration ::= SymbolVisibility? 'type' AliasType {
 
 AliasType ::= Type '=' TypeUnionList {
   pin=2
-  methods=[getIdentifier isAlias]
+  methods=[getIdentifier isAlias getAliasType]
 }
 
 // <type> [ | <type2>]...
@@ -615,7 +615,7 @@ private ElementInnerRecover ::= !('}' | ',' | semi | ')')
 Element ::= First [':' Value]  {pin(".*")=1}
 private First ::= Key | <<keyOrValueExpression>>
 Key ::= (FieldName &':') | !() Expression // nullability hack for key without reference inside
-FieldName ::= ReferenceExpression { methods=[getIdentifier getQualifier] }
+FieldName ::= ReferenceExpression { methods=[getIdentifier getQualifier resolve] }
 Value ::= Expression | LiteralValueExpression
 
 // end of type init
@@ -778,7 +778,7 @@ private RightHandExpr ::=
 
 // <expr>[<<generics>>](...)
 left CallExpr ::= GenericArguments? ArgumentList {
-  methods=[getParameters]
+  methods=[getParameters resolve paramIndexOf]
 }
 
 // noinspection BnfUnusedRule

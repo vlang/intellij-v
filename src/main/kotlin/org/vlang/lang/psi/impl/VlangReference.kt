@@ -11,6 +11,7 @@ import com.intellij.psi.util.parentOfType
 import com.intellij.util.ArrayUtil
 import org.vlang.configurations.VlangConfiguration
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
+import org.vlang.ide.codeInsight.VlangTypeInferenceUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangPsiImplUtil.processNamedElements
 import org.vlang.lang.stubs.index.VlangMethodIndex
@@ -294,7 +295,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
         when (val parent = myElement.parent) {
             is VlangEnumFetch -> {
-                if (!processEnumFetch(parent, file, processor, state)) return false
+                if (!processEnumFetch(parent, processor, state)) return false
             }
 
             is VlangFieldName -> {
@@ -325,62 +326,11 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
     private fun processEnumFetch(
         fetch: VlangEnumFetch,
-        file: VlangFile,
         processor: VlangScopeProcessor,
         state: ResolveState,
     ): Boolean {
-        if (fetch.parent is VlangMatchArm) {
-            val parentMatch = fetch.parentOfType<VlangMatchExpression>()
-            if (parentMatch != null) {
-                val matchExpression = parentMatch.expression as? VlangReferenceExpression ?: return true
-                return processQualifierExpression(file, matchExpression, processor, state)
-            }
-        }
-        if (fetch.parent is VlangDefaultFieldValue) {
-            val fieldDeclaration = fetch.parent.parent
-            if (fieldDeclaration is VlangFieldDeclaration) {
-                // TODO: support multi fields
-                val fieldDefinitionType = fieldDeclaration.type?.typeReferenceExpression ?: return true
-                return processQualifierExpression(file, fieldDefinitionType, processor, state)
-            }
-        }
-        if (fetch.parent is VlangBinaryExpr) {
-            val binaryExpr = fetch.parent as VlangBinaryExpr
-            if (binaryExpr.right != null && binaryExpr.right!!.isEquivalentTo(fetch)) {
-                val left = binaryExpr.left
-                return processQualifierExpression(file, left, processor, state)
-            }
-        }
-
-        val callExpr = fetch.parentOfType<VlangCallExpr>()
-        if (callExpr != null) {
-            val element = fetch.parentOfType<VlangElement>()
-            val index = callExpr.argumentList.elementList.indexOf(element)
-            val funcRef = callExpr.expression as? VlangReferenceExpression ?: return true
-            val func = funcRef.resolve() as? VlangFunctionOrMethodDeclaration ?: return true
-            val parameters = func.getSignature()?.parameters ?: return true
-            val params = parameters.parametersListWithTypes
-            val param = params.getOrNull(index) ?: return true
-            val type = param.second
-            return processType(type, processor, state)
-        }
-
-        if (fetch.parent.parent is VlangElement) {
-            val element = fetch.parent.parent as VlangElement
-            val key = element.key?.firstChild?.firstChild as? VlangReferenceExpression
-            if (key != null) {
-                return processQualifierExpression(file, key, processor, state)
-            }
-        }
-
-        val parentAssign = fetch.parentOfType<VlangAssignmentStatement>()
-        if (parentAssign != null) {
-            // TODO: support multi assign
-            val assignExpression = parentAssign.leftHandExprList.expressionList.firstOrNull() as? VlangReferenceExpression ?: return true
-            return processQualifierExpression(file, assignExpression, processor, state)
-        }
-
-        return true
+        val contextType = VlangTypeInferenceUtil.getContextType(fetch) ?: return true
+        return processType(contextType, processor, state)
     }
 
     private fun processDirectory(

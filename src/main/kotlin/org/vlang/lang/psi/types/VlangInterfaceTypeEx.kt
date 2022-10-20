@@ -1,8 +1,8 @@
 package org.vlang.lang.psi.types
 
 import com.intellij.openapi.project.Project
+import com.intellij.psi.PsiElement
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
-import org.vlang.lang.psi.VlangCompositeElement
 import org.vlang.lang.psi.VlangInterfaceDeclaration
 import org.vlang.lang.psi.VlangInterfaceType
 
@@ -14,7 +14,7 @@ class VlangInterfaceTypeEx(raw: VlangInterfaceType) : VlangBaseTypeEx<VlangInter
 
     override fun qualifiedName() = name
 
-    override fun readableName(context: VlangCompositeElement) = VlangCodeInsightUtil.getQualifiedName(context, decl)
+    override fun readableName(context: PsiElement) = VlangCodeInsightUtil.getQualifiedName(context, decl)
 
     override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {
         return true // TODO: Implement this

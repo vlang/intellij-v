@@ -1,7 +1,7 @@
 package org.vlang.lang.psi.types
 
 import com.intellij.openapi.project.Project
-import org.vlang.lang.psi.VlangCompositeElement
+import com.intellij.psi.PsiElement
 import org.vlang.lang.psi.VlangMapType
 
 class VlangMapTypeEx(raw: VlangMapType): VlangBaseTypeEx<VlangMapType>(raw) {
@@ -15,7 +15,7 @@ class VlangMapTypeEx(raw: VlangMapType): VlangBaseTypeEx<VlangMapType>(raw) {
         append(value)
     }
 
-    override fun readableName(context: VlangCompositeElement) = buildString {
+    override fun readableName(context: PsiElement) = buildString {
         append("map[")
         append(key.readableName(context))
         append("]")

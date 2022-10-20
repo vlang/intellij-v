@@ -19,19 +19,41 @@ import org.vlang.ide.documentation.DocumentationUtils.part
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 
 object DocumentationGenerator {
-    fun VlangType.generateDoc(): String {
+    fun VlangType.generateDoc(anchor: PsiElement? = null): String {
         when (this) {
             is VlangArrayOrSliceType -> return generateDoc()
             is VlangPointerType      -> return generateDoc()
             is VlangNullableType     -> return generateDoc()
             is VlangStructType       -> return generateDoc()
+            is VlangUnionType        -> return generateDoc()
+            is VlangEnumType         -> return generateDoc()
+            is VlangInterfaceType    -> return generateDoc()
         }
-        return colorize(text.escapeHTML(), asDeclaration)
+        return colorize(toEx().readableName(anchor ?: this).escapeHTML(), asDeclaration)
     }
 
     fun VlangStructType.generateDoc(): String {
+        return buildString {
+            colorize(identifier?.text ?: "anon", asDeclaration)
+        }
+    }
+
+    fun VlangUnionType.generateDoc(): String {
+        return buildString {
+            colorize(identifier?.text ?: "anon", asDeclaration)
+        }
+    }
+
+    fun VlangEnumType.generateDoc(): String {
+        return buildString {
+            colorize(identifier?.text ?: "anon", asDeclaration)
+        }
+    }
+
+    fun VlangInterfaceType.generateDoc(): String {
         return buildString {
             colorize(identifier?.text ?: "anon", asDeclaration)
         }
@@ -320,8 +342,7 @@ object DocumentationGenerator {
         return buildString {
             generateModuleName(containingFile)
             append(DocumentationMarkup.DEFINITION_START)
-            val parent = parent as? VlangVarDeclaration
-            val type = parent?.expressionList?.firstOrNull()?.getType(null) // TODO: support multi assign
+            val type = getType(null)
 
             val modifiersDoc = varModifiers?.generateDoc()
             if (!modifiersDoc.isNullOrEmpty()) {
@@ -334,7 +355,7 @@ object DocumentationGenerator {
 
             part("var", asKeyword)
             part(name, asDeclaration)
-            append(type?.generateDoc() ?: DocumentationUtils.colorize("unknown", asDeclaration))
+            append(type?.generateDoc(original) ?: DocumentationUtils.colorize("unknown", asDeclaration))
             append(DocumentationMarkup.DEFINITION_END)
 
             generateCommentsPart(this@generateDoc)
@@ -437,10 +458,10 @@ object DocumentationGenerator {
 
                 is VlangLiteral       -> {
                     when (elementType) {
-                        VlangTypes.TRUE  -> colorize(text, asKeyword)
+                        VlangTypes.TRUE -> colorize(text, asKeyword)
                         VlangTypes.FALSE -> colorize(text, asKeyword)
-                        VlangTypes.CHAR  -> colorize(text, asString)
-                        else             -> colorize(text, asNumber)
+                        VlangTypes.CHAR -> colorize(text, asString)
+                        else -> colorize(text, asNumber)
                     }
                 }
 
