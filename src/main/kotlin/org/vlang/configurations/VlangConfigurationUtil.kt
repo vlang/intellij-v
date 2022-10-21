@@ -7,8 +7,11 @@ import com.intellij.execution.process.OSProcessHandler
 import com.intellij.execution.process.ProcessEvent
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.logger
+import org.vlang.utils.toPath
 import java.nio.charset.StandardCharsets
+import java.nio.file.Path
 import java.util.concurrent.TimeUnit
+import kotlin.io.path.exists
 
 object VlangConfigurationUtil {
     private val LOG = logger<VlangConfigurationUtil>()
@@ -22,14 +25,14 @@ object VlangConfigurationUtil {
         if (path.isBlank()) {
             return null
         }
-        return "$path/$STANDARD_V_COMPILER"
+        return Path.of(path, STANDARD_V_COMPILER).toString()
     }
 
     fun getStdlibLocation(path: String): String? {
         if (path.isBlank()) {
             return null
         }
-        return "$path/$STANDARD_LIB_PATH"
+        return Path.of(path, STANDARD_LIB_PATH).toString()
     }
 
     fun guessToolchainVersion(path: String): String {
@@ -37,8 +40,13 @@ object VlangConfigurationUtil {
             return UNDEFINED_VERSION
         }
 
+        val exePath = "$path/$STANDARD_V_COMPILER"
+        if (!exePath.toPath().exists()) {
+            return UNDEFINED_VERSION
+        }
+
         val cmd = GeneralCommandLine()
-            .withExePath("$path/$STANDARD_V_COMPILER")
+            .withExePath(exePath)
             .withParameters("-version")
             .withCharset(StandardCharsets.UTF_8)
 

@@ -14,7 +14,10 @@ import org.jetbrains.concurrency.Promise
 import org.jetbrains.concurrency.rejectedPromise
 import org.jetbrains.concurrency.resolvedPromise
 import org.vlang.configurations.VlangConfigurationUtil
+import org.vlang.configurations.VlangProjectSettingsConfigurable
 import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
+import org.vlang.notifications.VlangErrorNotification
+import org.vlang.notifications.VlangNotification
 import java.io.File
 
 @Suppress("UnstableApiUsage")
@@ -71,7 +74,17 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
         val buildProgressListener = project.service<BuildViewManager>()
 
         val exe = project.projectSettings.compilerLocation
-            ?: throw RuntimeException(VlangConfigurationUtil.TOOLCHAIN_NOT_SETUP)
+        if (exe == null) {
+            VlangErrorNotification(VlangConfigurationUtil.TOOLCHAIN_NOT_SETUP)
+                .withTitle("Can't build V project")
+                .withActions(VlangNotification.Action("Setup V toolchain") { _, notification ->
+                    VlangProjectSettingsConfigurable.show(project)
+                    notification.expire()
+                })
+                .show()
+            resultPromise.setResult(TaskRunnerResults.FAILURE)
+            return
+        }
 
         val commandLine = GeneralCommandLine()
             .withExePath(exe)

@@ -2,6 +2,7 @@ package org.vlang.projectWizard
 
 import com.intellij.ide.util.projectWizard.ModuleWizardStep
 import com.intellij.ide.util.projectWizard.WizardContext
+import com.intellij.openapi.options.ConfigurationException
 import com.intellij.util.ui.JBUI
 import org.vlang.configurations.VlangProjectSettingsConfigurable
 import org.vlang.configurations.VlangProjectSettingsForm
@@ -21,7 +22,14 @@ class VlangConfigurationWizardStep(private val context: WizardContext, model: Vl
     override fun updateStep() {}
 
     override fun validate(): Boolean {
-        newProjectPanel.apply()
+        validateSettings()
         return true
+    }
+
+    private fun validateSettings() {
+        val issues = newProjectPanel.validateAll()
+        if (issues.isNotEmpty()) {
+            throw ConfigurationException(issues.first().message)
+        }
     }
 }

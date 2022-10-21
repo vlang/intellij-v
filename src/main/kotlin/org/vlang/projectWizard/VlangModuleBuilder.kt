@@ -1,13 +1,15 @@
 package org.vlang.projectWizard
 
-import com.intellij.ide.util.projectWizard.*
+import com.intellij.ide.util.projectWizard.ModuleBuilder
+import com.intellij.ide.util.projectWizard.ModuleBuilderListener
+import com.intellij.ide.util.projectWizard.ModuleWizardStep
+import com.intellij.ide.util.projectWizard.WizardContext
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.application.runWriteAction
 import com.intellij.openapi.fileEditor.FileEditorManager
-import com.intellij.openapi.module.BasePackageParameterFactory
 import com.intellij.openapi.module.Module
 import com.intellij.openapi.module.ModuleType
 import com.intellij.openapi.roots.ModifiableRootModel
@@ -40,11 +42,6 @@ class VlangModuleBuilder : ModuleBuilder(), ModuleBuilderListener {
 
     override fun getCustomOptionsStep(context: WizardContext, parentDisposable: Disposable): ModuleWizardStep {
         return VlangConfigurationWizardStep(context, model)
-    }
-
-    override fun getAdditionalFields(): MutableList<WizardInputField<*>> {
-        val field = BasePackageParameterFactory().createField("other") ?: return mutableListOf()
-        return mutableListOf(field)
     }
 
     override fun setupRootModel(modifiableRootModel: ModifiableRootModel) {

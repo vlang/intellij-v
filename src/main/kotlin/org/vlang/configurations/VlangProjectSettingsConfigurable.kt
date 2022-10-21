@@ -2,18 +2,21 @@ package org.vlang.configurations
 
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.options.Configurable
+import com.intellij.openapi.options.ConfigurationException
 import com.intellij.openapi.options.ShowSettingsUtil
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.openapi.util.Disposer
 import com.intellij.psi.stubs.StubIndexImpl
 import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
+import org.vlang.projectWizard.VlangToolchainFlavor
+import kotlin.io.path.pathString
 
 class VlangProjectSettingsConfigurable(private val project: Project) : Configurable {
     private val mainPanel: DialogPanel
     private val model = VlangProjectSettingsForm.Model(
         toolchainLocation = "",
-        toolchainVersion = "",
+        toolchainVersion = "N/A",
         stdlibLocation = "",
         modulesLocation = "",
     )
@@ -39,11 +42,10 @@ class VlangProjectSettingsConfigurable(private val project: Project) : Configura
                 model.modulesLocation != settings.modulesLocation
     }
 
-
     override fun apply() {
         mainPanel.apply()
 
-        mainPanel.validateAll()
+        validateSettings()
 
         if (model.stdlibLocation.isNotEmpty() && isModified) {
             val stdlibRoot = VlangConfiguration.getInstance(project).stdlibLocation
@@ -61,6 +63,13 @@ class VlangProjectSettingsConfigurable(private val project: Project) : Configura
         }
     }
 
+    private fun validateSettings() {
+        val issues = mainPanel.validateAll()
+        if (issues.isNotEmpty()) {
+            throw ConfigurationException(issues.first().message)
+        }
+    }
+
     override fun reset() {
         val settings = project.projectSettings
 
@@ -68,7 +77,9 @@ class VlangProjectSettingsConfigurable(private val project: Project) : Configura
             toolchainLocation = settings.toolchainLocation
             toolchainVersion = settings.toolchainVersion
             stdlibLocation = settings.stdlibLocation
-            modulesLocation = settings.modulesLocation
+            if (modulesLocation.isEmpty()) {
+                modulesLocation = settings.modulesLocation
+            }
         }
 
         mainPanel.reset()
@@ -78,10 +89,19 @@ class VlangProjectSettingsConfigurable(private val project: Project) : Configura
         private val LOG = logger<VlangProjectSettingsConfigurable>()
 
         fun onToolchainApply(model: VlangProjectSettingsForm.Model) {
+            if (model.modulesLocation.isEmpty()) {
+                val modulesLocation = VlangToolchainFlavor.suggestModulesHomePath()
+                if (modulesLocation != null) {
+                    model.modulesLocation = modulesLocation.pathString
+                }
+            }
+
             model.toolchainVersion = VlangConfigurationUtil.guessToolchainVersion(model.toolchainLocation)
 
-            if (model.stdlibLocation.isEmpty() && model.toolchainVersion != VlangConfigurationUtil.UNDEFINED_VERSION) {
+            if (model.toolchainVersion != VlangConfigurationUtil.UNDEFINED_VERSION) {
                 model.stdlibLocation = VlangConfigurationUtil.getStdlibLocation(model.toolchainLocation) ?: ""
+            } else {
+                model.stdlibLocation = ""
             }
         }
 

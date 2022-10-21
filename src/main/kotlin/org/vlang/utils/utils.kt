@@ -10,7 +10,15 @@ import com.intellij.openapi.project.ProjectLocator
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
+import com.intellij.ui.DocumentAdapter
 import org.vlang.lang.VlangFileType
+import java.nio.file.Files
+import java.nio.file.InvalidPathException
+import java.nio.file.Path
+import java.nio.file.Paths
+import javax.swing.JTextField
+import javax.swing.event.DocumentEvent
+import kotlin.streams.asSequence
 
 val Document.virtualFile: VirtualFile?
     get() = FileDocumentManager.getInstance().getFile(this)
@@ -19,6 +27,8 @@ val VirtualFile.isNotVlangFile: Boolean get() = !isVlangFile
 val VirtualFile.isVlangFile: Boolean get() = fileType == VlangFileType.INSTANCE
 
 val VirtualFile.guessProjectForFile get() = ProjectLocator.getInstance().guessProjectForFile(this)
+
+val VirtualFile.pathAsPath: Path get() = Paths.get(path)
 
 fun CapturingProcessHandler.runProcessWithGlobalProgress(timeoutInMilliseconds: Int? = null): ProcessOutput {
     return runProcess(ProgressManager.getGlobalProgressIndicator(), timeoutInMilliseconds)
@@ -54,4 +64,28 @@ fun PsiElement.line(): Int {
         0
     }
     return lineNumber
+}
+
+fun String.toPath(): Path = Paths.get(this)
+
+fun String.toPathOrNull(): Path? = pathOrNull(this::toPath)
+
+fun Path.list(): Sequence<Path> = Files.list(this).asSequence()
+
+private inline fun pathOrNull(block: () -> Path): Path? {
+    return try {
+        block()
+    } catch (e: InvalidPathException) {
+        null
+    }
+}
+
+fun JTextField.addTextChangeListener(listener: (DocumentEvent) -> Unit) {
+    document.addDocumentListener(
+        object : DocumentAdapter() {
+            override fun textChanged(e: DocumentEvent) {
+                listener(e)
+            }
+        }
+    )
 }
