@@ -23,11 +23,10 @@ class VlangRunConfigurationRunState(
             override fun startProcess(): ProcessHandler {
                 val workingDir = conf.workingDir
                 val outputDir = if (conf.outputDir.isEmpty()) File(conf.workingDir) else File(conf.outputDir)
-                val exe = File(outputDir, "main")
 
-                val iofile = File(workingDir, "bin/main")
-                if (!iofile.exists()) {
-                    throw IllegalStateException("Can't run ${iofile.absolutePath}, file not found")
+                val exe = File(outputDir, "main")
+                if (!exe.exists()) {
+                    throw IllegalStateException("Can't run ${exe.absolutePath}, file not found")
                 }
 
                 val commandLine = GeneralCommandLine()
