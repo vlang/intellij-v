@@ -161,4 +161,23 @@ class CompletionTest : CompletionTestBase() {
         }
         """.trimIndent()
     )
+
+    fun `test enum fetch`() = checkEquals(
+        """
+        module main
+        
+        enum Colors {
+            red
+            green
+        }
+        
+        fn red() {}
+        fn green() {}
+        
+        fn main() {
+            a := Colors.red
+            a = .<caret>
+        }
+        """.trimIndent(), 1, "red", "green"
+    )
 }

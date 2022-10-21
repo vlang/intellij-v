@@ -295,7 +295,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
         when (val parent = myElement.parent) {
             is VlangEnumFetch -> {
-                if (!processEnumFetch(parent, processor, state)) return false
+                return processEnumFetch(parent, processor, state)
             }
 
             is VlangFieldName -> {
