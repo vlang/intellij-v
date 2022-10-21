@@ -19,7 +19,7 @@ class VlangTestConfigurationType : ConfigurationTypeBase(
             override fun getId() = ID
 
             override fun createTemplateConfiguration(project: Project) =
-                VlangTestConfiguration(project, this, "Run Vlang test")
+                VlangTestConfiguration(project, this, "Run V test")
 
             override fun getOptionsClass() = VlangTestConfigurationOptions::class.java
         })

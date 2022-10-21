@@ -7,6 +7,7 @@ import com.intellij.openapi.vfs.VfsUtilCore
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VirtualFileManager
 import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
+import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 
 @Service
 class VlangConfiguration(private val project: Project) {
@@ -30,7 +31,7 @@ class VlangConfiguration(private val project: Project) {
         get() = findFile(settings.modulesLocation)
 
     val builtinLocation: VirtualFile?
-        get() = stdlibLocation?.findChild("builtin")
+        get() = stdlibLocation?.findChild(VlangCodeInsightUtil.BUILTIN_MODULE)
 
     private fun findFile(path: String): VirtualFile? {
         if (path.isEmpty()) return null

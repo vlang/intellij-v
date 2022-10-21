@@ -254,7 +254,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
     }
 
     private fun processMethods(fqn: String?, processor: VlangScopeProcessor, state: ResolveState): Boolean {
-        return VlangMethodIndex.processPrefix("$fqn.", myElement.project, GlobalSearchScope.allScope(myElement.project)) {
+        return VlangMethodIndex.processPrefix("$fqn.", myElement.project, null) {
             if (!processor.execute(it, state)) return@processPrefix false
             true
         }

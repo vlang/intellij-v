@@ -4,22 +4,19 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.roots.ProjectFileIndex
 import com.intellij.openapi.roots.TestSourcesFilter
 import com.intellij.openapi.vfs.VirtualFile
+import org.vlang.utils.isNotVlangFile
+import org.vlang.utils.isTestFile
 
 class VlangTestSourcesFilter : TestSourcesFilter() {
     override fun isTestSource(file: VirtualFile, project: Project): Boolean {
-        if (!file.isInLocalFileSystem) {
+        if (!file.isInLocalFileSystem || file.isNotVlangFile) {
             return false
         }
 
-        val fileIndex = ProjectFileIndex.getInstance(project)
-        if (!fileIndex.isInContent(file)) {
+        if (!ProjectFileIndex.getInstance(project).isInContent(file)) {
             return false
         }
 
-        if (!file.name.endsWith("_test.v")) {
-            return false
-        }
-
-        return true
+        return file.isTestFile
     }
 }

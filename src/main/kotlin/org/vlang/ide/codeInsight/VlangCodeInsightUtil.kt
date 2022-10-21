@@ -148,15 +148,11 @@ object VlangCodeInsightUtil {
             return name.removePrefix("$contextModule.")
         }
 
-        if (name.count { it == '.' } == 1) {
-            if (name.startsWith("$BUILTIN_MODULE.")) {
-                return name.removePrefix("$BUILTIN_MODULE.")
-            }
-            return name
+        if (name.startsWith("$BUILTIN_MODULE.")) {
+            return name.removePrefix("$BUILTIN_MODULE.")
         }
 
-        val parts = name.split('.')
-        return parts[parts.size - 2] + "." + parts[parts.size - 1]
+        return name
     }
 
     fun sameModule(firstFile: PsiFile, secondFile: PsiFile): Boolean {

@@ -26,6 +26,7 @@ val Document.virtualFile: VirtualFile?
 
 val VirtualFile.isNotVlangFile: Boolean get() = !isVlangFile
 val VirtualFile.isVlangFile: Boolean get() = fileType == VlangFileType.INSTANCE
+val VirtualFile.isTestFile: Boolean get() = name.endsWith("_test.v")
 
 val VirtualFile.guessProjectForFile get() = ProjectLocator.getInstance().guessProjectForFile(this)
 
