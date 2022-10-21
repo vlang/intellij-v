@@ -6,7 +6,6 @@ import com.intellij.codeInsight.template.impl.ConstantNode
 import com.intellij.patterns.*
 import com.intellij.patterns.PlatformPatterns.psiElement
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.parentOfType
@@ -531,10 +530,8 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
     private fun topLevelPattern(): PsiElementPattern.Capture<PsiElement?> {
         return onStatementBeginning(VlangTypes.IDENTIFIER).withParent(
             StandardPatterns.or(
-                psiElement(PsiErrorElement::class.java)
-                    .withParent(vlangFileWithModule()), psiElement(
-                    VlangFile::class.java
-                )
+                psiElement().withSuperParent(3, vlangFileWithModule()),
+                psiElement().withSuperParent(3, VlangFile::class.java),
             )
         )
     }
