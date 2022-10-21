@@ -7,6 +7,7 @@ import com.intellij.execution.process.OSProcessHandler
 import com.intellij.execution.process.ProcessEvent
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.logger
+import com.intellij.openapi.util.SystemInfo
 import org.vlang.utils.toPath
 import java.nio.charset.StandardCharsets
 import java.nio.file.Path
@@ -19,7 +20,7 @@ object VlangConfigurationUtil {
     const val TOOLCHAIN_NOT_SETUP = "V executable not found, toolchain not setup correctly?"
     const val UNDEFINED_VERSION = "N/A"
     const val STANDARD_LIB_PATH = "vlib"
-    private const val STANDARD_V_COMPILER = "v"
+    private val STANDARD_V_COMPILER = if (SystemInfo.isWindows) "v.exe" else "v"
 
     fun getCompilerExeLocation(path: String): String? {
         if (path.isBlank()) {
