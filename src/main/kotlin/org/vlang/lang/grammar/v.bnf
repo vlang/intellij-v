@@ -367,7 +367,7 @@ SqlStatement ::= SqlExpression
 // struct
 StructDeclaration ::= Attributes? SymbolVisibility? StructType {
   stubClass="org.vlang.lang.stubs.VlangStructDeclarationStub"
-  methods=[getIdentifier getName]
+  methods=[getIdentifier getName getTypeInner]
 }
 
 StructType ::= struct identifier GenericArguments? '{' FieldsGroup* '}' {

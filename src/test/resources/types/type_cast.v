@@ -29,4 +29,5 @@ fn main() {
 
 	expr_type(IFoo(Foo{}), 'IFoo')
 	expr_type(Type(''), 'Type')
+	expr_type(Foo(''), 'Foo')
 }

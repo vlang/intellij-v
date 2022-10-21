@@ -635,6 +635,11 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getTypeInner(o: VlangStructDeclaration, context: ResolveState?): VlangType {
+        return o.structType
+    }
+
+    @JvmStatic
     fun getTypeInner(o: VlangEnumDeclaration, context: ResolveState?): VlangType {
         return o.enumType
     }
