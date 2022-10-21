@@ -2,6 +2,7 @@ package org.vlang.lang.formatter
 
 import com.intellij.formatting.*
 import com.intellij.lang.ASTNode
+import com.intellij.psi.PsiComment
 import com.intellij.psi.TokenType
 import com.intellij.psi.formatter.common.AbstractBlock
 import com.intellij.psi.impl.source.tree.LeafPsiElement
@@ -40,7 +41,7 @@ class VlangFormattingBlock(
                 is VlangGlobalVariableDeclaration -> true
                 is VlangArrayCreation             -> true
                 else                              -> false
-            } && child !is LeafPsiElement
+            } && (child !is LeafPsiElement || child is PsiComment)
 
             val block = VlangFormattingBlock(child, spacingBuilder = spacingBuilder, withIdent = needIdent)
             blocks.add(block)

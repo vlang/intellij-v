@@ -10,6 +10,7 @@ import com.intellij.openapi.project.ProjectLocator
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.ui.DocumentAdapter
 import org.vlang.lang.VlangFileType
 import java.nio.file.Files
@@ -65,6 +66,9 @@ fun PsiElement.line(): Int {
     }
     return lineNumber
 }
+
+inline fun <reified T : PsiElement> PsiElement.ancestorOrSelf(): T? =
+    PsiTreeUtil.getParentOfType(this, T::class.java,false)
 
 fun String.toPath(): Path = Paths.get(this)
 
