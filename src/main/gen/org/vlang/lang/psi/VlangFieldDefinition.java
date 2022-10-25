@@ -15,6 +15,9 @@ public interface VlangFieldDefinition extends VlangMutable, VlangNamedElement, S
   @Nullable
   VlangCompositeElement getQualifier();
 
+  @Nullable
+  String getQualifiedName();
+
   boolean isPublic();
 
   boolean isMutable();

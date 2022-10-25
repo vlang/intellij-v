@@ -210,6 +210,13 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             if (!isMethodRef && !processNamedElements(processor, newState, typ.getFieldList(), localResolve)) return false
             val fqn = (typ.parent as VlangStructDeclaration).getQualifiedName()
             if (!processMethods(fqn, processor, newState)) return false
+
+            typ.embeddedStructList.forEach {
+                if (!processType(it.type, processor, newState)) return false
+            }
+
+            val embedded = typ.embeddedStructList.mapNotNull { it.type.typeReferenceExpression?.resolve() as? VlangNamedElement }
+            if (!processNamedElements(processor, newState, embedded, localResolve)) return false
         }
 
         if (typ is VlangUnionType) {

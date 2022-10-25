@@ -1,11 +1,11 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
-import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public interface VlangAnonymousFieldDefinition extends VlangCompositeElement {
+public interface VlangAnonymousFieldDefinition extends VlangTypeOwner {
 
   @NotNull
   VlangType getType();
@@ -22,8 +22,7 @@ public interface VlangAnonymousFieldDefinition extends VlangCompositeElement {
   //matching getTypeReferenceExpression(VlangAnonymousFieldDefinition, ...)
   //methods are not found in VlangPsiImplUtil
 
-  //WARNING: getGoTypeInner(...) is skipped
-  //matching getGoTypeInner(VlangAnonymousFieldDefinition, ...)
-  //methods are not found in VlangPsiImplUtil
+  @NotNull
+  VlangType getType(@Nullable ResolveState context);
 
 }

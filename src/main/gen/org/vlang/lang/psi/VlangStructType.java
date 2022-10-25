@@ -27,4 +27,7 @@ public interface VlangStructType extends VlangType, VlangFieldListOwner {
   @NotNull
   List<VlangFieldDefinition> getFieldList();
 
+  @NotNull
+  List<VlangAnonymousFieldDefinition> getEmbeddedStructList();
+
 }

@@ -373,7 +373,7 @@ StructDeclaration ::= Attributes? SymbolVisibility? StructType {
 StructType ::= struct identifier GenericArguments? '{' FieldsGroup* '}' {
   pin=1
   implements="org.vlang.lang.psi.VlangFieldListOwner"
-  methods=[getFieldList]
+  methods=[getFieldList getEmbeddedStructList]
 }
 
 MemberModifiers ::= MemberModifier* ':' {pin=2}
@@ -389,14 +389,14 @@ DefaultFieldValue ::= '=' Expression
 Tag ::= StringLiteral
 private FieldDefinitionList ::= FieldDefinition (',' FieldDefinition)*
 FieldDefinition ::= identifier {
-  methods=[getQualifier isPublic isMutable makeMutable]
+  methods=[getQualifier getQualifiedName isPublic isMutable makeMutable]
   implements="org.vlang.lang.psi.VlangMutable"
   stubClass="org.vlang.lang.stubs.VlangFieldDefinitionStub"
 }
 
 AnonymousFieldDefinition ::= Type {
-//  stubClass="org.vlang.lang.stubs.GoAnonymousFieldDefinitionStub"
-  methods=[getIdentifier getName getTypeReferenceExpression getGoTypeInner]
+  implements="org.vlang.lang.psi.VlangTypeOwner"
+  methods=[getIdentifier getName getTypeReferenceExpression getType]
 }
 
 

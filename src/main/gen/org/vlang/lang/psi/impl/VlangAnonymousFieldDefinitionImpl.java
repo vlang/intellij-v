@@ -1,14 +1,15 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.ResolveState;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.vlang.lang.psi.VlangAnonymousFieldDefinition;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
-import static org.vlang.lang.VlangTypes.*;
-import org.vlang.lang.psi.*;
+import org.vlang.lang.psi.VlangType;
+import org.vlang.lang.psi.VlangVisitor;
 
 public class VlangAnonymousFieldDefinitionImpl extends VlangCompositeElementImpl implements VlangAnonymousFieldDefinition {
 
@@ -30,6 +31,12 @@ public class VlangAnonymousFieldDefinitionImpl extends VlangCompositeElementImpl
   @NotNull
   public VlangType getType() {
     return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangType.class));
+  }
+
+  @Override
+  @NotNull
+  public VlangType getType(@Nullable ResolveState context) {
+    return VlangPsiImplUtil.getType(this, context);
   }
 
 }

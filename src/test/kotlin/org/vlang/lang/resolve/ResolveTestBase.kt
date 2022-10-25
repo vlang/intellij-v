@@ -14,7 +14,7 @@ abstract class ResolveTestBase : BasePlatformTestCase() {
     private var carets: MutableList<Caret>? = null
     private var caretIndex = 0
 
-    protected fun assertReferencedTo(name: String) {
+    protected fun assertReferencedTo(name: String, qualifier: Boolean = false) {
         val caret = carets!!.getOrNull(caretIndex++) ?: error("No more carets")
         val offset = caret.offset
 
@@ -25,9 +25,13 @@ abstract class ResolveTestBase : BasePlatformTestCase() {
         check(resolved != null) { "Cannot resolve reference" }
 
         val kind = resolved.toString()
-        val resolvedName = resolved.name
+        val resolvedName = if (!qualifier) resolved.name else resolved.getQualifiedName()
         val expected = "$kind $resolvedName"
         check(expected == name) { "Expected to resolve to $name, but got $expected" }
+    }
+
+    protected fun assertQualifiedReferencedTo(name: String) {
+        assertReferencedTo(name, true)
     }
 
     protected fun file(path: String, @Language("vlang") text: String) {

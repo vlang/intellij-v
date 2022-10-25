@@ -20,7 +20,7 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitAnonymousFieldDefinition(@NotNull VlangAnonymousFieldDefinition o) {
-    visitCompositeElement(o);
+    visitTypeOwner(o);
   }
 
   public void visitAnonymousInterfaceDefinition(@NotNull VlangAnonymousInterfaceDefinition o) {

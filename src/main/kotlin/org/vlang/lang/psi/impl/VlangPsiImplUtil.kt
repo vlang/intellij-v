@@ -276,6 +276,16 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getEmbeddedStructList(o: VlangStructType): List<VlangAnonymousFieldDefinition> {
+        return o.fieldsGroupList.flatMap { it.fieldDeclarationList }.mapNotNull { it.anonymousFieldDefinition }
+    }
+
+    @JvmStatic
+    fun getType(o: VlangAnonymousFieldDefinition, context: ResolveState?): VlangType {
+        return o.type
+    }
+
+    @JvmStatic
     fun getFieldList(o: VlangUnionType): List<VlangFieldDefinition> {
         return o.fieldsGroupList.flatMap { it.fieldDeclarationList }.flatMap { it.fieldDefinitionList }
     }
@@ -398,6 +408,12 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun getQualifier(o: VlangFieldDefinition): VlangCompositeElement? {
         return null
+    }
+
+    @JvmStatic
+    fun getQualifiedName(o: VlangFieldDefinition): String? {
+        val owner = o.parentOfType<VlangStructDeclaration>() ?: o.parentOfType<VlangInterfaceDeclaration>() ?: return o.getQualifiedName()
+        return owner.getQualifiedName() + "." + o.name
     }
 
     @JvmStatic
