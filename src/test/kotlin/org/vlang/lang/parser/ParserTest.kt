@@ -24,4 +24,5 @@ class ParserTest : ParserTestBase("parser", "v", VlangParserDefinition()) {
     fun `test decode`() = doTest(true)
     fun `test chars`() = doTest(true)
     fun `test top level expressions`() = doTest(true)
+    fun `test sql`() = doTest(true)
 }

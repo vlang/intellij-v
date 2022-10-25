@@ -160,8 +160,26 @@ public interface VlangTypes {
   IElementType SIGNATURE = new VlangCompositeElementType("SIGNATURE");
   IElementType SIMPLE_STATEMENT = new VlangCompositeElementType("SIMPLE_STATEMENT");
   IElementType SQL_BLOCK = new VlangCompositeElementType("SQL_BLOCK");
+  IElementType SQL_BLOCK_STATEMENT = new VlangCompositeElementType("SQL_BLOCK_STATEMENT");
+  IElementType SQL_CREATE_STATEMENT = new VlangCompositeElementType("SQL_CREATE_STATEMENT");
+  IElementType SQL_DELETE_STATEMENT = new VlangCompositeElementType("SQL_DELETE_STATEMENT");
+  IElementType SQL_DROP_STATEMENT = new VlangCompositeElementType("SQL_DROP_STATEMENT");
   IElementType SQL_EXPRESSION = new VlangCompositeElementType("SQL_EXPRESSION");
+  IElementType SQL_FROM_CLAUSE = new VlangCompositeElementType("SQL_FROM_CLAUSE");
+  IElementType SQL_INSERT_STATEMENT = new VlangCompositeElementType("SQL_INSERT_STATEMENT");
+  IElementType SQL_LIMIT_CLAUSE = new VlangCompositeElementType("SQL_LIMIT_CLAUSE");
+  IElementType SQL_OFFSET_CLAUSE = new VlangCompositeElementType("SQL_OFFSET_CLAUSE");
+  IElementType SQL_ORDER_BY_CLAUSE = new VlangCompositeElementType("SQL_ORDER_BY_CLAUSE");
+  IElementType SQL_REFERENCE_LIST = new VlangCompositeElementType("SQL_REFERENCE_LIST");
+  IElementType SQL_REFERENCE_LIST_ITEM = new VlangCompositeElementType("SQL_REFERENCE_LIST_ITEM");
+  IElementType SQL_SELECT_COUNT_CLAUSE = new VlangCompositeElementType("SQL_SELECT_COUNT_CLAUSE");
+  IElementType SQL_SELECT_STATEMENT = new VlangCompositeElementType("SQL_SELECT_STATEMENT");
   IElementType SQL_STATEMENT = new VlangCompositeElementType("SQL_STATEMENT");
+  IElementType SQL_TABLE_NAME = new VlangCompositeElementType("SQL_TABLE_NAME");
+  IElementType SQL_UPDATE_ITEM = new VlangCompositeElementType("SQL_UPDATE_ITEM");
+  IElementType SQL_UPDATE_LIST = new VlangCompositeElementType("SQL_UPDATE_LIST");
+  IElementType SQL_UPDATE_STATEMENT = new VlangCompositeElementType("SQL_UPDATE_STATEMENT");
+  IElementType SQL_WHERE_CLAUSE = new VlangCompositeElementType("SQL_WHERE_CLAUSE");
   IElementType STATEMENT = new VlangCompositeElementType("STATEMENT");
   IElementType STRING_LITERAL = new VlangCompositeElementType("STRING_LITERAL");
   IElementType STRING_TEMPLATE = new VlangCompositeElementType("STRING_TEMPLATE");
@@ -304,7 +322,6 @@ public interface VlangTypes {
   IElementType SHORT_TEMPLATE_ENTRY_START = new VlangTokenType("SHORT_TEMPLATE_ENTRY_START");
   IElementType SINGLE_QUOTE = new VlangTokenType("'");
   IElementType SQL = new VlangTokenType("sql");
-  IElementType SQL_LINE = new VlangTokenType("SQL_LINE");
   IElementType STATIC = new VlangTokenType("static");
   IElementType STRUCT = new VlangTokenType("struct");
   IElementType SWITCH = new VlangTokenType("switch");
@@ -767,11 +784,65 @@ public interface VlangTypes {
       else if (type == SQL_BLOCK) {
         return new VlangSqlBlockImpl(node);
       }
+      else if (type == SQL_BLOCK_STATEMENT) {
+        return new VlangSqlBlockStatementImpl(node);
+      }
+      else if (type == SQL_CREATE_STATEMENT) {
+        return new VlangSqlCreateStatementImpl(node);
+      }
+      else if (type == SQL_DELETE_STATEMENT) {
+        return new VlangSqlDeleteStatementImpl(node);
+      }
+      else if (type == SQL_DROP_STATEMENT) {
+        return new VlangSqlDropStatementImpl(node);
+      }
       else if (type == SQL_EXPRESSION) {
         return new VlangSqlExpressionImpl(node);
       }
+      else if (type == SQL_FROM_CLAUSE) {
+        return new VlangSqlFromClauseImpl(node);
+      }
+      else if (type == SQL_INSERT_STATEMENT) {
+        return new VlangSqlInsertStatementImpl(node);
+      }
+      else if (type == SQL_LIMIT_CLAUSE) {
+        return new VlangSqlLimitClauseImpl(node);
+      }
+      else if (type == SQL_OFFSET_CLAUSE) {
+        return new VlangSqlOffsetClauseImpl(node);
+      }
+      else if (type == SQL_ORDER_BY_CLAUSE) {
+        return new VlangSqlOrderByClauseImpl(node);
+      }
+      else if (type == SQL_REFERENCE_LIST) {
+        return new VlangSqlReferenceListImpl(node);
+      }
+      else if (type == SQL_REFERENCE_LIST_ITEM) {
+        return new VlangSqlReferenceListItemImpl(node);
+      }
+      else if (type == SQL_SELECT_COUNT_CLAUSE) {
+        return new VlangSqlSelectCountClauseImpl(node);
+      }
+      else if (type == SQL_SELECT_STATEMENT) {
+        return new VlangSqlSelectStatementImpl(node);
+      }
       else if (type == SQL_STATEMENT) {
         return new VlangSqlStatementImpl(node);
+      }
+      else if (type == SQL_TABLE_NAME) {
+        return new VlangSqlTableNameImpl(node);
+      }
+      else if (type == SQL_UPDATE_ITEM) {
+        return new VlangSqlUpdateItemImpl(node);
+      }
+      else if (type == SQL_UPDATE_LIST) {
+        return new VlangSqlUpdateListImpl(node);
+      }
+      else if (type == SQL_UPDATE_STATEMENT) {
+        return new VlangSqlUpdateStatementImpl(node);
+      }
+      else if (type == SQL_WHERE_CLAUSE) {
+        return new VlangSqlWhereClauseImpl(node);
       }
       else if (type == STATEMENT) {
         return new VlangStatementImpl(node);

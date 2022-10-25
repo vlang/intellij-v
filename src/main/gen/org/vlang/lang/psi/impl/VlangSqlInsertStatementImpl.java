@@ -3,20 +3,19 @@ package org.vlang.lang.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.ResolveState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.*;
 
-public class VlangSqlExpressionImpl extends VlangExpressionImpl implements VlangSqlExpression {
+public class VlangSqlInsertStatementImpl extends VlangSqlBlockStatementImpl implements VlangSqlInsertStatement {
 
-  public VlangSqlExpressionImpl(@NotNull ASTNode node) {
+  public VlangSqlInsertStatementImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitSqlExpression(this);
+    visitor.visitSqlInsertStatement(this);
   }
 
   @Override
@@ -27,20 +26,14 @@ public class VlangSqlExpressionImpl extends VlangExpressionImpl implements Vlang
 
   @Override
   @Nullable
-  public VlangExpression getExpression() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class);
+  public VlangReferenceExpression getReferenceExpression() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangReferenceExpression.class);
   }
 
   @Override
   @Nullable
-  public VlangSqlBlock getSqlBlock() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangSqlBlock.class);
-  }
-
-  @Override
-  @Nullable
-  public VlangType getType(@Nullable ResolveState context) {
-    return VlangPsiImplUtil.getType(this, context);
+  public VlangSqlTableName getSqlTableName() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangSqlTableName.class);
   }
 
 }

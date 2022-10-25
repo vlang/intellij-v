@@ -3,20 +3,21 @@ package org.vlang.lang.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.ResolveState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.vlang.lang.psi.*;
+import org.vlang.lang.psi.VlangExpression;
+import org.vlang.lang.psi.VlangPsiTreeUtil;
+import org.vlang.lang.psi.VlangSqlOffsetClause;
+import org.vlang.lang.psi.VlangVisitor;
 
-public class VlangSqlExpressionImpl extends VlangExpressionImpl implements VlangSqlExpression {
+public class VlangSqlOffsetClauseImpl extends VlangCompositeElementImpl implements VlangSqlOffsetClause {
 
-  public VlangSqlExpressionImpl(@NotNull ASTNode node) {
+  public VlangSqlOffsetClauseImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitSqlExpression(this);
+    visitor.visitSqlOffsetClause(this);
   }
 
   @Override
@@ -29,18 +30,6 @@ public class VlangSqlExpressionImpl extends VlangExpressionImpl implements Vlang
   @Nullable
   public VlangExpression getExpression() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class);
-  }
-
-  @Override
-  @Nullable
-  public VlangSqlBlock getSqlBlock() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangSqlBlock.class);
-  }
-
-  @Override
-  @Nullable
-  public VlangType getType(@Nullable ResolveState context) {
-    return VlangPsiImplUtil.getType(this, context);
   }
 
 }

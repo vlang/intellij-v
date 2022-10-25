@@ -3,9 +3,9 @@ package org.vlang.lang.psi;
 
 import org.jetbrains.annotations.NotNull;
 
-public interface VlangSqlStatement extends VlangSqlBlockStatement {
+public interface VlangSqlTableName extends VlangCompositeElement {
 
   @NotNull
-  VlangSqlExpression getSqlExpression();
+  VlangTypeReferenceExpression getTypeReferenceExpression();
 
 }

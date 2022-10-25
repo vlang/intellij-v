@@ -100,6 +100,7 @@
 
   elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum|Interface)Declaration|.*Type|(Var|Label|Field|Param|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
 
+  extends("Sql.*Statement")=SqlBlockStatement
   extends(".*Statement")=Statement
   extends(".*Type|TypeList")=Type
 
@@ -561,6 +562,7 @@ private ReceiverTail ::= Type ','?
 Expression ::=
     OrExpr
   | AndExpr
+  | SqlExpression
   | ConditionalExpr
   | AddExpr
   | MulExpr
@@ -581,7 +583,6 @@ Expression ::=
   | MutExpression
   | SharedExpression
   | ConstexprIdentifierExpression
-  | SqlExpression
   | GoExpression
   | LockExpression
   | IncDecExpression
@@ -907,9 +908,43 @@ IfExpression ::= if Condition semi? Block (semi? ElseStatement)? {
 CompileTimeIfExpression ::= IF_COMPILE_TIME Condition Block CompileElseStatement? {pin=1}
 private Condition ::= <<enterMode "BLOCK?">> (VarDeclaration | Expression) <<exitModeSafe "BLOCK?">>
 
-// sql <ident> { ... }
-SqlExpression ::= sql identifier SqlBlock {pin=1}
-SqlBlock ::= '{' ('}' | (SQL_LINE)* '}') {pin(".*")=1}
+// sql <ref> { ... }
+SqlExpression ::= 'sql' <<enterMode "BLOCK?">> Expression <<exitModeSafe "BLOCK?">> SqlBlock {
+  pin=1
+  methods=[getType]
+}
+SqlBlock ::= '{' ('}' | (SqlBlockStatement semi)* '}') {pin(".*")=1}
+
+SqlBlockStatement ::=
+	SqlCreateStatement
+  | SqlDropStatement
+  | SqlSelectStatement
+  | SqlUpdateStatement
+  | SqlInsertStatement
+  | SqlDeleteStatement
+  | identifier // for completion
+
+SqlCreateStatement ::= 'create' 'table' SqlTableName {pin=1}
+SqlDropStatement ::= 'drop' 'table' SqlTableName {pin=1}
+
+SqlUpdateStatement ::= 'update' SqlTableName 'set' SqlUpdateList SqlWhereClause {pin=1}
+SqlUpdateList ::= SqlUpdateItem (',' SqlUpdateItem)*
+SqlUpdateItem ::= ReferenceExpression '=' Expression
+
+SqlInsertStatement ::= 'insert' ReferenceExpression 'into' SqlTableName {pin=1}
+SqlDeleteStatement ::= 'delete' ((ReferenceExpression SqlFromClause) | SqlFromClause) SqlWhereClause? {pin=1}
+SqlSelectStatement ::= 'select' SqlSelectCountClause? SqlFromClause SqlWhereClause? SqlOrderByClause? SqlLimitClause? SqlOffsetClause? {pin=1}
+SqlSelectCountClause ::= 'count'
+
+SqlFromClause ::= 'from' SqlTableName {pin=1}
+SqlWhereClause ::= 'where' Expression {pin=1}
+SqlLimitClause ::= 'limit' Expression {pin=1}
+SqlOffsetClause ::= 'offset' Expression {pin=1}
+SqlOrderByClause ::= 'order' 'by' 'desc'? SqlReferenceList {pin=1}
+SqlReferenceList ::= SqlReferenceListItem (','? SqlReferenceListItem)* {pin=1}
+SqlReferenceListItem ::= (SqlLimitClause SqlOffsetClause?) | ReferenceExpression {pin=1}
+
+SqlTableName ::= TypeReferenceExpression {pin=1}
 
 ////////// EXPRESSIONS END //////////
 

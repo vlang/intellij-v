@@ -14,6 +14,7 @@ import org.vlang.lang.VlangTypes
 import org.vlang.lang.completion.VlangCompletionUtil.KEYWORD_PRIORITY
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangPsiImplUtil
+import org.vlang.lang.sql.VlangSqlUtil
 
 class VlangKeywordsCompletionContributor : CompletionContributor() {
     init {
@@ -87,7 +88,7 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         extend(
             CompletionType.BASIC,
             identifier(),
-            ConditionBlockKeywordCompletionProvider("if", "lock", "rlock")
+            ConditionBlockKeywordCompletionProvider("if", "lock", "rlock", "sql")
         )
         extend(
             CompletionType.BASIC,
@@ -144,6 +145,11 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
             CompletionType.BASIC,
             insideForStatement(VlangTypes.IDENTIFIER),
             KeywordsCompletionProvider("continue", "break")
+        )
+        extend(
+            CompletionType.BASIC,
+            insideSqlStatement(VlangTypes.IDENTIFIER),
+            SqlKeywordsCompletionProvider()
         )
     }
 
@@ -441,6 +447,27 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         }
     }
 
+    private inner class SqlKeywordsCompletionProvider : CompletionProvider<CompletionParameters>() {
+        override fun addCompletions(
+            parameters: CompletionParameters,
+            context: ProcessingContext,
+            result: CompletionResultSet,
+        ) {
+            for (keyword in VlangSqlUtil.sqlKeywords) {
+                result.addElement(
+                    PrioritizedLookupElement.withPriority(
+                        LookupElementBuilder.create(keyword)
+                            .withInsertHandler { ctx, item ->
+                                VlangCompletionUtil.StringInsertHandler(" ", 1).handleInsert(ctx, item)
+                                VlangCompletionUtil.showCompletion(ctx.editor)
+                            }
+                            .bold(), KEYWORD_PRIORITY.toDouble()
+                    )
+                )
+            }
+        }
+    }
+
     private inner class CompletionAfterKeywordsCompletionProvider(private vararg val keywords: String) :
         CompletionProvider<CompletionParameters>() {
         override fun addCompletions(
@@ -493,6 +520,14 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
                 psiElement(VlangFunctionDeclaration::class.java)
             ).andNot(
                 insideWithLabelStatement(tokenType)
+            )
+    }
+
+    private fun insideSqlStatement(tokenType: IElementType): ElementPattern<out PsiElement?> {
+        return onStatementBeginning(tokenType)
+            .inside(
+                false, psiElement(VlangSqlExpression::class.java),
+                psiElement(VlangFunctionDeclaration::class.java)
             )
     }
 
@@ -552,17 +587,19 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
     }
 
     private fun shouldSuppress(parameters: CompletionParameters, result: CompletionResultSet): Boolean {
-        if (VlangCompletionUtil.shouldSuppressCompletion(parameters.position)) {
+        val pos = parameters.position
+
+        if (VlangCompletionUtil.shouldSuppressCompletion(pos)) {
             result.stopHere()
             return true
         }
 
-        if (parameters.position.parentOfType<VlangLiteralValueExpression>() != null) {
+        if (pos.parentOfType<VlangLiteralValueExpression>() != null) {
             result.stopHere()
             return true
         }
 
-        if (VlangPsiImplUtil.prevDot(parameters.position)) {
+        if (VlangPsiImplUtil.prevDot(pos)) {
             result.stopHere()
             return true
         }

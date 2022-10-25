@@ -40,6 +40,8 @@ class VlangFormattingBlock(
                 is VlangMapInitExpr               -> true
                 is VlangGlobalVariableDeclaration -> true
                 is VlangArrayCreation             -> true
+                is VlangSqlBlock                  -> true
+                is VlangAsmBlock                  -> true
                 else                              -> false
             } && (child !is LeafPsiElement || child is PsiComment)
 

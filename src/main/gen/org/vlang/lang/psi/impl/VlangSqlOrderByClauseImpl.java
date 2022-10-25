@@ -4,20 +4,20 @@ package org.vlang.lang.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
-import org.vlang.lang.psi.VlangSqlExpression;
-import org.vlang.lang.psi.VlangSqlStatement;
+import org.vlang.lang.psi.VlangSqlOrderByClause;
+import org.vlang.lang.psi.VlangSqlReferenceList;
 import org.vlang.lang.psi.VlangVisitor;
 
-public class VlangSqlStatementImpl extends VlangSqlBlockStatementImpl implements VlangSqlStatement {
+public class VlangSqlOrderByClauseImpl extends VlangCompositeElementImpl implements VlangSqlOrderByClause {
 
-  public VlangSqlStatementImpl(@NotNull ASTNode node) {
+  public VlangSqlOrderByClauseImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitSqlStatement(this);
+    visitor.visitSqlOrderByClause(this);
   }
 
   @Override
@@ -27,9 +27,9 @@ public class VlangSqlStatementImpl extends VlangSqlBlockStatementImpl implements
   }
 
   @Override
-  @NotNull
-  public VlangSqlExpression getSqlExpression() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangSqlExpression.class));
+  @Nullable
+  public VlangSqlReferenceList getSqlReferenceList() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangSqlReferenceList.class);
   }
 
 }

@@ -4,20 +4,20 @@ package org.vlang.lang.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
-import org.vlang.lang.psi.VlangSqlExpression;
-import org.vlang.lang.psi.VlangSqlStatement;
+import org.vlang.lang.psi.VlangSqlFromClause;
+import org.vlang.lang.psi.VlangSqlTableName;
 import org.vlang.lang.psi.VlangVisitor;
 
-public class VlangSqlStatementImpl extends VlangSqlBlockStatementImpl implements VlangSqlStatement {
+public class VlangSqlFromClauseImpl extends VlangCompositeElementImpl implements VlangSqlFromClause {
 
-  public VlangSqlStatementImpl(@NotNull ASTNode node) {
+  public VlangSqlFromClauseImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitSqlStatement(this);
+    visitor.visitSqlFromClause(this);
   }
 
   @Override
@@ -27,9 +27,9 @@ public class VlangSqlStatementImpl extends VlangSqlBlockStatementImpl implements
   }
 
   @Override
-  @NotNull
-  public VlangSqlExpression getSqlExpression() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangSqlExpression.class));
+  @Nullable
+  public VlangSqlTableName getSqlTableName() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangSqlTableName.class);
   }
 
 }

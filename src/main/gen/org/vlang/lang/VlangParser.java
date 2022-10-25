@@ -39,6 +39,8 @@ public class VlangParser implements PsiParser, LightPsiParser {
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
     create_token_set_(RANGE_CLAUSE, VAR_DECLARATION),
     create_token_set_(ARGUMENT_LIST, JSON_ARGUMENT_LIST),
+    create_token_set_(SQL_BLOCK_STATEMENT, SQL_CREATE_STATEMENT, SQL_DELETE_STATEMENT, SQL_DROP_STATEMENT,
+      SQL_INSERT_STATEMENT, SQL_SELECT_STATEMENT, SQL_STATEMENT, SQL_UPDATE_STATEMENT),
     create_token_set_(ALIAS_TYPE, ARRAY_OR_SLICE_TYPE, CHANNEL_TYPE, ENUM_TYPE,
       FUNCTION_TYPE, INTERFACE_TYPE, MAP_TYPE, NOT_NULLABLE_TYPE,
       NULLABLE_TYPE, POINTER_TYPE, STRUCT_TYPE, THREAD_TYPE,
@@ -48,8 +50,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
       C_FLAG_STATEMENT, C_INCLUDE_STATEMENT, DEFER_STATEMENT, ELSE_STATEMENT,
       FOR_STATEMENT, GOTO_STATEMENT, GO_STATEMENT, IF_STATEMENT,
       LABELED_STATEMENT, LANGUAGE_INJECTION_STATEMENT, LOCK_STATEMENT, RETURN_STATEMENT,
-      SEND_STATEMENT, SIMPLE_STATEMENT, SQL_STATEMENT, STATEMENT,
-      UNSAFE_STATEMENT),
+      SEND_STATEMENT, SIMPLE_STATEMENT, STATEMENT, UNSAFE_STATEMENT),
     create_token_set_(ADD_EXPR, AND_EXPR, ARRAY_CREATION, AS_EXPRESSION,
       CALL_EXPR, COMPILE_TIME_IF_EXPRESSION, CONDITIONAL_EXPR, CONSTEXPR_IDENTIFIER_EXPRESSION,
       DOT_EXPRESSION, ENUM_FETCH, EXPRESSION, FUNCTION_LIT,
@@ -4253,7 +4254,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '{' ('}' | (SQL_LINE)* '}')
+  // '{' ('}' | (SqlBlockStatement semi)* '}')
   public static boolean SqlBlock(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SqlBlock")) return false;
     if (!nextTokenIs(b, LBRACE)) return false;
@@ -4266,7 +4267,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // '}' | (SQL_LINE)* '}'
+  // '}' | (SqlBlockStatement semi)* '}'
   private static boolean SqlBlock_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SqlBlock_1")) return false;
     boolean r;
@@ -4277,7 +4278,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (SQL_LINE)* '}'
+  // (SqlBlockStatement semi)* '}'
   private static boolean SqlBlock_1_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SqlBlock_1_1")) return false;
     boolean r, p;
@@ -4289,14 +4290,332 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // (SQL_LINE)*
+  // (SqlBlockStatement semi)*
   private static boolean SqlBlock_1_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SqlBlock_1_1_0")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!consumeToken(b, SQL_LINE)) break;
+      if (!SqlBlock_1_1_0_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "SqlBlock_1_1_0", c)) break;
     }
+    return true;
+  }
+
+  // SqlBlockStatement semi
+  private static boolean SqlBlock_1_1_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlBlock_1_1_0_0")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = SqlBlockStatement(b, l + 1);
+    p = r; // pin = 1
+    r = r && semi(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
+  // SqlCreateStatement
+  //   | SqlDropStatement
+  //   | SqlSelectStatement
+  //   | SqlUpdateStatement
+  //   | SqlInsertStatement
+  //   | SqlDeleteStatement
+  //   | identifier
+  public static boolean SqlBlockStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlBlockStatement")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _COLLAPSE_, SQL_BLOCK_STATEMENT, "<sql block statement>");
+    r = SqlCreateStatement(b, l + 1);
+    if (!r) r = SqlDropStatement(b, l + 1);
+    if (!r) r = SqlSelectStatement(b, l + 1);
+    if (!r) r = SqlUpdateStatement(b, l + 1);
+    if (!r) r = SqlInsertStatement(b, l + 1);
+    if (!r) r = SqlDeleteStatement(b, l + 1);
+    if (!r) r = consumeToken(b, IDENTIFIER);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // 'create' 'table' SqlTableName
+  public static boolean SqlCreateStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlCreateStatement")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, SQL_CREATE_STATEMENT, "<sql create statement>");
+    r = consumeToken(b, "create");
+    p = r; // pin = 1
+    r = r && report_error_(b, consumeToken(b, "table"));
+    r = p && SqlTableName(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
+  // 'delete' ((ReferenceExpression SqlFromClause) | SqlFromClause) SqlWhereClause?
+  public static boolean SqlDeleteStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlDeleteStatement")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, SQL_DELETE_STATEMENT, "<sql delete statement>");
+    r = consumeToken(b, "delete");
+    p = r; // pin = 1
+    r = r && report_error_(b, SqlDeleteStatement_1(b, l + 1));
+    r = p && SqlDeleteStatement_2(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // (ReferenceExpression SqlFromClause) | SqlFromClause
+  private static boolean SqlDeleteStatement_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlDeleteStatement_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = SqlDeleteStatement_1_0(b, l + 1);
+    if (!r) r = SqlFromClause(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ReferenceExpression SqlFromClause
+  private static boolean SqlDeleteStatement_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlDeleteStatement_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = ReferenceExpression(b, l + 1);
+    r = r && SqlFromClause(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // SqlWhereClause?
+  private static boolean SqlDeleteStatement_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlDeleteStatement_2")) return false;
+    SqlWhereClause(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // 'drop' 'table' SqlTableName
+  public static boolean SqlDropStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlDropStatement")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, SQL_DROP_STATEMENT, "<sql drop statement>");
+    r = consumeToken(b, "drop");
+    p = r; // pin = 1
+    r = r && report_error_(b, consumeToken(b, "table"));
+    r = p && SqlTableName(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
+  // 'from' SqlTableName
+  public static boolean SqlFromClause(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlFromClause")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, SQL_FROM_CLAUSE, "<sql from clause>");
+    r = consumeToken(b, "from");
+    p = r; // pin = 1
+    r = r && SqlTableName(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
+  // 'insert' ReferenceExpression 'into' SqlTableName
+  public static boolean SqlInsertStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlInsertStatement")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, SQL_INSERT_STATEMENT, "<sql insert statement>");
+    r = consumeToken(b, "insert");
+    p = r; // pin = 1
+    r = r && report_error_(b, ReferenceExpression(b, l + 1));
+    r = p && report_error_(b, consumeToken(b, "into")) && r;
+    r = p && SqlTableName(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
+  // 'limit' Expression
+  public static boolean SqlLimitClause(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlLimitClause")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, SQL_LIMIT_CLAUSE, "<sql limit clause>");
+    r = consumeToken(b, "limit");
+    p = r; // pin = 1
+    r = r && Expression(b, l + 1, -1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
+  // 'offset' Expression
+  public static boolean SqlOffsetClause(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlOffsetClause")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, SQL_OFFSET_CLAUSE, "<sql offset clause>");
+    r = consumeToken(b, "offset");
+    p = r; // pin = 1
+    r = r && Expression(b, l + 1, -1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
+  // 'order' 'by' 'desc'? SqlReferenceList
+  public static boolean SqlOrderByClause(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlOrderByClause")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, SQL_ORDER_BY_CLAUSE, "<sql order by clause>");
+    r = consumeToken(b, "order");
+    p = r; // pin = 1
+    r = r && report_error_(b, consumeToken(b, "by"));
+    r = p && report_error_(b, SqlOrderByClause_2(b, l + 1)) && r;
+    r = p && SqlReferenceList(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // 'desc'?
+  private static boolean SqlOrderByClause_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlOrderByClause_2")) return false;
+    consumeToken(b, "desc");
+    return true;
+  }
+
+  /* ********************************************************** */
+  // SqlReferenceListItem (','? SqlReferenceListItem)*
+  public static boolean SqlReferenceList(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlReferenceList")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, SQL_REFERENCE_LIST, "<sql reference list>");
+    r = SqlReferenceListItem(b, l + 1);
+    p = r; // pin = 1
+    r = r && SqlReferenceList_1(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // (','? SqlReferenceListItem)*
+  private static boolean SqlReferenceList_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlReferenceList_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!SqlReferenceList_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "SqlReferenceList_1", c)) break;
+    }
+    return true;
+  }
+
+  // ','? SqlReferenceListItem
+  private static boolean SqlReferenceList_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlReferenceList_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = SqlReferenceList_1_0_0(b, l + 1);
+    r = r && SqlReferenceListItem(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ','?
+  private static boolean SqlReferenceList_1_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlReferenceList_1_0_0")) return false;
+    consumeToken(b, COMMA);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // (SqlLimitClause SqlOffsetClause?) | ReferenceExpression
+  public static boolean SqlReferenceListItem(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlReferenceListItem")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, SQL_REFERENCE_LIST_ITEM, "<sql reference list item>");
+    r = SqlReferenceListItem_0(b, l + 1);
+    if (!r) r = ReferenceExpression(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // SqlLimitClause SqlOffsetClause?
+  private static boolean SqlReferenceListItem_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlReferenceListItem_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = SqlLimitClause(b, l + 1);
+    r = r && SqlReferenceListItem_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // SqlOffsetClause?
+  private static boolean SqlReferenceListItem_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlReferenceListItem_0_1")) return false;
+    SqlOffsetClause(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // 'count'
+  public static boolean SqlSelectCountClause(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlSelectCountClause")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, SQL_SELECT_COUNT_CLAUSE, "<sql select count clause>");
+    r = consumeToken(b, "count");
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // 'select' SqlSelectCountClause? SqlFromClause SqlWhereClause? SqlOrderByClause? SqlLimitClause? SqlOffsetClause?
+  public static boolean SqlSelectStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlSelectStatement")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, SQL_SELECT_STATEMENT, "<sql select statement>");
+    r = consumeToken(b, "select");
+    p = r; // pin = 1
+    r = r && report_error_(b, SqlSelectStatement_1(b, l + 1));
+    r = p && report_error_(b, SqlFromClause(b, l + 1)) && r;
+    r = p && report_error_(b, SqlSelectStatement_3(b, l + 1)) && r;
+    r = p && report_error_(b, SqlSelectStatement_4(b, l + 1)) && r;
+    r = p && report_error_(b, SqlSelectStatement_5(b, l + 1)) && r;
+    r = p && SqlSelectStatement_6(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // SqlSelectCountClause?
+  private static boolean SqlSelectStatement_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlSelectStatement_1")) return false;
+    SqlSelectCountClause(b, l + 1);
+    return true;
+  }
+
+  // SqlWhereClause?
+  private static boolean SqlSelectStatement_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlSelectStatement_3")) return false;
+    SqlWhereClause(b, l + 1);
+    return true;
+  }
+
+  // SqlOrderByClause?
+  private static boolean SqlSelectStatement_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlSelectStatement_4")) return false;
+    SqlOrderByClause(b, l + 1);
+    return true;
+  }
+
+  // SqlLimitClause?
+  private static boolean SqlSelectStatement_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlSelectStatement_5")) return false;
+    SqlLimitClause(b, l + 1);
+    return true;
+  }
+
+  // SqlOffsetClause?
+  private static boolean SqlSelectStatement_6(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlSelectStatement_6")) return false;
+    SqlOffsetClause(b, l + 1);
     return true;
   }
 
@@ -4304,12 +4623,103 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // SqlExpression
   public static boolean SqlStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SqlStatement")) return false;
-    if (!nextTokenIs(b, SQL)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, SQL_STATEMENT, "<sql statement>");
+    r = SqlExpression(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // TypeReferenceExpression
+  public static boolean SqlTableName(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlTableName")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = SqlExpression(b, l + 1);
-    exit_section_(b, m, SQL_STATEMENT, r);
+    r = TypeReferenceExpression(b, l + 1);
+    exit_section_(b, m, SQL_TABLE_NAME, r);
     return r;
+  }
+
+  /* ********************************************************** */
+  // ReferenceExpression '=' Expression
+  public static boolean SqlUpdateItem(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlUpdateItem")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = ReferenceExpression(b, l + 1);
+    r = r && consumeToken(b, ASSIGN);
+    r = r && Expression(b, l + 1, -1);
+    exit_section_(b, m, SQL_UPDATE_ITEM, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // SqlUpdateItem (',' SqlUpdateItem)*
+  public static boolean SqlUpdateList(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlUpdateList")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, SQL_UPDATE_LIST, null);
+    r = SqlUpdateItem(b, l + 1);
+    p = r; // pin = 1
+    r = r && SqlUpdateList_1(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // (',' SqlUpdateItem)*
+  private static boolean SqlUpdateList_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlUpdateList_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!SqlUpdateList_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "SqlUpdateList_1", c)) break;
+    }
+    return true;
+  }
+
+  // ',' SqlUpdateItem
+  private static boolean SqlUpdateList_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlUpdateList_1_0")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = consumeToken(b, COMMA);
+    p = r; // pin = 1
+    r = r && SqlUpdateItem(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
+  // 'update' SqlTableName 'set' SqlUpdateList SqlWhereClause
+  public static boolean SqlUpdateStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlUpdateStatement")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, SQL_UPDATE_STATEMENT, "<sql update statement>");
+    r = consumeToken(b, "update");
+    p = r; // pin = 1
+    r = r && report_error_(b, SqlTableName(b, l + 1));
+    r = p && report_error_(b, consumeToken(b, "set")) && r;
+    r = p && report_error_(b, SqlUpdateList(b, l + 1)) && r;
+    r = p && SqlWhereClause(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
+  // 'where' Expression
+  public static boolean SqlWhereClause(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlWhereClause")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, SQL_WHERE_CLAUSE, "<sql where clause>");
+    r = consumeToken(b, "where");
+    p = r; // pin = 1
+    r = r && Expression(b, l + 1, -1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -5397,27 +5807,27 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // Operator priority table:
   // 0: BINARY(OrExpr)
   // 1: BINARY(AndExpr)
-  // 2: BINARY(ConditionalExpr)
-  // 3: BINARY(AddExpr)
-  // 4: BINARY(MulExpr)
-  // 5: PREFIX(UnaryExpr)
-  // 6: BINARY(SendExpr)
-  // 7: BINARY(RangeExpr)
-  // 8: ATOM(MatchExpression)
-  // 9: ATOM(SelectExpression)
-  // 10: ATOM(IfExpression)
-  // 11: ATOM(CompileTimeIfExpression)
-  // 12: BINARY(InExpression)
-  // 13: BINARY(NotInExpression)
-  // 14: POSTFIX(IsExpression)
-  // 15: POSTFIX(NotIsExpression)
-  // 16: POSTFIX(AsExpression)
-  // 17: ATOM(DotExpression) ATOM(Literal) ATOM(FunctionLit)
-  // 18: PREFIX(EnumFetch)
-  // 19: PREFIX(MutExpression)
-  // 20: PREFIX(SharedExpression)
-  // 21: ATOM(ConstexprIdentifierExpression)
-  // 22: ATOM(SqlExpression)
+  // 2: ATOM(SqlExpression)
+  // 3: BINARY(ConditionalExpr)
+  // 4: BINARY(AddExpr)
+  // 5: BINARY(MulExpr)
+  // 6: PREFIX(UnaryExpr)
+  // 7: BINARY(SendExpr)
+  // 8: BINARY(RangeExpr)
+  // 9: ATOM(MatchExpression)
+  // 10: ATOM(SelectExpression)
+  // 11: ATOM(IfExpression)
+  // 12: ATOM(CompileTimeIfExpression)
+  // 13: BINARY(InExpression)
+  // 14: BINARY(NotInExpression)
+  // 15: POSTFIX(IsExpression)
+  // 16: POSTFIX(NotIsExpression)
+  // 17: POSTFIX(AsExpression)
+  // 18: ATOM(DotExpression) ATOM(Literal) ATOM(FunctionLit)
+  // 19: PREFIX(EnumFetch)
+  // 20: PREFIX(MutExpression)
+  // 21: PREFIX(SharedExpression)
+  // 22: ATOM(ConstexprIdentifierExpression)
   // 23: PREFIX(GoExpression)
   // 24: ATOM(LockExpression)
   // 25: POSTFIX(IncDecExpression)
@@ -5428,7 +5838,8 @@ public class VlangParser implements PsiParser, LightPsiParser {
     addVariant(b, "<expression>");
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, "<expression>");
-    r = UnaryExpr(b, l + 1);
+    r = SqlExpression(b, l + 1);
+    if (!r) r = UnaryExpr(b, l + 1);
     if (!r) r = MatchExpression(b, l + 1);
     if (!r) r = SelectExpression(b, l + 1);
     if (!r) r = IfExpression(b, l + 1);
@@ -5440,7 +5851,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = MutExpression(b, l + 1);
     if (!r) r = SharedExpression(b, l + 1);
     if (!r) r = ConstexprIdentifierExpression(b, l + 1);
-    if (!r) r = SqlExpression(b, l + 1);
     if (!r) r = GoExpression(b, l + 1);
     if (!r) r = LockExpression(b, l + 1);
     if (!r) r = UnpackingExpression(b, l + 1);
@@ -5464,43 +5874,43 @@ public class VlangParser implements PsiParser, LightPsiParser {
         r = Expression(b, l, 1);
         exit_section_(b, l, m, AND_EXPR, r, true, null);
       }
-      else if (g < 2 && RelOp(b, l + 1)) {
-        r = Expression(b, l, 2);
+      else if (g < 3 && RelOp(b, l + 1)) {
+        r = Expression(b, l, 3);
         exit_section_(b, l, m, CONDITIONAL_EXPR, r, true, null);
       }
-      else if (g < 3 && AddOp(b, l + 1)) {
-        r = Expression(b, l, 3);
+      else if (g < 4 && AddOp(b, l + 1)) {
+        r = Expression(b, l, 4);
         exit_section_(b, l, m, ADD_EXPR, r, true, null);
       }
-      else if (g < 4 && MulOp(b, l + 1)) {
-        r = Expression(b, l, 4);
+      else if (g < 5 && MulOp(b, l + 1)) {
+        r = Expression(b, l, 5);
         exit_section_(b, l, m, MUL_EXPR, r, true, null);
       }
-      else if (g < 6 && consumeTokenSmart(b, SEND_CHANNEL)) {
-        r = Expression(b, l, 6);
+      else if (g < 7 && consumeTokenSmart(b, SEND_CHANNEL)) {
+        r = Expression(b, l, 7);
         exit_section_(b, l, m, SEND_EXPR, r, true, null);
       }
-      else if (g < 7 && RangeExpr_0(b, l + 1)) {
-        r = Expression(b, l, 7);
+      else if (g < 8 && RangeExpr_0(b, l + 1)) {
+        r = Expression(b, l, 8);
         exit_section_(b, l, m, RANGE_EXPR, r, true, null);
       }
-      else if (g < 12 && consumeTokenSmart(b, IN)) {
-        r = Expression(b, l, 12);
+      else if (g < 13 && consumeTokenSmart(b, IN)) {
+        r = Expression(b, l, 13);
         exit_section_(b, l, m, IN_EXPRESSION, r, true, null);
       }
-      else if (g < 13 && consumeTokenSmart(b, NOT_IN)) {
-        r = Expression(b, l, 13);
+      else if (g < 14 && consumeTokenSmart(b, NOT_IN)) {
+        r = Expression(b, l, 14);
         exit_section_(b, l, m, NOT_IN_EXPRESSION, r, true, null);
       }
-      else if (g < 14 && IsExpression_0(b, l + 1)) {
+      else if (g < 15 && IsExpression_0(b, l + 1)) {
         r = true;
         exit_section_(b, l, m, IS_EXPRESSION, r, true, null);
       }
-      else if (g < 15 && NotIsExpression_0(b, l + 1)) {
+      else if (g < 16 && NotIsExpression_0(b, l + 1)) {
         r = true;
         exit_section_(b, l, m, NOT_IS_EXPRESSION, r, true, null);
       }
-      else if (g < 16 && AsExpression_0(b, l + 1)) {
+      else if (g < 17 && AsExpression_0(b, l + 1)) {
         r = true;
         exit_section_(b, l, m, AS_EXPRESSION, r, true, null);
       }
@@ -5552,13 +5962,28 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
+  // 'sql' <<enterMode "BLOCK?">> Expression <<exitModeSafe "BLOCK?">> SqlBlock
+  public static boolean SqlExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlExpression")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, SQL_EXPRESSION, "<sql expression>");
+    r = consumeTokenSmart(b, "sql");
+    p = r; // pin = 1
+    r = r && report_error_(b, enterMode(b, l + 1, "BLOCK?"));
+    r = p && report_error_(b, Expression(b, l + 1, -1)) && r;
+    r = p && report_error_(b, exitModeSafe(b, l + 1, "BLOCK?")) && r;
+    r = p && SqlBlock(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
   public static boolean UnaryExpr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "UnaryExpr")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, null);
     r = UnaryOp(b, l + 1);
     p = r;
-    r = p && Expression(b, l, 5);
+    r = p && Expression(b, l, 6);
     exit_section_(b, l, m, UNARY_EXPR, r, p, null);
     return r || p;
   }
@@ -5808,7 +6233,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeTokenSmart(b, DOT);
     p = r;
-    r = p && Expression(b, l, 18);
+    r = p && Expression(b, l, 19);
     exit_section_(b, l, m, ENUM_FETCH, r, p, null);
     return r || p;
   }
@@ -5820,7 +6245,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeTokenSmart(b, MUT);
     p = r;
-    r = p && Expression(b, l, 19);
+    r = p && Expression(b, l, 20);
     exit_section_(b, l, m, MUT_EXPRESSION, r, p, null);
     return r || p;
   }
@@ -5832,7 +6257,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeTokenSmart(b, SHARED);
     p = r;
-    r = p && Expression(b, l, 20);
+    r = p && Expression(b, l, 21);
     exit_section_(b, l, m, SHARED_EXPRESSION, r, p, null);
     return r || p;
   }
@@ -5846,19 +6271,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
     r = consumeTokensSmart(b, 2, AT, IDENTIFIER);
     exit_section_(b, m, CONSTEXPR_IDENTIFIER_EXPRESSION, r);
     return r;
-  }
-
-  // sql identifier SqlBlock
-  public static boolean SqlExpression(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SqlExpression")) return false;
-    if (!nextTokenIsSmart(b, SQL)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, SQL_EXPRESSION, null);
-    r = consumeTokensSmart(b, 1, SQL, IDENTIFIER);
-    p = r; // pin = 1
-    r = r && SqlBlock(b, l + 1);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
   }
 
   public static boolean GoExpression(PsiBuilder b, int l) {

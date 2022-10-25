@@ -14,6 +14,7 @@ import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.ide.codeInsight.VlangTypeInferenceUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangPsiImplUtil.processNamedElements
+import org.vlang.lang.sql.VlangSqlUtil
 import org.vlang.lang.stubs.index.VlangMethodIndex
 import org.vlang.lang.stubs.index.VlangModulesFingerprintIndex
 import org.vlang.lang.stubs.index.VlangModulesIndex
@@ -298,6 +299,11 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             (VlangCodeInsightUtil.insideOrGuard(identifier!!) || VlangCodeInsightUtil.insideElseBlockIfGuard(identifier!!))
         ) {
             return !processBuiltin(processor, state.put(SEARCH_NAME, "IError"))
+        }
+
+        if (VlangSqlUtil.insideSql(identifier!!) && VlangSqlUtil.fieldReference(identifier!!)) {
+            val resolved = VlangSqlUtil.getTable(identifier!!)?.typeReferenceExpression?.resolve() as? VlangStructDeclaration ?: return true
+            return processType(resolved.structType, processor, state)
         }
 
         when (val parent = myElement.parent) {

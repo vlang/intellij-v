@@ -23,6 +23,7 @@ import org.vlang.lang.psi.impl.VlangReferenceBase.Companion.LOCAL_RESOLVE
 import org.vlang.lang.psi.impl.imports.VlangImportReference
 import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
+import org.vlang.lang.sql.VlangSqlUtil
 import org.vlang.utils.parentNth
 
 object VlangPsiImplUtil {
@@ -632,6 +633,22 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun isGuard(o: VlangIfExpression): Boolean {
         return o.varDeclaration != null
+    }
+
+    @JvmStatic
+    fun getType(o: VlangSqlExpression, context: ResolveState?): VlangType? {
+        val lastStatement = o.sqlBlock?.sqlBlockStatementList?.lastOrNull() ?: return null
+        if (lastStatement is VlangSqlSelectStatement) {
+            if (lastStatement.sqlSelectCountClause != null) {
+                return getBuiltinType("int", lastStatement)
+            }
+
+            val tableRef = VlangSqlUtil.getTable(lastStatement) ?: return null
+            val table = tableRef.typeReferenceExpression.resolve() as? VlangNamedElement ?: return null
+            val type = table.getType(context) ?: return null
+            return VlangLightType.LightArrayType(type)
+        }
+        return null
     }
 
     @JvmStatic

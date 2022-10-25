@@ -3,9 +3,11 @@ package org.vlang.lang.psi;
 
 import org.jetbrains.annotations.NotNull;
 
-public interface VlangSqlStatement extends VlangSqlBlockStatement {
+import java.util.List;
+
+public interface VlangSqlUpdateList extends VlangCompositeElement {
 
   @NotNull
-  VlangSqlExpression getSqlExpression();
+  List<VlangSqlUpdateItem> getSqlUpdateItemList();
 
 }

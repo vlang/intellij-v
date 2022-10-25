@@ -18,4 +18,5 @@ class TypeTest : TypeTestBase() {
     fun `test json decode`() = doTestWithBuiltin("json_decode.v")
     fun `test array methods`() = doTestWithBuiltin("array_methods.v")
     fun `test enum fetch`() = doTest("enum_fetch.v")
+    fun `test sql`() = doTest("sql.v")
 }

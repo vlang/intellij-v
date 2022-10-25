@@ -10,12 +10,14 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.elementType
+import com.intellij.psi.util.parentOfType
 import org.vlang.ide.highlight.VlangHighlightingData
 import org.vlang.ide.highlight.VlangHighlightingData.VLANG_MUTABLE_VARIABLE
 import org.vlang.lang.VlangParserDefinition
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.*
+import org.vlang.lang.sql.VlangSqlUtil
 
 class VlangAnnotator : Annotator {
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
@@ -212,6 +214,21 @@ class VlangAnnotator : Annotator {
 
         if (VlangCompletionUtil.isCompileTimeIdentifier(element)) {
             holder.textAttributes(element, DefaultLanguageHighlighterColors.CONSTANT)
+        }
+
+        holder.annotateSql(element)
+    }
+
+    private fun AnnotationHolder.annotateSql(element: PsiElement) {
+        if (element.elementType != VlangTypes.IDENTIFIER) return
+        element.parentOfType<VlangSqlExpression>(true) ?: return
+
+        if (VlangSqlUtil.isSqlKeyword(element.text)) {
+            textAttributes(element, DefaultLanguageHighlighterColors.KEYWORD)
+        }
+
+        if (element.textMatches("sql")) {
+            textAttributes(element, DefaultLanguageHighlighterColors.KEYWORD)
         }
     }
 

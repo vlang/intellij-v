@@ -620,12 +620,84 @@ public class VlangVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitSqlBlockStatement(@NotNull VlangSqlBlockStatement o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitSqlCreateStatement(@NotNull VlangSqlCreateStatement o) {
+    visitSqlBlockStatement(o);
+  }
+
+  public void visitSqlDeleteStatement(@NotNull VlangSqlDeleteStatement o) {
+    visitSqlBlockStatement(o);
+  }
+
+  public void visitSqlDropStatement(@NotNull VlangSqlDropStatement o) {
+    visitSqlBlockStatement(o);
+  }
+
   public void visitSqlExpression(@NotNull VlangSqlExpression o) {
     visitExpression(o);
   }
 
+  public void visitSqlFromClause(@NotNull VlangSqlFromClause o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitSqlInsertStatement(@NotNull VlangSqlInsertStatement o) {
+    visitSqlBlockStatement(o);
+  }
+
+  public void visitSqlLimitClause(@NotNull VlangSqlLimitClause o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitSqlOffsetClause(@NotNull VlangSqlOffsetClause o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitSqlOrderByClause(@NotNull VlangSqlOrderByClause o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitSqlReferenceList(@NotNull VlangSqlReferenceList o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitSqlReferenceListItem(@NotNull VlangSqlReferenceListItem o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitSqlSelectCountClause(@NotNull VlangSqlSelectCountClause o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitSqlSelectStatement(@NotNull VlangSqlSelectStatement o) {
+    visitSqlBlockStatement(o);
+  }
+
   public void visitSqlStatement(@NotNull VlangSqlStatement o) {
-    visitStatement(o);
+    visitSqlBlockStatement(o);
+  }
+
+  public void visitSqlTableName(@NotNull VlangSqlTableName o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitSqlUpdateItem(@NotNull VlangSqlUpdateItem o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitSqlUpdateList(@NotNull VlangSqlUpdateList o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitSqlUpdateStatement(@NotNull VlangSqlUpdateStatement o) {
+    visitSqlBlockStatement(o);
+  }
+
+  public void visitSqlWhereClause(@NotNull VlangSqlWhereClause o) {
+    visitCompositeElement(o);
   }
 
   public void visitStatement(@NotNull VlangStatement o) {

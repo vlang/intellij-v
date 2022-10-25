@@ -2,22 +2,23 @@
 package org.vlang.lang.psi.impl;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
-import org.vlang.lang.psi.VlangPsiTreeUtil;
-import org.vlang.lang.psi.VlangSqlExpression;
-import org.vlang.lang.psi.VlangSqlStatement;
+import org.jetbrains.annotations.Nullable;
+import org.vlang.lang.psi.VlangSqlBlockStatement;
 import org.vlang.lang.psi.VlangVisitor;
 
-public class VlangSqlStatementImpl extends VlangSqlBlockStatementImpl implements VlangSqlStatement {
+import static org.vlang.lang.VlangTypes.IDENTIFIER;
 
-  public VlangSqlStatementImpl(@NotNull ASTNode node) {
+public class VlangSqlBlockStatementImpl extends VlangCompositeElementImpl implements VlangSqlBlockStatement {
+
+  public VlangSqlBlockStatementImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitSqlStatement(this);
+    visitor.visitSqlBlockStatement(this);
   }
 
   @Override
@@ -27,9 +28,9 @@ public class VlangSqlStatementImpl extends VlangSqlBlockStatementImpl implements
   }
 
   @Override
-  @NotNull
-  public VlangSqlExpression getSqlExpression() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangSqlExpression.class));
+  @Nullable
+  public PsiElement getIdentifier() {
+    return findChildByType(IDENTIFIER);
   }
 
 }

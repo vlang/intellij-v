@@ -129,8 +129,6 @@ RAW_SINGLE_QUOTE_STRING = {RAW_STR_MODIFIER} {STR_SINGLE} [^\']* {STR_SINGLE}
 %state SHORT_TEMPLATE_ENTRY_FIELD_NAME
 %state ASM_BLOCK
 %state ASM_BLOCK_LINE
-%state SQL_BLOCK
-%state SQL_BLOCK_LINE
 
 %%
 
@@ -336,7 +334,6 @@ RAW_SINGLE_QUOTE_STRING = {RAW_STR_MODIFIER} {STR_SINGLE} [^\']* {STR_SINGLE}
 
 "volatile"                                { return VOLATILE; }
 "asm"                                     { yybegin(ASM_BLOCK); return ASM; }
-"sql"                                     { yybegin(SQL_BLOCK); return SQL; }
 
 "__global"                                { return BUILTIN_GLOBAL; }
 
@@ -384,22 +381,4 @@ RAW_SINGLE_QUOTE_STRING = {RAW_STR_MODIFIER} {STR_SINGLE} [^\']* {STR_SINGLE}
 {NL}+                                     { return NLS; }
 "}"                                       { yybegin(MAYBE_SEMICOLON); return RBRACE; }
 [^}\r\n]+                                 { return ASM_LINE; }
-}
-
-<SQL_BLOCK> {
-{WS}                                      { return WS; }
-{NL}+                                     { return NLS; }
-
-// hack
-":"                                       { yybegin(YYINITIAL); return COLON; }
-
-{IDENT}                                   { return IDENTIFIER; }
-
-"{"                                       { yybegin(SQL_BLOCK_LINE); return LBRACE; }
-}
-
-<SQL_BLOCK_LINE> {
-{NL}+                                     { return NLS; }
-"}"                                       { yybegin(MAYBE_SEMICOLON); return RBRACE; }
-[^}\r\n]+                                 { return SQL_LINE; }
 }
