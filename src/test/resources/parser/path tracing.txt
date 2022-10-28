@@ -1422,16 +1422,15 @@ V Language file
       PsiElement(VlangTokenType.enum)('enum')
       PsiElement(VlangTokenType.identifier)('Refl_t')
       PsiElement(VlangTokenType.{)('{')
-      ENUM_FIELDS
-        ENUM_FIELD_DECLARATION
-          ENUM_FIELD_DEFINITION
-            PsiElement(VlangTokenType.identifier)('diff')
-        ENUM_FIELD_DECLARATION
-          ENUM_FIELD_DEFINITION
-            PsiElement(VlangTokenType.identifier)('spec')
-        ENUM_FIELD_DECLARATION
-          ENUM_FIELD_DEFINITION
-            PsiElement(VlangTokenType.identifier)('refr')
+      ENUM_FIELD_DECLARATION
+        ENUM_FIELD_DEFINITION
+          PsiElement(VlangTokenType.identifier)('diff')
+      ENUM_FIELD_DECLARATION
+        ENUM_FIELD_DEFINITION
+          PsiElement(VlangTokenType.identifier)('spec')
+      ENUM_FIELD_DECLARATION
+        ENUM_FIELD_DEFINITION
+          PsiElement(VlangTokenType.identifier)('refr')
       PsiElement(VlangTokenType.})('}')
   PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//******************************** Sphere ***********************************')
   STRUCT_DECLARATION

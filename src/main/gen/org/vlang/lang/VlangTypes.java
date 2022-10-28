@@ -54,7 +54,6 @@ public interface VlangTypes {
   IElementType EMPTY_SLICE = new VlangCompositeElementType("EMPTY_SLICE");
   IElementType ENUM_DECLARATION = VlangElementTypeFactory.stubFactory("ENUM_DECLARATION");
   IElementType ENUM_FETCH = new VlangCompositeElementType("ENUM_FETCH");
-  IElementType ENUM_FIELDS = new VlangCompositeElementType("ENUM_FIELDS");
   IElementType ENUM_FIELD_DECLARATION = new VlangCompositeElementType("ENUM_FIELD_DECLARATION");
   IElementType ENUM_FIELD_DEFINITION = VlangElementTypeFactory.stubFactory("ENUM_FIELD_DEFINITION");
   IElementType ENUM_TYPE = VlangElementTypeFactory.stubFactory("ENUM_TYPE");
@@ -468,9 +467,6 @@ public interface VlangTypes {
       }
       else if (type == ENUM_FETCH) {
         return new VlangEnumFetchImpl(node);
-      }
-      else if (type == ENUM_FIELDS) {
-        return new VlangEnumFieldsImpl(node);
       }
       else if (type == ENUM_FIELD_DECLARATION) {
         return new VlangEnumFieldDeclarationImpl(node);

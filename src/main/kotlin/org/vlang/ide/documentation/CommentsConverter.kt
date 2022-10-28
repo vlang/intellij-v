@@ -32,14 +32,14 @@ object CommentsConverter {
                 }
             } else if (element is VlangTypeAliasDeclaration) {
                 return getCommentsInner(element.parent) // type declaration
-            } else if (element is VlangFieldDefinition) {
+            } else if (element is VlangFieldDefinition || element is VlangEnumFieldDefinition) {
                 // comments after field definition
                 // ```
                 // struct Foo {
                 //   name string // comment
                 // }
                 // ```
-                val parent = element.parent as? VlangFieldDeclaration
+                val parent = element.parent
                 val lastChild = parent?.lastChild
                 if (lastChild is PsiComment) {
                     return listOf(lastChild)
@@ -52,9 +52,6 @@ object CommentsConverter {
     private fun getCommentsInner(element: PsiElement?): List<PsiComment> {
         if (element == null) {
             return emptyList()
-        }
-        if (element is VlangFieldDefinition) {
-            return getCommentsInner(element.parent)
         }
         val result = mutableListOf<PsiComment>()
         var e: PsiElement?

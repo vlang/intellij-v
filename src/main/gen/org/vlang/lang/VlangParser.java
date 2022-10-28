@@ -1321,7 +1321,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // EnumFieldDefinition ('=' Expression)?
+  // EnumFieldDefinition ('=' Expression)? semi?
   public static boolean EnumFieldDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "EnumFieldDeclaration")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
@@ -1329,7 +1329,8 @@ public class VlangParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, ENUM_FIELD_DECLARATION, null);
     r = EnumFieldDefinition(b, l + 1);
     p = r; // pin = 1
-    r = r && EnumFieldDeclaration_1(b, l + 1);
+    r = r && report_error_(b, EnumFieldDeclaration_1(b, l + 1));
+    r = p && EnumFieldDeclaration_2(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -1352,6 +1353,13 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
+  // semi?
+  private static boolean EnumFieldDeclaration_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "EnumFieldDeclaration_2")) return false;
+    semi(b, l + 1);
+    return true;
+  }
+
   /* ********************************************************** */
   // identifier
   public static boolean EnumFieldDefinition(PsiBuilder b, int l) {
@@ -1365,20 +1373,19 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // EnumFieldDeclaration (semi EnumFieldDeclaration)* semi?
-  public static boolean EnumFields(PsiBuilder b, int l) {
+  // EnumFieldDeclaration (EnumFieldDeclaration)*
+  static boolean EnumFields(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "EnumFields")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = EnumFieldDeclaration(b, l + 1);
     r = r && EnumFields_1(b, l + 1);
-    r = r && EnumFields_2(b, l + 1);
-    exit_section_(b, m, ENUM_FIELDS, r);
+    exit_section_(b, m, null, r);
     return r;
   }
 
-  // (semi EnumFieldDeclaration)*
+  // (EnumFieldDeclaration)*
   private static boolean EnumFields_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "EnumFields_1")) return false;
     while (true) {
@@ -1389,22 +1396,14 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // semi EnumFieldDeclaration
+  // (EnumFieldDeclaration)
   private static boolean EnumFields_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "EnumFields_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = semi(b, l + 1);
-    r = r && EnumFieldDeclaration(b, l + 1);
+    r = EnumFieldDeclaration(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
-  }
-
-  // semi?
-  private static boolean EnumFields_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "EnumFields_2")) return false;
-    semi(b, l + 1);
-    return true;
   }
 
   /* ********************************************************** */

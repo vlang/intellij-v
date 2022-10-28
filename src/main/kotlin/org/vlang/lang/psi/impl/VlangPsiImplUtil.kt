@@ -304,7 +304,7 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getFieldList(o: VlangEnumType): List<VlangEnumFieldDefinition> {
-        return o.enumFields?.enumFieldDeclarationList?.map { it.enumFieldDefinition } ?: emptyList()
+        return o.enumFieldDeclarationList.map { it.enumFieldDefinition }
     }
 
     @JvmStatic
@@ -1182,6 +1182,11 @@ object VlangPsiImplUtil {
         }
 
         return getBuiltinType(text, o)
+    }
+
+    @JvmStatic
+    fun getTypeInner(o: VlangGlobalVariableDefinition, context: ResolveState?): VlangType? {
+        return o.expression?.getType(context)
     }
 
     @JvmStatic

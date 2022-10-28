@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface VlangEnumType extends VlangType {
 
-  @Nullable
-  VlangEnumFields getEnumFields();
+  @NotNull
+  List<VlangEnumFieldDeclaration> getEnumFieldDeclarationList();
 
   @Nullable
   PsiElement getLbrace();

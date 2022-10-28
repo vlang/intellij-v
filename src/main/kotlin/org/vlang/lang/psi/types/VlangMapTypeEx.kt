@@ -5,8 +5,8 @@ import com.intellij.psi.PsiElement
 import org.vlang.lang.psi.VlangMapType
 
 class VlangMapTypeEx(raw: VlangMapType): VlangBaseTypeEx<VlangMapType>(raw) {
-    private val key = raw.keyType.toEx()
-    private val value = raw.valueType.toEx()
+    val key = raw.keyType.toEx()
+    val value = raw.valueType.toEx()
 
     override fun toString() = buildString {
         append("map[")

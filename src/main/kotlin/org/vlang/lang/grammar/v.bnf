@@ -444,8 +444,8 @@ EnumType ::= enum identifier GenericArguments? '{' EnumFields? '}' {
   methods=[getFieldList]
 }
 
-EnumFields ::= EnumFieldDeclaration (semi EnumFieldDeclaration)* semi?
-EnumFieldDeclaration ::= EnumFieldDefinition ('=' Expression)? {pin=1}
+private EnumFields ::= EnumFieldDeclaration (EnumFieldDeclaration)*
+EnumFieldDeclaration ::= EnumFieldDefinition ('=' Expression)? semi? {pin=1}
 EnumFieldDefinition ::= identifier {
   methods=[isPublic getTypeInner]
   stubClass="org.vlang.lang.stubs.VlangEnumFieldDefinitionStub"
@@ -515,7 +515,7 @@ private GlobalVariableDefinitions ::= GlobalVariableDefinition (semi GlobalVaria
 GlobalVariableDefinition ::= identifier (VarModifiers Type | GlobalVariableValue) {
   pin=1
   stubClass="org.vlang.lang.stubs.VlangGlobalVariableDefinitionStub"
-  methods=[deleteDefinition getName getSymbolVisibility]
+  methods=[deleteDefinition getName getTypeInner getSymbolVisibility]
 }
 
 private GlobalVariableValue ::= '=' (<<withOff Expression "BLOCK?">> | (!() Expression)) { pin=1 }

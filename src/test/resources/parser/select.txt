@@ -384,49 +384,48 @@ V Language file
       PsiElement(VlangTokenType.enum)('enum')
       PsiElement(VlangTokenType.identifier)('Feature')
       PsiElement(VlangTokenType.{)('{')
-      ENUM_FIELDS
-        ENUM_FIELD_DECLARATION
-          ENUM_FIELD_DEFINITION
-            PsiElement(VlangTokenType.identifier)('diagnostics')
-        ENUM_FIELD_DECLARATION
-          ENUM_FIELD_DEFINITION
-            PsiElement(VlangTokenType.identifier)('v_diagnostics')
-        ENUM_FIELD_DECLARATION
-          ENUM_FIELD_DEFINITION
-            PsiElement(VlangTokenType.identifier)('analyzer_diagnostics')
-        ENUM_FIELD_DECLARATION
-          ENUM_FIELD_DEFINITION
-            PsiElement(VlangTokenType.identifier)('formatting')
-        ENUM_FIELD_DECLARATION
-          ENUM_FIELD_DEFINITION
-            PsiElement(VlangTokenType.identifier)('document_symbol')
-        ENUM_FIELD_DECLARATION
-          ENUM_FIELD_DEFINITION
-            PsiElement(VlangTokenType.identifier)('workspace_symbol')
-        ENUM_FIELD_DECLARATION
-          ENUM_FIELD_DEFINITION
-            PsiElement(VlangTokenType.identifier)('signature_help')
-        ENUM_FIELD_DECLARATION
-          ENUM_FIELD_DEFINITION
-            PsiElement(VlangTokenType.identifier)('completion')
-        ENUM_FIELD_DECLARATION
-          ENUM_FIELD_DEFINITION
-            PsiElement(VlangTokenType.identifier)('hover')
-        ENUM_FIELD_DECLARATION
-          ENUM_FIELD_DEFINITION
-            PsiElement(VlangTokenType.identifier)('folding_range')
-        ENUM_FIELD_DECLARATION
-          ENUM_FIELD_DEFINITION
-            PsiElement(VlangTokenType.identifier)('definition')
-        ENUM_FIELD_DECLARATION
-          ENUM_FIELD_DEFINITION
-            PsiElement(VlangTokenType.identifier)('implementation')
-        ENUM_FIELD_DECLARATION
-          ENUM_FIELD_DEFINITION
-            PsiElement(VlangTokenType.identifier)('code_lens')
-        ENUM_FIELD_DECLARATION
-          ENUM_FIELD_DEFINITION
-            PsiElement(VlangTokenType.identifier)('document_link')
+      ENUM_FIELD_DECLARATION
+        ENUM_FIELD_DEFINITION
+          PsiElement(VlangTokenType.identifier)('diagnostics')
+      ENUM_FIELD_DECLARATION
+        ENUM_FIELD_DEFINITION
+          PsiElement(VlangTokenType.identifier)('v_diagnostics')
+      ENUM_FIELD_DECLARATION
+        ENUM_FIELD_DEFINITION
+          PsiElement(VlangTokenType.identifier)('analyzer_diagnostics')
+      ENUM_FIELD_DECLARATION
+        ENUM_FIELD_DEFINITION
+          PsiElement(VlangTokenType.identifier)('formatting')
+      ENUM_FIELD_DECLARATION
+        ENUM_FIELD_DEFINITION
+          PsiElement(VlangTokenType.identifier)('document_symbol')
+      ENUM_FIELD_DECLARATION
+        ENUM_FIELD_DEFINITION
+          PsiElement(VlangTokenType.identifier)('workspace_symbol')
+      ENUM_FIELD_DECLARATION
+        ENUM_FIELD_DEFINITION
+          PsiElement(VlangTokenType.identifier)('signature_help')
+      ENUM_FIELD_DECLARATION
+        ENUM_FIELD_DEFINITION
+          PsiElement(VlangTokenType.identifier)('completion')
+      ENUM_FIELD_DECLARATION
+        ENUM_FIELD_DEFINITION
+          PsiElement(VlangTokenType.identifier)('hover')
+      ENUM_FIELD_DECLARATION
+        ENUM_FIELD_DEFINITION
+          PsiElement(VlangTokenType.identifier)('folding_range')
+      ENUM_FIELD_DECLARATION
+        ENUM_FIELD_DEFINITION
+          PsiElement(VlangTokenType.identifier)('definition')
+      ENUM_FIELD_DECLARATION
+        ENUM_FIELD_DEFINITION
+          PsiElement(VlangTokenType.identifier)('implementation')
+      ENUM_FIELD_DECLARATION
+        ENUM_FIELD_DEFINITION
+          PsiElement(VlangTokenType.identifier)('code_lens')
+      ENUM_FIELD_DECLARATION
+        ENUM_FIELD_DEFINITION
+          PsiElement(VlangTokenType.identifier)('document_link')
       PsiElement(VlangTokenType.})('}')
   PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// feature_from_str returns the Feature-enum value equivalent of the given string.')
   PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// used internally for Vls.set_features method only.')
@@ -4565,16 +4564,15 @@ V Language file
       PsiElement(VlangTokenType.enum)('enum')
       PsiElement(VlangTokenType.identifier)('ServerStatus')
       PsiElement(VlangTokenType.{)('{')
-      ENUM_FIELDS
-        ENUM_FIELD_DECLARATION
-          ENUM_FIELD_DEFINITION
-            PsiElement(VlangTokenType.identifier)('off')
-        ENUM_FIELD_DECLARATION
-          ENUM_FIELD_DEFINITION
-            PsiElement(VlangTokenType.identifier)('initialized')
-        ENUM_FIELD_DECLARATION
-          ENUM_FIELD_DEFINITION
-            PsiElement(VlangTokenType.identifier)('shutdown')
+      ENUM_FIELD_DECLARATION
+        ENUM_FIELD_DEFINITION
+          PsiElement(VlangTokenType.identifier)('off')
+      ENUM_FIELD_DECLARATION
+        ENUM_FIELD_DEFINITION
+          PsiElement(VlangTokenType.identifier)('initialized')
+      ENUM_FIELD_DECLARATION
+        ENUM_FIELD_DEFINITION
+          PsiElement(VlangTokenType.identifier)('shutdown')
       PsiElement(VlangTokenType.})('}')
   FUNCTION_DECLARATION
     SYMBOL_VISIBILITY

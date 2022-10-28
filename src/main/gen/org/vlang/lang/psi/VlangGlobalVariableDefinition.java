@@ -2,6 +2,7 @@
 package org.vlang.lang.psi;
 
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
 import com.intellij.psi.StubBasedPsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,6 +32,9 @@ public interface VlangGlobalVariableDefinition extends VlangNamedElement, StubBa
   //WARNING: getName(...) is skipped
   //matching getName(VlangGlobalVariableDefinition, ...)
   //methods are not found in VlangPsiImplUtil
+
+  @Nullable
+  VlangType getTypeInner(@Nullable ResolveState context);
 
   //WARNING: getSymbolVisibility(...) is skipped
   //matching getSymbolVisibility(VlangGlobalVariableDefinition, ...)

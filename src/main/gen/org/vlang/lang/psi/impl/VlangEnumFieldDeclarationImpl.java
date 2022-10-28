@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.*;
 
-import static org.vlang.lang.VlangTypes.ASSIGN;
+import static org.vlang.lang.VlangTypes.*;
 
 public class VlangEnumFieldDeclarationImpl extends VlangCompositeElementImpl implements VlangEnumFieldDeclaration {
 
@@ -42,6 +42,18 @@ public class VlangEnumFieldDeclarationImpl extends VlangCompositeElementImpl imp
   @Nullable
   public PsiElement getAssign() {
     return findChildByType(ASSIGN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSemicolonSynthetic() {
+    return findChildByType(SEMICOLON_SYNTHETIC);
   }
 
 }

@@ -13,71 +13,93 @@ import org.vlang.ide.documentation.DocumentationUtils.asKeyword
 import org.vlang.ide.documentation.DocumentationUtils.asNumber
 import org.vlang.ide.documentation.DocumentationUtils.asParameter
 import org.vlang.ide.documentation.DocumentationUtils.asString
+import org.vlang.ide.documentation.DocumentationUtils.asType
 import org.vlang.ide.documentation.DocumentationUtils.colorize
 import org.vlang.ide.documentation.DocumentationUtils.line
 import org.vlang.ide.documentation.DocumentationUtils.part
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 
 object DocumentationGenerator {
-    fun VlangType.generateDoc(anchor: PsiElement? = null): String {
-        when (this) {
-            is VlangArrayOrSliceType -> return generateDoc()
-            is VlangPointerType      -> return generateDoc()
-            is VlangNullableType     -> return generateDoc()
-            is VlangStructType       -> return generateDoc()
-            is VlangUnionType        -> return generateDoc()
-            is VlangEnumType         -> return generateDoc()
-            is VlangInterfaceType    -> return generateDoc()
+    fun VlangType.generateDoc(anchor: PsiElement): String {
+        val typeEx = toEx()
+        when (typeEx) {
+            is VlangArrayTypeEx     -> return typeEx.generateDoc(anchor)
+            is VlangMapTypeEx       -> return typeEx.generateDoc(anchor)
+            is VlangPointerTypeEx   -> return typeEx.generateDoc(anchor)
+            is VlangNullableTypeEx  -> return typeEx.generateDoc(anchor)
+            is VlangStructTypeEx    -> return typeEx.generateDoc(anchor)
+            is VlangUnionTypeEx     -> return typeEx.generateDoc(anchor)
+            is VlangEnumTypeEx      -> return typeEx.generateDoc(anchor)
+            is VlangInterfaceTypeEx -> return typeEx.generateDoc(anchor)
         }
-        return colorize(toEx().readableName(anchor ?: this).escapeHTML(), asDeclaration)
+        return colorize(typeEx.readableName(anchor).escapeHTML(), asType)
     }
 
-    fun VlangStructType.generateDoc(): String {
+    fun VlangStructTypeEx.generateDoc(anchor: PsiElement): String {
         return buildString {
-            colorize(identifier?.text ?: "anon", asDeclaration)
+            append(generateFqnTypeDoc(readableName(anchor)))
         }
     }
 
-    fun VlangUnionType.generateDoc(): String {
+    fun VlangUnionTypeEx.generateDoc(anchor: PsiElement): String {
         return buildString {
-            colorize(identifier?.text ?: "anon", asDeclaration)
+            append(generateFqnTypeDoc(readableName(anchor)))
         }
     }
 
-    fun VlangEnumType.generateDoc(): String {
+    fun VlangEnumTypeEx.generateDoc(anchor: PsiElement): String {
         return buildString {
-            colorize(identifier?.text ?: "anon", asDeclaration)
+            append(generateFqnTypeDoc(readableName(anchor)))
         }
     }
 
-    fun VlangInterfaceType.generateDoc(): String {
+    fun VlangInterfaceTypeEx.generateDoc(anchor: PsiElement): String {
         return buildString {
-            colorize(identifier?.text ?: "anon", asDeclaration)
+            append(generateFqnTypeDoc(readableName(anchor)))
         }
     }
 
-    fun VlangArrayOrSliceType.generateDoc(): String {
+    fun VlangArrayTypeEx.generateDoc(anchor: PsiElement): String {
         return buildString {
             append("[]")
-            append(type?.generateDoc())
+            appendNotNull(inner?.raw()?.generateDoc(anchor))
         }
     }
 
-    fun VlangPointerType.generateDoc(): String {
+    fun VlangMapTypeEx.generateDoc(anchor: PsiElement): String {
+        return buildString {
+            append("map[")
+            appendNotNull(key.raw()?.generateDoc(anchor))
+            append("]")
+            appendNotNull(value.raw()?.generateDoc(anchor))
+        }
+    }
+
+    fun VlangPointerTypeEx.generateDoc(anchor: PsiElement): String {
         return buildString {
             append("&")
-            append(type?.generateDoc())
+            appendNotNull(inner?.raw()?.generateDoc(anchor))
         }
     }
 
-    fun VlangNullableType.generateDoc(): String {
+    fun VlangNullableTypeEx.generateDoc(anchor: PsiElement): String {
         return buildString {
             append("?")
-            appendNotNull(type?.generateDoc())
+            appendNotNull(inner?.raw()?.generateDoc(anchor))
         }
+    }
+
+    private fun generateFqnTypeDoc(fqn: String): String {
+        val parts = fqn.split(".")
+        if (parts.size == 1) {
+            return colorize(parts[0], asDeclaration)
+        }
+
+        return parts.subList(0, parts.size - 1).joinToString(".") + "." + colorize(parts.last(), asDeclaration)
     }
 
     fun VlangResult.generateDoc(): String {
@@ -87,14 +109,14 @@ object DocumentationGenerator {
                 append("(")
                 append(
                     typeInner.typeListNoPin.typeList.joinToString(", ") {
-                        it.generateDoc()
+                        it.generateDoc(this@generateDoc)
                     }
                 )
                 append(")")
             }
         }
 
-        return type.generateDoc()
+        return type.generateDoc(this)
     }
 
     private fun VlangVarModifiers.generateDoc(noHtml: Boolean = false): String {
@@ -197,7 +219,7 @@ object DocumentationGenerator {
                         colorize(param.name, asParameter)
                         append("".padEnd(paramNameMaxWidth - param.name.length))
                         append(" ")
-                        append(type.generateDoc())
+                        append(type.generateDoc(this@generateDoc))
                     }
                 }
             )
@@ -213,7 +235,7 @@ object DocumentationGenerator {
             }
             colorize(name, asParameter)
             append(" ")
-            append(type.generateDoc())
+            append(type.generateDoc(this@generateDoc))
         }
     }
 
@@ -232,7 +254,7 @@ object DocumentationGenerator {
             append("(")
             appendNotNull(varModifiers?.generateDoc())
             part(name, asDeclaration)
-            appendNotNull(type.generateDoc())
+            appendNotNull(type.generateDoc(this@generateMethodDoc))
             append(")")
         }
     }
@@ -355,10 +377,50 @@ object DocumentationGenerator {
 
             part("var", asKeyword)
             part(name, asDeclaration)
-            append(type?.generateDoc(original) ?: DocumentationUtils.colorize("unknown", asDeclaration))
+            append(type?.generateDoc(this@generateDoc) ?: DocumentationUtils.colorize("unknown", asDeclaration))
             append(DocumentationMarkup.DEFINITION_END)
 
             generateCommentsPart(this@generateDoc)
+        }
+    }
+
+    fun VlangParamDefinition.generateDoc(): String {
+        return buildString {
+            generateModuleName(containingFile)
+            append(DocumentationMarkup.DEFINITION_START)
+            val type = getType(null)
+
+            val modifiersDoc = varModifiers?.generateDoc()
+            if (!modifiersDoc.isNullOrEmpty()) {
+                append(modifiersDoc)
+            }
+
+            part("parameter", asKeyword)
+            part(name, asDeclaration)
+            append(type?.generateDoc(this@generateDoc) ?: DocumentationUtils.colorize("unknown", asDeclaration))
+            append(DocumentationMarkup.DEFINITION_END)
+
+            generateCommentsPart(this@generateDoc)
+        }
+    }
+
+    fun VlangGlobalVariableDefinition.generateDoc(): String {
+        return buildString {
+            generateModuleName(containingFile)
+            append(DocumentationMarkup.DEFINITION_START)
+            val type = getType(null)
+
+            val modifiersDoc = varModifiers?.generateDoc()
+            if (!modifiersDoc.isNullOrEmpty()) {
+                append(modifiersDoc)
+            }
+
+            part("global var", asKeyword)
+            part(name, asDeclaration)
+            append(type?.generateDoc(this@generateDoc) ?: DocumentationUtils.colorize("unknown", asDeclaration))
+            append(DocumentationMarkup.DEFINITION_END)
+
+            generateCommentsPart(this@generateDoc.parent)
         }
     }
 
@@ -398,7 +460,7 @@ object DocumentationGenerator {
             append(DocumentationMarkup.DEFINITION_START)
             val parent = parent as? VlangFieldDeclaration
             val parentGroup = parent?.parent as? VlangFieldsGroup
-            val owner = parent?.parentOfType<VlangNamedElement>()!!
+            val owner = parent?.parentOfType<VlangType>()!!
             val type = parent.type
 
             line(parent.attribute?.generateDoc())
@@ -409,14 +471,37 @@ object DocumentationGenerator {
             }
 
             part("field", asKeyword)
-            colorize(owner.name ?: "anon", asDeclaration)
+            append(owner.generateDoc(this@generateDoc))
             append(".")
             part(name, asDeclaration)
-            append(type?.generateDoc() ?: DocumentationUtils.colorize("unknown", asDeclaration))
+            append(type?.generateDoc(this@generateDoc) ?: DocumentationUtils.colorize("unknown", asDeclaration))
 
             val valueDoc = parent.defaultFieldValue?.expression?.generateDoc()
             if (valueDoc != null) {
                 part(" =")
+                append(valueDoc)
+            }
+
+            append(DocumentationMarkup.DEFINITION_END)
+            generateCommentsPart(this@generateDoc)
+        }
+    }
+
+    fun VlangEnumFieldDefinition.generateDoc(): String {
+        return buildString {
+            generateModuleName(containingFile)
+            append(DocumentationMarkup.DEFINITION_START)
+            val parent = parent as? VlangEnumFieldDeclaration
+            val owner = parentOfType<VlangType>()!!
+
+            part("enum field", asKeyword)
+            append(owner.generateDoc(this@generateDoc))
+            append(".")
+            part(name, asDeclaration)
+
+            val valueDoc = parent?.expression?.generateDoc()
+            if (valueDoc != null) {
+                part("=")
                 append(valueDoc)
             }
 
@@ -436,7 +521,7 @@ object DocumentationGenerator {
             }
             part("receiver", asKeyword)
             part(name, asDeclaration)
-            append(type.generateDoc())
+            append(type.generateDoc(this@generateDoc))
             append(DocumentationMarkup.DEFINITION_END)
 
             generateCommentsPart(this@generateDoc)
@@ -452,10 +537,10 @@ object DocumentationGenerator {
 
                 is VlangLiteral       -> {
                     when (elementType) {
-                        VlangTypes.TRUE -> colorize(text, asKeyword)
+                        VlangTypes.TRUE  -> colorize(text, asKeyword)
                         VlangTypes.FALSE -> colorize(text, asKeyword)
-                        VlangTypes.CHAR -> colorize(text, asString)
-                        else -> colorize(text, asNumber)
+                        VlangTypes.CHAR  -> colorize(text, asString)
+                        else             -> colorize(text, asNumber)
                     }
                 }
 

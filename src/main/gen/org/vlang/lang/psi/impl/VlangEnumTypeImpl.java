@@ -36,9 +36,9 @@ public class VlangEnumTypeImpl extends VlangTypeImpl implements VlangEnumType {
   }
 
   @Override
-  @Nullable
-  public VlangEnumFields getEnumFields() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangEnumFields.class);
+  @NotNull
+  public List<VlangEnumFieldDeclaration> getEnumFieldDeclarationList() {
+    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangEnumFieldDeclaration.class);
   }
 
   @Override

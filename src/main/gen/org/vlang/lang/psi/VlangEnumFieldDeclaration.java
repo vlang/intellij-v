@@ -16,4 +16,10 @@ public interface VlangEnumFieldDeclaration extends VlangCompositeElement {
   @Nullable
   PsiElement getAssign();
 
+  @Nullable
+  PsiElement getSemicolon();
+
+  @Nullable
+  PsiElement getSemicolonSynthetic();
+
 }

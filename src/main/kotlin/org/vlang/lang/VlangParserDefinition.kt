@@ -36,37 +36,4 @@ class VlangParserDefinition : ParserDefinition {
         }
         return Factory.createElement(node)
     }
-
-    companion object {
-        val typeCastFunctions = setOf(
-            "bool",
-            "string",
-
-            "int",
-            "i8",
-            "i16",
-            "i32",
-            "i64",
-            "i128",
-
-            "u8",
-            "u16",
-            "u32",
-            "u64",
-            "u128",
-
-            "rune",
-            "byte",
-
-            "f32",
-            "f64",
-
-            "isize",
-            "usize",
-
-            "voidptr",
-
-            "any",
-        )
-    }
 }

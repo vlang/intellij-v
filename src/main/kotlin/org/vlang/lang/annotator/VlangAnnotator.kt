@@ -10,11 +10,11 @@ import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.elementType
 import com.intellij.psi.util.parentOfType
 import org.vlang.ide.colors.VlangColor
-import org.vlang.lang.VlangParserDefinition
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangReference
+import org.vlang.lang.psi.types.VlangPrimitiveTypes
 import org.vlang.lang.sql.VlangSqlUtil
 
 class VlangAnnotator : Annotator {
@@ -56,6 +56,10 @@ class VlangAnnotator : Annotator {
             return VlangColor.CT_METHOD_CALL
         }
 
+        if (VlangPrimitiveTypes.isPrimitiveType(element.text)) {
+            return VlangColor.BUILTIN_TYPE
+        }
+
         if (parent is VlangReferenceExpression || parent is VlangTypeReferenceExpression) {
             return highlightReference(parent as VlangReferenceExpressionBase, parent.reference as VlangReference)
         }
@@ -77,13 +81,6 @@ class VlangAnnotator : Annotator {
     }
 
     private fun highlightReference(element: VlangReferenceExpressionBase, reference: VlangReference): VlangColor? {
-        if (element.parent is VlangCallExpr) {
-            val name = element.getIdentifier()?.text
-            if (VlangParserDefinition.typeCastFunctions.contains(name)) {
-                return VlangColor.BUILTIN_TYPE
-            }
-        }
-
         val resolved = reference.multiResolve(false).firstOrNull()?.element ?: return null
 
         return when (resolved) {
@@ -121,6 +118,7 @@ class VlangAnnotator : Annotator {
             parent is VlangMethodName && parent.identifier == element            -> colorFor(parent.parent as VlangMethodDeclaration)
             parent is PsiNameIdentifierOwner && parent.nameIdentifier == element -> colorFor(parent)
 
+            // pseudo keywords
             element.text in listOf(
                 "_likely_",
                 "_unlikely_",
@@ -128,6 +126,7 @@ class VlangAnnotator : Annotator {
                 "__offsetof",
                 "typeof",
                 "sql",
+                "map",
             )                                                                    -> VlangColor.KEYWORD
 
             else                                                                 -> null

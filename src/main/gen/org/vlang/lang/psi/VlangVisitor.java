@@ -193,10 +193,6 @@ public class VlangVisitor extends PsiElementVisitor {
     visitNamedElement(o);
   }
 
-  public void visitEnumFields(@NotNull VlangEnumFields o) {
-    visitCompositeElement(o);
-  }
-
   public void visitEnumType(@NotNull VlangEnumType o) {
     visitType(o);
   }

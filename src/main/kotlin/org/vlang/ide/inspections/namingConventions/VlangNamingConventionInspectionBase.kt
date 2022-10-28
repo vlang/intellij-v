@@ -10,6 +10,7 @@ import com.intellij.psi.util.parentOfType
 import com.intellij.refactoring.RefactoringFactory
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.ide.inspections.VlangBaseInspection
+import org.vlang.lang.psi.VlangEnumFieldDefinition
 import org.vlang.lang.psi.VlangNamedElement
 
 abstract class VlangNamingConventionInspectionBase : VlangBaseInspection() {
@@ -47,7 +48,7 @@ abstract class VlangNamingConventionInspectionBase : VlangBaseInspection() {
 
         val identifier = named.getIdentifier() ?: return
 
-        if (name.startsWith("_")) {
+        if (name.startsWith("_") && named !is VlangEnumFieldDefinition) {
             registerProblem(
                 identifier, "$elementKind name cannot start with '_'",
                 ProblemHighlightType.GENERIC_ERROR, TO_SNAKE_CASE_FIX

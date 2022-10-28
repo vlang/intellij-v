@@ -7,6 +7,7 @@ import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.editor.markup.TextAttributes
 import com.intellij.openapi.editor.richcopy.HtmlSyntaxInfoUtil
 import io.ktor.util.*
+import org.vlang.ide.colors.VlangColor
 
 object DocumentationUtils {
     private fun loadKey(key: TextAttributesKey): TextAttributes =
@@ -14,7 +15,8 @@ object DocumentationUtils {
 
     val asKeyword = loadKey(DefaultLanguageHighlighterColors.KEYWORD)
     val asIdentifier = loadKey(DefaultLanguageHighlighterColors.IDENTIFIER)
-    val asDeclaration = loadKey(DefaultLanguageHighlighterColors.FUNCTION_DECLARATION)
+    val asDeclaration = loadKey(VlangColor.FUNCTION.textAttributesKey)
+    val asType = loadKey(VlangColor.BUILTIN_TYPE.textAttributesKey)
     val asParameter = loadKey(DefaultLanguageHighlighterColors.PARAMETER)
     val asAttribute = loadKey(DefaultLanguageHighlighterColors.METADATA)
     val asString = loadKey(DefaultLanguageHighlighterColors.STRING)
