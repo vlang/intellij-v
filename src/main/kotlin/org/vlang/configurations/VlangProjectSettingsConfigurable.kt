@@ -74,9 +74,15 @@ class VlangProjectSettingsConfigurable(private val project: Project) : Configura
         val settings = project.projectSettings
 
         with(model) {
-            toolchainLocation = settings.toolchainLocation
-            toolchainVersion = settings.toolchainVersion
-            stdlibLocation = settings.stdlibLocation
+            if (modulesLocation.isEmpty()) {
+                modulesLocation = settings.toolchainLocation
+            }
+            if (toolchainVersion.isEmpty()) {
+                toolchainVersion = settings.toolchainVersion
+            }
+            if (stdlibLocation.isEmpty()) {
+                stdlibLocation = settings.stdlibLocation
+            }
             if (modulesLocation.isEmpty()) {
                 modulesLocation = settings.modulesLocation
             }
