@@ -2,7 +2,9 @@ package org.vlang.lang.psi
 
 import com.intellij.extapi.psi.PsiFileBase
 import com.intellij.openapi.project.guessProjectDir
-import com.intellij.psi.*
+import com.intellij.psi.FileViewProvider
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiReference
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
 import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.tree.IElementType
@@ -19,25 +21,17 @@ import org.vlang.lang.psi.impl.VlangPsiImplUtil
 import org.vlang.lang.stubs.VlangFileStub
 import org.vlang.lang.stubs.types.*
 
-class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, VlangLanguage.INSTANCE), PsiImportHolder, PsiClassOwner {
+class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, VlangLanguage.INSTANCE) {
 
     override fun getFileType() = VlangFileType.INSTANCE
 
     override fun toString() = "V Language file"
 
-    override fun getIcon(flags: Int) = VIcons.Vlang
+    override fun getIcon(flags: Int) = VIcons.V
 
     override fun getReference() = references.getOrNull(0)
 
     override fun getReferences(): Array<PsiReference?> = ReferenceProvidersRegistry.getReferencesFromProviders(this)
-
-    override fun getClasses(): Array<PsiClass> = emptyArray()
-
-    override fun getPackageName() = getModuleName()
-
-    override fun setPackageName(packageName: String?) {}
-
-    override fun importClass(aClass: PsiClass) = false
 
     fun isTestFile(): Boolean = name.split(".").first().endsWith("_test")
 

@@ -331,7 +331,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         if (!processImportedModules(file, processor, state)) return false
         if (!processImports(file, processor, state, myElement)) return false
         if (!processFileEntities(file, processor, state, true)) return false
-        if (!processDirectory(file.originalFile.parent, file, file.packageName, processor, state, true)) return false
+        if (!processDirectory(file.originalFile.parent, file, file.getModuleQualifiedName(), processor, state, true)) return false
         if (!processModulesEntities(file, processor, state)) return false
 
         return processBuiltin(processor, state)
@@ -349,7 +349,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
     private fun processDirectory(
         dir: PsiDirectory?,
         file: VlangFile?,
-        packageName: String?,
+        moduleName: String?,
         processor: VlangScopeProcessor,
         state: ResolveState,
         localProcessing: Boolean,
@@ -364,7 +364,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             if (f !is VlangFile || getPath(f) == filePath) {
                 continue
             }
-            if (packageName != null && packageName != f.packageName) {
+            if (moduleName != null && moduleName != f.getModuleQualifiedName()) {
                 continue
             }
             if (!processFileEntities(f, processor, state, localProcessing)) {

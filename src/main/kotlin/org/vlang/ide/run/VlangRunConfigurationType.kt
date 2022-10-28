@@ -8,7 +8,7 @@ import org.vlang.ide.ui.VIcons
 class VlangRunConfigurationType : ConfigurationTypeBase(
     ID, "V Build",
     "Run V project",
-    VIcons.Vlang
+    VIcons.V
 ) {
     companion object {
         const val ID = "VlangRun"

@@ -4,7 +4,7 @@ import com.intellij.icons.AllIcons
 import com.intellij.openapi.util.IconLoader
 
 object VIcons {
-    val Vlang = IconLoader.getIcon("/icons/vlang.svg", this::class.java)
+    val V = IconLoader.getIcon("/icons/vlang.svg", this::class.java)
     val Module = AllIcons.FileTypes.Config
 
     var Struct = AllIcons.Nodes.Class

@@ -20,9 +20,7 @@ V Language file
       PsiElement(VlangTokenType.pub)('pub')
     PsiElement(VlangTokenType.type)('type')
     ALIAS_TYPE
-      TYPE
-        TYPE_REFERENCE_EXPRESSION
-          PsiElement(VlangTokenType.identifier)('ImportsMap')
+      PsiElement(VlangTokenType.identifier)('ImportsMap')
       PsiElement(VlangTokenType.=)('=')
       TYPE_UNION_LIST
         MAP_TYPE

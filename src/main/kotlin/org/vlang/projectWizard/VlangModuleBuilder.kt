@@ -34,7 +34,7 @@ class VlangModuleBuilder : ModuleBuilder(), ModuleBuilderListener {
 
     override fun getDescription() = "Simple V project"
 
-    override fun getNodeIcon() = VIcons.Vlang
+    override fun getNodeIcon() = VIcons.V
 
     override fun getWeight() = 2100
 

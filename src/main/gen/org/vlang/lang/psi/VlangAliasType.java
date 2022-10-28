@@ -7,16 +7,13 @@ import org.jetbrains.annotations.Nullable;
 
 public interface VlangAliasType extends VlangType {
 
-  @NotNull
-  VlangType getType();
-
   @Nullable
   VlangTypeUnionList getTypeUnionList();
 
-  @NotNull
+  @Nullable
   PsiElement getAssign();
 
-  @Nullable
+  @NotNull
   PsiElement getIdentifier();
 
   boolean isAlias();

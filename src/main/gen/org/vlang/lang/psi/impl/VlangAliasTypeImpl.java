@@ -11,6 +11,7 @@ import org.vlang.lang.psi.*;
 import org.vlang.lang.stubs.VlangTypeStub;
 
 import static org.vlang.lang.VlangTypes.ASSIGN;
+import static org.vlang.lang.VlangTypes.IDENTIFIER;
 
 public class VlangAliasTypeImpl extends VlangTypeImpl implements VlangAliasType {
 
@@ -34,27 +35,21 @@ public class VlangAliasTypeImpl extends VlangTypeImpl implements VlangAliasType 
   }
 
   @Override
-  @NotNull
-  public VlangType getType() {
-    return notNullChild(VlangPsiTreeUtil.getStubChildOfType(this, VlangType.class));
-  }
-
-  @Override
   @Nullable
   public VlangTypeUnionList getTypeUnionList() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangTypeUnionList.class);
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getAssign() {
-    return notNullChild(findChildByType(ASSIGN));
+    return findChildByType(ASSIGN);
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiElement getIdentifier() {
-    return VlangPsiImplUtil.getIdentifier(this);
+    return notNullChild(findChildByType(IDENTIFIER));
   }
 
   @Override

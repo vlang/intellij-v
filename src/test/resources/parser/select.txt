@@ -3693,9 +3693,7 @@ V Language file
       PsiElement(VlangTokenType.pub)('pub')
     PsiElement(VlangTokenType.type)('type')
     ALIAS_TYPE
-      TYPE
-        TYPE_REFERENCE_EXPRESSION
-          PsiElement(VlangTokenType.identifier)('ResponseWriter')
+      PsiElement(VlangTokenType.identifier)('ResponseWriter')
       PsiElement(VlangTokenType.=)('=')
       TYPE_UNION_LIST
         TYPE

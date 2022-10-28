@@ -32,6 +32,8 @@ public interface VlangVarDefinition extends VlangMutable, VlangNamedElement, Stu
 
   void makeMutable();
 
+  boolean isCaptured(@NotNull PsiElement original);
+
   //WARNING: getValue(...) is skipped
   //matching getValue(VlangVarDefinition, ...)
   //methods are not found in VlangPsiImplUtil

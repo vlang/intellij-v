@@ -15,7 +15,7 @@ class VlangAdditionalLibraryRootsProvider : AdditionalLibraryRootsProvider() {
 
         override fun getPresentableText() = name
 
-        override fun getIcon(unused: Boolean) = VIcons.Vlang
+        override fun getIcon(unused: Boolean) = VIcons.V
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true

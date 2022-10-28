@@ -1,29 +1,45 @@
 package org.vlang.lang
 
-import com.intellij.ide.highlighter.JavaHighlightingColors
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase
 import com.intellij.psi.tree.IElementType
-import org.vlang.lang.psi.VlangDocTokenTypes
-import org.vlang.lang.psi.VlangTokenTypes
+import org.vlang.ide.colors.VlangColor
+import org.vlang.lang.VlangTypes.*
+import org.vlang.lang.psi.VlangDocTokenTypes.DOC_COMMENT
+import org.vlang.lang.psi.VlangTokenTypes.BOOL_LITERALS
+import org.vlang.lang.psi.VlangTokenTypes.COMMENTS
+import org.vlang.lang.psi.VlangTokenTypes.KEYWORDS
+import org.vlang.lang.psi.VlangTokenTypes.NUMBERS
+import org.vlang.lang.psi.VlangTokenTypes.OPERATORS
+import org.vlang.lang.psi.VlangTokenTypes.STRING_LITERALS
 
 class VlangSyntaxHighlighter : SyntaxHighlighterBase() {
     override fun getHighlightingLexer() = VlangHighlightingLexer()
 
-    override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> {
-        val attr = when {
-            tokenType == VlangTypes.LANGUAGE_INJECTION -> JavaHighlightingColors.LINE_COMMENT
-            tokenType == VlangDocTokenTypes.DOC_COMMENT -> JavaHighlightingColors.DOC_COMMENT
+    override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> =
+        pack(map(tokenType)?.textAttributesKey)
 
-            VlangTokenTypes.BOOL_LITERALS.contains(tokenType) -> JavaHighlightingColors.NUMBER
-            VlangTokenTypes.STRING_LITERALS.contains(tokenType) -> JavaHighlightingColors.STRING
-            VlangTokenTypes.NUMBERS.contains(tokenType) -> JavaHighlightingColors.NUMBER
-            VlangTokenTypes.KEYWORDS.contains(tokenType) -> JavaHighlightingColors.KEYWORD
-            VlangTokenTypes.OPERATORS.contains(tokenType) -> JavaHighlightingColors.OPERATION_SIGN
-            VlangTokenTypes.COMMENTS.contains(tokenType) -> JavaHighlightingColors.LINE_COMMENT
-            else -> null
+    companion object {
+        fun map(tokenType: IElementType): VlangColor? = when (tokenType) {
+            LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY -> VlangColor.VALID_STRING_ESCAPE
+            DOC_COMMENT                          -> VlangColor.BLOCK_COMMENT
+            LANGUAGE_INJECTION                   -> VlangColor.LINE_COMMENT
+
+            LPAREN, RPAREN                       -> VlangColor.PARENTHESES
+            LBRACE, RBRACE                       -> VlangColor.BRACES
+            LBRACK, RBRACK                       -> VlangColor.BRACKETS
+
+            DOT                                  -> VlangColor.DOT
+            COMMA                                -> VlangColor.COMMA
+
+            in KEYWORDS                          -> VlangColor.KEYWORD
+            in BOOL_LITERALS                     -> VlangColor.KEYWORD
+            in STRING_LITERALS                   -> VlangColor.STRING
+            in NUMBERS                           -> VlangColor.NUMBER
+            in OPERATORS                         -> VlangColor.OPERATOR
+            in COMMENTS                          -> VlangColor.LINE_COMMENT
+
+            else                                 -> null
         }
-
-        return if (attr == null) emptyArray() else arrayOf(attr)
     }
 }

@@ -8,7 +8,7 @@ import org.vlang.ide.ui.VIcons
 class VlangTestConfigurationType : ConfigurationTypeBase(
     ID, "Test",
     "Run V test",
-    VIcons.Vlang
+    VIcons.V
 ) {
     companion object {
         const val ID = "VlangTest"

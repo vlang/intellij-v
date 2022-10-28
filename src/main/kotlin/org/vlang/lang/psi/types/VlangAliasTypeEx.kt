@@ -9,7 +9,6 @@ import org.vlang.lang.psi.VlangTypeAliasDeclaration
 class VlangAliasTypeEx(raw: VlangAliasType) : VlangBaseTypeEx<VlangAliasType>(raw), VlangImportableTypeEx {
     private val decl = raw.parent as VlangTypeAliasDeclaration
     private val name = decl.getQualifiedName() ?: ANON
-    private val left = VlangSimpleTypeEx(raw.type)
     private val right = raw.typeUnionList?.typeList?.firstOrNull().toEx()
 
     override fun toString() = buildString {
@@ -32,10 +31,6 @@ class VlangAliasTypeEx(raw: VlangAliasType) : VlangBaseTypeEx<VlangAliasType>(ra
 
     override fun accept(visitor: VlangTypeVisitor) {
         if (!visitor.enter(this)) {
-            return
-        }
-
-        if (!visitor.enter(left)) {
             return
         }
 

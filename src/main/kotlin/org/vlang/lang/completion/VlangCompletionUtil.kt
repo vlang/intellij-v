@@ -73,6 +73,10 @@ object VlangCompletionUtil {
         return element.elementType == VlangTypes.IDENTIFIER && element.text.startsWith("@")
     }
 
+    fun isCompileTimeMethodIdentifier(element: PsiElement): Boolean {
+        return element.elementType == VlangTypes.IDENTIFIER && element.text.startsWith("$")
+    }
+
     fun shouldSuppressCompletion(element: PsiElement): Boolean {
         val parent = element.parent
         if (parent.parent is VlangVarDeclaration) {

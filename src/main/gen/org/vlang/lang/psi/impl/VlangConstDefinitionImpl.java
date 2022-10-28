@@ -59,6 +59,11 @@ public class VlangConstDefinitionImpl extends VlangNamedElementImpl<VlangConstDe
   }
 
   @Override
+  public boolean isPublic() {
+    return VlangPsiImplUtil.isPublic(this);
+  }
+
+  @Override
   @NotNull
   public String getName() {
     return VlangPsiImplUtil.getName(this);

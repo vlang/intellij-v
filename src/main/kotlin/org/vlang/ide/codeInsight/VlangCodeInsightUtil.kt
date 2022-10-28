@@ -161,9 +161,9 @@ object VlangCodeInsightUtil {
             return false
         }
         if (firstFile is VlangFile && secondFile is VlangFile) {
-            val referencePackage = firstFile.packageName
-            val definitionPackage = secondFile.packageName
-            return referencePackage != null && referencePackage == definitionPackage
+            val referenceModule = firstFile.getModuleQualifiedName()
+            val definitionModule = secondFile.getModuleQualifiedName()
+            return referenceModule == definitionModule
         }
         return true
     }

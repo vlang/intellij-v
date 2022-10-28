@@ -349,7 +349,7 @@ object DocumentationGenerator {
                 append(modifiersDoc)
             }
 
-            if (isCapturedVariable(original)) {
+            if (original != null && isCaptured(original)) {
                 part("captured", asKeyword)
             }
 
@@ -360,12 +360,6 @@ object DocumentationGenerator {
 
             generateCommentsPart(this@generateDoc)
         }
-    }
-
-    private fun VlangVarDefinition.isCapturedVariable(original: PsiElement?): Boolean {
-        val functionLit = original?.parentOfType<VlangFunctionLit>()
-        val captureList = functionLit?.captureList?.captureList ?: emptyList()
-        return captureList.find { it.referenceExpression.text == name } != null
     }
 
     fun VlangInterfaceMethodDefinition.generateDoc(): String {

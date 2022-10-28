@@ -1,243 +1,178 @@
 package org.vlang.lang.annotator
 
-import com.intellij.ide.highlighter.JavaHighlightingColors
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
-import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
-import com.intellij.openapi.editor.colors.TextAttributesKey
-import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiNameIdentifierOwner
+import com.intellij.psi.impl.source.tree.LeafPsiElement
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.elementType
 import com.intellij.psi.util.parentOfType
-import org.vlang.ide.highlight.VlangHighlightingData
-import org.vlang.ide.highlight.VlangHighlightingData.VLANG_MUTABLE_VARIABLE
+import org.vlang.ide.colors.VlangColor
 import org.vlang.lang.VlangParserDefinition
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.impl.VlangReference
 import org.vlang.lang.sql.VlangSqlUtil
 
 class VlangAnnotator : Annotator {
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
-        if (element is VlangFunctionOrMethodDeclaration) {
-            val ident = element.getIdentifier() ?: return
-            val attr =
-                if (element.isPublic()) VlangHighlightingData.VLANG_PUBLIC_FUNCTION_NAME
-                else VlangHighlightingData.VLANG_FUNCTION_NAME
-            holder.textAttributes(ident, attr)
-        }
+        if (holder.isBatchMode) return
 
-        if (element is VlangReferenceExpression) {
-            if (element.parent is VlangCallExpr) {
-                val name = element.getIdentifier().text
-                if (VlangParserDefinition.typeCastFunctions.contains(name)) {
-                    holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.TYPE_PARAMETER_NAME_ATTRIBUTES)
-                    return
-                }
-            }
+        val color = when (element) {
+            is LeafPsiElement        -> highlightLeaf(element, holder)
+            is VlangSqlBlock         -> VlangColor.SQL_CODE
+            is VlangUnsafeExpression -> VlangColor.UNSAFE_CODE
+            else                     -> null
+        } ?: return
 
-            val ref = element.reference
-            val resolvedElement = ref.multiResolve(false).firstOrNull()?.element ?: return
+        holder.newSilentAnnotation(HighlightSeverity.INFORMATION).textAttributes(color.textAttributesKey).create()
+    }
 
-            if (element.parent is VlangCallExpr) {
-                if (resolvedElement is VlangInterfaceDeclaration) {
-                    holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.INTERFACE_NAME_ATTRIBUTES)
-                    return
-                }
-
-                if (resolvedElement is VlangTypeAliasDeclaration) {
-                    holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.TYPE_PARAMETER_NAME_ATTRIBUTES)
-                    return
-                }
-            }
-
-            if (resolvedElement is VlangFunctionDeclaration) {
-                holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES)
-                return
-            }
-
-            if (resolvedElement is VlangMethodDeclaration) {
-                holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES)
-                return
-            }
-
-            if (resolvedElement is VlangInterfaceMethodDefinition) {
-                // TODO: separate styles?
-                holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES)
-                return
-            }
-
-            if (resolvedElement is VlangStructDeclaration) {
-                holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.CLASS_NAME_ATTRIBUTES)
-                return
-            }
-
-            if (resolvedElement is VlangEnumDeclaration) {
-                holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.ENUM_NAME_ATTRIBUTES)
-                return
-            }
-
-            if (resolvedElement is VlangUnionDeclaration) {
-                holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.CLASS_NAME_ATTRIBUTES)
-                return
-            }
-
-            if (resolvedElement is VlangInterfaceDeclaration) {
-                holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.INTERFACE_NAME_ATTRIBUTES)
-                return
-            }
-
-            if (resolvedElement is VlangParamDefinition) {
-                holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.PARAMETER_ATTRIBUTES)
-                return
-            }
-
-            if (resolvedElement is VlangReceiver) {
-                holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.PARAMETER_ATTRIBUTES)
-                return
-            }
-
-            if (resolvedElement is VlangConstDefinition) {
-                holder.textAttributes(element.getIdentifier(), DefaultLanguageHighlighterColors.CONSTANT)
-                return
-            }
-
-            if (resolvedElement is VlangFieldDefinition) {
-                holder.textAttributes(element.getIdentifier(), DefaultLanguageHighlighterColors.INSTANCE_FIELD)
-                return
-            }
-
-            if (resolvedElement is VlangEnumFieldDefinition) {
-                holder.textAttributes(element.getIdentifier(), JavaHighlightingColors.INSTANCE_FIELD_ATTRIBUTES)
-                return
-            }
-
-            if (resolvedElement is VlangVarDefinition) {
-                val attrs = if (resolvedElement.isMutable()) VLANG_MUTABLE_VARIABLE else DefaultLanguageHighlighterColors.LOCAL_VARIABLE
-                holder.textAttributes(element.getIdentifier(), attrs)
-                return
-            }
-        }
-
-        if (element is VlangType) {
-            val ident = element.identifier
-            if (ident != null) {
-                holder.textAttributes(ident, JavaHighlightingColors.TYPE_PARAMETER_NAME_ATTRIBUTES)
-            }
-        }
-
-        if (element is VlangFieldDefinition) {
-            holder.textAttributes(element, JavaHighlightingColors.INSTANCE_FIELD_ATTRIBUTES)
-        }
-
-        if (element is VlangEnumFieldDefinition) {
-            holder.textAttributes(element, JavaHighlightingColors.INSTANCE_FIELD_ATTRIBUTES)
-        }
-
-        if (element.elementType == VlangTypes.IDENTIFIER) {
-            when (element.parent) {
-                is VlangInterfaceMethodDeclaration -> holder.textAttributes(element, JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES)
-                is VlangEnumDeclaration            -> holder.textAttributes(element, JavaHighlightingColors.ENUM_NAME_ATTRIBUTES)
-                is VlangStructType                 -> holder.textAttributes(element, JavaHighlightingColors.CLASS_NAME_ATTRIBUTES)
-                is VlangInterfaceDeclaration       -> holder.textAttributes(element, JavaHighlightingColors.INTERFACE_NAME_ATTRIBUTES)
-                is VlangEnumFieldDeclaration       -> holder.textAttributes(element, JavaHighlightingColors.STATIC_FINAL_FIELD_ATTRIBUTES)
-                is VlangStatement                  -> holder.textAttributes(element, JavaHighlightingColors.INTERFACE_NAME_ATTRIBUTES)
-                is VlangLabelRef                   -> holder.textAttributes(element, VlangHighlightingData.VLANG_LABEL)
-                is VlangParamDefinition            -> holder.textAttributes(element, JavaHighlightingColors.PARAMETER_ATTRIBUTES)
-                is VlangReceiver                   -> holder.textAttributes(element, JavaHighlightingColors.PARAMETER_ATTRIBUTES)
-                is VlangConstDefinition            -> holder.textAttributes(element, DefaultLanguageHighlighterColors.CONSTANT)
-                is VlangInterfaceMethodDefinition  -> holder.textAttributes(element, JavaHighlightingColors.METHOD_DECLARATION_ATTRIBUTES)
-                is VlangVarDefinition  -> {
-                    val attrs = if ((element.parent as VlangVarDefinition).isMutable()) VLANG_MUTABLE_VARIABLE else DefaultLanguageHighlighterColors.LOCAL_VARIABLE
-                    holder.textAttributes(element, attrs)
-                }
-                is VlangLabelDefinition            -> {
-                    val parent = element.parent
-                    val search = ReferencesSearch.search(parent, parent.useScope)
-                    if (search.findFirst() != null) {
-                        holder.textAttributes(element, VlangHighlightingData.VLANG_LABEL)
-                    }
-                }
-            }
-
-            when (element.text) {
-                "_likely_", "_unlikely_" ->
-                    holder.textAttributes(element, JavaHighlightingColors.KEYWORD)
-                "sizeof", "__offsetof", "typeof" ->
-                    holder.textAttributes(element, JavaHighlightingColors.KEYWORD)
-            }
-        }
-
+    private fun highlightAttribute(element: PsiElement): VlangColor? {
         if (element.parent is VlangPlainAttribute) {
             if (element.elementType == VlangTypes.IDENTIFIER || element.elementType == VlangTypes.UNSAFE || element.elementType == VlangTypes.SQL) {
-                holder.textAttributes(element, JavaHighlightingColors.ANNOTATION_NAME_ATTRIBUTES)
+                return VlangColor.ATTRIBUTE
             }
         }
 
         if (element.parent is VlangAttribute && (element.elementType == VlangTypes.LBRACK || element.elementType == VlangTypes.RBRACK)) {
-            holder.textAttributes(element, JavaHighlightingColors.ANNOTATION_NAME_ATTRIBUTES)
+            return VlangColor.ATTRIBUTE
         }
 
-        if (element.elementType == VlangDocTokenTypes.DOC_COMMENT_TAG) {
-            holder.textAttributes(element, JavaHighlightingColors.DOC_COMMENT_TAG)
+        return null
+    }
+
+    private fun highlightLeaf(element: PsiElement, holder: AnnotationHolder): VlangColor? {
+        val parent = element.parent as? VlangCompositeElement ?: return null
+
+        if (VlangCompletionUtil.isCompileTimeIdentifier(element)) {
+            return VlangColor.CT_CONSTANT
         }
 
-        if (element.elementType in listOf(
-                VlangTypes.LONG_TEMPLATE_ENTRY_START,
-                VlangTypes.LONG_TEMPLATE_ENTRY_END,
-            )
-        ) {
-            holder.textAttributes(element, JavaHighlightingColors.VALID_STRING_ESCAPE)
+        if (VlangCompletionUtil.isCompileTimeMethodIdentifier(element) && parent.parentOfType<VlangCallExpr>() != null) {
+            return VlangColor.CT_METHOD_CALL
         }
 
-        if (element.elementType == VlangTypes.LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY) {
-            holder.textAttributes(element, JavaHighlightingColors.VALID_STRING_ESCAPE)
+        if (parent is VlangReferenceExpression || parent is VlangTypeReferenceExpression) {
+            return highlightReference(parent as VlangReferenceExpressionBase, parent.reference as VlangReference)
         }
 
-        if (element is VlangLiteral && (element.text == "true" || element.text == "false")) {
-            holder.textAttributes(element, JavaHighlightingColors.KEYWORD)
+        if (parent is VlangPlainAttribute || parent is VlangAttribute) {
+            return highlightAttribute(element)
         }
 
-        if (element.elementType == VlangTypes.RAW_STRING) {
-            holder.textAttributes(element, TextRange(0, 1), JavaHighlightingColors.VALID_STRING_ESCAPE)
+        if (VlangSqlUtil.insideSql(element) && VlangSqlUtil.isSqlKeyword(element.text)) {
+            return VlangColor.SQL_KEYWORD
         }
 
-        if (element.elementType == VlangTypes.SHORT_TEMPLATE_ENTRY_START) {
-            if (element.parent is VlangShortStringTemplateEntry) {
-                holder.textAttributes(element, JavaHighlightingColors.VALID_STRING_ESCAPE)
-            } else {
-                holder.textAttributes(element, JavaHighlightingColors.STRING)
+        return when (element.elementType) {
+            VlangTypes.IDENTIFIER                -> highlightIdentifier(element, parent)
+            VlangTypes.LONG_TEMPLATE_ENTRY_START -> VlangColor.STRING_INTERPOLATION
+            VlangTypes.LONG_TEMPLATE_ENTRY_END   -> VlangColor.STRING_INTERPOLATION
+            else                                 -> null
+        }
+    }
+
+    private fun highlightReference(element: VlangReferenceExpressionBase, reference: VlangReference): VlangColor? {
+        if (element.parent is VlangCallExpr) {
+            val name = element.getIdentifier()?.text
+            if (VlangParserDefinition.typeCastFunctions.contains(name)) {
+                return VlangColor.BUILTIN_TYPE
             }
         }
 
-        if (VlangCompletionUtil.isCompileTimeIdentifier(element)) {
-            holder.textAttributes(element, DefaultLanguageHighlighterColors.CONSTANT)
-        }
+        val resolved = reference.multiResolve(false).firstOrNull()?.element ?: return null
 
-        holder.annotateSql(element)
+        return when (resolved) {
+            is VlangFunctionDeclaration       -> public(resolved, VlangColor.PUBLIC_FUNCTION, VlangColor.FUNCTION)
+            is VlangMethodDeclaration         -> public(resolved, VlangColor.PUBLIC_FUNCTION, VlangColor.FUNCTION)
+            is VlangInterfaceMethodDefinition -> public(resolved, VlangColor.INTERFACE_METHOD, VlangColor.INTERFACE_METHOD)
+            is VlangStructDeclaration         -> public(resolved, VlangColor.PUBLIC_STRUCT, VlangColor.STRUCT)
+            is VlangEnumDeclaration           -> public(resolved, VlangColor.PUBLIC_ENUM, VlangColor.ENUM)
+            is VlangUnionDeclaration          -> public(resolved, VlangColor.PUBLIC_UNION, VlangColor.UNION)
+            is VlangInterfaceDeclaration      -> public(resolved, VlangColor.PUBLIC_INTERFACE, VlangColor.INTERFACE)
+            is VlangConstDefinition           -> public(resolved, VlangColor.PUBLIC_CONSTANT, VlangColor.CONSTANT)
+            is VlangFieldDefinition           -> public(resolved, VlangColor.PUBLIC_FIELD, VlangColor.FIELD)
+            is VlangEnumFieldDefinition       -> public(resolved, VlangColor.ENUM_FIELD, VlangColor.ENUM_FIELD)
+            is VlangTypeAliasDeclaration      -> public(resolved, VlangColor.PUBLIC_TYPE_ALIAS, VlangColor.TYPE_ALIAS)
+            is VlangParamDefinition           -> mutable(resolved, VlangColor.MUTABLE_PARAMETER, VlangColor.PARAMETER)
+            is VlangReceiver                  -> mutable(resolved, VlangColor.MUTABLE_RECEIVER, VlangColor.RECEIVER)
+            is VlangGlobalVariableDefinition  -> VlangColor.GLOBAL_VARIABLE
+            is VlangVarDefinition             -> if (resolved.isCaptured(element)) {
+                mutable(resolved, VlangColor.MUTABLE_CAPTURED_VARIABLE, VlangColor.CAPTURED_VARIABLE)
+            } else {
+                mutable(resolved, VlangColor.MUTABLE_VARIABLE, VlangColor.VARIABLE)
+            }
+
+            else                              -> null
+        }
     }
 
-    private fun AnnotationHolder.annotateSql(element: PsiElement) {
-        if (element.elementType != VlangTypes.IDENTIFIER) return
-        element.parentOfType<VlangSqlExpression>(true) ?: return
-
-        if (VlangSqlUtil.isSqlKeyword(element.text)) {
-            textAttributes(element, DefaultLanguageHighlighterColors.KEYWORD)
+    private fun highlightIdentifier(element: PsiElement, parent: VlangCompositeElement): VlangColor? {
+        val grand = parent.parent
+        if (grand is VlangCompositeElement && grand is PsiNameIdentifierOwner && grand.nameIdentifier == element) {
+            return colorFor(grand)
         }
 
-        if (element.textMatches("sql")) {
-            textAttributes(element, DefaultLanguageHighlighterColors.KEYWORD)
+        return when {
+            parent is VlangMethodName && parent.identifier == element            -> colorFor(parent.parent as VlangMethodDeclaration)
+            parent is PsiNameIdentifierOwner && parent.nameIdentifier == element -> colorFor(parent)
+
+            element.text in listOf(
+                "_likely_",
+                "_unlikely_",
+                "sizeof",
+                "__offsetof",
+                "typeof",
+                "sql",
+            )                                                                    -> VlangColor.KEYWORD
+
+            else                                                                 -> null
         }
     }
 
-    private fun AnnotationHolder.textAttributes(element: PsiElement, textAttributes: TextAttributesKey) {
-        newSilentAnnotation(HighlightSeverity.INFORMATION).range(element).textAttributes(textAttributes).create()
+    private fun colorFor(element: VlangCompositeElement): VlangColor? = when (element) {
+        is VlangFunctionOrMethodDeclaration -> public(element, VlangColor.PUBLIC_FUNCTION, VlangColor.FUNCTION)
+        is VlangConstDefinition             -> public(element, VlangColor.PUBLIC_CONSTANT, VlangColor.CONSTANT)
+        is VlangTypeAliasDeclaration        -> public(element, VlangColor.PUBLIC_TYPE_ALIAS, VlangColor.TYPE_ALIAS)
+        is VlangStructDeclaration           -> public(element, VlangColor.PUBLIC_STRUCT, VlangColor.STRUCT)
+        is VlangInterfaceDeclaration        -> public(element, VlangColor.PUBLIC_INTERFACE, VlangColor.INTERFACE)
+        is VlangEnumDeclaration             -> public(element, VlangColor.PUBLIC_ENUM, VlangColor.ENUM)
+        is VlangUnionDeclaration            -> public(element, VlangColor.PUBLIC_UNION, VlangColor.UNION)
+
+        is VlangFieldDefinition             -> public(element, VlangColor.PUBLIC_FIELD, VlangColor.FIELD)
+        is VlangInterfaceMethodDefinition   -> public(element, VlangColor.INTERFACE_METHOD, VlangColor.INTERFACE_METHOD)
+        is VlangEnumFieldDefinition         -> public(element, VlangColor.ENUM_FIELD, VlangColor.ENUM_FIELD)
+
+        is VlangVarDefinition               -> mutable(element, VlangColor.MUTABLE_VARIABLE, VlangColor.VARIABLE)
+        is VlangReceiver                    -> mutable(element, VlangColor.MUTABLE_VARIABLE, VlangColor.VARIABLE)
+        is VlangParamDefinition             -> mutable(element, VlangColor.MUTABLE_VARIABLE, VlangColor.VARIABLE)
+        is VlangGlobalVariableDefinition    -> VlangColor.GLOBAL_VARIABLE
+
+        is VlangLabelDefinition             -> label(element)
+        is VlangLabelRef                    -> VlangColor.LABEL
+
+        else                                -> null
     }
 
-    private fun AnnotationHolder.textAttributes(element: PsiElement, range: TextRange, textAttributes: TextAttributesKey) {
-        val newRange = TextRange(element.textRange.startOffset + range.startOffset, element.textRange.startOffset + range.endOffset)
-        newSilentAnnotation(HighlightSeverity.INFORMATION).range(newRange).textAttributes(textAttributes).create()
+    private fun label(element: VlangLabelDefinition): VlangColor {
+        val parent = element.parent
+        val search = ReferencesSearch.search(parent, parent.useScope)
+        return if (search.findFirst() != null) {
+            VlangColor.USED_LABEL
+        } else {
+            VlangColor.LABEL
+        }
+    }
+
+    private fun public(element: VlangNamedElement, ifPublic: VlangColor, ifNotPublic: VlangColor): VlangColor {
+        return if (element.isPublic()) ifPublic else ifNotPublic
+    }
+
+    private fun mutable(element: VlangMutable, ifMutable: VlangColor, ifNoMutable: VlangColor): VlangColor {
+        return if (element.isMutable()) ifMutable else ifNoMutable
     }
 }

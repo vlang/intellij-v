@@ -471,9 +471,9 @@ TypeAliasDeclaration ::= SymbolVisibility? 'type' AliasType {
   methods=[getIdentifier getName getTypeInner]
 }
 
-AliasType ::= Type '=' TypeUnionList {
+AliasType ::= identifier GenericArguments? '=' TypeUnionList {
   pin=2
-  methods=[getIdentifier isAlias getAliasType]
+  methods=[isAlias getAliasType]
 }
 
 // <type> [ | <type2>]...
@@ -490,7 +490,7 @@ private ConstDefinitions ::= ConstDefinition (semi ConstDefinition)* semi? {pin=
 ConstDefinition ::= identifier '=' (<<withOff Expression "BLOCK?">> | (!() Expression)) {
   pin=2
   stubClass="org.vlang.lang.stubs.VlangConstDefinitionStub"
-  methods=[getTypeInner deleteDefinition getName getSymbolVisibility]
+  methods=[getTypeInner isPublic deleteDefinition getName getSymbolVisibility]
 }
 
 // TODO: when const declaration will support multiple assign
@@ -745,7 +745,7 @@ private ExpressionListRecover ::= !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' |
 private VarDefinitionList ::= VarDefinition (',' VarDefinition)*
 VarDefinition ::= VarModifiers? identifier {
   pin=2
-  methods=[getTypeInner getName getReference isMutable isPublic makeMutable getValue getSymbolVisibility]
+  methods=[getTypeInner getName getReference isMutable isPublic makeMutable isCaptured getValue getSymbolVisibility]
   implements="org.vlang.lang.psi.VlangMutable"
   stubClass="org.vlang.lang.stubs.VlangVarDefinitionStub"
 }

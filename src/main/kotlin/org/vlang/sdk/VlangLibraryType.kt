@@ -29,7 +29,7 @@ class VlangLibraryType : LibraryType<VlangLibraryProperties>(LIBRARY_KIND) {
     }
 
     override fun getIcon(properties: VlangLibraryProperties?): Icon? {
-        return VIcons.Vlang
+        return VIcons.V
     }
 
     companion object {

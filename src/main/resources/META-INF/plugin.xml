@@ -8,7 +8,7 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
     ]]></description>
 
     <depends>com.intellij.modules.platform</depends>
-    <depends>com.intellij.java</depends>
+    <depends optional="true" config-file="idea-plugin.xml">com.intellij.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- V File -->
@@ -275,7 +275,7 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
 
         <formattingService implementation="org.vlang.lang.formatter.VlangFormattingService"/>
 
-        <colorSettingsPage implementation="org.vlang.ide.highlight.VlangColorsAndFontsPage"/>
+        <colorSettingsPage implementation="org.vlang.ide.colors.VlangColorsSettingsPage"/>
 
         <!--  Refactorings -->
         <statementUpDownMover implementation="org.vlang.ide.refactoring.VlangStatementUpDownMover"/>
@@ -294,7 +294,6 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
         <projectService serviceImplementation="org.vlang.configurations.VlangConfiguration"/>
         <projectService serviceImplementation="org.vlang.configurations.VlangProjectSettingsState"/>
         <projectService serviceImplementation="org.vlang.configurations.VlangFmtSettingsState"/>
-        <moduleBuilder builderClass="org.vlang.projectWizard.VlangModuleBuilder"/>
         <postStartupActivity implementation="org.vlang.project.VlangPostStartupActivity"/>
         <additionalLibraryRootsProvider implementation="org.vlang.project.VlangAdditionalLibraryRootsProvider"/>
 
@@ -310,7 +309,6 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
         <library.type implementation="org.vlang.sdk.VlangLibraryType"/>
 
         <projectService serviceImplementation="org.vlang.sdk.VlangSdkService"/>
-        <moduleType id="V_MODULE" implementationClass="org.vlang.sdk.VlangModuleType"/>
         <!-- End of SDK -->
 
         <!-- Run V script Configuration -->

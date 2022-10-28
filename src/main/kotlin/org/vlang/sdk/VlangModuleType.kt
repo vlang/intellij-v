@@ -19,7 +19,7 @@ class VlangModuleType : ModuleType<VlangModuleBuilder>("V_MODULE") {
 
     override fun getDescription() = "V modules are used for developing <b>V</b> applications."
 
-    override fun getNodeIcon(isOpened: Boolean) = VIcons.Vlang
+    override fun getNodeIcon(isOpened: Boolean) = VIcons.V
 
     override fun createWizardSteps(
         wizardContext: WizardContext,

@@ -77,17 +77,26 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Type '=' TypeUnionList
+  // identifier GenericArguments? '=' TypeUnionList
   public static boolean AliasType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AliasType")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, ALIAS_TYPE, "<alias type>");
-    r = Type(b, l + 1);
-    r = r && consumeToken(b, ASSIGN);
+    Marker m = enter_section_(b, l, _NONE_, ALIAS_TYPE, null);
+    r = consumeToken(b, IDENTIFIER);
+    r = r && AliasType_1(b, l + 1);
     p = r; // pin = 2
-    r = r && TypeUnionList(b, l + 1);
+    r = r && report_error_(b, consumeToken(b, ASSIGN));
+    r = p && TypeUnionList(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
+  }
+
+  // GenericArguments?
+  private static boolean AliasType_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AliasType_1")) return false;
+    GenericArguments(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */

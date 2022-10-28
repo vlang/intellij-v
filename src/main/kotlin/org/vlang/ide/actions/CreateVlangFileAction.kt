@@ -11,7 +11,7 @@ import org.vlang.ide.ui.VIcons
 class CreateVlangFileAction : CreateFileFromTemplateAction(
     "V File",
     "Create new V file",
-    VIcons.Vlang
+    VIcons.V
 ) {
     override fun isAvailable(dataContext: DataContext): Boolean {
         val project = CommonDataKeys.PROJECT.getData(dataContext)
@@ -27,7 +27,7 @@ class CreateVlangFileAction : CreateFileFromTemplateAction(
     ) {
         builder
             .setTitle("New V File")
-            .addKind("V file", VIcons.Vlang, "V File")
-            .addKind("V simple application", VIcons.Vlang, "V Simple Application")
+            .addKind("V file", VIcons.V, "V File")
+            .addKind("V simple application", VIcons.V, "V Simple Application")
     }
 }

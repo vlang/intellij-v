@@ -1,14 +1,79 @@
 <?xml version='1.0'?>
 <list>
-  <option name="VLANG_LABEL">
+  <option name="org.vlang.CAPTURED_VARIABLE">
     <value>
-      <option name="FONT_TYPE" value="1"/>
+      <option name="FOREGROUND" value="0" />
+      <option name="FONT_TYPE" value="2" />
     </value>
   </option>
-  <option name="VLANG_MUTABLE_VARIABLE">
+  <option name="org.vlang.CT_CONSTANT">
     <value>
+      <option name="FOREGROUND" value="9876aa" />
+    </value>
+  </option>
+  <option name="org.vlang.CT_METHOD_CALL">
+    <value>
+      <option name="FOREGROUND" value="9876aa" />
+    </value>
+  </option>
+  <option name="org.vlang.MUTABLE_PARAMETER">
+    <value>
+      <option name="EFFECT_COLOR" value="0" />
       <option name="EFFECT_TYPE" value="1" />
-      <option name="EFFECT_COLOR" value="000000" />
+    </value>
+  </option>
+  <option name="org.vlang.MUTABLE_RECEIVER">
+    <value>
+      <option name="EFFECT_COLOR" value="0" />
+      <option name="EFFECT_TYPE" value="1" />
+    </value>
+  </option>
+  <option name="org.vlang.MUTABLE_VARIABLE">
+    <value>
+      <option name="FOREGROUND" value="0" />
+      <option name="EFFECT_COLOR" value="0" />
+      <option name="EFFECT_TYPE" value="1" />
+    </value>
+  </option>
+  <option name="org.vlang.PUBLIC_ENUM">
+    <value>
+      <option name="FOREGROUND" value="0" />
+      <option name="FONT_TYPE" value="2" />
+    </value>
+  </option>
+  <option name="org.vlang.PUBLIC_FUNCTION">
+    <value>
+      <option name="FOREGROUND" value="627a" />
+      <option name="FONT_TYPE" value="2" />
+    </value>
+  </option>
+  <option name="org.vlang.PUBLIC_INTERFACE">
+    <value>
+      <option name="FOREGROUND" value="0" />
+      <option name="FONT_TYPE" value="2" />
+    </value>
+  </option>
+  <option name="org.vlang.PUBLIC_STRUCT">
+    <value>
+      <option name="FOREGROUND" value="0" />
+      <option name="FONT_TYPE" value="2" />
+    </value>
+  </option>
+  <option name="org.vlang.PUBLIC_TYPE_ALIAS">
+    <value>
+      <option name="FOREGROUND" value="0" />
+      <option name="FONT_TYPE" value="2" />
+    </value>
+  </option>
+  <option name="org.vlang.PUBLIC_UNION">
+    <value>
+      <option name="FOREGROUND" value="0" />
+      <option name="FONT_TYPE" value="2" />
+    </value>
+  </option>
+  <option name="org.vlang.TYPE_ALIAS">
+    <value>
+      <option name="FOREGROUND" value="0" />
     </value>
   </option>
 </list>

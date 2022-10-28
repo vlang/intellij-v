@@ -3,10 +3,7 @@ package org.vlang.lang.completion
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.parentOfType
 import org.jetbrains.annotations.Contract
-import org.vlang.lang.psi.VlangElement
-import org.vlang.lang.psi.VlangLiteralValueExpression
-import org.vlang.lang.psi.VlangReferenceExpression
-import org.vlang.lang.psi.VlangValue
+import org.vlang.lang.psi.*
 
 internal object VlangStructLiteralCompletion {
     fun allowedVariants(structFieldReference: VlangReferenceExpression?): Variants {

@@ -22,6 +22,8 @@ public interface VlangConstDefinition extends VlangNamedElement, StubBasedPsiEle
   @Nullable
   VlangType getTypeInner(@Nullable ResolveState context);
 
+  boolean isPublic();
+
   //WARNING: deleteDefinition(...) is skipped
   //matching deleteDefinition(VlangConstDefinition, ...)
   //methods are not found in VlangPsiImplUtil

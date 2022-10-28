@@ -7,12 +7,10 @@ import com.intellij.psi.PsiReference
 import com.intellij.psi.ResolveState
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
 import com.intellij.psi.stubs.IStubElementType
-import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.*
 import com.intellij.ui.IconManager
 import com.intellij.util.PlatformIcons
 import org.vlang.ide.ui.VIcons
-import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.VlangPsiTreeUtil.getChildOfType
 import org.vlang.lang.psi.VlangPsiTreeUtil.parentStubOfType
@@ -161,6 +159,6 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
     }
 
     override fun getNameIdentifier(): PsiElement? {
-        return findChildByFilter(TokenSet.create(VlangTypes.IDENTIFIER))
+        return getIdentifier()
     }
 }

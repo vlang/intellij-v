@@ -11,7 +11,7 @@ class VlangSdkType : SdkType("V SDK") {
         fun getInstance() = findInstance(VlangSdkType::class.java)
     }
 
-    override fun getIcon() = VIcons.Vlang
+    override fun getIcon() = VIcons.V
 
     override fun suggestHomePath() = VlangSdkUtil.suggestSdkDirectory()?.path
 

@@ -4,13 +4,9 @@ package org.vlang.lang.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.impl.source.tree.injected.StringLiteralEscaper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.vlang.lang.psi.VlangPsiTreeUtil;
-import org.vlang.lang.psi.VlangStringLiteral;
-import org.vlang.lang.psi.VlangStringTemplate;
-import org.vlang.lang.psi.VlangVisitor;
+import org.vlang.lang.psi.*;
 
 import static org.vlang.lang.VlangTypes.RAW_STRING;
 
