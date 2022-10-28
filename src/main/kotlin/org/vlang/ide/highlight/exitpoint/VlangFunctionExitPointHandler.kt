@@ -30,6 +30,14 @@ class VlangFunctionExitPointHandler(editor: Editor, file: PsiFile, private val t
             override fun visitReturnStatement(statement: VlangReturnStatement) {
                 addOccurrence(statement)
             }
+
+            override fun visitCallExpr(o: VlangCallExpr) {
+                val callerName = o.expression?.text
+                if (callerName == "panic" || callerName == "exit") {
+                    addOccurrence(o)
+                }
+            }
+
         }.visitTypeOwner(function)
     }
 
