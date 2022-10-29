@@ -5,18 +5,18 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface VlangLongStringTemplateEntry extends VlangCompositeElement {
+public interface VlangTypeOfCallExpr extends VlangExpression {
 
   @Nullable
   VlangExpression getExpression();
 
   @Nullable
-  VlangFormatSpecifier getFormatSpecifier();
+  PsiElement getLparen();
 
   @Nullable
-  PsiElement getTemplateEntryEnd();
+  PsiElement getRparen();
 
   @NotNull
-  PsiElement getTemplateEntryStart();
+  PsiElement getTypeof();
 
 }

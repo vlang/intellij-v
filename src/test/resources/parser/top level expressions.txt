@@ -499,23 +499,7 @@ V Language file
       STRING_LITERAL
         STRING_TEMPLATE
           PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-          PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('v -g -gc boehm ')
-          SHORT_STRING_TEMPLATE_ENTRY
-            PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-            REFERENCE_EXPRESSION
-              PsiElement(VlangTokenType.identifier)('use_libbacktrace_flag')
-          PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' ')
-          PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('-cc ')
-          SHORT_STRING_TEMPLATE_ENTRY
-            PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-            REFERENCE_EXPRESSION
-              PsiElement(VlangTokenType.identifier)('cc')
-          PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' ')
-          PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('cmd/vls -o ')
-          SHORT_STRING_TEMPLATE_ENTRY
-            PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-            REFERENCE_EXPRESSION
-              PsiElement(VlangTokenType.identifier)('full_vls_exec_path')
+          PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('v -g -gc boehm $use_libbacktrace_flag -cc $cc cmd/vls -o $full_vls_exec_path')
           PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
   SIMPLE_STATEMENT
     LEFT_HAND_EXPR_LIST
@@ -613,10 +597,6 @@ V Language file
               STRING_LITERAL
                 STRING_TEMPLATE
                   PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Executable saved in: ')
-                  SHORT_STRING_TEMPLATE_ENTRY
-                    PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                    REFERENCE_EXPRESSION
-                      PsiElement(VlangTokenType.identifier)('full_vls_exec_path')
+                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Executable saved in: $full_vls_exec_path')
                   PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
           PsiElement(VlangTokenType.))(')')

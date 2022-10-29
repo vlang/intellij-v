@@ -32,9 +32,9 @@ V Language file
                   STRING_LITERAL
                     STRING_TEMPLATE
                       PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('[')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('[$')
                       LONG_STRING_TEMPLATE_ENTRY
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_START)('${')
+                        PsiElement(VlangTokenType.TEMPLATE_ENTRY_START)('{')
                         REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('x')
                         FORMAT_SPECIFIER
@@ -42,7 +42,7 @@ V Language file
                           FORMAT_SPECIFIER_EXPRESSION
                             FORMAT_SPECIFIER_WIDTH_AND_PRECISION
                               PsiElement(VlangTokenType.float)('.2')
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_END)('}')
+                        PsiElement(VlangTokenType.TEMPLATE_ENTRY_END)('}')
                       PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(']')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
@@ -58,9 +58,9 @@ V Language file
                   STRING_LITERAL
                     STRING_TEMPLATE
                       PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('[')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('[$')
                       LONG_STRING_TEMPLATE_ENTRY
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_START)('${')
+                        PsiElement(VlangTokenType.TEMPLATE_ENTRY_START)('{')
                         REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('x')
                         FORMAT_SPECIFIER
@@ -68,7 +68,7 @@ V Language file
                           FORMAT_SPECIFIER_EXPRESSION
                             FORMAT_SPECIFIER_WIDTH_AND_PRECISION
                               PsiElement(VlangTokenType.int)('10')
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_END)('}')
+                        PsiElement(VlangTokenType.TEMPLATE_ENTRY_END)('}')
                       PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(']')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
@@ -84,9 +84,9 @@ V Language file
                   STRING_LITERAL
                     STRING_TEMPLATE
                       PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('[')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('[$')
                       LONG_STRING_TEMPLATE_ENTRY
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_START)('${')
+                        PsiElement(VlangTokenType.TEMPLATE_ENTRY_START)('{')
                         CALL_EXPR
                           REFERENCE_EXPRESSION
                             PsiElement(VlangTokenType.identifier)('int')
@@ -104,7 +104,7 @@ V Language file
                               PsiElement(VlangTokenType.-)('-')
                             FORMAT_SPECIFIER_WIDTH_AND_PRECISION
                               PsiElement(VlangTokenType.int)('10')
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_END)('}')
+                        PsiElement(VlangTokenType.TEMPLATE_ENTRY_END)('}')
                       PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(']')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
@@ -120,9 +120,9 @@ V Language file
                   STRING_LITERAL
                     STRING_TEMPLATE
                       PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('[')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('[$')
                       LONG_STRING_TEMPLATE_ENTRY
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_START)('${')
+                        PsiElement(VlangTokenType.TEMPLATE_ENTRY_START)('{')
                         CALL_EXPR
                           REFERENCE_EXPRESSION
                             PsiElement(VlangTokenType.identifier)('int')
@@ -138,7 +138,7 @@ V Language file
                           FORMAT_SPECIFIER_EXPRESSION
                             FORMAT_SPECIFIER_WIDTH_AND_PRECISION
                               PsiElement(VlangTokenType.int)('010')
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_END)('}')
+                        PsiElement(VlangTokenType.TEMPLATE_ENTRY_END)('}')
                       PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(']')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
@@ -154,9 +154,9 @@ V Language file
                   STRING_LITERAL
                     STRING_TEMPLATE
                       PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('[')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('[$')
                       LONG_STRING_TEMPLATE_ENTRY
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_START)('${')
+                        PsiElement(VlangTokenType.TEMPLATE_ENTRY_START)('{')
                         CALL_EXPR
                           REFERENCE_EXPRESSION
                             PsiElement(VlangTokenType.identifier)('int')
@@ -172,7 +172,7 @@ V Language file
                           FORMAT_SPECIFIER_EXPRESSION
                             FORMAT_SPECIFIER_LETTER
                               PsiElement(VlangTokenType.identifier)('b')
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_END)('}')
+                        PsiElement(VlangTokenType.TEMPLATE_ENTRY_END)('}')
                       PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(']')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
@@ -188,9 +188,9 @@ V Language file
                   STRING_LITERAL
                     STRING_TEMPLATE
                       PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('[')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('[$')
                       LONG_STRING_TEMPLATE_ENTRY
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_START)('${')
+                        PsiElement(VlangTokenType.TEMPLATE_ENTRY_START)('{')
                         CALL_EXPR
                           REFERENCE_EXPRESSION
                             PsiElement(VlangTokenType.identifier)('int')
@@ -206,7 +206,7 @@ V Language file
                           FORMAT_SPECIFIER_EXPRESSION
                             FORMAT_SPECIFIER_LETTER
                               PsiElement(VlangTokenType.identifier)('o')
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_END)('}')
+                        PsiElement(VlangTokenType.TEMPLATE_ENTRY_END)('}')
                       PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(']')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
@@ -222,9 +222,9 @@ V Language file
                   STRING_LITERAL
                     STRING_TEMPLATE
                       PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('[')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('[$')
                       LONG_STRING_TEMPLATE_ENTRY
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_START)('${')
+                        PsiElement(VlangTokenType.TEMPLATE_ENTRY_START)('{')
                         CALL_EXPR
                           REFERENCE_EXPRESSION
                             PsiElement(VlangTokenType.identifier)('int')
@@ -240,7 +240,7 @@ V Language file
                           FORMAT_SPECIFIER_EXPRESSION
                             FORMAT_SPECIFIER_LETTER
                               PsiElement(VlangTokenType.identifier)('X')
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_END)('}')
+                        PsiElement(VlangTokenType.TEMPLATE_ENTRY_END)('}')
                       PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(']')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
@@ -256,18 +256,9 @@ V Language file
                   STRING_LITERAL
                     STRING_TEMPLATE
                       PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('[')
-                      LONG_STRING_TEMPLATE_ENTRY
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_START)('${')
-                        LITERAL
-                          PsiElement(VlangTokenType.float)('10.0000')
-                        FORMAT_SPECIFIER
-                          PsiElement(VlangTokenType.:)(':')
-                          FORMAT_SPECIFIER_EXPRESSION
-                            FORMAT_SPECIFIER_WIDTH_AND_PRECISION
-                              PsiElement(VlangTokenType.float)('.2')
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_END)('}')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(']')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('[$')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('{')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('10.0000:.2}]')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
       SIMPLE_STATEMENT
@@ -282,22 +273,9 @@ V Language file
                   STRING_LITERAL
                     STRING_TEMPLATE
                       PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('[')
-                      LONG_STRING_TEMPLATE_ENTRY
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_START)('${')
-                        LITERAL
-                          PsiElement(VlangTokenType.float)('10.0000')
-                        FORMAT_SPECIFIER
-                          PsiElement(VlangTokenType.:)(':')
-                          FORMAT_SPECIFIER_EXPRESSION
-                            FORMAT_SPECIFIER_RIGHT_ALIGN_FLAG
-                              PsiElement(VlangTokenType.+)('+')
-                            FORMAT_SPECIFIER_WIDTH_AND_PRECISION
-                              PsiElement(VlangTokenType.float)('.2')
-                            FORMAT_SPECIFIER_LETTER
-                              PsiElement(VlangTokenType.identifier)('f')
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_END)('}')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(']')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('[$')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('{')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('10.0000:+.2f}]')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
       SIMPLE_STATEMENT
@@ -354,8 +332,9 @@ V Language file
                   STRING_LITERAL
                     STRING_TEMPLATE
                       PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('$')
                       LONG_STRING_TEMPLATE_ENTRY
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_START)('${')
+                        PsiElement(VlangTokenType.TEMPLATE_ENTRY_START)('{')
                         INDEX_OR_SLICE_EXPR
                           REFERENCE_EXPRESSION
                             PsiElement(VlangTokenType.identifier)('args')
@@ -363,25 +342,19 @@ V Language file
                           LITERAL
                             PsiElement(VlangTokenType.int)('0')
                           PsiElement(VlangTokenType.])(']')
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_END)('}')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' failed with return code ')
+                        PsiElement(VlangTokenType.TEMPLATE_ENTRY_END)('}')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' failed with return code $')
                       LONG_STRING_TEMPLATE_ENTRY
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_START)('${')
+                        PsiElement(VlangTokenType.TEMPLATE_ENTRY_START)('{')
                         REFERENCE_EXPRESSION
                           REFERENCE_EXPRESSION
                             PsiElement(VlangTokenType.identifier)('res')
                           PsiElement(VlangTokenType..)('.')
                           PsiElement(VlangTokenType.identifier)('exit_code')
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_END)('}')
+                        PsiElement(VlangTokenType.TEMPLATE_ENTRY_END)('}')
                       PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('.')
                       PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY)('\n')
-                      SHORT_STRING_TEMPLATE_ENTRY
-                        PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                        REFERENCE_EXPRESSION
-                          REFERENCE_EXPRESSION
-                            PsiElement(VlangTokenType.identifier)('res')
-                          PsiElement(VlangTokenType..)('.')
-                          PsiElement(VlangTokenType.identifier)('output')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('$res.output')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
       SIMPLE_STATEMENT
@@ -396,13 +369,7 @@ V Language file
                   STRING_LITERAL
                     STRING_TEMPLATE
                       PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                      SHORT_STRING_TEMPLATE_ENTRY
-                        PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                        REFERENCE_EXPRESSION
-                          REFERENCE_EXPRESSION
-                            PsiElement(VlangTokenType.identifier)('name')
-                          PsiElement(VlangTokenType..)('.')
-                          PsiElement(VlangTokenType.identifier)('field')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('$name.field')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
       SIMPLE_STATEMENT
@@ -417,16 +384,7 @@ V Language file
                   STRING_LITERAL
                     STRING_TEMPLATE
                       PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                      SHORT_STRING_TEMPLATE_ENTRY
-                        PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                        REFERENCE_EXPRESSION
-                          REFERENCE_EXPRESSION
-                            REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('name')
-                            PsiElement(VlangTokenType..)('.')
-                            PsiElement(VlangTokenType.identifier)('field')
-                          PsiElement(VlangTokenType..)('.')
-                          PsiElement(VlangTokenType.identifier)('field2')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('$name.field.field2')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
       SIMPLE_STATEMENT
@@ -441,15 +399,7 @@ V Language file
                   STRING_LITERAL
                     STRING_TEMPLATE
                       PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                      SHORT_STRING_TEMPLATE_ENTRY
-                        PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                        REFERENCE_EXPRESSION
-                          REFERENCE_EXPRESSION
-                            PsiElement(VlangTokenType.identifier)('name')
-                          PsiElement(VlangTokenType..)('.')
-                          PsiElement(VlangTokenType.identifier)('method')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('(')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(')')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('$name.method()')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
       PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// TODO: support')
@@ -465,15 +415,7 @@ V Language file
                   STRING_LITERAL
                     STRING_TEMPLATE
                       PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                      SHORT_STRING_TEMPLATE_ENTRY
-                        PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                        REFERENCE_EXPRESSION
-                          REFERENCE_EXPRESSION
-                            PsiElement(VlangTokenType.identifier)('name')
-                          PsiElement(VlangTokenType..)('.')
-                          PsiElement(VlangTokenType.identifier)('method')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('[')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('100]')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('$name.method[100]')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
       PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// TODO: support')
@@ -489,9 +431,9 @@ V Language file
                   STRING_LITERAL
                     STRING_TEMPLATE
                       PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('< client read back buf: |')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('< client read back buf: |$')
                       LONG_STRING_TEMPLATE_ENTRY
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_START)('${')
+                        PsiElement(VlangTokenType.TEMPLATE_ENTRY_START)('{')
                         CALL_EXPR
                           REFERENCE_EXPRESSION
                             INDEX_OR_SLICE_EXPR
@@ -513,7 +455,7 @@ V Language file
                           ARGUMENT_LIST
                             PsiElement(VlangTokenType.()('(')
                             PsiElement(VlangTokenType.))(')')
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_END)('}')
+                        PsiElement(VlangTokenType.TEMPLATE_ENTRY_END)('}')
                       PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('|')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
@@ -529,9 +471,9 @@ V Language file
                   STRING_LITERAL
                     STRING_TEMPLATE
                       PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' ')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' $')
                       LONG_STRING_TEMPLATE_ENTRY
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_START)('${')
+                        PsiElement(VlangTokenType.TEMPLATE_ENTRY_START)('{')
                         CALL_EXPR
                           REFERENCE_EXPRESSION
                             PsiElement(VlangTokenType.identifier)('any_to_json')
@@ -542,7 +484,7 @@ V Language file
                                 REFERENCE_EXPRESSION
                                   PsiElement(VlangTokenType.identifier)('val')
                             PsiElement(VlangTokenType.))(')')
-                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_END)('}')
+                        PsiElement(VlangTokenType.TEMPLATE_ENTRY_END)('}')
                       PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(',')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')

@@ -6,19 +6,22 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.vlang.lang.psi.*;
+import org.vlang.lang.psi.VlangExpression;
+import org.vlang.lang.psi.VlangPsiTreeUtil;
+import org.vlang.lang.psi.VlangTypeOfCallExpr;
+import org.vlang.lang.psi.VlangVisitor;
 
-import static org.vlang.lang.VlangTypes.TEMPLATE_ENTRY_END;
-import static org.vlang.lang.VlangTypes.TEMPLATE_ENTRY_START;
+import static org.vlang.lang.VlangTypes.*;
 
-public class VlangLongStringTemplateEntryImpl extends VlangCompositeElementImpl implements VlangLongStringTemplateEntry {
+public class VlangTypeOfCallExprImpl extends VlangExpressionImpl implements VlangTypeOfCallExpr {
 
-  public VlangLongStringTemplateEntryImpl(@NotNull ASTNode node) {
+  public VlangTypeOfCallExprImpl(@NotNull ASTNode node) {
     super(node);
   }
 
+  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitLongStringTemplateEntry(this);
+    visitor.visitTypeOfCallExpr(this);
   }
 
   @Override
@@ -35,20 +38,20 @@ public class VlangLongStringTemplateEntryImpl extends VlangCompositeElementImpl 
 
   @Override
   @Nullable
-  public VlangFormatSpecifier getFormatSpecifier() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangFormatSpecifier.class);
+  public PsiElement getLparen() {
+    return findChildByType(LPAREN);
   }
 
   @Override
   @Nullable
-  public PsiElement getTemplateEntryEnd() {
-    return findChildByType(TEMPLATE_ENTRY_END);
+  public PsiElement getRparen() {
+    return findChildByType(RPAREN);
   }
 
   @Override
   @NotNull
-  public PsiElement getTemplateEntryStart() {
-    return notNullChild(findChildByType(TEMPLATE_ENTRY_START));
+  public PsiElement getTypeof() {
+    return notNullChild(findChildByType(TYPEOF));
   }
 
 }

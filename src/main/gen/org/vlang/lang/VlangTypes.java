@@ -191,6 +191,7 @@ public interface VlangTypes {
   IElementType TYPE = VlangElementTypeFactory.stubFactory("TYPE");
   IElementType TYPE_ALIAS_DECLARATION = VlangElementTypeFactory.stubFactory("TYPE_ALIAS_DECLARATION");
   IElementType TYPE_LIST_NO_PIN = new VlangCompositeElementType("TYPE_LIST_NO_PIN");
+  IElementType TYPE_OF_CALL_EXPR = new VlangCompositeElementType("TYPE_OF_CALL_EXPR");
   IElementType TYPE_REFERENCE_EXPRESSION = new VlangCompositeElementType("TYPE_REFERENCE_EXPRESSION");
   IElementType TYPE_UNION_LIST = new VlangCompositeElementType("TYPE_UNION_LIST");
   IElementType UNARY_EXPR = new VlangCompositeElementType("UNARY_EXPR");
@@ -273,8 +274,6 @@ public interface VlangTypes {
   IElementType LITERAL_STRING_TEMPLATE_ENTRY = new VlangTokenType("LITERAL_STRING_TEMPLATE_ENTRY");
   IElementType LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY = new VlangTokenType("LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY");
   IElementType LOCK = new VlangTokenType("lock");
-  IElementType LONG_TEMPLATE_ENTRY_END = new VlangTokenType("LONG_TEMPLATE_ENTRY_END");
-  IElementType LONG_TEMPLATE_ENTRY_START = new VlangTokenType("LONG_TEMPLATE_ENTRY_START");
   IElementType LPAREN = new VlangTokenType("(");
   IElementType MATCH = new VlangTokenType("match");
   IElementType MINUS = new VlangTokenType("-");
@@ -324,9 +323,12 @@ public interface VlangTypes {
   IElementType STATIC = new VlangTokenType("static");
   IElementType STRUCT = new VlangTokenType("struct");
   IElementType SWITCH = new VlangTokenType("switch");
+  IElementType TEMPLATE_ENTRY_END = new VlangTokenType("TEMPLATE_ENTRY_END");
+  IElementType TEMPLATE_ENTRY_START = new VlangTokenType("TEMPLATE_ENTRY_START");
   IElementType TILDA = new VlangTokenType("~");
   IElementType TRIPLE_DOT = new VlangTokenType("...");
   IElementType TRUE = new VlangTokenType("true");
+  IElementType TYPEOF = new VlangTokenType("typeof");
   IElementType TYPE_ = new VlangTokenType("type");
   IElementType UNION = new VlangTokenType("union");
   IElementType UNSAFE = new VlangTokenType("unsafe");
@@ -875,6 +877,9 @@ public interface VlangTypes {
       }
       else if (type == TYPE_LIST_NO_PIN) {
         return new VlangTypeListNoPinImpl(node);
+      }
+      else if (type == TYPE_OF_CALL_EXPR) {
+        return new VlangTypeOfCallExprImpl(node);
       }
       else if (type == TYPE_REFERENCE_EXPRESSION) {
         return new VlangTypeReferenceExpressionImpl(node);

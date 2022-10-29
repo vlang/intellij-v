@@ -1310,19 +1310,7 @@ V Language file
                               STRING_LITERAL
                                 STRING_TEMPLATE
                                   PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Symbol `')
-                                  SHORT_STRING_TEMPLATE_ENTRY
-                                    PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                                    REFERENCE_EXPRESSION
-                                      PsiElement(VlangTokenType.identifier)('symbol_name')
-                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('`')
-                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' in module `')
-                                  SHORT_STRING_TEMPLATE_ENTRY
-                                    PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                                    REFERENCE_EXPRESSION
-                                      PsiElement(VlangTokenType.identifier)('module_name')
-                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('`')
-                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' not found')
+                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Symbol `$symbol_name` in module `$module_name` not found')
                                   PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                           PsiElement(VlangTokenType.))(')')
                   CONTINUE_STATEMENT
@@ -1382,19 +1370,7 @@ V Language file
                               STRING_LITERAL
                                 STRING_TEMPLATE
                                   PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Symbol `')
-                                  SHORT_STRING_TEMPLATE_ENTRY
-                                    PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                                    REFERENCE_EXPRESSION
-                                      PsiElement(VlangTokenType.identifier)('symbol_name')
-                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('`')
-                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' in module `')
-                                  SHORT_STRING_TEMPLATE_ENTRY
-                                    PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                                    REFERENCE_EXPRESSION
-                                      PsiElement(VlangTokenType.identifier)('module_name')
-                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('`')
-                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' not public')
+                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Symbol `$symbol_name` in module `$module_name` not public')
                                   PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                           PsiElement(VlangTokenType.))(')')
                   PsiElement(VlangTokenType.})('}')
@@ -13994,15 +13970,7 @@ V Language file
                           STRING_LITERAL
                             STRING_TEMPLATE
                               PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                              PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('`')
-                              SHORT_STRING_TEMPLATE_ENTRY
-                                PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                                REFERENCE_EXPRESSION
-                                  REFERENCE_EXPRESSION
-                                    PsiElement(VlangTokenType.identifier)('it')
-                                  PsiElement(VlangTokenType..)('.')
-                                  PsiElement(VlangTokenType.identifier)('name')
-                              PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('`')
+                              PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('`$it.name`')
                               PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                       PsiElement(VlangTokenType.))(')')
               SIMPLE_STATEMENT

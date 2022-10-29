@@ -746,6 +746,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitTypeOfCallExpr(@NotNull VlangTypeOfCallExpr o) {
+    visitExpression(o);
+  }
+
   public void visitTypeReferenceExpression(@NotNull VlangTypeReferenceExpression o) {
     visitReferenceExpressionBase(o);
   }

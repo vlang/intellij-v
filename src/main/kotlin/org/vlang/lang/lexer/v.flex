@@ -125,44 +125,20 @@ RAW_SINGLE_QUOTE_STRING = {RAW_STR_MODIFIER} {STR_SINGLE} [^\']* {STR_SINGLE}
 
 %state MAYBE_SEMICOLON
 %state TEMPLATE_STRING
-%state SHORT_TEMPLATE_ENTRY
-%state SHORT_TEMPLATE_ENTRY_FIELD_NAME
 %state ASM_BLOCK
 %state ASM_BLOCK_LINE
 
 %%
 
-<SHORT_TEMPLATE_ENTRY> {
-"$"             { return SHORT_TEMPLATE_ENTRY_START; }
-"${"            { yy_push_state(YYINITIAL); return LONG_TEMPLATE_ENTRY_START; }
-{IDENT}         { return IDENTIFIER; }
-"."             { yybegin(SHORT_TEMPLATE_ENTRY_FIELD_NAME); return DOT; }
-{STR_DOUBLE}    { yybegin(TEMPLATE_STRING); return handle_string_end(true); }
-{STR_SINGLE}    { yybegin(TEMPLATE_STRING); return handle_string_end(false); }
-"\\" (. | "\\") { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY; }
-\n              { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ENTRY; }
-.               { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ENTRY; }
-}
-
-<SHORT_TEMPLATE_ENTRY_FIELD_NAME> {
-{IDENT}         { return IDENTIFIER; }
-"."             { return DOT; }
-{STR_DOUBLE}    { yybegin(TEMPLATE_STRING); return handle_string_end(true); }
-{STR_SINGLE}    { yybegin(TEMPLATE_STRING); return handle_string_end(false); }
-"\\" (. | "\\") { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY; }
-\n              { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ENTRY; }
-.               { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ENTRY; }
-}
-
 <TEMPLATE_STRING> {
-"${"         { yy_push_state(YYINITIAL);      return LONG_TEMPLATE_ENTRY_START; }
-"$"          { yybegin(SHORT_TEMPLATE_ENTRY); return SHORT_TEMPLATE_ENTRY_START; }
+"{" [a-zA-Z_] { yy_push_state(YYINITIAL); yypushback(1); return TEMPLATE_ENTRY_START; }
+"{"           { return LITERAL_STRING_TEMPLATE_ENTRY; }
 
-{STR_DOUBLE} { return handle_string_end(true); }
-{STR_SINGLE} { return handle_string_end(false); }
+{STR_DOUBLE}  { return handle_string_end(true); }
+{STR_SINGLE}  { return handle_string_end(false); }
 
 "\\" (. | "\\") { return LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY; }
-[^\"\'\\$]+     { return LITERAL_STRING_TEMPLATE_ENTRY; }
+[^\"\'\\{]+     { return LITERAL_STRING_TEMPLATE_ENTRY; }
 }
 
 <YYINITIAL> {
@@ -209,7 +185,7 @@ RAW_SINGLE_QUOTE_STRING = {RAW_STR_MODIFIER} {STR_SINGLE} [^\']* {STR_SINGLE}
 "}" {
     if (inside_interpolation()) {
         yy_pop_state();
-        return LONG_TEMPLATE_ENTRY_END;
+        return TEMPLATE_ENTRY_END;
     }
 
     yybegin(MAYBE_SEMICOLON);
@@ -331,6 +307,7 @@ RAW_SINGLE_QUOTE_STRING = {RAW_STR_MODIFIER} {STR_SINGLE} [^\']* {STR_SINGLE}
 "type"                                    { return TYPE_; }
 "mut"                                     { return MUT; }
 "static"                                  { return STATIC; }
+"typeof"                                  { return TYPEOF; }
 
 "volatile"                                { return VOLATILE; }
 "asm"                                     { yybegin(ASM_BLOCK); return ASM; }

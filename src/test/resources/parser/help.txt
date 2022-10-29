@@ -393,11 +393,7 @@ V Language file
                                       STRING_LITERAL
                                         STRING_TEMPLATE
                                           PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                                          PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Invalid command: ')
-                                          SHORT_STRING_TEMPLATE_ENTRY
-                                            PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                                            REFERENCE_EXPRESSION
-                                              PsiElement(VlangTokenType.identifier)('args')
+                                          PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Invalid command: $args')
                                           PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                                   PsiElement(VlangTokenType.))(')')
                           RETURN_STATEMENT
@@ -522,16 +518,7 @@ V Language file
         STRING_LITERAL
           STRING_TEMPLATE
             PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-            PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Usage: ')
-            SHORT_STRING_TEMPLATE_ENTRY
-              PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-              REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('cmd')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('full_name')
-            PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('(')
-            PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(')')
+            PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Usage: $cmd.full_name()')
             PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
@@ -620,14 +607,7 @@ V Language file
                 STRING_LITERAL
                   STRING_TEMPLATE
                     PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                    PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' ')
-                    SHORT_STRING_TEMPLATE_ENTRY
-                      PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                      REFERENCE_EXPRESSION
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('cmd')
-                        PsiElement(VlangTokenType..)('.')
-                        PsiElement(VlangTokenType.identifier)('usage')
+                    PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' $cmd.usage')
                     PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.})('}')
             ELSE_STATEMENT
@@ -662,12 +642,7 @@ V Language file
                       STRING_LITERAL
                         STRING_TEMPLATE
                           PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                          PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' <arg')
-                          SHORT_STRING_TEMPLATE_ENTRY
-                            PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                            REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('i')
-                          PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('>')
+                          PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' <arg$i>')
                           PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                     PsiElement(VlangTokenType.})('}')
                 PsiElement(VlangTokenType.})('}')
@@ -709,13 +684,7 @@ V Language file
                   STRING_TEMPLATE
                     PsiElement(VlangTokenType.OPEN_QUOTE)(''')
                     PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY)('\n')
-                    SHORT_STRING_TEMPLATE_ENTRY
-                      PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                      REFERENCE_EXPRESSION
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('cmd')
-                        PsiElement(VlangTokenType..)('.')
-                        PsiElement(VlangTokenType.identifier)('description')
+                    PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('$cmd.description')
                     PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY)('\n')
                     PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.})('}')
@@ -1249,27 +1218,7 @@ V Language file
                             STRING_LITERAL
                               STRING_TEMPLATE
                                 PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('-')
-                                SHORT_STRING_TEMPLATE_ENTRY
-                                  PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                                  REFERENCE_EXPRESSION
-                                    REFERENCE_EXPRESSION
-                                      PsiElement(VlangTokenType.identifier)('flag')
-                                    PsiElement(VlangTokenType..)('.')
-                                    PsiElement(VlangTokenType.identifier)('abbrev')
-                                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('$')
-                                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('abbrev_indent')
-                                SHORT_STRING_TEMPLATE_ENTRY
-                                  PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                                  REFERENCE_EXPRESSION
-                                    PsiElement(VlangTokenType.identifier)('prefix')
-                                SHORT_STRING_TEMPLATE_ENTRY
-                                  PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                                  REFERENCE_EXPRESSION
-                                    REFERENCE_EXPRESSION
-                                      PsiElement(VlangTokenType.identifier)('flag')
-                                    PsiElement(VlangTokenType..)('.')
-                                    PsiElement(VlangTokenType.identifier)('name')
+                                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('-$flag.abbrev$abbrev_indent$prefix$flag.name')
                                 PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                           PsiElement(VlangTokenType.})('}')
                         ELSE_STATEMENT
@@ -1308,21 +1257,7 @@ V Language file
                               STRING_LITERAL
                                 STRING_TEMPLATE
                                   PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                                  SHORT_STRING_TEMPLATE_ENTRY
-                                    PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                                    REFERENCE_EXPRESSION
-                                      PsiElement(VlangTokenType.identifier)('abbrev_indent')
-                                  SHORT_STRING_TEMPLATE_ENTRY
-                                    PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                                    REFERENCE_EXPRESSION
-                                      PsiElement(VlangTokenType.identifier)('prefix')
-                                  SHORT_STRING_TEMPLATE_ENTRY
-                                    PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                                    REFERENCE_EXPRESSION
-                                      REFERENCE_EXPRESSION
-                                        PsiElement(VlangTokenType.identifier)('flag')
-                                      PsiElement(VlangTokenType..)('.')
-                                      PsiElement(VlangTokenType.identifier)('name')
+                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('$abbrev_indent$prefix$flag.name')
                                   PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                             PsiElement(VlangTokenType.})('}')
                   SIMPLE_STATEMENT
@@ -1427,18 +1362,7 @@ V Language file
                         STRING_LITERAL
                           STRING_TEMPLATE
                             PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                            SHORT_STRING_TEMPLATE_ENTRY
-                              PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('base_indent')
-                            SHORT_STRING_TEMPLATE_ENTRY
-                              PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('flag_name')
-                            SHORT_STRING_TEMPLATE_ENTRY
-                              PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('description_indent')
+                            PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('$base_indent$flag_name$description_indent')
                             PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                         PsiElement(VlangTokenType.+)('+')
                         CALL_EXPR
@@ -1594,19 +1518,7 @@ V Language file
                         STRING_LITERAL
                           STRING_TEMPLATE
                             PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                            SHORT_STRING_TEMPLATE_ENTRY
-                              PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('base_indent')
-                            SHORT_STRING_TEMPLATE_ENTRY
-                              PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                              REFERENCE_EXPRESSION
-                                REFERENCE_EXPRESSION
-                                  PsiElement(VlangTokenType.identifier)('command')
-                                PsiElement(VlangTokenType..)('.')
-                                PsiElement(VlangTokenType.identifier)('name')
-                            PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('$')
-                            PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('description_indent')
+                            PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('$base_indent$command.name$description_indent')
                             PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                         PsiElement(VlangTokenType.+)('+')
                         CALL_EXPR
@@ -1856,10 +1768,7 @@ V Language file
                                 STRING_TEMPLATE
                                   PsiElement(VlangTokenType.OPEN_QUOTE)(''')
                                   PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY)('\n')
-                                  SHORT_STRING_TEMPLATE_ENTRY
-                                    PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                                    REFERENCE_EXPRESSION
-                                      PsiElement(VlangTokenType.identifier)('indent')
+                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('$indent')
                                   PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                           PsiElement(VlangTokenType.))(')')
                   PsiElement(VlangTokenType.})('}')

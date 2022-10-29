@@ -78,7 +78,7 @@ class CompletionTest : CompletionTestBase() {
         
         fn main() {
             foo := Foo{}
-            "${"$"}<caret>"
+            "{caret}"
         }
         """.trimIndent(),
         1, "foo",
@@ -96,7 +96,7 @@ class CompletionTest : CompletionTestBase() {
         
         fn main() {
             foo := Foo{}
-            "${"$"}foo.<caret>"
+            "{foo.<caret>}"
         }
         """.trimIndent(),
         1, "name", "age",
@@ -114,7 +114,7 @@ class CompletionTest : CompletionTestBase() {
         
         fn main() {
             foo := Foo{}
-            "${"\${"}<caret>}"
+            "{<caret>}"
         }
         """.trimIndent(),
         1, "foo",

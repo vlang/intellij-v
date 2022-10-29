@@ -627,6 +627,8 @@ private MaxGroup ::=
   | FunctionLit
 //| CompositeLit
 
+TypeOfCallExpr ::= typeof '(' Expression ')' {pin=1}
+
 // fn [[<captures>]] [<generics>] (...) {...}
 FunctionLit ::= fn CaptureList? GenericArgumentsFirstPin? Signature Block {
   pin=1
@@ -755,6 +757,7 @@ DotExpression ::= DotPrimaryExpr RightHandExprs {extends=Expression}
 
 private DotPrimaryExpr ::=
     LiteralValueExpression
+  | TypeOfCallExpr
   | ReferenceExpression
   | Literal
   | FunctionLit
@@ -983,7 +986,7 @@ private StringTemplatePart ::=
   | ShortStringTemplateEntry
   | SHORT_TEMPLATE_ENTRY_START
 
-LongStringTemplateEntry ::= LONG_TEMPLATE_ENTRY_START Expression FormatSpecifier? LONG_TEMPLATE_ENTRY_END {pin=1}
+LongStringTemplateEntry ::= TEMPLATE_ENTRY_START Expression FormatSpecifier? TEMPLATE_ENTRY_END {pin=1}
 
 FormatSpecifier ::= ':' FormatSpecifierExpression
 FormatSpecifierExpression ::= (FormatSpecifierLeftAlignFlag | FormatSpecifierRightAlignFlag)? FormatSpecifierWidthAndPrecision? FormatSpecifierLetter?

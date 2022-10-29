@@ -70,7 +70,7 @@ enum class VlangColor(readableName: @NlsContexts.AttributeDescriptor String, def
     C_STRING("Literals//Strings//C string literals", Default.STRING),
     VALID_STRING_ESCAPE("Literals//Strings//Valid string escape", Default.VALID_STRING_ESCAPE),
     // String interpolation
-    STRING_INTERPOLATION("Literals//Strings/String interpolation", Default.IDENTIFIER),
+    STRING_INTERPOLATION("Literals//Strings//String interpolation", Default.VALID_STRING_ESCAPE),
     // Literals END
 
     // Braces and operators

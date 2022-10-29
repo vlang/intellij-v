@@ -60,8 +60,8 @@ public class VlangParser implements PsiParser, LightPsiParser {
       MUL_EXPR, MUT_EXPRESSION, NOT_IN_EXPRESSION, NOT_IS_EXPRESSION,
       OR_BLOCK_EXPR, OR_EXPR, PARENTHESES_EXPR, RANGE_EXPR,
       REFERENCE_EXPRESSION, SELECT_EXPRESSION, SEND_EXPR, SHARED_EXPRESSION,
-      SQL_EXPRESSION, STRING_LITERAL, UNARY_EXPR, UNPACKING_EXPRESSION,
-      UNSAFE_EXPRESSION),
+      SQL_EXPRESSION, STRING_LITERAL, TYPE_OF_CALL_EXPR, UNARY_EXPR,
+      UNPACKING_EXPRESSION, UNSAFE_EXPRESSION),
   };
 
   /* ********************************************************** */
@@ -1082,6 +1082,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // LiteralValueExpression
+  //   | TypeOfCallExpr
   //   | ReferenceExpression
   //   | Literal
   //   | FunctionLit
@@ -1093,6 +1094,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "DotPrimaryExpr")) return false;
     boolean r;
     r = LiteralValueExpression(b, l + 1);
+    if (!r) r = TypeOfCallExpr(b, l + 1);
     if (!r) r = ReferenceExpression(b, l + 1);
     if (!r) r = Literal(b, l + 1);
     if (!r) r = FunctionLit(b, l + 1);
@@ -3098,17 +3100,17 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LONG_TEMPLATE_ENTRY_START Expression FormatSpecifier? LONG_TEMPLATE_ENTRY_END
+  // TEMPLATE_ENTRY_START Expression FormatSpecifier? TEMPLATE_ENTRY_END
   public static boolean LongStringTemplateEntry(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LongStringTemplateEntry")) return false;
-    if (!nextTokenIs(b, LONG_TEMPLATE_ENTRY_START)) return false;
+    if (!nextTokenIs(b, TEMPLATE_ENTRY_START)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, LONG_STRING_TEMPLATE_ENTRY, null);
-    r = consumeToken(b, LONG_TEMPLATE_ENTRY_START);
+    r = consumeToken(b, TEMPLATE_ENTRY_START);
     p = r; // pin = 1
     r = r && report_error_(b, Expression(b, l + 1, -1));
     r = p && report_error_(b, LongStringTemplateEntry_2(b, l + 1)) && r;
-    r = p && consumeToken(b, LONG_TEMPLATE_ENTRY_END) && r;
+    r = p && consumeToken(b, TEMPLATE_ENTRY_END) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -5380,6 +5382,21 @@ public class VlangParser implements PsiParser, LightPsiParser {
       if (!empty_element_parsed_guard_(b, "TypeName_1", c)) break;
     }
     return true;
+  }
+
+  /* ********************************************************** */
+  // typeof '(' Expression ')'
+  public static boolean TypeOfCallExpr(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeOfCallExpr")) return false;
+    if (!nextTokenIs(b, TYPEOF)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, TYPE_OF_CALL_EXPR, null);
+    r = consumeTokens(b, 1, TYPEOF, LPAREN);
+    p = r; // pin = 1
+    r = r && report_error_(b, Expression(b, l + 1, -1));
+    r = p && consumeToken(b, RPAREN) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */

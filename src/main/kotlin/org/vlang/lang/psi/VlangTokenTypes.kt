@@ -89,6 +89,7 @@ object VlangTokenTypes {
         VOLATILE,
         SQL,
         NIL,
+        TYPEOF,
     )
 
     val OPERATORS = TokenSet.create(

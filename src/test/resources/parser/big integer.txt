@@ -1731,11 +1731,7 @@ V Language file
                             STRING_LITERAL
                               STRING_TEMPLATE
                                 PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Invalid character ')
-                                SHORT_STRING_TEMPLATE_ENTRY
-                                  PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                                  REFERENCE_EXPRESSION
-                                    PsiElement(VlangTokenType.identifier)('digit')
+                                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Invalid character $digit')
                                 PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                         PsiElement(VlangTokenType.))(')')
                   PsiElement(VlangTokenType.})('}')
@@ -1763,17 +1759,7 @@ V Language file
                             STRING_LITERAL
                               STRING_TEMPLATE
                                 PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Invalid character ')
-                                SHORT_STRING_TEMPLATE_ENTRY
-                                  PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                                  REFERENCE_EXPRESSION
-                                    PsiElement(VlangTokenType.identifier)('digit')
-                                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' ')
-                                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('for base ')
-                                SHORT_STRING_TEMPLATE_ENTRY
-                                  PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                                  REFERENCE_EXPRESSION
-                                    PsiElement(VlangTokenType.identifier)('radix')
+                                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Invalid character $digit for base $radix')
                                 PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                         PsiElement(VlangTokenType.))(')')
                   PsiElement(VlangTokenType.})('}')

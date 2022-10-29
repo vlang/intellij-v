@@ -439,10 +439,7 @@ V Language file
             STRING_LITERAL
               STRING_TEMPLATE
                 PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                SHORT_STRING_TEMPLATE_ENTRY
-                  PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('n')
+                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('$n')
                 PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
           PsiElement(VlangTokenType.})('}')
     PsiElement(VlangTokenType.))(')')
