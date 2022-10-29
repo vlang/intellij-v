@@ -4,8 +4,6 @@ import com.intellij.extapi.psi.PsiFileBase
 import com.intellij.openapi.project.guessProjectDir
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiReference
-import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
 import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.CachedValueProvider
@@ -28,10 +26,6 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
     override fun toString() = "V Language file"
 
     override fun getIcon(flags: Int) = VIcons.V
-
-    override fun getReference() = references.getOrNull(0)
-
-    override fun getReferences(): Array<PsiReference?> = ReferenceProvidersRegistry.getReferencesFromProviders(this)
 
     fun isTestFile(): Boolean = name.split(".").first().endsWith("_test")
 

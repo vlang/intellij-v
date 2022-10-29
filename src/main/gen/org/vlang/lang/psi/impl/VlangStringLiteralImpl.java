@@ -4,6 +4,7 @@ package org.vlang.lang.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.*;
@@ -54,6 +55,12 @@ public class VlangStringLiteralImpl extends VlangExpressionImpl implements Vlang
   @NotNull
   public StringLiteralEscaper<VlangStringLiteral> createLiteralTextEscaper() {
     return VlangPsiImplUtil.createLiteralTextEscaper(this);
+  }
+
+  @Override
+  @NotNull
+  public PsiReference[] getReferences() {
+    return VlangPsiImplUtil.getReferences(this);
   }
 
   @Override

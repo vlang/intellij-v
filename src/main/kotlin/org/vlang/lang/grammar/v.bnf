@@ -974,7 +974,7 @@ Literal ::=
 // just different strings
 StringLiteral ::= 'raw_string' | StringTemplate {
   implements = "com.intellij.psi.PsiLanguageInjectionHost"
-  methods = [isValidHost updateText createLiteralTextEscaper getDecodedText getContents]
+  methods = [isValidHost updateText createLiteralTextEscaper getDecodedText getReferences getContents]
 }
 
 StringTemplate ::= OPEN_QUOTE StringTemplatePart* CLOSING_QUOTE {pin=1}

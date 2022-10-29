@@ -3,6 +3,7 @@ package org.vlang.lang.psi;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLanguageInjectionHost;
+import com.intellij.psi.PsiReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,6 +26,9 @@ public interface VlangStringLiteral extends VlangExpression, PsiLanguageInjectio
   //WARNING: getDecodedText(...) is skipped
   //matching getDecodedText(VlangStringLiteral, ...)
   //methods are not found in VlangPsiImplUtil
+
+  @NotNull
+  PsiReference[] getReferences();
 
   @NotNull
   String getContents();

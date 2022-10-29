@@ -9,6 +9,7 @@ import com.intellij.openapi.util.Conditions
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.RecursionManager
 import com.intellij.psi.*
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet
 import com.intellij.psi.impl.source.tree.LeafElement
 import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.util.*
@@ -579,6 +580,22 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun isPublic(o: VlangParamDefinition): Boolean = true
 
+    class VlangLiteralFileReferenceSet(
+        str: String,
+        element: VlangStringLiteral,
+        startOffset: Int,
+        isCaseSensitive: Boolean,
+    ) : FileReferenceSet(str, element, startOffset, null, isCaseSensitive)
+
+    @JvmStatic
+    fun getReferences(o: VlangStringLiteral): Array<out PsiReference> {
+        if (o.textLength < 2) return PsiReference.EMPTY_ARRAY
+
+        val fs = o.containingFile.originalFile.virtualFile.fileSystem
+        val literalValue = o.contents
+        return VlangLiteralFileReferenceSet(literalValue, o, 1, fs.isCaseSensitive).allReferences
+    }
+
     @JvmStatic
     fun isValidHost(o: VlangStringLiteral): Boolean {
         return true
@@ -589,9 +606,9 @@ object VlangPsiImplUtil {
         if (text.length <= 2) {
             return o
         }
-        val valueNode = o.node.firstChildNode as? LeafElement
-        valueNode?.replaceWithText(text)
-        return o
+        val newLiteral = VlangElementFactory.createStringLiteral(o.project, text)
+        o.replace(newLiteral)
+        return newLiteral
     }
 
     @JvmStatic

@@ -3,9 +3,7 @@ package org.vlang.lang.psi.impl
 import com.intellij.lang.ASTNode
 import com.intellij.navigation.ItemPresentation
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiReference
 import com.intellij.psi.ResolveState
-import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
 import com.intellij.psi.stubs.IStubElementType
 import com.intellij.psi.util.*
 import com.intellij.ui.IconManager
@@ -42,10 +40,6 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
 
     override fun getSymbolVisibility(): VlangSymbolVisibility? {
         return getChildOfType(this, VlangSymbolVisibility::class.java)
-    }
-
-    override fun getReferences(): Array<PsiReference> {
-        return ReferenceProvidersRegistry.getReferencesFromProviders(this)
     }
 
     override fun getName(): String? {

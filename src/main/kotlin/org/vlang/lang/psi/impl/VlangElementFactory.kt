@@ -56,6 +56,13 @@ object VlangElementFactory {
         )?.lastChild!!
     }
 
+    fun createStringLiteral(project: Project, text: String): VlangStringLiteral {
+        return PsiTreeUtil.findChildOfType(
+            createFileFromText(project, "fn main() { $text }"),
+            VlangStringLiteral::class.java
+        )!!
+    }
+
     fun createNewLine(project: Project): PsiElement {
         return PsiParserFacade.getInstance(project).createWhiteSpaceFromText("\n")
     }
