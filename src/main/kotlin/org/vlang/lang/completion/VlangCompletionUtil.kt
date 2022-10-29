@@ -684,7 +684,7 @@ object VlangCompletionUtil {
                 ""
             }
 
-            p.icon = AllIcons.Nodes.Alias
+            p.icon = VIcons.Alias
             p.itemText = element.lookupString
             p.tailText = tail
         }

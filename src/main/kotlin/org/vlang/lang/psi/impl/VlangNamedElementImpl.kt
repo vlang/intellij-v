@@ -133,6 +133,7 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
             is VlangFieldDefinition           -> VIcons.Field
             is VlangEnumFieldDefinition       -> VIcons.Field
             is VlangParamDefinition           -> VIcons.Parameter
+            is VlangTypeAliasDeclaration      -> VIcons.Alias
             is VlangLabelDefinition           -> null
             else                              -> null
         } ?: return super.getIcon(flags)

@@ -10,7 +10,6 @@ import org.vlang.lang.stubs.VlangMethodDeclarationStub
 import org.vlang.lang.stubs.VlangNamedStub
 import org.vlang.lang.stubs.index.VlangNamesIndex
 
-@OptIn(ExperimentalStdlibApi::class)
 abstract class VlangNamedStubElementType<S : VlangNamedStub<T>, T : VlangNamedElement>(debugName: String) :
     VlangStubElementType<S, T>(debugName) {
 
