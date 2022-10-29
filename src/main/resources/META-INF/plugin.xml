@@ -330,6 +330,7 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
 
         <stepsBeforeRunProvider implementation="org.vlang.ide.run.VlangBuildTaskProvider"/>
         <projectTaskRunner order="last" implementation="org.vlang.ide.run.VlangBuildTaskRunner"/>
+        <console.folding implementation="org.vlang.ide.run.VlangConsoleFolding"/>
         <!-- Run V script Configuration End -->
 
         <!-- V Mod File -->
