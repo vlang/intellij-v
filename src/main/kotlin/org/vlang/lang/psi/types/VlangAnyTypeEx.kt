@@ -7,6 +7,8 @@ import org.vlang.lang.psi.VlangType
 class VlangAnyTypeEx(raw: VlangType): VlangBaseTypeEx<VlangType>(raw) {
     override fun toString(): String = "any"
 
+    override fun qualifiedName(): String = "any"
+
     override fun readableName(context: PsiElement): String = "any"
 
     override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean = true

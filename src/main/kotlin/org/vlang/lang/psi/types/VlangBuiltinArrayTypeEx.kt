@@ -8,6 +8,8 @@ import org.vlang.lang.psi.VlangType
 class VlangBuiltinArrayTypeEx(raw: VlangStructType) : VlangBaseTypeEx<VlangType>(raw) {
     override fun toString() = "array"
 
+    override fun qualifiedName(): String = "builtin.array"
+
     override fun readableName(context: PsiElement) = "array"
 
     override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {

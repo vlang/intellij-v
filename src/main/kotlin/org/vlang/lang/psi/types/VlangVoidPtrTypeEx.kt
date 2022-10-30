@@ -7,6 +7,8 @@ import org.vlang.lang.psi.VlangType
 class VlangVoidPtrTypeEx(raw: VlangType) : VlangBaseTypeEx<VlangType>(raw) {
     override fun toString(): String = "voidptr"
 
+    override fun qualifiedName() = "voidptr"
+
     override fun readableName(context: PsiElement): String = "voidptr"
 
     override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project) = true

@@ -5,6 +5,7 @@ import com.intellij.psi.PsiElement
 import org.vlang.lang.psi.VlangType
 
 interface VlangTypeEx<T: VlangType?> {
+    fun qualifiedName(): String
     fun readableName(context: PsiElement): String
     fun module(): String
     fun raw(): T

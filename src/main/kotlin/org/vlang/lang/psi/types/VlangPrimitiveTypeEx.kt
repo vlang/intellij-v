@@ -7,11 +7,11 @@ import org.vlang.lang.psi.VlangType
 class VlangPrimitiveTypeEx(raw: VlangType, private val name: VlangPrimitiveTypes) : VlangBaseTypeEx<VlangType>(raw) {
     override fun toString(): String = name.value
 
+    override fun qualifiedName(): String = name.value
+
     override fun readableName(context: PsiElement): String = name.value
 
-    fun isNumeric(): Boolean {
-        return name.numeric
-    }
+    fun isNumeric(): Boolean = name.numeric
 
     override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {
         return when (rhs) {

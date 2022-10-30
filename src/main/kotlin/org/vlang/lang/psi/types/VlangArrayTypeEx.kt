@@ -9,6 +9,8 @@ class VlangArrayTypeEx(raw: VlangArrayOrSliceType) : VlangBaseTypeEx<VlangArrayO
 
     override fun toString() = "[]".safeAppend(inner)
 
+    override fun qualifiedName(): String = "[]".safeAppend(inner?.qualifiedName())
+
     override fun readableName(context: PsiElement) = "[]".safeAppend(inner?.readableName(context))
 
     override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {

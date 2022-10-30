@@ -21,6 +21,17 @@ class VlangFunctionTypeEx(raw: VlangFunctionType?, signature: VlangSignature? = 
         }
     }
 
+    override fun qualifiedName(): String = buildString {
+        append("fn ")
+        append("(")
+        append(params.joinToString(", ") { it.qualifiedName() })
+        append(")")
+        if (result != null) {
+            append(" ")
+            append(result.qualifiedName())
+        }
+    }
+
     override fun readableName(context: PsiElement) = buildString {
         append("fn ")
         append("(")

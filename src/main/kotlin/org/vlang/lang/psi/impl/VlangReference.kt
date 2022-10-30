@@ -15,7 +15,6 @@ import org.vlang.ide.codeInsight.VlangTypeInferenceUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangPsiImplUtil.processNamedElements
 import org.vlang.lang.sql.VlangSqlUtil
-import org.vlang.lang.stubs.index.VlangMethodIndex
 import org.vlang.lang.stubs.index.VlangModulesFingerprintIndex
 import org.vlang.lang.stubs.index.VlangModulesIndex
 
@@ -160,7 +159,6 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
     private fun processExistingType(type: VlangType, processor: VlangScopeProcessor, state: ResolveState): Boolean {
         val file = type.containingFile as? VlangFile ?: return true
-        val moduleName = file.getModuleQualifiedName()
         val contextFile = getContextFile(state) ?: myElement.containingFile
         if (contextFile !is VlangFile) {
             return true
@@ -172,9 +170,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         val typ = type.resolveType()
 
         if (typ is VlangAliasType) {
-            val decl = typ.parent as? VlangTypeAliasDeclaration ?: return true
-            val aliasFqn = decl.getQualifiedName()
-            if (!processMethods(aliasFqn, processor, newState)) return false
+            if (!processMethods(typ, processor, newState, localResolve)) return false
 
             val types = typ.typeUnionList?.typeList ?: return true
             for (unionType in types) {
@@ -209,8 +205,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             val isMethodRef = element.parent is VlangCallExpr
 
             if (!isMethodRef && !processNamedElements(processor, newState, typ.getFieldList(), localResolve)) return false
-            val fqn = (typ.parent as VlangStructDeclaration).getQualifiedName()
-            if (!processMethods(fqn, processor, newState)) return false
+            if (!processMethods(typ, processor, newState, localResolve)) return false
 
             typ.embeddedStructList.forEach {
                 if (!processType(it.type, processor, newState)) return false
@@ -224,8 +219,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             val isMethodRef = element.parent is VlangCallExpr
 
             if (!isMethodRef && !processNamedElements(processor, newState, typ.getFieldList(), localResolve)) return false
-            val fqn = (typ.parent as VlangUnionDeclaration).getQualifiedName()
-            if (!processMethods(fqn, processor, newState)) return false
+            if (!processMethods(typ, processor, newState, localResolve)) return false
         }
 
         if (typ is VlangInterfaceType) {
@@ -233,8 +227,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
             if (!isMethodRef && !processNamedElements(processor, newState, typ.getFieldList(), localResolve)) return false
             if (!processNamedElements(processor, newState, typ.methodList, localResolve)) return false
-            val fqn = (typ.parent as VlangInterfaceDeclaration).getQualifiedName()
-            if (!processMethods(fqn, processor, newState)) return false
+            if (!processMethods(typ, processor, newState, localResolve)) return false
         }
 
         if (typ is VlangEnumType) {
@@ -242,8 +235,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         }
 
         if (typ is VlangArrayOrSliceType) {
-            val fqn = VlangPsiImplUtil.getFqn(moduleName, typ.text)
-            if (!processMethods(fqn, processor, newState)) return false
+            if (!processMethods(typ, processor, newState, localResolve)) return false
 
             val builtin = VlangConfiguration.getInstance(type.project).builtinLocation
             val arrayVirtualFile = builtin?.findChild("array.v") ?: return false
@@ -254,18 +246,14 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         }
 
         if (typ is VlangMapType) {
-            val fqn = VlangPsiImplUtil.getFqn(moduleName, typ.text)
-            if (!processMethods(fqn, processor, newState)) return false
+            if (!processMethods(typ, processor, newState, localResolve)) return false
         }
 
         return true
     }
 
-    private fun processMethods(fqn: String?, processor: VlangScopeProcessor, state: ResolveState): Boolean {
-        return VlangMethodIndex.processPrefix("$fqn.", myElement.project, null) {
-            if (!processor.execute(it, state)) return@processPrefix false
-            true
-        }
+    private fun processMethods(type: VlangType, processor: VlangScopeProcessor, state: ResolveState, localResolve: Boolean): Boolean {
+        return processNamedElements(processor, state, VlangLangUtil.getMethodList(type), localResolve)
     }
 
     private fun processTypeRef(type: VlangType?, processor: VlangScopeProcessor, state: ResolveState): Boolean {

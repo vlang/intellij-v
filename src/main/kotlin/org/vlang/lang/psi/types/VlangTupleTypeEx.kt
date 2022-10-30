@@ -13,6 +13,12 @@ class VlangTupleTypeEx(raw: VlangTupleType) : VlangBaseTypeEx<VlangTupleType>(ra
         append(")")
     }
 
+    override fun qualifiedName() = buildString {
+        append("(")
+        append(types.joinToString(", ") { it.qualifiedName() })
+        append(")")
+    }
+
     override fun readableName(context: PsiElement) = buildString {
         append("(")
         append(types.joinToString(", ") { it.readableName(context) })

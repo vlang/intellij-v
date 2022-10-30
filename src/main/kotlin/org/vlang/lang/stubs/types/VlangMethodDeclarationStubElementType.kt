@@ -49,16 +49,16 @@ class VlangMethodDeclarationStubElementType(name: String) :
         }
 
         val typeName = stub.typeName ?: return
-        if (typeName.isNotEmpty()) {
-            val parent = stub.parentStub
-            if (parent is VlangFileStub) {
-                val moduleName = parent.getModuleQualifiedName()
-                if (moduleName.isNullOrEmpty()) {
-                    sink.occurrence(VlangMethodIndex.KEY, "$typeName.$name")
-                } else {
-                    sink.occurrence(VlangMethodIndex.KEY, "$moduleName.$typeName.$name")
-                }
-            }
+        if (typeName.isEmpty()) return
+
+        val parent = stub.parentStub
+        if (parent !is VlangFileStub) return
+
+        val moduleName = parent.getModuleQualifiedName()
+        if (moduleName.isNullOrEmpty()) {
+            sink.occurrence(VlangMethodIndex.KEY, typeName)
+        } else {
+            sink.occurrence(VlangMethodIndex.KEY, "$moduleName.$typeName")
         }
     }
 

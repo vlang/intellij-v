@@ -590,17 +590,14 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         val pos = parameters.position
 
         if (VlangCompletionUtil.shouldSuppressCompletion(pos)) {
-            result.stopHere()
             return true
         }
 
         if (pos.parentOfType<VlangLiteralValueExpression>() != null) {
-            result.stopHere()
             return true
         }
 
         if (VlangPsiImplUtil.prevDot(pos)) {
-            result.stopHere()
             return true
         }
         return false

@@ -15,6 +15,13 @@ class VlangMapTypeEx(raw: VlangMapType): VlangBaseTypeEx<VlangMapType>(raw) {
         append(value)
     }
 
+    override fun qualifiedName() = buildString {
+        append("map[")
+        append(key.qualifiedName())
+        append("]")
+        append(value.qualifiedName())
+    }
+
     override fun readableName(context: PsiElement) = buildString {
         append("map[")
         append(key.readableName(context))

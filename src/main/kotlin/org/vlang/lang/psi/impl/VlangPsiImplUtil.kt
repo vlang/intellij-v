@@ -1362,13 +1362,8 @@ object VlangPsiImplUtil {
         val contextFile = if (checkContainingFile) VlangReference.getContextFile(state) else null
         for (definition in elements) {
             if (!condition.value(definition)) continue
-            if (!definition.isValid || checkContainingFile
-            /*&& !VlangPsiImplUtil.allowed(
-                definition.getContainingFile(),
-                contextFile,
-                module
-            )*/
-            ) continue
+            if (!definition.isValid || checkContainingFile)
+                continue
             if (!processor.execute(definition, state.put(LOCAL_RESOLVE, localResolve)))
                 return false
         }

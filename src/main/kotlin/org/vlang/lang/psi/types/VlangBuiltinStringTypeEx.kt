@@ -8,6 +8,8 @@ import org.vlang.lang.psi.VlangType
 class VlangBuiltinStringTypeEx(raw: VlangStructType) : VlangBaseTypeEx<VlangType>(raw) {
     override fun toString() = "string"
 
+    override fun qualifiedName(): String = "builtin.string"
+
     override fun readableName(context: PsiElement) = "string"
 
     override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {

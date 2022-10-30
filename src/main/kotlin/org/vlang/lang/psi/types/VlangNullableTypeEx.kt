@@ -9,6 +9,8 @@ class VlangNullableTypeEx(raw: VlangNullableType) : VlangBaseTypeEx<VlangNullabl
 
     override fun toString() = "?".safeAppend(inner)
 
+    override fun qualifiedName() = "?".safeAppend(inner?.qualifiedName())
+
     override fun readableName(context: PsiElement) = "?".safeAppend(inner?.readableName(context))
 
     override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {

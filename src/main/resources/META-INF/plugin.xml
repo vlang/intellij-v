@@ -269,26 +269,33 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
 
         <completion.contributor
           language="vlang"
+          id="VlangCommonAttributesCompletionContributor"
           order="first"
-          implementationClass="org.vlang.lang.completion.VlangClosureCompletionContributor"/>
+          implementationClass="org.vlang.lang.completion.VlangCommonAttributesCompletionContributor"/>
 
         <completion.contributor
           language="vlang"
-          implementationClass="org.vlang.lang.completion.VlangContextCompletionContributor"/>
-
-        <completion.contributor
-		      language="vlang"
-		      implementationClass="org.vlang.lang.completion.VlangModuleNameCompletionContributor"/>
-
-        <completion.contributor
-          language="vlang"
-          order="last"
+          id="VlangKeywordsCompletionContributor"
+          order="after VlangCommonAttributesCompletionContributor"
           implementationClass="org.vlang.lang.completion.VlangKeywordsCompletionContributor"/>
 
         <completion.contributor
           language="vlang"
-          order="first"
-          implementationClass="org.vlang.lang.completion.VlangCommonAttributesCompletionContributor"/>
+          id="VlangClosureCompletionContributor"
+          order="after VlangKeywordsCompletionContributor"
+          implementationClass="org.vlang.lang.completion.VlangClosureCompletionContributor"/>
+
+        <completion.contributor
+          language="vlang"
+          id="VlangModuleNameCompletionContributor"
+          order="after VlangClosureCompletionContributor"
+          implementationClass="org.vlang.lang.completion.VlangModuleNameCompletionContributor"/>
+
+        <completion.contributor
+          language="vlang"
+          id="VlangContextCompletionContributor"
+          order="after VlangKeywordsCompletionContributor"
+          implementationClass="org.vlang.lang.completion.VlangContextCompletionContributor"/>
 
         <typedHandler implementation="org.vlang.lang.completion.VlangTypedHandler"/>
         <enterHandlerDelegate implementation="org.vlang.lang.completion.VlangEnterHandlerDelegate"/>
