@@ -33,29 +33,6 @@ class VlangMethodIndex : StringStubIndexExtension<VlangMethodDeclaration>() {
                 VlangMethodDeclaration::class.java, processor
             )
         }
-
-        fun processPrefix(
-            prefix: String,
-            project: Project,
-            scope: GlobalSearchScope?,
-            processor: Processor<VlangMethodDeclaration>,
-        ): Boolean {
-            val keys = StubIndex.getInstance().getAllKeys(KEY, project)
-            for (key in keys) {
-                if (!key.startsWith(prefix)) {
-                    continue
-                }
-
-                val els = StubIndex.getElements(KEY, key, project, null, null, VlangMethodDeclaration::class.java)
-                for (el in els) {
-                    if (!processor.process(el)) {
-                        return false
-                    }
-                }
-            }
-
-            return true
-        }
     }
 
     override fun getVersion() = VlangFileElementType.VERSION + 2

@@ -30,7 +30,13 @@ class VlangTupleTypeEx(raw: VlangTupleType) : VlangBaseTypeEx<VlangTupleType>(ra
     }
 
     override fun isEqual(rhs: VlangTypeEx<*>): Boolean {
-        return true // TODO: implement this
+        if (rhs !is VlangTupleTypeEx) return false
+
+        if (types.size != rhs.types.size) {
+            return false
+        }
+
+        return types.zip(rhs.types).all { (lhs, rhs) -> lhs.isEqual(rhs) }
     }
 
     override fun accept(visitor: VlangTypeVisitor) {

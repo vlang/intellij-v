@@ -15,44 +15,6 @@ class VlangModulesFingerprintIndex : StringStubIndexExtension<VlangFile>() {
         fun find(name: String, project: Project, scope: GlobalSearchScope?): Collection<VlangFile> {
             return StubIndex.getElements(KEY, name, project, scope, null, VlangFile::class.java)
         }
-
-        fun getAll(project: Project): List<VlangFile> {
-            val result = mutableListOf<VlangFile>()
-            for (key in StubIndex.getInstance().getAllKeys(KEY, project)) {
-                val els = StubIndex.getElements(
-                    KEY,
-                    key,
-                    project,
-                    null,
-                    null,
-                    VlangFile::class.java
-                )
-                result.addAll(els)
-            }
-
-            return result
-        }
-
-        fun getPrefixed(project: Project, prefix: String): List<VlangFile> {
-            val result = mutableListOf<VlangFile>()
-            for (key in StubIndex.getInstance().getAllKeys(KEY, project)) {
-                if (!key.startsWith(prefix)) {
-                    continue
-                }
-
-                val els = StubIndex.getElements(
-                    KEY,
-                    key,
-                    project,
-                    null,
-                    null,
-                    VlangFile::class.java
-                )
-                result.addAll(els)
-            }
-
-            return result
-        }
     }
 
     override fun getVersion() = VlangFileElementType.VERSION + 2

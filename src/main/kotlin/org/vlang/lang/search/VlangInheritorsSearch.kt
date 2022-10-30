@@ -4,74 +4,62 @@ import com.intellij.openapi.application.QueryExecutorBase
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Condition
-import com.intellij.psi.PsiElement
 import com.intellij.psi.search.GlobalSearchScope
-import com.intellij.psi.search.ProjectScope
 import com.intellij.psi.search.searches.DefinitionsScopedSearch
-import com.intellij.psi.util.parentOfType
 import com.intellij.util.Processor
 import com.intellij.util.containers.JBIterable
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.impl.VlangLangUtil
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangFunctionTypeEx
 import org.vlang.lang.stubs.index.VlangFieldFingerprintIndex
 import org.vlang.lang.stubs.index.VlangMethodFingerprintIndex
-import org.vlang.lang.stubs.index.VlangNamesIndex
 
 class VlangInheritorsSearch : QueryExecutorBase<VlangNamedElement, DefinitionsScopedSearch.SearchParameters>(true) {
     override fun processQuery(queryParameters: DefinitionsScopedSearch.SearchParameters, processor: Processor<in VlangNamedElement>) {
         if (!queryParameters.isCheckDeep) return
 
-        val o = queryParameters.element
-        if (o is VlangInterfaceDeclaration) {
-            val interfaceType = o.interfaceType
-            val visitedSpecs = ReferenceOpenHashSet<VlangNamedElement>()
-            val ownMethods = interfaceType.methodList
-            val ownFields = interfaceType.getFieldList()
+        val element = queryParameters.element as? VlangInterfaceDeclaration ?: return
 
-            processTypeSpec(
-                queryParameters,
-                processor,
-                o,
-                interfaceType,
-                ownMethods,
-                ownFields,
-                true,
-                visitedSpecs
-            )
-        }
+        val visitedSpecs = ReferenceOpenHashSet<VlangNamedElement>()
+        val interfaceType = element.interfaceType
+        val ownMethods = interfaceType.methodList
+        val ownFields = interfaceType.getFieldList()
+
+        processMethodOwners(
+            processor,
+            element,
+            interfaceType,
+            ownMethods,
+            ownFields,
+            visitedSpecs
+        )
     }
 
-    fun processTypeSpec(
-        parameter: DefinitionsScopedSearch.SearchParameters,
+    fun processMethodOwners(
         processor: Processor<in VlangNamedElement>,
         typeSpec: VlangNamedElement,
         interfaceType: VlangInterfaceType,
         methods: Collection<VlangInterfaceMethodDefinition>,
         fields: List<VlangFieldDefinition>,
-        canBeImplementedOutsidePackage: Boolean,
     ) {
-        processTypeSpec(
-            parameter,
+        processMethodOwners(
             processor,
             typeSpec,
             interfaceType,
             methods,
             fields,
-            canBeImplementedOutsidePackage,
             ReferenceOpenHashSet()
         )
     }
 
-    fun processTypeSpec(
-        parameter: DefinitionsScopedSearch.SearchParameters,
+    fun processMethodOwners(
         processor: Processor<in VlangNamedElement>,
         typeSpec: VlangNamedElement,
         interfaceType: VlangInterfaceType,
         methods: Collection<VlangInterfaceMethodDefinition>,
         fields: List<VlangFieldDefinition>,
-        canBeImplementedOutsidePackage: Boolean,
         visitedSpecs: MutableSet<VlangNamedElement>,
     ) {
         val searchScope = GlobalSearchScope.allScope(typeSpec.project)
@@ -79,23 +67,24 @@ class VlangInheritorsSearch : QueryExecutorBase<VlangNamedElement, DefinitionsSc
         val condition = Condition { spec: VlangNamedElement ->
             val struct = (spec as? VlangStructDeclaration)?.structType ?: return@Condition false
 
-            checkImplementsInterface(interfaceType, struct, typeSpec)
+            checkImplementsInterface(interfaceType, struct)
         }
-        searchInContentFirst(project, searchScope) { scope ->
+
+        val candidateProcessor = VlangGotoUtil.createCandidatesProcessor(processor, condition)
+
+        VlangGotoUtil.searchInContentFirst(project, searchScope) {
             if (methods.isNotEmpty()) {
                 processMethodOwners(
                     project,
                     methods,
-                    scope,
-                    createCandidatesProcessor(processor, condition),
+                    candidateProcessor,
                     visitedSpecs
                 )
             } else {
                 processFieldOwners(
                     project,
                     fields,
-                    scope,
-                    createCandidatesProcessor(processor, condition),
+                    candidateProcessor,
                     visitedSpecs
                 )
             }
@@ -105,15 +94,10 @@ class VlangInheritorsSearch : QueryExecutorBase<VlangNamedElement, DefinitionsSc
     private fun checkImplementsInterface(
         interfaceType: VlangInterfaceType,
         type: VlangStructType,
-        context: PsiElement?,
     ): Boolean {
         val methods = interfaceType.methodList
         val fields = interfaceType.getFieldList()
-
-        val structName = (type.parent as? VlangStructDeclaration)?.getQualifiedName() ?: return false
-        val structMethods = VlangNamesIndex.getAllPrefix("$structName.", type.project).filter {
-            VlangMethodFingerprintIndex.find(it.name ?: "", type.project, null).isNotEmpty()
-        }.mapNotNull { it as? VlangMethodDeclaration }
+        val structMethods = VlangLangUtil.getMethodList(type)
 
         val structFields = type.getFieldList()
 
@@ -155,27 +139,14 @@ class VlangInheritorsSearch : QueryExecutorBase<VlangNamedElement, DefinitionsSc
         }
     }
 
-    private fun searchInContentFirst(
-        project: Project,
-        scope: GlobalSearchScope,
-        searcher: Processor<in GlobalSearchScope>,
-    ) {
-        val projectContentScope = ProjectScope.getContentScope(project)
-        if (!searcher.process(scope.intersectWith(projectContentScope))) {
-            return
-        }
-        searcher.process(scope.intersectWith(GlobalSearchScope.notScope(projectContentScope)))
-    }
-
     private fun processMethodOwners(
         project: Project,
         methods: Collection<VlangInterfaceMethodDefinition>,
-        scope: GlobalSearchScope,
         processor: Processor<in VlangNamedElement>,
         visitedSpecs: MutableSet<VlangNamedElement>,
     ): Boolean {
         for (method in JBIterable.from(methods).filter { obj -> obj.isValid }) {
-            if (!processMethodStructs(project, scope, processor, visitedSpecs, method)) {
+            if (!processMethodStructs(project, processor, visitedSpecs, method)) {
                 return false
             }
         }
@@ -185,12 +156,11 @@ class VlangInheritorsSearch : QueryExecutorBase<VlangNamedElement, DefinitionsSc
     private fun processFieldOwners(
         project: Project,
         fields: Collection<VlangFieldDefinition>,
-        scope: GlobalSearchScope,
         processor: Processor<in VlangNamedElement>,
         visitedSpecs: MutableSet<VlangNamedElement>,
     ): Boolean {
         for (field in JBIterable.from(fields).filter { obj -> obj.isValid }) {
-            if (!processFieldStructs(project, scope, processor, visitedSpecs, field)) {
+            if (!processFieldStructs(project, processor, visitedSpecs, field)) {
                 return false
             }
         }
@@ -199,17 +169,16 @@ class VlangInheritorsSearch : QueryExecutorBase<VlangNamedElement, DefinitionsSc
 
     private fun processMethodStructs(
         project: Project,
-        scope: GlobalSearchScope,
         processor: Processor<in VlangNamedElement>,
         visitedStructs: MutableSet<VlangNamedElement>,
         method: VlangInterfaceMethodDefinition,
     ): Boolean {
         val fingerprint = method.name ?: return true
 
-        return VlangMethodFingerprintIndex.process(fingerprint, project, null) { m ->
+        return VlangMethodFingerprintIndex.process(fingerprint, project, null) { methodSpec ->
             ProgressManager.checkCanceled()
 
-            val structType = m.receiverType.resolveType() as? VlangStructType ?: return@process true
+            val structType = methodSpec.receiverType.resolveType() as? VlangStructType ?: return@process true
             val structDecl = structType.parent as? VlangStructDeclaration
             structDecl == null || (!visitedStructs.add(structDecl)) || processor.process(structDecl)
         }
@@ -217,34 +186,17 @@ class VlangInheritorsSearch : QueryExecutorBase<VlangNamedElement, DefinitionsSc
 
     private fun processFieldStructs(
         project: Project,
-        scope: GlobalSearchScope,
         processor: Processor<in VlangNamedElement>,
         visitedStructs: MutableSet<VlangNamedElement>,
         field: VlangFieldDefinition,
     ): Boolean {
         val fingerprint = field.name ?: return true
 
-        return VlangFieldFingerprintIndex.process(fingerprint, project, null) { field ->
+        return VlangFieldFingerprintIndex.process(fingerprint, project, null) { fieldSpec ->
             ProgressManager.checkCanceled()
 
-            val structType = field.parentOfType<VlangStructType>() ?: return@process true
-            val structDecl = structType.parent as? VlangStructDeclaration
-            structDecl == null || (!visitedStructs.add(structDecl)) || processor.process(structDecl)
-        }
-    }
-
-    private fun createCandidatesProcessor(
-        processor: Processor<in VlangNamedElement>,
-        condition: Condition<VlangNamedElement?>,
-    ): Processor<VlangNamedElement?> {
-        val visitedSpecs = ReferenceOpenHashSet<VlangNamedElement>()
-
-        return Processor<VlangNamedElement?> { candidate ->
-            ProgressManager.checkCanceled()
-            if (!visitedSpecs.add(candidate)) return@Processor true
-            if (condition.value(candidate) && !processor.process(candidate)) return@Processor false
-
-            true
+            val structDecl = fieldSpec.getOwner()
+            !visitedStructs.add(structDecl) || processor.process(structDecl)
         }
     }
 }

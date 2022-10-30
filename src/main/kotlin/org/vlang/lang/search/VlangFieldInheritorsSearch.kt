@@ -3,9 +3,11 @@ package org.vlang.lang.search
 import com.intellij.openapi.application.QueryExecutorBase
 import com.intellij.psi.search.searches.DefinitionsScopedSearch
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.psi.util.parentOfType
 import com.intellij.util.Processor
-import org.vlang.lang.psi.*
+import org.vlang.lang.psi.VlangFieldDefinition
+import org.vlang.lang.psi.VlangInterfaceType
+import org.vlang.lang.psi.VlangNamedElement
+import org.vlang.lang.psi.VlangStructDeclaration
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 
 class VlangFieldInheritorsSearch : QueryExecutorBase<VlangFieldDefinition, DefinitionsScopedSearch.SearchParameters>(true) {
@@ -16,15 +18,13 @@ class VlangFieldInheritorsSearch : QueryExecutorBase<VlangFieldDefinition, Defin
         if (!parameter.isCheckDeep) return
 
         val field = parameter.element as? VlangFieldDefinition ?: return
-        val interfaceType = PsiTreeUtil.getStubOrPsiParentOfType(field, VlangInterfaceType::class.java)
-        val decl = interfaceType?.parentOfType<VlangInterfaceDeclaration>() ?: return
-        if (!interfaceType.isValid) return
+        val interfaceType = PsiTreeUtil.getStubOrPsiParentOfType(field, VlangInterfaceType::class.java) ?: return
+        val decl = field.getOwner()
 
-        VlangInheritorsSearch().processTypeSpec(parameter, { spec: VlangNamedElement ->
-            val struct = spec as VlangStructDeclaration
-            val structType = spec.structType
-            val name = struct.getQualifiedName() ?: return@processTypeSpec true
-            val structFields = structType.getFieldList()
+        VlangInheritorsSearch().processMethodOwners({ spec: VlangNamedElement ->
+            spec as VlangStructDeclaration
+
+            val structFields = spec.structType.getFieldList()
 
             val structField = structFields.find {
                 val lhsTypeEx = it.getType(null).toEx()
@@ -32,7 +32,7 @@ class VlangFieldInheritorsSearch : QueryExecutorBase<VlangFieldDefinition, Defin
                 it.name == field.name && lhsTypeEx.isEqual(rhsTypeEx)
             }
 
-            structField == null || field === structField || processor.process(structField)
-        }, decl, interfaceType, listOf(), mutableListOf(field), field.isPublic())
+            structField == null || field == structField || processor.process(structField)
+        }, decl, interfaceType, listOf(), mutableListOf(field))
     }
 }

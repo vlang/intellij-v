@@ -54,7 +54,11 @@ class VlangFunctionTypeEx(raw: VlangFunctionType?, signature: VlangSignature? = 
             return false
         }
 
-        if (result == null || rhs.result == null || !result.isEqual(rhs.result)) {
+        if (result == null && rhs.result != null || result != null && rhs.result == null) {
+            return false
+        }
+
+        if (result != null && rhs.result != null && !result.isEqual(rhs.result)) {
             return false
         }
 

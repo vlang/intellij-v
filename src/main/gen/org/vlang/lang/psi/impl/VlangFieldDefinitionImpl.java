@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.VlangCompositeElement;
 import org.vlang.lang.psi.VlangFieldDefinition;
+import org.vlang.lang.psi.VlangNamedElement;
 import org.vlang.lang.psi.VlangVisitor;
 import org.vlang.lang.stubs.VlangFieldDefinitionStub;
 
@@ -65,6 +66,12 @@ public class VlangFieldDefinitionImpl extends VlangNamedElementImpl<VlangFieldDe
   @Override
   public void makeMutable() {
     VlangPsiImplUtil.makeMutable(this);
+  }
+
+  @Override
+  @NotNull
+  public VlangNamedElement getOwner() {
+    return VlangPsiImplUtil.getOwner(this);
   }
 
 }

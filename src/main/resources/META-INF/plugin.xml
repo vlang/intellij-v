@@ -65,12 +65,11 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
 
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangModulesIndex"/>
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangModulesFingerprintIndex"/>
-        <stubIndex implementation="org.vlang.lang.stubs.index.VlangFunctionIndex"/>
-        <stubIndex implementation="org.vlang.lang.stubs.index.VlangFieldIndex"/>
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangMethodIndex"/>
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangFieldFingerprintIndex"/>
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangMethodFingerprintIndex"/>
-        <stubIndex implementation="org.vlang.lang.stubs.index.VlangTypeAliasIndex"/>
+        <stubIndex implementation="org.vlang.lang.stubs.index.VlangInterfaceMethodFingerprintIndex"/>
+        <stubIndex implementation="org.vlang.lang.stubs.index.VlangInterfaceFieldFingerprintIndex"/>
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangNamesIndex"/>
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangClassLikeIndex"/>
         <stubElementTypeHolder class="org.vlang.lang.VlangTypes"/>
@@ -81,9 +80,22 @@ Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
         <languageInjectionPerformer language="vlang"
                                     implementationClass="org.vlang.ide.injection.VlangLanguageInjectionPerformer"/>
 
-<!--        <definitionsScopedSearch implementation="org.vlang.lang.search.VlangInheritorsSearch"/>-->
+        <!-- Searches -->
+        <definitionsScopedSearch implementation="org.vlang.lang.search.VlangInheritorsSearch"/>
+        <definitionsScopedSearch implementation="org.vlang.lang.search.VlangMethodInheritorsSearch"/>
+        <definitionsScopedSearch implementation="org.vlang.lang.search.VlangFieldInheritorsSearch"/>
+        <definitionsScopedSearch implementation="org.vlang.lang.search.VlangSuperSearch"/>
+        <definitionsScopedSearch implementation="org.vlang.lang.search.VlangSuperMethodSearch"/>
+        <definitionsScopedSearch implementation="org.vlang.lang.search.VlangSuperFieldSearch"/>
+
         <codeInsight.lineMarkerProvider language="vlang"
                                         implementationClass="org.vlang.lang.search.VlangInheritorsLineMarkerProvider"/>
+        <codeInsight.lineMarkerProvider language="vlang"
+                                        implementationClass="org.vlang.lang.search.VlangSuperMarkerProvider"/>
+        <codeInsight.gotoSuper language="vlang"
+                               implementationClass="org.vlang.lang.search.VlangGotoSuperHandler"/>
+        <!-- Searches End -->
+
         <codeInsight.lineMarkerProvider language="vlang"
                                         implementationClass="org.vlang.ide.highlight.VlangRecursiveCallMarkerProvider"/>
         <codeInsight.inlayProvider language="vlang"

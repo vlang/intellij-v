@@ -5,10 +5,11 @@ import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.stubs.StubInputStream
 import com.intellij.psi.stubs.StubOutputStream
 import org.vlang.lang.psi.VlangFieldDefinition
+import org.vlang.lang.psi.VlangInterfaceDeclaration
 import org.vlang.lang.psi.impl.VlangFieldDefinitionImpl
 import org.vlang.lang.stubs.VlangFieldDefinitionStub
 import org.vlang.lang.stubs.index.VlangFieldFingerprintIndex
-import org.vlang.lang.stubs.index.VlangFieldIndex
+import org.vlang.lang.stubs.index.VlangInterfaceFieldFingerprintIndex
 
 class VlangFieldDefinitionStubElementType(name: String) : VlangNamedStubElementType<VlangFieldDefinitionStub, VlangFieldDefinition>(name) {
     override fun createPsi(stub: VlangFieldDefinitionStub): VlangFieldDefinition {
@@ -31,10 +32,13 @@ class VlangFieldDefinitionStubElementType(name: String) : VlangNamedStubElementT
     override fun indexStub(stub: VlangFieldDefinitionStub, sink: IndexSink) {
         super.indexStub(stub, sink)
 
-        val name = stub.name
-        if (name != null) {
-            sink.occurrence(VlangFieldFingerprintIndex.KEY, name)
-            sink.occurrence(VlangFieldIndex.KEY, name)
+        val name = stub.name ?: return
+
+        sink.occurrence(VlangFieldFingerprintIndex.KEY, name)
+
+        val insideInterface = stub.getParentStubOfType(VlangInterfaceDeclaration::class.java) != null
+        if (insideInterface) {
+            sink.occurrence(VlangInterfaceFieldFingerprintIndex.KEY, name)
         }
     }
 }

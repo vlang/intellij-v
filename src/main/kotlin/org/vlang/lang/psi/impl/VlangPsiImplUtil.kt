@@ -347,6 +347,17 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getOwner(o: VlangFieldDefinition): VlangNamedElement {
+        return o.parentOfType()
+            ?: error("Can't find owner for field ${o.name}, field definition must be inside a struct, union or interface")
+    }
+
+    @JvmStatic
+    fun getOwner(o: VlangInterfaceMethodDefinition): VlangNamedElement {
+        return o.parentOfType() ?: error("Can't find owner for method ${o.name}, interface method definition must be inside interface")
+    }
+
+    @JvmStatic
     fun getQualifier(o: VlangReferenceExpression): VlangCompositeElement? {
         return PsiTreeUtil.getChildOfType(o, VlangExpression::class.java)
     }

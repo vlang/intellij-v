@@ -1,0 +1,75 @@
+package org.vlang.lang.search
+
+import com.intellij.lang.LanguageCodeInsightActionHandler
+import com.intellij.openapi.editor.Editor
+import com.intellij.openapi.project.Project
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiFile
+import com.intellij.psi.util.parentOfType
+import org.vlang.lang.psi.VlangFieldDefinition
+import org.vlang.lang.psi.VlangFile
+import org.vlang.lang.psi.VlangMethodDeclaration
+import org.vlang.lang.psi.VlangNamedElement
+import java.awt.event.MouseEvent
+
+class VlangGotoSuperHandler : LanguageCodeInsightActionHandler {
+    override fun startInWriteAction() = false
+
+    override fun isValidFor(editor: Editor, file: PsiFile?) = file is VlangFile
+
+    override fun invoke(project: Project, editor: Editor, file: PsiFile) {
+        val element = file.findElementAt(editor.caretModel.offset) ?: return
+        showPopup(element)
+    }
+
+    companion object {
+        val SUPER_SEARCH = VlangSuperSearch()
+
+        private fun showPopup(element: PsiElement) {
+            val namedElement = element.parentOfType<VlangNamedElement>() ?: return
+            showPopup(null, namedElement)
+        }
+
+        fun showPopup(event: MouseEvent?, typeSpec: VlangNamedElement) {
+            val name = typeSpec.name ?: ""
+            VlangGotoUtil.showPopup(
+                "Implemented Interface of $name",
+                { count ->
+                    "Type $name Implements $count interfaces"
+                },
+                event,
+                VlangGotoUtil.param(typeSpec),
+                VlangGotoUtil.getDefaultRenderer(typeSpec),
+                SUPER_SEARCH,
+            )
+        }
+
+        fun showPopup(event: MouseEvent?, method: VlangMethodDeclaration) {
+            val name = method.name ?: ""
+            VlangGotoUtil.showPopup(
+                "Implemented methods of $name",
+                { count ->
+                    "Method $name Implements Methods $count interfaces"
+                },
+                event,
+                VlangGotoUtil.param(method),
+                VlangGotoUtil.getDefaultRenderer(method),
+                VlangSuperMethodSearch.GO_SUPER_METHOD_SEARCH,
+            )
+        }
+
+        fun showPopup(event: MouseEvent?, field: VlangFieldDefinition) {
+            val name = field.name ?: ""
+            VlangGotoUtil.showPopup(
+                "Implemented fields of $name",
+                { count ->
+                    "Method $name Implements Fields $count interfaces"
+                },
+                event,
+                VlangGotoUtil.param(field),
+                VlangGotoUtil.getDefaultRenderer(field),
+                VlangSuperFieldSearch.GO_SUPER_FIELD_SEARCH,
+            )
+        }
+    }
+}

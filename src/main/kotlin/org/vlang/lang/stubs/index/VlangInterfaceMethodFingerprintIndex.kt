@@ -7,26 +7,26 @@ import com.intellij.psi.stubs.StubIndex
 import com.intellij.psi.stubs.StubIndexKey
 import com.intellij.util.Processor
 import org.vlang.lang.VlangFileElementType
-import org.vlang.lang.psi.VlangFieldDefinition
+import org.vlang.lang.psi.VlangInterfaceMethodDefinition
 
-class VlangFieldIndex : StringStubIndexExtension<VlangFieldDefinition>() {
+class VlangInterfaceMethodFingerprintIndex : StringStubIndexExtension<VlangInterfaceMethodDefinition>() {
     companion object {
-        val KEY = StubIndexKey.createIndexKey<String, VlangFieldDefinition>("vlang.field")
+        val KEY = StubIndexKey.createIndexKey<String, VlangInterfaceMethodDefinition>("vlang.interface.method.fingerprint")
 
         fun find(
             name: String, project: Project,
             scope: GlobalSearchScope?,
-        ): Collection<VlangFieldDefinition> {
-            return StubIndex.getElements(KEY, name, project, scope, null, VlangFieldDefinition::class.java)
+        ): Collection<VlangInterfaceMethodDefinition> {
+            return StubIndex.getElements(KEY, name, project, scope, null, VlangInterfaceMethodDefinition::class.java)
         }
 
         fun process(
             name: String, project: Project,
-            scope: GlobalSearchScope?, processor: Processor<VlangFieldDefinition>,
+            scope: GlobalSearchScope?, processor: Processor<VlangInterfaceMethodDefinition>,
         ): Boolean {
             return StubIndex.getInstance().processElements(
                 KEY, name, project, scope, null,
-                VlangFieldDefinition::class.java, processor
+                VlangInterfaceMethodDefinition::class.java, processor
             )
         }
     }

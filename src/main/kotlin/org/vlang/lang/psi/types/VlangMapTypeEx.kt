@@ -34,7 +34,9 @@ class VlangMapTypeEx(raw: VlangMapType): VlangBaseTypeEx<VlangMapType>(raw) {
     }
 
     override fun isEqual(rhs: VlangTypeEx<*>): Boolean {
-        return true // TODO: implement this
+        if (rhs !is VlangMapTypeEx) return false
+
+        return key.isEqual(rhs.key) && value.isEqual(rhs.value)
     }
 
     override fun accept(visitor: VlangTypeVisitor) {

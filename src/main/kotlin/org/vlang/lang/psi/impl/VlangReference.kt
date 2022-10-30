@@ -315,7 +315,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
         if (!processBlock(processor, state, true)) return false
 //        if (!processPseudoParams(processor, state)) return false
-        if (!processImportModules(file, processor, state, true)) return false
+        if (!processImportModules(file, processor, state)) return false
         if (!processImportedModules(file, processor, state)) return false
         if (!processImports(file, processor, state, myElement)) return false
         if (!processFileEntities(file, processor, state, true)) return false
@@ -471,7 +471,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
     }
 
     // TODO: redone
-    private fun processImportModules(file: VlangFile, processor: VlangScopeProcessor, state: ResolveState, localResolve: Boolean): Boolean {
+    private fun processImportModules(file: VlangFile, processor: VlangScopeProcessor, state: ResolveState): Boolean {
         if (identifier?.parentOfType<VlangImportSpec>() == null) {
             return true
         }

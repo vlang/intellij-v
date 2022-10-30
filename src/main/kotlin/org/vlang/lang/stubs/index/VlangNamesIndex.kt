@@ -16,24 +16,10 @@ class VlangNamesIndex : StringStubIndexExtension<VlangNamedElement>() {
 
         fun find(
             fqn: String,
-            name: String,
             project: Project,
             scope: GlobalSearchScope?,
         ): Collection<VlangNamedElement> {
-            val res = StubIndex.getElements(KEY, fqn, project, scope, VlangNamedElement::class.java)
-            if (res.isNotEmpty()) {
-                return res
-            }
-
-            val builtinName = "builtin.$name"
-
-            return StubIndex.getElements(
-                KEY,
-                builtinName,
-                project,
-                scope,
-                VlangNamedElement::class.java
-            )
+            return StubIndex.getElements(KEY, fqn, project, scope, VlangNamedElement::class.java)
         }
 
         fun process(
@@ -58,23 +44,6 @@ class VlangNamesIndex : StringStubIndexExtension<VlangNamedElement>() {
 
                 StubIndex.getElements(KEY, key, project, null, null, VlangNamedElement::class.java)
             }
-        }
-
-        fun getAll(project: Project): List<VlangNamedElement> {
-            val result = mutableListOf<VlangNamedElement>()
-            for (key in StubIndex.getInstance().getAllKeys(KEY, project)) {
-                val els = StubIndex.getElements(
-                    KEY,
-                    key,
-                    project,
-                    null,
-                    null,
-                    VlangNamedElement::class.java
-                )
-                result.addAll(els)
-            }
-
-            return result
         }
     }
 

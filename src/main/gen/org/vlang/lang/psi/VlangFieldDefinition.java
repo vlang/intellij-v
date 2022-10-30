@@ -24,4 +24,7 @@ public interface VlangFieldDefinition extends VlangMutable, VlangNamedElement, S
 
   void makeMutable();
 
+  @NotNull
+  VlangNamedElement getOwner();
+
 }

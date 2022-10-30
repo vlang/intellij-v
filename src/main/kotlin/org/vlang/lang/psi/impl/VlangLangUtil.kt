@@ -10,6 +10,10 @@ import org.vlang.lang.psi.VlangType
 import org.vlang.lang.stubs.index.VlangMethodIndex
 
 object VlangLangUtil {
+    fun findMethod(o: VlangType, name: String): VlangMethodDeclaration? {
+        return getMethodList(o).firstOrNull { it.name == name }
+    }
+
     fun getMethodList(o: VlangType): List<VlangMethodDeclaration> {
         return CachedValuesManager.getCachedValue(o) {
             CachedValueProvider.Result.create(

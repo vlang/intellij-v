@@ -6,12 +6,12 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.Processor
 import org.vlang.lang.psi.*
-import org.vlang.lang.stubs.index.VlangNamesIndex
+import org.vlang.lang.psi.impl.VlangLangUtil
 
 class VlangMethodInheritorsSearch : QueryExecutorBase<VlangSignatureOwner, DefinitionsScopedSearch.SearchParameters>(true) {
     override fun processQuery(
         parameter: DefinitionsScopedSearch.SearchParameters,
-        processor: Processor<in VlangSignatureOwner>
+        processor: Processor<in VlangSignatureOwner>,
     ) {
         if (!parameter.isCheckDeep) return
 
@@ -20,19 +20,12 @@ class VlangMethodInheritorsSearch : QueryExecutorBase<VlangSignatureOwner, Defin
         val decl = interfaceType?.parentOfType<VlangInterfaceDeclaration>() ?: return
         if (!interfaceType.isValid) return
 
-        VlangInheritorsSearch().processTypeSpec(parameter, { spec: VlangNamedElement ->
-            val struct = spec as VlangStructDeclaration
-            val name = struct.getQualifiedName() ?: return@processTypeSpec true
-            val fqn = name + "." + method.name
-            val structMethod = VlangNamesIndex.find(fqn, "", method.project, null) as? VlangMethodDeclaration
+        VlangInheritorsSearch().processMethodOwners({ owner: VlangNamedElement ->
+            val struct = owner as VlangStructDeclaration
+            val name = method.name ?: return@processMethodOwners true
+            val structMethod = VlangLangUtil.findMethod(struct.structType, name)
 
-//            val structMethod = structMethods.find {
-//                val lhsTypeEx = it.getType(null).toEx()
-//                val rhsTypeEx = method.getType(null).toEx()
-//                it.name == method.name && lhsTypeEx.isEqual(rhsTypeEx)
-//            }
-
-            structMethod == null || structMethod === method || processor.process(structMethod)
-        }, decl, interfaceType, mutableListOf(method), listOf(), method.isPublic())
+            structMethod == null || structMethod == method || processor.process(structMethod)
+        }, decl, interfaceType, mutableListOf(method), listOf())
     }
 }

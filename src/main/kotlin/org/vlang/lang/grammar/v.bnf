@@ -390,7 +390,7 @@ DefaultFieldValue ::= '=' Expression
 Tag ::= StringLiteral
 private FieldDefinitionList ::= FieldDefinition (',' FieldDefinition)*
 FieldDefinition ::= identifier {
-  methods=[getQualifier getQualifiedName isPublic isMutable makeMutable]
+  methods=[getQualifier getQualifiedName isPublic isMutable makeMutable getOwner]
   implements="org.vlang.lang.psi.VlangMutable"
   stubClass="org.vlang.lang.stubs.VlangFieldDefinitionStub"
 }
@@ -424,7 +424,7 @@ InterfaceMethodDeclaration ::= InterfaceMethodDefinition Attribute? DefaultField
 InterfaceMethodDefinition ::= identifier Signature {
   implements="org.vlang.lang.psi.VlangSignatureOwner"
   stubClass="org.vlang.lang.stubs.VlangInterfaceMethodDefinitionStub"
-  methods=[getTypeInner isPublic]
+  methods=[getTypeInner isPublic getOwner]
 }
 
 AnonymousInterfaceDefinition ::= Type {
