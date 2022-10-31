@@ -522,10 +522,6 @@ public class VlangVisitor extends PsiElementVisitor {
     // visitNamedElement(o);
   }
 
-  public void visitParameterDeclaration(@NotNull VlangParameterDeclaration o) {
-    visitCompositeElement(o);
-  }
-
   public void visitParameters(@NotNull VlangParameters o) {
     visitCompositeElement(o);
   }

@@ -7,7 +7,7 @@ import org.vlang.lang.psi.VlangSignature
 
 class VlangFunctionTypeEx(raw: VlangFunctionType?, signature: VlangSignature? = null) : VlangBaseTypeEx<VlangFunctionType?>(raw) {
     val signature = signature ?: raw?.getSignature()
-    val params = this.signature?.parameters?.parametersListWithTypes?.map { (_, type) -> type.toEx() } ?: emptyList()
+    val params = this.signature?.parameters?.paramDefinitionList?.map { param -> param.type.toEx() } ?: emptyList()
     val result = this.signature?.result?.type?.toEx()
 
     override fun toString() = buildString {

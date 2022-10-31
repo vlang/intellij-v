@@ -136,7 +136,6 @@ public interface VlangTypes {
   IElementType OR_BLOCK_EXPR = new VlangCompositeElementType("OR_BLOCK_EXPR");
   IElementType OR_EXPR = new VlangCompositeElementType("OR_EXPR");
   IElementType PARAMETERS = new VlangCompositeElementType("PARAMETERS");
-  IElementType PARAMETER_DECLARATION = new VlangCompositeElementType("PARAMETER_DECLARATION");
   IElementType PARAM_DEFINITION = VlangElementTypeFactory.stubFactory("PARAM_DEFINITION");
   IElementType PARENTHESES_EXPR = new VlangCompositeElementType("PARENTHESES_EXPR");
   IElementType PLAIN_ATTRIBUTE = new VlangCompositeElementType("PLAIN_ATTRIBUTE");
@@ -712,9 +711,6 @@ public interface VlangTypes {
       }
       else if (type == PARAMETERS) {
         return new VlangParametersImpl(node);
-      }
-      else if (type == PARAMETER_DECLARATION) {
-        return new VlangParameterDeclarationImpl(node);
       }
       else if (type == PARAM_DEFINITION) {
         return new VlangParamDefinitionImpl(node);

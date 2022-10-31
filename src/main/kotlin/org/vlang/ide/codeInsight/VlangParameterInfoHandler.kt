@@ -69,7 +69,7 @@ class VlangParameterInfoHandler : ParameterInfoHandlerWithTabActionSupport<Vlang
             var endHighlighting = 0
 
             if (parametersPresentations.isNotEmpty()) {
-                val selected = if (isLastParameterVariadic(parameters.parameterDeclarationList))
+                val selected = if (isLastParameterVariadic(parameters.paramDefinitionList))
                     context.currentParameterIndex.coerceAtMost(parametersPresentations.size - 1)
                 else
                     context.currentParameterIndex
@@ -98,28 +98,19 @@ class VlangParameterInfoHandler : ParameterInfoHandlerWithTabActionSupport<Vlang
         }
 
         private fun getParameterPresentations(parameters: VlangParameters): List<String> {
-            val paramDeclarations = parameters.parameterDeclarationList
+            val paramDeclarations = parameters.paramDefinitionList
             val paramPresentations = mutableListOf<String>()
 
-            for (paramDeclaration in paramDeclarations) {
-                val isVariadic = paramDeclaration.isVariadic
-                val paramDefinitionList = paramDeclaration.paramDefinitionList
-
-                for (paramDefinition in paramDefinitionList) {
-                    val separator = if (isVariadic) " ..." else " "
-                    paramPresentations.add(paramDefinition.text + separator + paramDeclaration.type.text)
-                }
-
-                if (paramDefinitionList.isEmpty()) {
-                    val separator = if (isVariadic) "..." else ""
-                    paramPresentations.add(separator + paramDeclaration.type.text)
-                }
+            for (paramDefinition in paramDeclarations) {
+                val isVariadic = paramDefinition.isVariadic
+                val separator = if (isVariadic) "..." else " "
+                paramPresentations.add(paramDefinition.text + separator + paramDefinition.type.text)
             }
 
             return paramPresentations
         }
 
-        private fun isLastParameterVariadic(declarations: List<VlangParameterDeclaration>): Boolean {
+        private fun isLastParameterVariadic(declarations: List<VlangParamDefinition>): Boolean {
             val lastItem = declarations.lastOrNull()
             return lastItem != null && lastItem.isVariadic
         }

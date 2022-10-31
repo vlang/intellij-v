@@ -30,11 +30,10 @@ V Language file
     SIGNATURE
       PARAMETERS
         PsiElement(VlangTokenType.()('(')
-        PARAMETER_DECLARATION
-          PARAM_DEFINITION
-            VAR_MODIFIERS
-              <empty list>
-            PsiElement(VlangTokenType.identifier)('idx')
+        PARAM_DEFINITION
+          VAR_MODIFIERS
+            <empty list>
+          PsiElement(VlangTokenType.identifier)('idx')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')

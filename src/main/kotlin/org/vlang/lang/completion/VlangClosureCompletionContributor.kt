@@ -105,11 +105,11 @@ class VlangClosureCompletionContributor : CompletionContributor() {
                 call: VlangCallExpr?,
                 templateVariables: List<String>,
             ): String {
-                val params = signature.parameters.parametersListWithTypes
+                val params = signature.parameters.paramDefinitionList
 
-                val paramsStrings = params.mapIndexed { index, (def, type) ->
-                    val variadic = def?.isVariadic ?: false
-                    val modifiers = def?.varModifiers?.text ?: ""
+                val paramsStrings = params.mapIndexed { index, param ->
+                    val variadic = param.isVariadic
+                    val modifiers = param.varModifiers?.text ?: ""
                     val templateVar = templateVariables[index]
 
                     buildString {
@@ -121,7 +121,7 @@ class VlangClosureCompletionContributor : CompletionContributor() {
                         if (variadic) {
                             append("...")
                         }
-                        processParamType(type.toEx(), signature, call)
+                        processParamType(param.type.toEx(), signature, call)
                     }
                 }
 
@@ -157,13 +157,13 @@ class VlangClosureCompletionContributor : CompletionContributor() {
             }
 
             private fun processTemplateVars(signature: VlangSignature): List<String> {
-                val params = signature.parameters.parametersList.map { it?.name }
+                val paramNames = signature.parameters.paramDefinitionList.map { it?.name }
 
-                if (params.size == 1) {
-                    return listOf(params.first() ?: "it")
+                if (paramNames.size == 1) {
+                    return listOf(paramNames.first() ?: "it")
                 }
 
-                return params.mapIndexed { index, name ->
+                return paramNames.mapIndexed { index, name ->
                     val suffix = if (index == 0) "" else index.toString()
                     name ?: "it$suffix"
                 }
@@ -188,7 +188,7 @@ class VlangClosureCompletionContributor : CompletionContributor() {
             private fun findTypesForImport(signature: VlangSignature, currentModule: String): MutableSet<VlangTypeEx<*>> {
                 val typesToImport = mutableSetOf<VlangTypeEx<*>>()
 
-                val types = signature.parameters.typeList
+                val types = signature.parameters.paramDefinitionList.mapNotNull { it.type }
                 types.forEach { type ->
                     type.toEx().accept(object : VlangTypeVisitor {
                         override fun enter(type: VlangTypeEx<*>): Boolean {

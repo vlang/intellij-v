@@ -254,12 +254,11 @@ V Language file
     SIGNATURE
       PARAMETERS
         PsiElement(VlangTokenType.()('(')
-        PARAMETER_DECLARATION
-          PARAM_DEFINITION
-            VAR_MODIFIERS
-              VAR_MODIFIER
-                PsiElement(VlangTokenType.mut)('mut')
-            PsiElement(VlangTokenType.identifier)('arr')
+        PARAM_DEFINITION
+          VAR_MODIFIERS
+            VAR_MODIFIER
+              PsiElement(VlangTokenType.mut)('mut')
+          PsiElement(VlangTokenType.identifier)('arr')
           ARRAY_OR_SLICE_TYPE
             PsiElement(VlangTokenType.[)('[')
             PsiElement(VlangTokenType.])(']')
@@ -267,20 +266,18 @@ V Language file
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('T')
         PsiElement(VlangTokenType.,)(',')
-        PARAMETER_DECLARATION
-          PARAM_DEFINITION
-            VAR_MODIFIERS
-              <empty list>
-            PsiElement(VlangTokenType.identifier)('l')
+        PARAM_DEFINITION
+          VAR_MODIFIERS
+            <empty list>
+          PsiElement(VlangTokenType.identifier)('l')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
         PsiElement(VlangTokenType.,)(',')
-        PARAMETER_DECLARATION
-          PARAM_DEFINITION
-            VAR_MODIFIERS
-              <empty list>
-            PsiElement(VlangTokenType.identifier)('r')
+        PARAM_DEFINITION
+          VAR_MODIFIERS
+            <empty list>
+          PsiElement(VlangTokenType.identifier)('r')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
@@ -519,11 +516,10 @@ V Language file
     SIGNATURE
       PARAMETERS
         PsiElement(VlangTokenType.()('(')
-        PARAMETER_DECLARATION
-          PARAM_DEFINITION
-            VAR_MODIFIERS
-              <empty list>
-            PsiElement(VlangTokenType.identifier)('arr')
+        PARAM_DEFINITION
+          VAR_MODIFIERS
+            <empty list>
+          PsiElement(VlangTokenType.identifier)('arr')
           ARRAY_OR_SLICE_TYPE
             PsiElement(VlangTokenType.[)('[')
             PsiElement(VlangTokenType.])(']')

@@ -34,6 +34,15 @@ abstract class ResolveTestBase : BasePlatformTestCase() {
         assertReferencedTo(name, true)
     }
 
+    protected fun assertUnresolved() {
+        val caret = carets!!.getOrNull(caretIndex++) ?: error("No more carets")
+        val offset = caret.offset
+
+        val ref = myFixture.file.findReferenceAt(offset)
+        val resolved = ref?.resolve()
+        check(resolved == null) { "Not expected reference found at caret" }
+    }
+
     protected fun file(path: String, @Language("vlang") text: String) {
         myFixture.configureByText(path, text)
     }

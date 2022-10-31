@@ -40,11 +40,10 @@ V Language file
     SIGNATURE
       PARAMETERS
         PsiElement(VlangTokenType.()('(')
-        PARAMETER_DECLARATION
-          PARAM_DEFINITION
-            VAR_MODIFIERS
-              <empty list>
-            PsiElement(VlangTokenType.identifier)('with_abbrev')
+        PARAM_DEFINITION
+          VAR_MODIFIERS
+            <empty list>
+          PsiElement(VlangTokenType.identifier)('with_abbrev')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('bool')
@@ -216,11 +215,10 @@ V Language file
     SIGNATURE
       PARAMETERS
         PsiElement(VlangTokenType.()('(')
-        PARAMETER_DECLARATION
-          PARAM_DEFINITION
-            VAR_MODIFIERS
-              <empty list>
-            PsiElement(VlangTokenType.identifier)('help_cmd')
+        PARAM_DEFINITION
+          VAR_MODIFIERS
+            <empty list>
+          PsiElement(VlangTokenType.identifier)('help_cmd')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Command')
@@ -1560,20 +1558,18 @@ V Language file
     SIGNATURE
       PARAMETERS
         PsiElement(VlangTokenType.()('(')
-        PARAMETER_DECLARATION
-          PARAM_DEFINITION
-            VAR_MODIFIERS
-              <empty list>
-            PsiElement(VlangTokenType.identifier)('s')
+        PARAM_DEFINITION
+          VAR_MODIFIERS
+            <empty list>
+          PsiElement(VlangTokenType.identifier)('s')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
         PsiElement(VlangTokenType.,)(',')
-        PARAMETER_DECLARATION
-          PARAM_DEFINITION
-            VAR_MODIFIERS
-              <empty list>
-            PsiElement(VlangTokenType.identifier)('indent_len')
+        PARAM_DEFINITION
+          VAR_MODIFIERS
+            <empty list>
+          PsiElement(VlangTokenType.identifier)('indent_len')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
@@ -1991,20 +1987,18 @@ V Language file
     SIGNATURE
       PARAMETERS
         PsiElement(VlangTokenType.()('(')
-        PARAMETER_DECLARATION
-          PARAM_DEFINITION
-            VAR_MODIFIERS
-              <empty list>
-            PsiElement(VlangTokenType.identifier)('a')
+        PARAM_DEFINITION
+          VAR_MODIFIERS
+            <empty list>
+          PsiElement(VlangTokenType.identifier)('a')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
         PsiElement(VlangTokenType.,)(',')
-        PARAMETER_DECLARATION
-          PARAM_DEFINITION
-            VAR_MODIFIERS
-              <empty list>
-            PsiElement(VlangTokenType.identifier)('b')
+        PARAM_DEFINITION
+          VAR_MODIFIERS
+            <empty list>
+          PsiElement(VlangTokenType.identifier)('b')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')

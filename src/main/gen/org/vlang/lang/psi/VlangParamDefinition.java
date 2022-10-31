@@ -9,15 +9,21 @@ import org.vlang.lang.stubs.VlangParamDefinitionStub;
 
 public interface VlangParamDefinition extends VlangMutable, VlangNamedElement, StubBasedPsiElement<VlangParamDefinitionStub> {
 
+  @NotNull
+  VlangType getType();
+
   @Nullable
   VlangVarModifiers getVarModifiers();
 
-  @NotNull
+  @Nullable
+  PsiElement getTripleDot();
+
+  @Nullable
   PsiElement getIdentifier();
 
   boolean isVariadic();
 
-  @NotNull
+  @Nullable
   String getName();
 
   boolean isPublic();

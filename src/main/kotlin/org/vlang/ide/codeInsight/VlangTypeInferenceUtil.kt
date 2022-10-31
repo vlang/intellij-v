@@ -29,10 +29,10 @@ object VlangTypeInferenceUtil {
             if (index == -1) return null
 
             val function = callExpr.resolve() as? VlangFunctionOrMethodDeclaration ?: return null
-            val params = function.getSignature()?.parameters?.parametersListWithTypes ?: return null
+            val params = function.getSignature()?.parameters?.paramDefinitionList ?: return null
 
             val param = params.getOrNull(index) ?: return null
-            return param.second?.resolveType() ?: return null
+            return param.type.resolveType()
         }
 
         if (element.parent is VlangValue) {

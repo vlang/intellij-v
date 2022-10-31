@@ -20,4 +20,5 @@ class TypeTest : TypeTestBase() {
     fun `test enum fetch`() = doTest("enum_fetch.v")
     fun `test sql`() = doTest("sql.v")
     fun `test globals`() = doTest("globals.v")
+    fun `test fields`() = doTest("fields.v")
 }

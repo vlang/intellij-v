@@ -119,7 +119,11 @@ object DocumentationGenerator {
         return type.generateDoc(this)
     }
 
-    private fun VlangVarModifiers.generateDoc(noHtml: Boolean = false): String {
+    private fun VlangVarModifiers?.generateDoc(short: Boolean = false, noHtml: Boolean = false): String {
+        if (this == null) {
+            return ""
+        }
+
         val modifiers = varModifierList
         val isVolatile = modifiers.any { it.volatile != null }
         val isStatic = modifiers.any { it.static != null }
@@ -136,14 +140,14 @@ object DocumentationGenerator {
                 append(" ")
             }
             if (isMutable) {
-                colorize("mutable", asKeyword, noHtml)
+                colorize(if (short) "mut" else "mutable", asKeyword, noHtml)
                 append(" ")
             }
             if (isShared) {
                 colorize("shared", asKeyword, noHtml)
                 append(" ")
             }
-        }
+        }.trim()
     }
 
     private fun VlangMemberModifiers?.generateDoc(element: VlangNamedElement): String {
@@ -169,57 +173,45 @@ object DocumentationGenerator {
         }
     }
 
-    private fun VlangSymbolVisibility.generateDoc(): String {
-        val parts = mutableListOf<String>()
-        if (pub != null) {
-            parts.add(colorize("public", asKeyword))
-        } else {
-            parts.add(colorize("private", asKeyword))
-        }
-        if (builtinGlobal != null) {
-            parts.add(colorize("builtin global", asKeyword))
-        }
-
-        return parts.joinToString(" ")
-    }
-
     private fun VlangParameters.generateDoc(): String {
-        val params = parametersListWithTypes
+        val params = paramDefinitionList
 
         if (params.isEmpty()) {
             return "()"
         }
 
         if (params.size == 1) {
-            val (param, type) = params.first()
-
+            val param = params.first()
             return buildString {
                 append("(")
-                append(param.generateDoc(type))
+                append(param.generateDocForMethod())
                 append(")")
             }
         }
 
-        val modifierMaxWidth = params.mapNotNull { it.first?.varModifiers?.generateDoc(noHtml = true)?.length }.maxOrNull() ?: 0
-        val paramNameMaxWidth = params.maxOfOrNull { it.first?.name?.length ?: 0 } ?: 0
+        val modifierMaxWidth = params.mapNotNull { it.varModifiers.generateDoc(noHtml = true).length }.maxOrNull() ?: 0
+        val paramNameMaxWidth = params.maxOfOrNull { it.name?.length ?: 0 } ?: 0
 
         return buildString {
             append("(")
             append("\n")
             append(
-                params.joinToString(",\n") { (param, type) ->
+                params.joinToString(",\n") { param ->
                     buildString {
+                        val modifiersRawLength = param.varModifiers.generateDoc(noHtml = true).length
+                        val modifiers = param.varModifiers.generateDoc()
+
                         append("   ")
-                        if (param.varModifiers != null) {
-                            val modifiersRawLength = param.varModifiers?.generateDoc(noHtml = true)?.length ?: 0
-                            val modifiers = param.varModifiers?.generateDoc()
-                            append(modifiers)
-                            append("".padEnd(modifierMaxWidth - modifiersRawLength))
+                        append(modifiers)
+                        append("".padEnd(modifierMaxWidth - modifiersRawLength))
+                        val name = param.name
+                        if (name != null) {
+                            colorize(name, asParameter)
                         }
-                        colorize(param.name, asParameter)
-                        append("".padEnd(paramNameMaxWidth - param.name.length))
+                        val nameLength = name?.length ?: 0
+                        append("".padEnd(paramNameMaxWidth - nameLength))
                         append(" ")
-                        append(type.generateDoc(this@generateDoc))
+                        append(param.type.generateDoc(this@generateDoc))
                     }
                 }
             )
@@ -228,14 +220,15 @@ object DocumentationGenerator {
         }
     }
 
-    private fun VlangParamDefinition.generateDoc(type: VlangType): String {
+    private fun VlangParamDefinition.generateDocForMethod(): String {
         return buildString {
-            if (varModifiers != null) {
-                append(varModifiers?.generateDoc())
+            part(varModifiers.generateDoc(short = true))
+            val name = name
+            if (name != null) {
+                colorize(name, asParameter)
+                append(" ")
             }
-            colorize(name, asParameter)
-            append(" ")
-            append(type.generateDoc(this@generateDoc))
+            append(type.generateDoc(this@generateDocForMethod))
         }
     }
 
@@ -390,13 +383,10 @@ object DocumentationGenerator {
             append(DocumentationMarkup.DEFINITION_START)
             val type = getType(null)
 
-            val modifiersDoc = varModifiers?.generateDoc()
-            if (!modifiersDoc.isNullOrEmpty()) {
-                append(modifiersDoc)
-            }
+            part(varModifiers.generateDoc())
 
             part("parameter", asKeyword)
-            part(name, asDeclaration)
+            part(name ?: "it", asDeclaration)
             append(type?.generateDoc(this@generateDoc) ?: DocumentationUtils.colorize("unknown", asDeclaration))
             append(DocumentationMarkup.DEFINITION_END)
 
@@ -438,9 +428,7 @@ object DocumentationGenerator {
             line(parent.attribute?.generateDoc())
 
             val modifiersDoc = parentGroup?.memberModifiers.generateDoc(this@generateDoc)
-            if (modifiersDoc.isNotEmpty()) {
-                append(modifiersDoc)
-            }
+            append(modifiersDoc)
 
             part("interface method", asKeyword)
             colorize(owner.name ?: "anon", asDeclaration)
@@ -466,9 +454,7 @@ object DocumentationGenerator {
             line(parent.attribute?.generateDoc())
 
             val modifiersDoc = parentGroup?.memberModifiers.generateDoc(this@generateDoc)
-            if (modifiersDoc.isNotEmpty()) {
-                append(modifiersDoc)
-            }
+            append(modifiersDoc)
 
             part("field", asKeyword)
             append(owner.generateDoc(this@generateDoc))

@@ -24,11 +24,10 @@ V Language file
               SIGNATURE
                 PARAMETERS
                   PsiElement(VlangTokenType.()('(')
-                  PARAMETER_DECLARATION
-                    PARAM_DEFINITION
-                      VAR_MODIFIERS
-                        <empty list>
-                      PsiElement(VlangTokenType.identifier)('a')
+                  PARAM_DEFINITION
+                    VAR_MODIFIERS
+                      <empty list>
+                    PsiElement(VlangTokenType.identifier)('a')
                     TYPE
                       TYPE_REFERENCE_EXPRESSION
                         PsiElement(VlangTokenType.identifier)('i64')
@@ -81,21 +80,19 @@ V Language file
                         SIGNATURE
                           PARAMETERS
                             PsiElement(VlangTokenType.()('(')
-                            PARAMETER_DECLARATION
-                              PARAM_DEFINITION
-                                VAR_MODIFIERS
-                                  VAR_MODIFIER
-                                    PsiElement(VlangTokenType.mut)('mut')
-                                PsiElement(VlangTokenType.identifier)('ctx')
+                            PARAM_DEFINITION
+                              VAR_MODIFIERS
+                                VAR_MODIFIER
+                                  PsiElement(VlangTokenType.mut)('mut')
+                              PsiElement(VlangTokenType.identifier)('ctx')
                               TYPE
                                 TYPE_REFERENCE_EXPRESSION
                                   PsiElement(VlangTokenType.identifier)('TimerContext')
                             PsiElement(VlangTokenType.,)(',')
-                            PARAMETER_DECLARATION
-                              PARAM_DEFINITION
-                                VAR_MODIFIERS
-                                  <empty list>
-                                PsiElement(VlangTokenType.identifier)('dur')
+                            PARAM_DEFINITION
+                              VAR_MODIFIERS
+                                <empty list>
+                              PsiElement(VlangTokenType.identifier)('dur')
                               TYPE
                                 TYPE_REFERENCE_EXPRESSION
                                   TYPE_REFERENCE_EXPRESSION
@@ -208,11 +205,10 @@ V Language file
             SIGNATURE
               PARAMETERS
                 PsiElement(VlangTokenType.()('(')
-                PARAMETER_DECLARATION
-                  PARAM_DEFINITION
-                    VAR_MODIFIERS
-                      <empty list>
-                    PsiElement(VlangTokenType.identifier)('ctx')
+                PARAM_DEFINITION
+                  VAR_MODIFIERS
+                    <empty list>
+                  PsiElement(VlangTokenType.identifier)('ctx')
                   TYPE
                     TYPE_REFERENCE_EXPRESSION
                       TYPE_REFERENCE_EXPRESSION
@@ -220,11 +216,10 @@ V Language file
                       PsiElement(VlangTokenType..)('.')
                       PsiElement(VlangTokenType.identifier)('Context')
                 PsiElement(VlangTokenType.,)(',')
-                PARAMETER_DECLARATION
-                  PARAM_DEFINITION
-                    VAR_MODIFIERS
-                      <empty list>
-                    PsiElement(VlangTokenType.identifier)('key')
+                PARAM_DEFINITION
+                  VAR_MODIFIERS
+                    <empty list>
+                  PsiElement(VlangTokenType.identifier)('key')
                   TYPE
                     TYPE_REFERENCE_EXPRESSION
                       TYPE_REFERENCE_EXPRESSION

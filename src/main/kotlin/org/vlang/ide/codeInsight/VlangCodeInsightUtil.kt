@@ -41,7 +41,7 @@ object VlangCodeInsightUtil {
     }
 
     fun takeZeroArguments(owner: VlangSignatureOwner): Boolean {
-        return owner.getSignature()?.parameters?.parametersListWithTypes?.isEmpty() ?: false
+        return owner.getSignature()?.parameters?.paramDefinitionList?.isEmpty() ?: false
     }
 
     fun insideElseBlockIfGuard(element: PsiElement): Boolean {

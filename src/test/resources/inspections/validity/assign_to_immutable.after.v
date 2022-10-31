@@ -8,6 +8,12 @@ mut:
 	age int
 }
 
+[minify]
+struct MinifiedBoo {
+	name string
+	age int
+}
+
 fn (mut b Boo) foo(mut p string) {
 	b = Boo{}
 	p = ''
@@ -44,4 +50,8 @@ fn main() {
 	boo := Boo{}
 	boo.name = ''
 	boo.age = 100
+
+	minified := MinifiedBoo{}
+	minified.name = '' // ok
+	minified.age = 100 // ok
 }

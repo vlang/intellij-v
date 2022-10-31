@@ -11,42 +11,53 @@ import org.vlang.lang.psi.*
 class VlangUnusedParameterInspection : VlangBaseInspection() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
         return object : VlangVisitor() {
-            override fun visitMethodDeclaration(o: VlangMethodDeclaration) {
-                super.visitMethodDeclaration(o)
-                visitDeclaration(o, false)
+            override fun visitMethodDeclaration(methodDeclaration: VlangMethodDeclaration) {
+                super.visitMethodDeclaration(methodDeclaration)
+                visitDeclaration(methodDeclaration.getSignature())
             }
 
-            override fun visitFunctionDeclaration(o: VlangFunctionDeclaration) {
-                if (o.isDefinition) {
+            override fun visitFunctionDeclaration(functionDeclaration: VlangFunctionDeclaration) {
+                super.visitFunctionDeclaration(functionDeclaration)
+
+                if (functionDeclaration.isDefinition) {
                     return
                 }
 
-                super.visitFunctionDeclaration(o)
-                visitDeclaration(o, true)
+                visitDeclaration(functionDeclaration.getSignature())
             }
 
-            private fun visitDeclaration(o: VlangFunctionOrMethodDeclaration, checkParameters: Boolean) {
-                val signature = o.getSignature() ?: return
-                if (checkParameters) {
-                    val parameters = signature.parameters
-                    visitParameterList(parameters.parameterDeclarationList, "parameter")
+            override fun visitFunctionLit(functionLit: VlangFunctionLit) {
+                super.visitFunctionLit(functionLit)
+
+                visitDeclaration(functionLit.getSignature())
+            }
+
+            private fun visitDeclaration(signature: VlangSignature?) {
+                if (signature == null) return
+                val parameters = signature.parameters
+                visitParameterList(parameters.paramDefinitionList)
+            }
+
+            private fun visitParameterList(parameters: List<VlangParamDefinition>) {
+                for (parameter in parameters) {
+                    ProgressManager.checkCanceled()
+                    if (parameter.isBlank()) continue
+                    val identifier = parameter.getIdentifier() ?: continue
+
+                    val search = ReferencesSearch.search(parameter, parameter.useScope)
+                    if (search.findFirst() != null) continue
+
+                    holder.registerProblem(identifier, "Unused parameter <code>#ref</code> #loc", ProblemHighlightType.LIKE_UNUSED_SYMBOL)
                 }
             }
 
-            private fun visitParameterList(parameters: List<VlangParameterDeclaration>, what: String) {
-                for (parameterDeclaration in parameters) {
-                    for (parameter in parameterDeclaration.paramDefinitionList) {
-                        ProgressManager.checkCanceled()
-                        if (parameter.isBlank())
-                            continue
+            override fun visitReceiver(receiver: VlangReceiver) {
+                super.visitReceiver(receiver)
 
-                        val search = ReferencesSearch.search(parameter, parameter.useScope)
-                        if (search.findFirst() != null)
-                            continue
+                val search = ReferencesSearch.search(receiver, receiver.useScope)
+                if (search.findFirst() != null) return
 
-                        holder.registerProblem(parameter, "Unused $what <code>#ref</code> #loc", ProblemHighlightType.LIKE_UNUSED_SYMBOL)
-                    }
-                }
+                holder.registerProblem(receiver.getIdentifier(), "Unused receiver <code>#ref</code> #loc", ProblemHighlightType.LIKE_UNUSED_SYMBOL)
             }
         }
     }

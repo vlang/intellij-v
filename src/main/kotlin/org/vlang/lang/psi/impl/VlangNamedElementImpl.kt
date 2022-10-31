@@ -82,15 +82,10 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
     }
 
     override fun getType(context: ResolveState?): VlangType? {
-        val inner = getTypeInner(context)
-        if (inner != null) {
-            return inner
-        }
-
         return CachedValuesManager.getCachedValue(this) {
             CachedValueProvider.Result
                 .create(
-                    getTypeInner(VlangPsiImplUtil.createContextOnElement(this)),
+                    getTypeInner(null),
                     PsiModificationTracker.MODIFICATION_COUNT
                 )
         }
@@ -103,7 +98,7 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
         return if (stub != null) {
             VlangPsiTreeUtil.getStubChildOfType(parentByStub, VlangType::class.java)
         } else {
-            PsiTreeUtil.getNextSiblingOfType(this, VlangType::class.java)
+            PsiTreeUtil.getChildOfType(this, VlangType::class.java)
         }
     }
 

@@ -21,13 +21,13 @@ class VlangFunctionToMethodIntention : BaseIntentionAction() {
         val element = file.findElementAt(editor.caretModel.offset) ?: return false
         val parentFunction = element.parentOfType<VlangFunctionDeclaration>() ?: return false
         if (parentFunction.getIdentifier() != element) return false
-        val parameters = parentFunction.getSignature()?.parameters?.parameterDeclarationList
+        val parameters = parentFunction.getSignature()?.parameters?.paramDefinitionList
         return parameters?.isNotEmpty() ?: false
     }
 
     override fun invoke(project: Project, editor: Editor, file: PsiFile) {
         val function = file.findElementAt(editor.caretModel.offset)!!.parentOfType<VlangFunctionDeclaration>()!!
-        val firstParam = function.getSignature()!!.parameters.parameterDeclarationList.first()
+        val firstParam = function.getSignature()!!.parameters.paramDefinitionList.first()
         val receiverText = "(${firstParam.text}) "
         val insertPos = function.getIdentifier().startOffset
         val document = editor.document

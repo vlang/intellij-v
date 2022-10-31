@@ -36,7 +36,7 @@ object DocumentationUtils {
     }
 
     fun StringBuilder.part(text: String?) {
-        if (text == null) {
+        if (text.isNullOrEmpty()) {
             return
         }
         append(text)

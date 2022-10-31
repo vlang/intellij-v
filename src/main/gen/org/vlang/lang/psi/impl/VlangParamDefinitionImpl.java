@@ -7,13 +7,11 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.stubs.IStubElementType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.vlang.lang.psi.VlangParamDefinition;
-import org.vlang.lang.psi.VlangPsiTreeUtil;
-import org.vlang.lang.psi.VlangVarModifiers;
-import org.vlang.lang.psi.VlangVisitor;
+import org.vlang.lang.psi.*;
 import org.vlang.lang.stubs.VlangParamDefinitionStub;
 
 import static org.vlang.lang.VlangTypes.IDENTIFIER;
+import static org.vlang.lang.VlangTypes.TRIPLE_DOT;
 
 public class VlangParamDefinitionImpl extends VlangNamedElementImpl<VlangParamDefinitionStub> implements VlangParamDefinition {
 
@@ -36,15 +34,27 @@ public class VlangParamDefinitionImpl extends VlangNamedElementImpl<VlangParamDe
   }
 
   @Override
+  @NotNull
+  public VlangType getType() {
+    return notNullChild(VlangPsiTreeUtil.getStubChildOfType(this, VlangType.class));
+  }
+
+  @Override
   @Nullable
   public VlangVarModifiers getVarModifiers() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangVarModifiers.class);
   }
 
   @Override
-  @NotNull
+  @Nullable
+  public PsiElement getTripleDot() {
+    return findChildByType(TRIPLE_DOT);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getIdentifier() {
-    return notNullChild(findChildByType(IDENTIFIER));
+    return findChildByType(IDENTIFIER);
   }
 
   @Override
@@ -53,7 +63,7 @@ public class VlangParamDefinitionImpl extends VlangNamedElementImpl<VlangParamDe
   }
 
   @Override
-  @NotNull
+  @Nullable
   public String getName() {
     return VlangPsiImplUtil.getName(this);
   }

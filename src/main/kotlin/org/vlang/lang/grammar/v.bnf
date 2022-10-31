@@ -390,7 +390,7 @@ DefaultFieldValue ::= '=' Expression
 Tag ::= StringLiteral
 private FieldDefinitionList ::= FieldDefinition (',' FieldDefinition)*
 FieldDefinition ::= identifier {
-  methods=[getQualifier getQualifiedName isPublic isMutable makeMutable getOwner]
+  methods=[getQualifier getQualifiedName getTypeInner isPublic isMutable makeMutable getOwner]
   implements="org.vlang.lang.psi.VlangMutable"
   stubClass="org.vlang.lang.stubs.VlangFieldDefinitionStub"
 }
@@ -701,21 +701,18 @@ Result ::= Type {
   methods=[isVoid]
 //  stubClass="org.vlang.lang.stubs.GoResultStub"
 }
-Parameters ::= '(' [ (ParameterList ','?| TypeListNoPin) ] ')' {
+Parameters ::= '(' ParameterList? ','? ')' {
   pin=1
-  methods=[getParametersList getParametersListWithTypes getTypeList]
-//  stubClass="org.vlang.lang.stubs.GoParametersStub"
+//  stubClass="org.vlang.lang.stubs.VlangParametersStub"
 }
-private ParameterList ::= ParameterDeclaration (',' (ParameterDeclaration | &')'))* {pin(".*")=1}
-ParameterDeclaration ::= (ParamDefinitionListNoPin? '...'? Type) | Type { // todo: use left rule
-//  stubClass="org.vlang.lang.stubs.GoParameterDeclarationStub"
-  methods = [isVariadic]
-}
-private ParamDefinitionListNoPin ::= ParamDefinition &(!('.' | ')')) (',' ParamDefinition)* // todo
-ParamDefinition ::= VarModifiers? identifier {
+
+private ParameterList ::= ParamDefinition (',' (ParamDefinition | &')'))* {pin(".*")=1}
+
+ParamDefinition ::= Type &(','|')') | (VarModifiers? identifier? '...'? Type) {
   stubClass="org.vlang.lang.stubs.VlangParamDefinitionStub"
   implements="org.vlang.lang.psi.VlangMutable"
   methods = [isVariadic getName isPublic isMutable makeMutable]
+  pin=4
 }
 TypeListNoPin ::= Type (',' Type)* ','?
 // end of signature

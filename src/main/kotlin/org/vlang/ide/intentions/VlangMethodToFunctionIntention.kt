@@ -27,11 +27,6 @@ class VlangMethodToFunctionIntention : BaseIntentionAction() {
         val parameters = method.getSignature()!!.parameters
         var receiverText = receiver.text
 
-        // if fn (type) name() {}
-        if (receiver.getIdentifier() == null) {
-            receiverText = "this $receiverText"
-        }
-
         receiver.prevSibling?.delete()
         if (receiver.prevSibling is PsiWhiteSpace) {
             receiver.prevSibling?.delete()
@@ -39,7 +34,7 @@ class VlangMethodToFunctionIntention : BaseIntentionAction() {
         receiver.nextSibling?.delete()
         receiver.delete()
 
-        if (parameters.parameterDeclarationList.isNotEmpty()) {
+        if (parameters.paramDefinitionList.isNotEmpty()) {
             receiverText += ", "
         }
 

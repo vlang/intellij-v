@@ -8,6 +8,12 @@ mut:
 	age int
 }
 
+[minify]
+struct MinifiedBoo {
+	name string
+	age int
+}
+
 fn (b Boo) foo(p string) {
 	<warning descr="Immutable receiver 'b' cannot be reassigned">b</warning> = Boo{}
 	<warning descr="Immutable parameter 'p' cannot be reassigned">p</warning> = ''
@@ -44,4 +50,8 @@ fn main() {
 	boo := Boo{}
 	boo.<warning descr="Immutable field 'name' cannot be reassigned">name</warning> = ''
 	boo.age = 100
+
+	minified := MinifiedBoo{}
+	minified.name = '' // ok
+	minified.age = 100 // ok
 }
