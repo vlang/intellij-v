@@ -314,15 +314,15 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         }
 
         if (!processBlock(processor, state, true)) return false
+        if (!processBuiltin(processor, state)) return false
         if (!processPseudoParams(processor, state)) return false
         if (!processImportModules(file, processor, state)) return false
         if (!processImportedModules(file, processor, state)) return false
         if (!processImports(file, processor, state, myElement)) return false
         if (!processFileEntities(file, processor, state, true)) return false
         if (!processDirectory(file.originalFile.parent, file, file.getModuleQualifiedName(), processor, state, true)) return false
-        if (!processModulesEntities(file, processor, state)) return false
 
-        return processBuiltin(processor, state)
+        return processModulesEntities(file, processor, state)
     }
 
     private fun processEnumFetch(
