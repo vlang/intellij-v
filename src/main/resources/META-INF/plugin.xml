@@ -4,7 +4,7 @@
     <vendor>Petr Makhnev</vendor>
 
     <description><![CDATA[
-Vlang is a language plugin for IntelliJ IDEA that adds support for V language.
+The plugin provides support for V language
     ]]></description>
 
     <depends>com.intellij.modules.platform</depends>

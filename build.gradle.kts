@@ -72,4 +72,8 @@ tasks {
             }.toHTML()
         })
     }
+
+    buildSearchableOptions {
+        enabled = false
+    }
 }
