@@ -360,9 +360,7 @@ object DocumentationGenerator {
             val type = getType(null)
 
             val modifiersDoc = varModifiers?.generateDoc()
-            if (!modifiersDoc.isNullOrEmpty()) {
-                append(modifiersDoc)
-            }
+            part(modifiersDoc)
 
             if (original != null && isCaptured(original)) {
                 part("captured", asKeyword)
