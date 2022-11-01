@@ -38,7 +38,8 @@ The plugin provides support for V language
 
         <lang.findUsagesProvider language="vlang"
                                  implementationClass="org.vlang.lang.usages.VlangFindUsagesProvider"/>
-
+        <lang.psiStructureViewFactory language="vlang"
+                                      implementationClass="org.vlang.lang.structure.VlangStructureViewFactory"/>
 <!--        <lang.smartEnterProcessor language="vlang"-->
 <!--                                  order="first"-->
 <!--                                  implementationClass="org.vlang.lang.VlangSmartEnterProcessor"/>-->
