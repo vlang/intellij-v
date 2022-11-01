@@ -104,7 +104,7 @@ class VlangParameterInfoHandler : ParameterInfoHandlerWithTabActionSupport<Vlang
             for (paramDefinition in paramDeclarations) {
                 val isVariadic = paramDefinition.isVariadic
                 val separator = if (isVariadic) "..." else " "
-                paramPresentations.add(paramDefinition.text + separator + paramDefinition.type.text)
+                paramPresentations.add(paramDefinition.name + separator + paramDefinition.type.text)
             }
 
             return paramPresentations
