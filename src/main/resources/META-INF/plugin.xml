@@ -90,8 +90,8 @@ The plugin provides support for V language
 
         <codeInsight.lineMarkerProvider language="vlang"
                                         implementationClass="org.vlang.lang.search.VlangInheritorsLineMarkerProvider"/>
-        <codeInsight.lineMarkerProvider language="vlang"
-                                        implementationClass="org.vlang.lang.search.VlangSuperMarkerProvider"/>
+<!--        <codeInsight.lineMarkerProvider language="vlang"-->
+<!--                                        implementationClass="org.vlang.lang.search.VlangSuperMarkerProvider"/>-->
 <!--        <codeInsight.gotoSuper language="vlang"-->
 <!--                               implementationClass="org.vlang.lang.search.VlangGotoSuperHandler"/>-->
         <!-- Searches End -->
