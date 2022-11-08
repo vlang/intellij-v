@@ -12,6 +12,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('p')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('voidptr')
       PsiElement(VlangTokenType.})('}')
@@ -25,6 +27,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('i')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
       PsiElement(VlangTokenType.})('}')
@@ -38,14 +42,20 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('x')
           POINTER_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.&)('&')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('S2')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('y')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
       PsiElement(VlangTokenType.})('}')
@@ -59,6 +69,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('x')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('S2')
       FIELDS_GROUP
@@ -70,6 +82,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('y')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('f64')
       PsiElement(VlangTokenType.})('}')
@@ -82,12 +96,16 @@ V Language file
         FIELD_DECLARATION
           EMBEDDED_DEFINITION
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('S3')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('a')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('f32')
       PsiElement(VlangTokenType.})('}')
@@ -107,6 +125,8 @@ V Language file
             PsiElement(VlangTokenType.isreftype)('isreftype')
             PsiElement(VlangTokenType.()('(')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('S1')
             PsiElement(VlangTokenType.))(')')
@@ -120,6 +140,8 @@ V Language file
             PsiElement(VlangTokenType.isreftype)('isreftype')
             PsiElement(VlangTokenType.()('(')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('S2')
             PsiElement(VlangTokenType.))(')')
@@ -133,6 +155,8 @@ V Language file
             PsiElement(VlangTokenType.isreftype)('isreftype')
             PsiElement(VlangTokenType.()('(')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('S3')
             PsiElement(VlangTokenType.))(')')
@@ -146,6 +170,8 @@ V Language file
             PsiElement(VlangTokenType.isreftype)('isreftype')
             PsiElement(VlangTokenType.()('(')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('S4')
             PsiElement(VlangTokenType.))(')')
@@ -159,6 +185,8 @@ V Language file
             PsiElement(VlangTokenType.isreftype)('isreftype')
             PsiElement(VlangTokenType.()('(')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('S5')
             PsiElement(VlangTokenType.))(')')
@@ -172,6 +200,8 @@ V Language file
             PsiElement(VlangTokenType.isreftype)('isreftype')
             PsiElement(VlangTokenType.()('(')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('f64')
             PsiElement(VlangTokenType.))(')')
@@ -185,9 +215,13 @@ V Language file
             PsiElement(VlangTokenType.isreftype)('isreftype')
             PsiElement(VlangTokenType.()('(')
             ARRAY_TYPE
+              TYPE_MODIFIERS
+                <empty list>
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
+                TYPE_MODIFIERS
+                  <empty list>
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(VlangTokenType.identifier)('f64')
             PsiElement(VlangTokenType.))(')')
@@ -201,11 +235,15 @@ V Language file
             PsiElement(VlangTokenType.isreftype)('isreftype')
             PsiElement(VlangTokenType.()('(')
             FIXED_SIZE_ARRAY_TYPE
+              TYPE_MODIFIERS
+                <empty list>
               PsiElement(VlangTokenType.[)('[')
               LITERAL
                 PsiElement(VlangTokenType.int)('3')
               PsiElement(VlangTokenType.])(']')
               TYPE
+                TYPE_MODIFIERS
+                  <empty list>
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(VlangTokenType.identifier)('int')
             PsiElement(VlangTokenType.))(')')
@@ -220,6 +258,8 @@ V Language file
       PsiElement(VlangTokenType.<)('<')
       TYPE_LIST_NO_PIN
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('T')
       PsiElement(VlangTokenType.>)('>')
@@ -229,6 +269,8 @@ V Language file
         PsiElement(VlangTokenType.))(')')
       RESULT
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('string')
     BLOCK
@@ -241,6 +283,8 @@ V Language file
               PsiElement(VlangTokenType.isreftype)('isreftype')
               PsiElement(VlangTokenType.()('(')
               TYPE
+                TYPE_MODIFIERS
+                  <empty list>
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(VlangTokenType.identifier)('T')
               PsiElement(VlangTokenType.))(')')
@@ -286,6 +330,8 @@ V Language file
               PsiElement(VlangTokenType.<)('<')
               TYPE_LIST_NO_PIN
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('f64')
               PsiElement(VlangTokenType.>)('>')
@@ -308,6 +354,8 @@ V Language file
               PsiElement(VlangTokenType.<)('<')
               TYPE_LIST_NO_PIN
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('S3')
               PsiElement(VlangTokenType.>)('>')
@@ -340,6 +388,8 @@ V Language file
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('S3')
             PsiElement(VlangTokenType.{)('{')
@@ -354,6 +404,8 @@ V Language file
                   PsiElement(VlangTokenType.&)('&')
                   LITERAL_VALUE_EXPRESSION
                     TYPE
+                      TYPE_MODIFIERS
+                        <empty list>
                       TYPE_REFERENCE_EXPRESSION
                         PsiElement(VlangTokenType.identifier)('S2')
                     PsiElement(VlangTokenType.{)('{')
@@ -368,6 +420,8 @@ V Language file
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('S4')
             PsiElement(VlangTokenType.{)('{')
@@ -392,6 +446,8 @@ V Language file
             PsiElement(VlangTokenType.isreftype)('isreftype')
             PsiElement(VlangTokenType.()('(')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('a')
             PsiElement(VlangTokenType.))(')')
@@ -405,6 +461,8 @@ V Language file
             PsiElement(VlangTokenType.isreftype)('isreftype')
             PsiElement(VlangTokenType.()('(')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('b')
             PsiElement(VlangTokenType.))(')')
@@ -418,6 +476,8 @@ V Language file
             PsiElement(VlangTokenType.isreftype)('isreftype')
             PsiElement(VlangTokenType.()('(')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('c')
             PsiElement(VlangTokenType.))(')')

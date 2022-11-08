@@ -26,6 +26,8 @@ V Language file
         PsiElement(VlangTokenType.<)('<')
         TYPE_LIST_NO_PIN
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('T')
         PsiElement(VlangTokenType.>)('>')
@@ -39,10 +41,14 @@ V Language file
         PsiElement(VlangTokenType.<)('<')
         TYPE_LIST_NO_PIN
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('T')
           PsiElement(VlangTokenType.,)(',')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('E')
         PsiElement(VlangTokenType.>)('>')
@@ -56,6 +62,8 @@ V Language file
         PsiElement(VlangTokenType.<)('<')
         TYPE_LIST_NO_PIN
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('T')
         PsiElement(VlangTokenType.>)('>')
@@ -65,6 +73,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('value')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('T')
       PsiElement(VlangTokenType.})('}')
@@ -76,6 +86,8 @@ V Language file
         PsiElement(VlangTokenType.<)('<')
         TYPE_LIST_NO_PIN
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('T')
         PsiElement(VlangTokenType.>)('>')
@@ -85,18 +97,24 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('value')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('T')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('next')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Multiple')
             GENERIC_ARGUMENTS
               PsiElement(VlangTokenType.<)('<')
               TYPE_LIST_NO_PIN
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('T')
               PsiElement(VlangTokenType.>)('>')
@@ -115,12 +133,16 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('value')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Single')
             GENERIC_ARGUMENTS
               PsiElement(VlangTokenType.<)('<')
               TYPE_LIST_NO_PIN
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('int')
               PsiElement(VlangTokenType.>)('>')
@@ -141,12 +163,16 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('value')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Single')
             GENERIC_ARGUMENTS
               PsiElement(VlangTokenType.<)('<')
               TYPE_LIST_NO_PIN
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('int')
               PsiElement(VlangTokenType.>)('>')
@@ -165,12 +191,16 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('value')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Multiple')
             GENERIC_ARGUMENTS
               PsiElement(VlangTokenType.<)('<')
               TYPE_LIST_NO_PIN
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('int')
               PsiElement(VlangTokenType.>)('>')
@@ -178,12 +208,16 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('next')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Multiple')
             GENERIC_ARGUMENTS
               PsiElement(VlangTokenType.<)('<')
               TYPE_LIST_NO_PIN
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('T')
               PsiElement(VlangTokenType.>)('>')
@@ -202,12 +236,16 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('value')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Multiple')
             GENERIC_ARGUMENTS
               PsiElement(VlangTokenType.<)('<')
               TYPE_LIST_NO_PIN
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('int')
               PsiElement(VlangTokenType.>)('>')
@@ -222,12 +260,16 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('next')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Multiple')
             GENERIC_ARGUMENTS
               PsiElement(VlangTokenType.<)('<')
               TYPE_LIST_NO_PIN
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('T')
               PsiElement(VlangTokenType.>)('>')
@@ -242,12 +284,16 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('value')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Multiple')
             GENERIC_ARGUMENTS
               PsiElement(VlangTokenType.<)('<')
               TYPE_LIST_NO_PIN
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('int')
               PsiElement(VlangTokenType.>)('>')
@@ -260,12 +306,16 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('next')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Multiple')
             GENERIC_ARGUMENTS
               PsiElement(VlangTokenType.<)('<')
               TYPE_LIST_NO_PIN
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('T')
               PsiElement(VlangTokenType.>)('>')
@@ -284,6 +334,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('value')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
       PsiElement(VlangTokenType.})('}')
@@ -308,14 +360,20 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('value')
           SHARED_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.shared)('shared')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('Multiple')
               GENERIC_ARGUMENTS
                 PsiElement(VlangTokenType.<)('<')
                 TYPE_LIST_NO_PIN
                   TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
                     TYPE_REFERENCE_EXPRESSION
                       PsiElement(VlangTokenType.identifier)('int')
                 PsiElement(VlangTokenType.>)('>')
@@ -330,6 +388,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('value')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
           ATTRIBUTE
@@ -351,6 +411,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('with_default')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
           DEFAULT_FIELD_VALUE
@@ -364,8 +426,12 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('both')
           SHARED_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.shared)('shared')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('string')
           ATTRIBUTE
@@ -423,6 +489,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('parsing_type')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
           PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// name of the type to enable recursive type parsing')
@@ -437,66 +505,98 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('type_symbols')
           ARRAY_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.[)('[')
             PsiElement(VlangTokenType.])(']')
             POINTER_TYPE
+              TYPE_MODIFIERS
+                <empty list>
               PsiElement(VlangTokenType.&)('&')
               TYPE
+                TYPE_MODIFIERS
+                  <empty list>
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(VlangTokenType.identifier)('TypeSymbol')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('type_idxs')
           MAP_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.identifier)('map')
             PsiElement(VlangTokenType.[)('[')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('string')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('int')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('fns')
           MAP_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.identifier)('map')
             PsiElement(VlangTokenType.[)('[')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('string')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('Fn')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('iface_types')
           MAP_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.identifier)('map')
             PsiElement(VlangTokenType.[)('[')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('string')
             PsiElement(VlangTokenType.])(']')
             ARRAY_TYPE
+              TYPE_MODIFIERS
+                <empty list>
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
+                TYPE_MODIFIERS
+                  <empty list>
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(VlangTokenType.identifier)('Type')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('dumps')
           MAP_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.identifier)('map')
             PsiElement(VlangTokenType.[)('[')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('int')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('string')
           PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// needed for efficiently generating all _v_dump_expr_TNAME() functions')
@@ -504,9 +604,13 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('imports')
           ARRAY_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.[)('[')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('string')
           PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// List of all imports')
@@ -514,9 +618,13 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('modules')
           ARRAY_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.[)('[')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('string')
           PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Topologically sorted list of all modules registered by the application')
@@ -524,8 +632,12 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('global_scope')
           POINTER_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.&)('&')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('Scope')
           DEFAULT_FIELD_VALUE
@@ -543,9 +655,13 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('cflags')
           ARRAY_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.[)('[')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(VlangTokenType.identifier)('cflag')
@@ -555,28 +671,42 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('redefined_fns')
           ARRAY_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.[)('[')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('string')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('fn_generic_types')
           MAP_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.identifier)('map')
             PsiElement(VlangTokenType.[)('[')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('string')
             PsiElement(VlangTokenType.])(']')
             ARRAY_TYPE
+              TYPE_MODIFIERS
+                <empty list>
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               ARRAY_TYPE
+                TYPE_MODIFIERS
+                  <empty list>
                 PsiElement(VlangTokenType.[)('[')
                 PsiElement(VlangTokenType.])(']')
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('Type')
           PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// for generic functions')
@@ -584,19 +714,27 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('interfaces')
           MAP_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.identifier)('map')
             PsiElement(VlangTokenType.[)('[')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('int')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('InterfaceDecl')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('cmod_prefix')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
           PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// needed for ast.type_to_str(Type) while vfmt; contains `os.`')
@@ -604,19 +742,27 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('is_fmt')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('bool')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('used_fns')
           MAP_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.identifier)('map')
             PsiElement(VlangTokenType.[)('[')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('string')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('bool')
           PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// filled in by the checker, when pref.skip_unused = true;')
@@ -624,13 +770,19 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('used_consts')
           MAP_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.identifier)('map')
             PsiElement(VlangTokenType.[)('[')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('string')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('bool')
           PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// filled in by the checker, when pref.skip_unused = true;')
@@ -638,13 +790,19 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('used_globals')
           MAP_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.identifier)('map')
             PsiElement(VlangTokenType.[)('[')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('string')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('bool')
           PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// filled in by the checker, when pref.skip_unused = true;')
@@ -652,9 +810,13 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('used_vweb_types')
           ARRAY_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.[)('[')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('Type')
           PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// vweb context types, filled in by checker, when pref.skip_unused = true;')
@@ -662,6 +824,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('used_maps')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
           PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// how many times maps were used, filled in by checker, when pref.skip_unused = true;')
@@ -669,6 +833,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('panic_handler')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('FnPanicHandler')
           DEFAULT_FIELD_VALUE
@@ -679,6 +845,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('panic_userdata')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('voidptr')
           DEFAULT_FIELD_VALUE
@@ -697,14 +865,20 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('panic_npanics')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('cur_fn')
           POINTER_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.&)('&')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('FnDecl')
           DEFAULT_FIELD_VALUE
@@ -723,9 +897,13 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('cur_concrete_types')
           ARRAY_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.[)('[')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('Type')
           PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// current concrete types, e.g. <int, string>')
@@ -733,6 +911,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('gostmts')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
           PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// how many `go` statements there were in the parsed files.')
@@ -741,42 +921,62 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('enum_decls')
           MAP_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.identifier)('map')
             PsiElement(VlangTokenType.[)('[')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('string')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('EnumDecl')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('module_deprecated')
           MAP_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.identifier)('map')
             PsiElement(VlangTokenType.[)('[')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('string')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('bool')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('module_attrs')
           MAP_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.identifier)('map')
             PsiElement(VlangTokenType.[)('[')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('string')
             PsiElement(VlangTokenType.])(']')
             ARRAY_TYPE
+              TYPE_MODIFIERS
+                <empty list>
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
+                TYPE_MODIFIERS
+                  <empty list>
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(VlangTokenType.identifier)('Attr')
           PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// module attributes')
@@ -784,19 +984,27 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('builtin_pub_fns')
           MAP_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.identifier)('map')
             PsiElement(VlangTokenType.[)('[')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('string')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('bool')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('pointer_size')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
         PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// cache for type_to_str_using_aliases')
@@ -804,26 +1012,38 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('cached_type_to_str')
           MAP_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.identifier)('map')
             PsiElement(VlangTokenType.[)('[')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('u64')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('string')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('anon_struct_names')
           MAP_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.identifier)('map')
             PsiElement(VlangTokenType.[)('[')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('string')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('int')
           PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// anon struct name -> struct sym idx')
@@ -832,6 +1052,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('anon_struct_counter')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
       PsiElement(VlangTokenType.})('}')

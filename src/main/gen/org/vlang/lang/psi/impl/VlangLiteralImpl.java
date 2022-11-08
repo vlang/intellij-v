@@ -71,6 +71,12 @@ public class VlangLiteralImpl extends VlangExpressionImpl implements VlangLitera
 
   @Override
   @Nullable
+  public PsiElement getNone() {
+    return findChildByType(NONE);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getOct() {
     return findChildByType(OCT);
   }

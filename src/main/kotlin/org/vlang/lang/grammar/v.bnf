@@ -200,7 +200,7 @@ private TopDeclaration ::=
   | TypeAliasDeclaration
   | Statement
 
-private TopLevelDeclarationRecover ::= !('type' | '__global' | enum | import | '$for' | '$if' | '[' | '!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | '{' | '|' | '|=' | '||' | '&&' | '}' | break | case | const | continue | defer | else | float | for | fn | pub | mut | volatile | shared | go | spawn | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | union | switch | var | unsafe | assert | match | lock | rlock | asm | true | false | '$else' | typeof | offsetof | sizeof | isreftype | dump)
+private TopLevelDeclarationRecover ::= !('type' | '__global' | enum | import | '$for' | '$if' | '[' | '!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | '{' | '|' | '|=' | '||' | '&&' | '}' | break | case | const | continue | defer | else | float | for | fn | pub | mut | volatile | shared | go | spawn | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | union | switch | var | unsafe | assert | match | lock | rlock | asm | true | false | none | '$else' | typeof | offsetof | sizeof | isreftype | dump)
 
 ////////// TOP LEVEL DECLARATIONS END //////////
 
@@ -239,7 +239,7 @@ Statement ::=
   | LabeledStatement
   | DeferStatement {methods=[processDeclarations]}
 
-private StatementRecover ::= !('!' | '?' | '&' | '[' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | '{' | '|' | '|=' | '||' | '&&' | '}' | type | break | case | const | continue | defer | else | float | for | fn | pub | mut | volatile | shared | go | spawn | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | union | switch | var | unsafe | assert | match | lock | rlock | asm | true | false | '$for' | '$if' | '$else' | '__global' | typeof | offsetof | sizeof | isreftype | dump)
+private StatementRecover ::= !('!' | '?' | '&' | '[' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | '{' | '|' | '|=' | '||' | '&&' | '}' | type | break | case | const | continue | defer | else | float | for | fn | pub | mut | volatile | shared | go | spawn | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | union | switch | var | unsafe | assert | match | lock | rlock | asm | true | false | none | '$for' | '$if' | '$else' | '__global' | typeof | offsetof | sizeof | isreftype | dump)
 
 // attributes start
 // [attr1]
@@ -281,7 +281,7 @@ left AssignmentStatement ::= AssignOp (ExpressionList) {pin=1}
 AssignOp ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '>>>=' | '&=' | '&^='
 
 // <- <expr>
-left SendStatement ::= '<-' Expression {pin=1 methods=[getSendExpression]}
+left SendStatement ::= '<-' BeforeBlockExpression {pin=1}
 // end of simple statements
 
 // If-else
@@ -300,7 +300,7 @@ CompileElseStatement ::= '$else' (CompileTimeIfStatement | Block) {pin=1}
 
 // For statement
 // [<label>:] for ... { ... }
-ForStatement ::= for <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) <<exitModeSafe "BLOCK?">> {pin(".*")="for|ForOrRangeClause"}
+ForStatement ::= for (ForOrRangeClause Block | Block | BeforeBlockExpression Block) {pin(".*")="for|ForOrRangeClause"}
 // <label>:
 LabelDefinition ::= identifier ':' {
   pin=2
@@ -309,9 +309,9 @@ LabelDefinition ::= identifier ':' {
 // for ;;; or for <*> in <*>
 private ForOrRangeClause ::= (ForClause | RangeClause)
 // [<statement>]; [<expression>]; [<statement>]
-ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement? {methods=[processDeclarations]}
+ForClause ::= SimpleStatement? ';' Expression? ';' [<<enterMode "noBraces">> SimpleStatement <<exitModeSafe "noBraces">>] {methods=[processDeclarations]}
 // in <expression> or <var> in <expression>
-RangeClause ::= in Expression | VarDefinitionList in Expression {
+RangeClause ::= in BeforeBlockExpression | VarDefinitionList in BeforeBlockExpression {
   pin(".*")=2
   extends=VarDeclaration
   methods=[getRangeExpression getLeftExpressionsList getRightExpressionsList]
@@ -359,7 +359,14 @@ SelectExpression ::= select '{' SelectArms '}' {pin=2}
 // else { ... }
 SelectArms ::= (SelectArm | SelectElseArmClause)*
 // <stmt> { ... }
-SelectArm ::= <<enterMode "BLOCK?">> SimpleStatement <<exitModeSafe "BLOCK?">> Block semi {pin=2}
+SelectArm ::= SelectArmStatement Block semi {pin=2}
+SelectArmStatement ::=
+    (<<withOn "noBraces" VarDeclaration>>)
+  | SendStatement
+  | <<withOn "noBraces" LeftHandExprList>> SelectArmAssignmentStatement? {pin(".*")=LeftHandExprList}
+
+left SelectArmAssignmentStatement ::= AssignOp BeforeBlockExpression {extends=AssignmentStatement}
+
 // else { ... }
 SelectElseArmClause ::= else Block semi {pin=1}
 
@@ -394,7 +401,7 @@ private WithoutModifiersFieldsGroup ::= !MemberModifiers FieldDeclarations
 private FieldDeclarations ::= FieldDeclaration+
 FieldDeclaration ::= (PlainFieldDeclaration | EmbeddedDefinition) semi
 private PlainFieldDeclaration ::= FieldDefinition Type Attribute? DefaultFieldValue?
-DefaultFieldValue ::= '=' Expression
+DefaultFieldValue ::= '=' Expression {pin=1}
 FieldDefinition ::= identifier {
   methods=[getQualifier getQualifiedName getTypeInner isPublic isMutable makeMutable getOwner]
   implements="org.vlang.lang.psi.VlangMutable"
@@ -548,7 +555,6 @@ Receiver ::= VarModifiers? identifier Type ','? {
 Expression ::=
     OrExpr
   | AndExpr
-  | SqlExpression
   | ConditionalExpr
   | AddExpr
   | MulExpr
@@ -557,7 +563,6 @@ Expression ::=
   | RangeExpr
   | MatchExpression
   | SelectExpression
-  | IfExpression
   | CompileTimeIfExpression
   | InExpression
   | NotInExpression
@@ -582,7 +587,7 @@ TypeCastExpression ::= Type '(' Expression ')' {pin=4}
 // (r)lock <var> { ... }
 // (r)lock <var>; (r)lock <var2> { ... }
 LockExpression ::= LockParts+ Block {pin=1}
-LockParts ::= (lock | rlock) <<enterMode "BLOCK?">> ExpressionList? <<exitModeSafe "BLOCK?">> ';'? {pin=1}
+LockParts ::= (lock | rlock) BeforeBlockExpressionList? ';'? {pin=1}
 
 // go <expr>
 GoExpression ::= go Expression
@@ -590,7 +595,7 @@ GoExpression ::= go Expression
 SpawnExpression ::= spawn Expression
 
 // { ... }
-MapInitExpr ::= (<<isLastNotIs "BLOCK?">> | <<isLastIs "PAR">>) & <<prevIsNotType>> '{' KeyValues? '}' {pin=4}
+MapInitExpr ::= <<prevIsNotType>> <<braceRuleMarker>> '{' KeyValues? '}'
 KeyValues ::= KeyValue ((semi | ',') KeyValue)* (semi | ',')? {pin=1}
 // <key> : <value>
 KeyValue ::= Expression ':' Expression {
@@ -604,10 +609,10 @@ KeyValue ::= Expression ':' Expression {
 // struct {...}
 AnonymousStructValueExpression ::= struct '{' ElementList? '}' {pin=2}
 // <type> {...}
-LiteralValueExpression ::= Type GenericArguments? ((<<isLastNotIs "BLOCK?">> | <<isLastIs "PAR">> | <<prevIsType>>) & <<prevIsNotFunType>>) '{' ElementList? '}' {pin=4}
+LiteralValueExpression ::= <<braceRuleMarker>> Type <<prevIsNotFunType>> GenericArguments? '{' ElementList? '}'
 private ElementList ::= ElementInner ((',' | semi) ElementInner?)*
-private ElementInner ::= Element | (!() Element) {recoverWhile=ElementInnerRecover}
-private ElementInnerRecover ::= !('}' | ',' | semi | ')')
+private ElementInner ::= Element | (!() Element) // {recoverWhile=ElementInnerRecover}
+//private ElementInnerRecover ::= !('}' | ',' | semi | ')')
 Element ::= First [':' Value]  {pin(".*")=1}
 private First ::= Key | <<keyOrValueExpression>>
 Key ::= (FieldName &':') | !() Expression // nullability hack for key without reference inside
@@ -636,7 +641,11 @@ Capture ::= VarModifiers? ReferenceExpression {pin=2}
 
 ////// TYPES //////
 
-Type ::= (TypeLit | TypeName) GenericArguments? {
+// TODO: make as SharedType?
+TypeModifiers ::= TypeModifier*
+TypeModifier ::= mut | volatile | static
+
+Type ::= TypeModifiers? (TypeLit | TypeName) GenericArguments? {
   stubClass="org.vlang.lang.stubs.VlangTypeStub"
   methods=[getIdentifier getUnderlyingType resolveType]
 }
@@ -657,6 +666,7 @@ private TypeLit ::=
   | FixedSizeArrayType
   | TupleType
   | SharedType
+  | NoneType
   | PointerType
   | NullableType
   | NotNullableType
@@ -677,6 +687,9 @@ TupleType ::= '(' TypeListNoPin ')' {pin=3}
 
 // shared <type>
 SharedType ::= shared Type {pin=1}
+
+// none
+NoneType ::= none
 
 // &<type>
 // &&<type>
@@ -739,7 +752,7 @@ LeftHandExprList ::= ExpressionList
 
 private ExpressionList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &')'))* {pin(".*")=1}
 private ExpressionWithRecover ::= Expression !':' {recoverWhile=ExpressionListRecover}
-private ExpressionListRecover ::= !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+'  | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '>>>=' | '[' | ']' | '^' | '^=' | '{' | '|' | '|=' | '||' | '}' | 'type' | break | case | const | continue | defer | else | float | for | fn | go | spawn | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | enum | union | var | unsafe | assert | match | asm | true | false | nil | typeof | offsetof | sizeof | isreftype | dump )
+private ExpressionListRecover ::= !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+'  | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '>>>=' | '[' | ']' | '^' | '^=' | '{' | '|' | '|=' | '||' | '}' | 'type' | break | case | const | continue | defer | else | float | for | fn | go | spawn | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | enum | union | var | unsafe | assert | match | asm | true | false | none | nil | typeof | offsetof | sizeof | isreftype | dump )
 
 private VarDefinitionList ::= VarDefinition (',' VarDefinition)*
 VarDefinition ::= VarModifiers? identifier {
@@ -754,8 +767,10 @@ DotExpression ::= DotPrimaryExpr RightHandExprs {extends=Expression}
 
 private DotPrimaryExpr ::=
     AnonymousStructValueExpression
+  | SqlExpression
   | LiteralValueExpression
   | BuiltinCall
+  | IfExpression
   | ReferenceExpression
   | Literal
   | FunctionLit
@@ -763,7 +778,6 @@ private DotPrimaryExpr ::=
   | ParenthesesExpr
   | UnsafeExpression
   | MapInitExpr
-  | SqlExpression
 
 private BuiltinCall ::= OffsetOfCallExpr | TypeOfCallExpr | SizeOfCallExpr | IsRefTypeCallExpr | DumpCallExpr
 
@@ -880,15 +894,19 @@ ArrayCreationList ::= ExpressionWithRecover (list_separator? ExpressionWithRecov
 // ([<arg1>, <arg2>[...], ...])
 ArgumentList ::= '(' <<enterMode "PAR">> ElementList? '...'? ','? <<exitModeSafe "PAR">> ')' {pin=1}
 
+external BeforeBlockExpressionInner ::= beforeBlockExpression;
+private BeforeBlockExpression ::= BeforeBlockExpressionInner | !() Expression;
+private BeforeBlockExpressionList ::= BeforeBlockExpression (',' (BeforeBlockExpression | &')'))*
+
 // match <expr> { ... }
-MatchExpression ::= match <<enterMode "BLOCK?">> Expression '{' MatchArms '}' <<exitAllModeSafe "BLOCK?">> {pin=1}
+MatchExpression ::= match BeforeBlockExpression '{' MatchArms '}' {pin=1}
 // <expr>[, <expr2>] { ... }
 // else { ... }
 MatchArms ::= (MatchArm | MatchElseArmClause)*
 // <expr>[, <expr2>] { ... }
-MatchArm ::= <<enterMode "BLOCK?">> MatchExpressionList <<exitModeSafe "BLOCK?">> Block semi {pin=2}
+MatchArm ::= MatchExpressionList Block semi
 // <expr>[, <expr2>]
-private MatchExpressionList ::= MatchArmExpression (',' MatchArmExpression)* {pin=0}
+private MatchExpressionList ::= MatchArmExpression (',' MatchArmExpression)*
 // <expr> or <type>
 private MatchArmExpression ::= <<typeOrExpression>>
 // else { ... }
@@ -918,11 +936,12 @@ IfExpression ::= if Condition semi? Block (semi? ElseStatement)? {
 // $if <condition> { ... }
 CompileTimeIfExpression ::= '$if' Condition semi? Block (semi? CompileElseStatement)? {pin=1}
 
-private Condition ::= <<enterMode "BLOCK?">> (VarDeclaration | Expression) <<exitModeSafe "BLOCK?">>
+private Condition ::= GuardVarDeclaration | BeforeBlockExpression
+GuardVarDeclaration ::= VarDefinitionList ':=' BeforeBlockExpression {extends=VarDeclaration}
 
 // sql <ref> { ... }
-SqlExpression ::= 'sql' <<enterMode "BLOCK?">> Expression <<exitModeSafe "BLOCK?">> SqlBlock {
-  pin=1
+SqlExpression ::= 'sql' BeforeBlockExpression SqlBlock {
+  pin=3
   methods=[getType]
 }
 SqlBlock ::= '{' ('}' | (SqlBlockStatement semi)* '}') {pin(".*")=1}
@@ -974,6 +993,7 @@ Literal ::=
   | false
   | StringLiteral
   | char
+  | none
   | nil {
   methods=[isNumeric]
 }

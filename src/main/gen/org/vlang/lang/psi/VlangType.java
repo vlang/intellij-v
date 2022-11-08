@@ -16,6 +16,9 @@ public interface VlangType extends VlangCompositeElement, StubBasedPsiElement<Vl
   VlangType getType();
 
   @Nullable
+  VlangTypeModifiers getTypeModifiers();
+
+  @Nullable
   VlangTypeReferenceExpression getTypeReferenceExpression();
 
   @Nullable

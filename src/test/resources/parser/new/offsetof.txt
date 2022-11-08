@@ -19,18 +19,24 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('name')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('breed')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('age')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
       PsiElement(VlangTokenType.})('}')
@@ -41,6 +47,8 @@ V Language file
       PsiElement(VlangTokenType.=)('=')
       TYPE_UNION_LIST
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('Cat')
   FUNCTION_DECLARATION
@@ -61,6 +69,8 @@ V Language file
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('Cat')
             PsiElement(VlangTokenType.{)('{')
@@ -140,6 +150,8 @@ V Language file
                                     PsiElement(VlangTokenType.offsetof)('__offsetof')
                                     PsiElement(VlangTokenType.()('(')
                                     TYPE
+                                      TYPE_MODIFIERS
+                                        <empty list>
                                       TYPE_REFERENCE_EXPRESSION
                                         PsiElement(VlangTokenType.identifier)('Cat')
                                     PsiElement(VlangTokenType.,)(',')
@@ -190,6 +202,8 @@ V Language file
                                     PsiElement(VlangTokenType.offsetof)('__offsetof')
                                     PsiElement(VlangTokenType.()('(')
                                     TYPE
+                                      TYPE_MODIFIERS
+                                        <empty list>
                                       TYPE_REFERENCE_EXPRESSION
                                         PsiElement(VlangTokenType.identifier)('Cat')
                                     PsiElement(VlangTokenType.,)(',')
@@ -240,6 +254,8 @@ V Language file
                                     PsiElement(VlangTokenType.offsetof)('__offsetof')
                                     PsiElement(VlangTokenType.()('(')
                                     TYPE
+                                      TYPE_MODIFIERS
+                                        <empty list>
                                       TYPE_REFERENCE_EXPRESSION
                                         PsiElement(VlangTokenType.identifier)('Cat')
                                     PsiElement(VlangTokenType.,)(',')
@@ -271,6 +287,8 @@ V Language file
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(VlangTokenType.identifier)('complex')
@@ -329,6 +347,8 @@ V Language file
                                     PsiElement(VlangTokenType.offsetof)('__offsetof')
                                     PsiElement(VlangTokenType.()('(')
                                     TYPE
+                                      TYPE_MODIFIERS
+                                        <empty list>
                                       TYPE_REFERENCE_EXPRESSION
                                         TYPE_REFERENCE_EXPRESSION
                                           PsiElement(VlangTokenType.identifier)('complex')
@@ -379,6 +399,8 @@ V Language file
                                     PsiElement(VlangTokenType.offsetof)('__offsetof')
                                     PsiElement(VlangTokenType.()('(')
                                     TYPE
+                                      TYPE_MODIFIERS
+                                        <empty list>
                                       TYPE_REFERENCE_EXPRESSION
                                         TYPE_REFERENCE_EXPRESSION
                                           PsiElement(VlangTokenType.identifier)('complex')
@@ -413,6 +435,8 @@ V Language file
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('Feline')
             PsiElement(VlangTokenType.{)('{')
@@ -492,6 +516,8 @@ V Language file
                                     PsiElement(VlangTokenType.offsetof)('__offsetof')
                                     PsiElement(VlangTokenType.()('(')
                                     TYPE
+                                      TYPE_MODIFIERS
+                                        <empty list>
                                       TYPE_REFERENCE_EXPRESSION
                                         PsiElement(VlangTokenType.identifier)('Feline')
                                     PsiElement(VlangTokenType.,)(',')
@@ -542,6 +568,8 @@ V Language file
                                     PsiElement(VlangTokenType.offsetof)('__offsetof')
                                     PsiElement(VlangTokenType.()('(')
                                     TYPE
+                                      TYPE_MODIFIERS
+                                        <empty list>
                                       TYPE_REFERENCE_EXPRESSION
                                         PsiElement(VlangTokenType.identifier)('Feline')
                                     PsiElement(VlangTokenType.,)(',')
@@ -592,6 +620,8 @@ V Language file
                                     PsiElement(VlangTokenType.offsetof)('__offsetof')
                                     PsiElement(VlangTokenType.()('(')
                                     TYPE
+                                      TYPE_MODIFIERS
+                                        <empty list>
                                       TYPE_REFERENCE_EXPRESSION
                                         PsiElement(VlangTokenType.identifier)('Feline')
                                     PsiElement(VlangTokenType.,)(',')

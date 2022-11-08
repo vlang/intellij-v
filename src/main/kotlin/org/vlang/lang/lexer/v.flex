@@ -56,8 +56,8 @@ import static org.vlang.lang.psi.VlangDocTokenTypes.*;
        return LITERAL_STRING_TEMPLATE_ENTRY;
     }
 
-    yy_pop_state();
     yy_end_string(isDoubleQuote ? DOUBLE_QUOTE : SINGLE_QUOTE);
+    yy_pop_state();
     yybegin(MAYBE_SEMICOLON);
     return CLOSING_QUOTE;
   }
@@ -179,13 +179,13 @@ RAW_SINGLE_QUOTE_STRING = {RAW_STR_MODIFIER} {STR_SINGLE} [^\']* {STR_SINGLE}
 
 // disabled for now
 //"{" [a-zA-Z_] { yy_push_state(YYINITIAL); yypushback(1); return TEMPLATE_ENTRY_START; }
-"{"           { return LITERAL_STRING_TEMPLATE_ENTRY; }
+//"{"           { return LITERAL_STRING_TEMPLATE_ENTRY; }
 
 {STR_DOUBLE}  { return handle_string_end(true); }
 {STR_SINGLE}  { return handle_string_end(false); }
 
 "\\" (. | "\\") { return LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY; }
-[^\"\'\\{\\$]+  { return LITERAL_STRING_TEMPLATE_ENTRY; }
+[^\"\'\\$]+  { return LITERAL_STRING_TEMPLATE_ENTRY; }
 }
 
 <MULTI_LINE_COMMENT_STATE> {
@@ -359,6 +359,7 @@ RAW_SINGLE_QUOTE_STRING = {RAW_STR_MODIFIER} {STR_SINGLE} [^\']* {STR_SINGLE}
 "nil"                                     { yybegin(MAYBE_SEMICOLON); return NIL; }
 "true"                                    { yybegin(MAYBE_SEMICOLON); return TRUE; }
 "false"                                   { yybegin(MAYBE_SEMICOLON); return FALSE; }
+"none"                                    { yybegin(MAYBE_SEMICOLON); return NONE; }
 
 // modifiers
 "pub"                                     { return PUB; }

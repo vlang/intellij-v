@@ -40,9 +40,9 @@ public class VlangMapInitExprImpl extends VlangExpressionImpl implements VlangMa
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiElement getRbrace() {
-    return findChildByType(RBRACE);
+    return notNullChild(findChildByType(RBRACE));
   }
 
 }

@@ -29,6 +29,8 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('a')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('toml')
@@ -37,6 +39,8 @@ V Language file
         PsiElement(VlangTokenType.))(')')
       RESULT
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('string')
     BLOCK
@@ -51,6 +55,8 @@ V Language file
             MATCH_ARMS
               MATCH_ARM
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     TYPE_REFERENCE_EXPRESSION
                       PsiElement(VlangTokenType.identifier)('toml')
@@ -68,6 +74,8 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     TYPE_REFERENCE_EXPRESSION
                       PsiElement(VlangTokenType.identifier)('toml')
@@ -107,6 +115,8 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     TYPE_REFERENCE_EXPRESSION
                       PsiElement(VlangTokenType.identifier)('toml')
@@ -146,6 +156,8 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     TYPE_REFERENCE_EXPRESSION
                       PsiElement(VlangTokenType.identifier)('toml')
@@ -185,6 +197,8 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('string')
                 BLOCK
@@ -221,6 +235,8 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('bool')
                 BLOCK
@@ -258,6 +274,8 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('f32')
                 BLOCK
@@ -295,6 +313,8 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('f64')
                 BLOCK
@@ -332,6 +352,8 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('i64')
                 BLOCK
@@ -369,6 +391,8 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('int')
                 BLOCK
@@ -406,6 +430,8 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('u64')
                 BLOCK
@@ -443,13 +469,19 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
                 MAP_TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   PsiElement(VlangTokenType.identifier)('map')
                   PsiElement(VlangTokenType.[)('[')
                   TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
                     TYPE_REFERENCE_EXPRESSION
                       PsiElement(VlangTokenType.identifier)('string')
                   PsiElement(VlangTokenType.])(']')
                   TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
                     TYPE_REFERENCE_EXPRESSION
                       TYPE_REFERENCE_EXPRESSION
                         PsiElement(VlangTokenType.identifier)('toml')
@@ -582,9 +614,13 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
                 ARRAY_TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   PsiElement(VlangTokenType.[)('[')
                   PsiElement(VlangTokenType.])(']')
                   TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
                     TYPE_REFERENCE_EXPRESSION
                       TYPE_REFERENCE_EXPRESSION
                         PsiElement(VlangTokenType.identifier)('toml')
@@ -696,6 +732,8 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('a')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('toml')
@@ -704,6 +742,8 @@ V Language file
         PsiElement(VlangTokenType.))(')')
       RESULT
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('json2')
@@ -721,6 +761,8 @@ V Language file
             MATCH_ARMS
               MATCH_ARM
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     TYPE_REFERENCE_EXPRESSION
                       PsiElement(VlangTokenType.identifier)('toml')
@@ -732,6 +774,8 @@ V Language file
                     PsiElement(VlangTokenType.return)('return')
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           TYPE_REFERENCE_EXPRESSION
                             PsiElement(VlangTokenType.identifier)('json2')
@@ -742,6 +786,8 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     TYPE_REFERENCE_EXPRESSION
                       PsiElement(VlangTokenType.identifier)('toml')
@@ -774,6 +820,8 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     TYPE_REFERENCE_EXPRESSION
                       PsiElement(VlangTokenType.identifier)('toml')
@@ -806,6 +854,8 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     TYPE_REFERENCE_EXPRESSION
                       PsiElement(VlangTokenType.identifier)('toml')
@@ -838,6 +888,8 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('string')
                 BLOCK
@@ -867,6 +919,8 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('bool')
                 BLOCK
@@ -897,6 +951,8 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('int')
                 BLOCK
@@ -927,6 +983,8 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('f32')
                 BLOCK
@@ -957,6 +1015,8 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('f64')
                 BLOCK
@@ -987,6 +1047,8 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('i64')
                 BLOCK
@@ -1017,6 +1079,8 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('u64')
                 BLOCK
@@ -1047,13 +1111,19 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
                 MAP_TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   PsiElement(VlangTokenType.identifier)('map')
                   PsiElement(VlangTokenType.[)('[')
                   TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
                     TYPE_REFERENCE_EXPRESSION
                       PsiElement(VlangTokenType.identifier)('string')
                   PsiElement(VlangTokenType.])(']')
                   TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
                     TYPE_REFERENCE_EXPRESSION
                       TYPE_REFERENCE_EXPRESSION
                         PsiElement(VlangTokenType.identifier)('toml')
@@ -1071,13 +1141,19 @@ V Language file
                       PsiElement(VlangTokenType.:=)(':=')
                       LITERAL_VALUE_EXPRESSION
                         MAP_TYPE
+                          TYPE_MODIFIERS
+                            <empty list>
                           PsiElement(VlangTokenType.identifier)('map')
                           PsiElement(VlangTokenType.[)('[')
                           TYPE
+                            TYPE_MODIFIERS
+                              <empty list>
                             TYPE_REFERENCE_EXPRESSION
                               PsiElement(VlangTokenType.identifier)('string')
                           PsiElement(VlangTokenType.])(']')
                           TYPE
+                            TYPE_MODIFIERS
+                              <empty list>
                             TYPE_REFERENCE_EXPRESSION
                               TYPE_REFERENCE_EXPRESSION
                                 PsiElement(VlangTokenType.identifier)('json2')
@@ -1131,9 +1207,13 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
                 ARRAY_TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   PsiElement(VlangTokenType.[)('[')
                   PsiElement(VlangTokenType.])(']')
                   TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
                     TYPE_REFERENCE_EXPRESSION
                       TYPE_REFERENCE_EXPRESSION
                         PsiElement(VlangTokenType.identifier)('toml')
@@ -1151,9 +1231,13 @@ V Language file
                       PsiElement(VlangTokenType.:=)(':=')
                       LITERAL_VALUE_EXPRESSION
                         ARRAY_TYPE
+                          TYPE_MODIFIERS
+                            <empty list>
                           PsiElement(VlangTokenType.[)('[')
                           PsiElement(VlangTokenType.])(']')
                           TYPE
+                            TYPE_MODIFIERS
+                              <empty list>
                             TYPE_REFERENCE_EXPRESSION
                               TYPE_REFERENCE_EXPRESSION
                                 PsiElement(VlangTokenType.identifier)('json2')

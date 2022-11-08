@@ -27,9 +27,9 @@ public class VlangMatchArmImpl extends VlangCompositeElementImpl implements Vlan
   }
 
   @Override
-  @Nullable
+  @NotNull
   public VlangBlock getBlock() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangBlock.class);
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangBlock.class));
   }
 
   @Override

@@ -16,6 +16,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('name')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
       PsiElement(VlangTokenType.})('}')
@@ -52,6 +54,8 @@ V Language file
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('Test')
             PsiElement(VlangTokenType.{)('{')

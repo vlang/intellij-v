@@ -24,16 +24,24 @@ V Language file
       PsiElement(VlangTokenType.=)('=')
       TYPE_UNION_LIST
         MAP_TYPE
+          TYPE_MODIFIERS
+            <empty list>
           PsiElement(VlangTokenType.identifier)('map')
           PsiElement(VlangTokenType.[)('[')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
           PsiElement(VlangTokenType.])(']')
           ARRAY_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.[)('[')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('Import')
   STRUCT_DECLARATION
@@ -52,6 +60,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('context')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('AnalyzerContext')
       PsiElement(VlangTokenType.})('}')
@@ -66,6 +76,8 @@ V Language file
           PsiElement(VlangTokenType.mut)('mut')
       PsiElement(VlangTokenType.identifier)('imp')
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('Importer')
     PsiElement(VlangTokenType.))(')')
@@ -77,6 +89,8 @@ V Language file
         PsiElement(VlangTokenType.))(')')
       RESULT
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('ImportsMap')
     BLOCK
@@ -106,6 +120,8 @@ V Language file
           PsiElement(VlangTokenType.mut)('mut')
       PsiElement(VlangTokenType.identifier)('imp')
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('Importer')
     PsiElement(VlangTokenType.))(')')
@@ -119,8 +135,12 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('tree')
           POINTER_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.&)('&')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(VlangTokenType.identifier)('ast')
@@ -129,9 +149,13 @@ V Language file
         PsiElement(VlangTokenType.))(')')
       RESULT
         ARRAY_TYPE
+          TYPE_MODIFIERS
+            <empty list>
           PsiElement(VlangTokenType.[)('[')
           PsiElement(VlangTokenType.])(']')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
     BLOCK
@@ -178,9 +202,13 @@ V Language file
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
             ARRAY_TYPE
+              TYPE_MODIFIERS
+                <empty list>
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
+                TYPE_MODIFIERS
+                  <empty list>
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(VlangTokenType.identifier)('int')
             PsiElement(VlangTokenType.{)('{')
@@ -282,7 +310,7 @@ V Language file
             LEFT_HAND_EXPR_LIST
               IF_EXPRESSION
                 PsiElement(VlangTokenType.if)('if')
-                VAR_DECLARATION
+                GUARD_VAR_DECLARATION
                   VAR_DEFINITION
                     VAR_MODIFIERS
                       <empty list>
@@ -497,7 +525,7 @@ V Language file
             LEFT_HAND_EXPR_LIST
               IF_EXPRESSION
                 PsiElement(VlangTokenType.if)('if')
-                VAR_DECLARATION
+                GUARD_VAR_DECLARATION
                   VAR_DEFINITION
                     VAR_MODIFIERS
                       <empty list>
@@ -525,7 +553,7 @@ V Language file
                     LEFT_HAND_EXPR_LIST
                       IF_EXPRESSION
                         PsiElement(VlangTokenType.if)('if')
-                        VAR_DECLARATION
+                        GUARD_VAR_DECLARATION
                           VAR_DEFINITION
                             VAR_MODIFIERS
                               <empty list>
@@ -596,7 +624,7 @@ V Language file
                   IF_STATEMENT
                     IF_EXPRESSION
                       PsiElement(VlangTokenType.if)('if')
-                      VAR_DECLARATION
+                      GUARD_VAR_DECLARATION
                         VAR_DEFINITION
                           VAR_MODIFIERS
                             <empty list>
@@ -656,9 +684,13 @@ V Language file
                             PsiElement(VlangTokenType.:=)(':=')
                             LITERAL_VALUE_EXPRESSION
                               ARRAY_TYPE
+                                TYPE_MODIFIERS
+                                  <empty list>
                                 PsiElement(VlangTokenType.[)('[')
                                 PsiElement(VlangTokenType.])(']')
                                 TYPE
+                                  TYPE_MODIFIERS
+                                    <empty list>
                                   TYPE_REFERENCE_EXPRESSION
                                     PsiElement(VlangTokenType.identifier)('string')
                               PsiElement(VlangTokenType.{)('{')
@@ -907,6 +939,8 @@ V Language file
           PsiElement(VlangTokenType.mut)('mut')
       PsiElement(VlangTokenType.identifier)('imp')
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('Importer')
     PsiElement(VlangTokenType.))(')')
@@ -920,6 +954,8 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('path')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
         PsiElement(VlangTokenType.,)(',')
@@ -929,18 +965,26 @@ V Language file
           PsiElement(VlangTokenType.identifier)('mod_names')
           PsiElement(VlangTokenType....)('...')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
         PsiElement(VlangTokenType.))(')')
       RESULT
         TUPLE_TYPE
+          TYPE_MODIFIERS
+            <empty list>
           PsiElement(VlangTokenType.()('(')
           TYPE_LIST_NO_PIN
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('bool')
             PsiElement(VlangTokenType.,)(',')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('bool')
           PsiElement(VlangTokenType.))(')')
@@ -1057,7 +1101,7 @@ V Language file
         LEFT_HAND_EXPR_LIST
           IF_EXPRESSION
             PsiElement(VlangTokenType.if)('if')
-            VAR_DECLARATION
+            GUARD_VAR_DECLARATION
               VAR_DEFINITION
                 VAR_MODIFIERS
                   <empty list>
@@ -1210,6 +1254,8 @@ V Language file
           PsiElement(VlangTokenType.mut)('mut')
       PsiElement(VlangTokenType.identifier)('imp')
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('Importer')
     PsiElement(VlangTokenType.))(')')
@@ -1224,9 +1270,13 @@ V Language file
               PsiElement(VlangTokenType.mut)('mut')
           PsiElement(VlangTokenType.identifier)('new_imports')
           ARRAY_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.[)('[')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('Import')
         PsiElement(VlangTokenType.,)(',')
@@ -1235,9 +1285,13 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('import_idxs')
           ARRAY_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.[)('[')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('int')
         PsiElement(VlangTokenType.,)(',')
@@ -1247,6 +1301,8 @@ V Language file
           PsiElement(VlangTokenType.identifier)('lookup_paths')
           PsiElement(VlangTokenType....)('...')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
         PsiElement(VlangTokenType.))(')')
@@ -1340,6 +1396,8 @@ V Language file
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('ImportPathIterator')
             PsiElement(VlangTokenType.{)('{')
@@ -1997,6 +2055,8 @@ V Language file
           PsiElement(VlangTokenType.mut)('mut')
       PsiElement(VlangTokenType.identifier)('imp')
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('Importer')
     PsiElement(VlangTokenType.))(')')
@@ -2011,9 +2071,13 @@ V Language file
               PsiElement(VlangTokenType.mut)('mut')
           PsiElement(VlangTokenType.identifier)('imports')
           ARRAY_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.[)('[')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('Import')
         PsiElement(VlangTokenType.,)(',')
@@ -2022,9 +2086,13 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('import_idxs')
           ARRAY_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.[)('[')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('int')
         PsiElement(VlangTokenType.))(')')
@@ -2527,6 +2595,8 @@ V Language file
           PsiElement(VlangTokenType.mut)('mut')
       PsiElement(VlangTokenType.identifier)('ss')
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('Store')
     PsiElement(VlangTokenType.))(')')
@@ -2540,6 +2610,8 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('to_dir')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
         PsiElement(VlangTokenType.,)(',')
@@ -2548,24 +2620,36 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('imp')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Import')
         PsiElement(VlangTokenType.))(')')
       RESULT
         TUPLE_TYPE
+          TYPE_MODIFIERS
+            <empty list>
           PsiElement(VlangTokenType.()('(')
           TYPE_LIST_NO_PIN
             POINTER_TYPE
+              TYPE_MODIFIERS
+                <empty list>
               PsiElement(VlangTokenType.&)('&')
               TYPE
+                TYPE_MODIFIERS
+                  <empty list>
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(VlangTokenType.identifier)('Import')
             PsiElement(VlangTokenType.,)(',')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('int')
             PsiElement(VlangTokenType.,)(',')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('bool')
           PsiElement(VlangTokenType.))(')')
@@ -2675,9 +2759,13 @@ V Language file
                     PsiElement(VlangTokenType.=)('=')
                   LITERAL_VALUE_EXPRESSION
                     ARRAY_TYPE
+                      TYPE_MODIFIERS
+                        <empty list>
                       PsiElement(VlangTokenType.[)('[')
                       PsiElement(VlangTokenType.])(']')
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Import')
                     PsiElement(VlangTokenType.{)('{')
@@ -2713,6 +2801,8 @@ V Language file
                     PsiElement(VlangTokenType.<<)('<<')
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Import')
                       PsiElement(VlangTokenType.{)('{')
@@ -2871,6 +2961,8 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('context')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('AnalyzerContext')
         PsiElement(VlangTokenType.,)(',')
@@ -2879,8 +2971,12 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('tree')
           POINTER_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.&)('&')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(VlangTokenType.identifier)('ast')
@@ -2893,6 +2989,8 @@ V Language file
           PsiElement(VlangTokenType.identifier)('lookup_paths')
           PsiElement(VlangTokenType....)('...')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
         PsiElement(VlangTokenType.))(')')
@@ -2908,6 +3006,8 @@ V Language file
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('Importer')
             PsiElement(VlangTokenType.{)('{')
@@ -3058,6 +3158,8 @@ V Language file
           PsiElement(VlangTokenType.mut)('mut')
       PsiElement(VlangTokenType.identifier)('ss')
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('Store')
     PsiElement(VlangTokenType.))(')')
@@ -3071,11 +3173,15 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('from_dir')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
         PsiElement(VlangTokenType.))(')')
       RESULT
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('int')
     BLOCK
@@ -3360,6 +3466,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('resolved')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('bool')
         PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// imported indicates that the files of the modules are already imported.')
@@ -3367,6 +3475,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('imported')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('bool')
         PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// absolute_module_name is the name that was declared when imported.')
@@ -3374,6 +3484,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('absolute_module_name')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
         PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// module_name is the name to be used for symbol lookups')
@@ -3381,6 +3493,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('module_name')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
         PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// path is the path where the module was located.')
@@ -3388,6 +3502,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('path')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
         PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// track the location of the import statements')
@@ -3397,13 +3513,19 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('ranges')
           MAP_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.identifier)('map')
             PsiElement(VlangTokenType.[)('[')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('string')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('C.TSRange')
         PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// original module_names are not recorded as aliases')
@@ -3412,13 +3534,19 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('aliases')
           MAP_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.identifier)('map')
             PsiElement(VlangTokenType.[)('[')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('string')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('string')
         PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// e.g {'file.v': ['Any', 'decode', 'encode'], 'file2.v': ['foo']}')
@@ -3426,16 +3554,24 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('symbols')
           MAP_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.identifier)('map')
             PsiElement(VlangTokenType.[)('[')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('string')
             PsiElement(VlangTokenType.])(']')
             ARRAY_TYPE
+              TYPE_MODIFIERS
+                <empty list>
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
+                TYPE_MODIFIERS
+                  <empty list>
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(VlangTokenType.identifier)('string')
       PsiElement(VlangTokenType.})('}')
@@ -3451,6 +3587,8 @@ V Language file
           PsiElement(VlangTokenType.mut)('mut')
       PsiElement(VlangTokenType.identifier)('imp')
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('Import')
     PsiElement(VlangTokenType.))(')')
@@ -3464,6 +3602,8 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('file_name')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
         PsiElement(VlangTokenType.,)(',')
@@ -3472,6 +3612,8 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('alias')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
         PsiElement(VlangTokenType.))(')')
@@ -3527,6 +3669,8 @@ V Language file
           PsiElement(VlangTokenType.mut)('mut')
       PsiElement(VlangTokenType.identifier)('imp')
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('Import')
     PsiElement(VlangTokenType.))(')')
@@ -3540,6 +3684,8 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('file_name')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
         PsiElement(VlangTokenType.,)(',')
@@ -3548,6 +3694,8 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('range')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('C.TSRange')
         PsiElement(VlangTokenType.))(')')
@@ -3623,6 +3771,8 @@ V Language file
           PsiElement(VlangTokenType.mut)('mut')
       PsiElement(VlangTokenType.identifier)('imp')
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('Import')
     PsiElement(VlangTokenType.))(')')
@@ -3636,6 +3786,8 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('file_name')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
         PsiElement(VlangTokenType.))(')')
@@ -3688,6 +3840,8 @@ V Language file
           PsiElement(VlangTokenType.mut)('mut')
       PsiElement(VlangTokenType.identifier)('imp')
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('Import')
     PsiElement(VlangTokenType.))(')')
@@ -3701,6 +3855,8 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('file_name')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
         PsiElement(VlangTokenType.,)(',')
@@ -3710,6 +3866,8 @@ V Language file
           PsiElement(VlangTokenType.identifier)('symbols')
           PsiElement(VlangTokenType....)('...')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
         PsiElement(VlangTokenType.))(')')
@@ -3837,6 +3995,8 @@ V Language file
           PsiElement(VlangTokenType.mut)('mut')
       PsiElement(VlangTokenType.identifier)('imp')
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('Import')
     PsiElement(VlangTokenType.))(')')
@@ -3850,6 +4010,8 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('path')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
         PsiElement(VlangTokenType.))(')')
@@ -3915,8 +4077,12 @@ V Language file
         <empty list>
       PsiElement(VlangTokenType.identifier)('imp')
       POINTER_TYPE
+        TYPE_MODIFIERS
+          <empty list>
         PsiElement(VlangTokenType.&)('&')
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('Import')
     PsiElement(VlangTokenType.))(')')
@@ -3993,6 +4159,8 @@ V Language file
         <empty list>
       PsiElement(VlangTokenType.identifier)('imports')
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('ImportsMap')
     PsiElement(VlangTokenType.))(')')
@@ -4006,6 +4174,8 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('file_path')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
         PsiElement(VlangTokenType.,)(',')
@@ -4014,15 +4184,23 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('range')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('C.TSRange')
         PsiElement(VlangTokenType.))(')')
       RESULT
         NULLABLE_TYPE
+          TYPE_MODIFIERS
+            <empty list>
           PsiElement(VlangTokenType.?)('?')
           POINTER_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.&)('&')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('Import')
     BLOCK
@@ -4131,6 +4309,6 @@ V Language file
           PsiElement(VlangTokenType.})('}')
       RETURN_STATEMENT
         PsiElement(VlangTokenType.return)('return')
-        REFERENCE_EXPRESSION
-          PsiElement(VlangTokenType.identifier)('none')
+        LITERAL
+          PsiElement(VlangTokenType.none)('none')
       PsiElement(VlangTokenType.})('}')

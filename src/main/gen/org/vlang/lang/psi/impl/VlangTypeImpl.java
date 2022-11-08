@@ -46,6 +46,12 @@ public class VlangTypeImpl extends VlangStubbedElementImpl<VlangTypeStub> implem
 
   @Override
   @Nullable
+  public VlangTypeModifiers getTypeModifiers() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeModifiers.class);
+  }
+
+  @Override
+  @Nullable
   public VlangTypeReferenceExpression getTypeReferenceExpression() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangTypeReferenceExpression.class);
   }

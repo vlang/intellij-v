@@ -5,15 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangMapInitExpr extends VlangExpression {
-
-  @Nullable
-  VlangKeyValues getKeyValues();
+public interface VlangNoneType extends VlangType {
 
   @NotNull
-  PsiElement getLbrace();
-
-  @NotNull
-  PsiElement getRbrace();
+  PsiElement getNone();
 
 }

@@ -40,6 +40,8 @@ abstract class VlangLightType<E : VlangCompositeElement>(
 
         override fun getType() = element
 
+        override fun getTypeModifiers(): VlangTypeModifiers? = null
+
         override fun getLbrack(): PsiElement {
             return object : FakePsiElement() {
                 override fun getText(): String {
@@ -69,6 +71,8 @@ abstract class VlangLightType<E : VlangCompositeElement>(
         override fun getText() = "[]" + element.text
 
         override fun getType() = element
+
+        override fun getTypeModifiers(): VlangTypeModifiers? = null
 
         override fun getTypeList() = mutableListOf(keyType, element)
 
@@ -105,6 +109,8 @@ abstract class VlangLightType<E : VlangCompositeElement>(
         override fun getText() = "&" + element.text
 
         override fun getType() = element
+
+        override fun getTypeModifiers() = null
     }
 
     class LightFunctionType(o: VlangSignatureOwner) : VlangLightType<VlangSignatureOwner>(o), VlangFunctionType {
@@ -123,5 +129,7 @@ abstract class VlangLightType<E : VlangCompositeElement>(
         }
 
         override fun getType() = null
+
+        override fun getTypeModifiers() = null
     }
 }

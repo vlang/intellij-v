@@ -20,6 +20,7 @@ object VlangElementTypeFactory {
             put("ENUM_TYPE", VlangEnumTypeImpl::class.java)
             put("MAP_TYPE", VlangMapTypeImpl::class.java)
             put("SHARED_TYPE", VlangSharedTypeImpl::class.java)
+            put("NONE_TYPE", VlangNoneTypeImpl::class.java)
             put("POINTER_TYPE", VlangPointerTypeImpl::class.java)
             put("ANONYMOUS_STRUCT_TYPE", VlangAnonymousStructTypeImpl::class.java)
             put("STRUCT_TYPE", VlangStructTypeImpl::class.java)

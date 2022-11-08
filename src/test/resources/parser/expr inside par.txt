@@ -24,6 +24,8 @@ V Language file
                 ARRAY_CREATION_LIST
                   LITERAL_VALUE_EXPRESSION
                     TYPE
+                      TYPE_MODIFIERS
+                        <empty list>
                       TYPE_REFERENCE_EXPRESSION
                         PsiElement(VlangTokenType.identifier)('Test')
                     PsiElement(VlangTokenType.{)('{')
@@ -40,6 +42,8 @@ V Language file
                   PsiElement(VlangTokenType.,)(',')
                   LITERAL_VALUE_EXPRESSION
                     TYPE
+                      TYPE_MODIFIERS
+                        <empty list>
                       TYPE_REFERENCE_EXPRESSION
                         PsiElement(VlangTokenType.identifier)('Test')
                     PsiElement(VlangTokenType.{)('{')
@@ -62,7 +66,7 @@ V Language file
         LEFT_HAND_EXPR_LIST
           IF_EXPRESSION
             PsiElement(VlangTokenType.if)('if')
-            VAR_DECLARATION
+            GUARD_VAR_DECLARATION
               VAR_DEFINITION
                 VAR_MODIFIERS
                   <empty list>
@@ -77,6 +81,8 @@ V Language file
                     VALUE
                       LITERAL_VALUE_EXPRESSION
                         TYPE
+                          TYPE_MODIFIERS
+                            <empty list>
                           TYPE_REFERENCE_EXPRESSION
                             PsiElement(VlangTokenType.identifier)('Test')
                         PsiElement(VlangTokenType.{)('{')
@@ -170,6 +176,8 @@ V Language file
                 PsiElement(VlangTokenType.<<)('<<')
                 LITERAL_VALUE_EXPRESSION
                   TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
                     TYPE_REFERENCE_EXPRESSION
                       PsiElement(VlangTokenType.identifier)('RepIndex')
                   PsiElement(VlangTokenType.{)('{')
@@ -219,6 +227,8 @@ V Language file
                         PsiElement(VlangTokenType.<<)('<<')
                         LITERAL_VALUE_EXPRESSION
                           TYPE
+                            TYPE_MODIFIERS
+                              <empty list>
                             TYPE_REFERENCE_EXPRESSION
                               PsiElement(VlangTokenType.identifier)('RepIndex')
                           PsiElement(VlangTokenType.{)('{')

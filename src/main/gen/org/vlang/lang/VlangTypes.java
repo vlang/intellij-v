@@ -90,6 +90,7 @@ public interface VlangTypes {
   IElementType GOTO_STATEMENT = new VlangCompositeElementType("GOTO_STATEMENT");
   IElementType GO_EXPRESSION = new VlangCompositeElementType("GO_EXPRESSION");
   IElementType GO_STATEMENT = new VlangCompositeElementType("GO_STATEMENT");
+  IElementType GUARD_VAR_DECLARATION = new VlangCompositeElementType("GUARD_VAR_DECLARATION");
   IElementType IF_ATTRIBUTE = new VlangCompositeElementType("IF_ATTRIBUTE");
   IElementType IF_EXPRESSION = new VlangCompositeElementType("IF_EXPRESSION");
   IElementType IF_STATEMENT = new VlangCompositeElementType("IF_STATEMENT");
@@ -138,6 +139,7 @@ public interface VlangTypes {
   IElementType MODULE_CLAUSE = VlangElementTypeFactory.stubFactory("MODULE_CLAUSE");
   IElementType MUL_EXPR = new VlangCompositeElementType("MUL_EXPR");
   IElementType MUT_EXPRESSION = new VlangCompositeElementType("MUT_EXPRESSION");
+  IElementType NONE_TYPE = VlangElementTypeFactory.stubFactory("NONE_TYPE");
   IElementType NOT_IN_EXPRESSION = new VlangCompositeElementType("NOT_IN_EXPRESSION");
   IElementType NOT_IS_EXPRESSION = new VlangCompositeElementType("NOT_IS_EXPRESSION");
   IElementType NOT_NULLABLE_TYPE = VlangElementTypeFactory.stubFactory("NOT_NULLABLE_TYPE");
@@ -159,6 +161,8 @@ public interface VlangTypes {
   IElementType SELECTIVE_IMPORT_LIST = new VlangCompositeElementType("SELECTIVE_IMPORT_LIST");
   IElementType SELECT_ARM = new VlangCompositeElementType("SELECT_ARM");
   IElementType SELECT_ARMS = new VlangCompositeElementType("SELECT_ARMS");
+  IElementType SELECT_ARM_ASSIGNMENT_STATEMENT = new VlangCompositeElementType("SELECT_ARM_ASSIGNMENT_STATEMENT");
+  IElementType SELECT_ARM_STATEMENT = new VlangCompositeElementType("SELECT_ARM_STATEMENT");
   IElementType SELECT_ELSE_ARM_CLAUSE = new VlangCompositeElementType("SELECT_ELSE_ARM_CLAUSE");
   IElementType SELECT_EXPRESSION = new VlangCompositeElementType("SELECT_EXPRESSION");
   IElementType SEND_EXPR = new VlangCompositeElementType("SEND_EXPR");
@@ -204,6 +208,8 @@ public interface VlangTypes {
   IElementType TYPE_ALIAS_DECLARATION = VlangElementTypeFactory.stubFactory("TYPE_ALIAS_DECLARATION");
   IElementType TYPE_CAST_EXPRESSION = new VlangCompositeElementType("TYPE_CAST_EXPRESSION");
   IElementType TYPE_LIST_NO_PIN = new VlangCompositeElementType("TYPE_LIST_NO_PIN");
+  IElementType TYPE_MODIFIER = new VlangCompositeElementType("TYPE_MODIFIER");
+  IElementType TYPE_MODIFIERS = new VlangCompositeElementType("TYPE_MODIFIERS");
   IElementType TYPE_OF_CALL_EXPR = new VlangCompositeElementType("TYPE_OF_CALL_EXPR");
   IElementType TYPE_REFERENCE_EXPRESSION = new VlangCompositeElementType("TYPE_REFERENCE_EXPRESSION");
   IElementType TYPE_UNION_LIST = new VlangCompositeElementType("TYPE_UNION_LIST");
@@ -292,6 +298,7 @@ public interface VlangTypes {
   IElementType MUL_ASSIGN = new VlangTokenType("*=");
   IElementType MUT = new VlangTokenType("mut");
   IElementType NIL = new VlangTokenType("nil");
+  IElementType NONE = new VlangTokenType("none");
   IElementType NOT = new VlangTokenType("!");
   IElementType NOT_EQ = new VlangTokenType("!=");
   IElementType NOT_IN = new VlangTokenType("!in");
@@ -585,6 +592,9 @@ public interface VlangTypes {
       else if (type == GO_STATEMENT) {
         return new VlangGoStatementImpl(node);
       }
+      else if (type == GUARD_VAR_DECLARATION) {
+        return new VlangGuardVarDeclarationImpl(node);
+      }
       else if (type == IF_ATTRIBUTE) {
         return new VlangIfAttributeImpl(node);
       }
@@ -729,6 +739,9 @@ public interface VlangTypes {
       else if (type == MUT_EXPRESSION) {
         return new VlangMutExpressionImpl(node);
       }
+      else if (type == NONE_TYPE) {
+        return new VlangNoneTypeImpl(node);
+      }
       else if (type == NOT_IN_EXPRESSION) {
         return new VlangNotInExpressionImpl(node);
       }
@@ -791,6 +804,12 @@ public interface VlangTypes {
       }
       else if (type == SELECT_ARMS) {
         return new VlangSelectArmsImpl(node);
+      }
+      else if (type == SELECT_ARM_ASSIGNMENT_STATEMENT) {
+        return new VlangSelectArmAssignmentStatementImpl(node);
+      }
+      else if (type == SELECT_ARM_STATEMENT) {
+        return new VlangSelectArmStatementImpl(node);
       }
       else if (type == SELECT_ELSE_ARM_CLAUSE) {
         return new VlangSelectElseArmClauseImpl(node);
@@ -926,6 +945,12 @@ public interface VlangTypes {
       }
       else if (type == TYPE_LIST_NO_PIN) {
         return new VlangTypeListNoPinImpl(node);
+      }
+      else if (type == TYPE_MODIFIER) {
+        return new VlangTypeModifierImpl(node);
+      }
+      else if (type == TYPE_MODIFIERS) {
+        return new VlangTypeModifiersImpl(node);
       }
       else if (type == TYPE_OF_CALL_EXPR) {
         return new VlangTypeOfCallExprImpl(node);

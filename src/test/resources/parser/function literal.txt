@@ -45,6 +45,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('cb')
           FUNCTION_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.fn)('fn')
             SIGNATURE
               PARAMETERS
@@ -53,6 +55,8 @@ V Language file
                   VAR_MODIFIERS
                     <empty list>
                   TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
                     TYPE_REFERENCE_EXPRESSION
                       PsiElement(VlangTokenType.identifier)('voidptr')
                 PsiElement(VlangTokenType.,)(',')
@@ -61,6 +65,8 @@ V Language file
                     <empty list>
                   PsiElement(VlangTokenType.identifier)('name')
                   TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
                     TYPE_REFERENCE_EXPRESSION
                       TYPE_REFERENCE_EXPRESSION
                         PsiElement(VlangTokenType.identifier)('picohttpparser')
@@ -72,6 +78,8 @@ V Language file
                     VAR_MODIFIER
                       PsiElement(VlangTokenType.mut)('mut')
                   TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
                     TYPE_REFERENCE_EXPRESSION
                       TYPE_REFERENCE_EXPRESSION
                         PsiElement(VlangTokenType.identifier)('picohttpparser')
@@ -82,6 +90,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('err_cb')
           FUNCTION_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.fn)('fn')
             SIGNATURE
               PARAMETERS
@@ -90,6 +100,8 @@ V Language file
                   VAR_MODIFIERS
                     <empty list>
                   TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
                     TYPE_REFERENCE_EXPRESSION
                       PsiElement(VlangTokenType.identifier)('voidptr')
                 PsiElement(VlangTokenType.,)(',')
@@ -97,6 +109,8 @@ V Language file
                   VAR_MODIFIERS
                     <empty list>
                   TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
                     TYPE_REFERENCE_EXPRESSION
                       TYPE_REFERENCE_EXPRESSION
                         PsiElement(VlangTokenType.identifier)('picohttpparser')
@@ -108,6 +122,8 @@ V Language file
                     VAR_MODIFIER
                       PsiElement(VlangTokenType.mut)('mut')
                   TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
                     TYPE_REFERENCE_EXPRESSION
                       TYPE_REFERENCE_EXPRESSION
                         PsiElement(VlangTokenType.identifier)('picohttpparser')
@@ -118,6 +134,8 @@ V Language file
                   VAR_MODIFIERS
                     <empty list>
                   TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
                     TYPE_REFERENCE_EXPRESSION
                       PsiElement(VlangTokenType.identifier)('IError')
                 PsiElement(VlangTokenType.))(')')
@@ -129,6 +147,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('user_data')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('voidptr')
           DEFAULT_FIELD_VALUE
@@ -146,6 +166,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('timeout_secs')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
           DEFAULT_FIELD_VALUE
@@ -156,6 +178,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('max_headers')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
           DEFAULT_FIELD_VALUE
@@ -190,11 +214,15 @@ V Language file
                       <empty list>
                     PsiElement(VlangTokenType.identifier)('a')
                     TYPE
+                      TYPE_MODIFIERS
+                        <empty list>
                       TYPE_REFERENCE_EXPRESSION
                         PsiElement(VlangTokenType.identifier)('i64')
                   PsiElement(VlangTokenType.))(')')
                 RESULT
                   TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
                     TYPE_REFERENCE_EXPRESSION
                       PsiElement(VlangTokenType.identifier)('i64')
               BLOCK
@@ -226,9 +254,10 @@ V Language file
                   PsiElement(VlangTokenType.()('(')
                   PsiElement(VlangTokenType.))(')')
               PsiElement(VlangTokenType.is)('is')
-              TYPE
-                TYPE_REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('none')
+              NONE_TYPE
+                TYPE_MODIFIERS
+                  <empty list>
+                PsiElement(VlangTokenType.none)('none')
             BLOCK
               PsiElement(VlangTokenType.{)('{')
               SIMPLE_STATEMENT
@@ -247,6 +276,8 @@ V Language file
                                   PsiElement(VlangTokenType.mut)('mut')
                               PsiElement(VlangTokenType.identifier)('ctx')
                               TYPE
+                                TYPE_MODIFIERS
+                                  <empty list>
                                 TYPE_REFERENCE_EXPRESSION
                                   PsiElement(VlangTokenType.identifier)('TimerContext')
                             PsiElement(VlangTokenType.,)(',')
@@ -255,6 +286,8 @@ V Language file
                                 <empty list>
                               PsiElement(VlangTokenType.identifier)('dur')
                               TYPE
+                                TYPE_MODIFIERS
+                                  <empty list>
                                 TYPE_REFERENCE_EXPRESSION
                                   TYPE_REFERENCE_EXPRESSION
                                     PsiElement(VlangTokenType.identifier)('time')
@@ -371,6 +404,8 @@ V Language file
                     <empty list>
                   PsiElement(VlangTokenType.identifier)('ctx')
                   TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
                     TYPE_REFERENCE_EXPRESSION
                       TYPE_REFERENCE_EXPRESSION
                         PsiElement(VlangTokenType.identifier)('context')
@@ -382,6 +417,8 @@ V Language file
                     <empty list>
                   PsiElement(VlangTokenType.identifier)('key')
                   TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
                     TYPE_REFERENCE_EXPRESSION
                       TYPE_REFERENCE_EXPRESSION
                         PsiElement(VlangTokenType.identifier)('context')
@@ -390,8 +427,12 @@ V Language file
                 PsiElement(VlangTokenType.))(')')
               RESULT
                 POINTER_TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   PsiElement(VlangTokenType.&)('&')
                   TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
                     TYPE_REFERENCE_EXPRESSION
                       PsiElement(VlangTokenType.identifier)('Value')
             BLOCK
@@ -400,7 +441,7 @@ V Language file
                 LEFT_HAND_EXPR_LIST
                   IF_EXPRESSION
                     PsiElement(VlangTokenType.if)('if')
-                    VAR_DECLARATION
+                    GUARD_VAR_DECLARATION
                       VAR_DEFINITION
                         VAR_MODIFIERS
                           <empty list>
@@ -431,6 +472,8 @@ V Language file
                             MATCH_ARMS
                               MATCH_ARM
                                 TYPE
+                                  TYPE_MODIFIERS
+                                    <empty list>
                                   TYPE_REFERENCE_EXPRESSION
                                     PsiElement(VlangTokenType.identifier)('Value')
                                 BLOCK
@@ -475,6 +518,8 @@ V Language file
             PsiElement(VlangTokenType.&)('&')
             LITERAL_VALUE_EXPRESSION
               TYPE
+                TYPE_MODIFIERS
+                  <empty list>
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(VlangTokenType.identifier)('Value')
               PsiElement(VlangTokenType.{)('{')

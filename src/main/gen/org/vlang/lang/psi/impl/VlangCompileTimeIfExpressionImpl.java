@@ -47,8 +47,8 @@ public class VlangCompileTimeIfExpressionImpl extends VlangExpressionImpl implem
 
   @Override
   @Nullable
-  public VlangVarDeclaration getVarDeclaration() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangVarDeclaration.class);
+  public VlangGuardVarDeclaration getGuardVarDeclaration() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangGuardVarDeclaration.class);
   }
 
   @Override

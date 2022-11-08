@@ -17,7 +17,7 @@ public interface VlangCompileTimeIfExpression extends VlangExpression {
   VlangExpression getExpression();
 
   @Nullable
-  VlangVarDeclaration getVarDeclaration();
+  VlangGuardVarDeclaration getGuardVarDeclaration();
 
   @NotNull
   PsiElement getIfCompileTime();

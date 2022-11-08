@@ -10,14 +10,14 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangDefaultFieldValueImpl extends VlangCompositeElementImpl implements VlangDefaultFieldValue {
+public class VlangTypeModifierImpl extends VlangCompositeElementImpl implements VlangTypeModifier {
 
-  public VlangDefaultFieldValueImpl(@NotNull ASTNode node) {
+  public VlangTypeModifierImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitDefaultFieldValue(this);
+    visitor.visitTypeModifier(this);
   }
 
   @Override
@@ -28,14 +28,20 @@ public class VlangDefaultFieldValueImpl extends VlangCompositeElementImpl implem
 
   @Override
   @Nullable
-  public VlangExpression getExpression() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class);
+  public PsiElement getMut() {
+    return findChildByType(MUT);
   }
 
   @Override
-  @NotNull
-  public PsiElement getAssign() {
-    return notNullChild(findChildByType(ASSIGN));
+  @Nullable
+  public PsiElement getStatic() {
+    return findChildByType(STATIC);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getVolatile() {
+    return findChildByType(VOLATILE);
   }
 
 }

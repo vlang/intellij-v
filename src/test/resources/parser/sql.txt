@@ -227,6 +227,8 @@ V Language file
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('Customer')
             PsiElement(VlangTokenType.{)('{')
@@ -517,6 +519,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('id')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
           ATTRIBUTE
@@ -540,30 +544,40 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('name')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('nr_downloads')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('test_id')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('u64')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('user')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('User')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('created')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('time')
@@ -596,6 +610,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('id')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
           ATTRIBUTE
@@ -619,12 +635,16 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('age')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('name')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
           ATTRIBUTE
@@ -646,12 +666,16 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('is_customer')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('bool')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('skipped_string')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
           ATTRIBUTE
@@ -673,6 +697,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('age')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
       PsiElement(VlangTokenType.})('}')
@@ -686,6 +712,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('id')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
           ATTRIBUTE
@@ -709,6 +737,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('create')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('time')
@@ -820,6 +850,8 @@ V Language file
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('User')
             PsiElement(VlangTokenType.{)('{')
@@ -854,6 +886,8 @@ V Language file
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('User')
             PsiElement(VlangTokenType.{)('{')
@@ -888,6 +922,8 @@ V Language file
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('User')
             PsiElement(VlangTokenType.{)('{')
@@ -1776,6 +1812,8 @@ V Language file
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('User')
             PsiElement(VlangTokenType.{)('{')
@@ -2297,6 +2335,8 @@ V Language file
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('Foo')
             PsiElement(VlangTokenType.{)('{')
@@ -3090,6 +3130,8 @@ V Language file
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('TestTime')
             PsiElement(VlangTokenType.{)('{')
@@ -3191,6 +3233,8 @@ V Language file
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('Module')
             PsiElement(VlangTokenType.{)('{')

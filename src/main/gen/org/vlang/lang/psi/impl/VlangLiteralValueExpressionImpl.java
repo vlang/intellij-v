@@ -52,9 +52,9 @@ public class VlangLiteralValueExpressionImpl extends VlangExpressionImpl impleme
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiElement getRbrace() {
-    return findChildByType(RBRACE);
+    return notNullChild(findChildByType(RBRACE));
   }
 
 }

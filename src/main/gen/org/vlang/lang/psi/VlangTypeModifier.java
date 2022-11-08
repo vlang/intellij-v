@@ -5,15 +5,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangMapInitExpr extends VlangExpression {
+public interface VlangTypeModifier extends VlangCompositeElement {
 
   @Nullable
-  VlangKeyValues getKeyValues();
+  PsiElement getMut();
 
-  @NotNull
-  PsiElement getLbrace();
+  @Nullable
+  PsiElement getStatic();
 
-  @NotNull
-  PsiElement getRbrace();
+  @Nullable
+  PsiElement getVolatile();
 
 }

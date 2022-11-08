@@ -13,4 +13,5 @@ class ParserNewTest : ParserTestBase("parser/new", "v", VlangParserDefinition())
     fun `test sizeof`() = doTest(true)
     fun `test offsetof`() = doTest(true)
     fun `test isreftype`() = doTest(true)
+    fun `test before block expr`() = doTest(true)
 }

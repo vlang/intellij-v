@@ -9,6 +9,8 @@ V Language file
       ENUM_BACKED_TYPE_EXPR
         PsiElement(VlangTokenType.as)('as')
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('i8')
       PsiElement(VlangTokenType.{)('{')
@@ -48,6 +50,8 @@ V Language file
       ENUM_BACKED_TYPE_EXPR
         PsiElement(VlangTokenType.as)('as')
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('u64')
       PsiElement(VlangTokenType.{)('{')
@@ -83,6 +87,8 @@ V Language file
       ENUM_BACKED_TYPE_EXPR
         PsiElement(VlangTokenType.as)('as')
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('i64')
       PsiElement(VlangTokenType.{)('{')

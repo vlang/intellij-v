@@ -13,8 +13,12 @@ V Language file
         <empty list>
       PsiElement(VlangTokenType.identifier)('rw')
       POINTER_TYPE
+        TYPE_MODIFIERS
+          <empty list>
         PsiElement(VlangTokenType.&)('&')
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('TestStream')
     PsiElement(VlangTokenType.))(')')
@@ -24,6 +28,8 @@ V Language file
       PsiElement(VlangTokenType.<)('<')
       TYPE_LIST_NO_PIN
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('T')
       PsiElement(VlangTokenType.>)('>')
@@ -35,13 +41,19 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('idx')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
         PsiElement(VlangTokenType.))(')')
       RESULT
         NULLABLE_TYPE
+          TYPE_MODIFIERS
+            <empty list>
           PsiElement(VlangTokenType.?)('?')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('jsonrpc')
@@ -51,6 +63,8 @@ V Language file
               PsiElement(VlangTokenType.<)('<')
               TYPE_LIST_NO_PIN
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('T')
               PsiElement(VlangTokenType.>)('>')
@@ -108,6 +122,8 @@ V Language file
           JSON_ARGUMENT_LIST
             PsiElement(VlangTokenType.()('(')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(VlangTokenType.identifier)('jsonrpc')
@@ -117,6 +133,8 @@ V Language file
                 PsiElement(VlangTokenType.<)('<')
                 TYPE_LIST_NO_PIN
                   TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
                     TYPE_REFERENCE_EXPRESSION
                       PsiElement(VlangTokenType.identifier)('T')
                 PsiElement(VlangTokenType.>)('>')

@@ -10,14 +10,15 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangDefaultFieldValueImpl extends VlangCompositeElementImpl implements VlangDefaultFieldValue {
+public class VlangSelectArmStatementImpl extends VlangStatementImpl implements VlangSelectArmStatement {
 
-  public VlangDefaultFieldValueImpl(@NotNull ASTNode node) {
+  public VlangSelectArmStatementImpl(@NotNull ASTNode node) {
     super(node);
   }
 
+  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitDefaultFieldValue(this);
+    visitor.visitSelectArmStatement(this);
   }
 
   @Override
@@ -28,14 +29,8 @@ public class VlangDefaultFieldValueImpl extends VlangCompositeElementImpl implem
 
   @Override
   @Nullable
-  public VlangExpression getExpression() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getAssign() {
-    return notNullChild(findChildByType(ASSIGN));
+  public VlangStatement getStatement() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangStatement.class);
   }
 
 }

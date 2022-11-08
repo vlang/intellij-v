@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface VlangMatchArm extends VlangCompositeElement {
 
-  @Nullable
+  @NotNull
   VlangBlock getBlock();
 
   @Nullable

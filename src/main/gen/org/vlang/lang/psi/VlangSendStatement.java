@@ -20,13 +20,15 @@ public interface VlangSendStatement extends VlangStatement {
   VlangModuleClause getModuleClause();
 
   @Nullable
+  VlangSelectArm getSelectArm();
+
+  @Nullable
+  VlangSelectElseArmClause getSelectElseArmClause();
+
+  @Nullable
   VlangStatement getStatement();
 
   @NotNull
   PsiElement getSendChannel();
-
-  //WARNING: getSendExpression(...) is skipped
-  //matching getSendExpression(VlangSendStatement, ...)
-  //methods are not found in VlangPsiImplUtil
 
 }

@@ -17,7 +17,12 @@ object VlangSqlUtil {
     }
 
     fun insideSql(element: PsiElement): Boolean {
-        return element.parentOfType<VlangSqlExpression>() != null
+        val parentSql = element.parentOfType<VlangSqlExpression>()
+        if (PsiTreeUtil.isAncestor(parentSql?.expression, element, false)) {
+            return false
+        }
+
+        return parentSql != null
     }
 
     fun fieldReference(element: PsiElement): Boolean {
@@ -37,6 +42,9 @@ object VlangSqlUtil {
 
     private fun leftPartOfExpression(element: PsiElement): Boolean {
         val expr = element.parentOfType<VlangBinaryExpr>() ?: return false
+        if (expr is VlangOrBlockExpr) {
+            return false
+        }
         return PsiTreeUtil.isAncestor(expr.left, element, false)
     }
 

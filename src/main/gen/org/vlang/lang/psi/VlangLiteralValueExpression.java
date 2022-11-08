@@ -19,7 +19,7 @@ public interface VlangLiteralValueExpression extends VlangExpression {
   @NotNull
   PsiElement getLbrace();
 
-  @Nullable
+  @NotNull
   PsiElement getRbrace();
 
 }

@@ -4,17 +4,10 @@ package org.vlang.lang.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.ResolveState;
 
-public interface VlangSqlExpression extends VlangExpression {
+public interface VlangGuardVarDeclaration extends VlangVarDeclaration {
 
   @Nullable
   VlangExpression getExpression();
-
-  @NotNull
-  VlangSqlBlock getSqlBlock();
-
-  @Nullable
-  VlangType getType(@Nullable ResolveState context);
 
 }

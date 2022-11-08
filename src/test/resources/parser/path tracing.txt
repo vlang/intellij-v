@@ -65,6 +65,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('x')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('f64')
           DEFAULT_FIELD_VALUE
@@ -75,6 +77,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('y')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('f64')
           DEFAULT_FIELD_VALUE
@@ -85,6 +89,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('z')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('f64')
           DEFAULT_FIELD_VALUE
@@ -109,6 +115,8 @@ V Language file
         <empty list>
       PsiElement(VlangTokenType.identifier)('v')
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('Vec')
     PsiElement(VlangTokenType.))(')')
@@ -122,11 +130,15 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('b')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Vec')
         PsiElement(VlangTokenType.))(')')
       RESULT
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('Vec')
     BLOCK
@@ -135,6 +147,8 @@ V Language file
         PsiElement(VlangTokenType.return)('return')
         LITERAL_VALUE_EXPRESSION
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Vec')
           PsiElement(VlangTokenType.{)('{')
@@ -201,6 +215,8 @@ V Language file
         <empty list>
       PsiElement(VlangTokenType.identifier)('v')
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('Vec')
     PsiElement(VlangTokenType.))(')')
@@ -214,11 +230,15 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('b')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Vec')
         PsiElement(VlangTokenType.))(')')
       RESULT
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('Vec')
     BLOCK
@@ -227,6 +247,8 @@ V Language file
         PsiElement(VlangTokenType.return)('return')
         LITERAL_VALUE_EXPRESSION
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Vec')
           PsiElement(VlangTokenType.{)('{')
@@ -293,6 +315,8 @@ V Language file
         <empty list>
       PsiElement(VlangTokenType.identifier)('v')
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('Vec')
     PsiElement(VlangTokenType.))(')')
@@ -306,11 +330,15 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('b')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Vec')
         PsiElement(VlangTokenType.))(')')
       RESULT
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('Vec')
     BLOCK
@@ -319,6 +347,8 @@ V Language file
         PsiElement(VlangTokenType.return)('return')
         LITERAL_VALUE_EXPRESSION
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Vec')
           PsiElement(VlangTokenType.{)('{')
@@ -385,6 +415,8 @@ V Language file
         <empty list>
       PsiElement(VlangTokenType.identifier)('v')
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('Vec')
     PsiElement(VlangTokenType.))(')')
@@ -398,11 +430,15 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('b')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Vec')
         PsiElement(VlangTokenType.))(')')
       RESULT
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('f64')
     BLOCK
@@ -467,6 +503,8 @@ V Language file
         <empty list>
       PsiElement(VlangTokenType.identifier)('v')
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('Vec')
     PsiElement(VlangTokenType.))(')')
@@ -480,11 +518,15 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('b')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('f64')
         PsiElement(VlangTokenType.))(')')
       RESULT
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('Vec')
     BLOCK
@@ -493,6 +535,8 @@ V Language file
         PsiElement(VlangTokenType.return)('return')
         LITERAL_VALUE_EXPRESSION
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Vec')
           PsiElement(VlangTokenType.{)('{')
@@ -550,6 +594,8 @@ V Language file
         <empty list>
       PsiElement(VlangTokenType.identifier)('v')
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('Vec')
     PsiElement(VlangTokenType.))(')')
@@ -563,11 +609,15 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('b')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Vec')
         PsiElement(VlangTokenType.))(')')
       RESULT
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('Vec')
     BLOCK
@@ -576,6 +626,8 @@ V Language file
         PsiElement(VlangTokenType.return)('return')
         LITERAL_VALUE_EXPRESSION
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Vec')
           PsiElement(VlangTokenType.{)('{')
@@ -684,6 +736,8 @@ V Language file
         <empty list>
       PsiElement(VlangTokenType.identifier)('v')
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('Vec')
     PsiElement(VlangTokenType.))(')')
@@ -695,6 +749,8 @@ V Language file
         PsiElement(VlangTokenType.))(')')
       RESULT
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('Vec')
     BLOCK
@@ -765,6 +821,8 @@ V Language file
         PsiElement(VlangTokenType.return)('return')
         LITERAL_VALUE_EXPRESSION
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Vec')
           PsiElement(VlangTokenType.{)('{')
@@ -816,20 +874,28 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('width')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('height')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('data')
           POINTER_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.&)('&')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('Vec')
           DEFAULT_FIELD_VALUE
@@ -855,6 +921,8 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('w')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
         PsiElement(VlangTokenType.,)(',')
@@ -863,11 +931,15 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('h')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
         PsiElement(VlangTokenType.))(')')
       RESULT
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('Image')
     BLOCK
@@ -890,6 +962,8 @@ V Language file
                     PsiElement(VlangTokenType.sizeof)('sizeof')
                     PsiElement(VlangTokenType.()('(')
                     TYPE
+                      TYPE_MODIFIERS
+                        <empty list>
                       TYPE_REFERENCE_EXPRESSION
                         PsiElement(VlangTokenType.identifier)('Vec')
                     PsiElement(VlangTokenType.))(')')
@@ -898,6 +972,8 @@ V Language file
         PsiElement(VlangTokenType.return)('return')
         LITERAL_VALUE_EXPRESSION
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Image')
           PsiElement(VlangTokenType.{)('{')
@@ -972,6 +1048,8 @@ V Language file
         <empty list>
       PsiElement(VlangTokenType.identifier)('image')
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('Image')
     PsiElement(VlangTokenType.))(')')
@@ -985,6 +1063,8 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('file_name')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
         PsiElement(VlangTokenType.))(')')
@@ -1360,12 +1440,16 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('o')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Vec')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('d')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Vec')
       PsiElement(VlangTokenType.})('}')
@@ -1396,6 +1480,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('rad')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('f64')
           DEFAULT_FIELD_VALUE
@@ -1407,6 +1493,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('p')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Vec')
           PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// position')
@@ -1414,6 +1502,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('e')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Vec')
           PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// emission')
@@ -1421,6 +1511,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('c')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Vec')
           PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// color')
@@ -1428,6 +1520,8 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('refl')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Refl_t')
           PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// reflection type => [diffuse, specular, refractive]')
@@ -1440,6 +1534,8 @@ V Language file
         <empty list>
       PsiElement(VlangTokenType.identifier)('sp')
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('Sphere')
     PsiElement(VlangTokenType.))(')')
@@ -1453,11 +1549,15 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('r')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Ray')
         PsiElement(VlangTokenType.))(')')
       RESULT
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('f64')
     BLOCK
@@ -1658,6 +1758,8 @@ V Language file
       PsiElement(VlangTokenType.=)('=')
       LITERAL_VALUE_EXPRESSION
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('Vec')
         PsiElement(VlangTokenType.{)('{')
@@ -1691,6 +1793,8 @@ V Language file
             ARRAY_CREATION_LIST
               LITERAL_VALUE_EXPRESSION
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('Sphere')
                 PsiElement(VlangTokenType.{)('{')
@@ -1712,6 +1816,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -1743,6 +1849,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -1756,6 +1864,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -1790,6 +1900,8 @@ V Language file
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* Left */')
               LITERAL_VALUE_EXPRESSION
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('Sphere')
                 PsiElement(VlangTokenType.{)('{')
@@ -1811,6 +1923,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -1844,6 +1958,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -1857,6 +1973,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -1891,6 +2009,8 @@ V Language file
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* Rght */')
               LITERAL_VALUE_EXPRESSION
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('Sphere')
                 PsiElement(VlangTokenType.{)('{')
@@ -1912,6 +2032,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -1939,6 +2061,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -1952,6 +2076,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -1986,6 +2112,8 @@ V Language file
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* Back */')
               LITERAL_VALUE_EXPRESSION
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('Sphere')
                 PsiElement(VlangTokenType.{)('{')
@@ -2007,6 +2135,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -2040,6 +2170,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -2053,6 +2185,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -2073,6 +2207,8 @@ V Language file
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* Frnt */')
               LITERAL_VALUE_EXPRESSION
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('Sphere')
                 PsiElement(VlangTokenType.{)('{')
@@ -2094,6 +2230,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -2121,6 +2259,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -2134,6 +2274,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -2168,6 +2310,8 @@ V Language file
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* Botm */')
               LITERAL_VALUE_EXPRESSION
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('Sphere')
                 PsiElement(VlangTokenType.{)('{')
@@ -2189,6 +2333,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -2222,6 +2368,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -2235,6 +2383,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -2269,6 +2419,8 @@ V Language file
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* Top */')
               LITERAL_VALUE_EXPRESSION
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('Sphere')
                 PsiElement(VlangTokenType.{)('{')
@@ -2290,6 +2442,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -2317,6 +2471,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -2332,6 +2488,8 @@ V Language file
                       REFERENCE_EXPRESSION
                         LITERAL_VALUE_EXPRESSION
                           TYPE
+                            TYPE_MODIFIERS
+                              <empty list>
                             TYPE_REFERENCE_EXPRESSION
                               PsiElement(VlangTokenType.identifier)('Vec')
                           PsiElement(VlangTokenType.{)('{')
@@ -2375,6 +2533,8 @@ V Language file
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* Mirr */')
               LITERAL_VALUE_EXPRESSION
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('Sphere')
                 PsiElement(VlangTokenType.{)('{')
@@ -2396,6 +2556,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -2423,6 +2585,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -2438,6 +2602,8 @@ V Language file
                       REFERENCE_EXPRESSION
                         LITERAL_VALUE_EXPRESSION
                           TYPE
+                            TYPE_MODIFIERS
+                              <empty list>
                             TYPE_REFERENCE_EXPRESSION
                               PsiElement(VlangTokenType.identifier)('Vec')
                           PsiElement(VlangTokenType.{)('{')
@@ -2481,6 +2647,8 @@ V Language file
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* Glas */')
               LITERAL_VALUE_EXPRESSION
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('Sphere')
                 PsiElement(VlangTokenType.{)('{')
@@ -2502,6 +2670,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -2533,6 +2703,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -2560,6 +2732,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -2586,6 +2760,8 @@ V Language file
             ARRAY_CREATION_LIST
               LITERAL_VALUE_EXPRESSION
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('Sphere')
                 PsiElement(VlangTokenType.{)('{')
@@ -2609,6 +2785,8 @@ V Language file
                       REFERENCE_EXPRESSION
                         LITERAL_VALUE_EXPRESSION
                           TYPE
+                            TYPE_MODIFIERS
+                              <empty list>
                             TYPE_REFERENCE_EXPRESSION
                               PsiElement(VlangTokenType.identifier)('Vec')
                           PsiElement(VlangTokenType.{)('{')
@@ -2647,6 +2825,8 @@ V Language file
                       REFERENCE_EXPRESSION
                         LITERAL_VALUE_EXPRESSION
                           TYPE
+                            TYPE_MODIFIERS
+                              <empty list>
                             TYPE_REFERENCE_EXPRESSION
                               PsiElement(VlangTokenType.identifier)('Vec')
                           PsiElement(VlangTokenType.{)('{')
@@ -2691,6 +2871,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -2711,6 +2893,8 @@ V Language file
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* sun */')
               LITERAL_VALUE_EXPRESSION
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('Sphere')
                 PsiElement(VlangTokenType.{)('{')
@@ -2734,6 +2918,8 @@ V Language file
                       REFERENCE_EXPRESSION
                         LITERAL_VALUE_EXPRESSION
                           TYPE
+                            TYPE_MODIFIERS
+                              <empty list>
                             TYPE_REFERENCE_EXPRESSION
                               PsiElement(VlangTokenType.identifier)('Vec')
                           PsiElement(VlangTokenType.{)('{')
@@ -2772,6 +2958,8 @@ V Language file
                       REFERENCE_EXPRESSION
                         LITERAL_VALUE_EXPRESSION
                           TYPE
+                            TYPE_MODIFIERS
+                              <empty list>
                             TYPE_REFERENCE_EXPRESSION
                               PsiElement(VlangTokenType.identifier)('Vec')
                           PsiElement(VlangTokenType.{)('{')
@@ -2816,6 +3004,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -2836,6 +3026,8 @@ V Language file
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* horizon sun2 */')
               LITERAL_VALUE_EXPRESSION
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('Sphere')
                 PsiElement(VlangTokenType.{)('{')
@@ -2861,6 +3053,8 @@ V Language file
                       PsiElement(VlangTokenType.+)('+')
                       LITERAL_VALUE_EXPRESSION
                         TYPE
+                          TYPE_MODIFIERS
+                            <empty list>
                           TYPE_REFERENCE_EXPRESSION
                             PsiElement(VlangTokenType.identifier)('Vec')
                         PsiElement(VlangTokenType.{)('{')
@@ -2892,6 +3086,8 @@ V Language file
                       REFERENCE_EXPRESSION
                         LITERAL_VALUE_EXPRESSION
                           TYPE
+                            TYPE_MODIFIERS
+                              <empty list>
                             TYPE_REFERENCE_EXPRESSION
                               PsiElement(VlangTokenType.identifier)('Vec')
                           PsiElement(VlangTokenType.{)('{')
@@ -2934,6 +3130,8 @@ V Language file
                       REFERENCE_EXPRESSION
                         LITERAL_VALUE_EXPRESSION
                           TYPE
+                            TYPE_MODIFIERS
+                              <empty list>
                             TYPE_REFERENCE_EXPRESSION
                               PsiElement(VlangTokenType.identifier)('Vec')
                           PsiElement(VlangTokenType.{)('{')
@@ -2977,6 +3175,8 @@ V Language file
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* sky */')
               LITERAL_VALUE_EXPRESSION
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('Sphere')
                 PsiElement(VlangTokenType.{)('{')
@@ -2998,6 +3198,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -3027,6 +3229,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -3040,6 +3244,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -3074,6 +3280,8 @@ V Language file
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* grnd */')
               LITERAL_VALUE_EXPRESSION
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('Sphere')
                 PsiElement(VlangTokenType.{)('{')
@@ -3095,6 +3303,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -3126,6 +3336,8 @@ V Language file
                       REFERENCE_EXPRESSION
                         LITERAL_VALUE_EXPRESSION
                           TYPE
+                            TYPE_MODIFIERS
+                              <empty list>
                             TYPE_REFERENCE_EXPRESSION
                               PsiElement(VlangTokenType.identifier)('Vec')
                           PsiElement(VlangTokenType.{)('{')
@@ -3162,6 +3374,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -3182,6 +3396,8 @@ V Language file
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* horizon brightener */')
               LITERAL_VALUE_EXPRESSION
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('Sphere')
                 PsiElement(VlangTokenType.{)('{')
@@ -3203,6 +3419,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -3238,6 +3456,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -3251,6 +3471,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -3285,6 +3507,8 @@ V Language file
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* mountains */')
               LITERAL_VALUE_EXPRESSION
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('Sphere')
                 PsiElement(VlangTokenType.{)('{')
@@ -3306,6 +3530,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -3333,6 +3559,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -3348,6 +3576,8 @@ V Language file
                       REFERENCE_EXPRESSION
                         LITERAL_VALUE_EXPRESSION
                           TYPE
+                            TYPE_MODIFIERS
+                              <empty list>
                             TYPE_REFERENCE_EXPRESSION
                               PsiElement(VlangTokenType.identifier)('Vec')
                           PsiElement(VlangTokenType.{)('{')
@@ -3391,6 +3621,8 @@ V Language file
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* white Mirr */')
               LITERAL_VALUE_EXPRESSION
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('Sphere')
                 PsiElement(VlangTokenType.{)('{')
@@ -3412,6 +3644,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -3439,6 +3673,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -3454,6 +3690,8 @@ V Language file
                       REFERENCE_EXPRESSION
                         LITERAL_VALUE_EXPRESSION
                           TYPE
+                            TYPE_MODIFIERS
+                              <empty list>
                             TYPE_REFERENCE_EXPRESSION
                               PsiElement(VlangTokenType.identifier)('Vec')
                           PsiElement(VlangTokenType.{)('{')
@@ -3497,6 +3735,8 @@ V Language file
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* Glas */')
               LITERAL_VALUE_EXPRESSION
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('Sphere')
                 PsiElement(VlangTokenType.{)('{')
@@ -3518,6 +3758,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -3545,6 +3787,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -3560,6 +3804,8 @@ V Language file
                       REFERENCE_EXPRESSION
                         LITERAL_VALUE_EXPRESSION
                           TYPE
+                            TYPE_MODIFIERS
+                              <empty list>
                             TYPE_REFERENCE_EXPRESSION
                               PsiElement(VlangTokenType.identifier)('Vec')
                           PsiElement(VlangTokenType.{)('{')
@@ -3609,6 +3855,8 @@ V Language file
             ARRAY_CREATION_LIST
               LITERAL_VALUE_EXPRESSION
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('Sphere')
                 PsiElement(VlangTokenType.{)('{')
@@ -3630,6 +3878,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -3663,6 +3913,8 @@ V Language file
                       REFERENCE_EXPRESSION
                         LITERAL_VALUE_EXPRESSION
                           TYPE
+                            TYPE_MODIFIERS
+                              <empty list>
                             TYPE_REFERENCE_EXPRESSION
                               PsiElement(VlangTokenType.identifier)('Vec')
                           PsiElement(VlangTokenType.{)('{')
@@ -3701,6 +3953,8 @@ V Language file
                       REFERENCE_EXPRESSION
                         LITERAL_VALUE_EXPRESSION
                           TYPE
+                            TYPE_MODIFIERS
+                              <empty list>
                             TYPE_REFERENCE_EXPRESSION
                               PsiElement(VlangTokenType.identifier)('Vec')
                           PsiElement(VlangTokenType.{)('{')
@@ -3743,6 +3997,8 @@ V Language file
               PsiElement(VlangTokenType.,)(',')
               LITERAL_VALUE_EXPRESSION
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('Sphere')
                 PsiElement(VlangTokenType.{)('{')
@@ -3764,6 +4020,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -3799,6 +4057,8 @@ V Language file
                       REFERENCE_EXPRESSION
                         LITERAL_VALUE_EXPRESSION
                           TYPE
+                            TYPE_MODIFIERS
+                              <empty list>
                             TYPE_REFERENCE_EXPRESSION
                               PsiElement(VlangTokenType.identifier)('Vec')
                           PsiElement(VlangTokenType.{)('{')
@@ -3837,6 +4097,8 @@ V Language file
                       REFERENCE_EXPRESSION
                         LITERAL_VALUE_EXPRESSION
                           TYPE
+                            TYPE_MODIFIERS
+                              <empty list>
                             TYPE_REFERENCE_EXPRESSION
                               PsiElement(VlangTokenType.identifier)('Vec')
                           PsiElement(VlangTokenType.{)('{')
@@ -3879,6 +4141,8 @@ V Language file
               PsiElement(VlangTokenType.,)(',')
               LITERAL_VALUE_EXPRESSION
                 TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('Sphere')
                 PsiElement(VlangTokenType.{)('{')
@@ -3900,6 +4164,8 @@ V Language file
                   VALUE
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -3929,6 +4195,8 @@ V Language file
                       REFERENCE_EXPRESSION
                         LITERAL_VALUE_EXPRESSION
                           TYPE
+                            TYPE_MODIFIERS
+                              <empty list>
                             TYPE_REFERENCE_EXPRESSION
                               PsiElement(VlangTokenType.identifier)('Vec')
                           PsiElement(VlangTokenType.{)('{')
@@ -3967,6 +4235,8 @@ V Language file
                       REFERENCE_EXPRESSION
                         LITERAL_VALUE_EXPRESSION
                           TYPE
+                            TYPE_MODIFIERS
+                              <empty list>
                             TYPE_REFERENCE_EXPRESSION
                               PsiElement(VlangTokenType.identifier)('Vec')
                           PsiElement(VlangTokenType.{)('{')
@@ -4033,11 +4303,15 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('x')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('f64')
         PsiElement(VlangTokenType.))(')')
       RESULT
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('f64')
     BLOCK
@@ -4101,11 +4375,15 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('x')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('f64')
         PsiElement(VlangTokenType.))(')')
       RESULT
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('int')
     BLOCK
@@ -4179,6 +4457,8 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('r')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Ray')
         PsiElement(VlangTokenType.,)(',')
@@ -4187,8 +4467,12 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('spheres')
           POINTER_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.&)('&')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('Sphere')
         PsiElement(VlangTokenType.,)(',')
@@ -4197,22 +4481,32 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('nspheres')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
         PsiElement(VlangTokenType.))(')')
       RESULT
         TUPLE_TYPE
+          TYPE_MODIFIERS
+            <empty list>
           PsiElement(VlangTokenType.()('(')
           TYPE_LIST_NO_PIN
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('bool')
             PsiElement(VlangTokenType.,)(',')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('f64')
             PsiElement(VlangTokenType.,)(',')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('int')
           PsiElement(VlangTokenType.))(')')
@@ -4374,6 +4668,8 @@ V Language file
         PsiElement(VlangTokenType.))(')')
       RESULT
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('f64')
     BLOCK
@@ -4457,22 +4753,30 @@ V Language file
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('sin_tab')
           FIXED_SIZE_ARRAY_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.[)('[')
             LITERAL
               PsiElement(VlangTokenType.int)('65536')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('f64')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('cos_tab')
           FIXED_SIZE_ARRAY_TYPE
+            TYPE_MODIFIERS
+              <empty list>
             PsiElement(VlangTokenType.[)('[')
             LITERAL
               PsiElement(VlangTokenType.int)('65536')
             PsiElement(VlangTokenType.])(']')
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('f64')
       PsiElement(VlangTokenType.})('}')
@@ -4485,6 +4789,8 @@ V Language file
         PsiElement(VlangTokenType.))(')')
       RESULT
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('Cache')
     BLOCK
@@ -4499,6 +4805,8 @@ V Language file
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('Cache')
             PsiElement(VlangTokenType.{)('{')
@@ -4658,6 +4966,8 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('r')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Ray')
         PsiElement(VlangTokenType.,)(',')
@@ -4666,6 +4976,8 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('depthi')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
         PsiElement(VlangTokenType.,)(',')
@@ -4674,11 +4986,15 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('scene_id')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
         PsiElement(VlangTokenType.))(')')
       RESULT
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('Vec')
     BLOCK
@@ -4732,6 +5048,8 @@ V Language file
                 PsiElement(VlangTokenType.return)('return')
                 LITERAL_VALUE_EXPRESSION
                   TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
                     TYPE_REFERENCE_EXPRESSION
                       PsiElement(VlangTokenType.identifier)('Vec')
                   PsiElement(VlangTokenType.{)('{')
@@ -4858,6 +5176,8 @@ V Language file
                 PsiElement(VlangTokenType.return)('return')
                 LITERAL_VALUE_EXPRESSION
                   TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
                     TYPE_REFERENCE_EXPRESSION
                       PsiElement(VlangTokenType.identifier)('Vec')
                   PsiElement(VlangTokenType.{)('{')
@@ -5306,6 +5626,8 @@ V Language file
                         LEFT_HAND_EXPR_LIST
                           LITERAL_VALUE_EXPRESSION
                             TYPE
+                              TYPE_MODIFIERS
+                                <empty list>
                               TYPE_REFERENCE_EXPRESSION
                                 PsiElement(VlangTokenType.identifier)('Vec')
                             PsiElement(VlangTokenType.{)('{')
@@ -5333,6 +5655,8 @@ V Language file
                           LEFT_HAND_EXPR_LIST
                             LITERAL_VALUE_EXPRESSION
                               TYPE
+                                TYPE_MODIFIERS
+                                  <empty list>
                                 TYPE_REFERENCE_EXPRESSION
                                   PsiElement(VlangTokenType.identifier)('Vec')
                               PsiElement(VlangTokenType.{)('{')
@@ -5530,6 +5854,8 @@ V Language file
                           VALUE
                             LITERAL_VALUE_EXPRESSION
                               TYPE
+                                TYPE_MODIFIERS
+                                  <empty list>
                                 TYPE_REFERENCE_EXPRESSION
                                   PsiElement(VlangTokenType.identifier)('Ray')
                               PsiElement(VlangTokenType.{)('{')
@@ -5599,6 +5925,8 @@ V Language file
                                     VALUE
                                       LITERAL_VALUE_EXPRESSION
                                         TYPE
+                                          TYPE_MODIFIERS
+                                            <empty list>
                                           TYPE_REFERENCE_EXPRESSION
                                             PsiElement(VlangTokenType.identifier)('Ray')
                                         PsiElement(VlangTokenType.{)('{')
@@ -5670,6 +5998,8 @@ V Language file
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('Ray')
             PsiElement(VlangTokenType.{)('{')
@@ -6260,6 +6590,8 @@ V Language file
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('Vec')
             PsiElement(VlangTokenType.{)('{')
@@ -6348,6 +6680,8 @@ V Language file
                                     VALUE
                                       LITERAL_VALUE_EXPRESSION
                                         TYPE
+                                          TYPE_MODIFIERS
+                                            <empty list>
                                           TYPE_REFERENCE_EXPRESSION
                                             PsiElement(VlangTokenType.identifier)('Ray')
                                         PsiElement(VlangTokenType.{)('{')
@@ -6442,6 +6776,8 @@ V Language file
                                 VALUE
                                   LITERAL_VALUE_EXPRESSION
                                     TYPE
+                                      TYPE_MODIFIERS
+                                        <empty list>
                                       TYPE_REFERENCE_EXPRESSION
                                         PsiElement(VlangTokenType.identifier)('Ray')
                                     PsiElement(VlangTokenType.{)('{')
@@ -6508,6 +6844,8 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('w')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
         PsiElement(VlangTokenType.,)(',')
@@ -6516,6 +6854,8 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('h')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
         PsiElement(VlangTokenType.,)(',')
@@ -6524,6 +6864,8 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('samps')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
         PsiElement(VlangTokenType.,)(',')
@@ -6532,6 +6874,8 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('file_name')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
         PsiElement(VlangTokenType.,)(',')
@@ -6540,11 +6884,15 @@ V Language file
             <empty list>
           PsiElement(VlangTokenType.identifier)('scene_id')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
         PsiElement(VlangTokenType.))(')')
       RESULT
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('Image')
     BLOCK
@@ -6668,6 +7016,8 @@ V Language file
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('Ray')
             PsiElement(VlangTokenType.{)('{')
@@ -6675,6 +7025,8 @@ V Language file
               VALUE
                 LITERAL_VALUE_EXPRESSION
                   TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
                     TYPE_REFERENCE_EXPRESSION
                       PsiElement(VlangTokenType.identifier)('Vec')
                   PsiElement(VlangTokenType.{)('{')
@@ -6700,6 +7052,8 @@ V Language file
                   REFERENCE_EXPRESSION
                     LITERAL_VALUE_EXPRESSION
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('Vec')
                       PsiElement(VlangTokenType.{)('{')
@@ -6738,6 +7092,8 @@ V Language file
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('Vec')
             PsiElement(VlangTokenType.{)('{')
@@ -6831,6 +7187,8 @@ V Language file
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('Vec')
             PsiElement(VlangTokenType.{)('{')
@@ -7151,6 +7509,8 @@ V Language file
                           PsiElement(VlangTokenType.=)('=')
                         LITERAL_VALUE_EXPRESSION
                           TYPE
+                            TYPE_MODIFIERS
+                              <empty list>
                             TYPE_REFERENCE_EXPRESSION
                               PsiElement(VlangTokenType.identifier)('Vec')
                           PsiElement(VlangTokenType.{)('{')
@@ -7504,6 +7864,8 @@ V Language file
                                         VALUE
                                           LITERAL_VALUE_EXPRESSION
                                             TYPE
+                                              TYPE_MODIFIERS
+                                                <empty list>
                                               TYPE_REFERENCE_EXPRESSION
                                                 PsiElement(VlangTokenType.identifier)('Ray')
                                             PsiElement(VlangTokenType.{)('{')
@@ -7574,6 +7936,8 @@ V Language file
                             REFERENCE_EXPRESSION
                               LITERAL_VALUE_EXPRESSION
                                 TYPE
+                                  TYPE_MODIFIERS
+                                    <empty list>
                                   TYPE_REFERENCE_EXPRESSION
                                     PsiElement(VlangTokenType.identifier)('Vec')
                                 PsiElement(VlangTokenType.{)('{')

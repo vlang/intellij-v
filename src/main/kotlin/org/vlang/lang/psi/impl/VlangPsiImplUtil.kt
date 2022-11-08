@@ -629,12 +629,12 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun isGuard(o: VlangIfExpression): Boolean {
-        return o.varDeclaration != null
+        return o.guardVarDeclaration != null
     }
 
     @JvmStatic
     fun getType(o: VlangSqlExpression, context: ResolveState?): VlangType? {
-        val lastStatement = o.sqlBlock?.sqlBlockStatementList?.lastOrNull() ?: return null
+        val lastStatement = o.sqlBlock.sqlBlockStatementList.lastOrNull() ?: return null
         if (lastStatement is VlangSqlSelectStatement) {
             if (lastStatement.sqlSelectCountClause != null) {
                 return getBuiltinType("int", lastStatement)

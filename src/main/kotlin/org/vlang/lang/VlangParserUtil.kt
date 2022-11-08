@@ -5,6 +5,7 @@ import com.intellij.lang.parser.GeneratedParserUtilBase
 import com.intellij.openapi.util.Key
 import gnu.trove.TObjectIntHashMap
 import org.vlang.lang.VlangTypes.*
+import org.vlang.lang.psi.VlangTokenTypes
 import java.util.*
 
 object VlangParserUtil : GeneratedParserUtilBase() {
@@ -75,7 +76,18 @@ object VlangParserUtil : GeneratedParserUtilBase() {
 
     @JvmStatic
     fun withOn(builder: PsiBuilder, level_: Int, mode: String, parser: Parser): Boolean {
-        return withImpl(builder, level_, mode, true, parser, parser)
+        val nowStack = getParsingModesStack(builder)
+        val prevStack = Stack<String>()
+        prevStack.addAll(nowStack)
+
+        enterMode(builder, level_, mode)
+        val result = parser.parse(builder, level_)
+        exitMode(builder, level_, mode)
+
+        nowStack.clear()
+        nowStack.addAll(prevStack)
+
+        return result
     }
 
     @JvmStatic
@@ -150,6 +162,13 @@ object VlangParserUtil : GeneratedParserUtilBase() {
 
     @JvmStatic
     fun prevIsType(builder: PsiBuilder, level: Int): Boolean {
+        var tokenBefore = builder.rawLookup(-1)
+        if (tokenBefore == VlangTokenTypes.WS) {
+            tokenBefore = builder.rawLookup(-2)
+        }
+        if (tokenBefore == ASSIGN) {
+            return false
+        }
         val marker = builder.latestDoneMarker
         val type = marker?.tokenType
         return type == ARRAY_TYPE || type == FIXED_SIZE_ARRAY_TYPE || type == MAP_TYPE || type == STRUCT_TYPE
@@ -164,7 +183,7 @@ object VlangParserUtil : GeneratedParserUtilBase() {
     fun prevIsNotFunType(builder: PsiBuilder, level: Int): Boolean {
         val marker = builder.latestDoneMarker
         val type = marker?.tokenType
-        return type !== VlangTypes.FUNCTION_TYPE
+        return type !== FUNCTION_TYPE
     }
 
     @JvmStatic
@@ -172,12 +191,14 @@ object VlangParserUtil : GeneratedParserUtilBase() {
         val m = enter_section_(builder)
         var r = VlangParser.Expression(builder, level + 1, -1)
 
-        if (!r)
+        if (!r) {
             r = VlangParser.LiteralValueExpression(builder, level + 1)
-        val type = if (r && builder.tokenType === VlangTypes.COLON)
-            VlangTypes.KEY
+        }
+
+        val type = if (r && builder.tokenType === COLON)
+            KEY
         else
-            VlangTypes.VALUE
+            VALUE
         exit_section_(builder, m, type, r)
         return r
     }
@@ -253,7 +274,10 @@ object VlangParserUtil : GeneratedParserUtilBase() {
         }
         m1.rollbackTo()
 
-        return r
+        enterMode(builder, level, "noBraces")
+        val r1 = VlangParser.Expression(builder, level + 1, -1)
+        exitMode(builder, level, "noBraces")
+        return r1
     }
 
     @JvmStatic
@@ -280,6 +304,39 @@ object VlangParserUtil : GeneratedParserUtilBase() {
         m1.rollbackTo()
 
         return r
+    }
+
+    @JvmStatic
+    fun braceRuleMarker(builder: PsiBuilder, level: Int): Boolean {
+        if (isLastIs(builder, level, "noBraces")) {
+            return false
+        }
+
+        return true
+    }
+
+    @JvmStatic
+    fun beforeBlockExpression(builder: PsiBuilder, level: Int): Boolean {
+        val m = builder.mark()
+        val r = VlangParser.Expression(builder, level + 1, -1)
+        if (!r) {
+            println()
+        }
+
+        if (r && nextTokenIs(builder, LBRACE)) {
+            // Значит парсинг можно продолжать
+            m.drop()
+            return true
+        }
+
+        m.rollbackTo()
+        (builder as Builder).state.currentFrame.errorReportedAt = -1
+
+        // Иначе пробуем распарсить, но уже не исполняя правила которые заканчиваются на {}
+        enterMode(builder, level, "noBraces")
+        val r1 = VlangParser.Expression(builder, level + 1, -1)
+        exitMode(builder, level, "noBraces")
+        return r1
     }
 
     @JvmStatic

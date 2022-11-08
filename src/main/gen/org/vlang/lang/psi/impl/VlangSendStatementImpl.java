@@ -53,6 +53,18 @@ public class VlangSendStatementImpl extends VlangStatementImpl implements VlangS
 
   @Override
   @Nullable
+  public VlangSelectArm getSelectArm() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangSelectArm.class);
+  }
+
+  @Override
+  @Nullable
+  public VlangSelectElseArmClause getSelectElseArmClause() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangSelectElseArmClause.class);
+  }
+
+  @Override
+  @Nullable
   public VlangStatement getStatement() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangStatement.class);
   }

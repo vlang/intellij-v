@@ -17,6 +17,8 @@ V Language file
       VAR_MODIFIERS
         <empty list>
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('sync')
@@ -28,6 +30,8 @@ V Language file
       VAR_MODIFIERS
         <empty list>
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('sync')
@@ -54,13 +58,19 @@ V Language file
         VAR_MODIFIER
           PsiElement(VlangTokenType.shared)('shared')
       MAP_TYPE
+        TYPE_MODIFIERS
+          <empty list>
         PsiElement(VlangTokenType.identifier)('map')
         PsiElement(VlangTokenType.[)('[')
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('string')
         PsiElement(VlangTokenType.])(']')
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('f64')
     PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// initialized as empty `shared` map')
@@ -69,6 +79,8 @@ V Language file
       VAR_MODIFIERS
         <empty list>
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('f64')
     PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// initialized to `0.0`')
@@ -128,13 +140,19 @@ V Language file
       VAR_MODIFIERS
         <empty list>
       MAP_TYPE
+        TYPE_MODIFIERS
+          <empty list>
         PsiElement(VlangTokenType.identifier)('map')
         PsiElement(VlangTokenType.[)('[')
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('string')
         PsiElement(VlangTokenType.])(']')
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('int')
     GLOBAL_VARIABLE_DEFINITION
@@ -142,13 +160,19 @@ V Language file
       VAR_MODIFIERS
         <empty list>
       MAP_TYPE
+        TYPE_MODIFIERS
+          <empty list>
         PsiElement(VlangTokenType.identifier)('map')
         PsiElement(VlangTokenType.[)('[')
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('string')
         PsiElement(VlangTokenType.])(']')
         FUNCTION_TYPE
+          TYPE_MODIFIERS
+            <empty list>
           PsiElement(VlangTokenType.fn)('fn')
           SIGNATURE
             PARAMETERS
@@ -156,6 +180,8 @@ V Language file
               PsiElement(VlangTokenType.))(')')
             RESULT
               TYPE
+                TYPE_MODIFIERS
+                  <empty list>
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(VlangTokenType.identifier)('int')
     GLOBAL_VARIABLE_DEFINITION
@@ -163,8 +189,12 @@ V Language file
       VAR_MODIFIERS
         <empty list>
       CHANNEL_TYPE
+        TYPE_MODIFIERS
+          <empty list>
         PsiElement(VlangTokenType.identifier)('chan')
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('f64')
     GLOBAL_VARIABLE_DEFINITION
@@ -173,6 +203,8 @@ V Language file
         VAR_MODIFIER
           PsiElement(VlangTokenType.shared)('shared')
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('MyStruct')
     GLOBAL_VARIABLE_DEFINITION
@@ -180,6 +212,8 @@ V Language file
       VAR_MODIFIERS
         <empty list>
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('sync')
@@ -191,13 +225,19 @@ V Language file
         VAR_MODIFIER
           PsiElement(VlangTokenType.shared)('shared')
       MAP_TYPE
+        TYPE_MODIFIERS
+          <empty list>
         PsiElement(VlangTokenType.identifier)('map')
         PsiElement(VlangTokenType.[)('[')
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('string')
         PsiElement(VlangTokenType.])(']')
         TYPE
+          TYPE_MODIFIERS
+            <empty list>
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('f64')
     GLOBAL_VARIABLE_DEFINITION
@@ -205,6 +245,8 @@ V Language file
       VAR_MODIFIERS
         <empty list>
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           TYPE_REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('sync')
@@ -231,6 +273,8 @@ V Language file
                       PsiElement(VlangTokenType.sizeof)('sizeof')
                       PsiElement(VlangTokenType.()('(')
                       TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
                         TYPE_REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('f64')
                       PsiElement(VlangTokenType.))(')')
@@ -253,6 +297,8 @@ V Language file
       VAR_MODIFIERS
         <empty list>
       TYPE
+        TYPE_MODIFIERS
+          <empty list>
         TYPE_REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('f64')
     GLOBAL_VARIABLE_DEFINITION
@@ -310,9 +356,13 @@ V Language file
       PsiElement(VlangTokenType.=)('=')
       LITERAL_VALUE_EXPRESSION
         ARRAY_TYPE
+          TYPE_MODIFIERS
+            <empty list>
           PsiElement(VlangTokenType.[)('[')
           PsiElement(VlangTokenType.])(']')
           TYPE
+            TYPE_MODIFIERS
+              <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('f64')
         PsiElement(VlangTokenType.{)('{')
@@ -397,11 +447,15 @@ V Language file
                 <empty list>
               PsiElement(VlangTokenType.identifier)('n')
               TYPE
+                TYPE_MODIFIERS
+                  <empty list>
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(VlangTokenType.identifier)('int')
             PsiElement(VlangTokenType.))(')')
           RESULT
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('int')
         BLOCK
@@ -424,11 +478,15 @@ V Language file
                 <empty list>
               PsiElement(VlangTokenType.identifier)('n')
               TYPE
+                TYPE_MODIFIERS
+                  <empty list>
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(VlangTokenType.identifier)('int')
             PsiElement(VlangTokenType.))(')')
           RESULT
             TYPE
+              TYPE_MODIFIERS
+                <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('string')
         BLOCK

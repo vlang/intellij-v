@@ -29,6 +29,9 @@ public interface VlangLiteral extends VlangExpression {
   PsiElement getNil();
 
   @Nullable
+  PsiElement getNone();
+
+  @Nullable
   PsiElement getOct();
 
   @Nullable

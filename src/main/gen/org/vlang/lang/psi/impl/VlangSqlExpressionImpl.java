@@ -35,9 +35,9 @@ public class VlangSqlExpressionImpl extends VlangExpressionImpl implements Vlang
   }
 
   @Override
-  @Nullable
+  @NotNull
   public VlangSqlBlock getSqlBlock() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangSqlBlock.class);
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangSqlBlock.class));
   }
 
   @Override
