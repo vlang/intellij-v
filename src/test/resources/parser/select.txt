@@ -685,7 +685,10 @@ V Language file
                                 PsiElement(VlangTokenType.OPEN_QUOTE)(''')
                                 PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('feature ')
                                 PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('"')
-                                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('$feature_name')
+                                SHORT_STRING_TEMPLATE_ENTRY
+                                  PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
+                                  REFERENCE_EXPRESSION
+                                    PsiElement(VlangTokenType.identifier)('feature_name')
                                 PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('"')
                                 PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' not found')
                                 PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
@@ -948,7 +951,7 @@ V Language file
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('enabled_features')
-          ARRAY_OR_SLICE_TYPE
+          ARRAY_TYPE
             PsiElement(VlangTokenType.[)('[')
             PsiElement(VlangTokenType.])(']')
             TYPE
@@ -1154,7 +1157,7 @@ V Language file
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           COMPILE_TIME_IF_EXPRESSION
-            PsiElement(VlangTokenType.IF_COMPILE_TIME)('$if')
+            PsiElement(VlangTokenType.$if)('$if')
             REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('test')
             BLOCK
@@ -3314,7 +3317,7 @@ V Language file
         PsiElement(VlangTokenType.()('(')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        ARRAY_OR_SLICE_TYPE
+        ARRAY_TYPE
           PsiElement(VlangTokenType.[)('[')
           PsiElement(VlangTokenType.])(']')
           TYPE
@@ -3557,15 +3560,15 @@ V Language file
                           STRING_LITERAL
                             STRING_TEMPLATE
                               PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                              PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('VLS Panic: $')
+                              PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('VLS Panic: ')
                               LONG_STRING_TEMPLATE_ENTRY
-                                PsiElement(VlangTokenType.TEMPLATE_ENTRY_START)('{')
+                                PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_START)('${')
                                 REFERENCE_EXPRESSION
                                   PsiElement(VlangTokenType.identifier)('message')
                                 PsiElement(VlangTokenType.TEMPLATE_ENTRY_END)('}')
-                              PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('. Log saved to $')
+                              PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('. Log saved to ')
                               LONG_STRING_TEMPLATE_ENTRY
-                                PsiElement(VlangTokenType.TEMPLATE_ENTRY_START)('{')
+                                PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_START)('${')
                                 CALL_EXPR
                                   REFERENCE_EXPRESSION
                                     REFERENCE_EXPRESSION
@@ -3660,7 +3663,11 @@ V Language file
                             STRING_LITERAL
                               STRING_TEMPLATE
                                 PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('VLS: An error occurred. Message: $message')
+                                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('VLS: An error occurred. Message: ')
+                                SHORT_STRING_TEMPLATE_ENTRY
+                                  PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
+                                  REFERENCE_EXPRESSION
+                                    PsiElement(VlangTokenType.identifier)('message')
                                 PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                         PsiElement(VlangTokenType.,)(',')
                         ELEMENT
@@ -4080,7 +4087,7 @@ V Language file
           VAR_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.identifier)('features')
-          ARRAY_OR_SLICE_TYPE
+          ARRAY_TYPE
             PsiElement(VlangTokenType.[)('[')
             PsiElement(VlangTokenType.])(']')
             TYPE
@@ -4140,7 +4147,7 @@ V Language file
                   NOT_IN_EXPRESSION
                     REFERENCE_EXPRESSION
                       PsiElement(VlangTokenType.identifier)('feature_val')
-                    PsiElement(VlangTokenType.NOT_IN)('!in ')
+                    PsiElement(VlangTokenType.!in)('!in')
                     REFERENCE_EXPRESSION
                       REFERENCE_EXPRESSION
                         PsiElement(VlangTokenType.identifier)('ls')
@@ -4167,7 +4174,10 @@ V Language file
                                 PsiElement(VlangTokenType.OPEN_QUOTE)(''')
                                 PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('feature ')
                                 PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('"')
-                                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('$feature_name')
+                                SHORT_STRING_TEMPLATE_ENTRY
+                                  PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
+                                  REFERENCE_EXPRESSION
+                                    PsiElement(VlangTokenType.identifier)('feature_name')
                                 PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('"')
                                 PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' is already disabled')
                                 PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
@@ -4207,7 +4217,10 @@ V Language file
                                       PsiElement(VlangTokenType.OPEN_QUOTE)(''')
                                       PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('feature ')
                                       PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('"')
-                                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('$feature_name')
+                                      SHORT_STRING_TEMPLATE_ENTRY
+                                        PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
+                                        REFERENCE_EXPRESSION
+                                          PsiElement(VlangTokenType.identifier)('feature_name')
                                       PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('"')
                                       PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' is already enabled')
                                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
@@ -4222,7 +4235,7 @@ V Language file
                               NOT_IN_EXPRESSION
                                 REFERENCE_EXPRESSION
                                   PsiElement(VlangTokenType.identifier)('feature_val')
-                                PsiElement(VlangTokenType.NOT_IN)('!in ')
+                                PsiElement(VlangTokenType.!in)('!in')
                                 REFERENCE_EXPRESSION
                                   REFERENCE_EXPRESSION
                                     PsiElement(VlangTokenType.identifier)('ls')
@@ -4479,7 +4492,7 @@ V Language file
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           COMPILE_TIME_IF_EXPRESSION
-            PsiElement(VlangTokenType.IF_COMPILE_TIME)('$if')
+            PsiElement(VlangTokenType.$if)('$if')
             DOT_EXPRESSION
               REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('connection_test')
@@ -4507,7 +4520,7 @@ V Language file
                     PsiElement(VlangTokenType.identifier)('second')
               PsiElement(VlangTokenType.})('}')
             COMPILE_ELSE_STATEMENT
-              PsiElement(VlangTokenType.ELSE_COMPILE_TIME)('$else')
+              PsiElement(VlangTokenType.$else)('$else')
               BLOCK
                 PsiElement(VlangTokenType.{)('{')
                 ASSIGNMENT_STATEMENT
@@ -4885,7 +4898,7 @@ V Language file
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           COMPILE_TIME_IF_EXPRESSION
-            PsiElement(VlangTokenType.IF_COMPILE_TIME)('$if')
+            PsiElement(VlangTokenType.$if)('$if')
             REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('windows')
             BLOCK

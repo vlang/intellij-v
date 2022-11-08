@@ -12,7 +12,6 @@ class VlangCodeVisionLanguageContext : VcsCodeVisionLanguageContext {
             element is VlangStructDeclaration ||
             element is VlangInterfaceDeclaration ||
             element is VlangEnumDeclaration ||
-            element is VlangUnionDeclaration ||
             element is VlangConstDeclaration ||
             element is VlangTypeAliasDeclaration ||
             element is VlangGlobalVariableDeclaration

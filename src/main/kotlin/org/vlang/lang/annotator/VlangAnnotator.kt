@@ -22,10 +22,11 @@ class VlangAnnotator : Annotator {
         if (holder.isBatchMode) return
 
         val color = when (element) {
-            is LeafPsiElement        -> highlightLeaf(element, holder)
-            is VlangSqlBlock         -> VlangColor.SQL_CODE
-            is VlangUnsafeExpression -> VlangColor.UNSAFE_CODE
-            else                     -> null
+            is LeafPsiElement           -> highlightLeaf(element, holder)
+            is VlangSqlBlock            -> VlangColor.SQL_CODE
+            is VlangUnsafeExpression    -> VlangColor.UNSAFE_CODE
+            is VlangAttributeIdentifier -> VlangColor.ATTRIBUTE
+            else                        -> null
         } ?: return
 
         holder.newSilentAnnotation(HighlightSeverity.INFORMATION).textAttributes(color.textAttributesKey).create()
@@ -33,7 +34,7 @@ class VlangAnnotator : Annotator {
 
     private fun highlightAttribute(element: PsiElement): VlangColor? {
         if (element.parent is VlangPlainAttribute) {
-            if (element.elementType == VlangTypes.IDENTIFIER || element.elementType == VlangTypes.UNSAFE || element.elementType == VlangTypes.SQL) {
+            if (element.elementType == VlangTypes.IDENTIFIER || element.elementType == VlangTypes.UNSAFE) {
                 return VlangColor.ATTRIBUTE
             }
         }
@@ -64,7 +65,7 @@ class VlangAnnotator : Annotator {
             return highlightReference(parent as VlangReferenceExpressionBase, parent.reference as VlangReference)
         }
 
-        if (parent is VlangPlainAttribute || parent is VlangAttribute) {
+        if (parent is VlangAttribute || parent is VlangAttributeIdentifier) {
             return highlightAttribute(element)
         }
 
@@ -73,10 +74,12 @@ class VlangAnnotator : Annotator {
         }
 
         return when (element.elementType) {
-            VlangTypes.IDENTIFIER           -> highlightIdentifier(element, parent)
-            VlangTypes.TEMPLATE_ENTRY_START -> VlangColor.STRING_INTERPOLATION
-            VlangTypes.TEMPLATE_ENTRY_END   -> VlangColor.STRING_INTERPOLATION
-            else                            -> null
+            VlangTypes.IDENTIFIER                 -> highlightIdentifier(element, parent)
+            VlangTypes.SHORT_TEMPLATE_ENTRY_START -> VlangColor.STRING_INTERPOLATION
+            VlangTypes.LONG_TEMPLATE_ENTRY_START  -> VlangColor.STRING_INTERPOLATION
+            VlangTypes.TEMPLATE_ENTRY_START       -> VlangColor.STRING_INTERPOLATION
+            VlangTypes.TEMPLATE_ENTRY_END         -> VlangColor.STRING_INTERPOLATION
+            else                                  -> null
         }
     }
 
@@ -87,9 +90,12 @@ class VlangAnnotator : Annotator {
             is VlangFunctionDeclaration       -> public(resolved, VlangColor.PUBLIC_FUNCTION, VlangColor.FUNCTION)
             is VlangMethodDeclaration         -> public(resolved, VlangColor.PUBLIC_FUNCTION, VlangColor.FUNCTION)
             is VlangInterfaceMethodDefinition -> public(resolved, VlangColor.INTERFACE_METHOD, VlangColor.INTERFACE_METHOD)
-            is VlangStructDeclaration         -> public(resolved, VlangColor.PUBLIC_STRUCT, VlangColor.STRUCT)
+            is VlangStructDeclaration         -> if (!resolved.isUnion)
+                public(resolved, VlangColor.PUBLIC_STRUCT, VlangColor.STRUCT)
+            else
+                public(resolved, VlangColor.PUBLIC_UNION, VlangColor.UNION)
+
             is VlangEnumDeclaration           -> public(resolved, VlangColor.PUBLIC_ENUM, VlangColor.ENUM)
-            is VlangUnionDeclaration          -> public(resolved, VlangColor.PUBLIC_UNION, VlangColor.UNION)
             is VlangInterfaceDeclaration      -> public(resolved, VlangColor.PUBLIC_INTERFACE, VlangColor.INTERFACE)
             is VlangConstDefinition           -> public(resolved, VlangColor.PUBLIC_CONSTANT, VlangColor.CONSTANT)
             is VlangFieldDefinition           -> public(resolved, VlangColor.PUBLIC_FIELD, VlangColor.FIELD)
@@ -122,9 +128,6 @@ class VlangAnnotator : Annotator {
             element.text in listOf(
                 "_likely_",
                 "_unlikely_",
-                "sizeof",
-                "__offsetof",
-                "typeof",
                 "sql",
                 "map",
             )                                                                    -> VlangColor.KEYWORD
@@ -137,10 +140,13 @@ class VlangAnnotator : Annotator {
         is VlangFunctionOrMethodDeclaration -> public(element, VlangColor.PUBLIC_FUNCTION, VlangColor.FUNCTION)
         is VlangConstDefinition             -> public(element, VlangColor.PUBLIC_CONSTANT, VlangColor.CONSTANT)
         is VlangTypeAliasDeclaration        -> public(element, VlangColor.PUBLIC_TYPE_ALIAS, VlangColor.TYPE_ALIAS)
-        is VlangStructDeclaration           -> public(element, VlangColor.PUBLIC_STRUCT, VlangColor.STRUCT)
+        is VlangStructDeclaration           -> if (!element.isUnion)
+            public(element, VlangColor.PUBLIC_STRUCT, VlangColor.STRUCT)
+        else
+            public(element, VlangColor.PUBLIC_UNION, VlangColor.UNION)
+
         is VlangInterfaceDeclaration        -> public(element, VlangColor.PUBLIC_INTERFACE, VlangColor.INTERFACE)
         is VlangEnumDeclaration             -> public(element, VlangColor.PUBLIC_ENUM, VlangColor.ENUM)
-        is VlangUnionDeclaration            -> public(element, VlangColor.PUBLIC_UNION, VlangColor.UNION)
 
         is VlangFieldDefinition             -> public(element, VlangColor.PUBLIC_FIELD, VlangColor.FIELD)
         is VlangInterfaceMethodDefinition   -> public(element, VlangColor.INTERFACE_METHOD, VlangColor.INTERFACE_METHOD)

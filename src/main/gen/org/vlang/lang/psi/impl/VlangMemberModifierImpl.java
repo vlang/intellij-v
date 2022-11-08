@@ -44,10 +44,4 @@ public class VlangMemberModifierImpl extends VlangCompositeElementImpl implement
     return findChildByType(PUB);
   }
 
-  @Override
-  @Nullable
-  public PsiElement getShared() {
-    return findChildByType(SHARED);
-  }
-
 }

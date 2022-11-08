@@ -21,4 +21,6 @@ class TypeTest : TypeTestBase() {
     fun `test sql`() = doTest("sql.v")
     fun `test globals`() = doTest("globals.v")
     fun `test fields`() = doTest("fields.v")
+    fun `test shared`() = doTest("shared.v")
+    fun `test dump`() = doTest("dump.v")
 }

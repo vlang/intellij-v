@@ -3,16 +3,8 @@ package org.vlang.vmod.completion
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
-import com.intellij.icons.AllIcons
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.util.ProcessingContext
-import org.vlang.lang.VlangTypes
-import org.vlang.lang.psi.VlangEnumDeclaration
-import org.vlang.lang.psi.VlangFunctionDeclaration
-import org.vlang.lang.psi.VlangStructDeclaration
-import org.vlang.lang.psi.VlangTypeAliasDeclaration
-import org.vlang.lang.psi.VlangUnionDeclaration
-import org.vlang.lang.stubs.index.*
 import org.vlang.lang.vmod.VmodTypes
 
 class VmodCompletionContributor : CompletionContributor() {

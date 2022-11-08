@@ -1,18 +1,16 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi.impl;
 
+import java.util.List;
+import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.stubs.IStubElementType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.vlang.lang.psi.*;
-import org.vlang.lang.stubs.VlangTypeStub;
-
-import java.util.List;
-
+import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
+import org.vlang.lang.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
+import org.vlang.lang.stubs.VlangTypeStub;
 
 public class VlangStructTypeImpl extends VlangTypeImpl implements VlangStructType {
 
@@ -60,9 +58,15 @@ public class VlangStructTypeImpl extends VlangTypeImpl implements VlangStructTyp
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getStruct() {
-    return notNullChild(findChildByType(STRUCT));
+    return findChildByType(STRUCT);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getUnion() {
+    return findChildByType(UNION);
   }
 
   @Override
@@ -73,8 +77,13 @@ public class VlangStructTypeImpl extends VlangTypeImpl implements VlangStructTyp
 
   @Override
   @NotNull
-  public List<VlangAnonymousFieldDefinition> getEmbeddedStructList() {
+  public List<VlangEmbeddedDefinition> getEmbeddedStructList() {
     return VlangPsiImplUtil.getEmbeddedStructList(this);
+  }
+
+  @Override
+  public boolean isUnion() {
+    return VlangPsiImplUtil.isUnion(this);
   }
 
 }

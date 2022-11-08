@@ -87,7 +87,7 @@ object VlangCompletionUtil {
             return true
         }
 
-        if (parent is VlangStructType || parent is VlangUnionDeclaration || parent is VlangEnumDeclaration || parent is VlangInterfaceType) {
+        if (parent is VlangStructType || parent is VlangEnumDeclaration || parent is VlangInterfaceType) {
             return true
         }
 
@@ -218,9 +218,9 @@ object VlangCompletionUtil {
         )
     }
 
-    fun createStructLookupElement(element: VlangNamedElement, state: ResolveState, needBrackets: Boolean): LookupElement? {
+    fun createStructLookupElement(element: VlangStructDeclaration, state: ResolveState, needBrackets: Boolean): LookupElement? {
         val name = element.name
-        if (name.isNullOrEmpty()) {
+        if (name.isEmpty()) {
             return null
         }
 
@@ -239,9 +239,6 @@ object VlangCompletionUtil {
                 .withIcon(VIcons.Constant), COMPILE_TIME_CONSTANT_PRIORITY.toDouble()
         )
     }
-
-    fun createUnionLookupElement(element: VlangNamedElement, state: ResolveState): LookupElement? =
-        createClassLikeLookupElement(element, state, AllIcons.Nodes.AnonymousClass, STRUCT_PRIORITY)
 
     fun createEnumLookupElement(element: VlangNamedElement, state: ResolveState): LookupElement? =
         createClassLikeLookupElement(element, state, AllIcons.Nodes.Enum, STRUCT_PRIORITY)
@@ -308,14 +305,15 @@ object VlangCompletionUtil {
 
 
     private fun createStructLookupElement(
-        element: VlangNamedElement, lookupString: String, moduleName: String?, state: ResolveState,
+        element: VlangStructDeclaration, lookupString: String, moduleName: String?, state: ResolveState,
         insertHandler: InsertHandler<LookupElement>? = null,
         priority: Int = 0,
     ): LookupElement {
         val qualifiedName = createQualifiedName(state, lookupString)
+        val icon = if (element.isUnion) VIcons.Union else VIcons.Struct
         return PrioritizedLookupElement.withPriority(
             LookupElementBuilder.createWithSmartPointer(qualifiedName, element)
-                .withRenderer(ClassLikeRenderer(AllIcons.Nodes.Class, moduleName))
+                .withRenderer(ClassLikeRenderer(icon, moduleName))
                 .withInsertHandler(insertHandler), priority.toDouble()
         )
     }
@@ -603,7 +601,7 @@ object VlangCompletionUtil {
                 is VlangGlobalVariableDefinition -> VIcons.Variable
                 is VlangParamDefinition          -> VIcons.Parameter
                 is VlangReceiver                 -> VIcons.Receiver
-                is VlangAnonymousFieldDefinition -> VIcons.Field
+                is VlangEmbeddedDefinition -> VIcons.Field
                 else                             -> null
             }
 

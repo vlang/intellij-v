@@ -69,7 +69,6 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
         return parentOfTypes(
             VlangInterfaceDeclaration::class,
             VlangStructDeclaration::class,
-            VlangUnionDeclaration::class,
             VlangFile::class,
         )
     }
@@ -110,10 +109,9 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
 
     override fun getIcon(flags: Int): Icon? {
         val icon = when (this) {
-            is VlangStructDeclaration         -> VIcons.Struct
+            is VlangStructDeclaration         -> if (isUnion) VIcons.Union else VIcons.Struct
             is VlangInterfaceDeclaration      -> VIcons.Interface
             is VlangEnumDeclaration           -> VIcons.Enum
-            is VlangUnionDeclaration          -> VIcons.Union
             is VlangMethodDeclaration         -> VIcons.Method
             is VlangFunctionDeclaration       -> VIcons.Function
             is VlangVarDefinition             -> VIcons.Variable

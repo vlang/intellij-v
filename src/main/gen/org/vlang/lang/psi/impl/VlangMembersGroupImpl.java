@@ -1,17 +1,14 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi.impl;
 
+import java.util.List;
+import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.vlang.lang.psi.VlangPsiTreeUtil;
+import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
-
-import java.util.List;
-
-import static org.vlang.lang.VlangTypes.SEMICOLON;
-import static org.vlang.lang.VlangTypes.SEMICOLON_SYNTHETIC;
 
 public class VlangMembersGroupImpl extends VlangCompositeElementImpl implements VlangMembersGroup {
 
@@ -31,8 +28,8 @@ public class VlangMembersGroupImpl extends VlangCompositeElementImpl implements 
 
   @Override
   @NotNull
-  public List<VlangAnonymousInterfaceDefinition> getAnonymousInterfaceDefinitionList() {
-    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangAnonymousInterfaceDefinition.class);
+  public List<VlangEmbeddedInterfaceDefinition> getEmbeddedInterfaceDefinitionList() {
+    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangEmbeddedInterfaceDefinition.class);
   }
 
   @Override

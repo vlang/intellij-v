@@ -8,13 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface VlangIfAttribute extends VlangCompositeElement {
 
   @Nullable
-  PsiElement getNot();
-
-  @Nullable
-  PsiElement getQuestion();
-
-  @Nullable
-  PsiElement getIdentifier();
+  VlangExpression getExpression();
 
   @NotNull
   PsiElement getIf();

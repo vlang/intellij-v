@@ -16,7 +16,7 @@ class VlangSuperMethodSearch : QueryExecutorBase<VlangInterfaceMethodDeclaration
         if (!parameters.isCheckDeep) return
 
         val method = parameters.element as? VlangMethodDeclaration ?: return
-        val owner = method.receiverType.typeReferenceExpression?.resolve() as? VlangNamedElement ?: return
+        val owner = method.receiverType?.typeReferenceExpression?.resolve() as? VlangNamedElement ?: return
         val processor = Processor<VlangNamedElement> { spec ->
             val iface = spec as VlangInterfaceDeclaration
             val name = method.name ?: return@Processor true

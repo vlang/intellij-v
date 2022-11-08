@@ -31,8 +31,8 @@ class VlangFormattingBlock(
                 is VlangBlock                     -> true
                 is VlangInterfaceType             -> true
                 is VlangStructType                -> true
+                is VlangAnonymousStructType       -> true
                 is VlangEnumType                  -> true
-                is VlangUnionDeclaration          -> true
                 is VlangConstDeclaration          -> true
                 is VlangLiteralValueExpression    -> true
                 is VlangMatchArms                 -> true

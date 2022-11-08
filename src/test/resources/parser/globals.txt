@@ -3,14 +3,14 @@ V Language file
     PsiElement(VlangTokenType.module)('module')
     PsiElement(VlangTokenType.identifier)('main')
   GLOBAL_VARIABLE_DECLARATION
-    PsiElement(VlangTokenType.BUILTIN_GLOBAL)('__global')
+    PsiElement(VlangTokenType.__global)('__global')
     GLOBAL_VARIABLE_DEFINITION
       PsiElement(VlangTokenType.identifier)('name')
       PsiElement(VlangTokenType.=)('=')
       LITERAL
         PsiElement(VlangTokenType.int)('100')
   GLOBAL_VARIABLE_DECLARATION
-    PsiElement(VlangTokenType.BUILTIN_GLOBAL)('__global')
+    PsiElement(VlangTokenType.__global)('__global')
     PsiElement(VlangTokenType.()('(')
     GLOBAL_VARIABLE_DEFINITION
       PsiElement(VlangTokenType.identifier)('sem')
@@ -79,9 +79,11 @@ V Language file
         PsiElement(VlangTokenType.[)('[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
-            PsiElement(VlangTokenType.identifier)('markused')
+            ATTRIBUTE_KEY
+              ATTRIBUTE_IDENTIFIER
+                PsiElement(VlangTokenType.identifier)('markused')
         PsiElement(VlangTokenType.])(']')
-    PsiElement(VlangTokenType.BUILTIN_GLOBAL)('__global')
+    PsiElement(VlangTokenType.__global)('__global')
     GLOBAL_VARIABLE_DEFINITION
       PsiElement(VlangTokenType.identifier)('g_main_argc')
       PsiElement(VlangTokenType.=)('=')
@@ -101,9 +103,11 @@ V Language file
         PsiElement(VlangTokenType.[)('[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
-            PsiElement(VlangTokenType.identifier)('markused')
+            ATTRIBUTE_KEY
+              ATTRIBUTE_IDENTIFIER
+                PsiElement(VlangTokenType.identifier)('markused')
         PsiElement(VlangTokenType.])(']')
-    PsiElement(VlangTokenType.BUILTIN_GLOBAL)('__global')
+    PsiElement(VlangTokenType.__global)('__global')
     GLOBAL_VARIABLE_DEFINITION
       PsiElement(VlangTokenType.identifier)('g_main_argv')
       PsiElement(VlangTokenType.=)('=')
@@ -117,7 +121,7 @@ V Language file
                 PsiElement(VlangTokenType.nil)('nil')
           PsiElement(VlangTokenType.})('}')
   GLOBAL_VARIABLE_DECLARATION
-    PsiElement(VlangTokenType.BUILTIN_GLOBAL)('__global')
+    PsiElement(VlangTokenType.__global)('__global')
     PsiElement(VlangTokenType.()('(')
     GLOBAL_VARIABLE_DEFINITION
       PsiElement(VlangTokenType.identifier)('intmap')
@@ -223,16 +227,13 @@ V Language file
                 PARENTHESES_EXPR
                   PsiElement(VlangTokenType.()('(')
                   ADD_EXPR
-                    CALL_EXPR
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('sizeof')
-                      ARGUMENT_LIST
-                        PsiElement(VlangTokenType.()('(')
-                        ELEMENT
-                          VALUE
-                            REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('f64')
-                        PsiElement(VlangTokenType.))(')')
+                    SIZE_OF_CALL_EXPR
+                      PsiElement(VlangTokenType.sizeof)('sizeof')
+                      PsiElement(VlangTokenType.()('(')
+                      TYPE
+                        TYPE_REFERENCE_EXPRESSION
+                          PsiElement(VlangTokenType.identifier)('f64')
+                      PsiElement(VlangTokenType.))(')')
                     PsiElement(VlangTokenType.+)('+')
                     CALL_EXPR
                       REFERENCE_EXPRESSION
@@ -308,7 +309,7 @@ V Language file
       PsiElement(VlangTokenType.identifier)('testarr')
       PsiElement(VlangTokenType.=)('=')
       LITERAL_VALUE_EXPRESSION
-        ARRAY_OR_SLICE_TYPE
+        ARRAY_TYPE
           PsiElement(VlangTokenType.[)('[')
           PsiElement(VlangTokenType.])(']')
           TYPE
@@ -437,7 +438,10 @@ V Language file
             STRING_LITERAL
               STRING_TEMPLATE
                 PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('$n')
+                SHORT_STRING_TEMPLATE_ENTRY
+                  PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
+                  REFERENCE_EXPRESSION
+                    PsiElement(VlangTokenType.identifier)('n')
                 PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
           PsiElement(VlangTokenType.})('}')
     PsiElement(VlangTokenType.))(')')

@@ -23,7 +23,6 @@ class VlangSyntaxHighlighter : SyntaxHighlighterBase() {
         fun map(tokenType: IElementType): VlangColor? = when (tokenType) {
             LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY     -> VlangColor.VALID_STRING_ESCAPE
             DOC_COMMENT                              -> VlangColor.BLOCK_COMMENT
-            LANGUAGE_INJECTION                       -> VlangColor.LINE_COMMENT
 
             LPAREN, RPAREN                           -> VlangColor.PARENTHESES
             LBRACE, RBRACE                           -> VlangColor.BRACES

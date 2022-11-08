@@ -516,9 +516,18 @@ V Language file
                         STRING_LITERAL
                           STRING_TEMPLATE
                             PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                            PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' $json_key.json_str(): $')
+                            PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' ')
+                            SHORT_STRING_TEMPLATE_ENTRY
+                              PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
+                              REFERENCE_EXPRESSION
+                                REFERENCE_EXPRESSION
+                                  PsiElement(VlangTokenType.identifier)('json_key')
+                                PsiElement(VlangTokenType..)('.')
+                                PsiElement(VlangTokenType.identifier)('json_str')
+                            PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('(')
+                            PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('): ')
                             LONG_STRING_TEMPLATE_ENTRY
-                              PsiElement(VlangTokenType.TEMPLATE_ENTRY_START)('{')
+                              PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_START)('${')
                               CALL_EXPR
                                 REFERENCE_EXPRESSION
                                   PsiElement(VlangTokenType.identifier)('any_to_json')
@@ -572,7 +581,7 @@ V Language file
                       PsiElement(VlangTokenType.identifier)('str')
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
-                ARRAY_OR_SLICE_TYPE
+                ARRAY_TYPE
                   PsiElement(VlangTokenType.[)('[')
                   PsiElement(VlangTokenType.])(']')
                   TYPE
@@ -617,9 +626,9 @@ V Language file
                         STRING_LITERAL
                           STRING_TEMPLATE
                             PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                            PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' $')
+                            PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' ')
                             LONG_STRING_TEMPLATE_ENTRY
-                              PsiElement(VlangTokenType.TEMPLATE_ENTRY_START)('{')
+                              PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_START)('${')
                               CALL_EXPR
                                 REFERENCE_EXPRESSION
                                   PsiElement(VlangTokenType.identifier)('any_to_json')
@@ -1121,7 +1130,7 @@ V Language file
                       PsiElement(VlangTokenType.identifier)('jmap')
                   PsiElement(VlangTokenType.})('}')
               MATCH_ARM
-                ARRAY_OR_SLICE_TYPE
+                ARRAY_TYPE
                   PsiElement(VlangTokenType.[)('[')
                   PsiElement(VlangTokenType.])(']')
                   TYPE
@@ -1141,7 +1150,7 @@ V Language file
                         PsiElement(VlangTokenType.identifier)('jarr')
                       PsiElement(VlangTokenType.:=)(':=')
                       LITERAL_VALUE_EXPRESSION
-                        ARRAY_OR_SLICE_TYPE
+                        ARRAY_TYPE
                           PsiElement(VlangTokenType.[)('[')
                           PsiElement(VlangTokenType.])(']')
                           TYPE

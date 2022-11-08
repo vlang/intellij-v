@@ -1,7 +1,9 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi;
 
-import org.jetbrains.annotations.Nullable;
+import java.util.List;
+import org.jetbrains.annotations.*;
+import com.intellij.psi.PsiElement;
 
 public interface VlangStatement extends VlangCompositeElement {
 
@@ -10,9 +12,6 @@ public interface VlangStatement extends VlangCompositeElement {
 
   @Nullable
   VlangConstDeclaration getConstDeclaration();
-
-  @Nullable
-  VlangSqlStatement getSqlStatement();
 
   @Nullable
   VlangTypeAliasDeclaration getTypeAliasDeclaration();

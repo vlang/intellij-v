@@ -42,7 +42,7 @@ open class VlangVarProcessor(
         return e !is VlangVarDefinition &&
                 e !is VlangParamDefinition &&
                 e !is VlangReceiver &&
-                e !is VlangAnonymousFieldDefinition &&
+                e !is VlangEmbeddedDefinition &&
                 e !is VlangConstDefinition
     }
 

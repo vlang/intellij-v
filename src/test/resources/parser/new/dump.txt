@@ -1,0 +1,33 @@
+V Language file
+  MODULE_CLAUSE
+    PsiElement(VlangTokenType.module)('module')
+    PsiElement(VlangTokenType.identifier)('new')
+  SIMPLE_STATEMENT
+    VAR_DECLARATION
+      VAR_DEFINITION
+        VAR_MODIFIERS
+          <empty list>
+        PsiElement(VlangTokenType.identifier)('a')
+      PsiElement(VlangTokenType.:=)(':=')
+      LITERAL
+        PsiElement(VlangTokenType.int)('100')
+  SIMPLE_STATEMENT
+    LEFT_HAND_EXPR_LIST
+      DUMP_CALL_EXPR
+        PsiElement(VlangTokenType.dump)('dump')
+        PsiElement(VlangTokenType.()('(')
+        LITERAL
+          PsiElement(VlangTokenType.int)('100')
+        PsiElement(VlangTokenType.))(')')
+  SIMPLE_STATEMENT
+    LEFT_HAND_EXPR_LIST
+      DUMP_CALL_EXPR
+        PsiElement(VlangTokenType.dump)('dump')
+        PsiElement(VlangTokenType.()('(')
+        ADD_EXPR
+          REFERENCE_EXPRESSION
+            PsiElement(VlangTokenType.identifier)('a')
+          PsiElement(VlangTokenType.+)('+')
+          LITERAL
+            PsiElement(VlangTokenType.int)('100')
+        PsiElement(VlangTokenType.))(')')

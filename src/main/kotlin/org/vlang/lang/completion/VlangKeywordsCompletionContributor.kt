@@ -100,7 +100,6 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
             identifier(),
             KeywordsCompletionProvider(
                 "else",
-                "isreftype",
                 "atomic",
                 "for",
                 "mut",
@@ -136,8 +135,10 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
             CompletionType.BASIC,
             identifier(),
             FunctionsLikeCompletionProvider(
+                "dump",
                 "sizeof",
                 "typeof",
+                "isreftype",
                 "__offsetof",
             )
         )
@@ -504,8 +505,8 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
                 result.addElement(
                     PrioritizedLookupElement.withPriority(
                         LookupElementBuilder.create(keyword)
-                            .withTailText("()")
-                            .withInsertHandler(VlangCompletionUtil.StringInsertHandler("()", 1))
+                            .withTailText("(expr)")
+                            .withInsertHandler(VlangCompletionUtil.TemplateStringInsertHandler("(\$expr$)", true, "expr" to ConstantNode("expr")))
                             .bold(), KEYWORD_PRIORITY.toDouble()
                     )
                 )
@@ -550,12 +551,7 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         )
 
     private fun insideStruct() = onStatementBeginning(VlangTypes.IDENTIFIER)
-        .inside(
-            StandardPatterns.or(
-                psiElement(VlangStructDeclaration::class.java),
-                psiElement(VlangUnionDeclaration::class.java),
-            )
-        )
+        .inside(VlangStructDeclaration::class.java)
 
     private fun insideBlockPattern(tokenType: IElementType): PsiElementPattern.Capture<PsiElement?> {
         return onStatementBeginning(tokenType)

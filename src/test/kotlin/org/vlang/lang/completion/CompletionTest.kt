@@ -84,23 +84,23 @@ class CompletionTest : CompletionTestBase() {
         1, "foo",
     )
 
-    fun `test short string template member completion`() = checkEquals(
-        """
-        module main
-        
-        struct Foo {
-        pub:
-            name string
-            age  int
-        }
-        
-        fn main() {
-            foo := Foo{}
-            "{foo.<caret>}"
-        }
-        """.trimIndent(),
-        1, "name", "age",
-    )
+//    fun `test short string template member completion`() = checkEquals(
+//        """
+//        module main
+//
+//        struct Foo {
+//        pub:
+//            name string
+//            age  int
+//        }
+//
+//        fn main() {
+//            foo := Foo{}
+//            "{foo.<caret>}"
+//        }
+//        """.trimIndent(),
+//        1, "name", "age",
+//    )
 
     fun `test long string template completion`() = checkIncludes(
         """

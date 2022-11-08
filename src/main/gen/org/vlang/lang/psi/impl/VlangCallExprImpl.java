@@ -1,14 +1,14 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi.impl;
 
+import java.util.List;
+import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.vlang.lang.psi.VlangPsiTreeUtil;
+import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
-
-import java.util.List;
 
 public class VlangCallExprImpl extends VlangExpressionImpl implements VlangCallExpr {
 
@@ -28,9 +28,21 @@ public class VlangCallExprImpl extends VlangExpressionImpl implements VlangCallE
   }
 
   @Override
+  @Nullable
+  public VlangAnonymousStructValueExpression getAnonymousStructValueExpression() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangAnonymousStructValueExpression.class);
+  }
+
+  @Override
   @NotNull
   public VlangArgumentList getArgumentList() {
     return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangArgumentList.class));
+  }
+
+  @Override
+  @Nullable
+  public VlangCompileTimeFieldReference getCompileTimeFieldReference() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangCompileTimeFieldReference.class);
   }
 
   @Override

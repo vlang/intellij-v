@@ -12,7 +12,7 @@ V Language file
     BLOCK
       PsiElement(VlangTokenType.{)('{')
       COMPILE_TIME_FOR_STATEMENT
-        PsiElement(VlangTokenType.FOR_COMPILE_TIME)('$for')
+        PsiElement(VlangTokenType.$for)('$for')
         RANGE_CLAUSE
           VAR_DEFINITION
             VAR_MODIFIERS
@@ -25,7 +25,7 @@ V Language file
           PsiElement(VlangTokenType.{)('{')
           PsiElement(VlangTokenType.})('}')
       COMPILE_TIME_FOR_STATEMENT
-        PsiElement(VlangTokenType.FOR_COMPILE_TIME)('$for')
+        PsiElement(VlangTokenType.$for)('$for')
         FOR_CLAUSE
           SIMPLE_STATEMENT
             VAR_DECLARATION
@@ -54,7 +54,7 @@ V Language file
           PsiElement(VlangTokenType.{)('{')
           PsiElement(VlangTokenType.})('}')
       COMPILE_TIME_FOR_STATEMENT
-        PsiElement(VlangTokenType.FOR_COMPILE_TIME)('$for')
+        PsiElement(VlangTokenType.$for)('$for')
         RANGE_CLAUSE
           VAR_DEFINITION
             VAR_MODIFIERS

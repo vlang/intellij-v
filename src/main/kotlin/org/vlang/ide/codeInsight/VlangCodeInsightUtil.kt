@@ -33,7 +33,7 @@ object VlangCodeInsightUtil {
 
     fun isArrayMethodCall(callExpr: VlangCallExpr): Boolean {
         val function = callExpr.resolve() ?: return false
-        return function is VlangMethodDeclaration && function.receiverType.textMatches("array")
+        return function is VlangMethodDeclaration && function.receiverType?.textMatches("array") == true
     }
 
     fun insideOrGuard(element: PsiElement): Boolean {

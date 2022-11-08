@@ -37,29 +37,30 @@ abstract class VlangBaseTypeEx<T : VlangType?>(protected val raw: T) : VlangType
                 return when ((type.parent as VlangStructDeclaration).getQualifiedName()) {
                     "builtin.array"  -> VlangBuiltinArrayTypeEx(type)
                     "builtin.string" -> VlangBuiltinStringTypeEx(type)
-                    else             -> VlangStructTypeEx(type)
+                    else             -> if (type.isUnion) VlangUnionTypeEx(type) else VlangStructTypeEx(type)
                 }
             }
 
             return when (type) {
-                is VlangEnumType         -> VlangEnumTypeEx(type)
-                is VlangInterfaceType    -> VlangInterfaceTypeEx(type)
-                is VlangUnionType        -> VlangUnionTypeEx(type)
-                is VlangNullableType     -> VlangNullableTypeEx(type)
-                is VlangNotNullableType  -> VlangNotNullableTypeEx(type)
-                is VlangPointerType      -> VlangPointerTypeEx(type)
-                is VlangArrayOrSliceType -> VlangArrayTypeEx(type)
-                is VlangMapType          -> VlangMapTypeEx(type)
-                is VlangTupleType        -> VlangTupleTypeEx(type)
-                is VlangFunctionType     -> VlangFunctionTypeEx(type)
-                is VlangAliasType        -> {
+                is VlangEnumType        -> VlangEnumTypeEx(type)
+                is VlangInterfaceType   -> VlangInterfaceTypeEx(type)
+                is VlangNullableType    -> VlangNullableTypeEx(type)
+                is VlangNotNullableType -> VlangNotNullableTypeEx(type)
+                is VlangSharedType      -> VlangSharedTypeEx(type)
+                is VlangPointerType     -> VlangPointerTypeEx(type)
+                is VlangArrayType       -> VlangArrayTypeEx(type)
+                is VlangMapType         -> VlangMapTypeEx(type)
+                is VlangTupleType       -> VlangTupleTypeEx(type)
+                is VlangFunctionType    -> VlangFunctionTypeEx(type)
+                is VlangAliasType       -> {
                     if (type.isAlias) {
                         VlangAliasTypeEx(type)
                     } else {
                         VlangSumTypeEx(type)
                     }
                 }
-                else                     -> {
+
+                else                    -> {
                     if (type.text == "any") {
                         return VlangAnyTypeEx(this)
                     }

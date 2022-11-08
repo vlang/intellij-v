@@ -29,6 +29,7 @@ object DocumentationGenerator {
         when (typeEx) {
             is VlangArrayTypeEx     -> return typeEx.generateDoc(anchor)
             is VlangMapTypeEx       -> return typeEx.generateDoc(anchor)
+            is VlangSharedTypeEx    -> return typeEx.generateDoc(anchor)
             is VlangPointerTypeEx   -> return typeEx.generateDoc(anchor)
             is VlangNullableTypeEx  -> return typeEx.generateDoc(anchor)
             is VlangStructTypeEx    -> return typeEx.generateDoc(anchor)
@@ -76,6 +77,13 @@ object DocumentationGenerator {
             appendNotNull(key.raw()?.generateDoc(anchor))
             append("]")
             appendNotNull(value.raw()?.generateDoc(anchor))
+        }
+    }
+
+    fun VlangSharedTypeEx.generateDoc(anchor: PsiElement): String {
+        return buildString {
+            append("shared ")
+            appendNotNull(inner?.raw()?.generateDoc(anchor))
         }
     }
 
@@ -247,7 +255,7 @@ object DocumentationGenerator {
             append("(")
             appendNotNull(varModifiers?.generateDoc())
             part(name, asDeclaration)
-            appendNotNull(type.generateDoc(this@generateMethodDoc))
+            appendNotNull(type?.generateDoc(this@generateMethodDoc))
             append(")")
         }
     }
@@ -259,7 +267,7 @@ object DocumentationGenerator {
         return buildString {
             generateModuleName(containingFile)
             append(DocumentationMarkup.DEFINITION_START)
-            line(getAttributes()?.generateDoc())
+            line(attributes?.generateDoc())
             generateVisibilityPart(this@generateDoc)
 
             if (this@generateDoc is VlangMethodDeclaration) {
@@ -285,21 +293,6 @@ object DocumentationGenerator {
             generateVisibilityPart(this@generateDoc)
 
             part("struct", asKeyword)
-            colorize(name, asDeclaration)
-            append(DocumentationMarkup.DEFINITION_END)
-
-            generateCommentsPart(this@generateDoc)
-        }
-    }
-
-    fun VlangUnionDeclaration.generateDoc(): String {
-        return buildString {
-            generateModuleName(containingFile)
-            append(DocumentationMarkup.DEFINITION_START)
-            line(attributes?.generateDoc())
-            generateVisibilityPart(this@generateDoc)
-
-            part("union", asKeyword)
             colorize(name, asDeclaration)
             append(DocumentationMarkup.DEFINITION_END)
 
@@ -505,7 +498,7 @@ object DocumentationGenerator {
             }
             part("receiver", asKeyword)
             part(name, asDeclaration)
-            append(type.generateDoc(this@generateDoc))
+            append(type?.generateDoc(this@generateDoc))
             append(DocumentationMarkup.DEFINITION_END)
 
             generateCommentsPart(this@generateDoc)

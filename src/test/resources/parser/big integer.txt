@@ -70,7 +70,7 @@ V Language file
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('digits')
-          ARRAY_OR_SLICE_TYPE
+          ARRAY_TYPE
             PsiElement(VlangTokenType.[)('[')
             PsiElement(VlangTokenType.])(']')
             TYPE
@@ -100,7 +100,9 @@ V Language file
         PsiElement(VlangTokenType.[)('[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
-            PsiElement(VlangTokenType.unsafe)('unsafe')
+            ATTRIBUTE_KEY
+              ATTRIBUTE_IDENTIFIER
+                PsiElement(VlangTokenType.unsafe)('unsafe')
         PsiElement(VlangTokenType.])(']')
     PsiElement(VlangTokenType.fn)('fn')
     PsiElement(VlangTokenType.()('(')
@@ -855,7 +857,9 @@ V Language file
         PsiElement(VlangTokenType.[)('[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
-            PsiElement(VlangTokenType.identifier)('params')
+            ATTRIBUTE_KEY
+              ATTRIBUTE_IDENTIFIER
+                PsiElement(VlangTokenType.identifier)('params')
         PsiElement(VlangTokenType.])(']')
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -885,7 +889,9 @@ V Language file
         PsiElement(VlangTokenType.[)('[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
-            PsiElement(VlangTokenType.identifier)('direct_array_access')
+            ATTRIBUTE_KEY
+              ATTRIBUTE_IDENTIFIER
+                PsiElement(VlangTokenType.identifier)('direct_array_access')
         PsiElement(VlangTokenType.])(']')
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -898,7 +904,7 @@ V Language file
           VAR_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.identifier)('input')
-          ARRAY_OR_SLICE_TYPE
+          ARRAY_TYPE
             PsiElement(VlangTokenType.[)('[')
             PsiElement(VlangTokenType.])(']')
             TYPE
@@ -958,7 +964,7 @@ V Language file
             PsiElement(VlangTokenType.identifier)('padded_input')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
-            ARRAY_OR_SLICE_TYPE
+            ARRAY_TYPE
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
@@ -1044,7 +1050,7 @@ V Language file
             PsiElement(VlangTokenType.identifier)('digits')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
-            ARRAY_OR_SLICE_TYPE
+            ARRAY_TYPE
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
@@ -1539,7 +1545,9 @@ V Language file
         PsiElement(VlangTokenType.[)('[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
-            PsiElement(VlangTokenType.identifier)('direct_array_access')
+            ATTRIBUTE_KEY
+              ATTRIBUTE_IDENTIFIER
+                PsiElement(VlangTokenType.identifier)('direct_array_access')
         PsiElement(VlangTokenType.])(']')
     PsiElement(VlangTokenType.fn)('fn')
     PsiElement(VlangTokenType.identifier)('validate_string')
@@ -1719,7 +1727,11 @@ V Language file
                             STRING_LITERAL
                               STRING_TEMPLATE
                                 PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Invalid character $digit')
+                                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Invalid character ')
+                                SHORT_STRING_TEMPLATE_ENTRY
+                                  PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
+                                  REFERENCE_EXPRESSION
+                                    PsiElement(VlangTokenType.identifier)('digit')
                                 PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                         PsiElement(VlangTokenType.))(')')
                   PsiElement(VlangTokenType.})('}')
@@ -1747,7 +1759,17 @@ V Language file
                             STRING_LITERAL
                               STRING_TEMPLATE
                                 PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Invalid character $digit for base $radix')
+                                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Invalid character ')
+                                SHORT_STRING_TEMPLATE_ENTRY
+                                  PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
+                                  REFERENCE_EXPRESSION
+                                    PsiElement(VlangTokenType.identifier)('digit')
+                                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' ')
+                                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('for base ')
+                                SHORT_STRING_TEMPLATE_ENTRY
+                                  PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
+                                  REFERENCE_EXPRESSION
+                                    PsiElement(VlangTokenType.identifier)('radix')
                                 PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                         PsiElement(VlangTokenType.))(')')
                   PsiElement(VlangTokenType.})('}')
@@ -1759,7 +1781,9 @@ V Language file
         PsiElement(VlangTokenType.[)('[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
-            PsiElement(VlangTokenType.identifier)('direct_array_access')
+            ATTRIBUTE_KEY
+              ATTRIBUTE_IDENTIFIER
+                PsiElement(VlangTokenType.identifier)('direct_array_access')
         PsiElement(VlangTokenType.])(']')
     PsiElement(VlangTokenType.fn)('fn')
     PsiElement(VlangTokenType.identifier)('integer_from_special_string')
@@ -1911,7 +1935,7 @@ V Language file
             PsiElement(VlangTokenType.identifier)('big_digits')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
-            ARRAY_OR_SLICE_TYPE
+            ARRAY_TYPE
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
@@ -2217,7 +2241,9 @@ V Language file
         PsiElement(VlangTokenType.[)('[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
-            PsiElement(VlangTokenType.identifier)('direct_array_access')
+            ATTRIBUTE_KEY
+              ATTRIBUTE_IDENTIFIER
+                PsiElement(VlangTokenType.identifier)('direct_array_access')
         PsiElement(VlangTokenType.])(']')
     PsiElement(VlangTokenType.fn)('fn')
     PsiElement(VlangTokenType.identifier)('integer_from_regular_string')
@@ -3055,7 +3081,7 @@ V Language file
             PsiElement(VlangTokenType.identifier)('storage')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
-            ARRAY_OR_SLICE_TYPE
+            ARRAY_TYPE
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
@@ -3270,7 +3296,7 @@ V Language file
             PsiElement(VlangTokenType.identifier)('storage')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
-            ARRAY_OR_SLICE_TYPE
+            ARRAY_TYPE
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
@@ -3479,7 +3505,7 @@ V Language file
             PsiElement(VlangTokenType.identifier)('storage')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
-            ARRAY_OR_SLICE_TYPE
+            ARRAY_TYPE
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
@@ -3883,7 +3909,7 @@ V Language file
             PsiElement(VlangTokenType.identifier)('q')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
-            ARRAY_OR_SLICE_TYPE
+            ARRAY_TYPE
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
@@ -3929,7 +3955,7 @@ V Language file
             PsiElement(VlangTokenType.identifier)('r')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
-            ARRAY_OR_SLICE_TYPE
+            ARRAY_TYPE
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
@@ -4591,7 +4617,9 @@ V Language file
         PsiElement(VlangTokenType.[)('[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
-            PsiElement(VlangTokenType.identifier)('direct_array_access')
+            ATTRIBUTE_KEY
+              ATTRIBUTE_IDENTIFIER
+                PsiElement(VlangTokenType.identifier)('direct_array_access')
         PsiElement(VlangTokenType.])(']')
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -5359,7 +5387,9 @@ V Language file
         PsiElement(VlangTokenType.[)('[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
-            PsiElement(VlangTokenType.identifier)('direct_array_access')
+            ATTRIBUTE_KEY
+              ATTRIBUTE_IDENTIFIER
+                PsiElement(VlangTokenType.identifier)('direct_array_access')
         PsiElement(VlangTokenType.])(']')
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -5790,7 +5820,7 @@ V Language file
             PsiElement(VlangTokenType.identifier)('result')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
-            ARRAY_OR_SLICE_TYPE
+            ARRAY_TYPE
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
@@ -5983,7 +6013,7 @@ V Language file
             PsiElement(VlangTokenType.identifier)('result')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
-            ARRAY_OR_SLICE_TYPE
+            ARRAY_TYPE
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
@@ -6157,7 +6187,7 @@ V Language file
             PsiElement(VlangTokenType.identifier)('result')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
-            ARRAY_OR_SLICE_TYPE
+            ARRAY_TYPE
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
@@ -6320,7 +6350,7 @@ V Language file
             PsiElement(VlangTokenType.identifier)('result')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
-            ARRAY_OR_SLICE_TYPE
+            ARRAY_TYPE
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
@@ -6454,7 +6484,9 @@ V Language file
         PsiElement(VlangTokenType.[)('[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
-            PsiElement(VlangTokenType.identifier)('direct_array_access')
+            ATTRIBUTE_KEY
+              ATTRIBUTE_IDENTIFIER
+                PsiElement(VlangTokenType.identifier)('direct_array_access')
         PsiElement(VlangTokenType.])(']')
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -6567,7 +6599,7 @@ V Language file
             PsiElement(VlangTokenType.identifier)('new_array')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
-            ARRAY_OR_SLICE_TYPE
+            ARRAY_TYPE
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
@@ -6716,7 +6748,9 @@ V Language file
         PsiElement(VlangTokenType.[)('[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
-            PsiElement(VlangTokenType.identifier)('direct_array_access')
+            ATTRIBUTE_KEY
+              ATTRIBUTE_IDENTIFIER
+                PsiElement(VlangTokenType.identifier)('direct_array_access')
         PsiElement(VlangTokenType.])(']')
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -6852,7 +6886,7 @@ V Language file
             PsiElement(VlangTokenType.identifier)('new_array')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
-            ARRAY_OR_SLICE_TYPE
+            ARRAY_TYPE
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
@@ -6998,7 +7032,9 @@ V Language file
         PsiElement(VlangTokenType.[)('[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
-            PsiElement(VlangTokenType.identifier)('direct_array_access')
+            ATTRIBUTE_KEY
+              ATTRIBUTE_IDENTIFIER
+                PsiElement(VlangTokenType.identifier)('direct_array_access')
         PsiElement(VlangTokenType.])(']')
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -7274,7 +7310,9 @@ V Language file
         PsiElement(VlangTokenType.[)('[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
-            PsiElement(VlangTokenType.identifier)('direct_array_access')
+            ATTRIBUTE_KEY
+              ATTRIBUTE_IDENTIFIER
+                PsiElement(VlangTokenType.identifier)('direct_array_access')
         PsiElement(VlangTokenType.])(']')
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -7759,7 +7797,7 @@ V Language file
             PsiElement(VlangTokenType.identifier)('rune_array')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
-            ARRAY_OR_SLICE_TYPE
+            ARRAY_TYPE
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
@@ -8420,7 +8458,9 @@ V Language file
         PsiElement(VlangTokenType.[)('[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
-            PsiElement(VlangTokenType.identifier)('direct_array_access')
+            ATTRIBUTE_KEY
+              ATTRIBUTE_IDENTIFIER
+                PsiElement(VlangTokenType.identifier)('direct_array_access')
         PsiElement(VlangTokenType.])(']')
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -8444,7 +8484,7 @@ V Language file
         TUPLE_TYPE
           PsiElement(VlangTokenType.()('(')
           TYPE_LIST_NO_PIN
-            ARRAY_OR_SLICE_TYPE
+            ARRAY_TYPE
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
@@ -8475,7 +8515,7 @@ V Language file
               RETURN_STATEMENT
                 PsiElement(VlangTokenType.return)('return')
                 LITERAL_VALUE_EXPRESSION
-                  ARRAY_OR_SLICE_TYPE
+                  ARRAY_TYPE
                     PsiElement(VlangTokenType.[)('[')
                     PsiElement(VlangTokenType.])(']')
                     TYPE
@@ -8505,7 +8545,7 @@ V Language file
             PsiElement(VlangTokenType.identifier)('result')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
-            ARRAY_OR_SLICE_TYPE
+            ARRAY_TYPE
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
@@ -9136,7 +9176,9 @@ V Language file
         PsiElement(VlangTokenType.[)('[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
-            PsiElement(VlangTokenType.identifier)('inline')
+            ATTRIBUTE_KEY
+              ATTRIBUTE_IDENTIFIER
+                PsiElement(VlangTokenType.identifier)('inline')
         PsiElement(VlangTokenType.])(']')
     PsiElement(VlangTokenType.fn)('fn')
     PsiElement(VlangTokenType.identifier)('bi_min')
@@ -9198,7 +9240,9 @@ V Language file
         PsiElement(VlangTokenType.[)('[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
-            PsiElement(VlangTokenType.identifier)('inline')
+            ATTRIBUTE_KEY
+              ATTRIBUTE_IDENTIFIER
+                PsiElement(VlangTokenType.identifier)('inline')
         PsiElement(VlangTokenType.])(']')
     PsiElement(VlangTokenType.fn)('fn')
     PsiElement(VlangTokenType.identifier)('bi_max')
@@ -9260,7 +9304,9 @@ V Language file
         PsiElement(VlangTokenType.[)('[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
-            PsiElement(VlangTokenType.identifier)('direct_array_access')
+            ATTRIBUTE_KEY
+              ATTRIBUTE_IDENTIFIER
+                PsiElement(VlangTokenType.identifier)('direct_array_access')
         PsiElement(VlangTokenType.])(']')
     PsiElement(VlangTokenType.fn)('fn')
     PsiElement(VlangTokenType.()('(')
@@ -9987,7 +10033,9 @@ V Language file
         PsiElement(VlangTokenType.[)('[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
-            PsiElement(VlangTokenType.identifier)('inline')
+            ATTRIBUTE_KEY
+              ATTRIBUTE_IDENTIFIER
+                PsiElement(VlangTokenType.identifier)('inline')
         PsiElement(VlangTokenType.])(']')
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')

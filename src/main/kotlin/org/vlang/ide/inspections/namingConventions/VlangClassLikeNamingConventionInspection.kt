@@ -2,13 +2,16 @@ package org.vlang.ide.inspections.namingConventions
 
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.psi.PsiElementVisitor
-import org.vlang.lang.psi.*
+import org.vlang.lang.psi.VlangEnumDeclaration
+import org.vlang.lang.psi.VlangInterfaceDeclaration
+import org.vlang.lang.psi.VlangStructDeclaration
+import org.vlang.lang.psi.VlangVisitor
 
 class VlangClassLikeNamingConventionInspection : VlangNamingConventionInspectionBase() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
         return object : VlangVisitor() {
             override fun visitStructDeclaration(o: VlangStructDeclaration) {
-                holder.checkName(o, "Struct")
+                holder.checkName(o, if (o.isUnion) "Union" else "Struct")
             }
 
             override fun visitInterfaceDeclaration(o: VlangInterfaceDeclaration) {
@@ -17,10 +20,6 @@ class VlangClassLikeNamingConventionInspection : VlangNamingConventionInspection
 
             override fun visitEnumDeclaration(o: VlangEnumDeclaration) {
                 holder.checkName(o, "Enum")
-            }
-
-            override fun visitUnionDeclaration(o: VlangUnionDeclaration) {
-                holder.checkName(o, "Union")
             }
         }
     }

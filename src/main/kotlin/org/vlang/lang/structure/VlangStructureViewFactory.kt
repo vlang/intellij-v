@@ -45,7 +45,6 @@ class VlangStructureViewFactory : PsiStructureViewFactory {
                 element.getStructs().forEach { result.add(Element(it)) }
                 element.getInterfaces().forEach { result.add(Element(it)) }
                 element.getEnums().forEach { result.add(Element(it)) }
-                element.getUnions().forEach { result.add(Element(it)) }
                 element.getTypes().forEach { result.add(Element(it)) }
                 element.getConstants().forEach { result.add(Element(it)) }
                 element.getGlobalVariables().forEach { result.add(Element(it)) }
@@ -56,7 +55,6 @@ class VlangStructureViewFactory : PsiStructureViewFactory {
                 is VlangStructDeclaration    -> element.structType
                 is VlangInterfaceDeclaration -> element.interfaceType
                 is VlangEnumDeclaration      -> element.enumType
-                is VlangUnionDeclaration     -> element.unionType
                 else                         -> null
             }
 
@@ -100,7 +98,7 @@ class VlangStructureViewFactory : PsiStructureViewFactory {
                 } catch (ignored: IndexNotReadyException) {
                     null
                 }
-                val typeText = if (type == null || element is VlangAnonymousFieldDefinition)
+                val typeText = if (type == null || element is VlangEmbeddedDefinition)
                     ""
                 else
                     ": " + type.toEx().readableName(element)

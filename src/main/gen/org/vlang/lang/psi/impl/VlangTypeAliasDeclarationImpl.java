@@ -1,17 +1,17 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi.impl;
 
+import java.util.List;
+import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import org.vlang.lang.psi.VlangPsiTreeUtil;
+import static org.vlang.lang.VlangTypes.*;
+import org.vlang.lang.stubs.VlangTypeAliasDeclarationStub;
+import org.vlang.lang.psi.*;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.stubs.IStubElementType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.vlang.lang.psi.*;
-import org.vlang.lang.stubs.VlangTypeAliasDeclarationStub;
-
-import static org.vlang.lang.VlangTypes.TYPE_;
 
 public class VlangTypeAliasDeclarationImpl extends VlangNamedElementImpl<VlangTypeAliasDeclarationStub> implements VlangTypeAliasDeclaration {
 
@@ -37,6 +37,12 @@ public class VlangTypeAliasDeclarationImpl extends VlangNamedElementImpl<VlangTy
   @Nullable
   public VlangAliasType getAliasType() {
     return VlangPsiTreeUtil.getStubChildOfType(this, VlangAliasType.class);
+  }
+
+  @Override
+  @Nullable
+  public VlangAttributes getAttributes() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangAttributes.class);
   }
 
   @Override

@@ -190,9 +190,6 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
     fun getStructs(): List<VlangStructDeclaration> =
         getNamedElements(VlangTypes.STRUCT_DECLARATION, VlangStructDeclarationStubElementType.ARRAY_FACTORY)
 
-    fun getUnions(): List<VlangUnionDeclaration> =
-        getNamedElements(VlangTypes.UNION_DECLARATION, VlangUnionDeclarationStubElementType.ARRAY_FACTORY)
-
     fun getEnums(): List<VlangEnumDeclaration> =
         getNamedElements(VlangTypes.ENUM_DECLARATION, VlangEnumDeclarationStubElementType.ARRAY_FACTORY)
 

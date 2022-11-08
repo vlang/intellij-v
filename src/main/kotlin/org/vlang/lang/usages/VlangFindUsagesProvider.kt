@@ -26,18 +26,24 @@ class VlangFindUsagesProvider : FindUsagesProvider {
     override fun getHelpId(psiElement: PsiElement) = HelpID.FIND_OTHER_USAGES
 
     override fun getType(element: PsiElement) = when (element) {
+        is VlangStructDeclaration                         -> if (element.isUnion) "union" else "struct"
+        is VlangFieldDefinition                           -> "field"
+        is VlangInterfaceDeclaration                      -> "interface"
+        is VlangInterfaceMethodDefinition                 -> "interface method"
+        is VlangEnumDeclaration                           -> "enum"
+        is VlangEnumFieldDefinition                       -> "enum field"
+        is VlangTypeAliasDeclaration                      -> "type alias"
         is VlangMethodDeclaration                         -> "method"
         is VlangFunctionDeclaration                       -> "function"
         is VlangConstDefinition, is VlangConstDeclaration -> "constant"
         is VlangVarDefinition, is VlangVarDeclaration     -> "variable"
         is VlangParamDefinition                           -> "parameter"
-        is VlangAnonymousFieldDefinition                  -> "anonymous field"
+        is VlangEmbeddedDefinition                        -> "embedded definition"
         is VlangImportDeclaration                         -> "import"
         is VlangImportSpec                                -> "import alias"
         is VlangReceiver                                  -> "receiver"
         is VlangLabelDefinition                           -> "label"
-        is VlangModuleClause                              -> "module statement"
-        is VlangStatement                                 -> "statement"
+        is VlangModuleClause                              -> "module"
         else                                              -> ""
     }
 

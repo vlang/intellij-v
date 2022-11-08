@@ -215,13 +215,6 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             if (!processNamedElements(processor, newState, embedded, localResolve)) return false
         }
 
-        if (typ is VlangUnionType) {
-            val isMethodRef = element.parent is VlangCallExpr
-
-            if (!isMethodRef && !processNamedElements(processor, newState, typ.getFieldList(), localResolve)) return false
-            if (!processMethods(typ, processor, newState, localResolve)) return false
-        }
-
         if (typ is VlangInterfaceType) {
             val isMethodRef = element.parent is VlangCallExpr
 
@@ -234,7 +227,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             if (!processNamedElements(processor, newState, typ.fieldList, localResolve)) return false
         }
 
-        if (typ is VlangArrayOrSliceType) {
+        if (typ is VlangArrayType) {
             if (!processMethods(typ, processor, newState, localResolve)) return false
 
             val builtin = VlangConfiguration.getInstance(type.project).builtinLocation
@@ -520,16 +513,6 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
                 processor,
                 state,
                 file.getTypes(),
-                Conditions.alwaysTrue(),
-                localProcessing,
-                false
-            )
-        ) return false
-
-        if (!processNamedElements(
-                processor,
-                state,
-                file.getUnions(),
                 Conditions.alwaysTrue(),
                 localProcessing,
                 false

@@ -35,20 +35,8 @@ public class VlangLockExpressionImpl extends VlangExpressionImpl implements Vlan
 
   @Override
   @NotNull
-  public List<VlangExpression> getExpressionList() {
-    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangExpression.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getLock() {
-    return findChildByType(LOCK);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getRlock() {
-    return findChildByType(RLOCK);
+  public List<VlangLockParts> getLockPartsList() {
+    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangLockParts.class);
   }
 
 }

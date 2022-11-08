@@ -1,20 +1,14 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi.impl;
 
+import java.util.List;
+import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.vlang.lang.psi.VlangParamDefinition;
-import org.vlang.lang.psi.VlangParameters;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
-import org.vlang.lang.psi.VlangVisitor;
-
-import java.util.List;
-
-import static org.vlang.lang.VlangTypes.LPAREN;
-import static org.vlang.lang.VlangTypes.RPAREN;
+import static org.vlang.lang.VlangTypes.*;
+import org.vlang.lang.psi.*;
 
 public class VlangParametersImpl extends VlangCompositeElementImpl implements VlangParameters {
 
@@ -48,6 +42,18 @@ public class VlangParametersImpl extends VlangCompositeElementImpl implements Vl
   @Nullable
   public PsiElement getRparen() {
     return findChildByType(RPAREN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSemicolonSynthetic() {
+    return findChildByType(SEMICOLON_SYNTHETIC);
   }
 
 }

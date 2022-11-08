@@ -10,13 +10,17 @@ import static org.vlang.lang.psi.VlangDocTokenTypes.*;
 %%
 
 %{
-  private Stack<Integer> stack = new Stack<Integer>();
-  private Stack<Integer> quotesStack = new Stack<Integer>();
-  private Stack<Integer> prevQuotesStack = new Stack<Integer>();
+  protected Stack<Integer> stack = new Stack<Integer>();
+  protected Stack<Integer> quotesStack = new Stack<Integer>();
+  protected Stack<Integer> prevQuotesStack = new Stack<Integer>();
+  protected int openBrackets = 0;
+  protected int prevOpenBrackets = 0;
   private int SINGLE_QUOTE = 0;
   private int DOUBLE_QUOTE = 1;
 
   public void yy_push_state(int state) {
+    prevOpenBrackets = openBrackets;
+    openBrackets = 0;
     prevQuotesStack.addAll(quotesStack);
     quotesStack.clear();
     stack.push(state);
@@ -25,7 +29,13 @@ import static org.vlang.lang.psi.VlangDocTokenTypes.*;
 
   public void yy_pop_state() {
     stack.pop();
-    yybegin(stack.lastElement());
+    if (stack.isEmpty()) {
+	  yybegin(YYINITIAL);
+	} else {
+	  yybegin(stack.peek());
+	}
+    openBrackets = prevOpenBrackets;
+    prevOpenBrackets = 0;
     quotesStack.addAll(prevQuotesStack);
     prevQuotesStack.clear();
   }
@@ -82,9 +92,11 @@ NL = \n
 WS = [ \t\f]
 
 LINE_COMMENT = "//" [^\r\n]*
-LANGUAGE_INJECTION_COMMENT = [^\r\n]*
-DOC_COMMENT = "/**" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?
-MULTILINE_COMMENT = "/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?
+HASH_COMMENT = "#" [^\[] [^\r\n]*
+
+MULTI_LINE_DEGENERATE_COMMENT = "/*" "*"+ "/"
+MULTI_LINE_COMMENT_START      = "/*"
+MULTI_LINE_COMMENT_END        = "*/"
 
 LETTER = [:letter:] | "_"
 DIGIT =  [:digit:]
@@ -112,12 +124,19 @@ NUM_FLOAT = (
     ({NUM_INT} {FLOAT_EXPONENT}
 )
 
-IDENT = {LETTER} ({LETTER} | {DIGIT} )*
-SPECIAL_IDENT = ("JS." | "C.") {LETTER} ({LETTER} | {DIGIT} | "." )*
+IDENT = {LETTER} {IDENT_PART}*
+IDENT_PART = {LETTER} | {DIGIT}
+
+// JS and C special identifiers like JS.function_name or C.free
+SPECIAL_IDENT = ("JS." | "C.") "@"? {LETTER} ({LETTER} | {DIGIT} | "." )*
 
 STR_DOUBLE = "\""
 STR_SINGLE = "'"
-STR_MODIFIER = "c"
+
+// c string, like c"hello" or c'hello'
+C_STR_MODIFIER = "c"
+
+// raw string, like r"hello" or r'hello'
 RAW_STR_MODIFIER = "r"
 
 RAW_DOUBLE_QUOTE_STRING = {RAW_STR_MODIFIER} {STR_DOUBLE} [^\"]* {STR_DOUBLE}
@@ -125,20 +144,56 @@ RAW_SINGLE_QUOTE_STRING = {RAW_STR_MODIFIER} {STR_SINGLE} [^\']* {STR_SINGLE}
 
 %state MAYBE_SEMICOLON
 %state TEMPLATE_STRING
+%state SHORT_TEMPLATE_ENTRY
+%state SHORT_TEMPLATE_ENTRY_FIELD_NAME
+%state MULTI_LINE_COMMENT_STATE
 %state ASM_BLOCK
 %state ASM_BLOCK_LINE
 
 %%
+<SHORT_TEMPLATE_ENTRY> {
+"$"             { return SHORT_TEMPLATE_ENTRY_START; }
+"${"            { yy_push_state(YYINITIAL); return LONG_TEMPLATE_ENTRY_START; }
+{IDENT}         { return IDENTIFIER; }
+"."             { yybegin(SHORT_TEMPLATE_ENTRY_FIELD_NAME); return DOT; }
+{STR_DOUBLE}    { yybegin(TEMPLATE_STRING); return handle_string_end(true); }
+{STR_SINGLE}    { yybegin(TEMPLATE_STRING); return handle_string_end(false); }
+"\\" (. | "\\") { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY; }
+\n              { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ENTRY; }
+.               { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ENTRY; }
+}
+
+<SHORT_TEMPLATE_ENTRY_FIELD_NAME> {
+{IDENT}         { return IDENTIFIER; }
+"."             { return DOT; }
+{STR_DOUBLE}    { yybegin(TEMPLATE_STRING); return handle_string_end(true); }
+{STR_SINGLE}    { yybegin(TEMPLATE_STRING); return handle_string_end(false); }
+"\\" (. | "\\") { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY; }
+\n              { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ENTRY; }
+.               { yybegin(TEMPLATE_STRING); return LITERAL_STRING_TEMPLATE_ENTRY; }
+}
 
 <TEMPLATE_STRING> {
-"{" [a-zA-Z_] { yy_push_state(YYINITIAL); yypushback(1); return TEMPLATE_ENTRY_START; }
+"${"          { yy_push_state(YYINITIAL);      return LONG_TEMPLATE_ENTRY_START; }
+"$"           { yybegin(SHORT_TEMPLATE_ENTRY); return SHORT_TEMPLATE_ENTRY_START; }
+
+// disabled for now
+//"{" [a-zA-Z_] { yy_push_state(YYINITIAL); yypushback(1); return TEMPLATE_ENTRY_START; }
 "{"           { return LITERAL_STRING_TEMPLATE_ENTRY; }
 
 {STR_DOUBLE}  { return handle_string_end(true); }
 {STR_SINGLE}  { return handle_string_end(false); }
 
 "\\" (. | "\\") { return LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY; }
-[^\"\'\\{]+     { return LITERAL_STRING_TEMPLATE_ENTRY; }
+[^\"\'\\{\\$]+  { return LITERAL_STRING_TEMPLATE_ENTRY; }
+}
+
+<MULTI_LINE_COMMENT_STATE> {
+{MULTI_LINE_COMMENT_START}                { yy_push_state(MULTI_LINE_COMMENT_STATE); return MULTI_LINE_COMMENT_START; }
+[^]                                       { return MULTI_LINE_COMMENT_BODY; }
+{MULTI_LINE_COMMENT_END}                  { yy_pop_state(); return yystate() == MULTI_LINE_COMMENT_STATE
+											   ? MULTI_LINE_COMMENT_BODY // inner comment closed
+											   : MULTI_LINE_COMMENT_END; }
 }
 
 <YYINITIAL> {
@@ -146,8 +201,11 @@ RAW_SINGLE_QUOTE_STRING = {RAW_STR_MODIFIER} {STR_SINGLE} [^\']* {STR_SINGLE}
 {NL}+                                     { return NLS; }
 
 {LINE_COMMENT}                            { return LINE_COMMENT; }
-{DOC_COMMENT}                             { return DOC_COMMENT; }
-{MULTILINE_COMMENT}                       { return MULTILINE_COMMENT; }
+{HASH_COMMENT}                            { return HASH_COMMENT; }
+
+// without this rule /*****/ is parsed as doc comment and /**/ is parsed as not closed doc comment, thanks Dart plugin
+{MULTI_LINE_DEGENERATE_COMMENT}           { return MULTI_LINE_COMMENT; }
+{MULTI_LINE_COMMENT_START}                { yy_push_state(MULTI_LINE_COMMENT_STATE); return MULTI_LINE_COMMENT_START; }
 
 "`\\`"                                    { yybegin(MAYBE_SEMICOLON); return BAD_CHARACTER; }
 "``"                                      { yybegin(MAYBE_SEMICOLON); return CHAR; }
@@ -164,13 +222,13 @@ RAW_SINGLE_QUOTE_STRING = {RAW_STR_MODIFIER} {STR_SINGLE} [^\']* {STR_SINGLE}
 {RAW_DOUBLE_QUOTE_STRING}                 { yybegin(MAYBE_SEMICOLON); return RAW_STRING; }
 {RAW_SINGLE_QUOTE_STRING}                 { yybegin(MAYBE_SEMICOLON); return RAW_STRING; }
 
-{STR_MODIFIER}? {STR_DOUBLE} {
+{C_STR_MODIFIER}? {STR_DOUBLE} {
     yy_push_state(TEMPLATE_STRING);
     yy_start_string(DOUBLE_QUOTE);
     return OPEN_QUOTE;
 }
 
-{STR_MODIFIER}? {STR_SINGLE} {
+{C_STR_MODIFIER}? {STR_SINGLE} {
     yy_push_state(TEMPLATE_STRING);
     yy_start_string(SINGLE_QUOTE);
     return OPEN_QUOTE;
@@ -181,13 +239,14 @@ RAW_SINGLE_QUOTE_STRING = {RAW_STR_MODIFIER} {STR_SINGLE} [^\']* {STR_SINGLE}
 "."                                       { return DOT; }
 "~"                                       { return TILDA; }
 "|"                                       { return BIT_OR; }
-"{"                                       { return LBRACE; }
+"{"                                       { openBrackets++; return LBRACE; }
 "}" {
-    if (inside_interpolation()) {
+    if (inside_interpolation() && openBrackets == 0) {
         yy_pop_state();
         return TEMPLATE_ENTRY_END;
     }
 
+    openBrackets--;
     yybegin(MAYBE_SEMICOLON);
     return RBRACE;
 }
@@ -256,78 +315,85 @@ RAW_SINGLE_QUOTE_STRING = {RAW_STR_MODIFIER} {STR_SINGLE} [^\']* {STR_SINGLE}
 ">"                                       { yybegin(MAYBE_SEMICOLON); return GREATER; }
 
 "`"                                       { return BACKTICK; }
-
 ":="                                      { return VAR_ASSIGN; }
+"$"                                       { return DOLLAR; }
 
-"$for"                                    { return FOR_COMPILE_TIME ; }
-"$if"                                     { return IF_COMPILE_TIME ; }
-"$else"                                   { return ELSE_COMPILE_TIME ; }
+// top level declarations
+"module"                                  { return MODULE; }
+"import"                                  { return IMPORT ; }
+"struct"                                  { return STRUCT; }
+"union"                                   { return UNION; }
+"interface"                               { return INTERFACE; }
+"enum"                                    { return ENUM; }
+"const"                                   { return CONST; }
+"type"                                    { return TYPE_; }
+"fn"                                      { return FN; }
 
+"return"                                  { yybegin(MAYBE_SEMICOLON); return RETURN; }
+"select"                                  { return SELECT; }
+"match"                                   { return MATCH; }
+"or"                                      { return OR; }
+"if"                                      { return IF; }
+"else"                                    { return ELSE; }
+"goto"                                    { return GOTO; }
+
+"assert"                                  { return ASSERT; }
+
+// loop
+"for"                                     { return FOR; }
+"break"                                   { yybegin(MAYBE_SEMICOLON); return BREAK; }
+"continue"                                { yybegin(MAYBE_SEMICOLON); return CONTINUE; }
+
+"unsafe"                                  { return UNSAFE; }
+"defer"                                   { return DEFER; }
+"go"                                      { return GO; }
+"spawn"                                   { return SPAWN; }
+"rlock"                                   { return RLOCK; }
+"lock"                                    { return LOCK; }
+
+"as"                                      { return AS ; }
+"in"                                      { return IN; }
+"is"                                      { return IS; }
+
+// literals
 "nil"                                     { yybegin(MAYBE_SEMICOLON); return NIL; }
 "true"                                    { yybegin(MAYBE_SEMICOLON); return TRUE; }
 "false"                                   { yybegin(MAYBE_SEMICOLON); return FALSE; }
 
-"assert"                                  { return ASSERT; }
-"break"                                   { yybegin(MAYBE_SEMICOLON); return BREAK; }
-"fallthrough"                             { yybegin(MAYBE_SEMICOLON); return FALLTHROUGH; }
-"return"                                  { yybegin(MAYBE_SEMICOLON); return RETURN ; }
-"continue"                                { yybegin(MAYBE_SEMICOLON); return CONTINUE ; }
-
-"unsafe"                                  { return UNSAFE; }
-"module"                                  { return MODULE; }
+// modifiers
 "pub"                                     { return PUB; }
-"fn"                                      { return FN; }
-"interface"                               { return INTERFACE; }
-"select"                                  { return SELECT; }
-
-"defer"                                   { return DEFER; }
-"go"                                      { return GO; }
-
-"shared"                                  { return SHARED; }
-"rlock"                                   { return RLOCK; }
-"lock"                                    { return LOCK; }
-
-"union"                                   { return UNION; }
-"struct"                                  { return STRUCT; }
-"enum"                                    { return ENUM; }
-"else"                                    { return ELSE; }
-"goto"                                    { return GOTO; }
-"switch"                                  { return SWITCH; }
-"const"                                   { return CONST; }
-
-"or"                                      { return OR ; }
-"match"                                   { return MATCH ; }
-"if"                                      { return IF ; }
-"for"                                     { return FOR ; }
-"import"                                  { return IMPORT ; }
-"as"                                      { return AS ; }
-
-"in"                                      { return IN; }
-"is"                                      { return IS; }
-"type"                                    { return TYPE_; }
 "mut"                                     { return MUT; }
 "static"                                  { return STATIC; }
-"typeof"                                  { return TYPEOF; }
-
+"shared"                                  { return SHARED; }
 "volatile"                                { return VOLATILE; }
-"asm"                                     { yybegin(ASM_BLOCK); return ASM; }
-
 "__global"                                { return BUILTIN_GLOBAL; }
 
-^"#" {LANGUAGE_INJECTION_COMMENT}         { yybegin(MAYBE_SEMICOLON); return LANGUAGE_INJECTION; }
-{WS}+ "#" {LANGUAGE_INJECTION_COMMENT}    { yybegin(MAYBE_SEMICOLON); return LANGUAGE_INJECTION; }
+// builtin functions
+"dump"                                    { return DUMP; }
+"sizeof"                                  { return SIZEOF; }
+"typeof"                                  { return TYPEOF; }
+"isreftype"                               { return ISREFTYPE; }
+"__offsetof"                              { return OFFSETOF; }
 
-{SPECIAL_IDENT}                           { yybegin(MAYBE_SEMICOLON); return IDENTIFIER; }
+// compile time expressions
+"$for"                                    { return FOR_COMPILE_TIME; }
+"$if"                                     { return IF_COMPILE_TIME; }
+"$else"                                   { return ELSE_COMPILE_TIME; }
+
+"asm"                                     { yybegin(ASM_BLOCK); return ASM; }
+
 {IDENT}                                   { yybegin(MAYBE_SEMICOLON); return IDENTIFIER; }
+{SPECIAL_IDENT}                           { yybegin(MAYBE_SEMICOLON); return IDENTIFIER; }
 "$"{IDENT}                                { yybegin(MAYBE_SEMICOLON); return IDENTIFIER; }
 "@"{IDENT}                                { yybegin(MAYBE_SEMICOLON); return IDENTIFIER; }
 
-"!" "in" {WS}+                            { return NOT_IN; }
-"!" "is" {WS}+                            { return NOT_IS; }
+\!in{IDENT_PART}                          { yypushback(3); yybegin(MAYBE_SEMICOLON); return NOT; }
+\!is{IDENT_PART}                          { yypushback(3); yybegin(MAYBE_SEMICOLON); return NOT; }
 
-{NUM_FLOAT}"i"                            { yybegin(MAYBE_SEMICOLON); return FLOATI; }
+"!in"                                     { return NOT_IN; }
+"!is"                                     { return NOT_IS; }
+
 {NUM_FLOAT}                               { yybegin(MAYBE_SEMICOLON); return FLOAT; }
-{DIGIT}+"i"                               { yybegin(MAYBE_SEMICOLON); return DECIMALI; }
 {NUM_BIN}                                 { yybegin(MAYBE_SEMICOLON); return BIN; }
 {NUM_OCT}                                 { yybegin(MAYBE_SEMICOLON); return OCT; }
 {NUM_HEX}                                 { yybegin(MAYBE_SEMICOLON); return HEX; }
@@ -340,7 +406,7 @@ RAW_SINGLE_QUOTE_STRING = {RAW_STR_MODIFIER} {STR_SINGLE} [^\']* {STR_SINGLE}
 {WS}                                      { return WS; }
 {NL}                                      { yybegin(YYINITIAL); yypushback(yytext().length()); return SEMICOLON_SYNTHETIC; }
 {LINE_COMMENT}                            { return LINE_COMMENT; }
-{MULTILINE_COMMENT}                       { return MULTILINE_COMMENT; }
+{MULTI_LINE_COMMENT_START}                { yy_push_state(MULTI_LINE_COMMENT_STATE); return MULTI_LINE_COMMENT_START; }
 .                                         { yybegin(YYINITIAL); yypushback(yytext().length()); }
 }
 

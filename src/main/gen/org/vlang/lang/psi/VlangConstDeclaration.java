@@ -1,13 +1,14 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi;
 
-import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.List;
+import org.jetbrains.annotations.*;
+import com.intellij.psi.PsiElement;
 
-public interface VlangConstDeclaration extends VlangCompositeElement {
+public interface VlangConstDeclaration extends VlangAttributeOwner {
+
+  @Nullable
+  VlangAttributes getAttributes();
 
   @NotNull
   List<VlangConstDefinition> getConstDefinitionList();
@@ -23,13 +24,5 @@ public interface VlangConstDeclaration extends VlangCompositeElement {
 
   @NotNull
   PsiElement getConst();
-
-  //WARNING: addSpec(...) is skipped
-  //matching addSpec(VlangConstDeclaration, ...)
-  //methods are not found in VlangPsiImplUtil
-
-  //WARNING: deleteSpec(...) is skipped
-  //matching deleteSpec(VlangConstDeclaration, ...)
-  //methods are not found in VlangPsiImplUtil
 
 }

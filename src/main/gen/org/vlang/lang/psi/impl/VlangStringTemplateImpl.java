@@ -39,6 +39,12 @@ public class VlangStringTemplateImpl extends VlangCompositeElementImpl implement
   }
 
   @Override
+  @NotNull
+  public List<VlangStringTemplateEntry> getStringTemplateEntryList() {
+    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangStringTemplateEntry.class);
+  }
+
+  @Override
   @Nullable
   public PsiElement getClosingQuote() {
     return findChildByType(CLOSING_QUOTE);

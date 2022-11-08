@@ -1,10 +1,13 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi.impl;
 
+import java.util.List;
+import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.vlang.lang.psi.VlangPsiTreeUtil;
+import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
 public class VlangStatementImpl extends VlangCompositeElementImpl implements VlangStatement {
@@ -33,12 +36,6 @@ public class VlangStatementImpl extends VlangCompositeElementImpl implements Vla
   @Nullable
   public VlangConstDeclaration getConstDeclaration() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangConstDeclaration.class);
-  }
-
-  @Override
-  @Nullable
-  public VlangSqlStatement getSqlStatement() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangSqlStatement.class);
   }
 
   @Override

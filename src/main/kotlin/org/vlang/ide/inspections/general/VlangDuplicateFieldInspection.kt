@@ -14,11 +14,6 @@ class VlangDuplicateFieldInspection : VlangBaseInspection() {
                 super.visitStructType(o)
             }
 
-            override fun visitUnionType(o: VlangUnionType) {
-                holder.checkFields(o.getFieldList())
-                super.visitUnionType(o)
-            }
-
             override fun visitInterfaceType(o: VlangInterfaceType) {
                 // TODO: after interfaces reimplement
                 // holder.checkFields(o.getFieldList())

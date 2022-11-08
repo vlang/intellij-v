@@ -13,22 +13,20 @@ class VlangDocumentationProvider : AbstractDocumentationProvider() {
             return generateCompileTimeConstantDoc(element)
         }
 
-        when (element) {
-            is VlangFunctionOrMethodDeclaration -> return element.generateDoc()
-            is VlangStructDeclaration           -> return element.generateDoc()
-            is VlangInterfaceDeclaration        -> return element.generateDoc()
-            is VlangEnumDeclaration             -> return element.generateDoc()
-            is VlangUnionDeclaration            -> return element.generateDoc()
-            is VlangConstDefinition             -> return element.generateDoc()
-            is VlangVarDefinition               -> return element.generateDoc(originalElement)
-            is VlangParamDefinition             -> return element.generateDoc()
-            is VlangGlobalVariableDefinition    -> return element.generateDoc()
-            is VlangFieldDefinition             -> return element.generateDoc()
-            is VlangInterfaceMethodDefinition   -> return element.generateDoc()
-            is VlangReceiver                    -> return element.generateDoc()
-            is VlangEnumFieldDefinition         -> return element.generateDoc()
+        return when (element) {
+            is VlangFunctionOrMethodDeclaration -> element.generateDoc()
+            is VlangStructDeclaration           -> element.generateDoc()
+            is VlangInterfaceDeclaration        -> element.generateDoc()
+            is VlangEnumDeclaration             -> element.generateDoc()
+            is VlangConstDefinition             -> element.generateDoc()
+            is VlangVarDefinition               -> element.generateDoc(originalElement)
+            is VlangParamDefinition             -> element.generateDoc()
+            is VlangGlobalVariableDefinition    -> element.generateDoc()
+            is VlangFieldDefinition             -> element.generateDoc()
+            is VlangInterfaceMethodDefinition   -> element.generateDoc()
+            is VlangReceiver                    -> element.generateDoc()
+            is VlangEnumFieldDefinition         -> element.generateDoc()
+            else -> null
         }
-
-        return null
     }
 }

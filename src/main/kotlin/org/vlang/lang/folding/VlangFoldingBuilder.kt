@@ -106,6 +106,11 @@ class VlangFoldingBuilder : FoldingBuilderEx(), DumbAware {
                 super.visitElement(el)
             }
 
+            override fun visitMapInitExpr(o: VlangMapInitExpr) {
+                genericFolding(o)
+                super.visitElement(o)
+            }
+
             private fun genericFolding(el: PsiElement, start: IElementType = VlangTypes.LBRACE) {
                 var lbrack: PsiElement? = null
                 PsiTreeUtil.processElements(el) {

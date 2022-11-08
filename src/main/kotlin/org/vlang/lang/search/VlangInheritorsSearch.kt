@@ -178,7 +178,7 @@ class VlangInheritorsSearch : QueryExecutorBase<VlangNamedElement, DefinitionsSc
         return VlangMethodFingerprintIndex.process(fingerprint, project, null) { methodSpec ->
             ProgressManager.checkCanceled()
 
-            val structType = methodSpec.receiverType.resolveType() as? VlangStructType ?: return@process true
+            val structType = methodSpec.receiverType?.resolveType() as? VlangStructType ?: return@process true
             val structDecl = structType.parent as? VlangStructDeclaration
             structDecl == null || (!visitedStructs.add(structDecl)) || processor.process(structDecl)
         }

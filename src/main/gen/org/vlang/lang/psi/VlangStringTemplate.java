@@ -13,6 +13,9 @@ public interface VlangStringTemplate extends VlangCompositeElement {
   @NotNull
   List<VlangShortStringTemplateEntry> getShortStringTemplateEntryList();
 
+  @NotNull
+  List<VlangStringTemplateEntry> getStringTemplateEntryList();
+
   @Nullable
   PsiElement getClosingQuote();
 

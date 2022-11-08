@@ -75,7 +75,7 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
                 val structFieldName =
                     if (o is VlangFieldDefinition)
                         o.name
-                    else if (o is VlangAnonymousFieldDefinition)
+                    else if (o is VlangEmbeddedDefinition)
 //                        o.getName() // TODO
                         ""
                     else null
@@ -217,7 +217,6 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
             is VlangFunctionDeclaration       -> VlangCompletionUtil.createFunctionLookupElement(element, state)
             is VlangMethodDeclaration         -> VlangCompletionUtil.createMethodLookupElement(element)
             is VlangStructDeclaration         -> VlangCompletionUtil.createStructLookupElement(element, state, !forTypes)
-            is VlangUnionDeclaration          -> VlangCompletionUtil.createUnionLookupElement(element, state)
             is VlangEnumDeclaration           -> VlangCompletionUtil.createEnumLookupElement(element, state)
             is VlangInterfaceDeclaration      -> VlangCompletionUtil.createInterfaceLookupElement(element, state)
             is VlangTypeAliasDeclaration      -> VlangCompletionUtil.createTypeAliasLookupElement(element, state)

@@ -29,7 +29,7 @@ class VlangCommenter : CodeDocumentationAwareCommenterEx, SelfManagingCommenter<
 
     override fun getLineCommentTokenType() = VlangTokenTypes.LINE_COMMENT
 
-    override fun getBlockCommentTokenType() = VlangTokenTypes.MULTILINE_COMMENT
+    override fun getBlockCommentTokenType() = VlangTokenTypes.MULTI_LINE_COMMENT
 
     override fun getDocumentationCommentTokenType() = VlangDocTokenTypes.DOC_COMMENT
 

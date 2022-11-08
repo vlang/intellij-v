@@ -16,7 +16,4 @@ public interface VlangMemberModifier extends VlangCompositeElement {
   @Nullable
   PsiElement getPub();
 
-  @Nullable
-  PsiElement getShared();
-
 }

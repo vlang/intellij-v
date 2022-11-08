@@ -23,7 +23,7 @@ V Language file
         PsiElement(VlangTokenType.()('(')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        ARRAY_OR_SLICE_TYPE
+        ARRAY_TYPE
           PsiElement(VlangTokenType.[)('[')
           PsiElement(VlangTokenType.])(']')
           TYPE
@@ -39,7 +39,7 @@ V Language file
               REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('a')
               PsiElement(VlangTokenType.is)('is')
-              ARRAY_OR_SLICE_TYPE
+              ARRAY_TYPE
                 PsiElement(VlangTokenType.[)('[')
                 PsiElement(VlangTokenType.])(']')
                 TYPE
@@ -82,7 +82,7 @@ V Language file
                           PsiElement(VlangTokenType.identifier)('arr')
                         PsiElement(VlangTokenType.:=)(':=')
                         LITERAL_VALUE_EXPRESSION
-                          ARRAY_OR_SLICE_TYPE
+                          ARRAY_TYPE
                             PsiElement(VlangTokenType.[)('[')
                             PsiElement(VlangTokenType.])(']')
                             TYPE
@@ -421,7 +421,7 @@ V Language file
                         PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                 PsiElement(VlangTokenType.))(')')
             PsiElement(VlangTokenType.as)('as')
-            ARRAY_OR_SLICE_TYPE
+            ARRAY_TYPE
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
@@ -753,7 +753,7 @@ V Language file
                           PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                   PsiElement(VlangTokenType.))(')')
               PsiElement(VlangTokenType.as)('as')
-              ARRAY_OR_SLICE_TYPE
+              ARRAY_TYPE
                 PsiElement(VlangTokenType.[)('[')
                 PsiElement(VlangTokenType.])(']')
                 TYPE
@@ -781,7 +781,7 @@ V Language file
                 PsiElement(VlangTokenType.int)('0')
               PsiElement(VlangTokenType.])(']')
             PsiElement(VlangTokenType.as)('as')
-            ARRAY_OR_SLICE_TYPE
+            ARRAY_TYPE
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
@@ -806,7 +806,7 @@ V Language file
                 PsiElement(VlangTokenType.int)('1')
               PsiElement(VlangTokenType.])(']')
             PsiElement(VlangTokenType.as)('as')
-            ARRAY_OR_SLICE_TYPE
+            ARRAY_TYPE
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
@@ -930,7 +930,7 @@ V Language file
                               PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                       PsiElement(VlangTokenType.))(')')
                   PsiElement(VlangTokenType.as)('as')
-                  ARRAY_OR_SLICE_TYPE
+                  ARRAY_TYPE
                     PsiElement(VlangTokenType.[)('[')
                     PsiElement(VlangTokenType.])(']')
                     TYPE

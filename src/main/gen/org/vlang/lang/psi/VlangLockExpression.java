@@ -11,12 +11,6 @@ public interface VlangLockExpression extends VlangExpression {
   VlangBlock getBlock();
 
   @NotNull
-  List<VlangExpression> getExpressionList();
-
-  @Nullable
-  PsiElement getLock();
-
-  @Nullable
-  PsiElement getRlock();
+  List<VlangLockParts> getLockPartsList();
 
 }

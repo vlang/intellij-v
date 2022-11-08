@@ -3,7 +3,6 @@ module main
 struct Test {
 	name string
 	name string
-	name string
 }
 
 enum Colors {

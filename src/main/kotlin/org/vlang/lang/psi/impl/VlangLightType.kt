@@ -35,10 +35,8 @@ abstract class VlangLightType<E : VlangCompositeElement>(
 
     override fun resolveType() = resolveType(this)
 
-    class LightArrayType(type: VlangType) : VlangLightType<VlangType>(type), VlangArrayOrSliceType {
+    class LightArrayType(type: VlangType) : VlangLightType<VlangType>(type), VlangArrayType {
         override fun getText() = "[]" + element.text
-
-        override fun getExpression() = null
 
         override fun getType() = element
 

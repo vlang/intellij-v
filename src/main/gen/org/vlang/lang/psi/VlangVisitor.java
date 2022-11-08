@@ -1,9 +1,10 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi;
 
+import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiNameIdentifierOwner;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.psi.PsiLanguageInjectionHost;
 
 public class VlangVisitor extends PsiElementVisitor {
 
@@ -19,11 +20,11 @@ public class VlangVisitor extends PsiElementVisitor {
     visitBinaryExpr(o);
   }
 
-  public void visitAnonymousFieldDefinition(@NotNull VlangAnonymousFieldDefinition o) {
-    visitTypeOwner(o);
+  public void visitAnonymousStructType(@NotNull VlangAnonymousStructType o) {
+    visitType(o);
   }
 
-  public void visitAnonymousInterfaceDefinition(@NotNull VlangAnonymousInterfaceDefinition o) {
+  public void visitAnonymousStructValueExpression(@NotNull VlangAnonymousStructValueExpression o) {
     visitCompositeElement(o);
   }
 
@@ -39,7 +40,7 @@ public class VlangVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitArrayOrSliceType(@NotNull VlangArrayOrSliceType o) {
+  public void visitArrayType(@NotNull VlangArrayType o) {
     visitType(o);
   }
 
@@ -67,11 +68,31 @@ public class VlangVisitor extends PsiElementVisitor {
     visitStatement(o);
   }
 
+  public void visitAtomicType(@NotNull VlangAtomicType o) {
+    visitType(o);
+  }
+
   public void visitAttribute(@NotNull VlangAttribute o) {
     visitCompositeElement(o);
   }
 
   public void visitAttributeExpression(@NotNull VlangAttributeExpression o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitAttributeIdentifier(@NotNull VlangAttributeIdentifier o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitAttributeIdentifierPrefix(@NotNull VlangAttributeIdentifierPrefix o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitAttributeKey(@NotNull VlangAttributeKey o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitAttributeValue(@NotNull VlangAttributeValue o) {
     visitCompositeElement(o);
   }
 
@@ -90,14 +111,6 @@ public class VlangVisitor extends PsiElementVisitor {
   public void visitBreakStatement(@NotNull VlangBreakStatement o) {
     visitStatement(o);
     // visitLabelRefOwnerElement(o);
-  }
-
-  public void visitCFlagStatement(@NotNull VlangCFlagStatement o) {
-    visitStatement(o);
-  }
-
-  public void visitCIncludeStatement(@NotNull VlangCIncludeStatement o) {
-    visitStatement(o);
   }
 
   public void visitCallExpr(@NotNull VlangCallExpr o) {
@@ -120,6 +133,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitStatement(o);
   }
 
+  public void visitCompileTimeFieldReference(@NotNull VlangCompileTimeFieldReference o) {
+    visitCompositeElement(o);
+  }
+
   public void visitCompileTimeForStatement(@NotNull VlangCompileTimeForStatement o) {
     visitStatement(o);
   }
@@ -137,15 +154,11 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitConstDeclaration(@NotNull VlangConstDeclaration o) {
-    visitCompositeElement(o);
+    visitAttributeOwner(o);
   }
 
   public void visitConstDefinition(@NotNull VlangConstDefinition o) {
     visitNamedElement(o);
-  }
-
-  public void visitConstexprIdentifierExpression(@NotNull VlangConstexprIdentifierExpression o) {
-    visitExpression(o);
   }
 
   public void visitContinueStatement(@NotNull VlangContinueStatement o) {
@@ -165,6 +178,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitDumpCallExpr(@NotNull VlangDumpCallExpr o) {
+    visitExpression(o);
+  }
+
   public void visitElement(@NotNull VlangElement o) {
     visitCompositeElement(o);
   }
@@ -173,12 +190,25 @@ public class VlangVisitor extends PsiElementVisitor {
     visitStatement(o);
   }
 
+  public void visitEmbeddedDefinition(@NotNull VlangEmbeddedDefinition o) {
+    visitTypeOwner(o);
+  }
+
+  public void visitEmbeddedInterfaceDefinition(@NotNull VlangEmbeddedInterfaceDefinition o) {
+    visitCompositeElement(o);
+  }
+
   public void visitEmptySlice(@NotNull VlangEmptySlice o) {
     visitCompositeElement(o);
   }
 
+  public void visitEnumBackedTypeExpr(@NotNull VlangEnumBackedTypeExpr o) {
+    visitExpression(o);
+  }
+
   public void visitEnumDeclaration(@NotNull VlangEnumDeclaration o) {
     visitNamedElement(o);
+    // visitAttributeOwner(o);
   }
 
   public void visitEnumFetch(@NotNull VlangEnumFetch o) {
@@ -222,6 +252,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitFixedSizeArrayType(@NotNull VlangFixedSizeArrayType o) {
+    visitType(o);
+  }
+
   public void visitForClause(@NotNull VlangForClause o) {
     visitCompositeElement(o);
   }
@@ -261,6 +295,7 @@ public class VlangVisitor extends PsiElementVisitor {
   public void visitFunctionDeclaration(@NotNull VlangFunctionDeclaration o) {
     visitSignatureOwner(o);
     // visitFunctionOrMethodDeclaration(o);
+    // visitAttributeOwner(o);
   }
 
   public void visitFunctionLit(@NotNull VlangFunctionLit o) {
@@ -282,7 +317,7 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitGlobalVariableDeclaration(@NotNull VlangGlobalVariableDeclaration o) {
-    visitCompositeElement(o);
+    visitAttributeOwner(o);
   }
 
   public void visitGlobalVariableDefinition(@NotNull VlangGlobalVariableDefinition o) {
@@ -356,6 +391,7 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitInterfaceDeclaration(@NotNull VlangInterfaceDeclaration o) {
     visitNamedElement(o);
+    // visitAttributeOwner(o);
   }
 
   public void visitInterfaceMethodDeclaration(@NotNull VlangInterfaceMethodDeclaration o) {
@@ -373,6 +409,10 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitIsExpression(@NotNull VlangIsExpression o) {
+    visitExpression(o);
+  }
+
+  public void visitIsRefTypeCallExpr(@NotNull VlangIsRefTypeCallExpr o) {
     visitExpression(o);
   }
 
@@ -408,10 +448,6 @@ public class VlangVisitor extends PsiElementVisitor {
     visitStatement(o);
   }
 
-  public void visitLanguageInjectionStatement(@NotNull VlangLanguageInjectionStatement o) {
-    visitStatement(o);
-  }
-
   public void visitLeftHandExprList(@NotNull VlangLeftHandExprList o) {
     visitCompositeElement(o);
   }
@@ -426,6 +462,10 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitLockExpression(@NotNull VlangLockExpression o) {
     visitExpression(o);
+  }
+
+  public void visitLockParts(@NotNull VlangLockParts o) {
+    visitCompositeElement(o);
   }
 
   public void visitLockStatement(@NotNull VlangLockStatement o) {
@@ -475,6 +515,7 @@ public class VlangVisitor extends PsiElementVisitor {
   public void visitMethodDeclaration(@NotNull VlangMethodDeclaration o) {
     visitSignatureOwner(o);
     // visitFunctionOrMethodDeclaration(o);
+    // visitAttributeOwner(o);
   }
 
   public void visitMethodName(@NotNull VlangMethodName o) {
@@ -482,7 +523,7 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitModuleClause(@NotNull VlangModuleClause o) {
-    visitCompositeElement(o);
+    visitAttributeOwner(o);
   }
 
   public void visitMulExpr(@NotNull VlangMulExpr o) {
@@ -507,6 +548,10 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitNullableType(@NotNull VlangNullableType o) {
     visitType(o);
+  }
+
+  public void visitOffsetOfCallExpr(@NotNull VlangOffsetOfCallExpr o) {
+    visitExpression(o);
   }
 
   public void visitOrBlockExpr(@NotNull VlangOrBlockExpr o) {
@@ -596,6 +641,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitSharedType(@NotNull VlangSharedType o) {
+    visitType(o);
+  }
+
   public void visitShortStringTemplateEntry(@NotNull VlangShortStringTemplateEntry o) {
     visitCompositeElement(o);
   }
@@ -605,6 +654,18 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitSimpleStatement(@NotNull VlangSimpleStatement o) {
+    visitStatement(o);
+  }
+
+  public void visitSizeOfCallExpr(@NotNull VlangSizeOfCallExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitSpawnExpression(@NotNull VlangSpawnExpression o) {
+    visitExpression(o);
+  }
+
+  public void visitSpawnStatement(@NotNull VlangSpawnStatement o) {
     visitStatement(o);
   }
 
@@ -668,10 +729,6 @@ public class VlangVisitor extends PsiElementVisitor {
     visitSqlBlockStatement(o);
   }
 
-  public void visitSqlStatement(@NotNull VlangSqlStatement o) {
-    visitSqlBlockStatement(o);
-  }
-
   public void visitSqlTableName(@NotNull VlangSqlTableName o) {
     visitCompositeElement(o);
   }
@@ -705,8 +762,13 @@ public class VlangVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitStringTemplateEntry(@NotNull VlangStringTemplateEntry o) {
+    visitCompositeElement(o);
+  }
+
   public void visitStructDeclaration(@NotNull VlangStructDeclaration o) {
     visitNamedElement(o);
+    // visitAttributeOwner(o);
   }
 
   public void visitStructType(@NotNull VlangStructType o) {
@@ -715,10 +777,6 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitSymbolVisibility(@NotNull VlangSymbolVisibility o) {
-    visitCompositeElement(o);
-  }
-
-  public void visitTag(@NotNull VlangTag o) {
     visitCompositeElement(o);
   }
 
@@ -736,6 +794,11 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitTypeAliasDeclaration(@NotNull VlangTypeAliasDeclaration o) {
     visitNamedElement(o);
+    // visitAttributeOwner(o);
+  }
+
+  public void visitTypeCastExpression(@NotNull VlangTypeCastExpression o) {
+    visitExpression(o);
   }
 
   public void visitTypeListNoPin(@NotNull VlangTypeListNoPin o) {
@@ -756,15 +819,6 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitUnaryExpr(@NotNull VlangUnaryExpr o) {
     visitExpression(o);
-  }
-
-  public void visitUnionDeclaration(@NotNull VlangUnionDeclaration o) {
-    visitNamedElement(o);
-  }
-
-  public void visitUnionType(@NotNull VlangUnionType o) {
-    visitType(o);
-    // visitFieldListOwner(o);
   }
 
   public void visitUnpackingExpression(@NotNull VlangUnpackingExpression o) {
@@ -802,6 +856,10 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitPsiNameIdentifierOwner(@NotNull PsiNameIdentifierOwner o) {
     visitElement(o);
+  }
+
+  public void visitAttributeOwner(@NotNull VlangAttributeOwner o) {
+    visitCompositeElement(o);
   }
 
   public void visitMutable(@NotNull VlangMutable o) {

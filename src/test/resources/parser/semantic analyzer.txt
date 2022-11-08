@@ -231,7 +231,9 @@ V Language file
             PsiElement(VlangTokenType.[)('[')
             ATTRIBUTE_EXPRESSION
               PLAIN_ATTRIBUTE
-                PsiElement(VlangTokenType.identifier)('required')
+                ATTRIBUTE_KEY
+                  ATTRIBUTE_IDENTIFIER
+                    PsiElement(VlangTokenType.identifier)('required')
             PsiElement(VlangTokenType.])(']')
         PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// skips the local scopes and registers only')
         PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// the top-level ones regardless of its')
@@ -400,7 +402,7 @@ V Language file
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('params')
-          ARRAY_OR_SLICE_TYPE
+          ARRAY_TYPE
             PsiElement(VlangTokenType.[)('[')
             PsiElement(VlangTokenType.])(']')
             TYPE
@@ -731,7 +733,7 @@ V Language file
                           REFERENCE_EXPRESSION
                             PsiElement(VlangTokenType.identifier)('d')
                           PsiElement(VlangTokenType.is)('is')
-                          ARRAY_OR_SLICE_TYPE
+                          ARRAY_TYPE
                             PsiElement(VlangTokenType.[)('[')
                             PsiElement(VlangTokenType.])(']')
                             TYPE
@@ -1301,7 +1303,19 @@ V Language file
                               STRING_LITERAL
                                 STRING_TEMPLATE
                                   PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Symbol `$symbol_name` in module `$module_name` not found')
+                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Symbol `')
+                                  SHORT_STRING_TEMPLATE_ENTRY
+                                    PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
+                                    REFERENCE_EXPRESSION
+                                      PsiElement(VlangTokenType.identifier)('symbol_name')
+                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('`')
+                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' in module `')
+                                  SHORT_STRING_TEMPLATE_ENTRY
+                                    PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
+                                    REFERENCE_EXPRESSION
+                                      PsiElement(VlangTokenType.identifier)('module_name')
+                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('`')
+                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' not found')
                                   PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                           PsiElement(VlangTokenType.))(')')
                   CONTINUE_STATEMENT
@@ -1361,7 +1375,19 @@ V Language file
                               STRING_LITERAL
                                 STRING_TEMPLATE
                                   PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Symbol `$symbol_name` in module `$module_name` not public')
+                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Symbol `')
+                                  SHORT_STRING_TEMPLATE_ENTRY
+                                    PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
+                                    REFERENCE_EXPRESSION
+                                      PsiElement(VlangTokenType.identifier)('symbol_name')
+                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('`')
+                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' in module `')
+                                  SHORT_STRING_TEMPLATE_ENTRY
+                                    PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
+                                    REFERENCE_EXPRESSION
+                                      PsiElement(VlangTokenType.identifier)('module_name')
+                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('`')
+                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' not public')
                                   PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                           PsiElement(VlangTokenType.))(')')
                   PsiElement(VlangTokenType.})('}')
@@ -1724,7 +1750,7 @@ V Language file
                       PsiElement(VlangTokenType.identifier)('member_names')
                     PsiElement(VlangTokenType.:=)(':=')
                     LITERAL_VALUE_EXPRESSION
-                      ARRAY_OR_SLICE_TYPE
+                      ARRAY_TYPE
                         PsiElement(VlangTokenType.[)('[')
                         PsiElement(VlangTokenType.])(']')
                         TYPE
@@ -1758,7 +1784,7 @@ V Language file
                       PsiElement(VlangTokenType.identifier)('member_values')
                     PsiElement(VlangTokenType.:=)(':=')
                     LITERAL_VALUE_EXPRESSION
-                      ARRAY_OR_SLICE_TYPE
+                      ARRAY_TYPE
                         PsiElement(VlangTokenType.[)('[')
                         PsiElement(VlangTokenType.])(']')
                         TYPE
@@ -6978,7 +7004,7 @@ V Language file
                                   PsiElement(VlangTokenType.identifier)('left_sym')
                                 PsiElement(VlangTokenType..)('.')
                                 PsiElement(VlangTokenType.identifier)('name')
-                              PsiElement(VlangTokenType.NOT_IN)('!in ')
+                              PsiElement(VlangTokenType.!in)('!in')
                               REFERENCE_EXPRESSION
                                 PsiElement(VlangTokenType.identifier)('numeric_types_with_any_type')
                             PsiElement(VlangTokenType.||)('||')
@@ -6988,7 +7014,7 @@ V Language file
                                   PsiElement(VlangTokenType.identifier)('right_sym')
                                 PsiElement(VlangTokenType..)('.')
                                 PsiElement(VlangTokenType.identifier)('name')
-                              PsiElement(VlangTokenType.NOT_IN)('!in ')
+                              PsiElement(VlangTokenType.!in)('!in')
                               REFERENCE_EXPRESSION
                                 PsiElement(VlangTokenType.identifier)('numeric_types_with_any_type')
                           BLOCK
@@ -8679,7 +8705,7 @@ V Language file
                         PsiElement(VlangTokenType.identifier)('declared_fields')
                       PsiElement(VlangTokenType.:=)(':=')
                       LITERAL_VALUE_EXPRESSION
-                        ARRAY_OR_SLICE_TYPE
+                        ARRAY_TYPE
                           PsiElement(VlangTokenType.[)('[')
                           PsiElement(VlangTokenType.])(']')
                           TYPE
@@ -12873,7 +12899,7 @@ V Language file
             PsiElement(VlangTokenType.identifier)('existing_case_values')
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL_VALUE_EXPRESSION
-            ARRAY_OR_SLICE_TYPE
+            ARRAY_TYPE
               PsiElement(VlangTokenType.[)('[')
               PsiElement(VlangTokenType.])(']')
               TYPE
@@ -12995,7 +13021,7 @@ V Language file
                       PsiElement(VlangTokenType.identifier)('case_node')
                     PsiElement(VlangTokenType..)('.')
                     PsiElement(VlangTokenType.identifier)('type_name')
-                  PsiElement(VlangTokenType.NOT_IN)('!in ')
+                  PsiElement(VlangTokenType.!in)('!in')
                   ARRAY_CREATION
                     PsiElement(VlangTokenType.[)('[')
                     ARRAY_CREATION_LIST
@@ -13913,7 +13939,7 @@ V Language file
                                     PsiElement(VlangTokenType.identifier)('it')
                                   PsiElement(VlangTokenType..)('.')
                                   PsiElement(VlangTokenType.identifier)('name')
-                                PsiElement(VlangTokenType.NOT_IN)('!in ')
+                                PsiElement(VlangTokenType.!in)('!in')
                                 REFERENCE_EXPRESSION
                                   PsiElement(VlangTokenType.identifier)('existing_case_values')
                           PsiElement(VlangTokenType.))(')')
@@ -13926,7 +13952,15 @@ V Language file
                           STRING_LITERAL
                             STRING_TEMPLATE
                               PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                              PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('`$it.name`')
+                              PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('`')
+                              SHORT_STRING_TEMPLATE_ENTRY
+                                PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
+                                REFERENCE_EXPRESSION
+                                  REFERENCE_EXPRESSION
+                                    PsiElement(VlangTokenType.identifier)('it')
+                                  PsiElement(VlangTokenType..)('.')
+                                  PsiElement(VlangTokenType.identifier)('name')
+                              PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('`')
                               PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                       PsiElement(VlangTokenType.))(')')
               SIMPLE_STATEMENT
@@ -14002,7 +14036,9 @@ V Language file
         PsiElement(VlangTokenType.[)('[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
-            PsiElement(VlangTokenType.identifier)('params')
+            ATTRIBUTE_KEY
+              ATTRIBUTE_IDENTIFIER
+                PsiElement(VlangTokenType.identifier)('params')
         PsiElement(VlangTokenType.])(']')
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')

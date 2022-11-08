@@ -65,13 +65,8 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getName(o: VlangUnionDeclaration): String {
-        return o.getIdentifier()?.text ?: ""
-    }
-
-    @JvmStatic
-    fun getIdentifier(o: VlangUnionDeclaration): PsiElement? {
-        return o.unionType.identifier
+    fun isUnion(o: VlangStructDeclaration): Boolean {
+        return o.structType.isUnion
     }
 
     @JvmStatic
@@ -277,27 +272,27 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getFieldList(o: VlangStructType): List<VlangFieldDefinition> {
-        return o.fieldsGroupList.flatMap { it.fieldDeclarationList }.flatMap { it.fieldDefinitionList }
+        return o.fieldsGroupList.flatMap { it.fieldDeclarationList }.mapNotNull { it.fieldDefinition }
     }
 
     @JvmStatic
-    fun getEmbeddedStructList(o: VlangStructType): List<VlangAnonymousFieldDefinition> {
-        return o.fieldsGroupList.flatMap { it.fieldDeclarationList }.mapNotNull { it.anonymousFieldDefinition }
+    fun getEmbeddedStructList(o: VlangStructType): List<VlangEmbeddedDefinition> {
+        return o.fieldsGroupList.flatMap { it.fieldDeclarationList }.mapNotNull { it.embeddedDefinition }
     }
 
     @JvmStatic
-    fun getType(o: VlangAnonymousFieldDefinition, context: ResolveState?): VlangType {
+    fun isUnion(o: VlangStructType): Boolean {
+        return o.union != null
+    }
+
+    @JvmStatic
+    fun getType(o: VlangEmbeddedDefinition, context: ResolveState?): VlangType {
         return o.type
     }
 
     @JvmStatic
-    fun getFieldList(o: VlangUnionType): List<VlangFieldDefinition> {
-        return o.fieldsGroupList.flatMap { it.fieldDeclarationList }.flatMap { it.fieldDefinitionList }
-    }
-
-    @JvmStatic
     fun getFieldList(o: VlangInterfaceType): List<VlangFieldDefinition> {
-        return o.membersGroupList.flatMap { it.fieldDeclarationList }.flatMap { it.fieldDefinitionList }
+        return o.membersGroupList.flatMap { it.fieldDeclarationList }.mapNotNull { it.fieldDefinition }
     }
 
     @JvmStatic
@@ -376,7 +371,7 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getReceiverType(o: VlangMethodDeclaration): VlangType {
+    fun getReceiverType(o: VlangMethodDeclaration): VlangType? {
         return o.receiver.type
     }
 
@@ -407,11 +402,6 @@ object VlangPsiImplUtil {
         val enumType = resolved.childrenOfType<VlangEnumType>().firstOrNull()
         if (enumType != null) {
             return enumType
-        }
-
-        val unionType = resolved.childrenOfType<VlangUnionType>().firstOrNull()
-        if (unionType != null) {
-            return unionType
         }
 
         val aliasType = resolved.childrenOfType<VlangAliasType>().firstOrNull()
@@ -664,7 +654,7 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getTypeInner(o: VlangReceiver, context: ResolveState?): VlangType {
+    fun getTypeInner(o: VlangReceiver, context: ResolveState?): VlangType? {
         return o.type
     }
 
@@ -774,6 +764,10 @@ object VlangPsiImplUtil {
             return builtinTypes.bool
         }
 
+        if (expr is VlangDumpCallExpr) {
+            return expr.expression?.getType(null)
+        }
+
         if (expr is VlangOrBlockExpr) {
             if (expr.expression == null) return null
 
@@ -837,8 +831,6 @@ object VlangPsiImplUtil {
             if (expr.int != null || expr.hex != null || expr.oct != null)
                 return builtinTypes.int
             if (expr.float != null) return builtinTypes.f64
-            if (expr.floati != null) return builtinTypes.f64
-            if (expr.decimali != null) return builtinTypes.f64
         }
 
         if (expr is VlangIndexOrSliceExpr) {
@@ -852,7 +844,7 @@ object VlangPsiImplUtil {
             }
 
             val inner = indexExpr.getType(null)
-            if (inner is VlangArrayOrSliceType) {
+            if (inner is VlangArrayType) {
                 return inner.type
             }
             if (inner is VlangMapType) {
@@ -911,7 +903,7 @@ object VlangPsiImplUtil {
 
         if (expr is VlangDotExpression) {
             if (expr.errorPropagationExpression != null || expr.forceNoErrorPropagationExpression != null) {
-                val type = expr.expression.getType(context)
+                val type = expr.expression?.getType(context)
                 val exType = type.toEx()
 
                 if (exType is VlangNullableTypeEx) {
@@ -987,8 +979,6 @@ object VlangPsiImplUtil {
                 expr.hex != null      -> builtinTypes.int
                 expr.oct != null      -> builtinTypes.int
                 expr.float != null    -> builtinTypes.f64
-                expr.floati != null   -> builtinTypes.f64
-                expr.decimali != null -> builtinTypes.f64
                 expr.char != null     -> builtinTypes.rune
                 expr.nil != null      -> builtinTypes.nil
                 else                  -> null
@@ -1063,7 +1053,7 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun isNumeric(o: VlangLiteral): Boolean {
-        return o.int != null || o.bin != null || o.hex != null || o.oct != null || o.float != null || o.floati != null || o.decimali != null
+        return o.int != null || o.bin != null || o.hex != null || o.oct != null || o.float != null
     }
 
     @JvmStatic
@@ -1220,7 +1210,7 @@ object VlangPsiImplUtil {
         val rightType = decl.expression?.getType(context)
         val varList = decl.varDefinitionList
         if (varList.size == 1) {
-            if (rightType is VlangArrayOrSliceType) {
+            if (rightType is VlangArrayType) {
                 return rightType.type
             }
             if (rightType is VlangMapType) {
@@ -1239,7 +1229,7 @@ object VlangPsiImplUtil {
         }
 
         if (defineIndex == 1) {
-            if (rightType is VlangArrayOrSliceType) {
+            if (rightType is VlangArrayType) {
                 return rightType.type
             }
             if (rightType is VlangMapType) {

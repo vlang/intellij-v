@@ -36,4 +36,38 @@ class KeywordsCompletionTest : CompletionTestBase() {
         fn main() {}
         """.trimIndent()
     )
+
+    fun `test dump`() = doTestCompletion(
+        """
+        module main
+        
+        fn main() {
+            dump<caret>
+        }
+        """.trimIndent(),
+        """
+        module main
+        
+        fn main() {
+            dump(expr)<caret>
+        }
+        """.trimIndent()
+    )
+
+    fun `test isreftype`() = doTestCompletion(
+        """
+        module main
+        
+        fn main() {
+            isreftype<caret>
+        }
+        """.trimIndent(),
+        """
+        module main
+        
+        fn main() {
+            isreftype(expr)<caret>
+        }
+        """.trimIndent()
+    )
 }

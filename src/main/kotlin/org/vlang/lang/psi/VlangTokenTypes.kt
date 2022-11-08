@@ -5,20 +5,18 @@ import com.intellij.psi.tree.TokenSet
 import org.vlang.lang.VlangTypes.*
 
 object VlangTokenTypes {
-    @JvmField
-    val LINE_COMMENT = VlangTokenType("VLANG_LINE_COMMENT")
+    @JvmField val LINE_COMMENT = VlangTokenType("VLANG_LINE_COMMENT")
+    @JvmField val HASH_COMMENT = VlangTokenType("VLANG_HASH_COMMENT")
+    @JvmField val MULTI_LINE_COMMENT = VlangTokenType("VLANG_MULTI_LINE_COMMENT")
+    @JvmField val MULTI_LINE_COMMENT_START = VlangTokenType("VLANG_MULTI_LINE_COMMENT_START")
+    @JvmField val MULTI_LINE_COMMENT_BODY = VlangTokenType("VLANG_MULTI_LINE_COMMENT_BODY")
+    @JvmField val MULTI_LINE_COMMENT_END = VlangTokenType("VLANG_MULTI_LINE_COMMENT_END")
 
-    @JvmField
-    val MULTILINE_COMMENT = VlangTokenType("VLANG_MULTILINE_COMMENT")
-
-    @JvmField
-    val WS = VlangTokenType("VLANG_WHITESPACE")
-
-    @JvmField
-    val NLS = VlangTokenType("VLANG_WS_NEW_LINES")
+    @JvmField val WS = VlangTokenType("VLANG_WHITESPACE")
+    @JvmField val NLS = VlangTokenType("VLANG_WS_NEW_LINES")
 
     val IDENTIFIERS = TokenSet.create(IDENTIFIER)
-    val COMMENTS = TokenSet.create(LINE_COMMENT, MULTILINE_COMMENT, VlangDocTokenTypes.DOC_COMMENT)
+    val COMMENTS = TokenSet.create(LINE_COMMENT, MULTI_LINE_COMMENT, HASH_COMMENT, VlangDocTokenTypes.DOC_COMMENT)
     val STRING_LITERALS = TokenSet.create(
         RAW_STRING,
         CHAR,
@@ -32,9 +30,6 @@ object VlangTokenTypes {
     val NUMBERS = TokenSet.create(
         INT,
         FLOAT,
-        FLOATI,
-        DECIMALI,
-        FLOATI,
         HEX,
         OCT,
         BIN
@@ -49,7 +44,6 @@ object VlangTokenTypes {
         STATIC,
         DEFER,
         ELSE,
-        FALLTHROUGH,
         FOR,
         FN,
         GO,
@@ -75,8 +69,6 @@ object VlangTokenTypes {
         ASSERT,
         ENUM,
         MATCH,
-        C_INCLUDE,
-        C_FLAG,
         OR,
         IS,
         NOT_IS,
@@ -87,9 +79,13 @@ object VlangTokenTypes {
         SHARED,
         ASM,
         VOLATILE,
-        SQL,
         NIL,
+        DUMP,
         TYPEOF,
+        OFFSETOF,
+        SIZEOF,
+        ISREFTYPE,
+        SPAWN,
     )
 
     val OPERATORS = TokenSet.create(

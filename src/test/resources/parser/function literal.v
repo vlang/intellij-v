@@ -1,5 +1,18 @@
 module main
 
+import nedpals.vex.ctx
+import time
+import context
+import picohttpparser
+
+pub struct Config {
+	cb           fn (voidptr, name picohttpparser.Request, mut picohttpparser.Response)
+	err_cb       fn (voidptr, picohttpparser.Request, mut picohttpparser.Response, IError) = default_err_cb
+	user_data    voidptr = unsafe { nil }
+	timeout_secs int     = 8
+	max_headers  int     = 100
+}
+
 fn main() {
 	a := fn (a i64) i64 {
 		return 100

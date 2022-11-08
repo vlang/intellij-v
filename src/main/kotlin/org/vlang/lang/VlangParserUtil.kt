@@ -152,7 +152,7 @@ object VlangParserUtil : GeneratedParserUtilBase() {
     fun prevIsType(builder: PsiBuilder, level: Int): Boolean {
         val marker = builder.latestDoneMarker
         val type = marker?.tokenType
-        return type === VlangTypes.ARRAY_OR_SLICE_TYPE || type === VlangTypes.MAP_TYPE || type === VlangTypes.STRUCT_TYPE
+        return type == ARRAY_TYPE || type == FIXED_SIZE_ARRAY_TYPE || type == MAP_TYPE || type == STRUCT_TYPE
     }
 
     @JvmStatic
@@ -235,7 +235,7 @@ object VlangParserUtil : GeneratedParserUtilBase() {
         val m = builder.mark()
         var r = VlangParser.Type(builder, level + 1)
         if (r) {
-            if (builder.tokenType === VlangTypes.COMMA || builder.tokenType === VlangTypes.LBRACE) {
+            if (builder.tokenType === COMMA || builder.tokenType === LBRACE) {
                 m.drop()
                 return true
             }
@@ -246,7 +246,33 @@ object VlangParserUtil : GeneratedParserUtilBase() {
         r = VlangParser.Expression(builder, level + 1, -1)
 
         if (r) {
-            if (builder.tokenType === VlangTypes.COMMA || builder.tokenType === VlangTypes.LBRACE) {
+            if (builder.tokenType === COMMA || builder.tokenType === LBRACE) {
+                m1.drop()
+                return true
+            }
+        }
+        m1.rollbackTo()
+
+        return r
+    }
+
+    @JvmStatic
+    fun typeOrExpressionForSizeOf(builder: PsiBuilder, level: Int): Boolean {
+        val m = builder.mark()
+        var r = VlangParser.Type(builder, level + 1)
+        if (r) {
+            if (builder.tokenType === RPAREN) {
+                m.drop()
+                return true
+            }
+        }
+
+        m.rollbackTo()
+        val m1 = builder.mark()
+        r = VlangParser.Expression(builder, level + 1, -1)
+
+        if (r) {
+            if (builder.tokenType === RPAREN) {
                 m1.drop()
                 return true
             }

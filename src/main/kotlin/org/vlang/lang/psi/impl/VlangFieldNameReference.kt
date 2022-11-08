@@ -66,7 +66,7 @@ class VlangFieldNameReference(element: VlangReferenceExpressionBase) :
         }
 
         override fun crossOff(e: PsiElement): Boolean {
-            if (e !is VlangFieldDefinition && e !is VlangAnonymousFieldDefinition)
+            if (e !is VlangFieldDefinition && e !is VlangEmbeddedDefinition)
                 return true
             val named = e as VlangNamedElement
             val originFile = origin.containingFile as VlangFile

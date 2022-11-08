@@ -47,7 +47,11 @@ V Language file
                   STRING_LITERAL
                     STRING_TEMPLATE
                       PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('number of all customers: $nr_customers')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('number of all customers: ')
+                      SHORT_STRING_TEMPLATE_ENTRY
+                        PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
+                        REFERENCE_EXPRESSION
+                          PsiElement(VlangTokenType.identifier)('nr_customers')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
       PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// V syntax can be used to build queries')
@@ -130,7 +134,22 @@ V Language file
                       STRING_LITERAL
                         STRING_TEMPLATE
                           PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                          PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('$customer.id - $customer.name')
+                          SHORT_STRING_TEMPLATE_ENTRY
+                            PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
+                            REFERENCE_EXPRESSION
+                              REFERENCE_EXPRESSION
+                                PsiElement(VlangTokenType.identifier)('customer')
+                              PsiElement(VlangTokenType..)('.')
+                              PsiElement(VlangTokenType.identifier)('id')
+                          PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' ')
+                          PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('- ')
+                          SHORT_STRING_TEMPLATE_ENTRY
+                            PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
+                            REFERENCE_EXPRESSION
+                              REFERENCE_EXPRESSION
+                                PsiElement(VlangTokenType.identifier)('customer')
+                              PsiElement(VlangTokenType..)('.')
+                              PsiElement(VlangTokenType.identifier)('name')
                           PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                   PsiElement(VlangTokenType.))(')')
           PsiElement(VlangTokenType.})('}')
@@ -180,7 +199,22 @@ V Language file
                   STRING_LITERAL
                     STRING_TEMPLATE
                       PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('$customer.id - $customer.name')
+                      SHORT_STRING_TEMPLATE_ENTRY
+                        PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
+                        REFERENCE_EXPRESSION
+                          REFERENCE_EXPRESSION
+                            PsiElement(VlangTokenType.identifier)('customer')
+                          PsiElement(VlangTokenType..)('.')
+                          PsiElement(VlangTokenType.identifier)('id')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' ')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('- ')
+                      SHORT_STRING_TEMPLATE_ENTRY
+                        PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
+                        REFERENCE_EXPRESSION
+                          REFERENCE_EXPRESSION
+                            PsiElement(VlangTokenType.identifier)('customer')
+                          PsiElement(VlangTokenType..)('.')
+                          PsiElement(VlangTokenType.identifier)('name')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
       PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// insert a new customer')
@@ -489,13 +523,18 @@ V Language file
             PsiElement(VlangTokenType.[)('[')
             ATTRIBUTE_EXPRESSION
               PLAIN_ATTRIBUTE
-                PsiElement(VlangTokenType.identifier)('primary')
+                ATTRIBUTE_KEY
+                  ATTRIBUTE_IDENTIFIER
+                    PsiElement(VlangTokenType.identifier)('primary')
             PsiElement(VlangTokenType.;)(';')
             ATTRIBUTE_EXPRESSION
               PLAIN_ATTRIBUTE
-                PsiElement(VlangTokenType.identifier)('sql')
+                ATTRIBUTE_KEY
+                  ATTRIBUTE_IDENTIFIER
+                    PsiElement(VlangTokenType.identifier)('sql')
                 PsiElement(VlangTokenType.:)(':')
-                PsiElement(VlangTokenType.identifier)('serial')
+                ATTRIBUTE_VALUE
+                  PsiElement(VlangTokenType.identifier)('serial')
             PsiElement(VlangTokenType.])(']')
         FIELD_DECLARATION
           FIELD_DEFINITION
@@ -537,13 +576,16 @@ V Language file
         PsiElement(VlangTokenType.[)('[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
-            PsiElement(VlangTokenType.identifier)('table')
+            ATTRIBUTE_KEY
+              ATTRIBUTE_IDENTIFIER
+                PsiElement(VlangTokenType.identifier)('table')
             PsiElement(VlangTokenType.:)(':')
-            STRING_LITERAL
-              STRING_TEMPLATE
-                PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('userlist')
-                PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+            ATTRIBUTE_VALUE
+              STRING_LITERAL
+                STRING_TEMPLATE
+                  PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('userlist')
+                  PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
         PsiElement(VlangTokenType.])(']')
     STRUCT_TYPE
       PsiElement(VlangTokenType.struct)('struct')
@@ -560,13 +602,18 @@ V Language file
             PsiElement(VlangTokenType.[)('[')
             ATTRIBUTE_EXPRESSION
               PLAIN_ATTRIBUTE
-                PsiElement(VlangTokenType.identifier)('primary')
+                ATTRIBUTE_KEY
+                  ATTRIBUTE_IDENTIFIER
+                    PsiElement(VlangTokenType.identifier)('primary')
             PsiElement(VlangTokenType.;)(';')
             ATTRIBUTE_EXPRESSION
               PLAIN_ATTRIBUTE
-                PsiElement(VlangTokenType.identifier)('sql')
+                ATTRIBUTE_KEY
+                  ATTRIBUTE_IDENTIFIER
+                    PsiElement(VlangTokenType.identifier)('sql')
                 PsiElement(VlangTokenType.:)(':')
-                PsiElement(VlangTokenType.identifier)('serial')
+                ATTRIBUTE_VALUE
+                  PsiElement(VlangTokenType.identifier)('serial')
             PsiElement(VlangTokenType.])(']')
         FIELD_DECLARATION
           FIELD_DEFINITION
@@ -584,13 +631,16 @@ V Language file
             PsiElement(VlangTokenType.[)('[')
             ATTRIBUTE_EXPRESSION
               PLAIN_ATTRIBUTE
-                PsiElement(VlangTokenType.identifier)('sql')
+                ATTRIBUTE_KEY
+                  ATTRIBUTE_IDENTIFIER
+                    PsiElement(VlangTokenType.identifier)('sql')
                 PsiElement(VlangTokenType.:)(':')
-                STRING_LITERAL
-                  STRING_TEMPLATE
-                    PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                    PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('username')
-                    PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+                ATTRIBUTE_VALUE
+                  STRING_LITERAL
+                    STRING_TEMPLATE
+                      PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('username')
+                      PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
             PsiElement(VlangTokenType.])(']')
         FIELD_DECLARATION
           FIELD_DEFINITION
@@ -608,7 +658,9 @@ V Language file
             PsiElement(VlangTokenType.[)('[')
             ATTRIBUTE_EXPRESSION
               PLAIN_ATTRIBUTE
-                PsiElement(VlangTokenType.identifier)('skip')
+                ATTRIBUTE_KEY
+                  ATTRIBUTE_IDENTIFIER
+                    PsiElement(VlangTokenType.identifier)('skip')
             PsiElement(VlangTokenType.])(']')
       PsiElement(VlangTokenType.})('}')
   STRUCT_DECLARATION
@@ -640,13 +692,18 @@ V Language file
             PsiElement(VlangTokenType.[)('[')
             ATTRIBUTE_EXPRESSION
               PLAIN_ATTRIBUTE
-                PsiElement(VlangTokenType.identifier)('primary')
+                ATTRIBUTE_KEY
+                  ATTRIBUTE_IDENTIFIER
+                    PsiElement(VlangTokenType.identifier)('primary')
             PsiElement(VlangTokenType.;)(';')
             ATTRIBUTE_EXPRESSION
               PLAIN_ATTRIBUTE
-                PsiElement(VlangTokenType.identifier)('sql')
+                ATTRIBUTE_KEY
+                  ATTRIBUTE_IDENTIFIER
+                    PsiElement(VlangTokenType.identifier)('sql')
                 PsiElement(VlangTokenType.:)(':')
-                PsiElement(VlangTokenType.identifier)('serial')
+                ATTRIBUTE_VALUE
+                  PsiElement(VlangTokenType.identifier)('serial')
             PsiElement(VlangTokenType.])(']')
         FIELD_DECLARATION
           FIELD_DEFINITION
@@ -726,7 +783,7 @@ V Language file
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
       PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// db := pg.connect(host: 'localhost', port: 5432, user: 'louis', password: 'abc', dbname: 'orm') or { panic(err) }')
-      PsiComment(VlangTokenType.VLANG_MULTILINE_COMMENT)('/*\n\tmut db := mysql.Connection{\n\t\thost: '127.0.0.1'\n\t\tusername: 'root'\n\t\tpassword: 'pw'\n\t\tdbname: 'v'\n\t}\n\tdb.connect() or { panic(err) }*/')
+      PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/*\n\tmut db := mysql.Connection{\n\t\thost: '127.0.0.1'\n\t\tusername: 'root'\n\t\tpassword: 'pw'\n\t\tdbname: 'v'\n\t}\n\tdb.connect() or { panic(err) }*/')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           SQL_EXPRESSION
@@ -980,7 +1037,11 @@ V Language file
                   STRING_LITERAL
                     STRING_TEMPLATE
                       PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('nr_all_users=$nr_all_users')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('nr_all_users=')
+                      SHORT_STRING_TEMPLATE_ENTRY
+                        PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
+                        REFERENCE_EXPRESSION
+                          PsiElement(VlangTokenType.identifier)('nr_all_users')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
       PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//')
@@ -1035,7 +1096,11 @@ V Language file
                   STRING_LITERAL
                     STRING_TEMPLATE
                       PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('nr_users1=$nr_users1')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('nr_users1=')
+                      SHORT_STRING_TEMPLATE_ENTRY
+                        PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
+                        REFERENCE_EXPRESSION
+                          PsiElement(VlangTokenType.identifier)('nr_users1')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
       PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//')
@@ -1101,7 +1166,11 @@ V Language file
                   STRING_LITERAL
                     STRING_TEMPLATE
                       PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('nr_peters=$nr_peters')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('nr_peters=')
+                      SHORT_STRING_TEMPLATE_ENTRY
+                        PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
+                        REFERENCE_EXPRESSION
+                          PsiElement(VlangTokenType.identifier)('nr_peters')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
       PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//')
@@ -2115,7 +2184,7 @@ V Language file
               PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Kate N')
               PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
       PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//')
-      PsiComment(VlangTokenType.VLANG_MULTILINE_COMMENT)('/*\n\tsql db {\n\t\tupdate User set age = age + 1, name = 'Kate N' where name == 'Kate'\n\t}\n\tkate3 = sql db {\n\t\tselect from User where id == 3\n\t}\n\tprintln(kate3)\n\tassert kate3.age == 32\n\tassert kate3.name == 'Kate N'\n\t*/')
+      PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/*\n\tsql db {\n\t\tupdate User set age = age + 1, name = 'Kate N' where name == 'Kate'\n\t}\n\tkate3 = sql db {\n\t\tselect from User where id == 3\n\t}\n\tprintln(kate3)\n\tassert kate3.age == 32\n\tassert kate3.name == 'Kate N'\n\t*/')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION

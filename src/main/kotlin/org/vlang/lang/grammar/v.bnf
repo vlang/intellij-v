@@ -75,24 +75,34 @@
     SINGLE_QUOTE         =  "'"
     DOUBLE_QUOTE         =  '"'
     BACKTICK             =  '`'
+    DOLLAR               =  '$'
+    NOT_IN               =  '!in'
+    NOT_IS               =  '!is'
+    IF_COMPILE_TIME      =  '$if'
+    ELSE_COMPILE_TIME    =  '$else'
+    FOR_COMPILE_TIME     =  '$for'
+    BUILTIN_GLOBAL       =  '__global'
     SEMICOLON_SYNTHETIC  = '<NL>'
     TYPE_                = 'type'
+    DUMP                 = 'dump'
+    OFFSETOF             = 'offsetof'
+    SIZEOF               = 'sizeof'
+    ISREFTYPE            = 'isreftype'
     C_STRING             = 'c_string'
     raw_string           = 'raw_string'
     char                 = 'char'
   ]
 
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional|OrBlock)Expr")=BinaryExpr
-  extends(".*(Expr|Literal|Lit|OperandName)|TypeInitExpr|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|SharedExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression|LockExpression|IncDecExpression|LiteralValueExpression|SelectExpression")=Expression
+  extends(".*(Expr|Literal|Lit|OperandName)|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|SharedExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression|LockExpression|IncDecExpression|LiteralValueExpression|SelectExpression|SpawnExpression|TypeCastExpression")=Expression
 
   implements("(Var|Param|Field|Label|Var|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|(Struct|TypeAlias|Union|Enum|Interface)Declaration|Receiver|Import(Alias)")="org.vlang.lang.psi.VlangNamedElement"
   implements("FunctionLit|(Function|Method)Declaration")="org.vlang.lang.psi.VlangSignatureOwner"
-//  implements("InterfaceMethodDeclaration")="org.vlang.lang.psi.VlangNamedSignatureOwner"
   implements("(Function|Method)Declaration")="org.vlang.lang.psi.VlangFunctionOrMethodDeclaration"
-//  implements("(Const|Type|Var)Declaration")="org.vlang.lang.psi.GoTopLevelDeclaration"
   implements(".*ReferenceExpression|FieldName")="org.vlang.lang.psi.VlangReferenceExpressionBase"
-//  implements("Type")="org.vlang.lang.psi.VlangReferenceExpressionBase"
   implements("(Continue|Break|Goto)Statement")="org.vlang.lang.psi.VlangLabelRefOwnerElement"
+
+  implements("(Struct|Interface|Enum|GlobalVariable|Function|Method|TypeAlias|Const)Declaration|ModuleClause")="org.vlang.lang.psi.VlangAttributeOwner"
 
   extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
   extends("ModuleClause|Type|ImportName")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
@@ -117,6 +127,7 @@ File ::= ModuleClause? ImportList? TopLevelDeclaration*
 
 // General rule for explicit and implicit ';'
 private semi ::= '<NL>' | ';' | <<eof>>
+private list_separator ::= semi | ','
 
 // [attr] module <name>
 ModuleClause ::= Attributes? module identifier semi {
@@ -159,7 +170,7 @@ ImportName ::= identifier {
 }
 
 // { <ref>[, <ref2>] }
-SelectiveImportList ::= '{' ReferenceExpression (',' ReferenceExpression)* '}' {pin(".*")=2}
+SelectiveImportList ::= '{' ReferenceExpression (list_separator ReferenceExpression)* list_separator? '}' {pin(".*")=2}
 
 // as <ident>
 ImportAlias ::= as ImportAliasName {
@@ -183,17 +194,13 @@ private TopDeclaration ::=
   | StructDeclaration
   | EnumDeclaration
   | InterfaceDeclaration
-  | UnionDeclaration
   | GlobalVariableDeclaration
   | CompileTimeIfStatement
   | CompileTimeForStatement
-  | CIncludeStatement
-  | CFlagStatement
-  | LanguageInjectionStatement
   | TypeAliasDeclaration
   | Statement
 
-private TopLevelDeclarationRecover ::= !('type' | BUILTIN_GLOBAL | enum | import | C_INCLUDE | C_FLAG | FOR_COMPILE_TIME | IF_COMPILE_TIME | LANGUAGE_INJECTION | '[' | '!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | '{' | '|' | '|=' | '||' | '&&' | '}' | break | case | const | continue | decimali | defer | else | fallthrough | float | floati | for | fn | pub | mut | shared | go | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | union | switch | var | unsafe | assert | match | lock | rlock | asm | sql | true | false | ELSE_COMPILE_TIME)
+private TopLevelDeclarationRecover ::= !('type' | '__global' | enum | import | '$for' | '$if' | '[' | '!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | '{' | '|' | '|=' | '||' | '&&' | '}' | break | case | const | continue | defer | else | float | for | fn | pub | mut | volatile | shared | go | spawn | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | union | switch | var | unsafe | assert | match | lock | rlock | asm | true | false | '$else' | typeof | offsetof | sizeof | isreftype | dump)
 
 ////////// TOP LEVEL DECLARATIONS END //////////
 
@@ -204,6 +211,7 @@ private TopLevelDeclarationRecover ::= !('type' | BUILTIN_GLOBAL | enum | import
 BlockWithConsume ::= /*<<consumeBlock>> |*/ BlockInner {elementType=Block}
 Block ::= BlockInner {methods=[processDeclarations]}
 private BlockInner ::= '{' ('}' | (<<withOff Statements "BLOCK?" "PAR">> | (!() Statements)) '}') {pin(".*")=1}
+BlockNoPin ::= '{' ('}' | (<<withOff Statements "BLOCK?" "PAR">> | (!() Statements)) '}') {elementType=Block}
 // end of block rule
 
 private Statements ::= StatementWithSemi*
@@ -211,43 +219,50 @@ private Statements ::= StatementWithSemi*
 private StatementWithSemi ::= Statement (semi | &'}') { pin=1 recoverWhile=StatementRecover }
 Statement ::=
     ConstDeclaration
+  | BlockNoPin
   | SimpleStatement
   | LockStatement
   | GoStatement
+  | SpawnStatement
   | ReturnStatement
   | BreakStatement
   | ContinueStatement
   | GotoStatement
-  | Block
   | CompileTimeIfStatement
   | IfStatement
   | UnsafeStatement
   | ForStatement
   | CompileTimeForStatement
   | AssertStatement
-  | CFlagStatement
-  | CIncludeStatement
-  | LanguageInjectionStatement
   | TypeAliasDeclaration
   | AsmBlockStatement
-  | SqlStatement
   | LabeledStatement
   | DeferStatement {methods=[processDeclarations]}
 
-private StatementRecover ::= !('!' | '?' | '&' | '[' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | '{' | '|' | '|=' | '||' | '&&' | '}' | type | break | case | const | continue | decimali | defer | else | fallthrough | float | floati | for | fn | pub | mut | shared | go | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | union | switch | var | unsafe | assert | match | lock | rlock | asm | sql | true | false | FOR_COMPILE_TIME | IF_COMPILE_TIME | ELSE_COMPILE_TIME | BUILTIN_GLOBAL | C_INCLUDE | C_FLAG | LANGUAGE_INJECTION)
+private StatementRecover ::= !('!' | '?' | '&' | '[' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | '{' | '|' | '|=' | '||' | '&&' | '}' | type | break | case | const | continue | defer | else | float | for | fn | pub | mut | volatile | shared | go | spawn | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | union | switch | var | unsafe | assert | match | lock | rlock | asm | true | false | '$for' | '$if' | '$else' | '__global' | typeof | offsetof | sizeof | isreftype | dump)
 
 // attributes start
 // [attr1]
 // [attr2]
 Attributes ::= Attribute (semi Attribute)* semi? {pin=1}
-// [<expr>[, <expr2>]]
-Attribute ::= '[' AttributeExpression (';' AttributeExpression)* ']' {pin=1}
-// if <ident> or <plain>
+// [<exprs>]
+Attribute ::= '[' AttributeExpressions ']' {pin=1}
+// <expr>[; <expr2>]
+private AttributeExpressions ::= AttributeExpression (';' AttributeExpression)* {pin(".*")=1}
+// 'if <ident>' or <plain>
 AttributeExpression ::= IfAttribute | PlainAttribute
 // if <ident>
-IfAttribute ::= if '!'? identifier '?'? {pin=1}
-// <ident> or 10 or "string" [: <ident> or "string"]
-PlainAttribute ::= (identifier | unsafe | sql | int | StringLiteral) (':' (identifier | StringLiteral))?
+IfAttribute ::= if Expression {pin=1}
+// <ident> or 10 or "string" [: <ident> or <literal>]
+PlainAttribute ::= AttributeKey AttributeValueWithColon?
+AttributeKey ::= AttributeIdentifier | Literal
+
+// : <ident> or <literal>
+private AttributeValueWithColon ::= ':' AttributeValue {pin=1}
+AttributeValue ::= identifier | Literal
+
+AttributeIdentifier ::= AttributeIdentifierPrefix? (identifier | unsafe)
+AttributeIdentifierPrefix ::= (identifier | unsafe) '.'
 // end of attributes
 
 // simple statements
@@ -281,17 +296,17 @@ ElseStatement ::= else (IfStatement | Block) {pin=1}
 CompileTimeIfStatement ::= CompileTimeIfExpression
 // $else { ... }
 // $else $if { ... }
-CompileElseStatement ::= ELSE_COMPILE_TIME (CompileTimeIfStatement | Block) {pin=1}
+CompileElseStatement ::= '$else' (CompileTimeIfStatement | Block) {pin=1}
 
 // For statement
-// [<label>:] for ( ... ) { ... }
+// [<label>:] for ... { ... }
 ForStatement ::= for <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) <<exitModeSafe "BLOCK?">> {pin(".*")="for|ForOrRangeClause"}
 // <label>:
 LabelDefinition ::= identifier ':' {
   pin=2
   stubClass="org.vlang.lang.stubs.VlangLabelDefinitionStub"
 }
-// for (;;;) or for (<*> in <*>)
+// for ;;; or for <*> in <*>
 private ForOrRangeClause ::= (ForClause | RangeClause)
 // [<statement>]; [<expression>]; [<statement>]
 ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement? {methods=[processDeclarations]}
@@ -303,13 +318,15 @@ RangeClause ::= in Expression | VarDefinitionList in Expression {
 }
 
 // $for (...)  { ... }
-CompileTimeForStatement ::= FOR_COMPILE_TIME <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) <<exitModeSafe "BLOCK?">> {pin(".*")="FOR_COMPILE_TIME|ForOrRangeClause"}
+CompileTimeForStatement ::= '$for' <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) <<exitModeSafe "BLOCK?">> {pin=1}
 
 // (r)lock <var> { ... }
 LockStatement ::= LockExpression
 
-// go <expt>
+// go <expr>
 GoStatement ::= GoExpression
+// spawn <expr>
+SpawnStatement ::= SpawnExpression
 
 // return <expr>
 // return <expr>, <expr>
@@ -346,58 +363,47 @@ SelectArm ::= <<enterMode "BLOCK?">> SimpleStatement <<exitModeSafe "BLOCK?">> B
 // else { ... }
 SelectElseArmClause ::= else Block semi {pin=1}
 
-// #...
-// Used for inject other language in code
-LanguageInjectionStatement ::= LANGUAGE_INJECTION (semi LANGUAGE_INJECTION)* {pin=1}
-
-// C statements
-// #include <string>
-CIncludeStatement ::= C_INCLUDE StringLiteral {pin=1}
-// #flag ...
-CFlagStatement ::= C_FLAG C_FLAG_VALUE {pin=1}
-// end of C statements
-
 // asm [volatile] { ... }
 AsmBlockStatement ::= asm volatile? identifier AsmBlock {pin=1}
 AsmBlock ::= '{' ('}' | (ASM_LINE)* '}') {pin(".*")=1}
 
-SqlStatement ::= SqlExpression
-
 ////// DECLARATIONS //////
 
-// struct
+// struct or union
 StructDeclaration ::= Attributes? SymbolVisibility? StructType {
   stubClass="org.vlang.lang.stubs.VlangStructDeclarationStub"
-  methods=[getIdentifier getName getTypeInner]
+  methods=[getIdentifier getName getTypeInner isUnion]
 }
 
-StructType ::= struct identifier GenericArguments? '{' FieldsGroup* '}' {
+AnonymousStructType ::= struct '{' FieldsGroup* '}' {pin=2}
+
+StructType ::= (struct | union) identifier GenericArguments? '{' FieldsGroup* '}' {
   pin=1
   implements="org.vlang.lang.psi.VlangFieldListOwner"
-  methods=[getFieldList getEmbeddedStructList]
+  methods=[getFieldList getEmbeddedStructList isUnion]
 }
-
-MemberModifiers ::= MemberModifier* ':' {pin=2}
-MemberModifier ::= mut | pub | shared | BUILTIN_GLOBAL
 
 FieldsGroup ::= WithModifiersFieldsGroup | WithoutModifiersFieldsGroup
 
-private WithModifiersFieldsGroup ::= MemberModifiers semi? FieldDeclaration+ {pin=1}
-private WithoutModifiersFieldsGroup ::= !MemberModifiers FieldDeclaration+
+MemberModifiers ::= MemberModifier* ':' {pin=2}
+MemberModifier ::= mut | pub | '__global'
 
-FieldDeclaration ::= (FieldDefinitionList shared? Type | AnonymousFieldDefinition) Attribute? DefaultFieldValue? Tag? semi
+private WithModifiersFieldsGroup ::= MemberModifiers semi? FieldDeclarations {pin=1}
+private WithoutModifiersFieldsGroup ::= !MemberModifiers FieldDeclarations
+
+private FieldDeclarations ::= FieldDeclaration+
+FieldDeclaration ::= (PlainFieldDeclaration | EmbeddedDefinition) semi
+private PlainFieldDeclaration ::= FieldDefinition Type Attribute? DefaultFieldValue?
 DefaultFieldValue ::= '=' Expression
-Tag ::= StringLiteral
-private FieldDefinitionList ::= FieldDefinition (',' FieldDefinition)*
 FieldDefinition ::= identifier {
   methods=[getQualifier getQualifiedName getTypeInner isPublic isMutable makeMutable getOwner]
   implements="org.vlang.lang.psi.VlangMutable"
   stubClass="org.vlang.lang.stubs.VlangFieldDefinitionStub"
 }
 
-AnonymousFieldDefinition ::= Type {
+EmbeddedDefinition ::= Type {
   implements="org.vlang.lang.psi.VlangTypeOwner"
-  methods=[getIdentifier getName getTypeReferenceExpression getType]
+  methods=[getType]
 }
 
 
@@ -415,20 +421,20 @@ InterfaceType ::= interface identifier GenericArguments? '{' MembersGroup* '}' {
 
 MembersGroup ::= WithModifiersMembersGroup | WithoutModifiersMemberGroup
 
-private WithModifiersMembersGroup ::= MemberModifiers semi? InterfaceMember+ {pin=1}
-private WithoutModifiersMemberGroup ::= !MemberModifiers InterfaceMember+
+private WithModifiersMembersGroup ::= MemberModifiers semi? InterfaceMembers {pin=1}
+private WithoutModifiersMemberGroup ::= !MemberModifiers InterfaceMembers
 
-private InterfaceMember ::= InterfaceMethodDeclaration | FieldDeclaration | AnonymousInterfaceDefinition
+private InterfaceMembers ::= InterfaceMember+
+private InterfaceMember ::= InterfaceMethodDeclaration | FieldDeclaration | EmbeddedInterfaceDefinition
 
-InterfaceMethodDeclaration ::= InterfaceMethodDefinition Attribute? DefaultFieldValue? Tag? semi
+InterfaceMethodDeclaration ::= InterfaceMethodDefinition Attribute? DefaultFieldValue? semi
 InterfaceMethodDefinition ::= identifier Signature {
   implements="org.vlang.lang.psi.VlangSignatureOwner"
   stubClass="org.vlang.lang.stubs.VlangInterfaceMethodDefinitionStub"
   methods=[getTypeInner isPublic getOwner]
 }
 
-AnonymousInterfaceDefinition ::= Type {
-//  stubClass="org.vlang.lang.stubs.GoAnonymousFieldDefinitionStub"
+EmbeddedInterfaceDefinition ::= Type {
   methods=[getIdentifier getName getTypeReferenceExpression getGoTypeInner]
 }
 
@@ -439,10 +445,12 @@ EnumDeclaration ::= Attributes? SymbolVisibility? EnumType {
   methods=[getName getIdentifier getTypeInner]
 }
 
-EnumType ::= enum identifier GenericArguments? '{' EnumFields? '}' {
+EnumType ::= enum identifier EnumBackedTypeExpr? '{' EnumFields? '}' {
   pin=1
   methods=[getFieldList]
 }
+
+EnumBackedTypeExpr ::= as Type {pin=1}
 
 private EnumFields ::= EnumFieldDeclaration (EnumFieldDeclaration)*
 EnumFieldDeclaration ::= EnumFieldDefinition ('=' Expression)? semi? {pin=1}
@@ -451,22 +459,10 @@ EnumFieldDefinition ::= identifier {
   stubClass="org.vlang.lang.stubs.VlangEnumFieldDefinitionStub"
 }
 
-// union
-UnionDeclaration ::= Attributes? SymbolVisibility? UnionType {
-  stubClass="org.vlang.lang.stubs.VlangUnionDeclarationStub"
-  methods=[getName getIdentifier]
-}
-
-UnionType ::= union identifier GenericArguments? '{' FieldsGroup* '}' {
-  pin=1
-  implements="org.vlang.lang.psi.VlangFieldListOwner"
-  methods=[getFieldList]
-}
-
 // TODO: split for type alias and sum type?
 // [<visibility>] type <ident> = <types>
-TypeAliasDeclaration ::= SymbolVisibility? 'type' AliasType {
-  pin=2
+TypeAliasDeclaration ::= Attributes? SymbolVisibility? 'type' AliasType {
+  pin=3
   stubClass="org.vlang.lang.stubs.VlangTypeAliasDeclarationStub"
   methods=[getIdentifier getName getTypeInner]
 }
@@ -483,7 +479,7 @@ TypeUnionList ::= Type (semi? '|' Type)* {pin=1}
 // const declarations
 // [<visibility>] const <name> = <value>
 // [<visibility>] const (<list>)
-ConstDeclaration ::= SymbolVisibility? const ( ConstDefinition | '(' ConstDefinitions? ')' ) {pin(".*")=2 methods=[addSpec deleteSpec]}
+ConstDeclaration ::= Attributes? SymbolVisibility? const ( ConstDefinition | '(' ConstDefinitions? ')' ) {pin=3}
 // <spec> [<spec2>]
 private ConstDefinitions ::= ConstDefinition (semi ConstDefinition)* semi? {pin=1}
 // <list> = <list>
@@ -492,22 +488,13 @@ ConstDefinition ::= identifier '=' (<<withOff Expression "BLOCK?">> | (!() Expre
   stubClass="org.vlang.lang.stubs.VlangConstDefinitionStub"
   methods=[getTypeInner isPublic deleteDefinition getName getSymbolVisibility]
 }
-
-// TODO: when const declaration will support multiple assign
-//ConstSpec ::= ConstDefinitionList [ ('=' ExpressionList | TypeDecl '=' ExpressionList) ] {
-//  pin(".*")=1
-////  stubClass="org.vlang.lang.stubs.GoConstSpecStub"
-//  methods=[deleteDefinition]
-//}
-//private ConstDefinitionList ::= ConstDefinition ( ',' ConstDefinition )*
-
 // end of const
 
 
 // global variable declarations
 // <[attrs]> __global <ident> = <expr>
 // <[attrs]> __global (<list>)
-GlobalVariableDeclaration ::= Attributes? BUILTIN_GLOBAL ( GlobalVariableDefinition | '(' GlobalVariableDefinitions? ')' ) {pin(".*")=2 methods=[addSpec deleteSpec]}
+GlobalVariableDeclaration ::= Attributes? '__global' ( GlobalVariableDefinition | '(' GlobalVariableDefinitions? ')' ) {pin(".*")=2 methods=[addSpec deleteSpec]}
 // <spec> [<spec2>]
 private GlobalVariableDefinitions ::= GlobalVariableDefinition (semi GlobalVariableDefinition)* semi? {pin=1}
 // <def> = <expr>
@@ -523,7 +510,7 @@ private GlobalVariableValue ::= '=' (<<withOff Expression "BLOCK?">> | (!() Expr
 VarModifiers ::= VarModifier*
 VarModifier ::= mut | shared | volatile | static
 
-SymbolVisibility ::= pub | BUILTIN_GLOBAL
+SymbolVisibility ::= pub | '__global'
 
 GenericArguments ::= '<' TypeListNoPin '>' {pin=3}
 GenericArgumentsFirstPin ::= '<' TypeListNoPin '>' {pin=1}
@@ -542,14 +529,13 @@ MethodDeclaration ::= Attributes? SymbolVisibility? fn '(' Receiver ')' MethodNa
 // <ident> or <ops> for overload
 MethodName ::= identifier | AddOp | MulOp | RelOp
 
-// [mut|shared] <ident> <type>
-Receiver ::= VarModifiers? identifier ReceiverTail {
-  pin=3
+// [<modifiers>] <ident> <type>
+Receiver ::= VarModifiers? identifier Type ','? {
+  pin=2
   methods=[getTypeInner getName isPublic isMutable makeMutable]
   implements="org.vlang.lang.psi.VlangMutable"
   stubClass="org.vlang.lang.stubs.VlangReceiverStub"
 }
-private ReceiverTail ::= Type ','?
 
 ////// DECLARATIONS END //////
 
@@ -582,19 +568,26 @@ Expression ::=
   | EnumFetch
   | MutExpression
   | SharedExpression
-  | ConstexprIdentifierExpression
   | GoExpression
+  | SpawnExpression
   | LockExpression
   | IncDecExpression
   | UnpackingExpression
+  | TypeCastExpression
   | ParenthesesExpr {methods=[getType] implements="org.vlang.lang.psi.VlangTypeOwner"}
 // end of expression rule
 
+TypeCastExpression ::= Type '(' Expression ')' {pin=4}
+
 // (r)lock <var> { ... }
-LockExpression ::= (lock | rlock) <<enterMode "BLOCK?">> ExpressionList? Block <<exitModeSafe "BLOCK?">>  {pin=1}
+// (r)lock <var>; (r)lock <var2> { ... }
+LockExpression ::= LockParts+ Block {pin=1}
+LockParts ::= (lock | rlock) <<enterMode "BLOCK?">> ExpressionList? <<exitModeSafe "BLOCK?">> ';'? {pin=1}
 
 // go <expr>
 GoExpression ::= go Expression
+// spawn <expr>
+SpawnExpression ::= spawn Expression
 
 // { ... }
 MapInitExpr ::= (<<isLastNotIs "BLOCK?">> | <<isLastIs "PAR">>) & <<prevIsNotType>> '{' KeyValues? '}' {pin=4}
@@ -608,6 +601,8 @@ KeyValue ::= Expression ':' Expression {
   ]
 }
 
+// struct {...}
+AnonymousStructValueExpression ::= struct '{' ElementList? '}' {pin=2}
 // <type> {...}
 LiteralValueExpression ::= Type GenericArguments? ((<<isLastNotIs "BLOCK?">> | <<isLastIs "PAR">> | <<prevIsType>>) & <<prevIsNotFunType>>) '{' ElementList? '}' {pin=4}
 private ElementList ::= ElementInner ((',' | semi) ElementInner?)*
@@ -617,7 +612,7 @@ Element ::= First [':' Value]  {pin(".*")=1}
 private First ::= Key | <<keyOrValueExpression>>
 Key ::= (FieldName &':') | !() Expression // nullability hack for key without reference inside
 FieldName ::= ReferenceExpression { methods=[getIdentifier getQualifier resolve] }
-Value ::= Expression | LiteralValueExpression
+Value ::= Expression
 
 // end of type init
 
@@ -625,9 +620,6 @@ private MaxGroup ::=
     DotExpression
   | Literal
   | FunctionLit
-//| CompositeLit
-
-TypeOfCallExpr ::= typeof '(' Expression ')' {pin=1}
 
 // fn [[<captures>]] [<generics>] (...) {...}
 FunctionLit ::= fn CaptureList? GenericArgumentsFirstPin? Signature Block {
@@ -660,22 +652,31 @@ left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeRefere
 TypeReferenceExpression ::= identifier { methods=[getReference getQualifier resolve getType] }
 
 private TypeLit ::=
-    ArrayOrSliceType
+    MapType
+  | ArrayType
+  | FixedSizeArrayType
   | TupleType
+  | SharedType
   | PointerType
   | NullableType
   | NotNullableType
   | FunctionType
-  | MapType
   | ChannelType
   | ThreadType
+  | AtomicType
+  | AnonymousStructType
   | StructType
   | InterfaceType
 
 // [<expr>]<type>
-ArrayOrSliceType ::= '[' Expression? ']' Type {pin=3}
+ArrayType ::= '['']' Type {pin=3}
+FixedSizeArrayType ::= '[' Expression ']' Type {pin=4}
 
+// (<type>, <type>, ...)
 TupleType ::= '(' TypeListNoPin ')' {pin=3}
+
+// shared <type>
+SharedType ::= shared Type {pin=1}
 
 // &<type>
 // &&<type>
@@ -696,24 +697,21 @@ FunctionType ::= fn Signature {
 
 // signature
 // (...) ...
-Signature ::= Parameters Result? {pin=1 /*stubClass="org.vlang.lang.stubs.GoSignatureStub"*/}
-Result ::= Type {
-  methods=[isVoid]
-//  stubClass="org.vlang.lang.stubs.GoResultStub"
-}
-Parameters ::= '(' ParameterList? ','? ')' {
-  pin=1
-//  stubClass="org.vlang.lang.stubs.VlangParametersStub"
-}
+Signature ::= Parameters Result? {pin=1}
+Result ::= Type
+Parameters ::= '(' ParameterList? ','? ')' {pin=1}
 
-private ParameterList ::= ParamDefinition (',' (ParamDefinition | &')'))* {pin(".*")=1}
+private ParameterList ::= ParamDefinition (',' (ParamDefinition | &')'))* list_separator? {pin(".*")=1}
 
-ParamDefinition ::= Type &(','|')') | (VarModifiers? identifier? '...'? Type) {
+ParamDefinition ::= ParamWithName | ParamWithoutName {
+  pin=4
   stubClass="org.vlang.lang.stubs.VlangParamDefinitionStub"
   implements="org.vlang.lang.psi.VlangMutable"
   methods = [isVariadic getName isPublic isMutable makeMutable]
-  pin=4
 }
+private ParamWithName ::= VarModifiers? identifier '...'? Type
+private ParamWithoutName ::= VarModifiers? '...'? Type
+
 TypeListNoPin ::= Type (',' Type)* ','?
 // end of signature
 
@@ -732,14 +730,16 @@ ChannelType ::= 'chan' Type? {pin=1}
 // thread <type>
 ThreadType ::= 'thread' Type? {pin=1}
 
-////// TYPES END //////
+// atomic <type>
+AtomicType ::= 'atomic' Type? {pin=1}
 
+////// TYPES END //////
 
 LeftHandExprList ::= ExpressionList
 
 private ExpressionList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &')'))* {pin(".*")=1}
 private ExpressionWithRecover ::= Expression !':' {recoverWhile=ExpressionListRecover}
-private ExpressionListRecover ::= !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+'  | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '>>>=' | '[' | ']' | '^' | '^=' | '{' | '|' | '|=' | '||' | '}' | 'type' | break | case | const | continue | decimali | defer | else | fallthrough | float | floati | for | fn | go | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | enum | union | var | unsafe | assert | match | asm | sql | true | false | nil )
+private ExpressionListRecover ::= !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+'  | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '>>>=' | '[' | ']' | '^' | '^=' | '{' | '|' | '|=' | '||' | '}' | 'type' | break | case | const | continue | defer | else | float | for | fn | go | spawn | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | enum | union | var | unsafe | assert | match | asm | true | false | nil | typeof | offsetof | sizeof | isreftype | dump )
 
 private VarDefinitionList ::= VarDefinition (',' VarDefinition)*
 VarDefinition ::= VarModifiers? identifier {
@@ -753,8 +753,9 @@ VarDefinition ::= VarModifiers? identifier {
 DotExpression ::= DotPrimaryExpr RightHandExprs {extends=Expression}
 
 private DotPrimaryExpr ::=
-    LiteralValueExpression
-  | TypeOfCallExpr
+    AnonymousStructValueExpression
+  | LiteralValueExpression
+  | BuiltinCall
   | ReferenceExpression
   | Literal
   | FunctionLit
@@ -762,16 +763,26 @@ private DotPrimaryExpr ::=
   | ParenthesesExpr
   | UnsafeExpression
   | MapInitExpr
+  | SqlExpression
 
-// just <ident> with ref
+private BuiltinCall ::= OffsetOfCallExpr | TypeOfCallExpr | SizeOfCallExpr | IsRefTypeCallExpr | DumpCallExpr
+
+IsRefTypeCallExpr ::= isreftype '(' <<typeOrExpressionForSizeOf>> ')' {pin=1}
+SizeOfCallExpr ::= sizeof '(' <<typeOrExpressionForSizeOf>> ')' {pin=1}
+TypeOfCallExpr ::= typeof '(' Expression ')' {pin=1}
+OffsetOfCallExpr ::= offsetof '(' Type ',' ReferenceExpression ')' {pin=1}
+DumpCallExpr ::= dump '(' Expression ')' {pin=1}
+
+// just <ident> with reference
 ReferenceExpression ::= identifier { methods=[getReference getQualifier resolve getReadWriteAccess] extends=Expression}
 left QualifiedReferenceExpression ::= semi? '.' identifier {elementType=ReferenceExpression}
 
 private RightHandExprs ::= RightHandExpr*
 
 private RightHandExpr ::=
-    (<<callExpr>> | (!() CallExpr))
-  | IndexOrSliceExpr
+    IndexOrSliceExpr
+  | CompileTimeFieldReference
+  | (<<callExpr>> | (!() CallExpr))
   | QualifiedReferenceExpression
   | OrBlockExpr
   | ErrorPropagationExpression
@@ -781,6 +792,9 @@ private RightHandExpr ::=
 left CallExpr ::= GenericArguments? ArgumentList {
   methods=[getParameters resolve paramIndexOf]
 }
+
+// .$(<dot_expr>)
+left CompileTimeFieldReference ::= '.' '$' '(' DotExpression ')' {pin=2}
 
 // noinspection BnfUnusedRule
 // used in <<callExpr>>
@@ -795,11 +809,12 @@ JsonArgumentList ::= '(' <<enterMode "PAR">> Type ','? ElementList? '...'? ','? 
 }
 
 // <expr>[<expr>]
-// <expr>#[<exr>]
+// <expr>#[<expr>]
 // <expr>[0..10]
 // <expr>[..10]
 // <expr>[0..]
-left IndexOrSliceExpr ::= ('[' | HASH_LBRACK) IndexOrSliceInner ']' !identifier
+// <expr>[..]
+left IndexOrSliceExpr ::= ('[' | '#[') IndexOrSliceInner ']' !identifier
 private IndexOrSliceInner ::= EmptySlice | ((SliceExprBody | IndexExprBody) '..'?)
 EmptySlice ::= '..' &']'
 private IndexExprBody ::= Expression SliceExprBody?
@@ -832,9 +847,6 @@ ParenthesesExpr ::= '(' <<enterMode "PAR">> Expression <<exitModeSafe "PAR">>')'
 // <expr>++/--
 IncDecExpression ::= Expression ('++' | '--') {pin=1}
 
-// @<ident>
-ConstexprIdentifierExpression ::= '@' identifier {pin=2}
-
 // <expr>?
 ErrorPropagationExpression ::= '?' {pin=1}
 
@@ -861,9 +873,9 @@ MutExpression ::= mut Expression
 SharedExpression ::= shared Expression
 
 // [<list>]
-ArrayCreation ::= '[' <<enterMode "PAR">> ArrayCreationList? semi? (<<exitModeSafe "PAR">> ']' '!'?) {pin=1}
+ArrayCreation ::= '[' <<enterMode "PAR">> ArrayCreationList? semi? (<<exitModeSafe "PAR">> ']' '!'?) !identifier
 // <expr1>, <expr2>, ..., <exprN>
-ArrayCreationList ::= ExpressionWithRecover (','? ExpressionWithRecover)* ','? {pin(".*")=0}
+ArrayCreationList ::= ExpressionWithRecover (list_separator? ExpressionWithRecover)* list_separator? {pin(".*")=0}
 
 // ([<arg1>, <arg2>[...], ...])
 ArgumentList ::= '(' <<enterMode "PAR">> ElementList? '...'? ','? <<exitModeSafe "PAR">> ')' {pin=1}
@@ -885,12 +897,12 @@ MatchElseArmClause ::= else Block semi {pin=1}
 // <expr> in <expr>
 InExpression ::= Expression in Expression {pin=2}
 // <expr> !in <expr>
-NotInExpression ::= Expression NOT_IN Expression {pin=2}
+NotInExpression ::= Expression '!in' Expression {pin=2}
 
 // <expr> is <expr>
 IsExpression ::= Expression is Type {pin=2}
 // <expr> !is <expr>
-NotIsExpression ::= Expression NOT_IS Type {pin=2}
+NotIsExpression ::= Expression '!is' Type {pin=2}
 
 // <expr> as <expr>
 AsExpression ::= Expression as Type {pin=2}
@@ -903,9 +915,9 @@ IfExpression ::= if Condition semi? Block (semi? ElseStatement)? {
   pin=1
   methods=[isGuard]
 }
+// $if <condition> { ... }
+CompileTimeIfExpression ::= '$if' Condition semi? Block (semi? CompileElseStatement)? {pin=1}
 
-//  $if <condition> { ... }
-CompileTimeIfExpression ::= IF_COMPILE_TIME Condition Block CompileElseStatement? {pin=1}
 private Condition ::= <<enterMode "BLOCK?">> (VarDeclaration | Expression) <<exitModeSafe "BLOCK?">>
 
 // sql <ref> { ... }
@@ -951,12 +963,10 @@ SqlTableName ::= TypeReferenceExpression {pin=1}
 
 ////// LITERALS //////
 
-// literals line 0 or 10.5 and other
+// literals like 0 or 10.5 and other
 Literal ::=
     int
   | float
-  | floati
-  | decimali
   | hex
   | oct
   | bin
@@ -981,9 +991,11 @@ private StringTemplatePart ::=
   | LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY
   | LongStringTemplateEntry
   | ShortStringTemplateEntry
+  | StringTemplateEntry
   | SHORT_TEMPLATE_ENTRY_START
 
-LongStringTemplateEntry ::= TEMPLATE_ENTRY_START Expression FormatSpecifier? TEMPLATE_ENTRY_END {pin=1}
+LongStringTemplateEntry ::= LONG_TEMPLATE_ENTRY_START Expression FormatSpecifier? TEMPLATE_ENTRY_END {pin=1}
+StringTemplateEntry ::= TEMPLATE_ENTRY_START Expression FormatSpecifier? TEMPLATE_ENTRY_END {pin=1}
 
 FormatSpecifier ::= ':' FormatSpecifierExpression
 FormatSpecifierExpression ::= (FormatSpecifierLeftAlignFlag | FormatSpecifierRightAlignFlag)? FormatSpecifierWidthAndPrecision? FormatSpecifierLetter?
