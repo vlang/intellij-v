@@ -93,10 +93,11 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
             .withParameters("-color")
             .withWorkDirectory(workingDir)
 
+        val binName = File(conf.fileName).nameWithoutExtension
         if (outputDir != null) {
-            commandLine.withParameters("-o", File(outputDir, "main").absolutePath)
+            commandLine.withParameters("-o", File(outputDir, binName).absolutePath)
         } else {
-            commandLine.withParameters("-o", File(workingDir, "main").absolutePath)
+            commandLine.withParameters("-o", File(workingDir, binName).absolutePath)
         }
 
         val additionalArguments = ParametersListUtil.parse(conf.buildArguments)

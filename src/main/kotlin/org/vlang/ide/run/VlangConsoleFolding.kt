@@ -12,7 +12,13 @@ class VlangConsoleFolding : ConsoleFolding() {
 
     override fun getPlaceholderText(project: Project, lines: MutableList<String>): String? {
         val first = lines.firstOrNull() ?: return null
-        val lastPart = first.substringAfterLast('/')
-        return "Running .../$lastPart"
+        val binName = first.substringBefore(" ")
+        if (binName.endsWith(":")) {
+            return null
+        }
+
+        val args = first.substringAfter(" ", "")
+        val lastPart = binName.substringAfterLast('/')
+        return "Running .../$lastPart $args"
     }
 }
