@@ -12,6 +12,10 @@ abstract class VlangBaseTypeEx<T : VlangType?>(protected val raw: T) : VlangType
 
     override fun module() = moduleName
 
+    override fun name(): String {
+        return qualifiedName().removePrefix(moduleName).removePrefix(".")
+    }
+
     protected fun String?.safeAppend(str: String?): String {
         return if (this == null) str ?: "" else this + str
     }

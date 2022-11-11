@@ -295,9 +295,10 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             }
 
             is VlangFieldName -> {
-                val initExpr = parent.parentOfType<VlangLiteralValueExpression>()
-                val type = initExpr?.type ?: return true
-                return processType(type, processor, state)
+                if (!processTrailingStructParams(processor, state)) return false
+                if (!processLiteralValueField(processor, state)) return false
+
+                return true
             }
         }
 
@@ -308,9 +309,12 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             }
         }
 
+        if (element.parentOfType<VlangArgumentList>() != null) {
+            if (!processPseudoParams(processor, state)) return false
+        }
+
         if (!processBlock(processor, state, true)) return false
         if (!processBuiltin(processor, state)) return false
-        if (!processPseudoParams(processor, state)) return false
         if (!processImportModules(file, processor, state)) return false
         if (!processImportedModules(file, processor, state)) return false
         if (!processImports(file, processor, state, myElement)) return false
@@ -568,10 +572,6 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
     }
 
     private fun processPseudoParams(processor: VlangScopeProcessor, state: ResolveState): Boolean {
-        if (myElement.parentOfType<VlangArgumentList>() == null) {
-            return true
-        }
-
         if (identifier == null || !identifier!!.textMatches("it")) {
             return true
         }
@@ -594,6 +594,29 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         }
 
         return true
+    }
+
+    private fun processTrailingStructParams(processor: VlangScopeProcessor, state: ResolveState): Boolean {
+        val callExpr = VlangCodeInsightUtil.getCallExpr(myElement) ?: return true
+        val resolved = callExpr.resolve() as? VlangSignatureOwner ?: return true
+        val params = resolved.getSignature()?.parameters?.paramDefinitionList ?: return true
+
+        val paramTypes = params.map { it.type.resolveType() }
+        if (!VlangCodeInsightUtil.isAllowedParamsForTrailingStruct(params, paramTypes)) return true
+
+        val structType = paramTypes.last()
+        val index = callExpr.paramIndexOf(element)
+        if (index == -1) return true
+
+        if (params.size > 1 && index < params.size - 1) return true
+
+        return processType(structType, processor, state)
+    }
+
+    private fun processLiteralValueField(processor: VlangScopeProcessor, state: ResolveState): Boolean {
+        val initExpr = element.parentOfType<VlangLiteralValueExpression>()
+        val type = initExpr?.type ?: return true
+        return processType(type, processor, state)
     }
 
     private fun createDelegate(processor: VlangScopeProcessor): VlangVarProcessor {

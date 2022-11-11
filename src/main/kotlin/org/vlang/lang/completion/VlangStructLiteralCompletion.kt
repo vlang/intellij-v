@@ -1,26 +1,26 @@
 package org.vlang.lang.completion
 
 import com.intellij.psi.PsiElement
-import com.intellij.psi.util.parentOfType
 import org.jetbrains.annotations.Contract
+import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.*
 
 internal object VlangStructLiteralCompletion {
     fun allowedVariants(structFieldReference: VlangReferenceExpression?): Variants {
+        if (structFieldReference == null) {
+            return Variants.NONE
+        }
+
         val value = parent<VlangValue>(structFieldReference)
         val element = parent<VlangElement>(value)
         if (element?.key != null) {
             return Variants.NONE
         }
 
-        val parentLiteralType = element?.parentOfType<VlangLiteralValueExpression>()
-        val type = parentLiteralType?.getType(null) ?: return Variants.NONE
-
         var hasValueInitializers = false
         var hasFieldValueInitializers = false
 
-        val literalValue = parent<VlangLiteralValueExpression>(element)
-        val fieldInitializers: List<VlangElement> = literalValue?.elementList ?: emptyList()
+        val fieldInitializers: List<VlangElement> = getFieldInitializers(structFieldReference)
 
         for (initializer in fieldInitializers) {
             if (initializer === element) {
@@ -38,12 +38,33 @@ internal object VlangStructLiteralCompletion {
             Variants.BOTH
     }
 
-    fun alreadyAssignedFields(literal: VlangLiteralValueExpression?): Set<String> {
-        if (literal == null) {
-            return emptySet()
+    private fun getFieldInitializers(element: PsiElement): List<VlangElement> {
+        val literalValue = parent<VlangLiteralValueExpression>(element)
+        if (literalValue == null) {
+            val callExpr = VlangCodeInsightUtil.getCallExpr(element)
+            val resolved = callExpr?.resolve() as? VlangSignatureOwner
+            val params = resolved?.getSignature()?.parameters?.paramDefinitionList
+            val paramTypes = params?.map { it.type.resolveType() }
+
+            if (paramTypes != null) {
+                if (!VlangCodeInsightUtil.isAllowedParamsForTrailingStruct(params, paramTypes)) return emptyList()
+
+                val startIndex = paramTypes.indexOfFirst { it is VlangStructType }
+
+                val list = callExpr.argumentList.elementList
+                if (startIndex == -1 || startIndex >= list.size) return emptyList()
+
+                return list.subList(startIndex, list.size)
+            }
+
+            return emptyList()
         }
 
-        return literal.elementList.mapNotNull {
+        return literalValue.elementList
+    }
+
+    fun alreadyAssignedFields(elements: List<VlangElement>): Set<String> {
+        return elements.mapNotNull {
             val identifier = it.key?.fieldName?.getIdentifier()
             identifier?.text
         }.toSet()

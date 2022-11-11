@@ -23,6 +23,19 @@ object VlangTypeInferenceUtil {
     }
 
     fun getContextType(element: PsiElement): VlangType? {
+        if (element.parent is VlangValue) {
+            val parentElement = element.parentNth<VlangElement>(2)
+            val key = parentElement?.key
+            if (key?.fieldName != null) {
+                val resolved = key.fieldName?.resolve() as? VlangFieldDefinition
+                val declaration = resolved?.parent as? VlangFieldDeclaration
+                val resolvedType = declaration?.type?.resolveType()
+                if (resolvedType != null) {
+                    return resolvedType
+                }
+            }
+        }
+
         val callExpr = VlangCodeInsightUtil.getCallExpr(element)
         if (callExpr != null) {
             val index = callExpr.paramIndexOf(element)
@@ -33,14 +46,6 @@ object VlangTypeInferenceUtil {
 
             val param = params.getOrNull(index) ?: return null
             return param.type.resolveType()
-        }
-
-        if (element.parent is VlangValue) {
-            val literalValueElement = element.parentNth<VlangElement>(2) ?: return null
-            val key = literalValueElement.key ?: return null
-            val resolved = key.fieldName?.resolve() as? VlangFieldDefinition ?: return null
-            val declaration = resolved.parent as? VlangFieldDeclaration ?: return null
-            return declaration.type
         }
 
         if (element.parent is VlangDefaultFieldValue) {

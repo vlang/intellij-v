@@ -31,6 +31,21 @@ object VlangCodeInsightUtil {
         return element.parentOfType()
     }
 
+    fun getCalledParams(callExpr: VlangCallExpr?): List<VlangType>? {
+        val resolved = callExpr?.resolve() as? VlangSignatureOwner ?: return null
+        val params = resolved.getSignature()?.parameters?.paramDefinitionList
+        return params?.map { it.type.resolveType() }
+    }
+
+    fun isAllowedParamsForTrailingStruct(params: List<VlangParamDefinition>, paramTypes: List<VlangType>): Boolean {
+        if (paramTypes.none { it is VlangStructType }) return false
+        if (params.isEmpty()) return false
+
+        val structType = paramTypes.last()
+        if (params.size > 1 && structType !is VlangStructType) return false
+        return true
+    }
+
     fun isArrayMethodCall(callExpr: VlangCallExpr): Boolean {
         val function = callExpr.resolve() ?: return false
         return function is VlangMethodDeclaration && function.receiverType?.textMatches("array") == true

@@ -68,7 +68,7 @@ class VlangClosureCompletionContributor : CompletionContributor() {
                 processImportTypes(signature, currentModule, file, context.document)
 
                 val templateVariables = processTemplateVars(signature).toMutableList()
-                val paramsString = buildParamsPart(signature, call, templateVariables)
+                val paramsString = buildParamsPart(anchor, signature, call, templateVariables)
 
                 val resultTypeEx = result?.type.toEx()
                 if (resultTypeEx is VlangVoidPtrTypeEx) {
@@ -101,6 +101,7 @@ class VlangClosureCompletionContributor : CompletionContributor() {
             }
 
             private fun buildParamsPart(
+                anchor: PsiElement,
                 signature: VlangSignature,
                 call: VlangCallExpr?,
                 templateVariables: List<String>,
@@ -121,7 +122,7 @@ class VlangClosureCompletionContributor : CompletionContributor() {
                         if (variadic) {
                             append("...")
                         }
-                        processParamType(param.type.toEx(), signature, call)
+                        processParamType(param.type.toEx(), anchor, call)
                     }
                 }
 
@@ -134,7 +135,7 @@ class VlangClosureCompletionContributor : CompletionContributor() {
                 }
             }
 
-            private fun StringBuilder.processParamType(typeEx: VlangTypeEx<*>, anchor: VlangCompositeElement, call: VlangCallExpr?) {
+            private fun StringBuilder.processParamType(typeEx: VlangTypeEx<*>, anchor: PsiElement, call: VlangCallExpr?) {
                 if (call != null && typeEx is VlangVoidPtrTypeEx && VlangCodeInsightUtil.isArrayMethodCall(call)) {
                     val type = tryInferTypeFromCaller(call)
                     if (type != null) {

@@ -6,6 +6,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveState
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parentOfType
+import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangReferenceBase.Companion.LOCAL_RESOLVE
 
@@ -28,7 +29,12 @@ class VlangFieldNameReference(element: VlangReferenceExpressionBase) :
         if (key == null && (value == null || PsiTreeUtil.getPrevSiblingOfType(value, VlangKey::class.java) != null))
             return true
 
-        val type = myElement.parentOfType<VlangLiteralValueExpression>()?.getType(null)?.resolveType() ?: return true
+        var type = myElement.parentOfType<VlangLiteralValueExpression>()?.getType(null)?.resolveType()
+        if (type == null) {
+            val callExpr = VlangCodeInsightUtil.getCallExpr(element)
+            val paramTypes = VlangCodeInsightUtil.getCalledParams(callExpr)
+            type = paramTypes?.firstOrNull { it is VlangStructType }?: return true
+        }
 
         val typeFile = type.containingFile as VlangFile
         val originFile = element.containingFile as VlangFile

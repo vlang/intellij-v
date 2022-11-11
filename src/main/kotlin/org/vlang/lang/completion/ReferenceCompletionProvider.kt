@@ -14,6 +14,7 @@ import org.vlang.lang.psi.impl.VlangFieldNameReference
 import org.vlang.lang.psi.impl.VlangReference
 import org.vlang.lang.psi.impl.VlangReferenceBase.Companion.LOCAL_RESOLVE
 import org.vlang.lang.psi.impl.VlangScopeProcessor
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 
 class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
     override fun addCompletions(
@@ -67,18 +68,27 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
 
         val file = refExpression.containingFile as? VlangFile ?: return
         val fields = mutableSetOf<String>()
-        val literal = refExpression.parentOfType<VlangLiteralValueExpression>()
+        val elementList =
+            refExpression.parentOfType<VlangLiteralValueExpression>()?.elementList
+                ?: refExpression.parentOfType<VlangArgumentList>()?.elementList
+                ?: emptyList()
+
         VlangFieldNameReference(refExpression).processResolveVariants(object : MyScopeProcessor(result, file, false) {
-            val alreadyAssignedFields: Set<String> = VlangStructLiteralCompletion.alreadyAssignedFields(literal)
+            val alreadyAssignedFields: Set<String> = VlangStructLiteralCompletion.alreadyAssignedFields(elementList)
 
             override fun execute(o: PsiElement, state: ResolveState): Boolean {
                 val structFieldName =
-                    if (o is VlangFieldDefinition)
-                        o.name
-                    else if (o is VlangEmbeddedDefinition)
-//                        o.getName() // TODO
-                        ""
-                    else null
+                    when (o) {
+                        is VlangFieldDefinition    -> o.name
+                        is VlangEmbeddedDefinition -> o.type.toEx().name()
+                        else                       -> null
+                    }
+
+                val structFieldElement = if (o is VlangEmbeddedDefinition) {
+                    (o.type.resolveType() as? VlangStructType)?.parent ?: o
+                } else {
+                    o
+                }
 
                 if (structFieldName != null) {
                     fields.add(structFieldName)
@@ -87,7 +97,7 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
                 return if (structFieldName != null && alreadyAssignedFields.contains(structFieldName)) {
                     true
                 } else {
-                    super.execute(o, state)
+                    super.execute(structFieldElement, state)
                 }
             }
         })
