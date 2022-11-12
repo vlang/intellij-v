@@ -132,8 +132,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         state: ResolveState,
     ): Boolean {
         val moduleName = importPath.qualifiedName
-        val moduleFiles =
-            VlangModulesIndex.find(moduleName, myElement.project, GlobalSearchScope.allScope(myElement.project), null)
+        val moduleFiles = VlangModulesIndex.find(moduleName, myElement.project, GlobalSearchScope.allScope(myElement.project), null)
 
         if (moduleFiles.isNotEmpty()) {
             val moduleFile = moduleFiles.first()
@@ -453,7 +452,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         val currentModule = file.getModuleQualifiedName()
         file.getImports()
             .filter { it.importAlias == null }
-            .map { it.importPath.qualifiedName }
+            .map { it.importPath.lastPart }
             .flatMap { VlangModulesFingerprintIndex.find(it, element.project, null) }
             .forEach {
                 if (it.getModuleQualifiedName() == currentModule) return@forEach

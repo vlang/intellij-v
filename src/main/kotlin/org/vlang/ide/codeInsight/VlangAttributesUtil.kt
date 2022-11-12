@@ -14,4 +14,10 @@ object VlangAttributesUtil {
             it.attributeExpressionList.any { expr -> expr.textMatches("minify") }
         } ?: false
     }
+
+    fun isParamsStruct(struct: VlangStructDeclaration): Boolean {
+        return struct.attributes?.attributeList?.any {
+            it.attributeExpressionList.any { expr -> expr.textMatches("params") }
+        } ?: false
+    }
 }

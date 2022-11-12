@@ -1,5 +1,6 @@
 package org.vlang.integration.resolve
 
+import com.intellij.psi.PsiDirectory
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
@@ -30,8 +31,16 @@ abstract class IntegrationTestBase : BasePlatformTestCase() {
             val ref = myFixture.file.findReferenceAt(offset)
             check(ref != null) { "No reference at caret $caretIndex" }
 
-            val resolved = ref.resolve() as? VlangNamedElement
+            val resolved = ref.resolve()
             check(resolved != null) { "Cannot resolve reference $caretIndex" }
+
+            if (resolved is PsiDirectory) {
+                val expected = "DIRECTORY ${resolved.virtualFile.path}"
+                check(name == expected) { "Expected $expected but got $name" }
+                return
+            }
+
+            check(resolved is VlangNamedElement) { "Expected VlangNamedElement but got $resolved" }
 
             val kind = resolved.toString()
             val resolvedName = if (!qualifier) resolved.name else resolved.getQualifiedName()

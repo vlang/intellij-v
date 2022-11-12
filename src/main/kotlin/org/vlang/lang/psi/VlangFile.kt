@@ -8,6 +8,7 @@ import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.CachedValuesManager
+import com.intellij.psi.util.PsiModificationTracker
 import com.intellij.util.ArrayFactory
 import org.vlang.configurations.VlangConfiguration
 import org.vlang.ide.codeInsight.VlangAttributesUtil
@@ -86,6 +87,14 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
     }
 
     fun getModuleQualifiedName(): String {
+        return CachedValuesManager.getCachedValue(this) {
+            CachedValueProvider.Result.create(
+                moduleQualifiedNameInner(), PsiModificationTracker.MODIFICATION_COUNT
+            )
+        }
+    }
+
+    private fun moduleQualifiedNameInner(): String {
         var moduleName = getModuleName()
 
         val projectDir = project.guessProjectDir() ?: return ""
@@ -121,6 +130,10 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
             if (qualifierNames.isNotEmpty() && qualifierNames[0] == moduleName) {
                 // iui.iui.* -> iui.*
                 qualifierNames.removeAt(0)
+            }
+            if (qualifierNames.lastOrNull() == "src") {
+                // iui.src.* -> iui.*
+                qualifierNames.removeLast()
             }
         }
 

@@ -94,10 +94,13 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
                     fields.add(structFieldName)
                 }
 
+                // При инициализации структуры мы можем использовать приватные поля
+                val newState = state.put(LOCAL_RESOLVE, true)
+
                 return if (structFieldName != null && alreadyAssignedFields.contains(structFieldName)) {
                     true
                 } else {
-                    super.execute(structFieldElement, state)
+                    super.execute(structFieldElement, newState)
                 }
             }
         })

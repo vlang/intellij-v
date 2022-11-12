@@ -89,6 +89,20 @@ class ResolvingTest : IntegrationTestBase() {
         assertReferencedTo(3, "FUNCTION_DECLARATION mymodule.inner.inner")
     }
 
+    fun `test imports resolve`() = doTest {
+        myFixture.copyDirectoryToProject("fixtures/SimpleModules", "")
+        myFixture.configureByText("main.v", """
+            module main
+
+            import /*caret 0*/mymodule./*caret 1*/inner
+
+            fn main() {}
+        """.trimIndent())
+
+        assertReferencedTo(0, "DIRECTORY /src/mymodule")
+        assertReferencedTo(1, "DIRECTORY /src/mymodule/inner")
+    }
+
 //    fun `test import from simple plain module`() = doTest {
 //        myFixture.configureByText("main.v", """
 //            module main

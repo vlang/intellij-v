@@ -33,7 +33,7 @@ class VlangFieldNameReference(element: VlangReferenceExpressionBase) :
         if (type == null) {
             val callExpr = VlangCodeInsightUtil.getCallExpr(element)
             val paramTypes = VlangCodeInsightUtil.getCalledParams(callExpr)
-            type = paramTypes?.firstOrNull { it is VlangStructType }?: return true
+            type = paramTypes?.lastOrNull { it is VlangStructType }?: return true
         }
 
         val typeFile = type.containingFile as VlangFile

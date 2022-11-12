@@ -141,4 +141,45 @@ class TrailingStructLiteralCompletionTest : CompletionTestBase() {
         }
     """.trimIndent()
     )
+
+    fun `test with extra one param after struct`() = doTestVariants(
+        """
+        module main
+
+        struct Params {
+            foo int
+            boo int
+        }
+        
+        fn boo(params Params, id int) {}
+
+        fn main() {
+        	boo(fo<caret>)
+        }
+    """.trimIndent(),
+        CompletionType.BASIC, 1, CheckType.EXCLUDES,
+        "foo", "boo", )
+
+    fun `test with extra one string param`() = doTestVariants(
+        """
+        module main
+        
+        struct string {
+            len int
+            cap int
+        }
+
+        struct Params {
+            foo int
+            boo int
+        }
+        
+        fn boo(str string, params Params) {}
+
+        fn main() {
+        	boo('', <caret>)
+        }
+    """.trimIndent(),
+        CompletionType.BASIC, 1, CheckType.EXCLUDES,
+        "len", "cap", )
 }

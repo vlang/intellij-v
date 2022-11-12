@@ -353,9 +353,13 @@ object VlangPsiImplUtil {
             return true
         }
 
-        val group = o.parentOfType<VlangFieldsGroup>() ?: return false
-        val modifiers = group.memberModifiers?.memberModifierList ?: return false
-        return modifiers.any { it.text == "pub" }
+        val group = o.parentOfType<VlangFieldsGroup>()
+        val modifiers = group?.memberModifiers?.memberModifierList
+        if (modifiers != null && modifiers.any { it.text == "pub" }) {
+            return true
+        }
+
+        return false
     }
 
     @JvmStatic

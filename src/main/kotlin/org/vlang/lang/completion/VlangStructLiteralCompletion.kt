@@ -20,7 +20,7 @@ internal object VlangStructLiteralCompletion {
         var hasValueInitializers = false
         var hasFieldValueInitializers = false
 
-        val fieldInitializers: List<VlangElement> = getFieldInitializers(structFieldReference)
+        val fieldInitializers: List<VlangElement> = getFieldInitializers(structFieldReference) ?: return Variants.NONE
 
         for (initializer in fieldInitializers) {
             if (initializer === element) {
@@ -38,7 +38,7 @@ internal object VlangStructLiteralCompletion {
             Variants.BOTH
     }
 
-    private fun getFieldInitializers(element: PsiElement): List<VlangElement> {
+    private fun getFieldInitializers(element: PsiElement): List<VlangElement>? {
         val literalValue = parent<VlangLiteralValueExpression>(element)
         if (literalValue == null) {
             val callExpr = VlangCodeInsightUtil.getCallExpr(element)
@@ -47,9 +47,9 @@ internal object VlangStructLiteralCompletion {
             val paramTypes = params?.map { it.type.resolveType() }
 
             if (paramTypes != null) {
-                if (!VlangCodeInsightUtil.isAllowedParamsForTrailingStruct(params, paramTypes)) return emptyList()
+                if (!VlangCodeInsightUtil.isAllowedParamsForTrailingStruct(params, paramTypes)) return null
 
-                val startIndex = paramTypes.indexOfFirst { it is VlangStructType }
+                val startIndex = paramTypes.lastIndex
 
                 val list = callExpr.argumentList.elementList
                 if (startIndex == -1 || startIndex >= list.size) return emptyList()
