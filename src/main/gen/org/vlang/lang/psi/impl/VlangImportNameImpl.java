@@ -13,7 +13,7 @@ import org.vlang.lang.psi.*;
 import org.vlang.lang.psi.impl.imports.VlangImportReference;
 import com.intellij.psi.stubs.IStubElementType;
 
-public class VlangImportNameImpl extends VlangStubbedElementImpl<VlangImportNameStub> implements VlangImportName {
+public class VlangImportNameImpl extends VlangNamedElementImpl<VlangImportNameStub> implements VlangImportName {
 
   public VlangImportNameImpl(@NotNull VlangImportNameStub stub, @NotNull IStubElementType<?, ?> type) {
     super(stub, type);
@@ -58,7 +58,7 @@ public class VlangImportNameImpl extends VlangStubbedElementImpl<VlangImportName
   }
 
   @Override
-  @Nullable
+  @NotNull
   public String getName() {
     return VlangPsiImplUtil.getName(this);
   }
@@ -78,6 +78,12 @@ public class VlangImportNameImpl extends VlangStubbedElementImpl<VlangImportName
   @Nullable
   public PsiElement resolve() {
     return VlangPsiImplUtil.resolve(this);
+  }
+
+  @Override
+  @NotNull
+  public String getQualifiedName() {
+    return VlangPsiImplUtil.getQualifiedName(this);
   }
 
 }

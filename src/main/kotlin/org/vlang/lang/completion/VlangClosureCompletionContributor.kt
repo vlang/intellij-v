@@ -5,6 +5,7 @@ import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.codeInsight.template.TemplateManager
 import com.intellij.codeInsight.template.impl.ConstantNode
+import com.intellij.icons.AllIcons
 import com.intellij.openapi.editor.Document
 import com.intellij.patterns.PlatformPatterns.psiElement
 import com.intellij.psi.PsiDocumentManager
@@ -46,6 +47,7 @@ class VlangClosureCompletionContributor : CompletionContributor() {
                 PrioritizedLookupElement.withPriority(
                     LookupElementBuilder.create("fn")
                         .withPresentableText(presentationText)
+                        .withIcon(AllIcons.Actions.RealIntentionBulb)
                         .withInsertHandler(MyInsertHandler(signature, pos, callExpr)),
                     VlangCompletionUtil.CONTEXT_COMPLETION_PRIORITY.toDouble()
                 )
@@ -195,7 +197,7 @@ class VlangClosureCompletionContributor : CompletionContributor() {
                         override fun enter(type: VlangTypeEx<*>): Boolean {
                             if (type is VlangImportableTypeEx) {
                                 // type from current module no need to import
-                                if (currentModule == type.module()) {
+                                if (currentModule == type.module() || type.isBuiltin()) {
                                     return true
                                 }
 

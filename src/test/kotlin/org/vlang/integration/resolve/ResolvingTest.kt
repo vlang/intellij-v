@@ -1,0 +1,91 @@
+package org.vlang.integration.resolve
+
+class ResolvingTest : IntegrationTestBase() {
+    fun `test hello world`() = doTest {
+        myFixture.configureByText("a.v", """
+            fn main() {
+                /*caret 0*/println("Hello, World!")
+            }
+        """.trimIndent())
+
+        assertReferencedTo(0, "FUNCTION_DECLARATION builtin.println")
+    }
+
+    fun `test builtin resolved with prefix`() = doTest {
+        myFixture.configureByText("a.v", """
+            fn main() /*caret 0*/string {
+                /*caret 1*/println("Hello, World!")
+            }
+        """.trimIndent())
+
+        assertReferencedTo(0, "STRUCT_DECLARATION builtin.string")
+        assertReferencedTo(1, "FUNCTION_DECLARATION builtin.println")
+    }
+
+    fun `test simple modules`() = doTest {
+        myFixture.copyDirectoryToProject("fixtures/SimpleModules", "")
+
+        myFixture.configureByText("main.v", """
+            module main
+            
+            import mymodule
+            import mymodule2
+            import mymodule.inner
+            
+            fn main() {
+                /*caret 0*/mymodule./*caret 1*/my_func()
+                /*caret 2*/inner./*caret 3*/inner()
+                /*caret 4*/mymodule2./*caret 5*/my_func2()
+            }
+        """.trimIndent())
+
+        assertReferencedTo(0, "IMPORT_NAME mymodule")
+        assertReferencedTo(1, "FUNCTION_DECLARATION mymodule.my_func")
+        assertReferencedTo(2, "IMPORT_NAME mymodule.inner")
+        assertReferencedTo(3, "FUNCTION_DECLARATION mymodule.inner.inner")
+        assertReferencedTo(4, "IMPORT_NAME mymodule2")
+        assertReferencedTo(5, "FUNCTION_DECLARATION mymodule2.my_func2")
+    }
+
+    fun `test src based project`() = doTest {
+        myFixture.copyDirectoryToProject("fixtures/SrcBasedSources", "")
+
+        myFixture.configureByText("main.v", """
+            module main
+            
+            import mymodule
+            import mymodule.inner
+            
+            fn main() {
+                /*caret 0*/mymodule./*caret 1*/my_func()
+                /*caret 2*/inner./*caret 3*/inner()
+            }
+        """.trimIndent())
+
+        assertReferencedTo(0, "IMPORT_NAME mymodule")
+        assertReferencedTo(1, "FUNCTION_DECLARATION mymodule.my_func")
+        assertReferencedTo(2, "IMPORT_NAME mymodule.inner")
+        assertReferencedTo(3, "FUNCTION_DECLARATION mymodule.inner.inner")
+    }
+
+    fun `test local modules project`() = doTest {
+        myFixture.copyDirectoryToProject("fixtures/LocalModuleSources", "")
+
+        myFixture.configureByText("main.v", """
+            module main
+            
+            import mymodule
+            import mymodule.inner
+            
+            fn main() {
+                /*caret 0*/mymodule./*caret 1*/my_func()
+                /*caret 2*/inner./*caret 3*/inner()
+            }
+        """.trimIndent())
+
+        assertReferencedTo(0, "IMPORT_NAME mymodule")
+        assertReferencedTo(1, "FUNCTION_DECLARATION mymodule.my_func")
+        assertReferencedTo(2, "IMPORT_NAME mymodule.inner")
+        assertReferencedTo(3, "FUNCTION_DECLARATION mymodule.inner.inner")
+    }
+}

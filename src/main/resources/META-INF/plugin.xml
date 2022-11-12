@@ -63,6 +63,8 @@ The plugin provides support for V language
         <vcs.codeVisionLanguageContext language="vlang"
                                        implementationClass="org.vlang.ide.hints.VlangCodeVisionLanguageContext"/>
 
+        <projectViewNodeDecorator implementation="org.vlang.ide.projectview.ProjectViewDecorator"/>
+
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangModulesIndex"/>
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangModulesFingerprintIndex"/>
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangMethodIndex"/>

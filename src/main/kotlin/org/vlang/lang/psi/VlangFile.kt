@@ -11,13 +11,17 @@ import com.intellij.psi.util.CachedValuesManager
 import com.intellij.util.ArrayFactory
 import org.vlang.configurations.VlangConfiguration
 import org.vlang.ide.codeInsight.VlangAttributesUtil
+import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.ide.ui.VIcons
 import org.vlang.lang.VlangFileType
 import org.vlang.lang.VlangLanguage
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.impl.VlangPsiImplUtil
 import org.vlang.lang.stubs.VlangFileStub
-import org.vlang.lang.stubs.types.*
+import org.vlang.lang.stubs.types.VlangEnumDeclarationStubElementType
+import org.vlang.lang.stubs.types.VlangFunctionDeclarationStubElementType
+import org.vlang.lang.stubs.types.VlangInterfaceDeclarationStubElementType
+import org.vlang.lang.stubs.types.VlangStructDeclarationStubElementType
 
 class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, VlangLanguage.INSTANCE) {
 
@@ -87,13 +91,16 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
         val projectDir = project.guessProjectDir() ?: return ""
         val stdlib = VlangConfiguration.getInstance(project).stdlibLocation
         val modules = VlangConfiguration.getInstance(project).modulesLocation
+        val src = VlangConfiguration.getInstance(project).srcLocation
+        val localModules = VlangConfiguration.getInstance(project).localModulesLocation
+        val rootDirs = listOfNotNull(projectDir, stdlib, modules, src, localModules)
 
         val moduleNames = mutableListOf<String>()
         var dir = virtualFile?.parent
         val insideTopLevelDir = dir == projectDir
         val dirName = dir?.name ?: ""
         var depth = 0
-        while (dir != projectDir && dir != stdlib && dir != modules && dir != null && dir.name != "/" && depth < 10) {
+        while (dir != null && dir !in rootDirs && dir.name != "/" && depth < 10) {
             moduleNames.add(dir.name)
 
             dir = dir.parent
@@ -108,7 +115,9 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
             moduleNames.removeAt(0)
         }
 
-        val qualifier = moduleNames.reversed().joinToString(".").removePrefix("builtin.")
+        val qualifier = moduleNames.reversed()
+            .joinToString(".")
+            .removePrefix("${VlangCodeInsightUtil.BUILTIN_MODULE}.")
         if (qualifier.isNotEmpty()) {
             return "$qualifier.$moduleName"
         }
@@ -152,36 +161,6 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
         }
 
         return Triple(null, null, false)
-    }
-
-    fun resolveName(name: String): String? {
-        val imports = getImports()
-        for (import in imports) {
-            if (import.importAlias?.name == name) {
-                return import.getIdentifier().text
-            }
-
-            val selectiveImport = import.selectiveImportList?.referenceExpressionList?.any {
-                it.getIdentifier().text == name
-            } ?: false
-
-            if (selectiveImport) {
-                return import.name + "." + name
-            }
-
-            val importName = import.name
-            if (importName == name) {
-                return importName
-            }
-
-            if (import.lastPart == name) {
-                return importName
-            }
-        }
-
-        val module = getModuleName() ?: return name
-
-        return "$module.$name"
     }
 
     fun getFunctions(): List<VlangFunctionDeclaration> =
@@ -259,26 +238,7 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
         }
     }
 
-    fun getMethods(): List<VlangMethodDeclaration> {
-        return CachedValuesManager.getCachedValue(
-            this
-        ) {
-            val calc: List<VlangMethodDeclaration> =
-                if (stub != null) getChildrenByType(
-                    stub!!,
-                    VlangTypes.METHOD_DECLARATION,
-                    VlangMethodDeclarationStubElementType.ARRAY_FACTORY
-                ) else VlangPsiImplUtil.traverser().children(this).filter(
-                    VlangMethodDeclaration::class.java
-                ).toList()
-            CachedValueProvider.Result.create(
-                calc,
-                this
-            )
-        }
-    }
-
-    fun <E : PsiElement?> getChildrenByType(
+    private fun <E : PsiElement?> getChildrenByType(
         stub: StubElement<out PsiElement>,
         elementType: IElementType,
         f: ArrayFactory<E>,

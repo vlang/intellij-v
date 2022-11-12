@@ -61,7 +61,7 @@ class VlangAnnotator : Annotator {
             return VlangColor.BUILTIN_TYPE
         }
 
-        if (parent is VlangReferenceExpression || parent is VlangTypeReferenceExpression) {
+        if (element.elementType == VlangTypes.IDENTIFIER && (parent is VlangReferenceExpression || parent is VlangTypeReferenceExpression)) {
             return highlightReference(parent as VlangReferenceExpressionBase, parent.reference as VlangReference)
         }
 

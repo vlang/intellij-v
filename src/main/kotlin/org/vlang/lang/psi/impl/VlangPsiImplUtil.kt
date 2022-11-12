@@ -203,18 +203,18 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun setName(o: VlangImportName, newName: String): PsiElement {
-        val identifier = o.identifier
+        val identifier = o.getIdentifier()
         identifier.replace(VlangElementFactory.createIdentifierFromText(o.project, newName))
         return o
     }
 
     @JvmStatic
-    fun getName(o: VlangImportName): String? {
+    fun getName(o: VlangImportName): String {
         val stub = o.stub
         if (stub != null) {
-            return stub.name
+            return stub.name ?: ""
         }
-        return o.identifier.text
+        return o.getIdentifier().text
     }
 
     @JvmStatic
@@ -229,6 +229,15 @@ object VlangPsiImplUtil {
         }
 
         return parts.reversed().joinToString(".")
+    }
+
+    @JvmStatic
+    fun getQualifiedName(o: VlangImportName): String {
+        val qualifier = o.qualifier
+        if (qualifier.isEmpty()) {
+            return o.name
+        }
+        return qualifier + "." + o.name
     }
 
     @JvmStatic

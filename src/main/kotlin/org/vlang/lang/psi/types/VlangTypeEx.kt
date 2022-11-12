@@ -13,4 +13,5 @@ interface VlangTypeEx<T: VlangType?> {
     fun accept(visitor: VlangTypeVisitor)
     fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean
     fun isEqual(rhs: VlangTypeEx<*>): Boolean
+    fun isBuiltin(): Boolean
 }

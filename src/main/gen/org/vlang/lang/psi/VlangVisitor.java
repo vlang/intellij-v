@@ -3,7 +3,6 @@ package org.vlang.lang.psi;
 
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiNameIdentifierOwner;
 import com.intellij.psi.PsiLanguageInjectionHost;
 
 public class VlangVisitor extends PsiElementVisitor {
@@ -370,7 +369,7 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitImportName(@NotNull VlangImportName o) {
-    visitPsiNameIdentifierOwner(o);
+    visitNamedElement(o);
   }
 
   public void visitImportPath(@NotNull VlangImportPath o) {
@@ -876,10 +875,6 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitVarModifiers(@NotNull VlangVarModifiers o) {
     visitCompositeElement(o);
-  }
-
-  public void visitPsiNameIdentifierOwner(@NotNull PsiNameIdentifierOwner o) {
-    visitElement(o);
   }
 
   public void visitAttributeOwner(@NotNull VlangAttributeOwner o) {

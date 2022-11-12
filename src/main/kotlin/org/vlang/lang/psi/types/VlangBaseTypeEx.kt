@@ -1,12 +1,14 @@
 package org.vlang.lang.psi.types
 
+import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.*
 
 @Suppress("PropertyName")
 abstract class VlangBaseTypeEx<T : VlangType?>(protected val raw: T) : VlangTypeEx<T> {
     protected val UNKNOWN_TYPE = "unknown"
     protected val ANON = "anon"
-    protected val moduleName = (raw?.containingFile as? VlangFile)?.getModuleQualifiedName() ?: ""
+    protected val containingFile = raw?.containingFile as? VlangFile
+    protected val moduleName = containingFile?.getModuleQualifiedName() ?: ""
 
     override fun raw() = raw
 
@@ -15,6 +17,8 @@ abstract class VlangBaseTypeEx<T : VlangType?>(protected val raw: T) : VlangType
     override fun name(): String {
         return qualifiedName().removePrefix(moduleName).removePrefix(".")
     }
+
+    override fun isBuiltin() = moduleName == VlangCodeInsightUtil.BUILTIN_MODULE
 
     protected fun String?.safeAppend(str: String?): String {
         return if (this == null) str ?: "" else this + str

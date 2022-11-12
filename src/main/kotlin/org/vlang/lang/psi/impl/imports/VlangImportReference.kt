@@ -45,14 +45,7 @@ class VlangImportReference<T : PsiElement>(element: T, private val importSpec: V
         val element = element
 
         if (element is VlangImportName) {
-            val qualifier = element.qualifier
-            val identifier = element.identifier
-
-            val name = if (qualifier.isNotEmpty()) {
-                qualifier + "." + identifier.text
-            } else {
-                identifier.text
-            }
+            val name = element.getQualifiedName()
 
             val modules = VlangModulesIndex.find(name, element.project, null, null)
             if (modules.isEmpty()) {
