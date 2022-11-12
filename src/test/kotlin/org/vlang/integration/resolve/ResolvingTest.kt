@@ -88,4 +88,19 @@ class ResolvingTest : IntegrationTestBase() {
         assertReferencedTo(2, "IMPORT_NAME mymodule.inner")
         assertReferencedTo(3, "FUNCTION_DECLARATION mymodule.inner.inner")
     }
+
+//    fun `test import from simple plain module`() = doTest {
+//        myFixture.configureByText("main.v", """
+//            module main
+//
+//            import simple
+//
+//            fn main() {
+//                /*caret 0*/simple./*caret 1*/simple_func()
+//            }
+//        """.trimIndent())
+//
+//        assertReferencedTo(0, "IMPORT_NAME simple")
+//        assertReferencedTo(1, "FUNCTION_DECLARATION mymodule.my_func")
+//    }
 }

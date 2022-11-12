@@ -115,9 +115,19 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
             moduleNames.removeAt(0)
         }
 
-        val qualifier = moduleNames.reversed()
+        val qualifierNames = moduleNames.reversed().toMutableList()
+
+        if (modules != null && virtualFile != null && virtualFile.path.startsWith(modules.path)) {
+            if (qualifierNames.isNotEmpty() && qualifierNames[0] == moduleName) {
+                // iui.iui.* -> iui.*
+                qualifierNames.removeAt(0)
+            }
+        }
+
+        val qualifier = qualifierNames.reversed()
             .joinToString(".")
             .removePrefix("${VlangCodeInsightUtil.BUILTIN_MODULE}.")
+
         if (qualifier.isNotEmpty()) {
             return "$qualifier.$moduleName"
         }
