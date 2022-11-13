@@ -50,4 +50,10 @@ public class VlangFieldsGroupImpl extends VlangCompositeElementImpl implements V
     return findChildByType(SEMICOLON_SYNTHETIC);
   }
 
+  @Override
+  @NotNull
+  public List<VlangMemberModifier> getMemberModifierList() {
+    return VlangPsiImplUtil.getMemberModifierList(this);
+  }
+
 }

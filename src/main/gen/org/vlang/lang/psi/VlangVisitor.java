@@ -248,7 +248,7 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitFieldsGroup(@NotNull VlangFieldsGroup o) {
-    visitCompositeElement(o);
+    visitMemberModifiersOwner(o);
   }
 
   public void visitFixedSizeArrayType(@NotNull VlangFixedSizeArrayType o) {
@@ -512,7 +512,7 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitMembersGroup(@NotNull VlangMembersGroup o) {
-    visitCompositeElement(o);
+    visitMemberModifiersOwner(o);
   }
 
   public void visitMethodDeclaration(@NotNull VlangMethodDeclaration o) {
@@ -878,6 +878,10 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitAttributeOwner(@NotNull VlangAttributeOwner o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitMemberModifiersOwner(@NotNull VlangMemberModifiersOwner o) {
     visitCompositeElement(o);
   }
 

@@ -19,10 +19,11 @@ class VlangParameterNameHintsProvider : InlayParameterHintsProvider {
         val hints = mutableListOf<InlayInfo>()
 
         when (element) {
-            is VlangCallExpr      -> handleCallExpr(element, hints)
-            is VlangVarDefinition -> handleVarDefinition(element, hints)
-            is VlangOrBlockExpr   -> handleOrBlockExpr(element, hints)
-            is VlangElseStatement -> handleElseStatement(element, hints)
+            is VlangCallExpr        -> handleCallExpr(element, hints)
+            is VlangVarDefinition   -> handleVarDefinition(element, hints)
+            is VlangConstDefinition -> handleConstDefinition(element, hints)
+            is VlangOrBlockExpr     -> handleOrBlockExpr(element, hints)
+            is VlangElseStatement   -> handleElseStatement(element, hints)
         }
 
         return hints
@@ -75,6 +76,18 @@ class VlangParameterNameHintsProvider : InlayParameterHintsProvider {
         }
         val readableName = exType.readableName(element)
         val inlayInfo = InlayInfo(readableName, element.endOffset)
+        hints.add(inlayInfo)
+    }
+
+    private fun handleConstDefinition(element: VlangConstDefinition, hints: MutableList<InlayInfo>) {
+        val type = element.getTypeInner(null)
+        val exType = type.toEx()
+        if (exType is VlangUnknownTypeEx) {
+            // no need show hint if type is unknown
+            return
+        }
+        val readableName = exType.readableName(element)
+        val inlayInfo = InlayInfo(readableName, element.getIdentifier().endOffset)
         hints.add(inlayInfo)
     }
 

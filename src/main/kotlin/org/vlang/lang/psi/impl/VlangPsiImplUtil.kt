@@ -295,6 +295,16 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getMemberModifierList(o: VlangFieldsGroup): List<VlangMemberModifier> {
+        return o.memberModifiers?.memberModifierList ?: emptyList()
+    }
+
+    @JvmStatic
+    fun getMemberModifierList(o: VlangMembersGroup): List<VlangMemberModifier> {
+        return o.memberModifiers?.memberModifierList ?: emptyList()
+    }
+
+    @JvmStatic
     fun getType(o: VlangEmbeddedDefinition, context: ResolveState?): VlangType {
         return o.type
     }
@@ -331,8 +341,8 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun isMutable(o: VlangFieldDefinition): Boolean {
-        val group = o.parentOfType<VlangFieldsGroup>()
-        val modifiers = group?.memberModifiers?.memberModifierList
+        val group = o.parentOfType<VlangMemberModifiersOwner>()
+        val modifiers = group?.memberModifierList
         val withMutModifier = modifiers?.any { it.text == "mut" } ?: false
         if (withMutModifier) {
             return true

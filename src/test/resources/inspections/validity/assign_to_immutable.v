@@ -2,6 +2,17 @@ module validity
 
 const constant = 100
 
+interface IFoo {
+	immutable int
+mut:
+	mutable int
+}
+
+fn (b IFoo) foo() {
+	b.<warning descr="Immutable field 'immutable' cannot be reassigned">immutable</warning> = 100
+	b.mutable = 100
+}
+
 struct Boo {
 	name string
 mut:

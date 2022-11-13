@@ -4,6 +4,7 @@ enum class VlangPrimitiveTypes(val value: String, val size: Int, val numeric: Bo
     BOOL("bool", 1),
     BYTE("byte", 1),
     RUNE("rune" , 4),
+    CHAR("char" , 4),
     INT("int", 4, true),
     I8("i8", 1, true),
     I16("i16", 2, true),

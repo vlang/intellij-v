@@ -338,6 +338,7 @@ object DocumentationGenerator {
 
             part("const", asKeyword)
             part(name, asDeclaration)
+            part(getType(null)?.generateDoc(this@generateDoc) ?: DocumentationUtils.colorize("unknown", asDeclaration))
             part("=")
             append(expression?.generateDoc() ?: "unknown")
             append(DocumentationMarkup.DEFINITION_END)
@@ -521,7 +522,19 @@ object DocumentationGenerator {
                     }
                 }
 
-                else                  -> append(text.lines().firstOrNull()?.take(20) ?: "unknown")
+                else                  -> {
+                    val lines = text.lines()
+                    if (lines.isEmpty()) {
+                        append("no value")
+                        return@buildString
+                    }
+
+                    val firstLine = lines.first()
+                    append(firstLine.take(20))
+                    if (lines.size > 1 || firstLine.length > 20) {
+                        append("...")
+                    }
+                }
             }
         }
     }

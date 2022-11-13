@@ -140,6 +140,12 @@ The plugin provides support for V language
                         implementationClass="org.vlang.ide.inspections.general.VlangUnresolvedReferenceInspection"/>
 
         <localInspection language="vlang" groupPath="V"
+                        groupName="General" shortName="VlangUnresolvedImportInspection"
+                        displayName="Unresolved import"
+                        enabledByDefault="false" level="ERROR"
+                        implementationClass="org.vlang.ide.inspections.general.VlangUnresolvedImportInspection"/>
+
+        <localInspection language="vlang" groupPath="V"
                          groupName="General" shortName="VlangUnresolvedLabelInspection"
                          displayName="Unresolved label"
                          enabledByDefault="true" level="ERROR"

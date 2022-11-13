@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangMembersGroup extends VlangCompositeElement {
+public interface VlangMembersGroup extends VlangMemberModifiersOwner {
 
   @NotNull
   List<VlangEmbeddedInterfaceDefinition> getEmbeddedInterfaceDefinitionList();
@@ -24,5 +24,8 @@ public interface VlangMembersGroup extends VlangCompositeElement {
 
   @Nullable
   PsiElement getSemicolonSynthetic();
+
+  @NotNull
+  List<VlangMemberModifier> getMemberModifierList();
 
 }

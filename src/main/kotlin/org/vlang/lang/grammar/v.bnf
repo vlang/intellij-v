@@ -104,6 +104,8 @@
 
   implements("(Struct|Interface|Enum|GlobalVariable|Function|Method|TypeAlias|Const)Declaration|ModuleClause")="org.vlang.lang.psi.VlangAttributeOwner"
 
+  implements("(Fields|Members)Group")="org.vlang.lang.psi.VlangMemberModifiersOwner"
+
   extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
   extends("ModuleClause|Type")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
   extends("(Struct|TypeAlias|Union|Enum|Interface)Declaration|(Var|Label|Param|Field|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
@@ -389,7 +391,9 @@ StructType ::= (struct | union) identifier GenericArguments? '{' FieldsGroup* '}
   methods=[getFieldList getEmbeddedStructList isUnion]
 }
 
-FieldsGroup ::= WithModifiersFieldsGroup | WithoutModifiersFieldsGroup
+FieldsGroup ::= WithModifiersFieldsGroup | WithoutModifiersFieldsGroup {
+  methods=[getMemberModifierList]
+}
 
 MemberModifiers ::= MemberModifier* ':' {pin=2}
 MemberModifier ::= mut | pub | '__global'
@@ -425,7 +429,9 @@ InterfaceType ::= interface identifier GenericArguments? '{' MembersGroup* '}' {
   methods=[getFieldList getMethodList]
 }
 
-MembersGroup ::= WithModifiersMembersGroup | WithoutModifiersMemberGroup
+MembersGroup ::= WithModifiersMembersGroup | WithoutModifiersMemberGroup {
+  methods=[getMemberModifierList]
+}
 
 private WithModifiersMembersGroup ::= MemberModifiers semi? InterfaceMembers {pin=1}
 private WithoutModifiersMemberGroup ::= !MemberModifiers InterfaceMembers
