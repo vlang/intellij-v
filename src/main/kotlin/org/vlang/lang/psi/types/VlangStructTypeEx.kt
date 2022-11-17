@@ -18,25 +18,25 @@ class VlangStructTypeEx(raw: VlangStructType) : VlangBaseTypeEx<VlangStructType>
 
     override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {
         return when (rhs) {
-            is VlangAnyTypeEx         -> true
-            is VlangUnknownTypeEx     -> true
-            is VlangVoidPtrTypeEx     -> true
-            is VlangNullableTypeEx    -> if (rhs.inner == null) true else isAssignableFrom(rhs.inner, project)
-            is VlangNotNullableTypeEx -> if (rhs.inner == null) true else isAssignableFrom(rhs.inner, project)
-            is VlangPointerTypeEx     -> if (rhs.inner == null) true else isAssignableFrom(rhs.inner, project)
-            is VlangInterfaceTypeEx   -> {
+            is VlangAnyTypeEx       -> true
+            is VlangUnknownTypeEx   -> true
+            is VlangVoidPtrTypeEx   -> true
+            is VlangOptionTypeEx    -> if (rhs.inner == null) true else isAssignableFrom(rhs.inner, project)
+            is VlangResultTypeEx    -> if (rhs.inner == null) true else isAssignableFrom(rhs.inner, project)
+            is VlangPointerTypeEx   -> if (rhs.inner == null) true else isAssignableFrom(rhs.inner, project)
+            is VlangInterfaceTypeEx -> {
                 // TODO: Check for interface implementation
                 true
             }
 
-            is VlangStructTypeEx      -> {
+            is VlangStructTypeEx    -> {
                 val otherFqn = rhs.name
 
                 // Temp approach
                 return name == otherFqn
             }
 
-            else                      -> false
+            else                    -> false
         }
     }
 

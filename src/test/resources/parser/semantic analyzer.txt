@@ -1089,7 +1089,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('Node')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')
@@ -1736,7 +1736,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('Node')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')
@@ -2558,7 +2558,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('Node')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')
@@ -3049,7 +3049,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('Node')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')
@@ -4193,7 +4193,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('Node')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')
@@ -4361,7 +4361,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('Node')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')
@@ -4512,7 +4512,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('Node')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')
@@ -5881,7 +5881,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('int')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')
@@ -6613,7 +6613,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('Node')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')
@@ -6785,7 +6785,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('SemanticExpressionAnalyzeConfig')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')
@@ -7955,7 +7955,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('Node')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')
@@ -9295,7 +9295,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('Node')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')
@@ -10356,7 +10356,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('Node')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')
@@ -10894,7 +10894,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('Node')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')
@@ -11791,7 +11791,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('SemanticExpressionAnalyzeConfig')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')
@@ -12324,7 +12324,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('Node')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')
@@ -12732,7 +12732,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('Node')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')
@@ -12897,7 +12897,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('SemanticExpressionAnalyzeConfig')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')
@@ -13113,7 +13113,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('SemanticExpressionAnalyzeConfig')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')
@@ -14445,7 +14445,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('SemanticExpressionAnalyzeConfig')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')

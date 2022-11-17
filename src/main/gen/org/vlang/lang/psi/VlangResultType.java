@@ -5,9 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangNullableType extends VlangType {
+public interface VlangResultType extends VlangType {
 
   @NotNull
-  PsiElement getQuestion();
+  PsiElement getNot();
 
 }

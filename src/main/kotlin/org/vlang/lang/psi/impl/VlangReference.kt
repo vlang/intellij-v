@@ -186,14 +186,14 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             }
         }
 
-        if (typ is VlangNullableType) {
+        if (typ is VlangOptionType) {
             val baseType = typ.type
             if (baseType != null) {
                 return processType(baseType, processor, newState)
             }
         }
 
-        if (typ is VlangNotNullableType) {
+        if (typ is VlangResultType) {
             val baseType = typ.type
             if (baseType != null) {
                 return processType(baseType, processor, newState)
@@ -584,7 +584,8 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         val lambdaParams = functionType.getSignature()?.parameters?.paramDefinitionList ?: return true
         if (lambdaParams.size == 1) {
             val param = params.first { it.type is VlangFunctionType }
-            val functionTypeParam = (param.type as VlangFunctionType).getSignature()?.parameters?.paramDefinitionList?.firstOrNull() ?: return true
+            val functionTypeParam =
+                (param.type as VlangFunctionType).getSignature()?.parameters?.paramDefinitionList?.firstOrNull() ?: return true
 
             val searchName = functionTypeParam.name ?: ""
             val newState = state.put(SEARCH_NAME, searchName).put(ACTUAL_NAME, searchName)

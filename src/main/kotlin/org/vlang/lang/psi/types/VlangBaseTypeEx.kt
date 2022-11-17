@@ -50,17 +50,18 @@ abstract class VlangBaseTypeEx<T : VlangType?>(protected val raw: T) : VlangType
             }
 
             return when (type) {
-                is VlangEnumType        -> VlangEnumTypeEx(type)
-                is VlangInterfaceType   -> VlangInterfaceTypeEx(type)
-                is VlangNullableType    -> VlangNullableTypeEx(type)
-                is VlangNotNullableType -> VlangNotNullableTypeEx(type)
-                is VlangSharedType      -> VlangSharedTypeEx(type)
-                is VlangPointerType     -> VlangPointerTypeEx(type)
-                is VlangArrayType       -> VlangArrayTypeEx(type)
-                is VlangMapType         -> VlangMapTypeEx(type)
-                is VlangTupleType       -> VlangTupleTypeEx(type)
-                is VlangFunctionType    -> VlangFunctionTypeEx(type)
-                is VlangAliasType       -> {
+                is VlangEnumType      -> VlangEnumTypeEx(type)
+                is VlangInterfaceType -> VlangInterfaceTypeEx(type)
+                is VlangOptionType    -> VlangOptionTypeEx(type)
+                is VlangResultType    -> VlangResultTypeEx(type)
+                is VlangSharedType    -> VlangSharedTypeEx(type)
+                is VlangPointerType   -> VlangPointerTypeEx(type)
+                is VlangChannelType   -> VlangChannelTypeEx(type)
+                is VlangArrayType     -> VlangArrayTypeEx(type)
+                is VlangMapType       -> VlangMapTypeEx(type)
+                is VlangTupleType     -> VlangTupleTypeEx(type)
+                is VlangFunctionType  -> VlangFunctionTypeEx(type)
+                is VlangAliasType     -> {
                     if (type.isAlias) {
                         VlangAliasTypeEx(type)
                     } else {
@@ -68,7 +69,7 @@ abstract class VlangBaseTypeEx<T : VlangType?>(protected val raw: T) : VlangType
                     }
                 }
 
-                else                    -> {
+                else                  -> {
                     if (type.text == "any") {
                         return VlangAnyTypeEx(this)
                     }

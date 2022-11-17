@@ -31,7 +31,7 @@ object DocumentationGenerator {
             is VlangMapTypeEx       -> return typeEx.generateDoc(anchor)
             is VlangSharedTypeEx    -> return typeEx.generateDoc(anchor)
             is VlangPointerTypeEx   -> return typeEx.generateDoc(anchor)
-            is VlangNullableTypeEx  -> return typeEx.generateDoc(anchor)
+            is VlangOptionTypeEx    -> return typeEx.generateDoc(anchor)
             is VlangStructTypeEx    -> return typeEx.generateDoc(anchor)
             is VlangUnionTypeEx     -> return typeEx.generateDoc(anchor)
             is VlangEnumTypeEx      -> return typeEx.generateDoc(anchor)
@@ -94,7 +94,7 @@ object DocumentationGenerator {
         }
     }
 
-    fun VlangNullableTypeEx.generateDoc(anchor: PsiElement): String {
+    fun VlangOptionTypeEx.generateDoc(anchor: PsiElement): String {
         return buildString {
             append("?")
             appendNotNull(inner?.raw()?.generateDoc(anchor))

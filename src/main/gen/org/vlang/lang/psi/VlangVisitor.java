@@ -549,16 +549,12 @@ public class VlangVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
-  public void visitNotNullableType(@NotNull VlangNotNullableType o) {
-    visitType(o);
-  }
-
-  public void visitNullableType(@NotNull VlangNullableType o) {
-    visitType(o);
-  }
-
   public void visitOffsetOfCallExpr(@NotNull VlangOffsetOfCallExpr o) {
     visitExpression(o);
+  }
+
+  public void visitOptionType(@NotNull VlangOptionType o) {
+    visitType(o);
   }
 
   public void visitOrBlockExpr(@NotNull VlangOrBlockExpr o) {
@@ -610,6 +606,10 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitResult(@NotNull VlangResult o) {
     visitCompositeElement(o);
+  }
+
+  public void visitResultType(@NotNull VlangResultType o) {
+    visitType(o);
   }
 
   public void visitReturnStatement(@NotNull VlangReturnStatement o) {

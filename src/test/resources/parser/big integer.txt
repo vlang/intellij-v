@@ -1401,7 +1401,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('string')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')
@@ -1460,7 +1460,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('u32')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')
@@ -1657,7 +1657,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('u32')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')

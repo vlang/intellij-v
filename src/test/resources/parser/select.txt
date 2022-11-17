@@ -454,7 +454,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('string')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')
@@ -834,7 +834,7 @@ V Language file
                 PsiElement(VlangTokenType.()('(')
                 PsiElement(VlangTokenType.))(')')
               RESULT
-                NULLABLE_TYPE
+                OPTION_TYPE
                   TYPE_MODIFIERS
                     <empty list>
                   PsiElement(VlangTokenType.?)('?')
@@ -851,7 +851,7 @@ V Language file
                 PsiElement(VlangTokenType.()('(')
                 PsiElement(VlangTokenType.))(')')
               RESULT
-                NULLABLE_TYPE
+                OPTION_TYPE
                   TYPE_MODIFIERS
                     <empty list>
                   PsiElement(VlangTokenType.?)('?')
@@ -1429,7 +1429,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('ResponseWriter')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')
@@ -4284,7 +4284,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('bool')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')
@@ -4765,7 +4765,7 @@ V Language file
         PsiElement(VlangTokenType.()('(')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')

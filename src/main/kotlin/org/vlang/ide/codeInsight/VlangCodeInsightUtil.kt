@@ -5,17 +5,23 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.*
+import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.types.VlangPrimitiveTypes
 import org.vlang.utils.parentNth
 
 object VlangCodeInsightUtil {
     const val BUILTIN_MODULE = "builtin"
+    private const val ERR_VARIABLE = "err"
+
+    fun isErrVariable(element: PsiElement): Boolean {
+        return element.elementType == VlangTypes.IDENTIFIER && element.text == ERR_VARIABLE
+    }
 
     fun ownerPresentableName(element: VlangNamedElement): String? {
         val owner = element.getOwner()
         if (owner is VlangFile) {
-            return "module " +  owner.getModuleQualifiedName()
+            return "module " + owner.getModuleQualifiedName()
         } else if (owner !is VlangNamedElement) {
             return null
         }

@@ -673,8 +673,8 @@ private TypeLit ::=
   | SharedType
   | NoneType
   | PointerType
-  | NullableType
-  | NotNullableType
+  | OptionType
+  | ResultType
   | FunctionType
   | ChannelType
   | ThreadType
@@ -702,10 +702,10 @@ NoneType ::= none
 PointerType ::= ('&' | '&&')+ Type {pin=1}
 // !<type>
 // bare !
-NotNullableType ::= '!' Type? {pin=1}
+ResultType ::= '!' Type? {pin=1}
 // ?<type>
 // bare ?
-NullableType ::= '?' Type? {pin=1}
+OptionType ::= '?' Type? {pin=1}
 // fn (...) <type>
 // fn (...) (<type1>, <type2>, ...)
 FunctionType ::= fn Signature {
@@ -833,7 +833,9 @@ JsonArgumentList ::= '(' <<enterMode "PAR">> Type ','? ElementList? '...'? ','? 
 // <expr>[..10]
 // <expr>[0..]
 // <expr>[..]
-left IndexOrSliceExpr ::= ('[' | '#[') IndexOrSliceInner ']' !identifier
+left IndexOrSliceExpr ::= ('[' | '#[') IndexOrSliceInner ']' !identifier {
+  methods=[isSlice]
+}
 private IndexOrSliceInner ::= EmptySlice | ((SliceExprBody | IndexExprBody) '..'?)
 EmptySlice ::= '..' &']'
 private IndexExprBody ::= Expression SliceExprBody?

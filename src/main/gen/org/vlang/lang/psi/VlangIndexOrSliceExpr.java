@@ -34,4 +34,6 @@ public interface VlangIndexOrSliceExpr extends VlangExpression {
   @NotNull
   PsiElement getRbrack();
 
+  boolean isSlice();
+
 }

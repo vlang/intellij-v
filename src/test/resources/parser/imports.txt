@@ -4190,7 +4190,7 @@ V Language file
               PsiElement(VlangTokenType.identifier)('C.TSRange')
         PsiElement(VlangTokenType.))(')')
       RESULT
-        NULLABLE_TYPE
+        OPTION_TYPE
           TYPE_MODIFIERS
             <empty list>
           PsiElement(VlangTokenType.?)('?')

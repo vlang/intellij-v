@@ -81,4 +81,9 @@ public class VlangIndexOrSliceExprImpl extends VlangExpressionImpl implements Vl
     return notNullChild(findChildByType(RBRACK));
   }
 
+  @Override
+  public boolean isSlice() {
+    return VlangPsiImplUtil.isSlice(this);
+  }
+
 }

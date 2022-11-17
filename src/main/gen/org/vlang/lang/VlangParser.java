@@ -42,8 +42,8 @@ public class VlangParser implements PsiParser, LightPsiParser {
       SQL_INSERT_STATEMENT, SQL_SELECT_STATEMENT, SQL_UPDATE_STATEMENT),
     create_token_set_(ALIAS_TYPE, ANONYMOUS_STRUCT_TYPE, ARRAY_TYPE, ATOMIC_TYPE,
       CHANNEL_TYPE, ENUM_TYPE, FIXED_SIZE_ARRAY_TYPE, FUNCTION_TYPE,
-      INTERFACE_TYPE, MAP_TYPE, NONE_TYPE, NOT_NULLABLE_TYPE,
-      NULLABLE_TYPE, POINTER_TYPE, SHARED_TYPE, STRUCT_TYPE,
+      INTERFACE_TYPE, MAP_TYPE, NONE_TYPE, OPTION_TYPE,
+      POINTER_TYPE, RESULT_TYPE, SHARED_TYPE, STRUCT_TYPE,
       THREAD_TYPE, TUPLE_TYPE, TYPE),
     create_token_set_(ASM_BLOCK_STATEMENT, ASSERT_STATEMENT, ASSIGNMENT_STATEMENT, BREAK_STATEMENT,
       COMPILE_ELSE_STATEMENT, COMPILE_TIME_FOR_STATEMENT, COMPILE_TIME_IF_STATEMENT, CONTINUE_STATEMENT,
@@ -3763,48 +3763,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '!' Type?
-  public static boolean NotNullableType(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "NotNullableType")) return false;
-    if (!nextTokenIs(b, NOT)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, NOT_NULLABLE_TYPE, null);
-    r = consumeToken(b, NOT);
-    p = r; // pin = 1
-    r = r && NotNullableType_1(b, l + 1);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  // Type?
-  private static boolean NotNullableType_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "NotNullableType_1")) return false;
-    Type(b, l + 1);
-    return true;
-  }
-
-  /* ********************************************************** */
-  // '?' Type?
-  public static boolean NullableType(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "NullableType")) return false;
-    if (!nextTokenIs(b, QUESTION)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, NULLABLE_TYPE, null);
-    r = consumeToken(b, QUESTION);
-    p = r; // pin = 1
-    r = r && NullableType_1(b, l + 1);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  // Type?
-  private static boolean NullableType_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "NullableType_1")) return false;
-    Type(b, l + 1);
-    return true;
-  }
-
-  /* ********************************************************** */
   // offsetof '(' Type ',' ReferenceExpression ')'
   public static boolean OffsetOfCallExpr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "OffsetOfCallExpr")) return false;
@@ -3819,6 +3777,27 @@ public class VlangParser implements PsiParser, LightPsiParser {
     r = p && consumeToken(b, RPAREN) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
+  }
+
+  /* ********************************************************** */
+  // '?' Type?
+  public static boolean OptionType(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "OptionType")) return false;
+    if (!nextTokenIs(b, QUESTION)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, OPTION_TYPE, null);
+    r = consumeToken(b, QUESTION);
+    p = r; // pin = 1
+    r = r && OptionType_1(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // Type?
+  private static boolean OptionType_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "OptionType_1")) return false;
+    Type(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -4236,6 +4215,27 @@ public class VlangParser implements PsiParser, LightPsiParser {
     r = Type(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
+  }
+
+  /* ********************************************************** */
+  // '!' Type?
+  public static boolean ResultType(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ResultType")) return false;
+    if (!nextTokenIs(b, NOT)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, RESULT_TYPE, null);
+    r = consumeToken(b, NOT);
+    p = r; // pin = 1
+    r = r && ResultType_1(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // Type?
+  private static boolean ResultType_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ResultType_1")) return false;
+    Type(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -5740,8 +5740,8 @@ public class VlangParser implements PsiParser, LightPsiParser {
   //   | SharedType
   //   | NoneType
   //   | PointerType
-  //   | NullableType
-  //   | NotNullableType
+  //   | OptionType
+  //   | ResultType
   //   | FunctionType
   //   | ChannelType
   //   | ThreadType
@@ -5759,8 +5759,8 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = SharedType(b, l + 1);
     if (!r) r = NoneType(b, l + 1);
     if (!r) r = PointerType(b, l + 1);
-    if (!r) r = NullableType(b, l + 1);
-    if (!r) r = NotNullableType(b, l + 1);
+    if (!r) r = OptionType(b, l + 1);
+    if (!r) r = ResultType(b, l + 1);
     if (!r) r = FunctionType(b, l + 1);
     if (!r) r = ChannelType(b, l + 1);
     if (!r) r = ThreadType(b, l + 1);

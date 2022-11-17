@@ -12,19 +12,19 @@ import org.vlang.lang.psi.*;
 import com.intellij.psi.stubs.IStubElementType;
 import org.vlang.lang.stubs.VlangTypeStub;
 
-public class VlangNullableTypeImpl extends VlangTypeImpl implements VlangNullableType {
+public class VlangResultTypeImpl extends VlangTypeImpl implements VlangResultType {
 
-  public VlangNullableTypeImpl(@NotNull VlangTypeStub stub, @NotNull IStubElementType<?, ?> type) {
+  public VlangResultTypeImpl(@NotNull VlangTypeStub stub, @NotNull IStubElementType<?, ?> type) {
     super(stub, type);
   }
 
-  public VlangNullableTypeImpl(@NotNull ASTNode node) {
+  public VlangResultTypeImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitNullableType(this);
+    visitor.visitResultType(this);
   }
 
   @Override
@@ -35,8 +35,8 @@ public class VlangNullableTypeImpl extends VlangTypeImpl implements VlangNullabl
 
   @Override
   @NotNull
-  public PsiElement getQuestion() {
-    return notNullChild(findChildByType(QUESTION));
+  public PsiElement getNot() {
+    return notNullChild(findChildByType(NOT));
   }
 
 }

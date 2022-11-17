@@ -25,8 +25,8 @@ object VlangElementTypeFactory {
             put("ANONYMOUS_STRUCT_TYPE", VlangAnonymousStructTypeImpl::class.java)
             put("STRUCT_TYPE", VlangStructTypeImpl::class.java)
             put("TYPE", VlangTypeImpl::class.java)
-            put("NOT_NULLABLE_TYPE", VlangNotNullableTypeImpl::class.java)
-            put("NULLABLE_TYPE", VlangNullableTypeImpl::class.java)
+            put("RESULT_TYPE", VlangResultTypeImpl::class.java)
+            put("OPTION_TYPE", VlangOptionTypeImpl::class.java)
             put("ALIAS_TYPE", VlangAliasTypeImpl::class.java)
         }
     }

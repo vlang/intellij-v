@@ -142,9 +142,8 @@ public interface VlangTypes {
   IElementType NONE_TYPE = VlangElementTypeFactory.stubFactory("NONE_TYPE");
   IElementType NOT_IN_EXPRESSION = new VlangCompositeElementType("NOT_IN_EXPRESSION");
   IElementType NOT_IS_EXPRESSION = new VlangCompositeElementType("NOT_IS_EXPRESSION");
-  IElementType NOT_NULLABLE_TYPE = VlangElementTypeFactory.stubFactory("NOT_NULLABLE_TYPE");
-  IElementType NULLABLE_TYPE = VlangElementTypeFactory.stubFactory("NULLABLE_TYPE");
   IElementType OFFSET_OF_CALL_EXPR = new VlangCompositeElementType("OFFSET_OF_CALL_EXPR");
+  IElementType OPTION_TYPE = VlangElementTypeFactory.stubFactory("OPTION_TYPE");
   IElementType OR_BLOCK_EXPR = new VlangCompositeElementType("OR_BLOCK_EXPR");
   IElementType OR_EXPR = new VlangCompositeElementType("OR_EXPR");
   IElementType PARAMETERS = new VlangCompositeElementType("PARAMETERS");
@@ -157,6 +156,7 @@ public interface VlangTypes {
   IElementType RECEIVER = VlangElementTypeFactory.stubFactory("RECEIVER");
   IElementType REFERENCE_EXPRESSION = new VlangCompositeElementType("REFERENCE_EXPRESSION");
   IElementType RESULT = new VlangCompositeElementType("RESULT");
+  IElementType RESULT_TYPE = VlangElementTypeFactory.stubFactory("RESULT_TYPE");
   IElementType RETURN_STATEMENT = new VlangCompositeElementType("RETURN_STATEMENT");
   IElementType SELECTIVE_IMPORT_LIST = new VlangCompositeElementType("SELECTIVE_IMPORT_LIST");
   IElementType SELECT_ARM = new VlangCompositeElementType("SELECT_ARM");
@@ -748,14 +748,11 @@ public interface VlangTypes {
       else if (type == NOT_IS_EXPRESSION) {
         return new VlangNotIsExpressionImpl(node);
       }
-      else if (type == NOT_NULLABLE_TYPE) {
-        return new VlangNotNullableTypeImpl(node);
-      }
-      else if (type == NULLABLE_TYPE) {
-        return new VlangNullableTypeImpl(node);
-      }
       else if (type == OFFSET_OF_CALL_EXPR) {
         return new VlangOffsetOfCallExprImpl(node);
+      }
+      else if (type == OPTION_TYPE) {
+        return new VlangOptionTypeImpl(node);
       }
       else if (type == OR_BLOCK_EXPR) {
         return new VlangOrBlockExprImpl(node);
@@ -792,6 +789,9 @@ public interface VlangTypes {
       }
       else if (type == RESULT) {
         return new VlangResultImpl(node);
+      }
+      else if (type == RESULT_TYPE) {
+        return new VlangResultTypeImpl(node);
       }
       else if (type == RETURN_STATEMENT) {
         return new VlangReturnStatementImpl(node);
