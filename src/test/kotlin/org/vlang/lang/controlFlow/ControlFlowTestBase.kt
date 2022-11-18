@@ -31,16 +31,25 @@ class ControlFlowTestBase : BasePlatformTestCase() {
         }
         """,
         """
-        p:-     s:-      0: ENTRY_POINT
-        p:0     s:-      1: VARIABLE_DECLARATION a
-        p:1     s:-      2: ACCESS_VARIABLE (WRITE) a
-        p:2     s:-      3: HOST
-        p:3     s:-      4: CONDITION(true, CONDITIONAL_EXPR) 
-        p:4     s:-      5: ACCESS_VARIABLE (WRITE) a
-        p:5     s:-      6: RETURN 100
-        p:3     s:-      7: CONDITION(false, CONDITIONAL_EXPR) 
-        p:7     s:-      8: ACCESS_VARIABLE (WRITE) a
-        p:6, 8  s:-      9: EXIT_POINT
+p:-     s:-      0: ENTRY_POINT
+p:0     s:-      1: STATEMENT a := 100
+p:1     s:-      2: VARIABLE_DECLARATION a
+p:2     s:-      3: STATEMENT a = 100
+p:3     s:-      4: ACCESS_VARIABLE (WRITE) a
+p:4     s:-      5: STATEMENT if a == 100 {
+p:5     s:-      6: ACCESS_VARIABLE (READ) a
+p:6     s:-      7: HOST
+p:7     s:-      8: CONDITION(true, CONDITIONAL_EXPR) 
+p:8     s:-      9: STATEMENT a = 200
+p:9     s:-     10: ACCESS_VARIABLE (WRITE) a
+p:10    s:-     11: STATEMENT return 100
+p:11    s:-     12: RETURN 100
+p:7     s:-     13: CONDITION(false, CONDITIONAL_EXPR) 
+p:13    s:-     14: STATEMENT return 200
+p:14    s:-     15: RETURN 200
+p:-     s:-     16: STATEMENT a = 300
+p:16    s:-     17: ACCESS_VARIABLE (WRITE) a
+p:12, 15, 17 s:-     18: EXIT_POINT
         """
     )
 
@@ -228,22 +237,23 @@ p:1     s:-      2: VARIABLE_DECLARATION a
 p:2     s:-      3: STATEMENT b := 100
 p:3     s:-      4: VARIABLE_DECLARATION b
 p:4     s:-      5: STATEMENT if b == 10 {
-p:5     s:-      6: HOST
-p:6     s:-      7: CONDITION(true, CONDITIONAL_EXPR) 
-p:7     s:-      8: STATEMENT return 100
-p:8     s:-      9: RETURN 100
-p:6     s:-     10: CONDITION(false, CONDITIONAL_EXPR) 
-p:10    s:-     11: STATEMENT return 100
-p:11    s:-     12: RETURN 100
-p:9, 12 s:-     13: STATEMENT defer {
-p:13    s:-     14: STATEMENT a = 200
-p:14    s:-     15: ACCESS_VARIABLE (WRITE) a
-p:15    s:-     16: DEFER
-p:16    s:-     17: STATEMENT defer {
-p:17    s:-     18: STATEMENT b = 300
-p:18    s:-     19: ACCESS_VARIABLE (WRITE) b
-p:19    s:-     20: DEFER
-p:20    s:-     21: EXIT_POINT
+p:5     s:-      6: ACCESS_VARIABLE (READ) b
+p:6     s:-      7: HOST
+p:7     s:-      8: CONDITION(true, CONDITIONAL_EXPR) 
+p:8     s:-      9: STATEMENT return 100
+p:9     s:-     10: RETURN 100
+p:7     s:-     11: CONDITION(false, CONDITIONAL_EXPR) 
+p:11    s:-     12: STATEMENT return 100
+p:12    s:-     13: RETURN 100
+p:10, 13 s:-     14: STATEMENT defer {
+p:14    s:-     15: STATEMENT a = 200
+p:15    s:-     16: ACCESS_VARIABLE (WRITE) a
+p:16    s:-     17: DEFER
+p:17    s:-     18: STATEMENT defer {
+p:18    s:-     19: STATEMENT b = 300
+p:19    s:-     20: ACCESS_VARIABLE (WRITE) b
+p:20    s:-     21: DEFER
+p:21    s:-     22: EXIT_POINT
         """.trimIndent()
     )
 

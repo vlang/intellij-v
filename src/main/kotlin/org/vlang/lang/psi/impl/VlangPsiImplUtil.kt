@@ -696,7 +696,7 @@ object VlangPsiImplUtil {
         val lastStatement = o.sqlBlock.sqlBlockStatementList.lastOrNull() ?: return null
         if (lastStatement is VlangSqlSelectStatement) {
             if (lastStatement.sqlSelectCountClause != null) {
-                return getBuiltinType("int", lastStatement)
+                return VlangBuiltinTypesUtil.getInstance(o.project).int
             }
 
             val tableRef = VlangSqlUtil.getTable(lastStatement) ?: return null
@@ -1080,13 +1080,14 @@ object VlangPsiImplUtil {
         if (type == null) return null
 
         val exType = type.toEx()
+        val builtins = { VlangBuiltinTypesUtil.getInstance(type.project) }
 
         if (exType is VlangOptionTypeEx) {
-            val inner = exType.inner ?: return getBuiltinType("void", type)
+            val inner = exType.inner ?: return builtins().void
             return inner.raw()
         }
         if (exType is VlangResultTypeEx) {
-            val inner = exType.inner ?: return getBuiltinType("void", type)
+            val inner = exType.inner ?: return builtins().void
             return inner.raw()
         }
 
