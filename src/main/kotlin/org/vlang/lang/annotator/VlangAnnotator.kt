@@ -177,7 +177,7 @@ class VlangAnnotator : Annotator {
         return if (element.isPublic()) ifPublic else ifNotPublic
     }
 
-    private fun mutable(element: VlangMutable, ifMutable: VlangColor, ifNoMutable: VlangColor): VlangColor {
+    private fun mutable(element: VlangMutabilityOwner, ifMutable: VlangColor, ifNoMutable: VlangColor): VlangColor {
         return if (element.isMutable()) ifMutable else ifNoMutable
     }
 }

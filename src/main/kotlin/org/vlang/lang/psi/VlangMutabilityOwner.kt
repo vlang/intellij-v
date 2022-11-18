@@ -1,6 +1,7 @@
 package org.vlang.lang.psi
 
-interface VlangMutable : VlangCompositeElement {
+interface VlangMutabilityOwner : VlangCompositeElement {
     fun isMutable(): Boolean
     fun makeMutable()
+    fun makeImmutable()
 }

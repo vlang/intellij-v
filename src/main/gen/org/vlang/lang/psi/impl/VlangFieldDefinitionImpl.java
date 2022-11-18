@@ -73,6 +73,11 @@ public class VlangFieldDefinitionImpl extends VlangNamedElementImpl<VlangFieldDe
   }
 
   @Override
+  public void makeImmutable() {
+    VlangPsiImplUtil.makeImmutable(this);
+  }
+
+  @Override
   @NotNull
   public VlangNamedElement getOwner() {
     return VlangPsiImplUtil.getOwner(this);

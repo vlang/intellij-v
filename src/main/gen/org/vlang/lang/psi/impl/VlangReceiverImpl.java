@@ -84,4 +84,9 @@ public class VlangReceiverImpl extends VlangNamedElementImpl<VlangReceiverStub> 
     VlangPsiImplUtil.makeMutable(this);
   }
 
+  @Override
+  public void makeImmutable() {
+    VlangPsiImplUtil.makeImmutable(this);
+  }
+
 }

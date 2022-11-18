@@ -80,6 +80,11 @@ public class VlangVarDefinitionImpl extends VlangNamedElementImpl<VlangVarDefini
   }
 
   @Override
+  public void makeImmutable() {
+    VlangPsiImplUtil.makeImmutable(this);
+  }
+
+  @Override
   public boolean isCaptured(@NotNull PsiElement original) {
     return VlangPsiImplUtil.isCaptured(this, original);
   }

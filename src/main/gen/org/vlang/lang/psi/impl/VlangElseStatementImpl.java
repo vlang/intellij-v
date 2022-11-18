@@ -39,4 +39,10 @@ public class VlangElseStatementImpl extends VlangStatementImpl implements VlangE
     return notNullChild(findChildByType(ELSE));
   }
 
+  @Override
+  @Nullable
+  public VlangBlock getBlock() {
+    return VlangPsiImplUtil.getBlock(this);
+  }
+
 }

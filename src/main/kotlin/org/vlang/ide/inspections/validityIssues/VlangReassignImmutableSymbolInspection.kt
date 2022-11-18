@@ -67,7 +67,7 @@ class VlangReassignImmutableSymbolInspection : VlangBaseInspection() {
 
             override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
                 val ref = descriptor.psiElement as? VlangReferenceExpression ?: return
-                val resolved = ref.resolve() as? VlangMutable ?: return
+                val resolved = ref.resolve() as? VlangMutabilityOwner ?: return
                 resolved.makeMutable()
             }
         }

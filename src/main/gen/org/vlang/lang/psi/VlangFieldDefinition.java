@@ -8,7 +8,7 @@ import com.intellij.psi.StubBasedPsiElement;
 import org.vlang.lang.stubs.VlangFieldDefinitionStub;
 import com.intellij.psi.ResolveState;
 
-public interface VlangFieldDefinition extends VlangMutable, VlangNamedElement, StubBasedPsiElement<VlangFieldDefinitionStub> {
+public interface VlangFieldDefinition extends VlangMutabilityOwner, VlangNamedElement, StubBasedPsiElement<VlangFieldDefinitionStub> {
 
   @NotNull
   PsiElement getIdentifier();
@@ -27,6 +27,8 @@ public interface VlangFieldDefinition extends VlangMutable, VlangNamedElement, S
   boolean isMutable();
 
   void makeMutable();
+
+  void makeImmutable();
 
   @NotNull
   VlangNamedElement getOwner();

@@ -9,7 +9,7 @@ import org.vlang.lang.stubs.VlangVarDefinitionStub;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 
-public interface VlangVarDefinition extends VlangMutable, VlangNamedElement, StubBasedPsiElement<VlangVarDefinitionStub> {
+public interface VlangVarDefinition extends VlangMutabilityOwner, VlangNamedElement, StubBasedPsiElement<VlangVarDefinitionStub> {
 
   @Nullable
   VlangVarModifiers getVarModifiers();
@@ -31,6 +31,8 @@ public interface VlangVarDefinition extends VlangMutable, VlangNamedElement, Stu
   boolean isPublic();
 
   void makeMutable();
+
+  void makeImmutable();
 
   boolean isCaptured(@NotNull PsiElement original);
 

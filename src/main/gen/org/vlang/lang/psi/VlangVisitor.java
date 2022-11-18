@@ -239,7 +239,7 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitFieldDefinition(@NotNull VlangFieldDefinition o) {
-    visitMutable(o);
+    visitMutabilityOwner(o);
     // visitNamedElement(o);
   }
 
@@ -295,6 +295,7 @@ public class VlangVisitor extends PsiElementVisitor {
     visitSignatureOwner(o);
     // visitFunctionOrMethodDeclaration(o);
     // visitAttributeOwner(o);
+    // visitScopeHolder(o);
   }
 
   public void visitFunctionLit(@NotNull VlangFunctionLit o) {
@@ -566,7 +567,7 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitParamDefinition(@NotNull VlangParamDefinition o) {
-    visitMutable(o);
+    visitMutabilityOwner(o);
     // visitNamedElement(o);
   }
 
@@ -595,7 +596,7 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitReceiver(@NotNull VlangReceiver o) {
-    visitMutable(o);
+    visitMutabilityOwner(o);
     // visitNamedElement(o);
   }
 
@@ -865,7 +866,7 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitVarDefinition(@NotNull VlangVarDefinition o) {
-    visitMutable(o);
+    visitMutabilityOwner(o);
     // visitNamedElement(o);
   }
 
@@ -885,7 +886,7 @@ public class VlangVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitMutable(@NotNull VlangMutable o) {
+  public void visitMutabilityOwner(@NotNull VlangMutabilityOwner o) {
     visitCompositeElement(o);
   }
 

@@ -8,7 +8,7 @@ import com.intellij.psi.StubBasedPsiElement;
 import org.vlang.lang.stubs.VlangReceiverStub;
 import com.intellij.psi.ResolveState;
 
-public interface VlangReceiver extends VlangMutable, VlangNamedElement, StubBasedPsiElement<VlangReceiverStub> {
+public interface VlangReceiver extends VlangMutabilityOwner, VlangNamedElement, StubBasedPsiElement<VlangReceiverStub> {
 
   @Nullable
   VlangType getType();
@@ -33,5 +33,7 @@ public interface VlangReceiver extends VlangMutable, VlangNamedElement, StubBase
   boolean isMutable();
 
   void makeMutable();
+
+  void makeImmutable();
 
 }

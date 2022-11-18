@@ -266,6 +266,20 @@ The plugin provides support for V language
                          implementationClass="org.vlang.ide.inspections.unused.VlangUnusedImportInspection"/>
         <!-- Unused inspections End -->
 
+        <!-- Control flow inspections EXPERIMENTAL -->
+        <localInspection language="vlang" groupPath="V"
+                         groupName="Control flow" shortName="VlangUnreachableStatementInspection"
+                         displayName="Unreachable statement"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="org.vlang.ide.inspections.controlFlow.VlangUnreachableStatementInspection"/>
+
+        <localInspection language="vlang" groupPath="V"
+                         groupName="Control flow" shortName="VlangVariableCanBeImmutableInspection"
+                         displayName="Variable can be immutable"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="org.vlang.ide.inspections.controlFlow.VlangVariableCanBeImmutableInspection"/>
+        <!-- Control flow inspections End -->
+
         <!-- Intentions -->
         <intentionAction>
             <className>org.vlang.ide.intentions.VlangMethodToFunctionIntention</className>

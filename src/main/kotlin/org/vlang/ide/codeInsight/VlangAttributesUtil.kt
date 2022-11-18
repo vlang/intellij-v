@@ -9,6 +9,11 @@ object VlangAttributesUtil {
         return expr.text == "translated"
     }
 
+    fun isNoReturn(attribute: VlangAttribute): Boolean {
+        val expr = attribute.attributeExpressionList.firstOrNull() ?: return false
+        return expr.text == "noreturn"
+    }
+
     fun isMinifiedStruct(struct: VlangStructDeclaration): Boolean {
         return struct.attributes?.attributeList?.any {
             it.attributeExpressionList.any { expr -> expr.textMatches("minify") }

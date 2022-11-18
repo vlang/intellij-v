@@ -13,4 +13,7 @@ public interface VlangElseStatement extends VlangStatement {
   @NotNull
   PsiElement getElse();
 
+  @Nullable
+  VlangBlock getBlock();
+
 }

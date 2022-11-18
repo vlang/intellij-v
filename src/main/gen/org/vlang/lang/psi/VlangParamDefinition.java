@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import org.vlang.lang.stubs.VlangParamDefinitionStub;
 
-public interface VlangParamDefinition extends VlangMutable, VlangNamedElement, StubBasedPsiElement<VlangParamDefinitionStub> {
+public interface VlangParamDefinition extends VlangMutabilityOwner, VlangNamedElement, StubBasedPsiElement<VlangParamDefinitionStub> {
 
   @NotNull
   VlangType getType();
@@ -31,5 +31,7 @@ public interface VlangParamDefinition extends VlangMutable, VlangNamedElement, S
   boolean isMutable();
 
   void makeMutable();
+
+  void makeImmutable();
 
 }

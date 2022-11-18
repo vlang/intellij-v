@@ -19,6 +19,7 @@ import org.vlang.ide.codeInsight.VlangBuiltinTypesUtil
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.ide.codeInsight.VlangTypeInferenceUtil
 import org.vlang.lang.VlangTypes
+import org.vlang.lang.codeInsight.controlFlow.VlangControlFlow
 import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangReferenceBase.Companion.LOCAL_RESOLVE
@@ -37,6 +38,23 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun isDefinition(o: VlangFunctionDeclaration): Boolean {
         return o.getBlock() == null
+    }
+
+    @JvmStatic
+    fun isNoReturn(o: VlangFunctionDeclaration): Boolean {
+        return o.attributes?.attributeList?.any {
+            VlangAttributesUtil.isNoReturn(it)
+        } == true
+    }
+
+    @JvmStatic
+    fun scope(o: VlangFunctionDeclaration): VlangScope {
+        return VlangScopeImpl(o)
+    }
+
+    @JvmStatic
+    fun controlFlow(o: VlangFunctionDeclaration): VlangControlFlow {
+        return o.scope().controlFlow()
     }
 
     @JvmStatic
@@ -358,6 +376,11 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun makeImmutable(o: VlangFieldDefinition) {
+        // TODO: implement
+    }
+
+    @JvmStatic
     fun isPublic(o: VlangFieldDefinition): Boolean {
         if (o.parentOfType<VlangInterfaceType>() != null) {
             return true
@@ -501,6 +524,11 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun getReference(o: VlangTypeReferenceExpression): VlangReference {
         return VlangReference(o, forTypes = true)
+    }
+
+    @JvmStatic
+    fun getBlock(o: VlangElseStatement): VlangBlock? {
+        return o.childrenOfType<VlangBlock>().firstOrNull()
     }
 
     @JvmStatic
@@ -1100,6 +1128,11 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun makeImmutable(o: VlangParamDefinition) {
+        makeImmutable(o.varModifiers)
+    }
+
+    @JvmStatic
     fun getName(o: VlangVarDefinition): String {
         return o.getIdentifier().text
     }
@@ -1107,6 +1140,11 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun makeMutable(o: VlangVarDefinition) {
         makeMutable(o.project, o.varModifiers)
+    }
+
+    @JvmStatic
+    fun makeImmutable(o: VlangVarDefinition) {
+        makeImmutable(o.varModifiers)
     }
 
     @JvmStatic
@@ -1145,6 +1183,11 @@ object VlangPsiImplUtil {
         makeMutable(o.project, o.varModifiers)
     }
 
+    @JvmStatic
+    fun makeImmutable(o: VlangReceiver) {
+        makeImmutable(o.varModifiers)
+    }
+
     private fun makeMutable(project: Project, varModifiers: VlangVarModifiers?) {
         val modifiers = varModifiers ?: return
         val mutModifier = VlangElementFactory.createVarModifiers(project, "mut")
@@ -1156,6 +1199,12 @@ object VlangPsiImplUtil {
             modifiers.add(space)
             modifiers.add(mutModifier.firstChild)
         }
+    }
+
+    private fun makeImmutable(varModifiers: VlangVarModifiers?) {
+        val modifiers = varModifiers ?: return
+        val modifier = modifiers.varModifierList.find { it.text == "mut" }
+        modifier?.delete()
     }
 
     @JvmStatic

@@ -82,4 +82,9 @@ public class VlangParamDefinitionImpl extends VlangNamedElementImpl<VlangParamDe
     VlangPsiImplUtil.makeMutable(this);
   }
 
+  @Override
+  public void makeImmutable() {
+    VlangPsiImplUtil.makeImmutable(this);
+  }
+
 }

@@ -8,7 +8,7 @@ import com.intellij.psi.StubBasedPsiElement;
 import org.vlang.lang.stubs.VlangFunctionDeclarationStub;
 import com.intellij.psi.ResolveState;
 
-public interface VlangFunctionDeclaration extends VlangSignatureOwner, VlangFunctionOrMethodDeclaration, VlangAttributeOwner, StubBasedPsiElement<VlangFunctionDeclarationStub> {
+public interface VlangFunctionDeclaration extends VlangSignatureOwner, VlangFunctionOrMethodDeclaration, VlangAttributeOwner, VlangScopeHolder, StubBasedPsiElement<VlangFunctionDeclarationStub> {
 
   @Nullable
   VlangAttributes getAttributes();
@@ -38,5 +38,7 @@ public interface VlangFunctionDeclaration extends VlangSignatureOwner, VlangFunc
   VlangType getTypeInner(@Nullable ResolveState context);
 
   boolean isDefinition();
+
+  boolean isNoReturn();
 
 }

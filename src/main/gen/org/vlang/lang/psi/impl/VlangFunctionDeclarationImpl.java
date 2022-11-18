@@ -8,12 +8,12 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
-import org.vlang.lang.stubs.VlangFunctionDeclarationStub;
 import org.vlang.lang.psi.*;
 import com.intellij.psi.ResolveState;
+import org.vlang.lang.stubs.VlangFunctionDeclarationStub;
 import com.intellij.psi.stubs.IStubElementType;
 
-public class VlangFunctionDeclarationImpl extends VlangFunctionOrMethodDeclarationImpl<VlangFunctionDeclarationStub> implements VlangFunctionDeclaration {
+public class VlangFunctionDeclarationImpl extends VlangFunctionOrMethodDeclarationWithScopeHolder implements VlangFunctionDeclaration {
 
   public VlangFunctionDeclarationImpl(@NotNull VlangFunctionDeclarationStub stub, @NotNull IStubElementType<?, ?> type) {
     super(stub, type);
@@ -90,6 +90,11 @@ public class VlangFunctionDeclarationImpl extends VlangFunctionOrMethodDeclarati
   @Override
   public boolean isDefinition() {
     return VlangPsiImplUtil.isDefinition(this);
+  }
+
+  @Override
+  public boolean isNoReturn() {
+    return VlangPsiImplUtil.isNoReturn(this);
   }
 
 }

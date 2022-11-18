@@ -161,7 +161,7 @@ object DocumentationGenerator {
     private fun VlangMemberModifiers?.generateDoc(element: VlangNamedElement): String {
         val isShared = this?.memberModifierList?.find { it.text == "shared" } != null
 
-        val isMutable = (element as? VlangMutable)?.isMutable() ?: false
+        val isMutable = (element as? VlangMutabilityOwner)?.isMutable() ?: false
 
         return buildString {
             if (element.isPublic()) {
