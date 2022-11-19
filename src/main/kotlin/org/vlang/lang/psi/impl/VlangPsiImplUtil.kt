@@ -11,6 +11,7 @@ import com.intellij.openapi.util.RecursionManager
 import com.intellij.psi.*
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet
 import com.intellij.psi.impl.source.tree.LeafElement
+import com.intellij.psi.impl.source.tree.LeafPsiElement
 import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.util.*
 import org.vlang.configurations.VlangConfiguration
@@ -19,6 +20,7 @@ import org.vlang.ide.codeInsight.VlangBuiltinTypesUtil
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.ide.codeInsight.VlangTypeInferenceUtil
 import org.vlang.lang.VlangTypes
+import org.vlang.lang.VlangTypes.SAFE_DOT
 import org.vlang.lang.codeInsight.controlFlow.VlangControlFlow
 import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.*
@@ -477,6 +479,12 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun resolve(o: VlangReferenceExpression): PsiElement? {
         return o.reference.resolve()
+    }
+
+    @JvmStatic
+    fun safeAccess(o: VlangReferenceExpression): Boolean {
+        val leafs = o.childrenOfType<LeafPsiElement>()
+        return leafs.any { it.elementType == SAFE_DOT }
     }
 
     @JvmStatic
@@ -1005,12 +1013,18 @@ object VlangPsiImplUtil {
 
     private fun processTypeCast(callRef: VlangReferenceExpression?, expr: VlangExpression): VlangType? {
         val callName = callRef?.getIdentifier()?.text ?: return null
-        val builtinType = getBuiltinType(callName, expr)?.resolveType()
-        if (builtinType is VlangAliasType) {
-            // TODO:
-            return builtinType.typeUnionList?.typeList?.firstOrNull()
+
+        val builtinType = VlangBuiltinTypesUtil.getInstance(expr.project).get(callName)
+        if (builtinType != null) {
+            return builtinType
         }
-        return builtinType
+
+        val pseudoBuiltinType = getBuiltinType(callName, expr)?.resolveType()
+        if (pseudoBuiltinType is VlangAliasType) {
+            // TODO:
+            return pseudoBuiltinType.typeUnionList?.typeList?.firstOrNull()
+        }
+        return pseudoBuiltinType
     }
 
     private fun isBoolExpr(expr: VlangExpression) = expr is VlangConditionalExpr ||

@@ -63,6 +63,27 @@ object VlangElementFactory {
         )!!
     }
 
+    fun createOrBlock(project: Project, expression: PsiElement): VlangOrBlockExpr {
+        return PsiTreeUtil.findChildOfType(
+            createFileFromText(project, "${expression.text} or {  }"),
+            VlangOrBlockExpr::class.java
+        )!!
+    }
+
+    fun createOptionalPropagation(project: Project, expression: PsiElement): VlangDotExpression {
+        return PsiTreeUtil.findChildOfType(
+            createFileFromText(project, "${expression.text}?"),
+            VlangDotExpression::class.java
+        )!!
+    }
+
+    fun createResultPropagation(project: Project, expression: PsiElement): VlangDotExpression {
+        return PsiTreeUtil.findChildOfType(
+            createFileFromText(project, "${expression.text}!"),
+            VlangDotExpression::class.java
+        )!!
+    }
+
     fun createNewLine(project: Project): PsiElement {
         return PsiParserFacade.getInstance(project).createWhiteSpaceFromText("\n")
     }

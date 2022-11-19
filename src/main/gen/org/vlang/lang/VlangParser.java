@@ -4262,6 +4262,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // IndexOrSliceExpr
   //   | CompileTimeFieldReference
   //   | (<<callExpr>> | (!() CallExpr))
+  //   | SafeQualifiedReferenceExpression
   //   | QualifiedReferenceExpression
   //   | OrBlockExpr
   //   | ErrorPropagationExpression
@@ -4273,6 +4274,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     r = IndexOrSliceExpr(b, l + 1);
     if (!r) r = CompileTimeFieldReference(b, l + 1);
     if (!r) r = RightHandExpr_2(b, l + 1);
+    if (!r) r = SafeQualifiedReferenceExpression(b, l + 1);
     if (!r) r = QualifiedReferenceExpression(b, l + 1);
     if (!r) r = OrBlockExpr(b, l + 1);
     if (!r) r = ErrorPropagationExpression(b, l + 1);
@@ -4327,6 +4329,25 @@ public class VlangParser implements PsiParser, LightPsiParser {
       if (!RightHandExpr(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "RightHandExprs", c)) break;
     }
+    return true;
+  }
+
+  /* ********************************************************** */
+  // semi? '?.' identifier
+  public static boolean SafeQualifiedReferenceExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SafeQualifiedReferenceExpression")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _LEFT_, REFERENCE_EXPRESSION, "<safe qualified reference expression>");
+    r = SafeQualifiedReferenceExpression_0(b, l + 1);
+    r = r && consumeTokens(b, 0, SAFE_DOT, IDENTIFIER);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // semi?
+  private static boolean SafeQualifiedReferenceExpression_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SafeQualifiedReferenceExpression_0")) return false;
+    semi(b, l + 1);
     return true;
   }
 

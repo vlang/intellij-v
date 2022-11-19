@@ -19,16 +19,29 @@ class VlangBuiltinTypesUtil(private val project: Project) {
     val nil = builtinType("nil")
     val iError = builtinType("IError")
 
-    private fun builtinType(name: String): VlangType? {
-//        val builtin = VlangConfiguration.getInstance(project).builtinLocation
-//        if (builtin != null) {
-//            print("")
-//        }
+    fun get(name: String): VlangType? {
+        return when (name) {
+            "int"    -> int
+            "bool"   -> bool
+            "rune"   -> rune
+            "f32"    -> f32
+            "f64"    -> f64
+            "string" -> string
+            "void"   -> void
+            "any"    -> any
+            "nil"    -> nil
+            "IError" -> iError
+            else     -> null
+        }
+    }
 
-        val file = VlangElementFactory.createFileFromText(project, """
+    private fun builtinType(name: String): VlangType {
+        val file = VlangElementFactory.createFileFromText(
+            project, """
             module builtin
             fn f(a $name) {}
-        """.trimIndent())
+        """.trimIndent()
+        )
 
         return file.getFunctions().first().getSignature()!!.parameters.paramDefinitionList.first().type
     }

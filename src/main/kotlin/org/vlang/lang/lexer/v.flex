@@ -237,6 +237,8 @@ RAW_SINGLE_QUOTE_STRING = {RAW_STR_MODIFIER} {STR_SINGLE} [^\']* {STR_SINGLE}
 "..."                                     { return TRIPLE_DOT; }
 ".."                                      { return RANGE; }
 "."                                       { return DOT; }
+"?."                                      { return SAFE_DOT; }
+"!."                                      { return SAFE_DOT; }
 "~"                                       { return TILDA; }
 "|"                                       { return BIT_OR; }
 "{"                                       { openBrackets++; return LBRACE; }

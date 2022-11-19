@@ -324,6 +324,7 @@ public interface VlangTypes {
   IElementType RETURN = new VlangTokenType("return");
   IElementType RLOCK = new VlangTokenType("rlock");
   IElementType RPAREN = new VlangTokenType(")");
+  IElementType SAFE_DOT = new VlangTokenType("?.");
   IElementType SELECT = new VlangTokenType("select");
   IElementType SEMICOLON = new VlangTokenType(";");
   IElementType SEMICOLON_SYNTHETIC = new VlangTokenType("<NL>");

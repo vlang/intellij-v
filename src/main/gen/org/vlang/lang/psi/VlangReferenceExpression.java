@@ -24,4 +24,6 @@ public interface VlangReferenceExpression extends VlangExpression, VlangReferenc
   @NotNull
   Access getReadWriteAccess();
 
+  boolean safeAccess();
+
 }

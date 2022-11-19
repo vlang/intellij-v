@@ -70,6 +70,7 @@
     VAR_ASSIGN           =  ':='
     TRIPLE_DOT           =  '...'
     DOT                  =  '.'
+    SAFE_DOT             =  '?.'
     RANGE                =  '..'
     TILDA                =  '~'
     SINGLE_QUOTE         =  "'"
@@ -799,8 +800,9 @@ OffsetOfCallExpr ::= offsetof '(' Type ',' ReferenceExpression ')' {pin=1}
 DumpCallExpr ::= dump '(' Expression ')' {pin=1}
 
 // just <ident> with reference
-ReferenceExpression ::= identifier { methods=[getReference getQualifier resolve getReadWriteAccess] extends=Expression}
+ReferenceExpression ::= identifier { methods=[getReference getQualifier resolve getReadWriteAccess safeAccess] extends=Expression}
 left QualifiedReferenceExpression ::= semi? '.' identifier {elementType=ReferenceExpression}
+left SafeQualifiedReferenceExpression ::= semi? '?.' identifier {elementType=ReferenceExpression}
 
 private RightHandExprs ::= RightHandExpr*
 
@@ -808,6 +810,7 @@ private RightHandExpr ::=
     IndexOrSliceExpr
   | CompileTimeFieldReference
   | (<<callExpr>> | (!() CallExpr))
+  | SafeQualifiedReferenceExpression
   | QualifiedReferenceExpression
   | OrBlockExpr
   | ErrorPropagationExpression

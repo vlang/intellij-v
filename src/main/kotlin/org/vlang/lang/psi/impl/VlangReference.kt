@@ -1,6 +1,7 @@
 package org.vlang.lang.psi.impl
 
 import com.intellij.codeInsight.completion.CompletionUtil
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Conditions
 import com.intellij.openapi.util.RecursionManager
 import com.intellij.openapi.util.TextRange
@@ -228,20 +229,30 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
         if (typ is VlangArrayType) {
             if (!processMethods(typ, processor, newState, localResolve)) return false
-
-            val builtin = VlangConfiguration.getInstance(type.project).builtinLocation
-            val arrayVirtualFile = builtin?.findChild("array.v") ?: return false
-            val arrayFile = PsiManager.getInstance(typ.project).findFile(arrayVirtualFile) as? VlangFile ?: return false
-            val arrayStruct = arrayFile.getStructs()
-                .firstOrNull { it.name == "array" } ?: return false
-            return processExistingType(arrayStruct.structType, processor, newState)
+            return processBuiltinTypeMethods(typ.project, "array", processor, newState)
         }
 
         if (typ is VlangMapType) {
             if (!processMethods(typ, processor, newState, localResolve)) return false
+            return processBuiltinTypeMethods(typ.project, "map", processor, newState)
         }
 
+        if (!processMethods(typ, processor, newState, localResolve)) return false
         return true
+    }
+
+    private fun processBuiltinTypeMethods(
+        project: Project,
+        name: String,
+        processor: VlangScopeProcessor,
+        newState: ResolveState,
+    ): Boolean {
+        val builtin = VlangConfiguration.getInstance(project).builtinLocation
+        val arrayVirtualFile = builtin?.findChild("$name.v") ?: return false
+        val arrayFile = PsiManager.getInstance(project).findFile(arrayVirtualFile) as? VlangFile ?: return false
+        val arrayStruct = arrayFile.getStructs()
+            .firstOrNull { it.name == name } ?: return false
+        return processExistingType(arrayStruct.structType, processor, newState)
     }
 
     private fun processMethods(type: VlangType, processor: VlangScopeProcessor, state: ResolveState, localResolve: Boolean): Boolean {

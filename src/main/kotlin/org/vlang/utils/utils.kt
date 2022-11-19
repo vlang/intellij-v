@@ -11,6 +11,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.util.parentOfType
 import com.intellij.ui.DocumentAdapter
 import org.vlang.lang.VlangFileType
 import java.nio.file.Files
@@ -42,6 +43,10 @@ inline fun <reified T: PsiElement> PsiElement.parentNth(depth: Int): T? {
         parent = parent?.parent
     }
     return parent as? T
+}
+
+inline fun <reified T: PsiElement> PsiElement.inside(): Boolean {
+    return this.parentOfType<T>() != null
 }
 
 fun CapturingProcessHandler.runProcess(

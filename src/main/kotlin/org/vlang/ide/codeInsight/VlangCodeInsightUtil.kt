@@ -7,6 +7,8 @@ import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.*
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
+import org.vlang.lang.psi.types.VlangFunctionTypeEx
 import org.vlang.lang.psi.types.VlangPrimitiveTypes
 import org.vlang.utils.parentNth
 
@@ -204,5 +206,20 @@ object VlangCodeInsightUtil {
         val name = expr.getIdentifier().text ?: return false
 
         return VlangPrimitiveTypes.values().find { it.value == name } != null
+    }
+
+    fun getReturnType(resolved: PsiElement): VlangType? {
+        if (resolved is VlangFunctionOrMethodDeclaration) {
+            return resolved.getSignature()?.result?.type ?: VlangBuiltinTypesUtil.getInstance(resolved.project).void
+        }
+
+        if (resolved is VlangTypeOwner) {
+            val type = resolved.getType(null).toEx()
+            if (type is VlangFunctionTypeEx) {
+                return type.result?.raw() ?: VlangBuiltinTypesUtil.getInstance(resolved.project).void
+            }
+        }
+
+        return null
     }
 }

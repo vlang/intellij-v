@@ -58,4 +58,9 @@ public class VlangReferenceExpressionImpl extends VlangExpressionImpl implements
     return VlangPsiImplUtil.getReadWriteAccess(this);
   }
 
+  @Override
+  public boolean safeAccess() {
+    return VlangPsiImplUtil.safeAccess(this);
+  }
+
 }
