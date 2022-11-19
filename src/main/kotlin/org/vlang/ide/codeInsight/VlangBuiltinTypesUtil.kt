@@ -15,23 +15,25 @@ class VlangBuiltinTypesUtil(private val project: Project) {
     val f64 = builtinType("f64")
     val string = builtinType("string")
     val void = builtinType("void")
+    val voidptr = builtinType("voidptr")
     val any = builtinType("any")
     val nil = builtinType("nil")
     val iError = builtinType("IError")
 
     fun get(name: String): VlangType? {
         return when (name) {
-            "int"    -> int
-            "bool"   -> bool
-            "rune"   -> rune
-            "f32"    -> f32
-            "f64"    -> f64
-            "string" -> string
-            "void"   -> void
-            "any"    -> any
-            "nil"    -> nil
-            "IError" -> iError
-            else     -> null
+            "int"     -> int
+            "bool"    -> bool
+            "rune"    -> rune
+            "f32"     -> f32
+            "f64"     -> f64
+            "string"  -> string
+            "void"    -> void
+            "voidptr" -> voidptr
+            "any"     -> any
+            "nil"     -> nil
+            "IError"  -> iError
+            else      -> null
         }
     }
 

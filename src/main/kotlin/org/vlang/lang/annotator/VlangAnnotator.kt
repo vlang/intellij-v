@@ -16,6 +16,8 @@ import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangReference
 import org.vlang.lang.psi.types.VlangPrimitiveTypes
 import org.vlang.lang.sql.VlangSqlUtil
+import org.vlang.utils.inside
+import org.vlang.utils.insideAny
 
 class VlangAnnotator : Annotator {
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
@@ -57,8 +59,12 @@ class VlangAnnotator : Annotator {
             return VlangColor.CT_METHOD_CALL
         }
 
-        if (VlangPrimitiveTypes.isPrimitiveType(element.text)) {
+        if (VlangPrimitiveTypes.isPrimitiveType(element.text) && (element.insideAny<VlangType, VlangCallExpr>())) {
             return VlangColor.BUILTIN_TYPE
+        }
+
+        if (element.text == "chan" || element.text == "thread" && element.inside<VlangType>()) {
+            return VlangColor.KEYWORD
         }
 
         if (element.elementType == VlangTypes.IDENTIFIER && (parent is VlangReferenceExpression || parent is VlangTypeReferenceExpression)) {

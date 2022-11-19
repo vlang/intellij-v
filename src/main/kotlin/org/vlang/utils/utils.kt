@@ -12,6 +12,7 @@ import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parentOfType
+import com.intellij.psi.util.parentOfTypes
 import com.intellij.ui.DocumentAdapter
 import org.vlang.lang.VlangFileType
 import java.nio.file.Files
@@ -47,6 +48,10 @@ inline fun <reified T: PsiElement> PsiElement.parentNth(depth: Int): T? {
 
 inline fun <reified T: PsiElement> PsiElement.inside(): Boolean {
     return this.parentOfType<T>() != null
+}
+
+inline fun <reified T: PsiElement, reified T2: PsiElement> PsiElement.insideAny(): Boolean {
+    return parentOfTypes(T::class, T2::class) != null
 }
 
 fun CapturingProcessHandler.runProcess(

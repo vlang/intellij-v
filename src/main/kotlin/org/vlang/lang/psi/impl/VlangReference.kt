@@ -325,9 +325,9 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
         if (!processBlock(processor, state, true)) return false
         if (!processBuiltin(processor, state)) return false
-        if (!processImportModules(file, processor, state)) return false
-        if (!processImportedModules(file, processor, state)) return false
-        if (!processImports(file, processor, state, myElement)) return false
+        if (!processImportSpec(file, processor, state)) return false
+        if (!processImportedModulesForCompletion(file, processor, state)) return false
+        if (!processImportedModules(file, processor, state, myElement)) return false
         if (!processFileEntities(file, processor, state, true)) return false
         if (!processDirectory(file.originalFile.parent, file, file.getModuleQualifiedName(), processor, state, true)) return false
 
@@ -388,7 +388,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
     }
 
     // TODO: redone
-    private fun processImports(
+    private fun processImportedModules(
         file: VlangFile,
         processor: VlangScopeProcessor,
         state: ResolveState,
@@ -402,7 +402,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         val currentModuleName = file.getModuleName()
         if (searchName == currentModuleName) {
             val dir = file.parent ?: return true
-            return !processor.execute(dir, state.put(ACTUAL_NAME, searchName))
+            return processor.execute(dir, state.put(ACTUAL_NAME, searchName))
         }
 
         val (name, import, isSelectiveImport) = file.resolveImportNameAndSpec(searchName)
@@ -411,18 +411,18 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         }
 
         if (isSelectiveImport) {
-            return !processQualifierExpression(file, import.importPath, processor, state)
+            return processQualifierExpression(file, import.importPath, processor, state)
         }
 
         if (searchName == name) {
-            return !processor.execute(import.lastPartPsi, state)
+            return processor.execute(import.lastPartPsi, state)
         }
 
         if (import.importAlias != null) {
             return processor.execute(import.importAlias!!, state.put(ACTUAL_NAME, searchName))
         }
 
-        return !processor.execute(import.lastPartPsi, state.put(ACTUAL_NAME, searchName))
+        return processor.execute(import.lastPartPsi, state.put(ACTUAL_NAME, searchName))
     }
 
     private fun processModulesEntities(file: VlangFile, processor: VlangScopeProcessor, state: ResolveState): Boolean {
@@ -452,7 +452,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         return true
     }
 
-    private fun processImportedModules(file: VlangFile, processor: VlangScopeProcessor, state: ResolveState): Boolean {
+    private fun processImportedModulesForCompletion(file: VlangFile, processor: VlangScopeProcessor, state: ResolveState): Boolean {
         if (!processor.isCompletion()) {
             // This method is only for autocompletion when a user writes
             // a symbol (from another module) name, and we want to import
@@ -480,7 +480,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
     }
 
     // TODO: redone
-    private fun processImportModules(file: VlangFile, processor: VlangScopeProcessor, state: ResolveState): Boolean {
+    private fun processImportSpec(file: VlangFile, processor: VlangScopeProcessor, state: ResolveState): Boolean {
         if (identifier?.parentOfType<VlangImportSpec>() == null) {
             return true
         }
