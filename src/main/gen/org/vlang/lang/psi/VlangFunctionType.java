@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface VlangFunctionType extends VlangType, VlangSignatureOwner {
 
   @Nullable
+  VlangGenericParameters getGenericParameters();
+
+  @Nullable
   VlangSignature getSignature();
 
   @NotNull

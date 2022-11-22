@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import org.vlang.lang.stubs.VlangEnumFieldDefinitionStub;
 import com.intellij.psi.ResolveState;
+import org.vlang.lang.psi.types.VlangTypeEx;
 
 public interface VlangEnumFieldDefinition extends VlangNamedElement, StubBasedPsiElement<VlangEnumFieldDefinitionStub> {
 
@@ -16,6 +17,6 @@ public interface VlangEnumFieldDefinition extends VlangNamedElement, StubBasedPs
   boolean isPublic();
 
   @NotNull
-  VlangType getTypeInner(@Nullable ResolveState context);
+  VlangTypeEx getTypeInner(@Nullable ResolveState context);
 
 }

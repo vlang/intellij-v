@@ -3,6 +3,7 @@ package org.vlang.ide.codeInsight
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.parentOfType
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangBuiltinArrayTypeEx
 import org.vlang.lang.psi.types.VlangPointerTypeEx
 import org.vlang.lang.psi.types.VlangTypeEx
@@ -11,27 +12,27 @@ import org.vlang.utils.parentNth
 object VlangTypeInferenceUtil {
     const val ARRAY_MAP_METHOD = "map"
 
-    fun callerType(call: VlangCallExpr): VlangType? {
+    fun callerType(call: VlangCallExpr): VlangTypeEx? {
         val callExpression = call.expression as? VlangReferenceExpression ?: return null
-        val caller = callExpression.getQualifier() as? VlangReferenceExpression ?: return null
+        val caller = callExpression.getQualifier() as? VlangTypeOwner ?: return null
         return caller.getType(null)
     }
 
-    fun builtInArrayOrPointerTo(type: VlangTypeEx<*>): Boolean {
+    fun builtinArrayOrPointerTo(type: VlangTypeEx): Boolean {
         if (type is VlangBuiltinArrayTypeEx) return true
         return type is VlangPointerTypeEx && type.inner is VlangBuiltinArrayTypeEx
     }
 
-    fun getContextType(element: PsiElement): VlangType? {
+    fun getContextType(element: PsiElement): VlangTypeEx? {
         if (element.parent is VlangValue) {
             val parentElement = element.parentNth<VlangElement>(2)
             val key = parentElement?.key
             if (key?.fieldName != null) {
                 val resolved = key.fieldName?.resolve() as? VlangFieldDefinition
                 val declaration = resolved?.parent as? VlangFieldDeclaration
-                val resolvedType = declaration?.type?.resolveType()
+                val resolvedType = declaration?.type
                 if (resolvedType != null) {
-                    return resolvedType
+                    return resolvedType.toEx()
                 }
             }
         }
@@ -45,12 +46,12 @@ object VlangTypeInferenceUtil {
             val params = function.getSignature()?.parameters?.paramDefinitionList ?: return null
 
             val param = params.getOrNull(index) ?: return null
-            return param.type.resolveType()
+            return param.type.toEx()
         }
 
         if (element.parent is VlangDefaultFieldValue) {
             val fieldDeclaration = element.parentOfType<VlangFieldDeclaration>() ?: return null
-            return fieldDeclaration.type
+            return fieldDeclaration.type.toEx()
         }
 
         if (element.parent is VlangBinaryExpr) {

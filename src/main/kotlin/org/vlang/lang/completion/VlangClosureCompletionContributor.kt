@@ -14,7 +14,9 @@ import com.intellij.util.ProcessingContext
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.ide.codeInsight.VlangTypeInferenceUtil
 import org.vlang.lang.VlangTypes
-import org.vlang.lang.psi.*
+import org.vlang.lang.psi.VlangCallExpr
+import org.vlang.lang.psi.VlangFile
+import org.vlang.lang.psi.VlangSignature
 import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 
@@ -33,14 +35,14 @@ class VlangClosureCompletionContributor : CompletionContributor() {
 
             val contextType = VlangTypeInferenceUtil.getContextType(pos.parent)
 
-            val functionType = if (contextType is VlangAliasType) {
-                contextType.aliasType
+            val functionType = if (contextType is VlangAliasTypeEx) {
+                contextType.inner
             } else {
                 contextType
-            } as? VlangFunctionType ?: return
+            } as? VlangFunctionTypeEx ?: return
 
-            val presentationText = functionType.text + " {...}"
-            val signature = functionType.getSignature() ?: return
+            val presentationText = "$functionType {...}"
+            val signature = functionType.signature
 
             val callExpr = VlangCodeInsightUtil.getCallExpr(pos)
             result.addElement(
@@ -137,7 +139,7 @@ class VlangClosureCompletionContributor : CompletionContributor() {
                 }
             }
 
-            private fun StringBuilder.processParamType(typeEx: VlangTypeEx<*>, anchor: PsiElement, call: VlangCallExpr?) {
+            private fun StringBuilder.processParamType(typeEx: VlangTypeEx, anchor: PsiElement, call: VlangCallExpr?) {
                 if (call != null && typeEx is VlangVoidPtrTypeEx && VlangCodeInsightUtil.isArrayMethodCall(call)) {
                     val type = tryInferTypeFromCaller(call)
                     if (type != null) {
@@ -149,11 +151,10 @@ class VlangClosureCompletionContributor : CompletionContributor() {
                 append(typeEx.readableName(anchor))
             }
 
-            private fun tryInferTypeFromCaller(call: VlangCallExpr): VlangTypeEx<*>? {
+            private fun tryInferTypeFromCaller(call: VlangCallExpr): VlangTypeEx? {
                 val callerType = VlangTypeInferenceUtil.callerType(call)
-                val callerTypeEx = callerType.toEx()
-                if (callerTypeEx is VlangArrayTypeEx) {
-                    return callerTypeEx.inner
+                if (callerType is VlangArrayTypeEx) {
+                    return callerType.inner
                 }
 
                 return null
@@ -188,13 +189,13 @@ class VlangClosureCompletionContributor : CompletionContributor() {
                 PsiDocumentManager.getInstance(file.project).doPostponedOperationsAndUnblockDocument(document)
             }
 
-            private fun findTypesForImport(signature: VlangSignature, currentModule: String): MutableSet<VlangTypeEx<*>> {
-                val typesToImport = mutableSetOf<VlangTypeEx<*>>()
+            private fun findTypesForImport(signature: VlangSignature, currentModule: String): MutableSet<VlangTypeEx> {
+                val typesToImport = mutableSetOf<VlangTypeEx>()
 
                 val types = signature.parameters.paramDefinitionList.mapNotNull { it.type }
                 types.forEach { type ->
                     type.toEx().accept(object : VlangTypeVisitor {
-                        override fun enter(type: VlangTypeEx<*>): Boolean {
+                        override fun enter(type: VlangTypeEx): Boolean {
                             if (type is VlangImportableTypeEx) {
                                 // type from current module no need to import
                                 if (currentModule == type.module() || type.isBuiltin()) {

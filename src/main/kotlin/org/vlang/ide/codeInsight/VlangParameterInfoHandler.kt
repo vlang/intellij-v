@@ -6,8 +6,10 @@ import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.parentOfType
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.types.VlangFunctionTypeEx
+import org.vlang.lang.psi.types.VlangTypeEx
 
-class VlangParameterInfoHandler : ParameterInfoHandlerWithTabActionSupport<VlangArgumentList, VlangType?, VlangElement> {
+class VlangParameterInfoHandler : ParameterInfoHandlerWithTabActionSupport<VlangArgumentList, VlangTypeEx?, VlangElement> {
     override fun getActualParameters(o: VlangArgumentList) = o.elementList.toTypedArray()
 
     override fun getActualParameterDelimiterType(): IElementType = VlangTypes.COMMA
@@ -28,7 +30,7 @@ class VlangParameterInfoHandler : ParameterInfoHandlerWithTabActionSupport<Vlang
         context.setCurrentParameter(ParameterInfoUtils.getCurrentParameterIndex(list.node, context.offset, VlangTypes.COMMA))
     }
 
-    override fun updateUI(type: VlangType?, context: ParameterInfoUIContext) {
+    override fun updateUI(type: VlangTypeEx?, context: ParameterInfoUIContext) {
         updatePresentation(type, context)
     }
 
@@ -47,9 +49,9 @@ class VlangParameterInfoHandler : ParameterInfoHandlerWithTabActionSupport<Vlang
             return at?.parentOfType()
         }
 
-        private fun findFunctionType(type: VlangType?) = type as? VlangFunctionType
+        private fun findFunctionType(type: VlangTypeEx?) = type as? VlangFunctionTypeEx
 
-        fun updatePresentation(type: VlangType?, context: ParameterInfoUIContext): String? {
+        fun updatePresentation(type: VlangTypeEx?, context: ParameterInfoUIContext): String? {
             if (type == null) {
                 context.isUIComponentEnabled = false
                 return null

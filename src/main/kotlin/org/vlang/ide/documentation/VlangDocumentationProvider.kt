@@ -26,7 +26,8 @@ class VlangDocumentationProvider : AbstractDocumentationProvider() {
             is VlangInterfaceMethodDefinition   -> element.generateDoc()
             is VlangReceiver                    -> element.generateDoc()
             is VlangEnumFieldDefinition         -> element.generateDoc()
-            else -> null
+            is VlangGenericParameter            -> element.generateDoc()
+            else                                -> null
         }
     }
 }

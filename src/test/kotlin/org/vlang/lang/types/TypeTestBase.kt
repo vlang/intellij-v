@@ -7,13 +7,18 @@ import org.vlang.lang.psi.VlangCallExpr
 import org.vlang.lang.psi.VlangStringLiteral
 import org.vlang.lang.psi.VlangTypeOwner
 import org.vlang.lang.psi.VlangVisitor
-import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
+import org.vlang.lang.psi.types.VlangUnknownTypeEx
 import org.vlang.utils.line
 
 abstract class TypeTestBase : BasePlatformTestCase() {
     override fun getTestDataPath() = "src/test/resources/types"
 
-    protected open fun doTest(vararg fixtureFiles: String) {
+    protected open fun doTest(text: String) {
+        myFixture.configureByText("a.v", text)
+        runTypeTest(arrayOf("a.v"))
+    }
+
+    protected open fun doTestFile(vararg fixtureFiles: String) {
         myFixture.configureByFiles(*fixtureFiles)
         runTypeTest(fixtureFiles)
     }
@@ -58,7 +63,7 @@ abstract class TypeTestBase : BasePlatformTestCase() {
         val expr = call.parameters.first() as VlangTypeOwner
         val expectedTypePsi = call.parameters.last() as VlangStringLiteral
         val expectedTypeString = expectedTypePsi.contents
-        val gotType = expr.getType(null).toEx()
+        val gotType = expr.getType(null) ?: VlangUnknownTypeEx.INSTANCE
 
         val gotTypeString = gotType.readableName(call)
 
@@ -92,12 +97,16 @@ abstract class TypeTestBase : BasePlatformTestCase() {
                 }
 
                 if (parameters.size != 2) {
+                    fail("Invalid test call: ${el.text}")
                     return@findChildren false
                 }
 
                 val first = parameters.first()
                 val last = parameters.last()
 
+                assert(first is VlangTypeOwner && last is VlangStringLiteral) {
+                    "Invalid test call: ${el.text}"
+                }
                 first is VlangTypeOwner && last is VlangStringLiteral
             }
         }.flatten()

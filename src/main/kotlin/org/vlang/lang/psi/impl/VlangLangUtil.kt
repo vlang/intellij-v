@@ -1,40 +1,37 @@
 package org.vlang.lang.psi.impl
 
+import com.intellij.openapi.project.Project
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.CachedValuesManager
 import com.intellij.psi.util.PsiModificationTracker
-import org.vlang.lang.psi.VlangFile
 import org.vlang.lang.psi.VlangMethodDeclaration
-import org.vlang.lang.psi.VlangType
+import org.vlang.lang.psi.types.VlangTypeEx
 import org.vlang.lang.stubs.index.VlangMethodIndex
 
 object VlangLangUtil {
-    fun findMethod(o: VlangType, name: String): VlangMethodDeclaration? {
-        return getMethodList(o).firstOrNull { it.name == name }
+    fun findMethod(project: Project, type: VlangTypeEx, name: String): VlangMethodDeclaration? {
+        return getMethodList(project, type).firstOrNull { it.name == name }
     }
 
-    fun getMethodList(o: VlangType): List<VlangMethodDeclaration> {
-        return CachedValuesManager.getCachedValue(o) {
+    fun getMethodList(project: Project, type: VlangTypeEx): List<VlangMethodDeclaration> {
+        return CachedValuesManager.getManager(project).getCachedValue(type) {
             CachedValueProvider.Result.create(
-                calcMethods(o), PsiModificationTracker.MODIFICATION_COUNT
+                calcMethods(project, type), PsiModificationTracker.MODIFICATION_COUNT
             )
         }
     }
 
-    private fun calcMethods(o: VlangType): List<VlangMethodDeclaration> {
-        val file = o.containingFile.originalFile as? VlangFile ?: return emptyList()
-        val moduleName = file.getModuleQualifiedName()
-        val typeName = getTypeName(o)
+    private fun calcMethods(project: Project, type: VlangTypeEx): List<VlangMethodDeclaration> {
+        val moduleName = type.module()
+        val typeName = getTypeName(type)
         if (moduleName.isEmpty() || typeName.isEmpty()) return emptyList()
         val key = "$moduleName.$typeName"
-        val project = file.project
-        val declarations =
-            VlangMethodIndex.find(key, project, GlobalSearchScope.allScope(project), null)
+        val declarations = VlangMethodIndex.find(key, project, GlobalSearchScope.allScope(project), null)
         return declarations.toList()
     }
 
-    private fun getTypeName(o: VlangType): String {
-        return o.identifier?.text ?: o.text
+    private fun getTypeName(o: VlangTypeEx): String {
+        return o.toString()
     }
 }

@@ -2,14 +2,10 @@ package org.vlang.lang.psi.types
 
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
-import org.vlang.lang.psi.VlangFunctionType
 import org.vlang.lang.psi.VlangSignature
+import org.vlang.lang.psi.VlangSignatureOwner
 
-class VlangFunctionTypeEx(raw: VlangFunctionType?, signature: VlangSignature? = null) : VlangBaseTypeEx<VlangFunctionType?>(raw) {
-    val signature = signature ?: raw?.getSignature()
-    val params = this.signature?.parameters?.paramDefinitionList?.map { param -> param.type.toEx() } ?: emptyList()
-    val result = this.signature?.result?.type?.toEx()
-
+class VlangFunctionTypeEx(val params: List<VlangTypeEx>, val result: VlangTypeEx?, val signature: VlangSignature) : VlangBaseTypeEx(signature) {
     override fun toString() = buildString {
         append("fn ")
         append("(")
@@ -43,22 +39,18 @@ class VlangFunctionTypeEx(raw: VlangFunctionType?, signature: VlangSignature? = 
         }
     }
 
-    override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {
+    override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
         return true // TODO: implement this
     }
 
-    override fun isEqual(rhs: VlangTypeEx<*>): Boolean {
+    override fun isEqual(rhs: VlangTypeEx): Boolean {
         if (rhs !is VlangFunctionTypeEx) return false
 
         if (params.size != rhs.params.size) {
             return false
         }
 
-        if (result == null && rhs.result != null || result != null && rhs.result == null) {
-            return false
-        }
-
-        if (result != null && rhs.result != null && !result.isEqual(rhs.result)) {
+        if (result == null || rhs.result == null || !result.isEqual(rhs.result)) {
             return false
         }
 
@@ -74,15 +66,26 @@ class VlangFunctionTypeEx(raw: VlangFunctionType?, signature: VlangSignature? = 
         }
 
         for (param in params) {
-            if (!visitor.enter(param)) {
-                return
-            }
+            param.accept(visitor)
         }
 
-        if (result != null) {
-            if (!visitor.enter(result)) {
-                return
-            }
+        result?.accept(visitor)
+    }
+
+    override fun substituteGenerics(nameMap: Map<String, VlangTypeEx>): VlangTypeEx {
+        return VlangFunctionTypeEx(
+            params.map { it.substituteGenerics(nameMap) },
+            result?.substituteGenerics(nameMap),
+            signature
+        )
+    }
+
+    companion object {
+        fun from(signatureOwner: VlangSignatureOwner): VlangFunctionTypeEx? {
+            val signature = signatureOwner.getSignature() ?: return null
+            val params = signature.parameters.paramDefinitionList.map { it.type.toEx() }
+            val result = signature.result?.type?.toEx()
+            return VlangFunctionTypeEx(params, result, signature)
         }
     }
 }

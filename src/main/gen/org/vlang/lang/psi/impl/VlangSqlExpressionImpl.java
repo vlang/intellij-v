@@ -10,6 +10,7 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 import com.intellij.psi.ResolveState;
+import org.vlang.lang.psi.types.VlangTypeEx;
 
 public class VlangSqlExpressionImpl extends VlangExpressionImpl implements VlangSqlExpression {
 
@@ -42,7 +43,7 @@ public class VlangSqlExpressionImpl extends VlangExpressionImpl implements Vlang
 
   @Override
   @Nullable
-  public VlangType getType(@Nullable ResolveState context) {
+  public VlangTypeEx getType(@Nullable ResolveState context) {
     return VlangPsiImplUtil.getType(this, context);
   }
 

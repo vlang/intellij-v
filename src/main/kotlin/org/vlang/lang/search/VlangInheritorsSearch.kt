@@ -10,9 +10,9 @@ import com.intellij.util.Processor
 import com.intellij.util.containers.JBIterable
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet
 import org.vlang.lang.psi.*
-import org.vlang.lang.psi.impl.VlangLangUtil
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
-import org.vlang.lang.psi.types.VlangFunctionTypeEx
+import org.vlang.lang.psi.types.VlangInterfaceTypeEx
+import org.vlang.lang.psi.types.VlangStructTypeEx
 import org.vlang.lang.stubs.index.VlangFieldFingerprintIndex
 import org.vlang.lang.stubs.index.VlangMethodFingerprintIndex
 
@@ -23,18 +23,18 @@ class VlangInheritorsSearch : QueryExecutorBase<VlangNamedElement, DefinitionsSc
         val element = queryParameters.element as? VlangInterfaceDeclaration ?: return
 
         val visitedSpecs = ReferenceOpenHashSet<VlangNamedElement>()
-        val interfaceType = element.interfaceType
-        val ownMethods = interfaceType.methodList
-        val ownFields = interfaceType.getFieldList()
-
-        processMethodOwners(
-            processor,
-            element,
-            interfaceType,
-            ownMethods,
-            ownFields,
-            visitedSpecs
-        )
+//        val interfaceType = element.interfaceType.toEx()
+//        val ownMethods = interfaceType.methodList
+//        val ownFields = interfaceType.getFieldList()
+//
+//        processMethodOwners(
+//            processor,
+//            element,
+//            interfaceType,
+//            ownMethods,
+//            ownFields,
+//            visitedSpecs
+//        )
     }
 
     fun processMethodOwners(
@@ -44,20 +44,20 @@ class VlangInheritorsSearch : QueryExecutorBase<VlangNamedElement, DefinitionsSc
         methods: Collection<VlangInterfaceMethodDefinition>,
         fields: List<VlangFieldDefinition>,
     ) {
-        processMethodOwners(
-            processor,
-            typeSpec,
-            interfaceType,
-            methods,
-            fields,
-            ReferenceOpenHashSet()
-        )
+//        processMethodOwners(
+//            processor,
+//            typeSpec,
+//            interfaceType,
+//            methods,
+//            fields,
+//            ReferenceOpenHashSet()
+//        )
     }
 
     fun processMethodOwners(
         processor: Processor<in VlangNamedElement>,
         typeSpec: VlangNamedElement,
-        interfaceType: VlangInterfaceType,
+        interfaceType: VlangInterfaceTypeEx,
         methods: Collection<VlangInterfaceMethodDefinition>,
         fields: List<VlangFieldDefinition>,
         visitedSpecs: MutableSet<VlangNamedElement>,
@@ -65,9 +65,9 @@ class VlangInheritorsSearch : QueryExecutorBase<VlangNamedElement, DefinitionsSc
         val searchScope = GlobalSearchScope.allScope(typeSpec.project)
         val project = typeSpec.project
         val condition = Condition { spec: VlangNamedElement ->
-            val struct = (spec as? VlangStructDeclaration)?.structType ?: return@Condition false
+            val struct = (spec as? VlangStructDeclaration)?.structType.toEx() as? VlangStructTypeEx ?: return@Condition false
 
-            checkImplementsInterface(interfaceType, struct)
+            checkImplementsInterface(typeSpec.project, interfaceType, struct)
         }
 
         val candidateProcessor = VlangGotoUtil.createCandidatesProcessor(processor, condition)
@@ -92,51 +92,54 @@ class VlangInheritorsSearch : QueryExecutorBase<VlangNamedElement, DefinitionsSc
     }
 
     private fun checkImplementsInterface(
-        interfaceType: VlangInterfaceType,
-        type: VlangStructType,
+        project: Project,
+        interfaceType: VlangInterfaceTypeEx,
+        type: VlangStructTypeEx,
     ): Boolean {
-        val methods = interfaceType.methodList
-        val fields = interfaceType.getFieldList()
-        val structMethods = VlangLangUtil.getMethodList(type)
+//        val methods = interfaceType.methodList
+//        val fields = interfaceType.getFieldList()
+//        val structMethods = VlangLangUtil.getMethodList(project, type)
+//
+//        val structFields = type.getFieldList()
+//
+//        val structMethodsSet = structMethods.associateBy { it.name }
+//        methods.forEach {
+//            if (it.name != null && !structMethodsSet.contains(it.name)) {
+//                return false
+//            }
+//        }
+//
+//        val structFieldsSet = structFields.associateBy { it.name }
+//        fields.forEach {
+//            if (it.name != null && !structFieldsSet.contains(it.name)) {
+//                return false
+//            }
+//        }
+//
+//        val fieldsIsEqual = fields.all { interfaceField ->
+//            val field = structFieldsSet[interfaceField.name] ?: return@all false
+//            val fieldType = field.getType(null).toEx()
+//            val interfaceFieldType = interfaceField.getType(null).toEx()
+//
+//            fieldType.isEqual(interfaceFieldType)
+//        }
+//
+//        if (!fieldsIsEqual) {
+//            return false
+//        }
+//
+//        return methods.all { interfaceMethod ->
+//            val structMethod = structMethodsSet[interfaceMethod.name!!] ?: return@all true
+//            val structSignature = structMethod.getSignature() ?: return@all false
+//            val interfaceSignature = interfaceMethod.getSignature()
+//
+//            val interfaceTypeEx = VlangFunctionTypeEx(null, interfaceSignature)
+//            val structTypeEx = VlangFunctionTypeEx(null, structSignature)
+//
+//            interfaceTypeEx.isEqual(structTypeEx)
+//        }
 
-        val structFields = type.getFieldList()
-
-        val structMethodsSet = structMethods.associateBy { it.name }
-        methods.forEach {
-            if (it.name != null && !structMethodsSet.contains(it.name)) {
-                return false
-            }
-        }
-
-        val structFieldsSet = structFields.associateBy { it.name }
-        fields.forEach {
-            if (it.name != null && !structFieldsSet.contains(it.name)) {
-                return false
-            }
-        }
-
-        val fieldsIsEqual = fields.all { interfaceField ->
-            val field = structFieldsSet[interfaceField.name] ?: return@all false
-            val fieldType = field.getType(null).toEx()
-            val interfaceFieldType = interfaceField.getType(null).toEx()
-
-            fieldType.isEqual(interfaceFieldType)
-        }
-
-        if (!fieldsIsEqual) {
-            return false
-        }
-
-        return methods.all { interfaceMethod ->
-            val structMethod = structMethodsSet[interfaceMethod.name!!] ?: return@all true
-            val structSignature = structMethod.getSignature() ?: return@all false
-            val interfaceSignature = interfaceMethod.getSignature()
-
-            val interfaceTypeEx = VlangFunctionTypeEx(null, interfaceSignature)
-            val structTypeEx = VlangFunctionTypeEx(null, structSignature)
-
-            interfaceTypeEx.isEqual(structTypeEx)
-        }
+        return false
     }
 
     private fun processMethodOwners(

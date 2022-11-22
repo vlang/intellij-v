@@ -2,37 +2,38 @@ package org.vlang.lang.psi.types
 
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
-import org.vlang.lang.psi.VlangOptionType
 
-class VlangOptionTypeEx(raw: VlangOptionType) : VlangBaseTypeEx<VlangOptionType>(raw) {
-    val inner = raw.type?.toEx()
-
+class VlangOptionTypeEx(val inner: VlangTypeEx?, anchor: PsiElement) : VlangBaseTypeEx(anchor) {
     override fun toString() = "?".safeAppend(inner)
 
-    override fun qualifiedName() = "?".safeAppend(inner?.qualifiedName())
+    override fun qualifiedName(): String = "?".safeAppend(inner?.qualifiedName())
 
     override fun readableName(context: PsiElement) = "?".safeAppend(inner?.readableName(context))
 
-    override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {
+    override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
         return when (rhs) {
             is VlangAnyTypeEx     -> true
             is VlangUnknownTypeEx -> true
             is VlangVoidPtrTypeEx -> true
-            is VlangOptionTypeEx  -> if (rhs.inner == null) true else inner?.isAssignableFrom(rhs.inner, project) ?: false
+            is VlangOptionTypeEx  -> rhs.inner?.let { inner?.isAssignableFrom(it, project) } ?: false
             else                  -> inner?.isAssignableFrom(rhs, project) ?: false
         }
     }
 
-    override fun isEqual(rhs: VlangTypeEx<*>): Boolean {
+    override fun isEqual(rhs: VlangTypeEx): Boolean {
         if (rhs !is VlangOptionTypeEx) {
             return false
         }
 
-        if (rhs.inner == null && inner == null) {
+        if (inner == null && rhs.inner == null) {
             return true
         }
 
-        return inner!!.isEqual(rhs.inner!!)
+        if (inner == null || rhs.inner == null) {
+            return false
+        }
+
+        return inner.isEqual(rhs.inner)
     }
 
     override fun accept(visitor: VlangTypeVisitor) {
@@ -40,8 +41,10 @@ class VlangOptionTypeEx(raw: VlangOptionType) : VlangBaseTypeEx<VlangOptionType>
             return
         }
 
-        if (inner != null) {
-            visitor.enter(inner)
-        }
+        inner?.accept(visitor)
+    }
+
+    override fun substituteGenerics(nameMap: Map<String, VlangTypeEx>): VlangTypeEx {
+        return VlangOptionTypeEx(inner?.substituteGenerics(nameMap), anchor!!)
     }
 }

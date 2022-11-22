@@ -29,4 +29,6 @@ fn main() {
 
 	new_arr5 := arr.reverse()
 	expr_type(new_arr5, '[]int')
+
+	expr_type([1,2,3].first(), 'int')
 }

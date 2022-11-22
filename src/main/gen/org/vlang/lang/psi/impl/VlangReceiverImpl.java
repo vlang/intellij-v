@@ -11,6 +11,7 @@ import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.stubs.VlangReceiverStub;
 import org.vlang.lang.psi.*;
 import com.intellij.psi.ResolveState;
+import org.vlang.lang.psi.types.VlangTypeEx;
 import com.intellij.psi.stubs.IStubElementType;
 
 public class VlangReceiverImpl extends VlangNamedElementImpl<VlangReceiverStub> implements VlangReceiver {
@@ -58,8 +59,8 @@ public class VlangReceiverImpl extends VlangNamedElementImpl<VlangReceiverStub> 
   }
 
   @Override
-  @Nullable
-  public VlangType getTypeInner(@Nullable ResolveState context) {
+  @NotNull
+  public VlangTypeEx getTypeInner(@Nullable ResolveState context) {
     return VlangPsiImplUtil.getTypeInner(this, context);
   }
 

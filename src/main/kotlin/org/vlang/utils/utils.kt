@@ -21,6 +21,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import javax.swing.JTextField
 import javax.swing.event.DocumentEvent
+import kotlin.reflect.KClass
 import kotlin.streams.asSequence
 
 val Document.virtualFile: VirtualFile?
@@ -52,6 +53,10 @@ inline fun <reified T: PsiElement> PsiElement.inside(): Boolean {
 
 inline fun <reified T: PsiElement, reified T2: PsiElement> PsiElement.insideAny(): Boolean {
     return parentOfTypes(T::class, T2::class) != null
+}
+
+inline fun <reified T : PsiElement> PsiElement.parentOfType(vararg stopAt: KClass<out PsiElement>): T? {
+    return PsiTreeUtil.getParentOfType(this, T::class.java, true, *stopAt.map { it.java }.toTypedArray())
 }
 
 fun CapturingProcessHandler.runProcess(

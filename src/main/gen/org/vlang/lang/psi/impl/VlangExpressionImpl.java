@@ -10,6 +10,7 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 import com.intellij.psi.ResolveState;
+import org.vlang.lang.psi.types.VlangTypeEx;
 
 public abstract class VlangExpressionImpl extends VlangCompositeElementImpl implements VlangExpression {
 
@@ -29,7 +30,7 @@ public abstract class VlangExpressionImpl extends VlangCompositeElementImpl impl
 
   @Override
   @Nullable
-  public VlangType getType(@Nullable ResolveState context) {
+  public VlangTypeEx getType(@Nullable ResolveState context) {
     return VlangPsiImplUtil.getType(this, context);
   }
 

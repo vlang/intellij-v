@@ -12,6 +12,7 @@ import org.vlang.lang.stubs.VlangVarDefinitionStub;
 import org.vlang.lang.psi.*;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
+import org.vlang.lang.psi.types.VlangTypeEx;
 import com.intellij.psi.stubs.IStubElementType;
 
 public class VlangVarDefinitionImpl extends VlangNamedElementImpl<VlangVarDefinitionStub> implements VlangVarDefinition {
@@ -48,7 +49,7 @@ public class VlangVarDefinitionImpl extends VlangNamedElementImpl<VlangVarDefini
 
   @Override
   @Nullable
-  public VlangType getTypeInner(@Nullable ResolveState context) {
+  public VlangTypeEx getTypeInner(@Nullable ResolveState context) {
     return VlangPsiImplUtil.getTypeInner(this, context);
   }
 

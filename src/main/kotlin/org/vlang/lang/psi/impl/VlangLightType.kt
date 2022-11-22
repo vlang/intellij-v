@@ -123,10 +123,22 @@ abstract class VlangLightType<E : VlangCompositeElement>(
                 element
         }
 
+        override val genericParameters: VlangGenericParameters? = null
+
         override fun getText(): String {
             val signature = element.getSignature()
             return "fn " + if (signature != null) signature.text else "<null>"
         }
+
+        override fun getType() = null
+
+        override fun getTypeModifiers() = null
+    }
+
+    class VlangGenericType(private val name: String, param: VlangCompositeElement) : VlangLightType<VlangCompositeElement>(param) {
+        override fun getName() = name
+
+        override fun getText() = name
 
         override fun getType() = null
 

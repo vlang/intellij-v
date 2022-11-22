@@ -10,11 +10,11 @@ import io.ktor.util.*
 import org.vlang.lang.psi.VlangFile
 import org.vlang.lang.psi.VlangFunctionOrMethodDeclaration
 import org.vlang.lang.psi.VlangTypeOwner
-import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 
 class VlangTypeInfoProvider : ExpressionTypeProvider<VlangTypeOwner>() {
     override fun getInformationHint(element: VlangTypeOwner): String {
-        return element.getType(null).toEx().readableName(element).escapeHTML()
+        val type = element.getType(null) ?: return ""
+        return type.readableName(element).escapeHTML()
     }
 
     override fun getErrorHint(): String {

@@ -10,14 +10,14 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangGenericArgumentsFirstPinImpl extends VlangCompositeElementImpl implements VlangGenericArgumentsFirstPin {
+public class VlangGenericParametersImpl extends VlangCompositeElementImpl implements VlangGenericParameters {
 
-  public VlangGenericArgumentsFirstPinImpl(@NotNull ASTNode node) {
+  public VlangGenericParametersImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitGenericArgumentsFirstPin(this);
+    visitor.visitGenericParameters(this);
   }
 
   @Override
@@ -27,15 +27,15 @@ public class VlangGenericArgumentsFirstPinImpl extends VlangCompositeElementImpl
   }
 
   @Override
-  @Nullable
-  public VlangTypeListNoPin getTypeListNoPin() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeListNoPin.class);
+  @NotNull
+  public VlangGenericParameterList getGenericParameterList() {
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangGenericParameterList.class));
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiElement getGreater() {
-    return findChildByType(GREATER);
+    return notNullChild(findChildByType(GREATER));
   }
 
   @Override

@@ -1,5 +1,5 @@
 package org.vlang.lang.psi
 
-interface VlangSignatureOwner : VlangCompositeElement {
+interface VlangSignatureOwner : VlangGenericParametersOwner, VlangCompositeElement {
     fun getSignature(): VlangSignature?
 }

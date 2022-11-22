@@ -5,6 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
+import org.vlang.lang.psi.types.VlangTypeEx;
 
 public interface VlangSqlExpression extends VlangExpression {
 
@@ -15,6 +16,6 @@ public interface VlangSqlExpression extends VlangExpression {
   VlangSqlBlock getSqlBlock();
 
   @Nullable
-  VlangType getType(@Nullable ResolveState context);
+  VlangTypeEx getType(@Nullable ResolveState context);
 
 }

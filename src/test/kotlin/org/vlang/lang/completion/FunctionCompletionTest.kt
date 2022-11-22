@@ -138,4 +138,67 @@ class FunctionCompletionTest : CompletionTestBase() {
         }
         """.trimIndent()
     )
+
+    fun `test generic function name completion`() = doTestCompletion(
+        """
+        module main
+        
+        fn foo<T>() {}
+        
+        fn main() {
+            fo<caret>
+        }
+        """.trimIndent(),
+        """
+        module main
+        
+        fn foo<T>() {}
+        
+        fn main() {
+            foo<<caret>T>()
+        }
+        """.trimIndent()
+    )
+
+    fun `test generic function name before less completion`() = doTestCompletion(
+        """
+        module main
+        
+        fn foo<T>() {}
+        
+        fn main() {
+            fo<caret><int>()
+        }
+        """.trimIndent(),
+        """
+        module main
+        
+        fn foo<T>() {}
+        
+        fn main() {
+            foo<<caret>int>()
+        }
+        """.trimIndent()
+    )
+
+    fun `test generic function name completion 2`() = doTestCompletion(
+        """
+        module main
+        
+        fn foo<T, U, N>() {}
+        
+        fn main() {
+            fo<caret>
+        }
+        """.trimIndent(),
+        """
+        module main
+        
+        fn foo<T, U, N>() {}
+        
+        fn main() {
+            foo<<caret>T, U, N>()
+        }
+        """.trimIndent()
+    )
 }

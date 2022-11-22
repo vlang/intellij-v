@@ -84,7 +84,9 @@ public interface VlangTypes {
   IElementType FUNCTION_LIT = new VlangCompositeElementType("FUNCTION_LIT");
   IElementType FUNCTION_TYPE = VlangElementTypeFactory.stubFactory("FUNCTION_TYPE");
   IElementType GENERIC_ARGUMENTS = new VlangCompositeElementType("GENERIC_ARGUMENTS");
-  IElementType GENERIC_ARGUMENTS_FIRST_PIN = new VlangCompositeElementType("GENERIC_ARGUMENTS_FIRST_PIN");
+  IElementType GENERIC_PARAMETER = VlangElementTypeFactory.stubFactory("GENERIC_PARAMETER");
+  IElementType GENERIC_PARAMETERS = new VlangCompositeElementType("GENERIC_PARAMETERS");
+  IElementType GENERIC_PARAMETER_LIST = new VlangCompositeElementType("GENERIC_PARAMETER_LIST");
   IElementType GLOBAL_VARIABLE_DECLARATION = new VlangCompositeElementType("GLOBAL_VARIABLE_DECLARATION");
   IElementType GLOBAL_VARIABLE_DEFINITION = VlangElementTypeFactory.stubFactory("GLOBAL_VARIABLE_DEFINITION");
   IElementType GOTO_STATEMENT = new VlangCompositeElementType("GOTO_STATEMENT");
@@ -575,8 +577,14 @@ public interface VlangTypes {
       else if (type == GENERIC_ARGUMENTS) {
         return new VlangGenericArgumentsImpl(node);
       }
-      else if (type == GENERIC_ARGUMENTS_FIRST_PIN) {
-        return new VlangGenericArgumentsFirstPinImpl(node);
+      else if (type == GENERIC_PARAMETER) {
+        return new VlangGenericParameterImpl(node);
+      }
+      else if (type == GENERIC_PARAMETERS) {
+        return new VlangGenericParametersImpl(node);
+      }
+      else if (type == GENERIC_PARAMETER_LIST) {
+        return new VlangGenericParameterListImpl(node);
       }
       else if (type == GLOBAL_VARIABLE_DECLARATION) {
         return new VlangGlobalVariableDeclarationImpl(node);

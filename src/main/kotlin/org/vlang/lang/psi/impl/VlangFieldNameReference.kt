@@ -9,6 +9,9 @@ import com.intellij.psi.util.parentOfType
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangReferenceBase.Companion.LOCAL_RESOLVE
+import org.vlang.lang.psi.types.VlangPointerTypeEx
+import org.vlang.lang.psi.types.VlangStructTypeEx
+import org.vlang.lang.psi.types.VlangTypeEx
 
 class VlangFieldNameReference(element: VlangReferenceExpressionBase) :
     VlangCachedReference<VlangReferenceExpressionBase>(element) {
@@ -29,26 +32,37 @@ class VlangFieldNameReference(element: VlangReferenceExpressionBase) :
         if (key == null && (value == null || PsiTreeUtil.getPrevSiblingOfType(value, VlangKey::class.java) != null))
             return true
 
-        var type = myElement.parentOfType<VlangLiteralValueExpression>()?.getType(null)?.resolveType()
+        var type = myElement.parentOfType<VlangLiteralValueExpression>()?.getType(null)
         if (type == null) {
             val callExpr = VlangCodeInsightUtil.getCallExpr(element)
             val paramTypes = VlangCodeInsightUtil.getCalledParams(callExpr)
-            type = paramTypes?.lastOrNull { it is VlangStructType }?: return true
+            type = paramTypes?.lastOrNull { it is VlangStructTypeEx }?: return true
         }
 
-        val typeFile = type.containingFile as VlangFile
+        val typeFile = type.anchor()?.containingFile as? VlangFile
         val originFile = element.containingFile as VlangFile
-        val localResolve = VlangReference.isLocalResolve(typeFile, originFile)
+        val localResolve = typeFile == null || VlangReference.isLocalResolve(typeFile, originFile)
 
         return if (!processStructType(fieldProcessor, type, localResolve))
             false
         else
-            !(type is VlangPointerType && !processStructType(fieldProcessor, type.getType(), localResolve))
+            !(type is VlangPointerTypeEx && !processStructType(fieldProcessor, type.inner, localResolve))
     }
 
-    private fun processStructType(fieldProcessor: VlangScopeProcessor, type: VlangType?, localResolve: Boolean): Boolean {
+    private fun processStructType(fieldProcessor: VlangScopeProcessor, type: VlangTypeEx?, localResolve: Boolean): Boolean {
+        if (type !is VlangStructTypeEx) return true
+
         val state = if (localResolve) ResolveState.initial().put(LOCAL_RESOLVE, true) else ResolveState.initial()
-        return !(type is VlangStructType && !type.processDeclarations(fieldProcessor, state, null, myElement))
+        val declaration = type.resolve(project) ?: return true
+        val structType = declaration.structType
+
+        val fields = structType.getFieldList()
+        for (field in fields) {
+            if (!fieldProcessor.execute(field, state)) return false
+        }
+
+        return true
+//        return !(type is VlangStructType && !structType.processDeclarations(fieldProcessor, state, null, myElement))
     }
 
     fun inStructTypeKey(): Boolean {

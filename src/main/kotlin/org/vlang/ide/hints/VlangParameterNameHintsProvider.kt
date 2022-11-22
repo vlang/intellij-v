@@ -8,7 +8,6 @@ import com.intellij.refactoring.suggested.endOffset
 import com.intellij.refactoring.suggested.startOffset
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.*
-import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangUnknownTypeEx
 import org.vlang.utils.line
 import kotlin.math.min
@@ -68,25 +67,23 @@ class VlangParameterNameHintsProvider : InlayParameterHintsProvider {
     }
 
     private fun handleVarDefinition(element: VlangVarDefinition, hints: MutableList<InlayInfo>) {
-        val type = element.getTypeInner(null)
-        val exType = type.toEx()
-        if (exType is VlangUnknownTypeEx) {
+        val type = element.getTypeInner(null) ?: return
+        if (type is VlangUnknownTypeEx) {
             // no need show hint if type is unknown
             return
         }
-        val readableName = exType.readableName(element)
+        val readableName = type.readableName(element)
         val inlayInfo = InlayInfo(readableName, element.endOffset)
         hints.add(inlayInfo)
     }
 
     private fun handleConstDefinition(element: VlangConstDefinition, hints: MutableList<InlayInfo>) {
-        val type = element.getTypeInner(null)
-        val exType = type.toEx()
-        if (exType is VlangUnknownTypeEx) {
+        val type = element.getTypeInner(null) ?: return
+        if (type is VlangUnknownTypeEx) {
             // no need show hint if type is unknown
             return
         }
-        val readableName = exType.readableName(element)
+        val readableName = type.readableName(element)
         val inlayInfo = InlayInfo(readableName, element.getIdentifier().endOffset)
         hints.add(inlayInfo)
     }

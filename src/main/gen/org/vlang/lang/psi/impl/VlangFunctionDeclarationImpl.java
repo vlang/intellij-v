@@ -10,6 +10,7 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 import com.intellij.psi.ResolveState;
+import org.vlang.lang.psi.types.VlangTypeEx;
 import org.vlang.lang.stubs.VlangFunctionDeclarationStub;
 import com.intellij.psi.stubs.IStubElementType;
 
@@ -47,8 +48,8 @@ public class VlangFunctionDeclarationImpl extends VlangFunctionOrMethodDeclarati
 
   @Override
   @Nullable
-  public VlangGenericArguments getGenericArguments() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangGenericArguments.class);
+  public VlangGenericParameters getGenericParameters() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangGenericParameters.class);
   }
 
   @Override
@@ -83,7 +84,7 @@ public class VlangFunctionDeclarationImpl extends VlangFunctionOrMethodDeclarati
 
   @Override
   @Nullable
-  public VlangType getTypeInner(@Nullable ResolveState context) {
+  public VlangTypeEx getTypeInner(@Nullable ResolveState context) {
     return VlangPsiImplUtil.getTypeInner(this, context);
   }
 
@@ -95,6 +96,11 @@ public class VlangFunctionDeclarationImpl extends VlangFunctionOrMethodDeclarati
   @Override
   public boolean isNoReturn() {
     return VlangPsiImplUtil.isNoReturn(this);
+  }
+
+  @Override
+  public boolean isGeneric() {
+    return VlangPsiImplUtil.isGeneric(this);
   }
 
 }

@@ -29,4 +29,10 @@ fn main() {
 
 	three_tuple := ret_three_tuple()
 	expr_type(three_tuple, '(bool, string, Foo)')
+
+	a1, b1, c1 := ret_tuple()
+
+	expr_type(a1, 'int')
+	expr_type(b1, 'string')
+	expr_type(c1, 'any')
 }

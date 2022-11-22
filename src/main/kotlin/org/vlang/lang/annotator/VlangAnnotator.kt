@@ -63,8 +63,12 @@ class VlangAnnotator : Annotator {
             return VlangColor.BUILTIN_TYPE
         }
 
-        if (element.text == "chan" || element.text == "thread" && element.inside<VlangType>()) {
+        if ((element.text == "chan" || element.text == "thread") && element.inside<VlangType>()) {
             return VlangColor.KEYWORD
+        }
+
+        if (parent is VlangGenericParameter) {
+            return VlangColor.GENERIC_PARAMETER
         }
 
         if (element.elementType == VlangTypes.IDENTIFIER && (parent is VlangReferenceExpression || parent is VlangTypeReferenceExpression)) {
@@ -115,6 +119,8 @@ class VlangAnnotator : Annotator {
             } else {
                 mutable(resolved, VlangColor.MUTABLE_VARIABLE, VlangColor.VARIABLE)
             }
+
+            is VlangGenericParameter          -> VlangColor.GENERIC_PARAMETER
 
             else                              -> null
         }

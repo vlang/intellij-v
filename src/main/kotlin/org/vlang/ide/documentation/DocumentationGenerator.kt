@@ -9,6 +9,8 @@ import io.ktor.util.*
 import org.vlang.ide.documentation.DocumentationUtils.appendNotNull
 import org.vlang.ide.documentation.DocumentationUtils.asAttribute
 import org.vlang.ide.documentation.DocumentationUtils.asDeclaration
+import org.vlang.ide.documentation.DocumentationUtils.asGeneric
+import org.vlang.ide.documentation.DocumentationUtils.asIdentifier
 import org.vlang.ide.documentation.DocumentationUtils.asKeyword
 import org.vlang.ide.documentation.DocumentationUtils.asNumber
 import org.vlang.ide.documentation.DocumentationUtils.asParameter
@@ -24,20 +26,31 @@ import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 
 object DocumentationGenerator {
-    fun VlangType.generateDoc(anchor: PsiElement): String {
-        val typeEx = toEx()
-        when (typeEx) {
-            is VlangArrayTypeEx     -> return typeEx.generateDoc(anchor)
-            is VlangMapTypeEx       -> return typeEx.generateDoc(anchor)
-            is VlangSharedTypeEx    -> return typeEx.generateDoc(anchor)
-            is VlangPointerTypeEx   -> return typeEx.generateDoc(anchor)
-            is VlangOptionTypeEx    -> return typeEx.generateDoc(anchor)
-            is VlangStructTypeEx    -> return typeEx.generateDoc(anchor)
-            is VlangUnionTypeEx     -> return typeEx.generateDoc(anchor)
-            is VlangEnumTypeEx      -> return typeEx.generateDoc(anchor)
-            is VlangInterfaceTypeEx -> return typeEx.generateDoc(anchor)
+    fun VlangTypeEx.generateDoc(anchor: PsiElement): String {
+        when (this) {
+            is VlangAliasTypeEx            -> return this.generateDoc(anchor)
+            is VlangArrayTypeEx            -> return this.generateDoc(anchor)
+            is VlangMapTypeEx              -> return this.generateDoc(anchor)
+            is VlangSharedTypeEx           -> return this.generateDoc(anchor)
+            is VlangPointerTypeEx          -> return this.generateDoc(anchor)
+            is VlangOptionTypeEx           -> return this.generateDoc(anchor)
+            is VlangChannelTypeEx          -> return this.generateDoc(anchor)
+            is VlangResultTypeEx           -> return this.generateDoc(anchor)
+            is VlangUnionTypeEx            -> return this.generateDoc(anchor)
+            is VlangStructTypeEx           -> return this.generateDoc(anchor)
+            is VlangEnumTypeEx             -> return this.generateDoc(anchor)
+            is VlangInterfaceTypeEx        -> return this.generateDoc(anchor)
+            is VlangFunctionTypeEx         -> return this.generateDoc(anchor)
+            is VlangGenericTypeEx          -> return this.generateDoc(anchor)
+            is VlangGenericInstantiationEx -> return this.generateDoc(anchor)
         }
-        return colorize(typeEx.readableName(anchor).escapeHTML(), asType)
+        return colorize(this.readableName(anchor).escapeHTML(), asType)
+    }
+
+    fun VlangAliasTypeEx.generateDoc(anchor: PsiElement): String {
+        return buildString {
+            append(generateFqnTypeDoc(readableName(anchor)))
+        }
     }
 
     fun VlangStructTypeEx.generateDoc(anchor: PsiElement): String {
@@ -67,37 +80,88 @@ object DocumentationGenerator {
     fun VlangArrayTypeEx.generateDoc(anchor: PsiElement): String {
         return buildString {
             append("[]")
-            appendNotNull(inner?.raw()?.generateDoc(anchor))
+            appendNotNull(inner.generateDoc(anchor))
         }
     }
 
     fun VlangMapTypeEx.generateDoc(anchor: PsiElement): String {
         return buildString {
-            append("map[")
-            appendNotNull(key.raw()?.generateDoc(anchor))
+            colorize("map", asKeyword)
+            append("[")
+            appendNotNull(key.generateDoc(anchor))
             append("]")
-            appendNotNull(value.raw()?.generateDoc(anchor))
+            appendNotNull(value.generateDoc(anchor))
         }
     }
 
     fun VlangSharedTypeEx.generateDoc(anchor: PsiElement): String {
         return buildString {
-            append("shared ")
-            appendNotNull(inner?.raw()?.generateDoc(anchor))
+            colorize("shared ", asKeyword)
+            appendNotNull(inner.generateDoc(anchor))
         }
     }
 
     fun VlangPointerTypeEx.generateDoc(anchor: PsiElement): String {
         return buildString {
             append("&")
-            appendNotNull(inner?.raw()?.generateDoc(anchor))
+            appendNotNull(inner.generateDoc(anchor))
         }
     }
 
     fun VlangOptionTypeEx.generateDoc(anchor: PsiElement): String {
         return buildString {
             append("?")
-            appendNotNull(inner?.raw()?.generateDoc(anchor))
+            appendNotNull(inner?.generateDoc(anchor))
+        }
+    }
+
+    fun VlangResultTypeEx.generateDoc(anchor: PsiElement): String {
+        return buildString {
+            append("!")
+            appendNotNull(inner?.generateDoc(anchor))
+        }
+    }
+
+    fun VlangChannelTypeEx.generateDoc(anchor: PsiElement): String {
+        return buildString {
+            colorize("chan ", asKeyword)
+            appendNotNull(inner.generateDoc(anchor))
+        }
+    }
+
+    fun VlangFunctionTypeEx.generateDoc(anchor: PsiElement): String {
+        return buildString {
+            colorize("fn", asKeyword)
+            append(" (")
+            params.forEachIndexed { index, param ->
+                if (index > 0) {
+                    append(", ")
+                }
+                appendNotNull(param.generateDoc(anchor))
+            }
+            append(")")
+            if (result != null) {
+                append(" ")
+                appendNotNull(result.generateDoc(anchor))
+            }
+        }
+    }
+
+    fun VlangGenericTypeEx.generateDoc(anchor: PsiElement): String {
+        return colorize(qualifiedName(), asGeneric)
+    }
+
+    fun VlangGenericInstantiationEx.generateDoc(anchor: PsiElement): String {
+        return buildString {
+            appendNotNull(inner.generateDoc(anchor))
+            append("&lt;")
+            specialization.forEachIndexed { index, param ->
+                if (index > 0) {
+                    append(", ")
+                }
+                appendNotNull(param.generateDoc(anchor))
+            }
+            append(">")
         }
     }
 
@@ -111,12 +175,12 @@ object DocumentationGenerator {
     }
 
     fun VlangResult.generateDoc(): String {
-        val typeInner = type as? VlangTupleType
-        if (typeInner != null) {
+        val type = type.toEx()
+        if (type is VlangTupleTypeEx) {
             return buildString {
                 append("(")
                 append(
-                    typeInner.typeListNoPin.typeList.joinToString(", ") {
+                    type.types.joinToString(", ") {
                         it.generateDoc(this@generateDoc)
                     }
                 )
@@ -141,19 +205,15 @@ object DocumentationGenerator {
         return buildString {
             if (isVolatile) {
                 colorize("volatile", asKeyword, noHtml)
-                append(" ")
             }
             if (isStatic) {
                 colorize("static", asKeyword, noHtml)
-                append(" ")
             }
             if (isMutable) {
                 colorize(if (short) "mut" else "mutable", asKeyword, noHtml)
-                append(" ")
             }
             if (isShared) {
                 colorize("shared", asKeyword, noHtml)
-                append(" ")
             }
         }.trim()
     }
@@ -210,8 +270,9 @@ object DocumentationGenerator {
                         val modifiers = param.varModifiers.generateDoc()
 
                         append("   ")
-                        append(modifiers)
-                        append("".padEnd(modifierMaxWidth - modifiersRawLength))
+                        part(modifiers)
+                        val pad = modifierMaxWidth - modifiersRawLength
+                        append("".padEnd(if (pad != 0) pad + 1 else 0))
                         val name = param.name
                         if (name != null) {
                             colorize(name, asParameter)
@@ -219,12 +280,22 @@ object DocumentationGenerator {
                         val nameLength = name?.length ?: 0
                         append("".padEnd(paramNameMaxWidth - nameLength))
                         append(" ")
-                        append(param.type.generateDoc(this@generateDoc))
+                        append(param.type.toEx().generateDoc(this@generateDoc))
                     }
-                }
+                } + ","
             )
             append("\n")
             append(")")
+        }
+    }
+
+    private fun VlangGenericParameters?.generateDoc(): String? {
+        if (this == null) return null
+
+        val parameters = this@generateDoc.genericParameterList.genericParameterList
+        val names = parameters.mapNotNull { it.name }
+        return names.joinToString(", ", prefix = "<".escapeHTML(), postfix = ">".escapeHTML()) {
+            colorize(it, asGeneric)
         }
     }
 
@@ -236,7 +307,7 @@ object DocumentationGenerator {
                 colorize(name, asParameter)
                 append(" ")
             }
-            append(type.generateDoc(this@generateDocForMethod))
+            append(type.toEx().generateDoc(this@generateDocForMethod))
         }
     }
 
@@ -253,14 +324,15 @@ object DocumentationGenerator {
     private fun VlangReceiver.generateMethodDoc(): String {
         return buildString {
             append("(")
-            appendNotNull(varModifiers?.generateDoc())
-            part(name, asDeclaration)
-            appendNotNull(type?.generateDoc(this@generateMethodDoc))
+            part(varModifiers?.generateDoc())
+            part(name, asParameter)
+            appendNotNull(type.toEx().generateDoc(this@generateMethodDoc))
             append(")")
         }
     }
 
     fun VlangFunctionOrMethodDeclaration.generateDoc(): String? {
+        val genericParameters = genericParameters
         val parameters = getSignature()?.parameters ?: return null
         val returnType = getSignature()?.result
 
@@ -276,6 +348,7 @@ object DocumentationGenerator {
 
             part("fn", asKeyword)
             colorize(name ?: "anon", asDeclaration)
+            appendNotNull(genericParameters.generateDoc())
             part(parameters.generateDoc())
             append(returnType?.generateDoc() ?: DocumentationUtils.colorize("void", asDeclaration))
             append(DocumentationMarkup.DEFINITION_END)
@@ -294,6 +367,7 @@ object DocumentationGenerator {
 
             part("struct", asKeyword)
             colorize(name, asDeclaration)
+            appendNotNull(structType.genericParameters.generateDoc())
             append(DocumentationMarkup.DEFINITION_END)
 
             generateCommentsPart(this@generateDoc)
@@ -324,6 +398,7 @@ object DocumentationGenerator {
 
             part("interface", asKeyword)
             colorize(name, asDeclaration)
+            appendNotNull(interfaceType.genericParameters.generateDoc())
             append(DocumentationMarkup.DEFINITION_END)
 
             generateCommentsPart(this@generateDoc)
@@ -392,10 +467,7 @@ object DocumentationGenerator {
             append(DocumentationMarkup.DEFINITION_START)
             val type = getType(null)
 
-            val modifiersDoc = varModifiers?.generateDoc()
-            if (!modifiersDoc.isNullOrEmpty()) {
-                append(modifiersDoc)
-            }
+            part(varModifiers?.generateDoc())
 
             part("global var", asKeyword)
             part(name, asDeclaration)
@@ -423,11 +495,12 @@ object DocumentationGenerator {
             append(modifiersDoc)
 
             part("interface method", asKeyword)
-            colorize(owner.name ?: "anon", asDeclaration)
-            append(".")
             colorize(name ?: "anon", asDeclaration)
             part(parameters.generateDoc())
             append(returnType?.generateDoc() ?: DocumentationUtils.colorize("void", asDeclaration))
+
+            colorize(" of ", asIdentifier)
+            colorize(owner.name ?: "anon", asDeclaration)
 
             append(DocumentationMarkup.DEFINITION_END)
             generateCommentsPart(this@generateDoc)
@@ -449,10 +522,10 @@ object DocumentationGenerator {
             append(modifiersDoc)
 
             part("field", asKeyword)
-            append(owner.generateDoc(this@generateDoc))
+            append(owner.toEx().generateDoc(this@generateDoc))
             append(".")
             part(name, asDeclaration)
-            append(type?.generateDoc(this@generateDoc) ?: DocumentationUtils.colorize("unknown", asDeclaration))
+            append(type.toEx().generateDoc(this@generateDoc))
 
             val valueDoc = parent.defaultFieldValue?.expression?.generateDoc()
             if (valueDoc != null) {
@@ -473,7 +546,7 @@ object DocumentationGenerator {
             val owner = parentOfType<VlangType>()!!
 
             part("enum field", asKeyword)
-            append(owner.generateDoc(this@generateDoc))
+            append(owner.toEx().generateDoc(this@generateDoc))
             append(".")
             part(name, asDeclaration)
 
@@ -493,17 +566,23 @@ object DocumentationGenerator {
             generateModuleName(containingFile)
             append(DocumentationMarkup.DEFINITION_START)
 
-            val modifiersDoc = varModifiers?.generateDoc()
-            if (!modifiersDoc.isNullOrEmpty()) {
-                append(modifiersDoc)
-            }
+            part(varModifiers?.generateDoc())
             part("receiver", asKeyword)
             part(name, asDeclaration)
-            append(type?.generateDoc(this@generateDoc))
+            append(type.toEx().generateDoc(this@generateDoc))
             append(DocumentationMarkup.DEFINITION_END)
 
             generateCommentsPart(this@generateDoc)
         }
+    }
+
+    fun VlangGenericParameter.generateDoc() = buildString {
+        generateModuleName(containingFile)
+        append(DocumentationMarkup.DEFINITION_START)
+
+        part("generic parameter", asKeyword)
+        part(name, asDeclaration)
+        append(DocumentationMarkup.DEFINITION_END)
     }
 
     fun VlangExpression.generateDoc(): String {

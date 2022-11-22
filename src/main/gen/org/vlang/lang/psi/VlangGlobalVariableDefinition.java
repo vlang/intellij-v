@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import org.vlang.lang.stubs.VlangGlobalVariableDefinitionStub;
 import com.intellij.psi.ResolveState;
+import org.vlang.lang.psi.types.VlangTypeEx;
 
 public interface VlangGlobalVariableDefinition extends VlangNamedElement, StubBasedPsiElement<VlangGlobalVariableDefinitionStub> {
 
@@ -34,7 +35,7 @@ public interface VlangGlobalVariableDefinition extends VlangNamedElement, StubBa
   //methods are not found in VlangPsiImplUtil
 
   @Nullable
-  VlangType getTypeInner(@Nullable ResolveState context);
+  VlangTypeEx getTypeInner(@Nullable ResolveState context);
 
   //WARNING: getSymbolVisibility(...) is skipped
   //matching getSymbolVisibility(VlangGlobalVariableDefinition, ...)

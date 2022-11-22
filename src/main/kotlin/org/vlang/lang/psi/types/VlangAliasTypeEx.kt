@@ -3,29 +3,28 @@ package org.vlang.lang.psi.types
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
-import org.vlang.lang.psi.VlangAliasType
 import org.vlang.lang.psi.VlangTypeAliasDeclaration
+import org.vlang.lang.stubs.index.VlangNamesIndex
 
-class VlangAliasTypeEx(raw: VlangAliasType) : VlangBaseTypeEx<VlangAliasType>(raw), VlangImportableTypeEx {
-    private val decl = raw.parent as VlangTypeAliasDeclaration
-    private val name = decl.getQualifiedName() ?: ANON
-    private val right = raw.typeUnionList?.typeList?.firstOrNull().toEx()
+class VlangAliasTypeEx(val name: String, val inner: VlangTypeEx, anchor: PsiElement) :
+    VlangBaseTypeEx(anchor), VlangImportableTypeEx, VlangResolvableTypeEx<VlangTypeAliasDeclaration> {
 
-    override fun toString() = buildString {
-        append(name)
-        append(" = ")
-        append(right)
+    override fun toString() = name
+
+    override fun qualifiedName(): String {
+        if (moduleName.isEmpty()) {
+            return "main.$name"
+        }
+        return "$moduleName.$name"
     }
 
-    override fun qualifiedName() = name
+    override fun readableName(context: PsiElement) = VlangCodeInsightUtil.getQualifiedName(context, anchor!!, name)
 
-    override fun readableName(context: PsiElement) = VlangCodeInsightUtil.getQualifiedName(context, decl)
-
-    override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {
+    override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
         return true // TODO: implement this
     }
 
-    override fun isEqual(rhs: VlangTypeEx<*>): Boolean {
+    override fun isEqual(rhs: VlangTypeEx): Boolean {
         return rhs is VlangAliasTypeEx && name == rhs.name
     }
 
@@ -34,8 +33,19 @@ class VlangAliasTypeEx(raw: VlangAliasType) : VlangBaseTypeEx<VlangAliasType>(ra
             return
         }
 
-        if (!visitor.enter(right)) {
-            return
+        inner.accept(visitor)
+    }
+
+    override fun substituteGenerics(nameMap: Map<String, VlangTypeEx>): VlangTypeEx {
+        return VlangAliasTypeEx(name, inner.substituteGenerics(nameMap), anchor!!)
+    }
+
+    override fun resolve(project: Project): VlangTypeAliasDeclaration? {
+        // TODO: own index?
+        val variants = VlangNamesIndex.find(qualifiedName(), project, null)
+        if (variants.isEmpty()) {
+            return null
         }
+        return variants.first { it is VlangTypeAliasDeclaration } as? VlangTypeAliasDeclaration
     }
 }

@@ -2,7 +2,7 @@ package org.vlang.lang.psi
 
 import com.intellij.psi.PsiElement
 
-interface VlangFunctionOrMethodDeclaration : VlangAttributeOwner, VlangNamedElement {
+interface VlangFunctionOrMethodDeclaration : VlangAttributeOwner, VlangNamedElement, VlangGenericParametersOwner {
     fun getBlock(): VlangBlock?
     fun getSignature(): VlangSignature?
     fun getFn(): PsiElement

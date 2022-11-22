@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangFunctionLit extends VlangExpression, VlangSignatureOwner {
+public interface VlangFunctionLit extends VlangExpression, VlangSignatureOwner, VlangGenericParametersOwner {
 
   @Nullable
   VlangBlock getBlock();
@@ -14,7 +14,7 @@ public interface VlangFunctionLit extends VlangExpression, VlangSignatureOwner {
   VlangCaptureList getCaptureList();
 
   @Nullable
-  VlangGenericArgumentsFirstPin getGenericArgumentsFirstPin();
+  VlangGenericParameters getGenericParameters();
 
   @Nullable
   VlangSignature getSignature();

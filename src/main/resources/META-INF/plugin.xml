@@ -333,8 +333,14 @@ The plugin provides support for V language
 
         <completion.contributor
           language="vlang"
+          id="VlangPrimitiveTypesContributor"
+          order="after VlangModuleNameCompletionContributor"
+          implementationClass="org.vlang.lang.completion.VlangPrimitiveTypesContributor"/>
+
+        <completion.contributor
+          language="vlang"
           id="VlangContextCompletionContributor"
-          order="after VlangKeywordsCompletionContributor"
+          order="after VlangPrimitiveTypesContributor"
           implementationClass="org.vlang.lang.completion.VlangContextCompletionContributor"/>
 
         <typedHandler implementation="org.vlang.lang.completion.VlangTypedHandler"/>

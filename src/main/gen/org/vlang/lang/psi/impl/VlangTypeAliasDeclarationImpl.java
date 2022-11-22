@@ -11,6 +11,7 @@ import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.stubs.VlangTypeAliasDeclarationStub;
 import org.vlang.lang.psi.*;
 import com.intellij.psi.ResolveState;
+import org.vlang.lang.psi.types.VlangTypeEx;
 import com.intellij.psi.stubs.IStubElementType;
 
 public class VlangTypeAliasDeclarationImpl extends VlangNamedElementImpl<VlangTypeAliasDeclarationStub> implements VlangTypeAliasDeclaration {
@@ -70,8 +71,8 @@ public class VlangTypeAliasDeclarationImpl extends VlangNamedElementImpl<VlangTy
   }
 
   @Override
-  @Nullable
-  public VlangType getTypeInner(@Nullable ResolveState context) {
+  @NotNull
+  public VlangTypeEx getTypeInner(@Nullable ResolveState context) {
     return VlangPsiImplUtil.getTypeInner(this, context);
   }
 

@@ -22,7 +22,7 @@ class VlangSuperSearch : QueryExecutorBase<VlangNamedElement, DefinitionsScopedS
         if (element !is VlangNamedElement || !element.isValid()) return
         val typeSpec = element.getType(null) ?: return
         val visitedSpecs = ReferenceOpenHashSet<VlangNamedElement>()
-        val ownMethods = VlangLangUtil.getMethodList(typeSpec)
+        val ownMethods = VlangLangUtil.getMethodList(element.project, typeSpec)
         processMethodOwners(processor, element, ownMethods, visitedSpecs)
     }
 

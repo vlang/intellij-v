@@ -44,7 +44,8 @@ abstract class ResolveTestBase : BasePlatformTestCase() {
     }
 
     protected fun file(path: String, @Language("vlang") text: String) {
-        myFixture.configureByText(path, text)
+        val fileText = text.replace(CARET, CARET_ORIGINAL)
+        myFixture.configureByText(path, fileText)
     }
 
     protected fun mainFile(path: String, @Language("vlang") text: String) {
@@ -60,5 +61,10 @@ abstract class ResolveTestBase : BasePlatformTestCase() {
     protected fun findReferenceAtCaret(filePath: String): PsiReference? {
         val file: PsiFile = myFixture.configureByFile(filePath)
         return file.findReferenceAt(myFixture.editor.caretModel.offset)
+    }
+
+    companion object {
+        const val CARET = "/*caret*/"
+        const val CARET_ORIGINAL = "<caret>"
     }
 }

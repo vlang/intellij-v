@@ -3,29 +3,23 @@ package org.vlang.lang.psi.types
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
-import org.vlang.lang.psi.VlangAliasType
-import org.vlang.lang.psi.VlangTypeAliasDeclaration
 
-class VlangSumTypeEx(raw: VlangAliasType) : VlangBaseTypeEx<VlangAliasType>(raw), VlangImportableTypeEx {
-    private val decl = raw.parent as VlangTypeAliasDeclaration
-    private val name = decl.getQualifiedName() ?: ANON
-    private val rightList = emptyList<VlangTypeEx<*>>() // TODO
-
+class VlangSumTypeEx(val name: String, val right: List<VlangTypeEx>, anchor: PsiElement) : VlangBaseTypeEx(anchor), VlangImportableTypeEx {
     override fun toString() = buildString {
         append(name)
         append(" = ")
-        append(rightList.joinToString(" | ") { it.toString() })
+        append(right.joinToString(" | ") { it.toString() })
     }
 
     override fun qualifiedName() = name
 
-    override fun readableName(context: PsiElement) = VlangCodeInsightUtil.getQualifiedName(context, decl)
+    override fun readableName(context: PsiElement) = VlangCodeInsightUtil.getQualifiedName(context, anchor!!, name)
 
-    override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {
+    override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
         return true // TODO: implement this
     }
 
-    override fun isEqual(rhs: VlangTypeEx<*>): Boolean {
+    override fun isEqual(rhs: VlangTypeEx): Boolean {
         return true // TODO: implement this
     }
 
@@ -34,10 +28,12 @@ class VlangSumTypeEx(raw: VlangAliasType) : VlangBaseTypeEx<VlangAliasType>(raw)
             return
         }
 
-        for (right in rightList) {
-            if (!visitor.enter(right)) {
-                return
-            }
+        for (right in right) {
+            right.accept(visitor)
         }
+    }
+
+    override fun substituteGenerics(nameMap: Map<String, VlangTypeEx>): VlangTypeEx {
+        return VlangSumTypeEx(name, right.map { it.substituteGenerics(nameMap) }, anchor!!)
     }
 }

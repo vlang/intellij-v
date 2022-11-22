@@ -13,6 +13,7 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitAliasType(@NotNull VlangAliasType o) {
     visitType(o);
+    // visitGenericParametersOwner(o);
   }
 
   public void visitAndExpr(@NotNull VlangAndExpr o) {
@@ -295,12 +296,14 @@ public class VlangVisitor extends PsiElementVisitor {
     visitSignatureOwner(o);
     // visitFunctionOrMethodDeclaration(o);
     // visitAttributeOwner(o);
+    // visitGenericParametersOwner(o);
     // visitScopeHolder(o);
   }
 
   public void visitFunctionLit(@NotNull VlangFunctionLit o) {
     visitExpression(o);
     // visitSignatureOwner(o);
+    // visitGenericParametersOwner(o);
   }
 
   public void visitFunctionType(@NotNull VlangFunctionType o) {
@@ -312,7 +315,15 @@ public class VlangVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitGenericArgumentsFirstPin(@NotNull VlangGenericArgumentsFirstPin o) {
+  public void visitGenericParameter(@NotNull VlangGenericParameter o) {
+    visitNamedElement(o);
+  }
+
+  public void visitGenericParameterList(@NotNull VlangGenericParameterList o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitGenericParameters(@NotNull VlangGenericParameters o) {
     visitCompositeElement(o);
   }
 
@@ -405,11 +416,13 @@ public class VlangVisitor extends PsiElementVisitor {
   public void visitInterfaceMethodDefinition(@NotNull VlangInterfaceMethodDefinition o) {
     visitSignatureOwner(o);
     // visitNamedElement(o);
+    // visitGenericParametersOwner(o);
   }
 
   public void visitInterfaceType(@NotNull VlangInterfaceType o) {
     visitType(o);
     // visitFieldListOwner(o);
+    // visitGenericParametersOwner(o);
   }
 
   public void visitIsExpression(@NotNull VlangIsExpression o) {
@@ -520,6 +533,7 @@ public class VlangVisitor extends PsiElementVisitor {
     visitSignatureOwner(o);
     // visitFunctionOrMethodDeclaration(o);
     // visitAttributeOwner(o);
+    // visitGenericParametersOwner(o);
   }
 
   public void visitMethodName(@NotNull VlangMethodName o) {
@@ -790,6 +804,7 @@ public class VlangVisitor extends PsiElementVisitor {
   public void visitStructType(@NotNull VlangStructType o) {
     visitType(o);
     // visitFieldListOwner(o);
+    // visitGenericParametersOwner(o);
   }
 
   public void visitSymbolVisibility(@NotNull VlangSymbolVisibility o) {

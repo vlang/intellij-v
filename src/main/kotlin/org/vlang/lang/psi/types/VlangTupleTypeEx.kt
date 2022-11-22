@@ -2,18 +2,15 @@ package org.vlang.lang.psi.types
 
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
-import org.vlang.lang.psi.VlangTupleType
 
-class VlangTupleTypeEx(raw: VlangTupleType) : VlangBaseTypeEx<VlangTupleType>(raw) {
-    private val types = raw.typeListNoPin.typeList.map { it.toEx() }
-
+class VlangTupleTypeEx(val types: List<VlangTypeEx>, anchor: PsiElement) : VlangBaseTypeEx(anchor) {
     override fun toString() = buildString {
         append("(")
         append(types.joinToString(", ") { it.toString() })
         append(")")
     }
 
-    override fun qualifiedName() = buildString {
+    override fun qualifiedName(): String = buildString {
         append("(")
         append(types.joinToString(", ") { it.qualifiedName() })
         append(")")
@@ -25,18 +22,12 @@ class VlangTupleTypeEx(raw: VlangTupleType) : VlangBaseTypeEx<VlangTupleType>(ra
         append(")")
     }
 
-    override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {
+    override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
         return true // TODO: implement this
     }
 
-    override fun isEqual(rhs: VlangTypeEx<*>): Boolean {
-        if (rhs !is VlangTupleTypeEx) return false
-
-        if (types.size != rhs.types.size) {
-            return false
-        }
-
-        return types.zip(rhs.types).all { (lhs, rhs) -> lhs.isEqual(rhs) }
+    override fun isEqual(rhs: VlangTypeEx): Boolean {
+        return true // TODO: implement this
     }
 
     override fun accept(visitor: VlangTypeVisitor) {
@@ -45,9 +36,11 @@ class VlangTupleTypeEx(raw: VlangTupleType) : VlangBaseTypeEx<VlangTupleType>(ra
         }
 
         for (type in types) {
-            if (!visitor.enter(type)) {
-                return
-            }
+            type.accept(visitor)
         }
+    }
+
+    override fun substituteGenerics(nameMap: Map<String, VlangTypeEx>): VlangTypeEx {
+        return VlangTupleTypeEx(types.map { it.substituteGenerics(nameMap) }, anchor!!)
     }
 }

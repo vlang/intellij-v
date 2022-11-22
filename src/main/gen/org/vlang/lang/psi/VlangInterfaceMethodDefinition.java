@@ -7,8 +7,12 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import org.vlang.lang.stubs.VlangInterfaceMethodDefinitionStub;
 import com.intellij.psi.ResolveState;
+import org.vlang.lang.psi.types.VlangTypeEx;
 
-public interface VlangInterfaceMethodDefinition extends VlangSignatureOwner, VlangNamedElement, StubBasedPsiElement<VlangInterfaceMethodDefinitionStub> {
+public interface VlangInterfaceMethodDefinition extends VlangSignatureOwner, VlangNamedElement, VlangGenericParametersOwner, StubBasedPsiElement<VlangInterfaceMethodDefinitionStub> {
+
+  @Nullable
+  VlangGenericParameters getGenericParameters();
 
   @NotNull
   VlangSignature getSignature();
@@ -17,7 +21,7 @@ public interface VlangInterfaceMethodDefinition extends VlangSignatureOwner, Vla
   PsiElement getIdentifier();
 
   @Nullable
-  VlangType getTypeInner(@Nullable ResolveState context);
+  VlangTypeEx getTypeInner(@Nullable ResolveState context);
 
   boolean isPublic();
 

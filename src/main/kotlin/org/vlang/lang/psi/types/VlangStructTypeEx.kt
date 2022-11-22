@@ -4,26 +4,30 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.VlangStructDeclaration
-import org.vlang.lang.psi.VlangStructType
+import org.vlang.lang.stubs.index.VlangClassLikeIndex
 
-class VlangStructTypeEx(raw: VlangStructType) : VlangBaseTypeEx<VlangStructType>(raw), VlangImportableTypeEx {
-    private val decl = raw.parent as VlangStructDeclaration
-    private val name = decl.getQualifiedName() ?: ANON
+open class VlangStructTypeEx(private val name: String, anchor: PsiElement?) :
+    VlangBaseTypeEx(anchor), VlangImportableTypeEx, VlangResolvableTypeEx<VlangStructDeclaration> {
 
     override fun toString() = name
 
-    override fun qualifiedName() = name
+    override fun qualifiedName(): String {
+        if (moduleName.isEmpty()) {
+            return "main.$name"
+        }
+        return "$moduleName.$name"
+    }
 
-    override fun readableName(context: PsiElement) = VlangCodeInsightUtil.getQualifiedName(context, decl)
+    override fun readableName(context: PsiElement) = VlangCodeInsightUtil.getQualifiedName(context, anchor!!, name)
 
-    override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {
+    override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
         return when (rhs) {
             is VlangAnyTypeEx       -> true
             is VlangUnknownTypeEx   -> true
             is VlangVoidPtrTypeEx   -> true
             is VlangOptionTypeEx    -> if (rhs.inner == null) true else isAssignableFrom(rhs.inner, project)
             is VlangResultTypeEx    -> if (rhs.inner == null) true else isAssignableFrom(rhs.inner, project)
-            is VlangPointerTypeEx   -> if (rhs.inner == null) true else isAssignableFrom(rhs.inner, project)
+            is VlangPointerTypeEx   -> isAssignableFrom(rhs.inner, project)
             is VlangInterfaceTypeEx -> {
                 // TODO: Check for interface implementation
                 true
@@ -40,11 +44,18 @@ class VlangStructTypeEx(raw: VlangStructType) : VlangBaseTypeEx<VlangStructType>
         }
     }
 
-    override fun isEqual(rhs: VlangTypeEx<*>): Boolean {
+    override fun isEqual(rhs: VlangTypeEx): Boolean {
         return rhs is VlangStructTypeEx && name == rhs.name
     }
 
     override fun accept(visitor: VlangTypeVisitor) {
         visitor.enter(this)
+    }
+
+    override fun substituteGenerics(nameMap: Map<String, VlangTypeEx>): VlangTypeEx = this
+
+    override fun resolve(project: Project): VlangStructDeclaration? {
+        val variants = VlangClassLikeIndex.find(qualifiedName(), project, null, null)
+        return variants.firstOrNull() as? VlangStructDeclaration
     }
 }

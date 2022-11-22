@@ -97,21 +97,22 @@
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional|OrBlock)Expr")=BinaryExpr
   extends(".*(Expr|Literal|Lit|OperandName)|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|SharedExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression|LockExpression|IncDecExpression|LiteralValueExpression|SelectExpression|SpawnExpression|TypeCastExpression")=Expression
 
-  implements("(Var|Param|Field|Label|Var|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|(Struct|TypeAlias|Union|Enum|Interface)Declaration|Receiver|Import(Alias|Name)")="org.vlang.lang.psi.VlangNamedElement"
+  implements("(Var|Param|Field|Label|Var|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|(Struct|TypeAlias|Union|Enum|Interface)Declaration|Receiver|Import(Alias|Name)|GenericParameter")="org.vlang.lang.psi.VlangNamedElement"
   implements("FunctionLit|(Function|Method)Declaration")="org.vlang.lang.psi.VlangSignatureOwner"
   implements("(Function|Method)Declaration")="org.vlang.lang.psi.VlangFunctionOrMethodDeclaration"
   implements(".*ReferenceExpression|FieldName")="org.vlang.lang.psi.VlangReferenceExpressionBase"
   implements("(Continue|Break|Goto)Statement")="org.vlang.lang.psi.VlangLabelRefOwnerElement"
 
   implements("(Struct|Interface|Enum|GlobalVariable|Function|Method|TypeAlias|Const)Declaration|ModuleClause")="org.vlang.lang.psi.VlangAttributeOwner"
+  implements("(Function|Method)Declaration|(Struct|Interface|Alias)Type|FunctionLit|InterfaceMethodDefinition")="org.vlang.lang.psi.VlangGenericParametersOwner"
 
   implements("(Function)Declaration")="org.vlang.lang.psi.VlangScopeHolder"
 
   extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
   extends("ModuleClause|Type")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
-  extends("(Struct|TypeAlias|Union|Enum|Interface)Declaration|(Var|Label|Param|Field|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
+  extends("(Struct|TypeAlias|Union|Enum|Interface)Declaration|(Var|Label|Param|Field|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
 
-  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum|Interface)Declaration|.*Type|(Var|Label|Field|Param|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
+  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum|Interface)Declaration|.*Type|(Var|Label|Field|Param|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
 
   extends("Sql.*Statement")=SqlBlockStatement
   extends(".*Statement")=Statement
@@ -389,7 +390,7 @@ StructDeclaration ::= Attributes? SymbolVisibility? StructType {
 
 AnonymousStructType ::= struct '{' FieldsGroup* '}' {pin=2}
 
-StructType ::= (struct | union) identifier GenericArguments? '{' FieldsGroup* '}' {
+StructType ::= (struct | union) identifier GenericParameters? '{' FieldsGroup* '}' {
   pin=1
   implements="org.vlang.lang.psi.VlangFieldListOwner"
   methods=[getFieldList getEmbeddedStructList isUnion]
@@ -428,7 +429,7 @@ InterfaceDeclaration ::= Attributes? SymbolVisibility? InterfaceType {
   methods=[getName getIdentifier getTypeInner]
 }
 
-InterfaceType ::= interface identifier GenericArguments? '{' MembersGroup* '}' {
+InterfaceType ::= interface identifier GenericParameters? '{' MembersGroup* '}' {
   pin=1
   implements="org.vlang.lang.psi.VlangFieldListOwner"
   methods=[getFieldList getMethodList]
@@ -446,7 +447,7 @@ private InterfaceMembers ::= InterfaceMember+
 private InterfaceMember ::= InterfaceMethodDeclaration | FieldDeclaration | EmbeddedInterfaceDefinition
 
 InterfaceMethodDeclaration ::= InterfaceMethodDefinition Attribute? DefaultFieldValue? semi
-InterfaceMethodDefinition ::= identifier Signature {
+InterfaceMethodDefinition ::= identifier GenericParameters? Signature {
   implements="org.vlang.lang.psi.VlangSignatureOwner"
   stubClass="org.vlang.lang.stubs.VlangInterfaceMethodDefinitionStub"
   methods=[getTypeInner isPublic getOwner]
@@ -485,7 +486,7 @@ TypeAliasDeclaration ::= Attributes? SymbolVisibility? 'type' AliasType {
   methods=[getIdentifier getName getTypeInner]
 }
 
-AliasType ::= identifier GenericArguments? '=' TypeUnionList {
+AliasType ::= identifier GenericParameters? '=' TypeUnionList {
   pin=2
   methods=[isAlias getAliasType]
 }
@@ -530,17 +531,23 @@ VarModifier ::= mut | shared | volatile | static
 
 SymbolVisibility ::= pub | '__global'
 
-GenericArguments ::= '<' TypeListNoPin '>' {pin=3}
-GenericArgumentsFirstPin ::= '<' TypeListNoPin '>' {pin=1}
+GenericParameters ::= '<' GenericParameterList '>' {pin=3}
+GenericParametersFirstPin ::= '<' GenericParameterList '>' {pin=3 elementType=GenericParameters}
+GenericParameterList ::= GenericParameter (',' GenericParameter)* ','?
+GenericParameter ::= identifier {
+  stubClass="org.vlang.lang.stubs.VlangGenericParameterStub"
+}
 
-FunctionDeclaration ::= Attributes? SymbolVisibility? fn identifier GenericArguments? Signature BlockWithConsume? {
+GenericArguments ::= '<' TypeListNoPin '>' {pin=3}
+
+FunctionDeclaration ::= Attributes? SymbolVisibility? fn identifier GenericParameters? Signature BlockWithConsume? {
   pin=4
   stubClass="org.vlang.lang.stubs.VlangFunctionDeclarationStub"
-  methods=[getName getTypeInner isDefinition isNoReturn]
+  methods=[getName getTypeInner isDefinition isNoReturn isGeneric]
   mixin="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationWithScopeHolder"
 }
 
-MethodDeclaration ::= Attributes? SymbolVisibility? fn '(' Receiver ')' MethodName GenericArguments? Signature BlockWithConsume? {
+MethodDeclaration ::= Attributes? SymbolVisibility? fn '(' Receiver ')' MethodName GenericParameters? Signature BlockWithConsume? {
   pin=7
   stubClass="org.vlang.lang.stubs.VlangMethodDeclarationStub"
   methods=[getReceiverType getTypeInner getIdentifier]
@@ -639,7 +646,7 @@ private MaxGroup ::=
   | FunctionLit
 
 // fn [[<captures>]] [<generics>] (...) {...}
-FunctionLit ::= fn CaptureList? GenericArgumentsFirstPin? Signature Block {
+FunctionLit ::= fn CaptureList? GenericParametersFirstPin? Signature Block {
   pin=1
   methods=[addCapture processDeclarations]
 }
@@ -715,7 +722,7 @@ ResultType ::= '!' Type? {pin=1}
 OptionType ::= '?' Type? {pin=1}
 // fn (...) <type>
 // fn (...) (<type1>, <type2>, ...)
-FunctionType ::= fn Signature {
+FunctionType ::= fn GenericParameters? Signature {
   pin=1
   implements="org.vlang.lang.psi.VlangSignatureOwner"
 }

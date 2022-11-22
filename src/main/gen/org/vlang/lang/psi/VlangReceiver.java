@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import org.vlang.lang.stubs.VlangReceiverStub;
 import com.intellij.psi.ResolveState;
+import org.vlang.lang.psi.types.VlangTypeEx;
 
 public interface VlangReceiver extends VlangMutabilityOwner, VlangNamedElement, StubBasedPsiElement<VlangReceiverStub> {
 
@@ -22,8 +23,8 @@ public interface VlangReceiver extends VlangMutabilityOwner, VlangNamedElement, 
   @NotNull
   PsiElement getIdentifier();
 
-  @Nullable
-  VlangType getTypeInner(@Nullable ResolveState context);
+  @NotNull
+  VlangTypeEx getTypeInner(@Nullable ResolveState context);
 
   @Nullable
   String getName();

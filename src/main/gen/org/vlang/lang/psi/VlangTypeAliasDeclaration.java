@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import org.vlang.lang.stubs.VlangTypeAliasDeclarationStub;
 import com.intellij.psi.ResolveState;
+import org.vlang.lang.psi.types.VlangTypeEx;
 
 public interface VlangTypeAliasDeclaration extends VlangNamedElement, VlangAttributeOwner, StubBasedPsiElement<VlangTypeAliasDeclarationStub> {
 
@@ -28,7 +29,7 @@ public interface VlangTypeAliasDeclaration extends VlangNamedElement, VlangAttri
   @NotNull
   String getName();
 
-  @Nullable
-  VlangType getTypeInner(@Nullable ResolveState context);
+  @NotNull
+  VlangTypeEx getTypeInner(@Nullable ResolveState context);
 
 }

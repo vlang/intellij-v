@@ -24,14 +24,11 @@ V Language file
     PsiElement(VlangTokenType.))(')')
     METHOD_NAME
       PsiElement(VlangTokenType.identifier)('notification_at')
-    GENERIC_ARGUMENTS
+    GENERIC_PARAMETERS
       PsiElement(VlangTokenType.<)('<')
-      TYPE_LIST_NO_PIN
-        TYPE
-          TYPE_MODIFIERS
-            <empty list>
-          TYPE_REFERENCE_EXPRESSION
-            PsiElement(VlangTokenType.identifier)('T')
+      GENERIC_PARAMETER_LIST
+        GENERIC_PARAMETER
+          PsiElement(VlangTokenType.identifier)('T')
       PsiElement(VlangTokenType.>)('>')
     SIGNATURE
       PARAMETERS

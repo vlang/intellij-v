@@ -2,18 +2,15 @@ package org.vlang.lang.psi.types
 
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
-import org.vlang.lang.psi.VlangArrayType
 
-class VlangArrayTypeEx(raw: VlangArrayType) : VlangBaseTypeEx<VlangArrayType>(raw) {
-    val inner = raw.type.toEx()
-
+class VlangArrayTypeEx(val inner: VlangTypeEx, anchor: PsiElement) : VlangBaseTypeEx(anchor) {
     override fun toString() = "[]".safeAppend(inner)
 
-    override fun qualifiedName(): String = "[]".safeAppend(inner.qualifiedName())
+    override fun qualifiedName(): String  = "[]".safeAppend(inner.qualifiedName())
 
     override fun readableName(context: PsiElement) = "[]".safeAppend(inner.readableName(context))
 
-    override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {
+    override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
         return when (rhs) {
             is VlangAnyTypeEx          -> true
             is VlangVoidPtrTypeEx      -> true
@@ -24,7 +21,7 @@ class VlangArrayTypeEx(raw: VlangArrayType) : VlangBaseTypeEx<VlangArrayType>(ra
         }
     }
 
-    override fun isEqual(rhs: VlangTypeEx<*>): Boolean {
+    override fun isEqual(rhs: VlangTypeEx): Boolean {
         return rhs is VlangArrayTypeEx && inner.isEqual(rhs.inner)
     }
 
@@ -33,6 +30,10 @@ class VlangArrayTypeEx(raw: VlangArrayType) : VlangBaseTypeEx<VlangArrayType>(ra
             return
         }
 
-        visitor.enter(inner)
+        inner.accept(visitor)
+    }
+
+    override fun substituteGenerics(nameMap: Map<String, VlangTypeEx>): VlangTypeEx {
+        return VlangArrayTypeEx(inner.substituteGenerics(nameMap), anchor!!)
     }
 }

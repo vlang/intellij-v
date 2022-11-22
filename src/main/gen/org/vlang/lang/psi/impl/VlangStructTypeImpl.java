@@ -41,6 +41,12 @@ public class VlangStructTypeImpl extends VlangTypeImpl implements VlangStructTyp
 
   @Override
   @Nullable
+  public VlangGenericParameters getGenericParameters() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangGenericParameters.class);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getLbrace() {
     return findChildByType(LBRACE);
   }

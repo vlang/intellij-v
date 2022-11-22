@@ -19,13 +19,12 @@ enum class VlangPrimitiveTypes(val value: String, val size: Int, val numeric: Bo
     F32("f32", 4, true),
     F64("f64", 8, true),
     STRING("string", -1),
-    VOIDPTR("voidptr", 8);
+    VOIDPTR("voidptr", 8),
+    NIL("nil", 0);
 
     companion object {
-        private val map = values().associateBy(VlangPrimitiveTypes::value)
-
-        fun isPrimitiveType(type: String): Boolean {
-            return map.containsKey(type)
+        fun isPrimitiveType(name: String): Boolean {
+            return values().any { it.value == name }
         }
     }
 }

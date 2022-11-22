@@ -22,14 +22,11 @@ V Language file
     STRUCT_TYPE
       PsiElement(VlangTokenType.struct)('struct')
       PsiElement(VlangTokenType.identifier)('GenericEmpty')
-      GENERIC_ARGUMENTS
+      GENERIC_PARAMETERS
         PsiElement(VlangTokenType.<)('<')
-        TYPE_LIST_NO_PIN
-          TYPE
-            TYPE_MODIFIERS
-              <empty list>
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(VlangTokenType.identifier)('T')
+        GENERIC_PARAMETER_LIST
+          GENERIC_PARAMETER
+            PsiElement(VlangTokenType.identifier)('T')
         PsiElement(VlangTokenType.>)('>')
       PsiElement(VlangTokenType.{)('{')
       PsiElement(VlangTokenType.})('}')
@@ -37,20 +34,14 @@ V Language file
     STRUCT_TYPE
       PsiElement(VlangTokenType.struct)('struct')
       PsiElement(VlangTokenType.identifier)('Result')
-      GENERIC_ARGUMENTS
+      GENERIC_PARAMETERS
         PsiElement(VlangTokenType.<)('<')
-        TYPE_LIST_NO_PIN
-          TYPE
-            TYPE_MODIFIERS
-              <empty list>
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(VlangTokenType.identifier)('T')
+        GENERIC_PARAMETER_LIST
+          GENERIC_PARAMETER
+            PsiElement(VlangTokenType.identifier)('T')
           PsiElement(VlangTokenType.,)(',')
-          TYPE
-            TYPE_MODIFIERS
-              <empty list>
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(VlangTokenType.identifier)('E')
+          GENERIC_PARAMETER
+            PsiElement(VlangTokenType.identifier)('E')
         PsiElement(VlangTokenType.>)('>')
       PsiElement(VlangTokenType.{)('{')
       PsiElement(VlangTokenType.})('}')
@@ -58,14 +49,11 @@ V Language file
     STRUCT_TYPE
       PsiElement(VlangTokenType.struct)('struct')
       PsiElement(VlangTokenType.identifier)('Single')
-      GENERIC_ARGUMENTS
+      GENERIC_PARAMETERS
         PsiElement(VlangTokenType.<)('<')
-        TYPE_LIST_NO_PIN
-          TYPE
-            TYPE_MODIFIERS
-              <empty list>
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(VlangTokenType.identifier)('T')
+        GENERIC_PARAMETER_LIST
+          GENERIC_PARAMETER
+            PsiElement(VlangTokenType.identifier)('T')
         PsiElement(VlangTokenType.>)('>')
       PsiElement(VlangTokenType.{)('{')
       FIELDS_GROUP
@@ -82,14 +70,11 @@ V Language file
     STRUCT_TYPE
       PsiElement(VlangTokenType.struct)('struct')
       PsiElement(VlangTokenType.identifier)('Multiple')
-      GENERIC_ARGUMENTS
+      GENERIC_PARAMETERS
         PsiElement(VlangTokenType.<)('<')
-        TYPE_LIST_NO_PIN
-          TYPE
-            TYPE_MODIFIERS
-              <empty list>
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(VlangTokenType.identifier)('T')
+        GENERIC_PARAMETER_LIST
+          GENERIC_PARAMETER
+            PsiElement(VlangTokenType.identifier)('T')
         PsiElement(VlangTokenType.>)('>')
       PsiElement(VlangTokenType.{)('{')
       FIELDS_GROUP

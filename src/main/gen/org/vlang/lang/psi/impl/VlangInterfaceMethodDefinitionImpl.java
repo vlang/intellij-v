@@ -11,6 +11,7 @@ import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.stubs.VlangInterfaceMethodDefinitionStub;
 import org.vlang.lang.psi.*;
 import com.intellij.psi.ResolveState;
+import org.vlang.lang.psi.types.VlangTypeEx;
 import com.intellij.psi.stubs.IStubElementType;
 
 public class VlangInterfaceMethodDefinitionImpl extends VlangNamedElementImpl<VlangInterfaceMethodDefinitionStub> implements VlangInterfaceMethodDefinition {
@@ -34,6 +35,12 @@ public class VlangInterfaceMethodDefinitionImpl extends VlangNamedElementImpl<Vl
   }
 
   @Override
+  @Nullable
+  public VlangGenericParameters getGenericParameters() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangGenericParameters.class);
+  }
+
+  @Override
   @NotNull
   public VlangSignature getSignature() {
     return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangSignature.class));
@@ -47,7 +54,7 @@ public class VlangInterfaceMethodDefinitionImpl extends VlangNamedElementImpl<Vl
 
   @Override
   @Nullable
-  public VlangType getTypeInner(@Nullable ResolveState context) {
+  public VlangTypeEx getTypeInner(@Nullable ResolveState context) {
     return VlangPsiImplUtil.getTypeInner(this, context);
   }
 

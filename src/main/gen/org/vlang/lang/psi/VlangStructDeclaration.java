@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import org.vlang.lang.stubs.VlangStructDeclarationStub;
 import com.intellij.psi.ResolveState;
+import org.vlang.lang.psi.types.VlangTypeEx;
 
 public interface VlangStructDeclaration extends VlangNamedElement, VlangAttributeOwner, StubBasedPsiElement<VlangStructDeclarationStub> {
 
@@ -26,7 +27,7 @@ public interface VlangStructDeclaration extends VlangNamedElement, VlangAttribut
   String getName();
 
   @NotNull
-  VlangType getTypeInner(@Nullable ResolveState context);
+  VlangTypeEx getTypeInner(@Nullable ResolveState context);
 
   boolean isUnion();
 

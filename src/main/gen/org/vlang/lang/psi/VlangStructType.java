@@ -5,10 +5,13 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangStructType extends VlangType, VlangFieldListOwner {
+public interface VlangStructType extends VlangType, VlangFieldListOwner, VlangGenericParametersOwner {
 
   @NotNull
   List<VlangFieldsGroup> getFieldsGroupList();
+
+  @Nullable
+  VlangGenericParameters getGenericParameters();
 
   @Nullable
   PsiElement getLbrace();

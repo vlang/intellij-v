@@ -76,7 +76,13 @@ class VlangMethodDeclarationStubElementType(name: String) :
                 type
             }
 
-            return underlyingType?.text
+            val text = underlyingType?.text ?: return null
+            if (text.contains("<")) {
+                // Foo<T> -> Foo
+                return text.substringBefore("<")
+            }
+
+            return text
         }
     }
 }

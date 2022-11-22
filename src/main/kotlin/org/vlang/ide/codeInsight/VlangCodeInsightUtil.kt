@@ -7,10 +7,10 @@ import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.*
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
-import org.vlang.lang.psi.types.VlangFunctionTypeEx
-import org.vlang.lang.psi.types.VlangPrimitiveTypes
 import org.vlang.utils.parentNth
+import org.vlang.utils.parentOfType
 
 object VlangCodeInsightUtil {
     const val BUILTIN_MODULE = "builtin"
@@ -32,25 +32,25 @@ object VlangCodeInsightUtil {
     }
 
     fun getCallExpr(element: PsiElement): VlangCallExpr? {
-        val parentValue = element.parentOfType<VlangValue>()
+        val parentValue = element.parentOfType<VlangValue>(VlangBlock::class)
         if (parentValue != null) {
             return parentValue.parentNth(3)
         }
-        return element.parentOfType()
+        return element.parentOfType(VlangBlock::class)
     }
 
-    fun getCalledParams(callExpr: VlangCallExpr?): List<VlangType>? {
+    fun getCalledParams(callExpr: VlangCallExpr?): List<VlangTypeEx>? {
         val resolved = callExpr?.resolve() as? VlangSignatureOwner ?: return null
         val params = resolved.getSignature()?.parameters?.paramDefinitionList
-        return params?.map { it.type.resolveType() }
+        return params?.map { it.type.toEx() }
     }
 
-    fun isAllowedParamsForTrailingStruct(params: List<VlangParamDefinition>, paramTypes: List<VlangType>): Boolean {
-        if (paramTypes.none { it is VlangStructType }) return false
+    fun isAllowedParamsForTrailingStruct(params: List<VlangParamDefinition>, paramTypes: List<VlangTypeEx>): Boolean {
+        if (paramTypes.none { it is VlangStructTypeEx }) return false
         if (params.isEmpty()) return false
 
         val structType = paramTypes.last()
-        if (params.size > 1 && structType !is VlangStructType) return false
+        if (params.size > 1 && structType !is VlangStructTypeEx) return false
         return true
     }
 
@@ -73,7 +73,7 @@ object VlangCodeInsightUtil {
 
         // if err used in nested if
         if (PsiTreeUtil.isAncestor(parentIf.expression, element, false)) {
-            val secondParentIf = parentIf.parentOfType<VlangIfExpression>() ?: return false
+            val secondParentIf = parentIf.parentOfType<VlangIfExpression>(false) ?: return false
             return secondParentIf.isGuard
         }
 
@@ -154,17 +154,15 @@ object VlangCodeInsightUtil {
         return name.startsWith("JS.") || name.startsWith("C.")
     }
 
-    fun getQualifiedName(context: PsiElement, element: VlangNamedElement): String {
-        val name = element.getQualifiedName() ?: return element.name ?: ""
-
+    fun getQualifiedName(context: PsiElement, anchor: PsiElement, name: String): String {
         val contextFile = context.containingFile as VlangFile
         val contextModule = contextFile.getModuleQualifiedName()
 
-        val elementFile = element.containingFile as VlangFile
+        val elementFile = anchor.containingFile as VlangFile
         val elementModule = elementFile.getModuleQualifiedName()
 
         if (contextModule == elementModule) {
-            return element.name ?: ""
+            return name
         }
 
         if (name.startsWith("$contextModule.")) {
@@ -208,15 +206,15 @@ object VlangCodeInsightUtil {
         return VlangPrimitiveTypes.values().find { it.value == name } != null
     }
 
-    fun getReturnType(resolved: PsiElement): VlangType? {
+    fun getReturnType(resolved: PsiElement): VlangTypeEx? {
         if (resolved is VlangFunctionOrMethodDeclaration) {
-            return resolved.getSignature()?.result?.type ?: VlangBuiltinTypesUtil.getInstance(resolved.project).void
+            return resolved.getSignature()?.result?.type?.toEx() ?: VlangVoidTypeEx.INSTANCE
         }
 
         if (resolved is VlangTypeOwner) {
-            val type = resolved.getType(null).toEx()
+            val type = resolved.getType(null)
             if (type is VlangFunctionTypeEx) {
-                return type.result?.raw() ?: VlangBuiltinTypesUtil.getInstance(resolved.project).void
+                return type.result
             }
         }
 

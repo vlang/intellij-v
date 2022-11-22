@@ -12,6 +12,8 @@ import org.vlang.ide.ui.VIcons
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.VlangPsiTreeUtil.getChildOfType
 import org.vlang.lang.psi.VlangPsiTreeUtil.parentStubOfType
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
+import org.vlang.lang.psi.types.VlangTypeEx
 import org.vlang.lang.stubs.VlangFileStub
 import org.vlang.lang.stubs.VlangNamedStub
 import javax.swing.Icon
@@ -75,12 +77,12 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
 
     override fun setName(name: String): PsiElement? {
         val identifier = getIdentifier()
-        val newIdentifier = VlangElementFactory.createIdentifierFromText(project, name) ?: return null
+        val newIdentifier = VlangElementFactory.createIdentifierFromText(project, name)
         identifier?.replace(newIdentifier)
         return this
     }
 
-    override fun getType(context: ResolveState?): VlangType? {
+    override fun getType(context: ResolveState?): VlangTypeEx? {
         return CachedValuesManager.getCachedValue(this) {
             CachedValueProvider.Result
                 .create(
@@ -92,12 +94,12 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
 
     protected open fun getTypeInner(context: ResolveState?) = findSiblingType()
 
-    open fun findSiblingType(): VlangType? {
+    open fun findSiblingType(): VlangTypeEx? {
         val stub = stub
         return if (stub != null) {
-            VlangPsiTreeUtil.getStubChildOfType(parentByStub, VlangType::class.java)
+            VlangPsiTreeUtil.getStubChildOfType(parentByStub, VlangType::class.java).toEx()
         } else {
-            PsiTreeUtil.getChildOfType(this, VlangType::class.java)
+            PsiTreeUtil.getChildOfType(this, VlangType::class.java).toEx()
         }
     }
 

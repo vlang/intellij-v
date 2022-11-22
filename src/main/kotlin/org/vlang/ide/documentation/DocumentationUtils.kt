@@ -13,14 +13,15 @@ object DocumentationUtils {
     private fun loadKey(key: TextAttributesKey): TextAttributes =
         EditorColorsManager.getInstance().globalScheme.getAttributes(key)!!
 
-    val asKeyword = loadKey(DefaultLanguageHighlighterColors.KEYWORD)
+    val asKeyword = loadKey(VlangColor.KEYWORD.textAttributesKey)
     val asIdentifier = loadKey(DefaultLanguageHighlighterColors.IDENTIFIER)
     val asDeclaration = loadKey(VlangColor.FUNCTION.textAttributesKey)
     val asType = loadKey(VlangColor.BUILTIN_TYPE.textAttributesKey)
-    val asParameter = loadKey(DefaultLanguageHighlighterColors.PARAMETER)
-    val asAttribute = loadKey(DefaultLanguageHighlighterColors.METADATA)
-    val asString = loadKey(DefaultLanguageHighlighterColors.STRING)
-    val asNumber = loadKey(DefaultLanguageHighlighterColors.NUMBER)
+    val asParameter = loadKey(VlangColor.PARAMETER.textAttributesKey)
+    val asAttribute = loadKey(VlangColor.ATTRIBUTE.textAttributesKey)
+    val asString = loadKey(VlangColor.STRING.textAttributesKey)
+    val asNumber = loadKey(VlangColor.NUMBER.textAttributesKey)
+    val asGeneric = loadKey(VlangColor.GENERIC_PARAMETER.textAttributesKey)
 
     @Suppress("UnstableApiUsage")
     fun StringBuilder.colorize(text: String, attrs: TextAttributes, noHtml: Boolean = false) {

@@ -56,10 +56,10 @@ class VlangStructureViewFactory : PsiStructureViewFactory {
                 is VlangInterfaceDeclaration -> element.interfaceType
                 is VlangEnumDeclaration      -> element.enumType
                 else                         -> null
-            }
+            }?.toEx()
 
             if (type != null) {
-                VlangLangUtil.getMethodList(type).forEach { result.add(Element(it)) }
+                VlangLangUtil.getMethodList(element!!.project, type).forEach { result.add(Element(it)) }
 
                 if (type is VlangFieldListOwner) {
                     type.getFieldList().forEach { result.add(Element(it)) }
@@ -101,7 +101,7 @@ class VlangStructureViewFactory : PsiStructureViewFactory {
                 val typeText = if (type == null || element is VlangEmbeddedDefinition)
                     ""
                 else
-                    ": " + type.toEx().readableName(element)
+                    ": " + type.readableName(element)
 
                 return element.name + typeText
             }

@@ -4,27 +4,42 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.VlangInterfaceDeclaration
-import org.vlang.lang.psi.VlangInterfaceType
+import org.vlang.lang.stubs.index.VlangClassLikeIndex
 
-class VlangInterfaceTypeEx(raw: VlangInterfaceType) : VlangBaseTypeEx<VlangInterfaceType>(raw), VlangImportableTypeEx {
-    private val decl = raw.parent as VlangInterfaceDeclaration
-    private val name = decl.getQualifiedName() ?: ANON
+class VlangInterfaceTypeEx(val name: String, anchor: PsiElement) :
+    VlangBaseTypeEx(anchor), VlangImportableTypeEx, VlangResolvableTypeEx<VlangInterfaceDeclaration> {
 
     override fun toString() = name
 
-    override fun qualifiedName() = name
+    override fun qualifiedName(): String {
+        if (moduleName.isEmpty()) {
+            return name
+        }
+        return "$moduleName.$name"
+    }
 
-    override fun readableName(context: PsiElement) = VlangCodeInsightUtil.getQualifiedName(context, decl)
+    override fun readableName(context: PsiElement) = VlangCodeInsightUtil.getQualifiedName(context, anchor!!, name)
 
-    override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {
+    override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
         return true // TODO: Implement this
     }
 
-    override fun isEqual(rhs: VlangTypeEx<*>): Boolean {
+    override fun isEqual(rhs: VlangTypeEx): Boolean {
         return rhs is VlangInterfaceTypeEx && name == rhs.name
     }
 
     override fun accept(visitor: VlangTypeVisitor) {
         visitor.enter(this)
+    }
+
+    override fun substituteGenerics(nameMap: Map<String, VlangTypeEx>): VlangTypeEx = this
+
+    override fun resolve(project: Project): VlangInterfaceDeclaration? {
+        val variants = VlangClassLikeIndex.find(qualifiedName(), project, null, null)
+        return variants.firstOrNull() as? VlangInterfaceDeclaration
+    }
+
+    companion object {
+        fun iError(anchor: PsiElement) = VlangInterfaceTypeEx("IError", anchor)
     }
 }

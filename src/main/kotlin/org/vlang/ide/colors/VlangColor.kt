@@ -95,6 +95,9 @@ enum class VlangColor(readableName: @NlsContexts.AttributeDescriptor String, def
 
     // Unsafe
     UNSAFE_CODE("Unsafe//Unsafe code"),
+
+    // Generics
+    GENERIC_PARAMETER("Generics//Generic parameter", Default.IDENTIFIER),
     ;
 
     val textAttributesKey = TextAttributesKey.createTextAttributesKey("org.vlang.$name", default)

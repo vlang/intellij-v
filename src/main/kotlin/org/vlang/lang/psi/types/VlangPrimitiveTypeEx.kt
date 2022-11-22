@@ -2,18 +2,21 @@ package org.vlang.lang.psi.types
 
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
-import org.vlang.lang.psi.VlangType
 
-class VlangPrimitiveTypeEx(raw: VlangType, private val name: VlangPrimitiveTypes) : VlangBaseTypeEx<VlangType>(raw) {
+class VlangPrimitiveTypeEx(private val name: VlangPrimitiveTypes) : VlangBaseTypeEx(null) {
+    override fun module(): String = "builtin"
+
     override fun toString(): String = name.value
 
     override fun qualifiedName(): String = name.value
 
     override fun readableName(context: PsiElement): String = name.value
 
-    fun isNumeric(): Boolean = name.numeric
+    fun isNumeric(): Boolean {
+        return name.numeric
+    }
 
-    override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {
+    override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
         return when (rhs) {
             is VlangAnyTypeEx       -> true
             is VlangUnknownTypeEx   -> true
@@ -48,13 +51,60 @@ class VlangPrimitiveTypeEx(raw: VlangType, private val name: VlangPrimitiveTypes
         }
     }
 
-    override fun isEqual(rhs: VlangTypeEx<*>): Boolean {
+    override fun isEqual(rhs: VlangTypeEx): Boolean {
         return rhs is VlangPrimitiveTypeEx && name == rhs.name
     }
 
     override fun accept(visitor: VlangTypeVisitor) {
         if (!visitor.enter(this)) {
             return
+        }
+    }
+
+    override fun substituteGenerics(nameMap: Map<String, VlangTypeEx>): VlangTypeEx = this
+
+    companion object {
+        val BOOL = VlangPrimitiveTypeEx(VlangPrimitiveTypes.BOOL)
+        val BYTE = VlangPrimitiveTypeEx(VlangPrimitiveTypes.BYTE)
+        val RUNE = VlangPrimitiveTypeEx(VlangPrimitiveTypes.RUNE)
+        val CHAR = VlangPrimitiveTypeEx(VlangPrimitiveTypes.CHAR)
+        val I16 = VlangPrimitiveTypeEx(VlangPrimitiveTypes.I16)
+        val I32 = VlangPrimitiveTypeEx(VlangPrimitiveTypes.I32)
+        val I64 = VlangPrimitiveTypeEx(VlangPrimitiveTypes.I64)
+        val I8 = VlangPrimitiveTypeEx(VlangPrimitiveTypes.I8)
+        val INT = VlangPrimitiveTypeEx(VlangPrimitiveTypes.INT)
+        val ISIZE = VlangPrimitiveTypeEx(VlangPrimitiveTypes.ISIZE)
+        val U16 = VlangPrimitiveTypeEx(VlangPrimitiveTypes.U16)
+        val U32 = VlangPrimitiveTypeEx(VlangPrimitiveTypes.U32)
+        val U64 = VlangPrimitiveTypeEx(VlangPrimitiveTypes.U64)
+        val U8 = VlangPrimitiveTypeEx(VlangPrimitiveTypes.U8)
+        val USIZE = VlangPrimitiveTypeEx(VlangPrimitiveTypes.USIZE)
+        val F32 = VlangPrimitiveTypeEx(VlangPrimitiveTypes.F32)
+        val F64 = VlangPrimitiveTypeEx(VlangPrimitiveTypes.F64)
+        val NIL = VlangPrimitiveTypeEx(VlangPrimitiveTypes.NIL)
+
+        fun get(name: String): VlangPrimitiveTypeEx? {
+            return when (name) {
+                "bool"   -> BOOL
+                "byte"   -> BYTE
+                "rune"   -> RUNE
+                "char"   -> CHAR
+                "i16"    -> I16
+                "i32"    -> I32
+                "i64"    -> I64
+                "i8"     -> I8
+                "int"    -> INT
+                "isize"  -> ISIZE
+                "u16"    -> U16
+                "u32"    -> U32
+                "u64"    -> U64
+                "u8"     -> U8
+                "usize"  -> USIZE
+                "f32"    -> F32
+                "f64"    -> F64
+                "nil"    -> NIL
+                else     -> null
+            }
         }
     }
 }

@@ -6,7 +6,6 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.Processor
 import org.vlang.lang.psi.*
-import org.vlang.lang.psi.impl.VlangLangUtil
 
 class VlangMethodInheritorsSearch : QueryExecutorBase<VlangSignatureOwner, DefinitionsScopedSearch.SearchParameters>(true) {
     override fun processQuery(
@@ -21,11 +20,12 @@ class VlangMethodInheritorsSearch : QueryExecutorBase<VlangSignatureOwner, Defin
         if (!interfaceType.isValid) return
 
         VlangInheritorsSearch().processMethodOwners({ owner: VlangNamedElement ->
-            val struct = owner as VlangStructDeclaration
-            val name = method.name ?: return@processMethodOwners true
-            val structMethod = VlangLangUtil.findMethod(struct.structType, name)
+//            val struct = owner as VlangStructDeclaration
+//            val name = method.name ?: return@processMethodOwners true
+//            val structMethod = VlangLangUtil.findMethod(struct.structType, name)
 
-            structMethod == null || structMethod == method || processor.process(structMethod)
+//            structMethod == null || structMethod == method || processor.process(structMethod)
+            false
         }, decl, interfaceType, mutableListOf(method), listOf())
     }
 }

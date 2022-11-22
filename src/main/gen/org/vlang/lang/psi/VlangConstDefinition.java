@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import org.vlang.lang.stubs.VlangConstDefinitionStub;
 import com.intellij.psi.ResolveState;
+import org.vlang.lang.psi.types.VlangTypeEx;
 
 public interface VlangConstDefinition extends VlangNamedElement, StubBasedPsiElement<VlangConstDefinitionStub> {
 
@@ -20,7 +21,7 @@ public interface VlangConstDefinition extends VlangNamedElement, StubBasedPsiEle
   PsiElement getIdentifier();
 
   @Nullable
-  VlangType getTypeInner(@Nullable ResolveState context);
+  VlangTypeEx getTypeInner(@Nullable ResolveState context);
 
   boolean isPublic();
 

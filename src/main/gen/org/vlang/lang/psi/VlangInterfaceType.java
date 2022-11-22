@@ -5,7 +5,10 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangInterfaceType extends VlangType, VlangFieldListOwner {
+public interface VlangInterfaceType extends VlangType, VlangFieldListOwner, VlangGenericParametersOwner {
+
+  @Nullable
+  VlangGenericParameters getGenericParameters();
 
   @NotNull
   List<VlangMembersGroup> getMembersGroupList();

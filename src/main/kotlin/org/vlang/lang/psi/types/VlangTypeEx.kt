@@ -1,17 +1,18 @@
 package org.vlang.lang.psi.types
 
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.UserDataHolder
 import com.intellij.psi.PsiElement
-import org.vlang.lang.psi.VlangType
 
-interface VlangTypeEx<T: VlangType?> {
+interface VlangTypeEx : UserDataHolder {
     fun name(): String
     fun qualifiedName(): String
     fun readableName(context: PsiElement): String
     fun module(): String
-    fun raw(): T
+    fun anchor(): PsiElement?
     fun accept(visitor: VlangTypeVisitor)
-    fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean
-    fun isEqual(rhs: VlangTypeEx<*>): Boolean
+    fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean
+    fun isEqual(rhs: VlangTypeEx): Boolean
     fun isBuiltin(): Boolean
+    fun substituteGenerics(nameMap: Map<String, VlangTypeEx>): VlangTypeEx
 }

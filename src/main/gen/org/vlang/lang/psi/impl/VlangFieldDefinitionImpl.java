@@ -11,6 +11,7 @@ import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.stubs.VlangFieldDefinitionStub;
 import org.vlang.lang.psi.*;
 import com.intellij.psi.ResolveState;
+import org.vlang.lang.psi.types.VlangTypeEx;
 import com.intellij.psi.stubs.IStubElementType;
 
 public class VlangFieldDefinitionImpl extends VlangNamedElementImpl<VlangFieldDefinitionStub> implements VlangFieldDefinition {
@@ -52,8 +53,8 @@ public class VlangFieldDefinitionImpl extends VlangNamedElementImpl<VlangFieldDe
   }
 
   @Override
-  @Nullable
-  public VlangType getTypeInner(@Nullable ResolveState context) {
+  @NotNull
+  public VlangTypeEx getTypeInner(@Nullable ResolveState context) {
     return VlangPsiImplUtil.getTypeInner(this, context);
   }
 

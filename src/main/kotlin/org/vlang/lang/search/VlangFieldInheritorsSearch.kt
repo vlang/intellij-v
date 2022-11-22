@@ -8,7 +8,6 @@ import org.vlang.lang.psi.VlangFieldDefinition
 import org.vlang.lang.psi.VlangInterfaceType
 import org.vlang.lang.psi.VlangNamedElement
 import org.vlang.lang.psi.VlangStructDeclaration
-import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 
 class VlangFieldInheritorsSearch : QueryExecutorBase<VlangFieldDefinition, DefinitionsScopedSearch.SearchParameters>(true) {
     override fun processQuery(
@@ -27,9 +26,9 @@ class VlangFieldInheritorsSearch : QueryExecutorBase<VlangFieldDefinition, Defin
             val structFields = spec.structType.getFieldList()
 
             val structField = structFields.find {
-                val lhsTypeEx = it.getType(null).toEx()
-                val rhsTypeEx = field.getType(null).toEx()
-                it.name == field.name && lhsTypeEx.isEqual(rhsTypeEx)
+                val lhsType = it.getType(null)
+                val rhsType = field.getType(null)
+                it.name == field.name && lhsType != null && rhsType != null && lhsType.isEqual(rhsType)
             }
 
             structField == null || field == structField || processor.process(structField)

@@ -14,7 +14,6 @@ import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.ide.inspections.VlangBaseInspection
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangElementFactory
-import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangOptionTypeEx
 import org.vlang.lang.psi.types.VlangResultTypeEx
 import org.vlang.lang.psi.types.VlangTypeEx
@@ -27,7 +26,7 @@ class VlangRawOptionOrResultTypeUsedInspection : VlangBaseInspection() {
                 super.visitCallExpr(call)
 
                 val resolved = call.resolve() ?: return
-                val type = VlangCodeInsightUtil.getReturnType(resolved)?.toEx() ?: return
+                val type = VlangCodeInsightUtil.getReturnType(resolved) ?: return
                 checkType(call, type)
             }
 
@@ -35,11 +34,11 @@ class VlangRawOptionOrResultTypeUsedInspection : VlangBaseInspection() {
                 super.visitReferenceExpression(expr)
 
                 val resolved = expr.resolve() as? VlangTypeOwner ?: return
-                val type = resolved.getType(null)?.toEx() ?: return
+                val type = resolved.getType(null) ?: return
                 checkType(expr, type)
             }
 
-            private fun checkType(expr: PsiElement, type: VlangTypeEx<*>) {
+            private fun checkType(expr: PsiElement, type: VlangTypeEx) {
                 val parent = expr.parent
                 if (parent is VlangOrBlockExpr ||
                     parent is VlangDotExpression &&

@@ -10,6 +10,7 @@ import com.intellij.codeInsight.lookup.LookupElementPresentation
 import com.intellij.codeInsight.lookup.LookupElementRenderer
 import com.intellij.codeInsight.template.Expression
 import com.intellij.codeInsight.template.TemplateManager
+import com.intellij.codeInsight.template.impl.ConstantNode
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiDirectory
@@ -140,16 +141,16 @@ object VlangCompletionUtil {
         )
     }
 
-    fun createFunctionLookupElement(element: VlangNamedElement, state: ResolveState): LookupElement? {
+    fun createFunctionLookupElement(element: VlangFunctionDeclaration, state: ResolveState): LookupElement? {
         val name = element.name
-        if (name.isNullOrEmpty()) {
+        if (name.isEmpty()) {
             return null
         }
 
         val moduleName = state.get(MODULE_NAME)
         return createFunctionLookupElement(
             element, name, moduleName, state,
-            insertHandler = FunctionInsertHandler(moduleName),
+            insertHandler = FunctionInsertHandler(element, moduleName),
             priority = FUNCTION_PRIORITY,
         )
     }
@@ -179,14 +180,14 @@ object VlangCompletionUtil {
         )
     }
 
-    fun createMethodLookupElement(element: VlangNamedElement): LookupElement? {
+    fun createMethodLookupElement(element: VlangMethodDeclaration): LookupElement? {
         val name = element.name
         if (name.isNullOrEmpty()) {
             return null
         }
         return createMethodLookupElement(
             element, name,
-            insertHandler = FunctionInsertHandler(null),
+            insertHandler = FunctionInsertHandler(element, null),
             priority = METHOD_PRIORITY,
         )
     }
@@ -204,7 +205,7 @@ object VlangCompletionUtil {
         )
     }
 
-    fun createInterfaceMethodLookupElement(element: VlangNamedElement, state: ResolveState): LookupElement? {
+    fun createInterfaceMethodLookupElement(element: VlangInterfaceMethodDefinition, state: ResolveState): LookupElement? {
         val name = element.name
         if (name.isNullOrEmpty()) {
             return null
@@ -214,7 +215,7 @@ object VlangCompletionUtil {
         return createInterfaceMethodLookupElement(
             element, name, moduleName, state,
             priority = METHOD_PRIORITY,
-            insertHandler = FunctionInsertHandler(null)
+            insertHandler = FunctionInsertHandler(element, null)
         )
     }
 
@@ -228,7 +229,7 @@ object VlangCompletionUtil {
         return createStructLookupElement(
             element, name, moduleName, state,
             priority = STRUCT_PRIORITY,
-            insertHandler = StructInsertHandler(moduleName, needBrackets)
+            insertHandler = StructInsertHandler(moduleName, element.structType, needBrackets)
         )
     }
 
@@ -478,19 +479,25 @@ object VlangCompletionUtil {
         }
     }
 
-    class FunctionInsertHandler(moduleName: String?) : ElementInsertHandler(moduleName) {
+    class FunctionInsertHandler(private val function: VlangSignatureOwner, moduleName: String?) : ElementInsertHandler(moduleName) {
         override fun handleInsertion(context: InsertionContext, item: LookupElement) {
             val caretOffset = context.editor.caretModel.offset
-            val element = context.file.findElementAt(caretOffset - 1)
-            val function = element?.parentOfType<VlangReferenceExpression>()?.resolve()
-            val takeZeroArguments = if (function is VlangSignatureOwner) VlangCodeInsightUtil.takeZeroArguments(function) else false
+            val takeZeroArguments = VlangCodeInsightUtil.takeZeroArguments(function)
+            val isGeneric = function.genericParameters != null
 
-            val withParenAfterCursor =  context.document.charsSequence.getOrNull(caretOffset) == '('
+            val prevChar = context.document.charsSequence.getOrNull(caretOffset)
+            val withParenAfterCursor = prevChar == '('
+            val withAngleParenAfterCursor = prevChar == '<'
 
-            if (!withParenAfterCursor) {
+            if (!withParenAfterCursor && !isGeneric) {
                 context.document.insertString(caretOffset, "()")
             }
-            if (takeZeroArguments) {
+            if (!withAngleParenAfterCursor && isGeneric) {
+                val endVariable = if (!takeZeroArguments) "\$END$" else ""
+                genericParametersInsertHandler(function.genericParameters!!, "($endVariable)")
+                    .handleInsert(context, item)
+            }
+            if (takeZeroArguments && !isGeneric) {
                 // move after ()
                 context.editor.caretModel.moveToOffset(caretOffset + 2)
                 return
@@ -499,12 +506,41 @@ object VlangCompletionUtil {
         }
     }
 
+    private fun genericParametersInsertHandler(params: VlangGenericParameters, suffix: String = ""): TemplateStringInsertHandler {
+        val paramList = params.genericParameterList.genericParameterList.map {
+            it.name!!
+        }
+
+        return TemplateStringInsertHandler(
+            "<" + paramList.joinToString(", ") { "\$$it$" } + ">" + suffix, true,
+            *paramList.map {
+                it to ConstantNode(it)
+            }.toTypedArray()
+        )
+    }
+
     class ConstantInsertHandler(moduleName: String?) : ElementInsertHandler(moduleName)
 
-    class StructInsertHandler(moduleName: String?, private val needBrackets: Boolean = true) : ElementInsertHandler(moduleName) {
+    class StructInsertHandler(
+        moduleName: String?,
+        private val struct: VlangStructType,
+        private val needBrackets: Boolean = true,
+    ) : ElementInsertHandler(moduleName) {
+
         override fun handleInsertion(context: InsertionContext, item: LookupElement) {
             val caretOffset = context.editor.caretModel.offset
-            if (needBrackets) {
+
+            val prevChar = context.document.charsSequence.getOrNull(caretOffset)
+            val withAngleParenAfterCursor = prevChar == '<'
+
+            val isGeneric = struct.genericParameters != null
+            if (isGeneric && !withAngleParenAfterCursor) {
+                val suffix = if (needBrackets) "{\$END$}" else ""
+                genericParametersInsertHandler(struct.genericParameters!!, suffix)
+                    .handleInsert(context, item)
+            }
+
+            if (!isGeneric && needBrackets) {
                 context.document.insertString(caretOffset, "{}")
                 context.editor.caretModel.moveToOffset(caretOffset + 1)
 
@@ -595,14 +631,14 @@ object VlangCompletionUtil {
     private val VARIABLE_RENDERER = object : LookupElementRenderer<LookupElement>() {
         override fun renderElement(element: LookupElement, p: LookupElementPresentation) {
             val elem = element.psiElement as? VlangNamedElement ?: return
-            val type = elem.getType(null)?.toEx()?.readableName(elem)
+            val type = elem.getType(null)?.readableName(elem)
             val icon = when (elem) {
-                is VlangVarDefinition            -> VIcons.Variable
+                is VlangVarDefinition -> VIcons.Variable
                 is VlangGlobalVariableDefinition -> VIcons.Variable
-                is VlangParamDefinition          -> VIcons.Parameter
-                is VlangReceiver                 -> VIcons.Receiver
+                is VlangParamDefinition -> VIcons.Parameter
+                is VlangReceiver -> VIcons.Receiver
                 is VlangEmbeddedDefinition -> VIcons.Field
-                else                             -> null
+                else -> null
             }
 
             p.icon = icon
@@ -617,6 +653,7 @@ object VlangCompletionUtil {
             val elem = element.psiElement as? VlangMethodDeclaration ?: return
             val signature = elem.getSignature()
 
+            val genericParameters = elem.genericParameters?.text ?: ""
             val typeText = signature?.result?.text ?: "void"
             val icon = VIcons.Method
 
@@ -626,7 +663,7 @@ object VlangCompletionUtil {
             p.icon = icon
             p.typeText = typeText
             p.isTypeGrayed = true
-            p.itemText = element.lookupString
+            p.itemText = element.lookupString + genericParameters
         }
     }
 
@@ -635,6 +672,7 @@ object VlangCompletionUtil {
             val elem = element.psiElement as? VlangInterfaceMethodDefinition ?: return
             val signature = elem.getSignature()
 
+            val genericParameters = elem.genericParameters?.text ?: ""
             val typeText = signature.result?.text ?: "void"
             val icon = VIcons.Method
 
@@ -644,14 +682,14 @@ object VlangCompletionUtil {
             p.icon = icon
             p.typeText = typeText
             p.isTypeGrayed = true
-            p.itemText = element.lookupString
+            p.itemText = element.lookupString + genericParameters
         }
     }
 
     private val FIELD_RENDERER = object : LookupElementRenderer<LookupElement>() {
         override fun renderElement(element: LookupElement, p: LookupElementPresentation) {
             val elem = element.psiElement as? VlangNamedElement ?: return
-            val type = elem.getType(null)?.toEx()?.readableName(elem)
+            val type = elem.getType(null)?.readableName(elem)
             val icon = VIcons.Field
 
             // TODO: show fqn?
@@ -692,11 +730,14 @@ object VlangCompletionUtil {
         override fun render(element: LookupElement, p: LookupElementPresentation) {
             val elem = element.psiElement as? VlangFunctionDeclaration ?: return
             p.icon = VIcons.Function
+
+            val genericParameters = elem.genericParameters?.text ?: ""
             val signature = elem.getSignature()
             val parameters = signature?.parameters?.text ?: ""
             val result = signature?.result?.text
 
-            p.itemText = element.lookupString + parameters
+            p.tailText = parameters
+            p.itemText = element.lookupString + genericParameters
             p.typeText = result
         }
     }
@@ -709,7 +750,7 @@ object VlangCompletionUtil {
 
             val valueText = elem.expression?.text
             p.tailText = " = $valueText"
-            p.typeText = elem.expression?.getType(null)?.toEx()?.readableName(elem)
+            p.typeText = elem.expression?.getType(null)?.readableName(elem)
         }
     }
 
@@ -724,7 +765,7 @@ object VlangCompletionUtil {
             if (valueText != null) {
                 p.tailText = " = $valueText"
             }
-            p.typeText = parent.expression?.getType(null)?.toEx()?.readableName(elem)
+            p.typeText = parent.expression?.getType(null)?.readableName(elem)
         }
     }
 

@@ -2,33 +2,26 @@ package org.vlang.lang.psi.types
 
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
-import org.vlang.lang.psi.VlangChannelType
 
-class VlangChannelTypeEx(raw: VlangChannelType) : VlangBaseTypeEx<VlangChannelType>(raw) {
-    val inner = raw.type?.toEx()
-
+class VlangChannelTypeEx(val inner: VlangTypeEx, anchor: PsiElement) : VlangBaseTypeEx(anchor) {
     override fun toString() = "chan ".safeAppend(inner)
 
-    override fun qualifiedName() = "chan ".safeAppend(inner?.qualifiedName())
+    override fun qualifiedName() = "chan ".safeAppend(inner.qualifiedName())
 
-    override fun readableName(context: PsiElement) = "chan ".safeAppend(inner?.readableName(context))
+    override fun readableName(context: PsiElement) = "chan ".safeAppend(inner.readableName(context))
 
-    override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {
+    override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
         return when (rhs) {
             is VlangAnyTypeEx     -> true
             is VlangUnknownTypeEx -> true
             is VlangVoidPtrTypeEx -> true
-            is VlangChannelTypeEx -> {
-                val otherInner = rhs.inner
-                if (otherInner == null) true else inner?.isAssignableFrom(otherInner, project) ?: false
-            }
-
-            else                  -> inner?.isAssignableFrom(rhs, project) ?: false
+            is VlangChannelTypeEx -> inner.isAssignableFrom(rhs.inner, project)
+            else                  -> inner.isAssignableFrom(rhs, project)
         }
     }
 
-    override fun isEqual(rhs: VlangTypeEx<*>): Boolean {
-        return rhs is VlangChannelTypeEx && rhs.inner?.let { inner?.isEqual(it) } ?: false
+    override fun isEqual(rhs: VlangTypeEx): Boolean {
+        return rhs is VlangChannelTypeEx && inner.isEqual(rhs.inner)
     }
 
     override fun accept(visitor: VlangTypeVisitor) {
@@ -36,8 +29,10 @@ class VlangChannelTypeEx(raw: VlangChannelType) : VlangBaseTypeEx<VlangChannelTy
             return
         }
 
-        if (inner != null) {
-            visitor.enter(inner)
-        }
+        inner.accept(visitor)
+    }
+
+    override fun substituteGenerics(nameMap: Map<String, VlangTypeEx>): VlangTypeEx {
+        return VlangChannelTypeEx(inner.substituteGenerics(nameMap), anchor!!)
     }
 }

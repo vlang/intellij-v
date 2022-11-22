@@ -46,6 +46,9 @@ open class VlangCompositeElementImpl(node: ASTNode) : ASTWrapperPsiElement(node)
             if (o is VlangExpression && o !is VlangIfExpression) {
                 return true
             }
+            if (o is VlangGenericParametersOwner) {
+                if (!processGenericParameters(o, processor)) return false
+            }
             if (!processor.execute(o, state)) {
                 return false
             }
@@ -69,7 +72,7 @@ open class VlangCompositeElementImpl(node: ASTNode) : ASTWrapperPsiElement(node)
             lastParent: PsiElement?, place: PsiElement,
         ): Boolean {
             return ResolveUtil.processChildrenFromTop(o, processor, state, lastParent, place) &&
-                    processParameters(o, processor) && processReceiver(o, processor)
+                    processParameters(o, processor) && processReceiver(o, processor) && processGenericParametersForBlock(o, processor)
         }
 
         private fun processParameters(b: VlangBlock, processor: PsiScopeProcessor): Boolean {
@@ -94,6 +97,26 @@ open class VlangCompositeElementImpl(node: ASTNode) : ASTWrapperPsiElement(node)
                 processor,
                 ResolveState.initial(),
                 listOf(receiver),
+                true
+            )
+        }
+
+        private fun processGenericParametersForBlock(b: VlangBlock, processor: PsiScopeProcessor): Boolean {
+            if (processor !is VlangScopeProcessorBase || b.parent !is VlangGenericParametersOwner) {
+                return true
+            }
+
+            val parent = b.parent as VlangGenericParametersOwner
+            return processGenericParameters(parent, processor)
+        }
+
+        private fun processGenericParameters(parent: VlangGenericParametersOwner, processor: PsiScopeProcessor): Boolean {
+            val parameterList = parent.genericParameters?.genericParameterList?.genericParameterList ?: return true
+
+            return VlangPsiImplUtil.processNamedElements(
+                processor,
+                ResolveState.initial(),
+                parameterList,
                 true
             )
         }

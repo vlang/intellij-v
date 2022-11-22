@@ -7,8 +7,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import org.vlang.lang.stubs.VlangFunctionDeclarationStub;
 import com.intellij.psi.ResolveState;
+import org.vlang.lang.psi.types.VlangTypeEx;
 
-public interface VlangFunctionDeclaration extends VlangSignatureOwner, VlangFunctionOrMethodDeclaration, VlangAttributeOwner, VlangScopeHolder, StubBasedPsiElement<VlangFunctionDeclarationStub> {
+public interface VlangFunctionDeclaration extends VlangSignatureOwner, VlangFunctionOrMethodDeclaration, VlangAttributeOwner, VlangGenericParametersOwner, VlangScopeHolder, StubBasedPsiElement<VlangFunctionDeclarationStub> {
 
   @Nullable
   VlangAttributes getAttributes();
@@ -17,7 +18,7 @@ public interface VlangFunctionDeclaration extends VlangSignatureOwner, VlangFunc
   VlangBlock getBlock();
 
   @Nullable
-  VlangGenericArguments getGenericArguments();
+  VlangGenericParameters getGenericParameters();
 
   @Nullable
   VlangSignature getSignature();
@@ -35,10 +36,12 @@ public interface VlangFunctionDeclaration extends VlangSignatureOwner, VlangFunc
   String getName();
 
   @Nullable
-  VlangType getTypeInner(@Nullable ResolveState context);
+  VlangTypeEx getTypeInner(@Nullable ResolveState context);
 
   boolean isDefinition();
 
   boolean isNoReturn();
+
+  boolean isGeneric();
 
 }

@@ -51,6 +51,7 @@ object VlangElementTypeFactory {
         "MODULE_CLAUSE"               -> VlangModuleClauseStubElementType.INSTANCE
         "VAR_DEFINITION"              -> VlangVarDefinitionStubElementType(name)
         "LABEL_DEFINITION"            -> VlangLabelDefinitionStubElementType(name)
+        "GENERIC_PARAMETER"           -> VlangGenericParameterStubElementType(name)
 
         else                          -> {
             val c = TYPES[name] ?: throw RuntimeException("Unknown element type: $name")

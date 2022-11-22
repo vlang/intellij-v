@@ -35,6 +35,12 @@ abstract class CompletionTestBase : BasePlatformTestCase() {
         vararg variants: String,
     ) = doTestVariants(txt, CompletionType.BASIC, count, CheckType.EQUALS, *variants)
 
+    fun checkExcludes(
+        txt: String,
+        count: Int,
+        vararg variants: String,
+    ) = doTestVariants(txt, CompletionType.BASIC, count, CheckType.EXCLUDES, *variants)
+
     protected fun doTestVariants(
         txt: String,
         type: CompletionType,

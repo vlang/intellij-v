@@ -5,15 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangGenericArgumentsFirstPin extends VlangCompositeElement {
-
-  @Nullable
-  VlangTypeListNoPin getTypeListNoPin();
-
-  @Nullable
-  PsiElement getGreater();
+public interface VlangGenericParameterList extends VlangCompositeElement {
 
   @NotNull
-  PsiElement getLess();
+  List<VlangGenericParameter> getGenericParameterList();
 
 }

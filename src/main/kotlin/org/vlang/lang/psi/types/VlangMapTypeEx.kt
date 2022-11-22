@@ -2,12 +2,8 @@ package org.vlang.lang.psi.types
 
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
-import org.vlang.lang.psi.VlangMapType
 
-class VlangMapTypeEx(raw: VlangMapType): VlangBaseTypeEx<VlangMapType>(raw) {
-    val key = raw.keyType.toEx()
-    val value = raw.valueType.toEx()
-
+class VlangMapTypeEx(val key: VlangTypeEx, val value: VlangTypeEx, anchor: PsiElement) : VlangBaseTypeEx(anchor) {
     override fun toString() = buildString {
         append("map[")
         append(key)
@@ -15,7 +11,7 @@ class VlangMapTypeEx(raw: VlangMapType): VlangBaseTypeEx<VlangMapType>(raw) {
         append(value)
     }
 
-    override fun qualifiedName() = buildString {
+    override fun qualifiedName(): String = buildString {
         append("map[")
         append(key.qualifiedName())
         append("]")
@@ -29,14 +25,12 @@ class VlangMapTypeEx(raw: VlangMapType): VlangBaseTypeEx<VlangMapType>(raw) {
         append(value.readableName(context))
     }
 
-    override fun isAssignableFrom(rhs: VlangTypeEx<*>, project: Project): Boolean {
+    override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
         return true // TODO: implement this
     }
 
-    override fun isEqual(rhs: VlangTypeEx<*>): Boolean {
-        if (rhs !is VlangMapTypeEx) return false
-
-        return key.isEqual(rhs.key) && value.isEqual(rhs.value)
+    override fun isEqual(rhs: VlangTypeEx): Boolean {
+        return true // TODO: implement this
     }
 
     override fun accept(visitor: VlangTypeVisitor) {
@@ -44,12 +38,12 @@ class VlangMapTypeEx(raw: VlangMapType): VlangBaseTypeEx<VlangMapType>(raw) {
             return
         }
 
-        if (!visitor.enter(key)) {
-            return
-        }
+        key.accept(visitor)
 
-        if (!visitor.enter(value)) {
-            return
-        }
+        value.accept(visitor)
+    }
+
+    override fun substituteGenerics(nameMap: Map<String, VlangTypeEx>): VlangTypeEx {
+        return VlangMapTypeEx(key.substituteGenerics(nameMap), value.substituteGenerics(nameMap), anchor!!)
     }
 }

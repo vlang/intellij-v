@@ -4,6 +4,7 @@ import com.intellij.psi.PsiElement
 import org.jetbrains.annotations.Contract
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 
 internal object VlangStructLiteralCompletion {
     fun allowedVariants(structFieldReference: VlangReferenceExpression?): Variants {
@@ -44,7 +45,7 @@ internal object VlangStructLiteralCompletion {
             val callExpr = VlangCodeInsightUtil.getCallExpr(element)
             val resolved = callExpr?.resolve() as? VlangSignatureOwner
             val params = resolved?.getSignature()?.parameters?.paramDefinitionList
-            val paramTypes = params?.map { it.type.resolveType() }
+            val paramTypes = params?.map { it.type.toEx() }
 
             if (paramTypes != null) {
                 if (!VlangCodeInsightUtil.isAllowedParamsForTrailingStruct(params, paramTypes)) return null

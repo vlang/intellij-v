@@ -8,6 +8,7 @@ import com.intellij.psi.StubBasedPsiElement;
 import org.vlang.lang.stubs.VlangVarDefinitionStub;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
+import org.vlang.lang.psi.types.VlangTypeEx;
 
 public interface VlangVarDefinition extends VlangMutabilityOwner, VlangNamedElement, StubBasedPsiElement<VlangVarDefinitionStub> {
 
@@ -18,7 +19,7 @@ public interface VlangVarDefinition extends VlangMutabilityOwner, VlangNamedElem
   PsiElement getIdentifier();
 
   @Nullable
-  VlangType getTypeInner(@Nullable ResolveState context);
+  VlangTypeEx getTypeInner(@Nullable ResolveState context);
 
   @NotNull
   String getName();

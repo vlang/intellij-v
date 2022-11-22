@@ -6,7 +6,6 @@ import com.intellij.psi.PsiElementVisitor
 import org.vlang.lang.psi.VlangAssignmentStatement
 import org.vlang.lang.psi.VlangLiteral
 import org.vlang.lang.psi.VlangVisitor
-import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangPrimitiveTypeEx
 
 class VlangAssignTypeMismatchInspection : LocalInspectionTool() {
@@ -20,8 +19,8 @@ class VlangAssignTypeMismatchInspection : LocalInspectionTool() {
                     val left = vars[0]
                     val expr = exprs[0]
 
-                    val leftType = left.getType(null).toEx()
-                    val exprType = expr.getType(null).toEx()
+                    val leftType = left.getType(null) ?: return
+                    val exprType = expr.getType(null) ?: return
 
                     if (leftType is VlangPrimitiveTypeEx && leftType.isNumeric() && expr is VlangLiteral && expr.isNumeric) {
                         // if assign literal to numeric type, no need to check

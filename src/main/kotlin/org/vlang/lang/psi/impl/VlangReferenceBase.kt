@@ -10,6 +10,8 @@ import org.vlang.lang.psi.VlangReferenceExpressionBase
 abstract class VlangReferenceBase<T : VlangReferenceExpressionBase>(element: T, range: TextRange?) :
     PsiPolyVariantReferenceBase<T>(element, range) {
 
+    protected val project = element.project
+
     companion object {
         val ACTUAL_NAME = Key.create<String>("ACTUAL_NAME")
         val SEARCH_NAME = Key.create<String>("SEARCH_NAME")

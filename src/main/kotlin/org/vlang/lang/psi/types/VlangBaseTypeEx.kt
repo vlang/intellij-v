@@ -1,16 +1,19 @@
 package org.vlang.lang.psi.types
 
+import com.intellij.openapi.util.UserDataHolderBase
+import com.intellij.psi.PsiElement
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.impl.VlangLightType.VlangGenericType
 
 @Suppress("PropertyName")
-abstract class VlangBaseTypeEx<T : VlangType?>(protected val raw: T) : VlangTypeEx<T> {
+abstract class VlangBaseTypeEx(protected val anchor: PsiElement? = null) : UserDataHolderBase(), VlangTypeEx {
     protected val UNKNOWN_TYPE = "unknown"
     protected val ANON = "anon"
-    protected val containingFile = raw?.containingFile as? VlangFile
-    protected val moduleName = containingFile?.getModuleQualifiedName() ?: ""
+    protected val containingFile = anchor?.containingFile as? VlangFile
+    protected open val moduleName = containingFile?.getModuleQualifiedName() ?: ""
 
-    override fun raw() = raw
+    override fun anchor() = anchor
 
     override fun module() = moduleName
 
@@ -24,70 +27,102 @@ abstract class VlangBaseTypeEx<T : VlangType?>(protected val raw: T) : VlangType
         return if (this == null) str ?: "" else this + str
     }
 
-    protected fun String?.safeAppend(type: VlangTypeEx<*>?): String {
+    protected fun String?.safeAppend(type: VlangTypeEx?): String {
         return this.safeAppend(type?.toString())
     }
 
-    protected fun VlangTypeEx<*>?.safeAppend(str: String): String {
+    protected fun VlangTypeEx?.safeAppend(str: String): String {
         return this?.toString().safeAppend(str)
     }
 
     companion object {
         protected val primitivesMap = VlangPrimitiveTypes.values().associateBy { it.value }
 
-        fun VlangType?.toEx(): VlangTypeEx<*> {
+        fun VlangTypeEx.isGeneric(): Boolean {
+            var isGeneric = false
+            accept(object : VlangTypeVisitor {
+                override fun enter(type: VlangTypeEx): Boolean {
+                    if (type is VlangGenericTypeEx) {
+                        isGeneric = true
+                        return false
+                    }
+                    return true
+                }
+            })
+            return isGeneric
+        }
+
+        fun VlangType?.toEx(): VlangTypeEx {
             if (this == null) {
-                return VlangUnknownTypeEx(null)
+                return VlangUnknownTypeEx.INSTANCE
             }
 
+            val type = toExInner()
+
+            if (genericArguments != null) {
+                val genericArguments = genericArguments!!.typeListNoPin.typeList.map { it.toEx() }
+                return VlangGenericInstantiationEx(type, genericArguments, this)
+            }
+
+            return type
+        }
+
+        private fun VlangType.toExInner(): VlangTypeEx {
             val type = resolveType()
             if (type is VlangStructType && type.parent is VlangStructDeclaration) {
                 return when ((type.parent as VlangStructDeclaration).getQualifiedName()) {
-                    "builtin.array"  -> VlangBuiltinArrayTypeEx(type)
-                    "builtin.string" -> VlangBuiltinStringTypeEx(type)
-                    else             -> if (type.isUnion) VlangUnionTypeEx(type) else VlangStructTypeEx(type)
+                    "builtin.array"  -> VlangBuiltinArrayTypeEx.INSTANCE
+                    "builtin.string" -> VlangStringTypeEx.INSTANCE
+                    else             -> {
+                        if (type.isUnion) VlangUnionTypeEx(parentName(type), type)
+                        else VlangStructTypeEx(parentName(type), type)
+                    }
                 }
             }
 
             return when (type) {
-                is VlangEnumType      -> VlangEnumTypeEx(type)
-                is VlangInterfaceType -> VlangInterfaceTypeEx(type)
-                is VlangOptionType    -> VlangOptionTypeEx(type)
-                is VlangResultType    -> VlangResultTypeEx(type)
-                is VlangSharedType    -> VlangSharedTypeEx(type)
-                is VlangPointerType   -> VlangPointerTypeEx(type)
-                is VlangChannelType   -> VlangChannelTypeEx(type)
-                is VlangArrayType     -> VlangArrayTypeEx(type)
-                is VlangMapType       -> VlangMapTypeEx(type)
-                is VlangTupleType     -> VlangTupleTypeEx(type)
-                is VlangFunctionType  -> VlangFunctionTypeEx(type)
+                is VlangEnumType      -> VlangEnumTypeEx(parentName(type), type)
+                is VlangInterfaceType -> VlangInterfaceTypeEx(parentName(type), type)
+                is VlangOptionType    -> VlangOptionTypeEx(type.type?.toEx(), type)
+                is VlangResultType    -> VlangResultTypeEx(type.type?.toEx(), type)
+                is VlangSharedType    -> VlangSharedTypeEx(type.type.toEx(), type)
+                is VlangPointerType   -> VlangPointerTypeEx(type.type.toEx(), type)
+                is VlangArrayType     -> VlangArrayTypeEx(type.type.toEx(), type)
+                is VlangChannelType   -> VlangChannelTypeEx(type.type.toEx(), type)
+                is VlangMapType       -> VlangMapTypeEx(type.keyType.toEx(), type.valueType.toEx(), type)
+                is VlangTupleType     -> VlangTupleTypeEx(type.typeListNoPin.typeList.map { it.toEx() }, type)
+                is VlangGenericType   -> VlangGenericTypeEx(type.name, type)
+                is VlangFunctionType  -> VlangFunctionTypeEx.from(type) ?: VlangUnknownTypeEx.INSTANCE
                 is VlangAliasType     -> {
-                    if (type.isAlias) {
-                        VlangAliasTypeEx(type)
-                    } else {
-                        VlangSumTypeEx(type)
-                    }
+//                  if (type.isAlias) {
+                    VlangAliasTypeEx(parentName(type), type.typeUnionList?.typeList?.firstOrNull().toEx(), type)
+//                  } TODO: stack overflow
+//                  else {
+//                      VlangSumTypeEx(parentName(type), type.typeUnionList?.typeList?.map { it.toEx() } ?: emptyList(), type)
+//                  }
                 }
 
                 else                  -> {
                     if (type.text == "any") {
-                        return VlangAnyTypeEx(this)
+                        return VlangAnyTypeEx.INSTANCE
                     }
                     if (type.text == "void") {
-                        return VlangVoidTypeEx(this)
+                        return VlangVoidTypeEx.INSTANCE
                     }
                     if (type.text == "voidptr") {
-                        return VlangVoidPtrTypeEx(this)
+                        return VlangVoidPtrTypeEx.INSTANCE
                     }
 
                     val primitive = primitivesMap[type.text]
                     if (primitive != null) {
-                        VlangPrimitiveTypeEx(type, primitive)
+                        VlangPrimitiveTypeEx(primitive)
                     } else {
-                        VlangUnknownTypeEx(type)
+                        VlangUnknownTypeEx.INSTANCE
                     }
                 }
             }
         }
+
+        private fun parentName(type: PsiElement) = (type.parent as VlangNamedElement).name!!
     }
 }

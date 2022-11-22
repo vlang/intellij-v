@@ -208,4 +208,18 @@ class ClosureCompletionTest : CompletionTestBase() {
         	}
         }
     """.trimIndent())
+
+    fun `test no completion inside closure`() = checkExcludes("""
+        module completion
+
+        fn foo(cb fn ()) ?int {
+        	return 0
+        }
+
+        fn main() {
+        	foo(fn () {
+        		fn<caret>
+        	})
+        }
+    """.trimIndent(), 1, "fn () {...}")
 }

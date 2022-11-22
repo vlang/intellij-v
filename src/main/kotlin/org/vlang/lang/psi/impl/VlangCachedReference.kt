@@ -7,6 +7,8 @@ import com.intellij.psi.impl.source.resolve.ResolveCache
 import com.intellij.util.ArrayUtil
 
 abstract class VlangCachedReference<T : PsiElement>(element: T) : PsiReferenceBase<T>(element, TextRange.from(0, element.textLength)) {
+    protected val project = element.project
+
     override fun resolve(): PsiElement? {
         if (!myElement!!.isValid) {
             return null

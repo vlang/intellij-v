@@ -7,8 +7,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import org.vlang.lang.stubs.VlangMethodDeclarationStub;
 import com.intellij.psi.ResolveState;
+import org.vlang.lang.psi.types.VlangTypeEx;
 
-public interface VlangMethodDeclaration extends VlangSignatureOwner, VlangFunctionOrMethodDeclaration, VlangAttributeOwner, StubBasedPsiElement<VlangMethodDeclarationStub> {
+public interface VlangMethodDeclaration extends VlangSignatureOwner, VlangFunctionOrMethodDeclaration, VlangAttributeOwner, VlangGenericParametersOwner, StubBasedPsiElement<VlangMethodDeclarationStub> {
 
   @Nullable
   VlangAttributes getAttributes();
@@ -17,7 +18,7 @@ public interface VlangMethodDeclaration extends VlangSignatureOwner, VlangFuncti
   VlangBlock getBlock();
 
   @Nullable
-  VlangGenericArguments getGenericArguments();
+  VlangGenericParameters getGenericParameters();
 
   @NotNull
   VlangMethodName getMethodName();
@@ -44,7 +45,7 @@ public interface VlangMethodDeclaration extends VlangSignatureOwner, VlangFuncti
   VlangType getReceiverType();
 
   @Nullable
-  VlangType getTypeInner(@Nullable ResolveState context);
+  VlangTypeEx getTypeInner(@Nullable ResolveState context);
 
   @Nullable
   PsiElement getIdentifier();

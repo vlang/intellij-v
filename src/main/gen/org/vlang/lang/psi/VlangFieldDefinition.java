@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import org.vlang.lang.stubs.VlangFieldDefinitionStub;
 import com.intellij.psi.ResolveState;
+import org.vlang.lang.psi.types.VlangTypeEx;
 
 public interface VlangFieldDefinition extends VlangMutabilityOwner, VlangNamedElement, StubBasedPsiElement<VlangFieldDefinitionStub> {
 
@@ -19,8 +20,8 @@ public interface VlangFieldDefinition extends VlangMutabilityOwner, VlangNamedEl
   @Nullable
   String getQualifiedName();
 
-  @Nullable
-  VlangType getTypeInner(@Nullable ResolveState context);
+  @NotNull
+  VlangTypeEx getTypeInner(@Nullable ResolveState context);
 
   boolean isPublic();
 

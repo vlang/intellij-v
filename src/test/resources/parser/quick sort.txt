@@ -261,14 +261,11 @@ V Language file
   FUNCTION_DECLARATION
     PsiElement(VlangTokenType.fn)('fn')
     PsiElement(VlangTokenType.identifier)('quick_sort')
-    GENERIC_ARGUMENTS
+    GENERIC_PARAMETERS
       PsiElement(VlangTokenType.<)('<')
-      TYPE_LIST_NO_PIN
-        TYPE
-          TYPE_MODIFIERS
-            <empty list>
-          TYPE_REFERENCE_EXPRESSION
-            PsiElement(VlangTokenType.identifier)('T')
+      GENERIC_PARAMETER_LIST
+        GENERIC_PARAMETER
+          PsiElement(VlangTokenType.identifier)('T')
       PsiElement(VlangTokenType.>)('>')
     SIGNATURE
       PARAMETERS
@@ -537,14 +534,11 @@ V Language file
   FUNCTION_DECLARATION
     PsiElement(VlangTokenType.fn)('fn')
     PsiElement(VlangTokenType.identifier)('is_sorted')
-    GENERIC_ARGUMENTS
+    GENERIC_PARAMETERS
       PsiElement(VlangTokenType.<)('<')
-      TYPE_LIST_NO_PIN
-        TYPE
-          TYPE_MODIFIERS
-            <empty list>
-          TYPE_REFERENCE_EXPRESSION
-            PsiElement(VlangTokenType.identifier)('T')
+      GENERIC_PARAMETER_LIST
+        GENERIC_PARAMETER
+          PsiElement(VlangTokenType.identifier)('T')
       PsiElement(VlangTokenType.>)('>')
     SIGNATURE
       PARAMETERS
