@@ -40,12 +40,6 @@ abstract class DocumentationTestBase : BasePlatformTestCase() {
 
     private fun checkDoc(generateDoc: String, fileToCheck: String) {
         val file = File(fileToCheck)
-        if (true) { // TODO: delete
-            file.createNewFile()
-            file.writeText(generateDoc)
-            return
-        }
-
         if (!file.exists()) {
             file.createNewFile()
             file.writeText(generateDoc)
