@@ -67,9 +67,9 @@ object DocumentationUtils {
         append("\n")
     }
 
-    fun colorize(text: String, attrs: TextAttributes): String {
+    fun colorize(text: String, attrs: TextAttributes, noHtml: Boolean = false): String {
         val sb = StringBuilder()
-        sb.colorize(text, attrs)
+        sb.colorize(text, attrs, noHtml)
         return sb.toString()
     }
 }

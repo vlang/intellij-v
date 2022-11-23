@@ -12,7 +12,7 @@ import org.vlang.lang.stubs.VlangModuleClauseStub;
 import org.vlang.lang.psi.*;
 import com.intellij.psi.stubs.IStubElementType;
 
-public class VlangModuleClauseImpl extends VlangStubbedElementImpl<VlangModuleClauseStub> implements VlangModuleClause {
+public class VlangModuleClauseImpl extends VlangNamedElementImpl<VlangModuleClauseStub> implements VlangModuleClause {
 
   public VlangModuleClauseImpl(@NotNull VlangModuleClauseStub stub, @NotNull IStubElementType<?, ?> type) {
     super(stub, type);

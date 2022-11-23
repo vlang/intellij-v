@@ -541,7 +541,8 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitModuleClause(@NotNull VlangModuleClause o) {
-    visitAttributeOwner(o);
+    visitNamedElement(o);
+    // visitAttributeOwner(o);
   }
 
   public void visitMulExpr(@NotNull VlangMulExpr o) {

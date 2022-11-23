@@ -25,7 +25,7 @@ object VlangElementFactory {
 
     fun createIdentifierFromText(project: Project, text: String): PsiElement {
         val file = createFileFromText(project, "module $text")
-        return file.getModule()?.identifier!!
+        return file.getModule()?.getIdentifier()!!
     }
 
     fun createCaptureList(project: Project, text: String): VlangCaptureList {

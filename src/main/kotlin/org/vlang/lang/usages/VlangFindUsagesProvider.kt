@@ -40,10 +40,12 @@ class VlangFindUsagesProvider : FindUsagesProvider {
         is VlangParamDefinition                           -> "parameter"
         is VlangEmbeddedDefinition                        -> "embedded definition"
         is VlangImportDeclaration                         -> "import"
+        is VlangImportName                                -> "import"
         is VlangImportSpec                                -> "import alias"
         is VlangReceiver                                  -> "receiver"
         is VlangLabelDefinition                           -> "label"
         is VlangModuleClause                              -> "module"
+        is VlangGenericParameter                          -> "generic parameter"
         else                                              -> ""
     }
 

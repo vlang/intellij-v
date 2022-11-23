@@ -97,7 +97,7 @@
   extends("(Or|And|Add|Conversion|Mul|Selector|Conditional|OrBlock)Expr")=BinaryExpr
   extends(".*(Expr|Literal|Lit|OperandName)|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|SharedExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression|LockExpression|IncDecExpression|LiteralValueExpression|SelectExpression|SpawnExpression|TypeCastExpression")=Expression
 
-  implements("(Var|Param|Field|Label|Var|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|(Struct|TypeAlias|Union|Enum|Interface)Declaration|Receiver|Import(Alias|Name)|GenericParameter")="org.vlang.lang.psi.VlangNamedElement"
+  implements("ModuleClause|(Var|Param|Field|Label|Var|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|(Struct|TypeAlias|Union|Enum|Interface)Declaration|Receiver|Import(Alias|Name)|GenericParameter")="org.vlang.lang.psi.VlangNamedElement"
   implements("FunctionLit|(Function|Method)Declaration")="org.vlang.lang.psi.VlangSignatureOwner"
   implements("(Function|Method)Declaration")="org.vlang.lang.psi.VlangFunctionOrMethodDeclaration"
   implements(".*ReferenceExpression|FieldName")="org.vlang.lang.psi.VlangReferenceExpressionBase"
@@ -109,8 +109,8 @@
   implements("(Function)Declaration")="org.vlang.lang.psi.VlangScopeHolder"
 
   extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
-  extends("ModuleClause|Type")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
-  extends("(Struct|TypeAlias|Union|Enum|Interface)Declaration|(Var|Label|Param|Field|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
+  extends("Type")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
+  extends("ModuleClause|(Struct|TypeAlias|Union|Enum|Interface)Declaration|(Var|Label|Param|Field|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
 
   elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum|Interface)Declaration|.*Type|(Var|Label|Field|Param|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
 

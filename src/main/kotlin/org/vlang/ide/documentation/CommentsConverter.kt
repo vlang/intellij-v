@@ -71,4 +71,18 @@ object CommentsConverter {
         }
         return result
     }
+
+    fun getCommentsForModule(element: VlangModuleClause): List<PsiComment> {
+        val result = mutableListOf<PsiComment>()
+        var e: PsiElement? = element.nextSibling
+        while (e != null && (e is PsiWhiteSpace || e is PsiComment)) {
+            if (e is PsiComment) {
+                result.add(e)
+            }
+
+            e = e.nextSibling
+        }
+
+        return result
+    }
 }

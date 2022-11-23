@@ -174,6 +174,25 @@ object DocumentationGenerator {
         return parts.subList(0, parts.size - 1).joinToString(".") + "." + colorize(parts.last(), asDeclaration)
     }
 
+    fun VlangModuleClause.generateDoc(): String {
+        return buildString {
+            append(DocumentationMarkup.DEFINITION_START)
+            part("module", asKeyword)
+            colorize(name, asDeclaration)
+            append(DocumentationMarkup.DEFINITION_END)
+            generateModuleCommentsPart(this@generateDoc)
+        }
+    }
+
+    private fun StringBuilder.generateModuleCommentsPart(element: VlangModuleClause) {
+        val comments = CommentsConverter.toHtml(CommentsConverter.getCommentsForModule(element))
+        if (comments.isNotEmpty()) {
+            append(DocumentationMarkup.CONTENT_START)
+            append(comments)
+            append(DocumentationMarkup.CONTENT_END)
+        }
+    }
+
     fun VlangResult.generateDoc(): String {
         val type = type.toEx()
         if (type is VlangTupleTypeEx) {
@@ -191,7 +210,7 @@ object DocumentationGenerator {
         return type.generateDoc(this)
     }
 
-    private fun VlangVarModifiers?.generateDoc(short: Boolean = false, noHtml: Boolean = false): String {
+    private fun VlangVarModifiers?.generateDoc(noHtml: Boolean = false): String {
         if (this == null) {
             return ""
         }
@@ -202,20 +221,22 @@ object DocumentationGenerator {
         val isMutable = modifiers.any { it.mut != null }
         val isShared = modifiers.any { it.shared != null }
 
-        return buildString {
-            if (isVolatile) {
-                colorize("volatile", asKeyword, noHtml)
-            }
-            if (isStatic) {
-                colorize("static", asKeyword, noHtml)
-            }
-            if (isMutable) {
-                colorize(if (short) "mut" else "mutable", asKeyword, noHtml)
-            }
-            if (isShared) {
-                colorize("shared", asKeyword, noHtml)
-            }
-        }.trim()
+        val parts = mutableListOf<String>()
+
+        if (isVolatile) {
+            parts.add(colorize("volatile", asKeyword, noHtml))
+        }
+        if (isStatic) {
+            parts.add(colorize("static", asKeyword, noHtml))
+        }
+        if (isMutable) {
+            parts.add(colorize("mutable", asKeyword, noHtml))
+        }
+        if (isShared) {
+            parts.add(colorize("shared", asKeyword, noHtml))
+        }
+
+        return parts.joinToString(" ")
     }
 
     private fun VlangMemberModifiers?.generateDoc(element: VlangNamedElement): String {
@@ -272,7 +293,10 @@ object DocumentationGenerator {
                         append("   ")
                         part(modifiers)
                         val pad = modifierMaxWidth - modifiersRawLength
-                        append("".padEnd(if (pad != 0) pad + 1 else 0))
+                        append("".padEnd(pad))
+                        if (modifiers.isEmpty()) {
+                            append(" ")
+                        }
                         val name = param.name
                         if (name != null) {
                             colorize(name, asParameter)
@@ -301,7 +325,7 @@ object DocumentationGenerator {
 
     private fun VlangParamDefinition.generateDocForMethod(): String {
         return buildString {
-            part(varModifiers.generateDoc(short = true))
+            part(varModifiers.generateDoc())
             val name = name
             if (name != null) {
                 colorize(name, asParameter)
@@ -531,6 +555,28 @@ object DocumentationGenerator {
             if (valueDoc != null) {
                 part(" =")
                 append(valueDoc)
+            }
+
+            append(DocumentationMarkup.DEFINITION_END)
+            generateCommentsPart(this@generateDoc)
+        }
+    }
+
+    fun VlangTypeAliasDeclaration.generateDoc(): String {
+        val genericParameters = aliasType?.genericParameters
+        return buildString {
+            generateModuleName(containingFile)
+            append(DocumentationMarkup.DEFINITION_START)
+
+            part("type alias", asKeyword)
+            colorize(name, asDeclaration)
+            appendNotNull(genericParameters.generateDoc())
+            append(" ")
+
+            val rightType = aliasType?.typeUnionList?.typeList?.firstOrNull()?.toEx()
+            if (rightType != null) {
+                part("=")
+                append(rightType.generateDoc(this@generateDoc))
             }
 
             append(DocumentationMarkup.DEFINITION_END)

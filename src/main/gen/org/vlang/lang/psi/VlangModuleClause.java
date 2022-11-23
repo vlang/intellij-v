@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import org.vlang.lang.stubs.VlangModuleClauseStub;
 
-public interface VlangModuleClause extends VlangAttributeOwner, StubBasedPsiElement<VlangModuleClauseStub> {
+public interface VlangModuleClause extends VlangNamedElement, VlangAttributeOwner, StubBasedPsiElement<VlangModuleClauseStub> {
 
   @Nullable
   VlangAttributes getAttributes();
