@@ -5,8 +5,8 @@
 </p>
 
 ![Build](https://github.com/i582/vlang-idea/workflows/Build/badge.svg)
-[![Version](https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
-[![Downloads](https://img.shields.io/jetbrains/plugin/d/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
+[![Version](https://img.shields.io/jetbrains/plugin/v/20287-vlang.svg)](https://plugins.jetbrains.com/plugin/20287-vlang)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/20287-vlang.svg)](https://plugins.jetbrains.com/plugin/20287-vlang)
 
 # V language plugin for JetBrains IDEs
 
@@ -14,13 +14,14 @@
 
 This plugin adds support of [V](https://vlang.io) language to JetBrains IDEs.
 
-> This plugin in very very early stage.
+## Installation & Usage
 
-## Installation
+For installation options, see the [Quick Start Guide](https://plugins.jetbrains.com/plugin/20287-vlang/docs/#install-update-the-plugin).
+If you want to jump straight in use following instructions:
 
 - Using IDE built-in plugin system:
   
-  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "vlang-idea"</kbd> >
+  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "Vlang"</kbd> >
   <kbd>Install Plugin</kbd>
   
 - Manually:
@@ -28,6 +29,7 @@ This plugin adds support of [V](https://vlang.io) language to JetBrains IDEs.
   Download the [latest release](https://github.com/i582/vlang-idea/releases/latest) and install it manually using
   <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
+All the plugin's features are described in [documentation](https://plugins.jetbrains.com/plugin/20287-vlang/docs).
 
 ## License
 
