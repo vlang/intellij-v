@@ -7,22 +7,17 @@ import com.intellij.openapi.options.ShowSettingsUtil
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.openapi.util.Disposer
-import com.intellij.psi.stubs.StubIndexImpl
 import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
-import org.vlang.projectWizard.VlangToolchainFlavor
-import kotlin.io.path.pathString
 
 class VlangProjectSettingsConfigurable(private val project: Project) : Configurable {
     private val mainPanel: DialogPanel
     private val model = VlangProjectSettingsForm.Model(
         toolchainLocation = "",
-        toolchainVersion = "N/A",
-        stdlibLocation = "",
-        modulesLocation = "",
     )
+    private val settingsForm = VlangProjectSettingsForm(project, model)
 
     init {
-        mainPanel = VlangProjectSettingsForm(project, model, false) { onToolchainApply(model) }.createComponent()
+        mainPanel = settingsForm.createComponent()
 
         val disposable = Disposer.newDisposable()
         mainPanel.registerValidators(disposable)
@@ -36,10 +31,7 @@ class VlangProjectSettingsConfigurable(private val project: Project) : Configura
         mainPanel.apply()
 
         val settings = project.projectSettings
-        return model.toolchainLocation != settings.toolchainLocation ||
-                model.toolchainVersion != settings.toolchainVersion ||
-                model.stdlibLocation != settings.stdlibLocation ||
-                model.modulesLocation != settings.modulesLocation
+        return model.toolchainLocation != settings.toolchainLocation
     }
 
     override fun apply() {
@@ -47,20 +39,8 @@ class VlangProjectSettingsConfigurable(private val project: Project) : Configura
 
         validateSettings()
 
-        if (model.stdlibLocation.isNotEmpty() && isModified) {
-            val stdlibRoot = VlangConfiguration.getInstance(project).stdlibLocation
-            if (stdlibRoot != null) {
-                StubIndexImpl.getInstance().forceRebuild(object : Exception() {})
-            }
-        }
-
         val settings = project.projectSettings
-        with(settings) {
-            toolchainLocation = model.toolchainLocation
-            toolchainVersion = model.toolchainVersion
-            stdlibLocation = model.stdlibLocation
-            modulesLocation = model.modulesLocation
-        }
+        settings.setToolchain(project, model.toolchainLocation)
     }
 
     private fun validateSettings() {
@@ -74,42 +54,15 @@ class VlangProjectSettingsConfigurable(private val project: Project) : Configura
         val settings = project.projectSettings
 
         with(model) {
-            if (modulesLocation.isEmpty()) {
-                modulesLocation = settings.toolchainLocation
-            }
-            if (toolchainVersion.isEmpty()) {
-                toolchainVersion = settings.toolchainVersion
-            }
-            if (stdlibLocation.isEmpty()) {
-                stdlibLocation = settings.stdlibLocation
-            }
-            if (modulesLocation.isEmpty()) {
-                modulesLocation = settings.modulesLocation
-            }
+            toolchainLocation = settings.toolchainLocation
         }
 
+        settingsForm.reset()
         mainPanel.reset()
     }
 
     companion object {
         private val LOG = logger<VlangProjectSettingsConfigurable>()
-
-        fun onToolchainApply(model: VlangProjectSettingsForm.Model) {
-            if (model.modulesLocation.isEmpty()) {
-                val modulesLocation = VlangToolchainFlavor.suggestModulesHomePath()
-                if (modulesLocation != null) {
-                    model.modulesLocation = modulesLocation.pathString
-                }
-            }
-
-            model.toolchainVersion = VlangConfigurationUtil.guessToolchainVersion(model.toolchainLocation)
-
-            if (model.toolchainVersion != VlangConfigurationUtil.UNDEFINED_VERSION) {
-                model.stdlibLocation = VlangConfigurationUtil.getStdlibLocation(model.toolchainLocation) ?: ""
-            } else {
-                model.stdlibLocation = ""
-            }
-        }
 
         fun show(project: Project) {
             ShowSettingsUtil.getInstance().showSettingsDialog(project, VlangProjectSettingsConfigurable::class.java)

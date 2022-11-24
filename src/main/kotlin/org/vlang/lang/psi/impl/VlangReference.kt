@@ -335,7 +335,8 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         }
 
         if (element.inside<VlangArgumentList>()) {
-            if (!processPseudoParams(processor, state)) return false
+            // disabled for now
+//            if (!processPseudoParams(processor, state)) return false
         }
 
         if (!processBlock(processor, state, true)) return false

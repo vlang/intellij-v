@@ -7,7 +7,6 @@ import java.nio.charset.StandardCharsets
 
 class VlangProjectTemplate {
     fun generateProject(
-        sdkRoot: String,
         module: Module,
         baseDir: VirtualFile
     ): Collection<VirtualFile> {

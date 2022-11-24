@@ -636,7 +636,7 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getName(o: VlangModuleClause): String {
-        return o.identifier?.text ?: "<unknown>"
+        return o.getIdentifier()?.text ?: "<unknown>"
     }
 
     @JvmStatic
@@ -756,7 +756,8 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getTypeInner(o: VlangFieldDefinition, context: ResolveState?): VlangTypeEx {
-        return (o.parent as VlangFieldDeclaration).type.toEx()
+        val fieldDeclaration = o.parent as? VlangFieldDeclaration
+        return fieldDeclaration?.type.toEx()
     }
 
     @JvmStatic

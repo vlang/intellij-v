@@ -98,6 +98,8 @@ The plugin provides support for V language
 <!--                               implementationClass="org.vlang.lang.search.VlangGotoSuperHandler"/>-->
         <!-- Searches End -->
 
+        <postStartupActivity implementation="org.vlang.ide.VlangPostStartupActivity"/>
+
         <codeInsight.lineMarkerProvider language="vlang"
                                         implementationClass="org.vlang.ide.highlight.VlangRecursiveCallMarkerProvider"/>
         <codeInsight.inlayProvider language="vlang"
@@ -371,18 +373,14 @@ The plugin provides support for V language
         <additionalLibraryRootsProvider implementation="org.vlang.project.VlangAdditionalLibraryRootsProvider"/>
 
         <fileDocumentManagerListener implementation="org.vlang.project.VlangFmtWatcher$VlangFmtListener"/>
-        <editorNotificationProvider implementation="org.vlang.project.MissingToolchainNotificationProvider"/>
         <!-- End of Project -->
 
         <notificationGroup id="V Plugin" displayType="BALLOON"/>
 
-        <!-- SDK -->
-        <sdkType implementation="org.vlang.sdk.VlangSdkType"/>
-        <library.presentationProvider implementation="org.vlang.sdk.VlangLibraryPresentationProvider"/>
-        <library.type implementation="org.vlang.sdk.VlangLibraryType"/>
-
-        <projectService serviceImplementation="org.vlang.sdk.VlangSdkService"/>
-        <!-- End of SDK -->
+        <!-- Toolchains -->
+        <editorNotificationProvider implementation="org.vlang.project.MissingToolchainNotificationProvider"/>
+        <applicationService serviceImplementation="org.vlang.configurations.VlangToolchainsState"/>
+        <!-- End of Toolchains -->
 
         <!-- Run V script Configuration -->
         <configurationType implementation="org.vlang.ide.run.VlangRunConfigurationType"/>
@@ -452,6 +450,8 @@ The plugin provides support for V language
 
     <extensions defaultExtensionNs="org.vlang">
       <!-- Toolchain flavors -->
+      <toolchainFlavor id="vlang.sysPathHomeToolchainFlavor"
+                       implementation="org.vlang.projectWizard.flavors.VlangSysPathToolchainFlavor"/>
       <toolchainFlavor id="vlang.macToolchainFlavor"
                        implementation="org.vlang.projectWizard.flavors.VlangMacToolchainFlavor"/>
       <toolchainFlavor id="vlang.winToolchainFlavor"
@@ -460,8 +460,6 @@ The plugin provides support for V language
                        implementation="org.vlang.projectWizard.flavors.VlangUnixToolchainFlavor"/>
       <toolchainFlavor id="vlang.userHomeToolchainFlavor"
                        implementation="org.vlang.projectWizard.flavors.VlangUserHomeToolchainFlavor"/>
-      <toolchainFlavor id="vlang.sysPathHomeToolchainFlavor"
-                       implementation="org.vlang.projectWizard.flavors.VlangSysPathToolchainFlavor"/>
       <toolchainFlavor id="vlang.vupToolchainFlavor"
                        implementation="org.vlang.projectWizard.flavors.VupToolchainFlavor"/>
       <!-- Toolchain flavors End -->

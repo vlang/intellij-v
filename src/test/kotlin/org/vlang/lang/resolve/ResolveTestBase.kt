@@ -55,7 +55,7 @@ abstract class ResolveTestBase : BasePlatformTestCase() {
 
     protected fun setupBuiltin() {
         myFixture.copyDirectoryToProject("builtin", "builtin")
-        myFixture.project.projectSettings.stdlibLocation = myFixture.testDataPath
+        myFixture.project.projectSettings.customStdlibLocation = myFixture.testDataPath
     }
 
     protected fun findReferenceAtCaret(filePath: String): PsiReference? {

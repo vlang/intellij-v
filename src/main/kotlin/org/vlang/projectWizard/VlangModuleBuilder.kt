@@ -23,9 +23,6 @@ import java.io.IOException
 class VlangModuleBuilder : ModuleBuilder(), ModuleBuilderListener {
     private val model = VlangProjectSettingsForm.Model(
         toolchainLocation = "",
-        toolchainVersion = "",
-        stdlibLocation = "",
-        modulesLocation = "",
     )
 
     override fun getPresentableName() = "V"
@@ -61,7 +58,7 @@ class VlangModuleBuilder : ModuleBuilder(), ModuleBuilderListener {
             runWriteAction {
                 try {
                     val filesToOpen = VlangProjectTemplate()
-                        .generateProject("", modifiableRootModel.module, baseDir)
+                        .generateProject(modifiableRootModel.module, baseDir)
 
                     if (!filesToOpen.isEmpty()) {
                         scheduleFilesOpening(modifiableRootModel.module, filesToOpen)
@@ -77,12 +74,7 @@ class VlangModuleBuilder : ModuleBuilder(), ModuleBuilderListener {
     private fun setToolchainInfo(modifiableRootModel: ModifiableRootModel) {
         val project = modifiableRootModel.module.project
         val settings = project.projectSettings
-        with(settings) {
-            toolchainLocation = model.toolchainLocation
-            toolchainVersion = model.toolchainVersion
-            stdlibLocation = model.stdlibLocation
-            modulesLocation = model.modulesLocation
-        }
+        settings.setToolchain(project, model.toolchainLocation)
     }
 
     private fun scheduleFilesOpening(module: Module, files: Collection<VirtualFile>) {
@@ -95,7 +87,7 @@ class VlangModuleBuilder : ModuleBuilder(), ModuleBuilderListener {
     }
 
     private fun runWhenNonModalIfModuleNotDisposed(module: Module, runnable: Runnable) {
-        // runnable must not be executed immediately because the new project model might be not yet committed, so Dart SDK won't be found
+        // runnable must not be executed immediately because the new project model might be not yet committed, so V Toolchain won't be found
         // In WebStorm we get already initialized project at this point, but in IntelliJ IDEA - not yet initialized.
         if (module.project.isInitialized) {
             ApplicationManager.getApplication().invokeLater(runnable, ModalityState.NON_MODAL, module.disposed)

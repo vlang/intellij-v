@@ -61,7 +61,7 @@ abstract class IntegrationTestBase : BasePlatformTestCase() {
     }
 
     private fun copyStdlibToProject() {
-        myFixture.project.projectSettings.stdlibLocation = myFixture.testDataPath + "/vlib"
-        myFixture.project.projectSettings.modulesLocation = myFixture.testDataPath + "/modules"
+        myFixture.project.projectSettings.customStdlibLocation = myFixture.testDataPath + "/vlib"
+        myFixture.project.projectSettings.customModulesLocation = myFixture.testDataPath + "/modules"
     }
 }

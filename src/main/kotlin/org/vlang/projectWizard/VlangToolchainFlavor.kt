@@ -1,7 +1,6 @@
 package org.vlang.projectWizard
 
 import com.intellij.openapi.extensions.ExtensionPointName
-import com.intellij.util.io.exists
 import com.intellij.util.io.isDirectory
 import org.vlang.projectWizard.ToolchainUtil.hasExecutable
 import org.vlang.projectWizard.ToolchainUtil.pathToExecutable
@@ -20,7 +19,7 @@ abstract class VlangToolchainFlavor {
     protected open fun isApplicable(): Boolean = true
 
     /**
-     * Checks if the path is the name of a Rust toolchain of this flavor.
+     * Checks if the path is the name of a V toolchain of this flavor.
      *
      * @param path path to check.
      * @return true if paths points to a valid home.
@@ -42,13 +41,5 @@ abstract class VlangToolchainFlavor {
 
         fun getFlavor(path: Path): VlangToolchainFlavor? =
             getApplicableFlavors().find { flavor -> flavor.isValidToolchainPath(path) }
-
-        fun suggestModulesHomePath(): Path? {
-            val vmodulePath = Path.of(System.getProperty("user.home"), ".vmodules")
-            if (!vmodulePath.exists()) {
-                return null
-            }
-            return vmodulePath
-        }
     }
 }

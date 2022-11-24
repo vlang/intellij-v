@@ -1,6 +1,5 @@
 <idea-plugin>
   <extensions defaultExtensionNs="com.intellij">
     <moduleBuilder builderClass="org.vlang.projectWizard.VlangModuleBuilder"/>
-    <moduleType id="V_MODULE" implementationClass="org.vlang.sdk.VlangModuleType"/>
   </extensions>
 </idea-plugin>

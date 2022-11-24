@@ -5,7 +5,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.util.xmlb.XmlSerializerUtil
 
 @State(
-    name = "VlangProjectSettingsState",
+    name = "VROOT",
     storages = [Storage(StoragePathMacros.WORKSPACE_FILE)]
 )
 class VlangProjectSettingsState : PersistentStateComponent<VlangProjectSettingsState?> {
@@ -15,12 +15,16 @@ class VlangProjectSettingsState : PersistentStateComponent<VlangProjectSettingsS
     }
 
     var toolchainLocation: String = ""
-    var toolchainVersion: String = ""
-    var stdlibLocation: String = ""
-    var modulesLocation: String = ""
+    var customStdlibLocation: String? = null
+    var customModulesLocation: String? = null
 
     val compilerLocation: String?
         get() = VlangConfigurationUtil.getCompilerExeLocation(toolchainLocation)
+
+    fun setToolchain(project: Project, location: String) {
+        toolchainLocation = location
+        VlangLibrariesUtil.updateLibraries(project)
+    }
 
     override fun getState() = this
 

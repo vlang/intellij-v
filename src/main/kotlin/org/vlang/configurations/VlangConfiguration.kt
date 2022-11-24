@@ -4,11 +4,13 @@ import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.guessProjectDir
+import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.vfs.VfsUtilCore
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VirtualFileManager
 import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
+import java.io.File
 
 @Service
 class VlangConfiguration(private val project: Project) {
@@ -22,14 +24,11 @@ class VlangConfiguration(private val project: Project) {
     val toolchainLocation: VirtualFile?
         get() = findFile(settings.toolchainLocation)
 
-    val toolchainVersion: String
-        get() = settings.toolchainVersion
-
     val stdlibLocation: VirtualFile?
-        get() = findFile(settings.stdlibLocation)
+        get() = findFile(settings.customStdlibLocation ?: (settings.toolchainLocation + "/vlib"))
 
     val modulesLocation: VirtualFile?
-        get() = findFile(settings.modulesLocation)
+        get() = findFile(settings.customModulesLocation ?: modulesLocation())
 
     val builtinLocation: VirtualFile?
         get() = stdlibLocation?.findChild(VlangCodeInsightUtil.BUILTIN_MODULE)
@@ -48,5 +47,15 @@ class VlangConfiguration(private val project: Project) {
     private fun findFileInProject(path: String): VirtualFile? {
         val projectDir = project.guessProjectDir() ?: return null
         return projectDir.findFileByRelativePath(path)
+    }
+
+    private fun modulesLocation(): String {
+        val vmodulesPathString = System.getenv("VMODULES") ?: return defaultModulesLocation()
+        val paths = vmodulesPathString.split(File.pathSeparatorChar)
+        return paths.firstOrNull() ?: defaultModulesLocation()
+    }
+
+    private fun defaultModulesLocation(): String {
+        return FileUtil.expandUserHome("~/.vmodules")
     }
 }

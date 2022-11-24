@@ -1,7 +1,6 @@
 package org.vlang.lang.psi.impl
 
 import com.intellij.openapi.project.Project
-import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.CachedValuesManager
 import com.intellij.psi.util.PsiModificationTracker
@@ -27,7 +26,7 @@ object VlangLangUtil {
         val typeName = getTypeName(type)
         if (moduleName.isEmpty() || typeName.isEmpty()) return emptyList()
         val key = "$moduleName.$typeName"
-        val declarations = VlangMethodIndex.find(key, project, GlobalSearchScope.allScope(project), null)
+        val declarations = VlangMethodIndex.find(key, project, null, null)
         return declarations.toList()
     }
 
