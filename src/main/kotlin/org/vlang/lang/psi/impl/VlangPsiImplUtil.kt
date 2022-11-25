@@ -945,17 +945,10 @@ object VlangPsiImplUtil {
                 return indexType
             }
 
-            // [type, type][0] -> type
-            if (indexType is VlangArrayTypeEx) {
-                return indexType.inner
-            }
-            // ["1": type, "2": type]["1"] -> type
-            if (indexType is VlangMapTypeEx) {
-                return indexType.value
-            }
-            // "1"[0] -> rune
-            if (indexType is VlangStringTypeEx) {
-                return VlangPrimitiveTypeEx.RUNE
+            return if (indexType is VlangAliasTypeEx) {
+                inferTypeForIndexOrSlice(indexType.inner)
+            } else {
+                inferTypeForIndexOrSlice(indexType)
             }
         }
 
@@ -1068,6 +1061,23 @@ object VlangPsiImplUtil {
         }
 
         return null
+    }
+
+    private fun inferTypeForIndexOrSlice(indexType: VlangTypeEx): VlangTypeEx {
+        // [type, type][0] -> type
+        if (indexType is VlangArrayTypeEx) {
+            return indexType.inner
+        }
+        // ["1": type, "2": type]["1"] -> type
+        if (indexType is VlangMapTypeEx) {
+            return indexType.value
+        }
+        // "1"[0] -> rune
+        if (indexType is VlangStringTypeEx) {
+            return VlangPrimitiveTypeEx.RUNE
+        }
+
+        return VlangAnyTypeEx.INSTANCE
     }
 
     private fun getTypeOfBlock(
