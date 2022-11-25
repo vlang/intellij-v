@@ -1334,6 +1334,22 @@ object VlangPsiImplUtil {
 
     private fun processRangeClause(o: VlangVarDefinition, decl: VlangRangeClause, context: ResolveState?): VlangTypeEx? {
         val rightType = decl.expression?.getType(context)
+        if (rightType is VlangStructTypeEx) {
+            return processIteratorStruct(o, rightType)
+        }
+
+        if (rightType is VlangGenericInstantiationEx) {
+            val inner = rightType.inner
+            val specMap = rightType.specializationMap(o.project)
+            if (inner is VlangStructTypeEx) {
+                val type = processIteratorStruct(o, inner)
+                if (type != null && type.isGeneric()) {
+                    return type.substituteGenerics(specMap)
+                }
+                return type
+            }
+        }
+
         val varList = decl.varDefinitionList
         if (varList.size == 1) {
             if (rightType is VlangArrayTypeEx) {
@@ -1366,6 +1382,16 @@ object VlangPsiImplUtil {
         }
 
         return VlangAnyTypeEx.INSTANCE
+    }
+
+    private fun processIteratorStruct(
+        o: VlangVarDefinition,
+        rightType: VlangTypeEx,
+    ): VlangTypeEx? {
+        val method = VlangLangUtil.findMethod(o.project, rightType, "next") ?: return VlangAnyTypeEx.INSTANCE
+        val result = method.getSignature()?.result ?: return VlangAnyTypeEx.INSTANCE
+        val resultType = result.type.toEx()
+        return unwrapOptionOrResultType(resultType)
     }
 
     private fun getTypeInVarSpec(o: VlangVarDefinition, decl: VlangVarDeclaration, context: ResolveState?): VlangTypeEx? {

@@ -2,6 +2,9 @@ package org.vlang.lang.psi.types
 
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.childrenOfType
+import org.vlang.lang.psi.VlangGenericParametersOwner
+import org.vlang.lang.psi.VlangTypeOwner
 
 class VlangGenericInstantiationEx(
     val inner: VlangTypeEx,
@@ -58,4 +61,26 @@ class VlangGenericInstantiationEx(
             anchor!!,
         )
     }
+
+    fun specializationMap(project: Project): Map<String, VlangTypeEx> {
+        val genericTs = extractInstantiationTs(project)
+        if (genericTs.isEmpty()) {
+            return emptyMap()
+        }
+
+        return genericTs.zip(specialization).toMap()
+    }
+
+    fun extractInstantiationTs(project: Project): List<String> {
+        if (inner !is VlangResolvableTypeEx<*>) {
+            return emptyList()
+        }
+
+        val innerResolved = inner.resolve(project) as? VlangTypeOwner ?: return emptyList()
+        val resolvedType = innerResolved.childrenOfType<VlangGenericParametersOwner>().firstOrNull() ?: return emptyList()
+        return extractGenericParameters(resolvedType)
+    }
+
+    private fun extractGenericParameters(resolvedType: VlangGenericParametersOwner) =
+        resolvedType.genericParameters?.genericParameterList?.genericParameterList?.map { it.name!! } ?: emptyList()
 }

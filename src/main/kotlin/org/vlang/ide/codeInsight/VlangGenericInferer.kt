@@ -1,11 +1,12 @@
 package org.vlang.ide.codeInsight
 
-import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
-import com.intellij.psi.util.childrenOfType
 import org.vlang.lang.psi.*
-import org.vlang.lang.psi.types.*
+import org.vlang.lang.psi.types.VlangAliasTypeEx
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
+import org.vlang.lang.psi.types.VlangGenericInstantiationEx
+import org.vlang.lang.psi.types.VlangPointerTypeEx
+import org.vlang.lang.psi.types.VlangTypeEx
 
 object VlangGenericInferer {
     fun inferGenericCall(call: VlangCallExpr, caller: VlangSignatureOwner, resultType: VlangTypeEx): VlangTypeEx? {
@@ -106,26 +107,14 @@ object VlangGenericInferer {
             return genericType
         }
 
-        // foo<int, string> -> foo
-        val genericTs = qualifierType.extractInstantiationTs(expr.project)
-        if (genericTs.isEmpty()) {
+        // foo<int, string> ->
+        //   T: int
+        //   U: string
+        val specializationMap = qualifierType.specializationMap(expr.project)
+        if (specializationMap.isEmpty()) {
             return genericType
         }
 
-        val specializationMap = genericTs.zip(qualifierType.specialization).toMap()
         return genericType.substituteGenerics(specializationMap)
     }
-
-    private fun VlangGenericInstantiationEx.extractInstantiationTs(project: Project): List<String> {
-        if (inner !is VlangResolvableTypeEx<*>) {
-            return emptyList()
-        }
-
-        val innerResolved = inner.resolve(project) as? VlangTypeOwner ?: return emptyList()
-        val resolvedType = innerResolved.childrenOfType<VlangGenericParametersOwner>().firstOrNull() ?: return emptyList()
-        return extractGenericParameters(resolvedType)
-    }
-
-    private fun extractGenericParameters(resolvedType: VlangGenericParametersOwner) =
-        resolvedType.genericParameters?.genericParameterList?.genericParameterList?.map { it.name!! } ?: emptyList()
 }
