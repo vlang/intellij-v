@@ -53,7 +53,7 @@ class VlangGotoSuperHandler : LanguageCodeInsightActionHandler {
                 },
                 event,
                 VlangGotoUtil.param(method),
-                VlangGotoUtil.getDefaultRenderer(method),
+                VlangGotoUtil.getMethodRenderer(method),
                 VlangSuperMethodSearch.GO_SUPER_METHOD_SEARCH,
             )
         }
@@ -67,7 +67,7 @@ class VlangGotoSuperHandler : LanguageCodeInsightActionHandler {
                 },
                 event,
                 VlangGotoUtil.param(field),
-                VlangGotoUtil.getDefaultRenderer(field),
+                VlangGotoUtil.getFieldRenderer(field),
                 VlangSuperFieldSearch.GO_SUPER_FIELD_SEARCH,
             )
         }
