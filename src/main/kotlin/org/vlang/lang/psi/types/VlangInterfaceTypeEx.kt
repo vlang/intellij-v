@@ -12,6 +12,10 @@ class VlangInterfaceTypeEx(val name: String, anchor: PsiElement) :
     override fun toString() = name
 
     override fun qualifiedName(): String {
+        if (name == "IError") {
+            return "builtin.IError"
+        }
+
         if (moduleName.isEmpty()) {
             return name
         }
@@ -40,6 +44,8 @@ class VlangInterfaceTypeEx(val name: String, anchor: PsiElement) :
     }
 
     companion object {
-        fun iError(anchor: PsiElement) = VlangInterfaceTypeEx("IError", anchor)
+        fun iError(anchor: PsiElement): VlangInterfaceTypeEx {
+            return VlangInterfaceTypeEx("IError", anchor)
+        }
     }
 }

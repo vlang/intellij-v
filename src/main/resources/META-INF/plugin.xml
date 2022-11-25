@@ -190,6 +190,12 @@ The plugin provides support for V language
                          displayName="Missing function name in doc"
                          enabledByDefault="true" level="WEAK WARNING"
                          implementationClass="org.vlang.ide.inspections.general.VlangMissingFunctionNameInDocInspection"/>
+
+        <localInspection language="vlang" groupPath="V"
+                         groupName="General" shortName="VlangCannotInferTypeInspection"
+                         displayName="Cannot infer type"
+                         enabledByDefault="true" level="ERROR"
+                         implementationClass="org.vlang.ide.inspections.general.VlangCannotInferTypeInspection"/>
         <!-- General inspections End -->
 
         <!-- Validity issues inspections -->

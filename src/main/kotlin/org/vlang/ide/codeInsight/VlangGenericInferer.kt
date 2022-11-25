@@ -103,14 +103,15 @@ object VlangGenericInferer {
         // foo.a
         // ^^^ type of foo
         val qualifierType = (expr.getQualifier() as? VlangTypeOwner)?.getType(null) ?: return null
-        if (qualifierType !is VlangGenericInstantiationEx) {
+        val instantiation = extractInstantiation(qualifierType)
+        if (instantiation !is VlangGenericInstantiationEx) {
             return genericType
         }
 
         // foo<int, string> ->
         //   T: int
         //   U: string
-        val specializationMap = qualifierType.specializationMap(expr.project)
+        val specializationMap = instantiation.specializationMap(expr.project)
         if (specializationMap.isEmpty()) {
             return genericType
         }

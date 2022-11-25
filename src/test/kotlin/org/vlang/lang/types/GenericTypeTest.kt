@@ -190,4 +190,22 @@ class GenericTypeTest : TypeTestBase() {
         }
         """.trimIndent()
     )
+
+    fun `test alias for generic struct with field`() = doTest(
+        """
+        struct Foo<T> {
+            field T
+        }
+        
+        type FooT = Foo<int>
+        type FooT2 = Foo<string>
+        
+        fn main() {
+            foo := FooT{}
+            expr_type(foo.field, 'int')
+            foo2 := FooT2{}
+            expr_type(foo2.field, 'string')
+        }
+        """.trimIndent()
+    )
 }

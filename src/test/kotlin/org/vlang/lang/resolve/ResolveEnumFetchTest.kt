@@ -119,16 +119,16 @@ open class ResolveEnumFetchTest : ResolveTestBase() {
     fun `test in array in binary expr`() {
         mainFile("a.v", """
             module main
-            
+
             enum Colors {
                 red
                 green
             }
-            
+
             fn main() {
                 mut color := Colors.red
                 if color in [./*caret*/red, ./*caret*/green] {
-                    
+
                 }
             }
         """.trimIndent())
@@ -137,7 +137,44 @@ open class ResolveEnumFetchTest : ResolveTestBase() {
         assertReferencedTo("ENUM_FIELD_DEFINITION green")
     }
 
-    fun `test in array`() {
+    fun `test in array in binary expr 2`() {
+        mainFile("a.v", """
+            module main
+
+            enum Colors {
+                red
+                green
+            }
+
+            fn main() {
+                mut colors := [Colors.red]
+                assert colors == [./*caret*/red, ./*caret*/green]
+            }
+        """.trimIndent())
+
+        assertReferencedTo("ENUM_FIELD_DEFINITION red")
+        assertReferencedTo("ENUM_FIELD_DEFINITION green")
+    }
+
+//    fun `test in array`() {
+//        mainFile("a.v", """
+//            module main
+//
+//            enum Colors {
+//                red
+//                green
+//            }
+//
+//            fn main() {
+//                mut colors := [Colors./*caret*/red, ./*caret*/green]
+//            }
+//        """.trimIndent())
+//
+//        assertReferencedTo("ENUM_FIELD_DEFINITION red")
+//        assertReferencedTo("ENUM_FIELD_DEFINITION green")
+//    }
+
+    fun `test return`() {
         mainFile("a.v", """
             module main
             
@@ -146,12 +183,11 @@ open class ResolveEnumFetchTest : ResolveTestBase() {
                 green
             }
             
-            fn main() {
-                mut colors := [Colors./*caret*/red, ./*caret*/green]
+            fn foo() Colors {
+                return ./*caret*/green
             }
         """.trimIndent())
 
-        assertReferencedTo("ENUM_FIELD_DEFINITION red")
         assertReferencedTo("ENUM_FIELD_DEFINITION green")
     }
 }

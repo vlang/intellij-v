@@ -10,6 +10,8 @@ class VlangSharedTypeEx(val inner: VlangTypeEx, anchor: PsiElement) : VlangBaseT
 
     override fun readableName(context: PsiElement) = "shared ".safeAppend(inner.readableName(context))
 
+    override fun module() = inner.module()
+
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
         return when (rhs) {
             is VlangAnyTypeEx     -> true

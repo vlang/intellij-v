@@ -10,6 +10,8 @@ class VlangArrayTypeEx(val inner: VlangTypeEx, anchor: PsiElement) : VlangBaseTy
 
     override fun readableName(context: PsiElement) = "[]".safeAppend(inner.readableName(context))
 
+    override fun module() = inner.module()
+
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
         return when (rhs) {
             is VlangAnyTypeEx          -> true

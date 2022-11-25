@@ -22,6 +22,8 @@ class VlangTupleTypeEx(val types: List<VlangTypeEx>, anchor: PsiElement) : Vlang
         append(")")
     }
 
+    override fun module() = types.firstOrNull()?.module() ?: super.module()
+
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
         return true // TODO: implement this
     }

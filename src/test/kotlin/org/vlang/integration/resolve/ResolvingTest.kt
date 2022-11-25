@@ -117,4 +117,24 @@ class ResolvingTest : IntegrationTestBase() {
 //        assertReferencedTo(0, "IMPORT_NAME simple")
 //        assertReferencedTo(1, "FUNCTION_DECLARATION mymodule.my_func")
 //    }
+
+    fun `test complex type methods`() = doTest {
+        myFixture.copyDirectoryToProject("fixtures/ComplexTypeMethods", "")
+        myFixture.configureByText("main.v", """
+            module main
+
+            import inner
+
+            fn main() {
+                arr := []inner.Foo{}
+                arr./*caret 0*/foo()
+                
+                mp := map[string]inner.Foo{}
+                mp./*caret 1*/boo()
+            }
+        """.trimIndent())
+
+        assertReferencedTo(0, "METHOD_DECLARATION inner.foo")
+        assertReferencedTo(1, "METHOD_DECLARATION inner.boo")
+    }
 }

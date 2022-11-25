@@ -243,6 +243,11 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             return processBuiltinTypeMethods(project, "map", processor, newState)
         }
 
+        if (typ is VlangChannelTypeEx) {
+            if (!processMethods(typ, processor, newState, localResolve)) return false
+            return processBuiltinChannelTypeMethods(project,  processor, newState)
+        }
+
         if (typ is VlangGenericInstantiationEx) {
             if (!processType(typ.inner, processor, newState)) return false
         }
@@ -258,11 +263,25 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         newState: ResolveState,
     ): Boolean {
         val builtin = VlangConfiguration.getInstance(project).builtinLocation
-        val arrayVirtualFile = builtin?.findChild("$name.v") ?: return false
-        val arrayFile = PsiManager.getInstance(project).findFile(arrayVirtualFile) as? VlangFile ?: return false
-        val arrayStruct = arrayFile.getStructs()
+        val virtualFile = builtin?.findChild("$name.v") ?: return false
+        val psiFile = PsiManager.getInstance(project).findFile(virtualFile) as? VlangFile ?: return false
+        val struct = psiFile.getStructs()
             .firstOrNull { it.name == name } ?: return false
-        return processExistingType(arrayStruct.structType.toEx(), processor, newState)
+        return processExistingType(struct.structType.toEx(), processor, newState)
+    }
+
+    private fun processBuiltinChannelTypeMethods(
+        project: Project,
+        processor: VlangScopeProcessor,
+        newState: ResolveState,
+    ): Boolean {
+        val vlib = VlangConfiguration.getInstance(project).builtinLocation?.parent
+        val syncDir = vlib?.findChild("sync") ?: return false
+        val virtualFile = syncDir.findChild("channels.c.v") ?: return false
+        val psiFile = PsiManager.getInstance(project).findFile(virtualFile) as? VlangFile ?: return false
+        val struct = psiFile.getStructs()
+            .firstOrNull { it.name == "Channel" } ?: return false
+        return processExistingType(struct.structType.toEx(), processor, newState)
     }
 
     private fun processMethods(type: VlangTypeEx, processor: VlangScopeProcessor, state: ResolveState, localResolve: Boolean): Boolean {

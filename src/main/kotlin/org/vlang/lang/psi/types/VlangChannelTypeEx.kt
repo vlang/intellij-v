@@ -10,6 +10,8 @@ class VlangChannelTypeEx(val inner: VlangTypeEx, anchor: PsiElement) : VlangBase
 
     override fun readableName(context: PsiElement) = "chan ".safeAppend(inner.readableName(context))
 
+    override fun module() = inner.module()
+
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
         return when (rhs) {
             is VlangAnyTypeEx     -> true

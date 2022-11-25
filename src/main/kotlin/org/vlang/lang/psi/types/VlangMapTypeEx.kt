@@ -25,6 +25,8 @@ class VlangMapTypeEx(val key: VlangTypeEx, val value: VlangTypeEx, anchor: PsiEl
         append(value.readableName(context))
     }
 
+    override fun module() = value.module()
+
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
         return true // TODO: implement this
     }

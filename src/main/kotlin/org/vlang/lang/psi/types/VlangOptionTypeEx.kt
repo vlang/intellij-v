@@ -10,6 +10,8 @@ class VlangOptionTypeEx(val inner: VlangTypeEx?, anchor: PsiElement) : VlangBase
 
     override fun readableName(context: PsiElement) = "?".safeAppend(inner?.readableName(context))
 
+    override fun module() = inner?.module() ?: super.module()
+
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
         return when (rhs) {
             is VlangAnyTypeEx     -> true

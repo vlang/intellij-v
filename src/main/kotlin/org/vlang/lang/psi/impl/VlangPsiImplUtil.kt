@@ -969,6 +969,11 @@ object VlangPsiImplUtil {
             return expr.jsonArgumentList.type.toEx()
         }
 
+        // <type>(<expr>) -> type
+        if (expr is VlangTypeCastExpression) {
+            return expr.type.toEx()
+        }
+
         if (expr is VlangCallExpr) {
             val callRef = expr.expression as? VlangReferenceExpression
             if (VlangCodeInsightUtil.isTypeCast(expr)) {
@@ -1037,14 +1042,8 @@ object VlangPsiImplUtil {
             val ifBody = expr.block
             val elseBody = expr.elseStatement?.block
 
-            val lastIfStatement = ifBody?.statementList?.lastOrNull()
-            val lastElseStatement = elseBody?.statementList?.lastOrNull()
-
-            val lastIfExpressionList = lastIfStatement?.childrenOfType<VlangLeftHandExprList>()?.lastOrNull()
-            val lastElseExpressionList = lastElseStatement?.childrenOfType<VlangLeftHandExprList>()?.lastOrNull()
-
-            val ifType = getTypeInner(lastIfExpressionList, context)
-            val elseType = getTypeInner(lastElseExpressionList, context)
+            val ifType = getTypeOfBlock(ifBody, context)
+            val elseType = getTypeOfBlock(elseBody, context)
 
             if (ifType == null) return elseType
             if (elseType == null) return ifType
@@ -1054,7 +1053,30 @@ object VlangPsiImplUtil {
             return ifType
         }
 
+        if (expr is VlangEnumFetch) {
+            val field = expr.reference.resolve() as? VlangEnumFieldDefinition
+            return field?.getTypeInner(context)
+        }
+
+        if (expr is VlangMatchExpression) {
+            val block = expr.matchArms?.matchArmList?.firstOrNull()?.block
+            return getTypeOfBlock(block, context)
+        }
+
+        if (expr is VlangAsExpression) {
+            return expr.type.toEx()
+        }
+
         return null
+    }
+
+    private fun getTypeOfBlock(
+        body: VlangBlock?,
+        context: ResolveState?,
+    ): VlangTypeEx? {
+        val lastIfStatement = body?.statementList?.lastOrNull()
+        val lastIfExpressionList = lastIfStatement?.childrenOfType<VlangLeftHandExprList>()?.lastOrNull()
+        return getTypeInner(lastIfExpressionList, context)
     }
 
     private fun getTypeInner(expr: VlangLeftHandExprList?, context: ResolveState?): VlangTypeEx? {

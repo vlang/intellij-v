@@ -3,10 +3,12 @@ package org.vlang.ide.codeInsight
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.parentOfType
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.types.VlangArrayTypeEx
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangBuiltinArrayTypeEx
 import org.vlang.lang.psi.types.VlangPointerTypeEx
 import org.vlang.lang.psi.types.VlangTypeEx
+import org.vlang.utils.inside
 import org.vlang.utils.parentNth
 
 object VlangTypeInferenceUtil {
@@ -24,12 +26,12 @@ object VlangTypeInferenceUtil {
     }
 
     fun getContextType(element: PsiElement): VlangTypeEx? {
-        if (element is VlangArrayCreation) {
-            val type = element.arrayCreationList?.expressionList?.firstOrNull()?.getType(null)
-            if (type != null) {
-                return type
-            }
-        }
+//        if (element is VlangArrayCreation) {
+//            val type = element.arrayCreationList?.expressionList?.firstOrNull()?.getType(null)
+//            if (type != null) {
+//                return type
+//            }
+//        }
 
         if (element.parent is VlangValue) {
             val parentElement = element.parentNth<VlangElement>(2)
@@ -37,9 +39,13 @@ object VlangTypeInferenceUtil {
             if (key?.fieldName != null) {
                 val resolved = key.fieldName?.resolve() as? VlangFieldDefinition
                 val declaration = resolved?.parent as? VlangFieldDeclaration
-                val resolvedType = declaration?.type
+                val resolvedType = declaration?.type?.toEx()
                 if (resolvedType != null) {
-                    return resolvedType.toEx()
+                    if (element is VlangArrayCreation && resolvedType is VlangArrayTypeEx) {
+                        return resolvedType.inner
+                    }
+
+                    return resolvedType
                 }
             }
         }
@@ -58,7 +64,11 @@ object VlangTypeInferenceUtil {
             val right = binaryExpr.right!!
             if (binaryExpr.right != null && right.isEquivalentTo(element)) {
                 val left = binaryExpr.left
-                return left.getType(null)
+                val leftType = left.getType(null)
+                if (leftType is VlangArrayTypeEx) {
+                    return leftType.inner
+                }
+                return leftType
             }
         }
 
@@ -87,6 +97,11 @@ object VlangTypeInferenceUtil {
 
             val param = params.getOrNull(index) ?: return null
             return param.type.toEx()
+        }
+
+        if (element.inside<VlangReturnStatement>()) {
+            val function = element.parentOfType<VlangFunctionOrMethodDeclaration>() ?: return null
+            return function.getSignature()?.result?.type?.toEx()
         }
 
         return null
