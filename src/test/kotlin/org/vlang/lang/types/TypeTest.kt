@@ -24,4 +24,5 @@ class TypeTest : TypeTestBase() {
 //    fun `test shared`() = doTestFile("shared.v")
     fun `test dump`() = doTestFile("dump.v")
     fun `test channels`() = doTestFile("channels.v")
+    fun `test range`() = doTestFile("range.v")
 }

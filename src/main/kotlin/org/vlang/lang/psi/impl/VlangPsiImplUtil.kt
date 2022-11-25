@@ -851,6 +851,10 @@ object VlangPsiImplUtil {
             return exprType
         }
 
+        if (expr is VlangRangeExpr && expr.tripleDot == null) {
+            return VlangArrayTypeEx(VlangPrimitiveTypeEx.INT, expr)
+        }
+
         // dump(type) -> type
         if (expr is VlangDumpCallExpr) {
             return expr.expression?.getType(null)
