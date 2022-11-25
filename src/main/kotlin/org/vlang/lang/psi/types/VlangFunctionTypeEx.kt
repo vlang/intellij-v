@@ -50,7 +50,15 @@ class VlangFunctionTypeEx(val params: List<VlangTypeEx>, val result: VlangTypeEx
             return false
         }
 
-        if (result == null || rhs.result == null || !result.isEqual(rhs.result)) {
+        if (result != null && rhs.result == null) {
+            return false
+        }
+
+        if (result == null && rhs.result != null) {
+            return false
+        }
+
+        if (result != null && rhs.result != null && !result.isEqual(rhs.result)) {
             return false
         }
 

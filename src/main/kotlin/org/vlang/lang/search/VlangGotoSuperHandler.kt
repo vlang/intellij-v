@@ -35,7 +35,7 @@ class VlangGotoSuperHandler : LanguageCodeInsightActionHandler {
             VlangGotoUtil.showPopup(
                 "Implemented Interface of $name",
                 { count ->
-                    "Type $name Implements $count interfaces"
+                    "Type '$name' Implements $count interfaces"
                 },
                 event,
                 VlangGotoUtil.param(typeSpec),
@@ -49,7 +49,7 @@ class VlangGotoSuperHandler : LanguageCodeInsightActionHandler {
             VlangGotoUtil.showPopup(
                 "Implemented methods of $name",
                 { count ->
-                    "Method $name Implements Methods $count interfaces"
+                    "Method '$name' Implements $count interfaces"
                 },
                 event,
                 VlangGotoUtil.param(method),
@@ -63,7 +63,7 @@ class VlangGotoSuperHandler : LanguageCodeInsightActionHandler {
             VlangGotoUtil.showPopup(
                 "Implemented fields of $name",
                 { count ->
-                    "Method $name Implements Fields $count interfaces"
+                    "Field '$name' Implements $count interfaces"
                 },
                 event,
                 VlangGotoUtil.param(field),

@@ -28,26 +28,24 @@ class VlangSuperMarkerProvider : LineMarkerProviderDescriptor() {
             if (element !is LeafPsiElement || element.elementType != VlangTypes.IDENTIFIER) continue
 
             val parent = element.parent
-            if (parent is VlangType) {
-                val grand = parent.parent
-                if (grand is VlangNamedElement) {
-                    if (hasSuperType(grand)) {
-                        result.add(
-                            VlangGotoUtil.createInfo(
-                                element,
-                                { e, identifier -> showSuperTypePopup(e, identifier) },
-                                "Go to Interfaces",
-                                GO_TO_SUPER_ICON,
-                                IdeActions.ACTION_GOTO_SUPER
-                            )
+            val grand = parent.parent
+            if (grand is VlangStructDeclaration) {
+                if (hasSuperType(grand)) {
+                    result.add(
+                        VlangGotoUtil.createInfo(
+                            element,
+                            { e, identifier -> showSuperTypePopup(e, identifier) },
+                            "Go to Interfaces",
+                            GO_TO_SUPER_ICON,
+                            IdeActions.ACTION_GOTO_SUPER
                         )
-                    }
+                    )
                 }
             }
 
             if (parent is VlangMethodName) {
-                val grand = parent.parent as VlangMethodDeclaration
-                if (hasSuperMethod(grand)) {
+                val grandDecl = grand as VlangMethodDeclaration
+                if (hasSuperMethod(grandDecl)) {
                     result.add(
                         VlangGotoUtil.createInfo(
                             element,
@@ -61,7 +59,8 @@ class VlangSuperMarkerProvider : LineMarkerProviderDescriptor() {
             }
 
             if (parent is VlangFieldDefinition) {
-                if (hasSuperField(parent)) {
+                val owner = parent.getOwner()
+                if (owner is VlangStructDeclaration && hasSuperField(parent)) {
                     result.add(
                         VlangGotoUtil.createInfo(
                             element,
@@ -92,8 +91,8 @@ class VlangSuperMarkerProvider : LineMarkerProviderDescriptor() {
         }
 
         private fun showSuperFieldPopup(e: MouseEvent?, identifier: PsiElement) {
-            val method = identifier.parent as? VlangFieldDefinition ?: return
-            VlangGotoSuperHandler.showPopup(e, method)
+            val field = identifier.parent as? VlangFieldDefinition ?: return
+            VlangGotoSuperHandler.showPopup(e, field)
         }
 
         private fun hasSuperType(spec: VlangNamedElement): Boolean {

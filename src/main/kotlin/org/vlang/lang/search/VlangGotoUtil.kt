@@ -23,6 +23,8 @@ import com.intellij.psi.search.searches.DefinitionsScopedSearch
 import com.intellij.util.FunctionUtil
 import com.intellij.util.Processor
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet
+import org.vlang.lang.psi.VlangFieldDefinition
+import org.vlang.lang.psi.VlangMethodDeclaration
 import org.vlang.lang.psi.VlangNamedElement
 import java.awt.event.MouseEvent
 import javax.swing.Icon
@@ -79,6 +81,32 @@ object VlangGotoUtil {
         return if (context == null) DefaultPsiElementCellRenderer() else object : DefaultPsiElementCellRenderer() {
             override fun getComparator(): Comparator<PsiElement> {
                 return GotoImplementationHandler.projectElementsFirst(context.project).thenComparing(super.getComparator())
+            }
+        }
+    }
+
+    fun getMethodRenderer(context: PsiElement?): DefaultPsiElementCellRenderer {
+        return if (context == null) DefaultPsiElementCellRenderer() else object : DefaultPsiElementCellRenderer() {
+            override fun getComparator(): Comparator<PsiElement> {
+                return GotoImplementationHandler.projectElementsFirst(context.project).thenComparing(super.getComparator())
+            }
+
+            override fun getElementText(element: PsiElement?): String {
+                val method = element as? VlangMethodDeclaration
+                return method?.receiverType?.text ?: super.getElementText(element)
+            }
+        }
+    }
+
+    fun getFieldRenderer(context: PsiElement?): DefaultPsiElementCellRenderer {
+        return if (context == null) DefaultPsiElementCellRenderer() else object : DefaultPsiElementCellRenderer() {
+            override fun getComparator(): Comparator<PsiElement> {
+                return GotoImplementationHandler.projectElementsFirst(context.project).thenComparing(super.getComparator())
+            }
+
+            override fun getElementText(element: PsiElement?): String {
+                val field = element as? VlangFieldDefinition
+                return field?.getOwner()?.name ?: super.getElementText(element)
             }
         }
     }

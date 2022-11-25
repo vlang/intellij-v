@@ -76,7 +76,7 @@ class VlangInheritorsLineMarkerProvider : LineMarkerProviderDescriptor() {
 
             VlangGotoUtil.showPopup(
                 "Implementations of $name",
-                { size -> "Type $name implemented in $size types" },
+                { size -> "Type '$name' implemented in $size types" },
                 event,
                 VlangGotoUtil.param(named),
                 VlangGotoUtil.getDefaultRenderer(named),
@@ -92,10 +92,10 @@ class VlangInheritorsLineMarkerProvider : LineMarkerProviderDescriptor() {
 
             VlangGotoUtil.showPopup(
                 "Implementations of $name",
-                { size -> "Method $name implemented in $size types" },
+                { size -> "Method '$name' implemented in $size types" },
                 event,
                 VlangGotoUtil.param(named),
-                VlangGotoUtil.getDefaultRenderer(named),
+                VlangGotoUtil.getMethodRenderer(named),
                 VlangMethodInheritorsSearch(),
             )
         }, "Go to Implementations", AllIcons.Gutter.ImplementedMethod, IdeActions.ACTION_GOTO_IMPLEMENTATION)
@@ -108,10 +108,10 @@ class VlangInheritorsLineMarkerProvider : LineMarkerProviderDescriptor() {
 
             VlangGotoUtil.showPopup(
                 "Implementations of $name",
-                { size -> "Field $name implemented in $size types" },
+                { size -> "Field '$name' implemented in $size types" },
                 event,
                 VlangGotoUtil.param(named),
-                VlangGotoUtil.getDefaultRenderer(named),
+                VlangGotoUtil.getFieldRenderer(named),
                 VlangFieldInheritorsSearch(),
             )
         }, "Go to Implementations", AllIcons.Gutter.ImplementedMethod, IdeActions.ACTION_GOTO_IMPLEMENTATION)

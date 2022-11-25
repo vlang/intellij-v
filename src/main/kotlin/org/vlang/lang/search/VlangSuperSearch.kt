@@ -3,7 +3,6 @@ package org.vlang.lang.search
 import com.intellij.openapi.application.QueryExecutorBase
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.util.Conditions
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.search.searches.DefinitionsScopedSearch
 import com.intellij.psi.util.parentOfType
@@ -12,6 +11,7 @@ import com.intellij.util.containers.JBIterable
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet
 import org.vlang.lang.psi.VlangInterfaceDeclaration
 import org.vlang.lang.psi.VlangNamedElement
+import org.vlang.lang.psi.VlangStructDeclaration
 import org.vlang.lang.psi.impl.VlangLangUtil
 import org.vlang.lang.stubs.index.VlangInterfaceFieldFingerprintIndex
 import org.vlang.lang.stubs.index.VlangInterfaceMethodFingerprintIndex
@@ -43,7 +43,7 @@ class VlangSuperSearch : QueryExecutorBase<VlangNamedElement, DefinitionsScopedS
         ) {
             val project = typeSpec.project
             val searchScope = GlobalSearchScope.allScope(project)
-            val candidatesProcessor = VlangGotoUtil.createCandidatesProcessor(processor, Conditions.alwaysTrue())
+            val candidatesProcessor = createCandidatesProcessor(processor, typeSpec)
             VlangGotoUtil.searchInContentFirst(project, searchScope) {
                 processMethodInterfaces(project, methods, candidatesProcessor, visitedSpecs)
             }
@@ -93,10 +93,24 @@ class VlangSuperSearch : QueryExecutorBase<VlangNamedElement, DefinitionsScopedS
         ) {
             val project = typeSpec.project
             val searchScope = GlobalSearchScope.allScope(project)
-            val candidatesProcessor = VlangGotoUtil.createCandidatesProcessor(processor, Conditions.alwaysTrue())
+            val candidatesProcessor = createCandidatesProcessor(processor, typeSpec)
             VlangGotoUtil.searchInContentFirst(project, searchScope) { scope ->
                 processFieldInterfaces(project, fields, scope, candidatesProcessor, visitedSpecs)
             }
+        }
+
+        private fun createCandidatesProcessor(
+            processor: Processor<in VlangNamedElement>,
+            typeSpec: VlangNamedElement,
+        ): Processor<VlangNamedElement?> {
+            val condition = condition@{ interfaceDecl: VlangNamedElement? ->
+                val interfaceType = (interfaceDecl as? VlangInterfaceDeclaration)?.interfaceType ?: return@condition false
+                val structType = (typeSpec as? VlangStructDeclaration)?.structType ?: return@condition false
+
+                VlangInheritorsSearch.checkImplementsInterface(typeSpec.project, interfaceType, structType)
+            }
+
+            return VlangGotoUtil.createCandidatesProcessor(processor, condition)
         }
 
         private fun processFieldInterfaces(
