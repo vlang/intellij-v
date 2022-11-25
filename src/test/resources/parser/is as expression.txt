@@ -2,7 +2,12 @@ V Language file
   MODULE_CLAUSE
     PsiElement(VlangTokenType.module)('module')
     PsiElement(VlangTokenType.identifier)('parser')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// array returns `Any` as an array.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('array returns ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`Any`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' as an array.')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -815,8 +820,11 @@ V Language file
                     PsiElement(VlangTokenType..)('.')
                     PsiElement(VlangTokenType.identifier)('Any')
             PsiElement(VlangTokenType.))(')')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// dump(clients_data)')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// assert false')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('dump(clients_data)')
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('assert false')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION

@@ -417,8 +417,11 @@ V Language file
                           CONTINUE_STATEMENT
                             PsiElement(VlangTokenType.continue)('continue')
                           PsiElement(VlangTokenType.})('}')
-                  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// if the current import node is not the same as before,')
-                  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// untrack and remove the import entry asap')
+                  PsiComment(VLANG_DOC_COMMENT)
+                    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                    PsiElement(VlangTokenType.<DOC_DATA>)('if the current import node is not the same as before,')
+                    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                    PsiElement(VlangTokenType.<DOC_DATA>)('untrack and remove the import entry asap')
                   SIMPLE_STATEMENT
                     LEFT_HAND_EXPR_LIST
                       CALL_EXPR
@@ -441,7 +444,9 @@ V Language file
                                 PsiElement(VlangTokenType.identifier)('file_path')
                           PsiElement(VlangTokenType.))(')')
                   PsiElement(VlangTokenType.})('}')
-          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// resolve it later after')
+          PsiComment(VLANG_DOC_COMMENT)
+            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+            PsiElement(VlangTokenType.<DOC_DATA>)('resolve it later after')
           SIMPLE_STATEMENT
             VAR_DECLARATION
               VAR_DEFINITION
@@ -1017,8 +1022,11 @@ V Language file
                     REFERENCE_EXPRESSION
                       PsiElement(VlangTokenType.identifier)('mod_names')
               PsiElement(VlangTokenType.))(')')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// if the directory is already present in the')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// dependency tree, inject it directly')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('if the directory is already present in the')
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('dependency tree, inject it directly')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           IF_EXPRESSION
@@ -1095,8 +1103,11 @@ V Language file
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL
             PsiElement(VlangTokenType.false)('false')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// files is just for checking so it')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// is not used by the code below it')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('files is just for checking so it')
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('is not used by the code below it')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           IF_EXPRESSION
@@ -1179,10 +1190,18 @@ V Language file
                         PsiElement(VlangTokenType.identifier)('has_v_files')
                     BLOCK
                       PsiElement(VlangTokenType.{)('{')
-                      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// directory exists so is valid')
-                      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// but may have the possibility that the')
-                      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// source is stored in `src` so the')
-                      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// first return is set to false')
+                      PsiComment(VLANG_DOC_COMMENT)
+                        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                        PsiElement(VlangTokenType.<DOC_DATA>)('directory exists so is valid')
+                        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                        PsiElement(VlangTokenType.<DOC_DATA>)('but may have the possibility that the')
+                        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                        PsiElement(VlangTokenType.<DOC_DATA>)('source is stored in ')
+                        VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+                          PsiElement(VlangTokenType.<DOC_DATA>)('`src`')
+                        PsiElement(VlangTokenType.<DOC_DATA>)(' so the')
+                        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                        PsiElement(VlangTokenType.<DOC_DATA>)('first return is set to false')
                       RETURN_STATEMENT
                         PsiElement(VlangTokenType.return)('return')
                         LITERAL
@@ -1242,7 +1261,9 @@ V Language file
         LITERAL
           PsiElement(VlangTokenType.true)('true')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// inject_paths_of_new_imports resolves and injects the path to the Import instance')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('inject_paths_of_new_imports resolves and injects the path to the Import instance')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -1382,10 +1403,15 @@ V Language file
                             PsiElement(VlangTokenType.identifier)('dir')
                       PsiElement(VlangTokenType.))(')')
               PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Custom iterator for looping over paths without')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// allocating a new array with concatenated items')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Might be "smart" but I'm just testing my hypothesis')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// if it will be better for the memory consumption ~ Ned')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('Custom iterator for looping over paths without')
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('allocating a new array with concatenated items')
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('Might be "smart" but I'm just testing my hypothesis')
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('if it will be better for the memory consumption ~ Ned')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -1486,7 +1512,12 @@ V Language file
                   CONTINUE_STATEMENT
                     PsiElement(VlangTokenType.continue)('continue')
                   PsiElement(VlangTokenType.})('}')
-          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// module.submod -> ['module', 'submod']')
+          PsiComment(VLANG_DOC_COMMENT)
+            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+            PsiElement(VlangTokenType.<DOC_DATA>)('module.submod -> ')
+            VlangDocLinkReferenceShortImpl(VlangTokenType.<DOC_SHORT_REFERENCE_LINK>)
+              VlangDocLinkLabelImpl(VlangTokenType.<DOC_LINK_LABEL>)
+                PsiElement(VlangTokenType.<DOC_DATA>)('['module', 'submod']')
           SIMPLE_STATEMENT
             VAR_DECLARATION
               VAR_DEFINITION
@@ -1799,13 +1830,18 @@ V Language file
                                               PsiElement(VlangTokenType.()('(')
                                               PsiElement(VlangTokenType.))(')')
                                         PsiElement(VlangTokenType.})('}')
-                          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// break if found or does not exist')
+                          PsiComment(VLANG_DOC_COMMENT)
+                            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                            PsiElement(VlangTokenType.<DOC_DATA>)('break if found or does not exist')
                           BREAK_STATEMENT
                             PsiElement(VlangTokenType.break)('break')
                           PsiElement(VlangTokenType.})('}')
                       PsiElement(VlangTokenType.})('}')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// make it a separate if branch so that')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// it can be "reusable" with the if branch above')
+              PsiComment(VLANG_DOC_COMMENT)
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('make it a separate if branch so that')
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('it can be "reusable" with the if branch above')
               SIMPLE_STATEMENT
                 LEFT_HAND_EXPR_LIST
                   IF_EXPRESSION
@@ -1860,7 +1896,9 @@ V Language file
               BREAK_STATEMENT
                 PsiElement(VlangTokenType.break)('break')
               PsiElement(VlangTokenType.})('}')
-          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// report the unresolved import')
+          PsiComment(VLANG_DOC_COMMENT)
+            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+            PsiElement(VlangTokenType.<DOC_DATA>)('report the unresolved import')
           SIMPLE_STATEMENT
             LEFT_HAND_EXPR_LIST
               IF_EXPRESSION
@@ -2008,7 +2046,9 @@ V Language file
                           PsiElement(VlangTokenType.identifier)('dependencies')
                       BLOCK
                         PsiElement(VlangTokenType.{)('{')
-                        PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// append the path if not yet added to the project dependency')
+                        PsiComment(VLANG_DOC_COMMENT)
+                          PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                          PsiElement(VlangTokenType.<DOC_DATA>)('append the path if not yet added to the project dependency')
                         SIMPLE_STATEMENT
                           LEFT_HAND_EXPR_LIST
                             MUL_EXPR
@@ -2042,8 +2082,11 @@ V Language file
                   PsiElement(VlangTokenType.))(')')
           PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// import_modules imports the given Import array to the current directory.')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// It also registers the symbols to the store.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('import_modules imports the given Import array to the current directory.')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('It also registers the symbols to the store.')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -2161,7 +2204,9 @@ V Language file
             PsiElement(VlangTokenType.identifier)('import_idxs')
         BLOCK
           PsiElement(VlangTokenType.{)('{')
-          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// skip if import is not resolved or already imported')
+          PsiComment(VLANG_DOC_COMMENT)
+            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+            PsiElement(VlangTokenType.<DOC_DATA>)('skip if import is not resolved or already imported')
           SIMPLE_STATEMENT
             LEFT_HAND_EXPR_LIST
               IF_EXPRESSION
@@ -2429,7 +2474,9 @@ V Language file
                                       PsiElement(VlangTokenType.))(')')
                               PsiElement(VlangTokenType.))(')')
                       PsiElement(VlangTokenType.))(')')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Import module but from different lookup oath other than the project')
+              PsiComment(VLANG_DOC_COMMENT)
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('Import module but from different lookup oath other than the project')
               SIMPLE_STATEMENT
                 VAR_DECLARATION
                   VAR_DEFINITION
@@ -2505,9 +2552,13 @@ V Language file
                     REFERENCE_EXPRESSION
                       PsiElement(VlangTokenType.identifier)('imported')
                     PsiElement(VlangTokenType.++)('++')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Set version to zero so that modules that are already opened')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// in the editor can register symbols with scopes without')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// getting "symbol exists" errors')
+              PsiComment(VLANG_DOC_COMMENT)
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('Set version to zero so that modules that are already opened')
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('in the editor can register symbols with scopes without')
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('getting "symbol exists" errors')
               SIMPLE_STATEMENT
                 LEFT_HAND_EXPR_LIST
                   CALL_EXPR
@@ -2582,8 +2633,11 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
           PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// add_imports adds/registers the import. it returns a boolean')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// to indicate if the import already exist in the array.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('add_imports adds/registers the import. it returns a boolean')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('to indicate if the import already exist in the array.')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -2682,7 +2736,9 @@ V Language file
                 PsiElement(VlangTokenType.identifier)('imports')
             BLOCK
               PsiElement(VlangTokenType.{)('{')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// check if import has already imported')
+              PsiComment(VLANG_DOC_COMMENT)
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('check if import has already imported')
               FOR_STATEMENT
                 PsiElement(VlangTokenType.for)('for')
                 RANGE_CLAUSE
@@ -2919,7 +2975,9 @@ V Language file
               PsiElement(VlangTokenType.else)('else')
               BLOCK
                 PsiElement(VlangTokenType.{)('{')
-                PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// unsafe { imp.free() }')
+                PsiComment(VLANG_DOC_COMMENT)
+                  PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                  PsiElement(VlangTokenType.<DOC_DATA>)('unsafe { imp.free() }')
                 RETURN_STATEMENT
                   PsiElement(VlangTokenType.return)('return')
                   UNARY_EXPR
@@ -2947,7 +3005,9 @@ V Language file
                     PsiElement(VlangTokenType.true)('true')
                 PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// import_modules_from_tree scans and imports the modules based from the AST tree')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('import_modules_from_tree scans and imports the modules based from the AST tree')
   FUNCTION_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -3145,8 +3205,17 @@ V Language file
                     PsiElement(VlangTokenType.identifier)('import_idxs')
               PsiElement(VlangTokenType.))(')')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// cleanup_imports removes the unused imports from the current directory.')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// This should be used after executing `import_modules_from_tree` or `import_modules`.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('cleanup_imports removes the unused imports from the current directory.')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('This should be used after executing ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`import_modules_from_tree`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' or ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`import_modules`')
+    PsiElement(VlangTokenType.<DOC_DATA>)('.')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -3291,7 +3360,9 @@ V Language file
                     PsiElement(VlangTokenType.))(')')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
-                  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// delete in the dependency tree')
+                  PsiComment(VLANG_DOC_COMMENT)
+                    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                    PsiElement(VlangTokenType.<DOC_DATA>)('delete in the dependency tree')
                   SIMPLE_STATEMENT
                     VAR_DECLARATION
                       VAR_DEFINITION
@@ -3340,7 +3411,9 @@ V Language file
                             REFERENCE_EXPRESSION
                               PsiElement(VlangTokenType.identifier)('deleted')
                           PsiElement(VlangTokenType.})('}')
-                  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// intentionally do not use the variables to the same scope')
+                  PsiComment(VLANG_DOC_COMMENT)
+                    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                    PsiElement(VlangTokenType.<DOC_DATA>)('intentionally do not use the variables to the same scope')
                   SIMPLE_STATEMENT
                     LEFT_HAND_EXPR_LIST
                       CALL_EXPR
@@ -3359,7 +3432,9 @@ V Language file
                                 PsiElement(VlangTokenType..)('.')
                                 PsiElement(VlangTokenType.identifier)('path')
                           PsiElement(VlangTokenType.))(')')
-                  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// delete dir if possible')
+                  PsiComment(VLANG_DOC_COMMENT)
+                    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                    PsiElement(VlangTokenType.<DOC_DATA>)('delete dir if possible')
                   SIMPLE_STATEMENT
                     LEFT_HAND_EXPR_LIST
                       CALL_EXPR
@@ -3378,7 +3453,9 @@ V Language file
                                 PsiElement(VlangTokenType..)('.')
                                 PsiElement(VlangTokenType.identifier)('path')
                           PsiElement(VlangTokenType.))(')')
-                  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// unsafe { imp_module.free() }')
+                  PsiComment(VLANG_DOC_COMMENT)
+                    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                    PsiElement(VlangTokenType.<DOC_DATA>)('unsafe { imp_module.free() }')
                   SIMPLE_STATEMENT
                     LEFT_HAND_EXPR_LIST
                       IF_EXPRESSION
@@ -3461,7 +3538,9 @@ V Language file
           MEMBER_MODIFIER
             PsiElement(VlangTokenType.mut)('mut')
           PsiElement(VlangTokenType.:)(':')
-        PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// resolved indicates that an import's path has been resolved.')
+        PsiComment(VLANG_DOC_COMMENT)
+          PsiElement(VlangTokenType.<DOC_GAP>)('//')
+          PsiElement(VlangTokenType.<DOC_DATA>)('resolved indicates that an import's path has been resolved.')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('resolved')
@@ -3470,7 +3549,9 @@ V Language file
               <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('bool')
-        PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// imported indicates that the files of the modules are already imported.')
+        PsiComment(VLANG_DOC_COMMENT)
+          PsiElement(VlangTokenType.<DOC_GAP>)('//')
+          PsiElement(VlangTokenType.<DOC_DATA>)('imported indicates that the files of the modules are already imported.')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('imported')
@@ -3479,7 +3560,9 @@ V Language file
               <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('bool')
-        PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// absolute_module_name is the name that was declared when imported.')
+        PsiComment(VLANG_DOC_COMMENT)
+          PsiElement(VlangTokenType.<DOC_GAP>)('//')
+          PsiElement(VlangTokenType.<DOC_DATA>)('absolute_module_name is the name that was declared when imported.')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('absolute_module_name')
@@ -3488,7 +3571,9 @@ V Language file
               <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
-        PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// module_name is the name to be used for symbol lookups')
+        PsiComment(VLANG_DOC_COMMENT)
+          PsiElement(VlangTokenType.<DOC_GAP>)('//')
+          PsiElement(VlangTokenType.<DOC_DATA>)('module_name is the name to be used for symbol lookups')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('module_name')
@@ -3497,7 +3582,9 @@ V Language file
               <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
-        PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// path is the path where the module was located.')
+        PsiComment(VLANG_DOC_COMMENT)
+          PsiElement(VlangTokenType.<DOC_GAP>)('//')
+          PsiElement(VlangTokenType.<DOC_DATA>)('path is the path where the module was located.')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('path')
@@ -3506,9 +3593,13 @@ V Language file
               <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
-        PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// track the location of the import statements')
-        PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// this one uses the full path instead of the usual file name')
-        PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// for error reporting (just in case)')
+        PsiComment(VLANG_DOC_COMMENT)
+          PsiElement(VlangTokenType.<DOC_GAP>)('//')
+          PsiElement(VlangTokenType.<DOC_DATA>)('track the location of the import statements')
+          PsiElement(VlangTokenType.<DOC_GAP>)('//')
+          PsiElement(VlangTokenType.<DOC_DATA>)('this one uses the full path instead of the usual file name')
+          PsiElement(VlangTokenType.<DOC_GAP>)('//')
+          PsiElement(VlangTokenType.<DOC_DATA>)('for error reporting (just in case)')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('ranges')
@@ -3528,8 +3619,11 @@ V Language file
                 <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('C.TSRange')
-        PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// original module_names are not recorded as aliases')
-        PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// e.g {'file.v': 'foo', 'file1.v': 'bar'}')
+        PsiComment(VLANG_DOC_COMMENT)
+          PsiElement(VlangTokenType.<DOC_GAP>)('//')
+          PsiElement(VlangTokenType.<DOC_DATA>)('original module_names are not recorded as aliases')
+          PsiElement(VlangTokenType.<DOC_GAP>)('//')
+          PsiElement(VlangTokenType.<DOC_DATA>)('e.g {'file.v': 'foo', 'file1.v': 'bar'}')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('aliases')
@@ -3549,7 +3643,17 @@ V Language file
                 <empty list>
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('string')
-        PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// e.g {'file.v': ['Any', 'decode', 'encode'], 'file2.v': ['foo']}')
+        PsiComment(VLANG_DOC_COMMENT)
+          PsiElement(VlangTokenType.<DOC_GAP>)('//')
+          PsiElement(VlangTokenType.<DOC_DATA>)('e.g {'file.v': ')
+          VlangDocLinkReferenceShortImpl(VlangTokenType.<DOC_SHORT_REFERENCE_LINK>)
+            VlangDocLinkLabelImpl(VlangTokenType.<DOC_LINK_LABEL>)
+              PsiElement(VlangTokenType.<DOC_DATA>)('['Any', 'decode', 'encode']')
+          PsiElement(VlangTokenType.<DOC_DATA>)(', 'file2.v': ')
+          VlangDocLinkReferenceShortImpl(VlangTokenType.<DOC_SHORT_REFERENCE_LINK>)
+            VlangDocLinkLabelImpl(VlangTokenType.<DOC_LINK_LABEL>)
+              PsiElement(VlangTokenType.<DOC_DATA>)('['foo']')
+          PsiElement(VlangTokenType.<DOC_DATA>)('}')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('symbols')
@@ -3575,7 +3679,9 @@ V Language file
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(VlangTokenType.identifier)('string')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// set_alias records/changes the alias of the import from the file')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('set_alias records/changes the alias of the import from the file')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -3637,9 +3743,17 @@ V Language file
               RETURN_STATEMENT
                 PsiElement(VlangTokenType.return)('return')
               PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// if imp.aliases.len == 0 {')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// \tunsafe { imp.aliases[file_name].free() }')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// }')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('if imp.aliases.len == 0 {')
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('\tunsafe { imp.aliases')
+        VlangDocLinkReferenceShortImpl(VlangTokenType.<DOC_SHORT_REFERENCE_LINK>)
+          VlangDocLinkLabelImpl(VlangTokenType.<DOC_LINK_LABEL>)
+            PsiElement(VlangTokenType.<DOC_DATA>)('[file_name]')
+        PsiElement(VlangTokenType.<DOC_DATA>)('.free() }')
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('}')
       ASSIGNMENT_STATEMENT
         LEFT_HAND_EXPR_LIST
           INDEX_OR_SLICE_EXPR
@@ -3657,7 +3771,9 @@ V Language file
         REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('alias')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// track_file records the location of the import declaration of a file')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('track_file records the location of the import declaration of a file')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -3759,7 +3875,9 @@ V Language file
         REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('range')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// untrack_file removes the location of the import declaration of a file')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('untrack_file removes the location of the import declaration of a file')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -3828,7 +3946,9 @@ V Language file
                       PsiElement(VlangTokenType.))(')')
               PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// set_symbols records/changes the imported symbols on a specific file')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('set_symbols records/changes the imported symbols on a specific file')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -3939,7 +4059,15 @@ V Language file
                   PsiElement(VlangTokenType.;)(';')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
-                  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// unsafe { imp.symbols[file_name][i].free() }')
+                  PsiComment(VLANG_DOC_COMMENT)
+                    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                    PsiElement(VlangTokenType.<DOC_DATA>)('unsafe { imp.symbols')
+                    VlangDocLinkReferenceFullImpl(VlangTokenType.<DOC_FULL_REFERENCE_LINK>)
+                      VlangDocLinkTextImpl(VlangTokenType.<DOC_LINK_TEXT>)
+                        PsiElement(VlangTokenType.<DOC_DATA>)('[file_name]')
+                      VlangDocLinkLabelImpl(VlangTokenType.<DOC_LINK_LABEL>)
+                        PsiElement(VlangTokenType.<DOC_DATA>)('[i]')
+                    PsiElement(VlangTokenType.<DOC_DATA>)('.free() }')
                   SIMPLE_STATEMENT
                     LEFT_HAND_EXPR_LIST
                       CALL_EXPR
@@ -3964,7 +4092,13 @@ V Language file
                                 PsiElement(VlangTokenType.identifier)('i')
                           PsiElement(VlangTokenType.))(')')
                   PsiElement(VlangTokenType.})('}')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// unsafe { imp.symbols[file_name].free() }')
+              PsiComment(VLANG_DOC_COMMENT)
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('unsafe { imp.symbols')
+                VlangDocLinkReferenceShortImpl(VlangTokenType.<DOC_SHORT_REFERENCE_LINK>)
+                  VlangDocLinkLabelImpl(VlangTokenType.<DOC_LINK_LABEL>)
+                    PsiElement(VlangTokenType.<DOC_DATA>)('[file_name]')
+                PsiElement(VlangTokenType.<DOC_DATA>)('.free() }')
               PsiElement(VlangTokenType.})('}')
       ASSIGNMENT_STATEMENT
         LEFT_HAND_EXPR_LIST
@@ -3983,7 +4117,9 @@ V Language file
         REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('symbols')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// set_path changes the path of a given import')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('set_path changes the path of a given import')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -4100,9 +4236,13 @@ V Language file
             PsiElement(VlangTokenType.unsafe)('unsafe')
             BLOCK
               PsiElement(VlangTokenType.{)('{')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// imp.absolute_module_name.free()')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// imp.module_name.free()')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// imp.path.free()')
+              PsiComment(VLANG_DOC_COMMENT)
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('imp.absolute_module_name.free()')
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('imp.module_name.free()')
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('imp.path.free()')
               SIMPLE_STATEMENT
                 LEFT_HAND_EXPR_LIST
                   CALL_EXPR
@@ -4147,8 +4287,11 @@ V Language file
                       PsiElement(VlangTokenType.))(')')
               PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// find_by_position locates the import of the current directory')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// based on the given range')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('find_by_position locates the import of the current directory')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('based on the given range')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')

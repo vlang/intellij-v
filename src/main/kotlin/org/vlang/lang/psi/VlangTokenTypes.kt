@@ -16,7 +16,7 @@ object VlangTokenTypes {
     @JvmField val NLS = VlangTokenType("VLANG_WS_NEW_LINES")
 
     val IDENTIFIERS = TokenSet.create(IDENTIFIER)
-    val COMMENTS = TokenSet.create(LINE_COMMENT, MULTI_LINE_COMMENT, HASH_COMMENT, VlangDocTokenTypes.DOC_COMMENT)
+    val COMMENTS = TokenSet.create(LINE_COMMENT, MULTI_LINE_COMMENT, HASH_COMMENT, VlangDocElementTypes.DOC_COMMENT)
     val STRING_LITERALS = TokenSet.create(
         RAW_STRING,
         CHAR,

@@ -62,4 +62,9 @@ public class VlangConstDeclarationImpl extends VlangCompositeElementImpl impleme
     return notNullChild(findChildByType(CONST));
   }
 
+  @Override
+  public boolean isMultiline() {
+    return VlangPsiImplUtil.isMultiline(this);
+  }
+
 }

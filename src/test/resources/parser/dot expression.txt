@@ -2,9 +2,13 @@ V Language file
   MODULE_CLAUSE
     PsiElement(VlangTokenType.module)('module')
     PsiElement(VlangTokenType.identifier)('strings')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// #-js')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// use levenshtein distance algorithm to calculate')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// the distance between between two strings (lower is closer)')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('#-js')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('use levenshtein distance algorithm to calculate')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('the distance between between two strings (lower is closer)')
   FUNCTION_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -379,8 +383,11 @@ V Language file
               PsiElement(VlangTokenType.int)('1')
           PsiElement(VlangTokenType.])(']')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// use levenshtein distance algorithm to calculate')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// how similar two strings are as a percentage (higher is closer)')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('use levenshtein distance algorithm to calculate')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('how similar two strings are as a percentage (higher is closer)')
   FUNCTION_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -518,9 +525,13 @@ V Language file
           LITERAL
             PsiElement(VlangTokenType.float)('100.00')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// implementation of Sørensen–Dice coefficient.')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// find the similarity between two strings.')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// returns coefficient between 0.0 (not similar) and 1.0 (exact match).')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('implementation of Sørensen–Dice coefficient.')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('find the similarity between two strings.')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('returns coefficient between 0.0 (not similar) and 1.0 (exact match).')
   FUNCTION_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')

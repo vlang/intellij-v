@@ -4,7 +4,7 @@ import com.intellij.navigation.NavigationItem
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNameIdentifierOwner
 
-interface VlangNamedElement : VlangTypeOwner, VlangCompositeElement, PsiNameIdentifierOwner, NavigationItem {
+interface VlangNamedElement : VlangTypeOwner, VlangDocumentationOwner, VlangCompositeElement, PsiNameIdentifierOwner, NavigationItem {
     fun isBlank(): Boolean
     fun isPublic(): Boolean
     fun isGlobal(): Boolean

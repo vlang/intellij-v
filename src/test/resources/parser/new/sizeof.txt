@@ -153,7 +153,9 @@ V Language file
           PsiElement(VlangTokenType.==)('==')
           LITERAL
             PsiElement(VlangTokenType.int)('4')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// depends on -m32/64')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('depends on -m32/64')
       ASSERT_STATEMENT
         PsiElement(VlangTokenType.assert)('assert')
         IN_EXPRESSION

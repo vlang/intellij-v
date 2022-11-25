@@ -383,8 +383,14 @@ V Language file
                   PsiElement(VlangTokenType.identifier)('vls_build_commit')
           PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// These are the list of features available in VLS')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// If the feature is experimental, the value name should have a `exp_` prefix')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('These are the list of features available in VLS')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('If the feature is experimental, the value name should have a ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`exp_`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' prefix')
   ENUM_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -435,8 +441,11 @@ V Language file
         ENUM_FIELD_DEFINITION
           PsiElement(VlangTokenType.identifier)('document_link')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// feature_from_str returns the Feature-enum value equivalent of the given string.')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// used internally for Vls.set_features method only.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('feature_from_str returns the Feature-enum value equivalent of the given string.')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('used internally for Vls.set_features method only.')
   FUNCTION_DECLARATION
     PsiElement(VlangTokenType.fn)('fn')
     PsiElement(VlangTokenType.identifier)('feature_from_str')
@@ -1067,7 +1076,9 @@ V Language file
               <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
-        PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// client_capabilities lsp.ClientCapabilities')
+        PsiComment(VLANG_DOC_COMMENT)
+          PsiElement(VlangTokenType.<DOC_GAP>)('//')
+          PsiElement(VlangTokenType.<DOC_DATA>)('client_capabilities lsp.ClientCapabilities')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('reporter')
@@ -1435,7 +1446,9 @@ V Language file
           PsiElement(VlangTokenType.?)('?')
     BLOCK
       PsiElement(VlangTokenType.{)('{')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// initialize writer upon receiving the first request')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('initialize writer upon receiving the first request')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           IF_EXPRESSION
@@ -1513,14 +1526,22 @@ V Language file
                               PsiElement(VlangTokenType.identifier)('rw')
                         PsiElement(VlangTokenType.))(')')
               PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// The server will log a send request/notification')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// log based on the the received payload since the spec')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// doesn't indicate a way to log on the client side and')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// notify it to the server.')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Notification has no ID attached so the server can detect')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// if its a notification or a request payload by checking')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// if the ID is empty.')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('The server will log a send request/notification')
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('log based on the the received payload since the spec')
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('doesn't indicate a way to log on the client side and')
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('notify it to the server.')
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('Notification has no ID attached so the server can detect')
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('if its a notification or a request payload by checking')
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('if the ID is empty.')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           IF_EXPRESSION
@@ -1539,10 +1560,15 @@ V Language file
                   PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
             BLOCK
               PsiElement(VlangTokenType.{)('{')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// NB: LSP specification is unclear whether or not')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// a shutdown request is allowed before server init')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// but we'll just put it here since we want to formally')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// shutdown the server after a certain timeout period.')
+              PsiComment(VLANG_DOC_COMMENT)
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('NB: LSP specification is unclear whether or not')
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('a shutdown request is allowed before server init')
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('but we'll just put it here since we want to formally')
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('shutdown the server after a certain timeout period.')
               SIMPLE_STATEMENT
                 LEFT_HAND_EXPR_LIST
                   CALL_EXPR
@@ -1589,7 +1615,9 @@ V Language file
                             PsiElement(VlangTokenType..)('.')
                             PsiElement(VlangTokenType.identifier)('method')
                           PsiElement(VlangTokenType.{)('{')
-                          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// not only requests but also notifications')
+                          PsiComment(VLANG_DOC_COMMENT)
+                            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                            PsiElement(VlangTokenType.<DOC_DATA>)('not only requests but also notifications')
                           MATCH_ARMS
                             MATCH_ARM
                               STRING_LITERAL
@@ -1609,8 +1637,11 @@ V Language file
                                   PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                               BLOCK
                                 PsiElement(VlangTokenType.{)('{')
-                                PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// ignore for the reasons stated in the above comment')
-                                PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// ls.exit()')
+                                PsiComment(VLANG_DOC_COMMENT)
+                                  PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                                  PsiElement(VlangTokenType.<DOC_DATA>)('ignore for the reasons stated in the above comment')
+                                  PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                                  PsiElement(VlangTokenType.<DOC_DATA>)('ls.exit()')
                                 PsiElement(VlangTokenType.})('}')
                             MATCH_ARM
                               STRING_LITERAL
@@ -2189,9 +2220,13 @@ V Language file
                                   PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                               BLOCK
                                 PsiElement(VlangTokenType.{)('{')
-                                PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// params := json.decode(lsp.WorkspaceSymbolParams, request.params) or {')
-                                PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// \treturn w.wrap_error(err)')
-                                PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// }')
+                                PsiComment(VLANG_DOC_COMMENT)
+                                  PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                                  PsiElement(VlangTokenType.<DOC_DATA>)('params := json.decode(lsp.WorkspaceSymbolParams, request.params) or {')
+                                  PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                                  PsiElement(VlangTokenType.<DOC_DATA>)('\treturn w.wrap_error(err)')
+                                  PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                                  PsiElement(VlangTokenType.<DOC_DATA>)('}')
                                 SIMPLE_STATEMENT
                                   LEFT_HAND_EXPR_LIST
                                     CALL_EXPR
@@ -2982,9 +3017,13 @@ V Language file
                                   PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                               BLOCK
                                 PsiElement(VlangTokenType.{)('{')
-                                PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// params := json.decode(lsp.CodeLensParams, request.params) or {')
-                                PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// \treturn w.wrap_error(err)')
-                                PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// }')
+                                PsiComment(VLANG_DOC_COMMENT)
+                                  PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                                  PsiElement(VlangTokenType.<DOC_DATA>)('params := json.decode(lsp.CodeLensParams, request.params) or {')
+                                  PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                                  PsiElement(VlangTokenType.<DOC_DATA>)('\treturn w.wrap_error(err)')
+                                  PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                                  PsiElement(VlangTokenType.<DOC_DATA>)('}')
                                 SIMPLE_STATEMENT
                                   LEFT_HAND_EXPR_LIST
                                     CALL_EXPR
@@ -3056,9 +3095,13 @@ V Language file
                                   PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                               BLOCK
                                 PsiElement(VlangTokenType.{)('{')
-                                PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// params := json.decode(lsp.DocumentLinkParams, request.params) or {')
-                                PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// \treturn w.wrap_error(err)')
-                                PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// }')
+                                PsiComment(VLANG_DOC_COMMENT)
+                                  PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                                  PsiElement(VlangTokenType.<DOC_DATA>)('params := json.decode(lsp.DocumentLinkParams, request.params) or {')
+                                  PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                                  PsiElement(VlangTokenType.<DOC_DATA>)('\treturn w.wrap_error(err)')
+                                  PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                                  PsiElement(VlangTokenType.<DOC_DATA>)('}')
                                 SIMPLE_STATEMENT
                                   LEFT_HAND_EXPR_LIST
                                     CALL_EXPR
@@ -3335,7 +3378,9 @@ V Language file
                             PsiElement(VlangTokenType.})('}')
                       PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// set_vroot_path changes the path of the V root directory')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('set_vroot_path changes the path of the V root directory')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -3402,7 +3447,9 @@ V Language file
         REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('new_vroot_path')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// capabilities returns the current server capabilities')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('capabilities returns the current server capabilities')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -3443,7 +3490,9 @@ V Language file
           PsiElement(VlangTokenType..)('.')
           PsiElement(VlangTokenType.identifier)('capabilities')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// features returns the current server features enabled')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('features returns the current server features enabled')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -3486,7 +3535,9 @@ V Language file
           PsiElement(VlangTokenType..)('.')
           PsiElement(VlangTokenType.identifier)('enabled_features')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// status returns the current server status')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('status returns the current server status')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -3524,7 +3575,9 @@ V Language file
           PsiElement(VlangTokenType..)('.')
           PsiElement(VlangTokenType.identifier)('status')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// log_path returns the combined path of the workspace's root URI and the log file name.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('log_path returns the combined path of the workspace's root URI and the log file name.')
   METHOD_DECLARATION
     PsiElement(VlangTokenType.fn)('fn')
     PsiElement(VlangTokenType.()('(')
@@ -3586,7 +3639,9 @@ V Language file
                     PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
             PsiElement(VlangTokenType.))(')')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// panic generates a log report and exits the language server.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('panic generates a log report and exits the language server.')
   METHOD_DECLARATION
     PsiElement(VlangTokenType.fn)('fn')
     PsiElement(VlangTokenType.()('(')
@@ -3638,7 +3693,9 @@ V Language file
               PsiElement(VlangTokenType..)('.')
               PsiElement(VlangTokenType.identifier)('panic_count')
             PsiElement(VlangTokenType.++)('++')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// NB: Would 2 be enough to exit?')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('NB: Would 2 be enough to exit?')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           IF_EXPRESSION
@@ -3862,7 +3919,9 @@ V Language file
               PsiElement(VlangTokenType.identifier)('jsonrpc')
             PsiElement(VlangTokenType..)('.')
             PsiElement(VlangTokenType.identifier)('ResponseWriter')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// TODO: replace resp_wr')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('TODO: replace resp_wr')
   FUNCTION_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -3931,7 +3990,9 @@ V Language file
               SELECT_EXPRESSION
                 PsiElement(VlangTokenType.select)('select')
                 PsiElement(VlangTokenType.{)('{')
-                PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// This is for debouncing analysis')
+                PsiComment(VLANG_DOC_COMMENT)
+                  PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                  PsiElement(VlangTokenType.<DOC_DATA>)('This is for debouncing analysis')
                 SELECT_ARMS
                   SELECT_ARM
                     SELECT_ARM_STATEMENT
@@ -4236,7 +4297,9 @@ V Language file
                 PsiElement(VlangTokenType.})('}')
           PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// set_features enables or disables a language feature. emits an error if not found')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('set_features enables or disables a language feature. emits an error if not found')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -4842,7 +4905,9 @@ V Language file
                       PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('VEXE')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Return the directory of VEXE if present')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('Return the directory of VEXE if present')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           IF_EXPRESSION
@@ -4874,7 +4939,9 @@ V Language file
                           PsiElement(VlangTokenType.identifier)('vexe_path_from_env')
                     PsiElement(VlangTokenType.))(')')
               PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Find the V executable in PATH')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('Find the V executable in PATH')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -4989,9 +5056,13 @@ V Language file
                       PsiElement(VlangTokenType.))(')')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
-                  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// defer {')
-                  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// \tunsafe { full_path.free() }')
-                  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// }')
+                  PsiComment(VLANG_DOC_COMMENT)
+                    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                    PsiElement(VlangTokenType.<DOC_DATA>)('defer {')
+                    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                    PsiElement(VlangTokenType.<DOC_DATA>)('\tunsafe { full_path.free() }')
+                    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                    PsiElement(VlangTokenType.<DOC_DATA>)('}')
                   SIMPLE_STATEMENT
                     LEFT_HAND_EXPR_LIST
                       IF_EXPRESSION
@@ -5011,7 +5082,9 @@ V Language file
                             PsiElement(VlangTokenType.))(')')
                         BLOCK
                           PsiElement(VlangTokenType.{)('{')
-                          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Get the real path of the V executable')
+                          PsiComment(VLANG_DOC_COMMENT)
+                            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                            PsiElement(VlangTokenType.<DOC_DATA>)('Get the real path of the V executable')
                           SIMPLE_STATEMENT
                             VAR_DECLARATION
                               VAR_DEFINITION
@@ -5092,7 +5165,9 @@ V Language file
                                   PsiElement(VlangTokenType.))(')')
                             PsiElement(VlangTokenType.})('}')
                   PsiElement(VlangTokenType.})('}')
-          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// unsafe { full_path.free() }')
+          PsiComment(VLANG_DOC_COMMENT)
+            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+            PsiElement(VlangTokenType.<DOC_DATA>)('unsafe { full_path.free() }')
           PsiElement(VlangTokenType.})('}')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
@@ -5102,8 +5177,11 @@ V Language file
               PsiElement(VlangTokenType.identifier)('windows')
             BLOCK
               PsiElement(VlangTokenType.{)('{')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// for some reason, PATH env in getenv only gives the system one')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// and not the user one V uses when symlinking')
+              PsiComment(VLANG_DOC_COMMENT)
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('for some reason, PATH env in getenv only gives the system one')
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('and not the user one V uses when symlinking')
               SIMPLE_STATEMENT
                 VAR_DECLARATION
                   VAR_DEFINITION

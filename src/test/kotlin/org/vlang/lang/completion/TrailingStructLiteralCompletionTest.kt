@@ -181,5 +181,45 @@ class TrailingStructLiteralCompletionTest : CompletionTestBase() {
         }
     """.trimIndent(),
         CompletionType.BASIC, 1, CheckType.EXCLUDES,
-        "len", "cap", )
+        "len", "cap")
+
+    fun `test just struct field`() = doTestCompletion(
+        """
+        module main
+        
+        struct Person {
+            age int
+        }
+        
+        struct Params {
+            foo int
+            boo int
+        }
+        
+        fn boo(age int, params Params) {}
+
+        fn main() {
+            person := Person{}
+        	boo(person.a<caret>, foo: 100)
+        }
+        """.trimIndent(),
+        """
+        module main
+        
+        struct Person {
+            age int
+        }
+        
+        struct Params {
+            foo int
+            boo int
+        }
+        
+        fn boo(age int, params Params) {}
+
+        fn main() {
+            person := Person{}
+        	boo(person.age, foo: 100)
+        }
+        """.trimIndent())
 }

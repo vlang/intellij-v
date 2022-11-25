@@ -5,7 +5,7 @@ import com.intellij.psi.tree.IElementType;
 import java.util.Stack;
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
 import static org.vlang.lang.psi.VlangTokenTypes.*;
-import static org.vlang.lang.psi.VlangDocTokenTypes.*;
+import static org.vlang.lang.psi.VlangDocElementTypes.*;
 
 %%
 
@@ -91,6 +91,7 @@ import static org.vlang.lang.psi.VlangDocTokenTypes.*;
 NL = \n
 WS = [ \t\f]
 
+EOL_DOC_COMMENT = ({WS}*"//".*{NL})*({WS}*"//".*)
 LINE_COMMENT = "//" [^\r\n]*
 HASH_COMMENT = "#" [^\[] [^\r\n]*
 
@@ -200,6 +201,7 @@ RAW_SINGLE_QUOTE_STRING = {RAW_STR_MODIFIER} {STR_SINGLE} [^\']* {STR_SINGLE}
 {WS}                                      { return WS; }
 {NL}+                                     { return NLS; }
 
+{EOL_DOC_COMMENT}                         { return DOC_COMMENT; }
 {LINE_COMMENT}                            { return LINE_COMMENT; }
 {HASH_COMMENT}                            { return HASH_COMMENT; }
 

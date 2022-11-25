@@ -11,7 +11,9 @@ V Language file
         PsiElement(VlangTokenType.))(')')
     BLOCK
       PsiElement(VlangTokenType.{)('{')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// select count(*) from customers')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('select count(*) from customers')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -54,7 +56,9 @@ V Language file
                           PsiElement(VlangTokenType.identifier)('nr_customers')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// V syntax can be used to build queries')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('V syntax can be used to build queries')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -153,7 +157,12 @@ V Language file
                           PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                   PsiElement(VlangTokenType.))(')')
           PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// by adding `limit 1` we tell V that there will be only one object')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('by adding ')
+        VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+          PsiElement(VlangTokenType.<DOC_DATA>)('`limit 1`')
+        PsiElement(VlangTokenType.<DOC_DATA>)(' we tell V that there will be only one object')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -217,7 +226,9 @@ V Language file
                           PsiElement(VlangTokenType.identifier)('name')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// insert a new customer')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('insert a new customer')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -812,7 +823,9 @@ V Language file
                       PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('drop table if exists User')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// db := pg.connect(host: 'localhost', port: 5432, user: 'louis', password: 'abc', dbname: 'orm') or { panic(err) }')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('db := pg.connect(host: 'localhost', port: 5432, user: 'louis', password: 'abc', dbname: 'orm') or { panic(err) }')
       PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/*\n\tmut db := mysql.Connection{\n\t\thost: '127.0.0.1'\n\t\tusername: 'root'\n\t\tpassword: 'pw'\n\t\tdbname: 'v'\n\t}\n\tdb.connect() or { panic(err) }*/')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
@@ -1080,7 +1093,8 @@ V Language file
                           PsiElement(VlangTokenType.identifier)('nr_all_users')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -1139,7 +1153,8 @@ V Language file
                           PsiElement(VlangTokenType.identifier)('nr_users1')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -1209,7 +1224,8 @@ V Language file
                           PsiElement(VlangTokenType.identifier)('nr_peters')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -1413,7 +1429,8 @@ V Language file
           PsiElement(VlangTokenType.==)('==')
           LITERAL
             PsiElement(VlangTokenType.int)('2')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -1491,7 +1508,8 @@ V Language file
           PsiElement(VlangTokenType.==)('==')
           LITERAL
             PsiElement(VlangTokenType.int)('29')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -1598,7 +1616,8 @@ V Language file
           PsiElement(VlangTokenType.==)('==')
           LITERAL
             PsiElement(VlangTokenType.int)('31')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -1651,7 +1670,8 @@ V Language file
           PsiElement(VlangTokenType.==)('==')
           LITERAL
             PsiElement(VlangTokenType.int)('0')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -1744,7 +1764,8 @@ V Language file
           PsiElement(VlangTokenType.==)('==')
           LITERAL
             PsiElement(VlangTokenType.int)('31')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -1802,7 +1823,8 @@ V Language file
                     PsiElement(VlangTokenType.identifier)('missing_user')
               PsiElement(VlangTokenType.))(')')
       PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// zero struct')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -1856,7 +1878,9 @@ V Language file
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('User')
               PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// db.insert<User>(user2)')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('db.insert<User>(user2)')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -1934,7 +1958,8 @@ V Language file
               PsiElement(VlangTokenType.OPEN_QUOTE)(''')
               PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('New user')
               PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -1975,7 +2000,8 @@ V Language file
           PsiElement(VlangTokenType.==)('==')
           LITERAL
             PsiElement(VlangTokenType.true)('true')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -2034,7 +2060,8 @@ V Language file
               PsiElement(VlangTokenType.OPEN_QUOTE)(''')
               PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Kate')
               PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           SQL_EXPRESSION
@@ -2122,7 +2149,8 @@ V Language file
               PsiElement(VlangTokenType.OPEN_QUOTE)(''')
               PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Kate')
               PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           SQL_EXPRESSION
@@ -2221,7 +2249,8 @@ V Language file
               PsiElement(VlangTokenType.OPEN_QUOTE)(''')
               PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Kate N')
               PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
       PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/*\n\tsql db {\n\t\tupdate User set age = age + 1, name = 'Kate N' where name == 'Kate'\n\t}\n\tkate3 = sql db {\n\t\tselect from User where id == 3\n\t}\n\tprintln(kate3)\n\tassert kate3.age == 32\n\tassert kate3.name == 'Kate N'\n\t*/')
       SIMPLE_STATEMENT
         VAR_DECLARATION
@@ -2325,7 +2354,8 @@ V Language file
               PsiElement(VlangTokenType.OPEN_QUOTE)(''')
               PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Kate N')
               PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -2441,7 +2471,8 @@ V Language file
               PsiElement(VlangTokenType.OPEN_QUOTE)(''')
               PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('Kate N')
               PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -2496,7 +2527,8 @@ V Language file
           PsiElement(VlangTokenType.==)('==')
           LITERAL
             PsiElement(VlangTokenType.int)('0')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -2549,7 +2581,8 @@ V Language file
           PsiElement(VlangTokenType.==)('==')
           LITERAL
             PsiElement(VlangTokenType.int)('1')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -2606,7 +2639,8 @@ V Language file
           PsiElement(VlangTokenType.==)('==')
           LITERAL
             PsiElement(VlangTokenType.int)('2')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -2858,8 +2892,11 @@ V Language file
           PsiElement(VlangTokenType.==)('==')
           LITERAL
             PsiElement(VlangTokenType.int)('31')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Remove this when pg is used')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// db.exec('insert into User (name, age) values (NULL, 31)')')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('Remove this when pg is used')
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('db.exec('insert into User (name, age) values (NULL, 31)')')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -3401,9 +3438,13 @@ V Language file
                     LITERAL
                       PsiElement(VlangTokenType.int)('1')
               PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Note: usually updated_time_mod.created != t, because t has')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// its microseconds set, while the value retrieved from the DB')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// has them zeroed, because the db field resolution is seconds.')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('Note: usually updated_time_mod.created != t, because t has')
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('its microseconds set, while the value retrieved from the DB')
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('has them zeroed, because the db field resolution is seconds.')
       ASSERT_STATEMENT
         PsiElement(VlangTokenType.assert)('assert')
         CONDITIONAL_EXPR

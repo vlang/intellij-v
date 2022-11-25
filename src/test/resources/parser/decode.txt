@@ -2,7 +2,9 @@ V Language file
   MODULE_CLAUSE
     PsiElement(VlangTokenType.module)('module')
     PsiElement(VlangTokenType.identifier)('parser')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// notification_at returns the jsonrpc.Notification<T> in a given index.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('notification_at returns the jsonrpc.Notification<T> in a given index.')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')

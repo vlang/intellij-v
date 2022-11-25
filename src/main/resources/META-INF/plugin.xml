@@ -115,6 +115,8 @@ The plugin provides support for V language
 
         <annotator language="vlang" order="first" id="org.vlang.lang.annotator.VlangAnnotator"
                    implementationClass="org.vlang.lang.annotator.VlangAnnotator"/>
+        <annotator language="vlang" order="first" id="org.vlang.lang.annotator.VlangDocAnnotator"
+                   implementationClass="org.vlang.lang.annotator.VlangDocAnnotator"/>
         <documentationProvider implementation="org.vlang.ide.documentation.VlangDocumentationProvider"/>
 
         <lang.inspectionSuppressor language="vlang"
@@ -182,6 +184,12 @@ The plugin provides support for V language
                          displayName="Raw option or result type used"
                          enabledByDefault="true" level="ERROR"
                          implementationClass="org.vlang.ide.inspections.general.VlangRawOptionOrResultTypeUsedInspection"/>
+
+        <localInspection language="vlang" groupPath="V"
+                         groupName="General" shortName="VlangMissingFunctionNameInDocInspection"
+                         displayName="Missing function name in doc"
+                         enabledByDefault="true" level="WEAK WARNING"
+                         implementationClass="org.vlang.ide.inspections.general.VlangMissingFunctionNameInDocInspection"/>
         <!-- General inspections End -->
 
         <!-- Validity issues inspections -->

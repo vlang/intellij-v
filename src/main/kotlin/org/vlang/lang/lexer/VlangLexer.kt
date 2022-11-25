@@ -15,16 +15,27 @@ class VlangLexer : MergingLexerAdapterBase(createLexer()) {
 
     companion object {
         private val MERGE_FUNCTION = MergeFunction { firstTokenType: IElementType, originalLexer: Lexer ->
-           if (firstTokenType === MULTI_LINE_COMMENT_START) {
+            if (firstTokenType == MULTI_LINE_COMMENT_START) {
                 // merge multiline comments that are parsed in parts into single element
                 while (true) {
                     val nextTokenType = originalLexer.tokenType ?: break
                     // EOF reached, multi-line comment is not closed
                     originalLexer.advance()
-                    if (nextTokenType === MULTI_LINE_COMMENT_END) break
+                    if (nextTokenType == MULTI_LINE_COMMENT_END) break
                 }
                 return@MergeFunction MULTI_LINE_COMMENT
             }
+//            if (firstTokenType == DOC_COMMENT_LINE) {
+//                while (true) {
+//                    val nextTokenType = originalLexer.tokenType ?: break
+//                    if (nextTokenType != DOC_COMMENT_LINE && nextTokenType != NLS && nextTokenType != WS) {
+//                        break
+//                    }
+//
+//                    originalLexer.advance()
+//                }
+//                return@MergeFunction VlangDocElementTypes.DOC_COMMENT
+//            }
             firstTokenType
         }
 

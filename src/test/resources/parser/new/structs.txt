@@ -329,7 +329,9 @@ V Language file
       PsiElement(VlangTokenType.struct)('struct')
       PsiElement(VlangTokenType.identifier)('MutliplyFields')
       PsiElement(VlangTokenType.{)('{')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// value, value2 int // not allowed')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('value, value2 int // not allowed')
       PsiElement(VlangTokenType.})('}')
   STRUCT_DECLARATION
     STRUCT_TYPE
@@ -442,7 +444,9 @@ V Language file
                 PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('default')
                 PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Complex example')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('Complex example')
   STRUCT_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
@@ -901,7 +905,14 @@ V Language file
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
           PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// how many `go` statements there were in the parsed files.')
-        PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// When table.gostmts > 0, __VTHREADS__ is defined, which can be checked with `$if threads {`')
+        PsiComment(VLANG_DOC_COMMENT)
+          PsiElement(VlangTokenType.<DOC_GAP>)('//')
+          PsiElement(VlangTokenType.<DOC_DATA>)('When table.gostmts > 0, ')
+          VlangDocStrongImpl(VlangTokenType.<DOC_STRONG>)
+            PsiElement(VlangTokenType.<DOC_DATA>)('__VTHREADS__')
+          PsiElement(VlangTokenType.<DOC_DATA>)(' is defined, which can be checked with ')
+          VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+            PsiElement(VlangTokenType.<DOC_DATA>)('`$if threads {`')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('enum_decls')
@@ -992,7 +1003,9 @@ V Language file
               <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
-        PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// cache for type_to_str_using_aliases')
+        PsiComment(VLANG_DOC_COMMENT)
+          PsiElement(VlangTokenType.<DOC_GAP>)('//')
+          PsiElement(VlangTokenType.<DOC_DATA>)('cache for type_to_str_using_aliases')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('cached_type_to_str')
@@ -1032,7 +1045,9 @@ V Language file
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('int')
           PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// anon struct name -> struct sym idx')
-        PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// counter for anon struct, avoid name conflicts.')
+        PsiComment(VLANG_DOC_COMMENT)
+          PsiElement(VlangTokenType.<DOC_GAP>)('//')
+          PsiElement(VlangTokenType.<DOC_DATA>)('counter for anon struct, avoid name conflicts.')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('anon_struct_counter')

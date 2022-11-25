@@ -498,7 +498,10 @@ TypeUnionList ::= Type (semi? '|' Type)* {pin=1}
 // const declarations
 // [<visibility>] const <name> = <value>
 // [<visibility>] const (<list>)
-ConstDeclaration ::= Attributes? SymbolVisibility? const ( ConstDefinition | '(' ConstDefinitions? ')' ) {pin=3}
+ConstDeclaration ::= Attributes? SymbolVisibility? const ( ConstDefinition | '(' ConstDefinitions? ')' ) {
+  pin=3
+  methods=[isMultiline]
+}
 // <spec> [<spec2>]
 private ConstDefinitions ::= ConstDefinition (semi ConstDefinition)* semi? {pin=1}
 // <list> = <list>
@@ -513,7 +516,10 @@ ConstDefinition ::= identifier '=' (<<withOff Expression "BLOCK?">> | (!() Expre
 // global variable declarations
 // <[attrs]> __global <ident> = <expr>
 // <[attrs]> __global (<list>)
-GlobalVariableDeclaration ::= Attributes? '__global' ( GlobalVariableDefinition | '(' GlobalVariableDefinitions? ')' ) {pin(".*")=2 methods=[addSpec deleteSpec]}
+GlobalVariableDeclaration ::= Attributes? '__global' ( GlobalVariableDefinition | '(' GlobalVariableDefinitions? ')' ) {
+  pin(".*")=2
+  methods=[isMultiline]
+}
 // <spec> [<spec2>]
 private GlobalVariableDefinitions ::= GlobalVariableDefinition (semi GlobalVariableDefinition)* semi? {pin=1}
 // <def> = <expr>

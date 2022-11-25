@@ -108,7 +108,7 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun isPublic(o: VlangConstDefinition): Boolean {
-        val decl = o.parent as VlangConstDeclaration
+        val decl = o.parent as? VlangConstDeclaration ?: return true
         val visibility = VlangPsiTreeUtil.getChildOfType(decl, VlangSymbolVisibility::class.java)
         return visibility?.pub != null
     }
@@ -758,6 +758,16 @@ object VlangPsiImplUtil {
     fun getTypeInner(o: VlangFieldDefinition, context: ResolveState?): VlangTypeEx {
         val fieldDeclaration = o.parent as? VlangFieldDeclaration
         return fieldDeclaration?.type.toEx()
+    }
+
+    @JvmStatic
+    fun isMultiline(o: VlangConstDeclaration): Boolean {
+        return o.lparen != null
+    }
+
+    @JvmStatic
+    fun isMultiline(o: VlangGlobalVariableDeclaration): Boolean {
+        return o.lparen != null
     }
 
     @JvmStatic

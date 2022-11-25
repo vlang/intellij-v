@@ -50,7 +50,9 @@ V Language file
       LITERAL
         PsiElement(VlangTokenType.float)('0.0')
     PsiElement(VlangTokenType.))(')')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//**************************** 3D Vector utility struct *********************')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('**************************** 3D Vector utility struct *********************')
   STRUCT_DECLARATION
     STRUCT_TYPE
       PsiElement(VlangTokenType.struct)('struct')
@@ -863,7 +865,56 @@ V Language file
                   PsiElement(VlangTokenType.identifier)('tmp_norm')
           PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//********************************Image**************************************')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    VlangDocStrongImpl(VlangTokenType.<DOC_STRONG>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('**')
+      VlangDocStrongImpl(VlangTokenType.<DOC_STRONG>)
+        PsiElement(VlangTokenType.<DOC_DATA>)('**')
+        VlangDocStrongImpl(VlangTokenType.<DOC_STRONG>)
+          PsiElement(VlangTokenType.<DOC_DATA>)('**')
+          VlangDocStrongImpl(VlangTokenType.<DOC_STRONG>)
+            PsiElement(VlangTokenType.<DOC_DATA>)('**')
+            VlangDocStrongImpl(VlangTokenType.<DOC_STRONG>)
+              PsiElement(VlangTokenType.<DOC_DATA>)('**')
+              VlangDocStrongImpl(VlangTokenType.<DOC_STRONG>)
+                PsiElement(VlangTokenType.<DOC_DATA>)('**')
+                VlangDocStrongImpl(VlangTokenType.<DOC_STRONG>)
+                  PsiElement(VlangTokenType.<DOC_DATA>)('**')
+                  VlangDocStrongImpl(VlangTokenType.<DOC_STRONG>)
+                    PsiElement(VlangTokenType.<DOC_DATA>)('**')
+                    VlangDocStrongImpl(VlangTokenType.<DOC_STRONG>)
+                      PsiElement(VlangTokenType.<DOC_DATA>)('**')
+                      VlangDocStrongImpl(VlangTokenType.<DOC_STRONG>)
+                        PsiElement(VlangTokenType.<DOC_DATA>)('**')
+                        VlangDocStrongImpl(VlangTokenType.<DOC_STRONG>)
+                          PsiElement(VlangTokenType.<DOC_DATA>)('**')
+                          VlangDocStrongImpl(VlangTokenType.<DOC_STRONG>)
+                            PsiElement(VlangTokenType.<DOC_DATA>)('**')
+                            VlangDocStrongImpl(VlangTokenType.<DOC_STRONG>)
+                              PsiElement(VlangTokenType.<DOC_DATA>)('**')
+                              VlangDocStrongImpl(VlangTokenType.<DOC_STRONG>)
+                                PsiElement(VlangTokenType.<DOC_DATA>)('**')
+                                VlangDocStrongImpl(VlangTokenType.<DOC_STRONG>)
+                                  PsiElement(VlangTokenType.<DOC_DATA>)('**')
+                                  VlangDocStrongImpl(VlangTokenType.<DOC_STRONG>)
+                                    PsiElement(VlangTokenType.<DOC_DATA>)('**Image**')
+                                  PsiElement(VlangTokenType.<DOC_DATA>)('**')
+                                PsiElement(VlangTokenType.<DOC_DATA>)('**')
+                              PsiElement(VlangTokenType.<DOC_DATA>)('**')
+                            PsiElement(VlangTokenType.<DOC_DATA>)('**')
+                          PsiElement(VlangTokenType.<DOC_DATA>)('**')
+                        PsiElement(VlangTokenType.<DOC_DATA>)('**')
+                      PsiElement(VlangTokenType.<DOC_DATA>)('**')
+                    PsiElement(VlangTokenType.<DOC_DATA>)('**')
+                  PsiElement(VlangTokenType.<DOC_DATA>)('**')
+                PsiElement(VlangTokenType.<DOC_DATA>)('**')
+              PsiElement(VlangTokenType.<DOC_DATA>)('**')
+            PsiElement(VlangTokenType.<DOC_DATA>)('**')
+          PsiElement(VlangTokenType.<DOC_DATA>)('**')
+        PsiElement(VlangTokenType.<DOC_DATA>)('**')
+      PsiElement(VlangTokenType.<DOC_DATA>)('**')
+    PsiElement(VlangTokenType.<DOC_DATA>)('******')
   STRUCT_DECLARATION
     STRUCT_TYPE
       PsiElement(VlangTokenType.struct)('struct')
@@ -1039,7 +1090,9 @@ V Language file
                   PsiElement(VlangTokenType.})('}')
           PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// write out a .ppm file')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('write out a .ppm file')
   METHOD_DECLARATION
     PsiElement(VlangTokenType.fn)('fn')
     PsiElement(VlangTokenType.()('(')
@@ -1429,7 +1482,9 @@ V Language file
               PsiElement(VlangTokenType.()('(')
               PsiElement(VlangTokenType.))(')')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//********************************** Ray ************************************')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('********************************** Ray ************************************')
   STRUCT_DECLARATION
     STRUCT_TYPE
       PsiElement(VlangTokenType.struct)('struct')
@@ -1453,7 +1508,9 @@ V Language file
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('Vec')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// material types, used in radiance()')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('material types, used in radiance()')
   ENUM_DECLARATION
     ENUM_TYPE
       PsiElement(VlangTokenType.enum)('enum')
@@ -1469,7 +1526,9 @@ V Language file
         ENUM_FIELD_DEFINITION
           PsiElement(VlangTokenType.identifier)('refr')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//******************************** Sphere ***********************************')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('******************************** Sphere ***********************************')
   STRUCT_DECLARATION
     STRUCT_TYPE
       PsiElement(VlangTokenType.struct)('struct')
@@ -1789,7 +1848,9 @@ V Language file
         ARRAY_CREATION_LIST
           ARRAY_CREATION
             PsiElement(VlangTokenType.[)('[')
-            PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// scene 0 cornnel box')
+            PsiComment(VLANG_DOC_COMMENT)
+              PsiElement(VlangTokenType.<DOC_GAP>)('//')
+              PsiElement(VlangTokenType.<DOC_DATA>)('scene 0 cornnel box')
             ARRAY_CREATION_LIST
               LITERAL_VALUE_EXPRESSION
                 TYPE
@@ -2756,7 +2817,9 @@ V Language file
           PsiElement(VlangTokenType.,)(',')
           ARRAY_CREATION
             PsiElement(VlangTokenType.[)('[')
-            PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// scene 1 sunset')
+            PsiComment(VLANG_DOC_COMMENT)
+              PsiElement(VlangTokenType.<DOC_GAP>)('//')
+              PsiElement(VlangTokenType.<DOC_DATA>)('scene 1 sunset')
             ARRAY_CREATION_LIST
               LITERAL_VALUE_EXPRESSION
                 TYPE
@@ -3851,7 +3914,9 @@ V Language file
           PsiElement(VlangTokenType.,)(',')
           ARRAY_CREATION
             PsiElement(VlangTokenType.[)('[')
-            PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// scene 3 Psychedelic')
+            PsiComment(VLANG_DOC_COMMENT)
+              PsiElement(VlangTokenType.<DOC_GAP>)('//')
+              PsiElement(VlangTokenType.<DOC_DATA>)('scene 3 Psychedelic')
             ARRAY_CREATION_LIST
               LITERAL_VALUE_EXPRESSION
                 TYPE
@@ -4282,7 +4347,9 @@ V Language file
         PsiElement(VlangTokenType.])(']')
     PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// end of scene array')
     PsiElement(VlangTokenType.))(')')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//********************************** Utilities ******************************')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('********************************** Utilities ******************************')
   FUNCTION_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
@@ -4658,7 +4725,9 @@ V Language file
         REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('id')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// some casual random function, try to avoid the 0')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('some casual random function, try to avoid the 0')
   FUNCTION_DECLARATION
     PsiElement(VlangTokenType.fn)('fn')
     PsiElement(VlangTokenType.identifier)('rand_f64')
@@ -4940,7 +5009,9 @@ V Language file
         REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('c')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//************ Cache for sin/cos speed-up table and scene selector **********')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('************ Cache for sin/cos speed-up table and scene selector **********')
   CONST_DECLARATION
     PsiElement(VlangTokenType.const)('const')
     PsiElement(VlangTokenType.()('(')
@@ -4954,7 +5025,9 @@ V Language file
           PsiElement(VlangTokenType.()('(')
           PsiElement(VlangTokenType.))(')')
     PsiElement(VlangTokenType.))(')')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//****************** main function for the radiance calculation *************')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('****************** main function for the radiance calculation *************')
   FUNCTION_DECLARATION
     PsiElement(VlangTokenType.fn)('fn')
     PsiElement(VlangTokenType.identifier)('radiance')
@@ -5108,7 +5181,9 @@ V Language file
           PsiElement(VlangTokenType.:=)(':=')
           LITERAL
             PsiElement(VlangTokenType.float)('1.0')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// v_2 := f64(2.0)')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('v_2 := f64(2.0)')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -5123,7 +5198,9 @@ V Language file
             REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('scene_id')
             PsiElement(VlangTokenType.])(']')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// res, t, id = intersect(r, id, tb.scene)')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('res, t, id = intersect(r, id, tb.scene)')
       ASSIGNMENT_STATEMENT
         LEFT_HAND_EXPR_LIST
           REFERENCE_EXPRESSION
@@ -5183,7 +5260,9 @@ V Language file
                   PsiElement(VlangTokenType.{)('{')
                   PsiElement(VlangTokenType.})('}')
               PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// if miss, return black')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('if miss, return black')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -5326,7 +5405,9 @@ V Language file
               PsiElement(VlangTokenType.identifier)('obj')
             PsiElement(VlangTokenType..)('.')
             PsiElement(VlangTokenType.identifier)('c')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// max reflection')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('max reflection')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -5516,10 +5597,17 @@ V Language file
                   PsiElement(VlangTokenType.identifier)('diff')
             BLOCK
               PsiElement(VlangTokenType.{)('{')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Ideal DIFFUSE reflection')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// **Full Precision**')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// r1  := f64(2.0 * math.pi) * rand_f64()')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// tabbed speed-up')
+              PsiComment(VLANG_DOC_COMMENT)
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('Ideal DIFFUSE reflection')
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                VlangDocStrongImpl(VlangTokenType.<DOC_STRONG>)
+                  PsiElement(VlangTokenType.<DOC_DATA>)('**Full Precision**')
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('r1  := f64(2.0 * math.pi) * rand_f64()')
+              PsiComment(VLANG_DOC_COMMENT)
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('tabbed speed-up')
               SIMPLE_STATEMENT
                 VAR_DECLARATION
                   VAR_DEFINITION
@@ -5722,9 +5810,15 @@ V Language file
                           REFERENCE_EXPRESSION
                             PsiElement(VlangTokenType.identifier)('u')
                       PsiElement(VlangTokenType.))(')')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// **Full Precision**')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// d := (u.mult_s(math.cos(r1) * r2s) + v.mult_s(math.sin(r1) * r2s) + w.mult_s(1.0 - r2)).norm()')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// tabbed speed-up')
+              PsiComment(VLANG_DOC_COMMENT)
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                VlangDocStrongImpl(VlangTokenType.<DOC_STRONG>)
+                  PsiElement(VlangTokenType.<DOC_DATA>)('**Full Precision**')
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('d := (u.mult_s(math.cos(r1) * r2s) + v.mult_s(math.sin(r1) * r2s) + w.mult_s(1.0 - r2)).norm()')
+              PsiComment(VLANG_DOC_COMMENT)
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('tabbed speed-up')
               SIMPLE_STATEMENT
                 VAR_DECLARATION
                   VAR_DEFINITION
@@ -5902,7 +5996,9 @@ V Language file
                             PsiElement(VlangTokenType.identifier)('spec')
                       BLOCK
                         PsiElement(VlangTokenType.{)('{')
-                        PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Ideal SPECULAR reflection')
+                        PsiComment(VLANG_DOC_COMMENT)
+                          PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                          PsiElement(VlangTokenType.<DOC_DATA>)('Ideal SPECULAR reflection')
                         RETURN_STATEMENT
                           PsiElement(VlangTokenType.return)('return')
                           ADD_EXPR
@@ -6211,7 +6307,9 @@ V Language file
                 PsiElement(VlangTokenType.float)('0.0')
             BLOCK
               PsiElement(VlangTokenType.{)('{')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Total internal reflection')
+              PsiComment(VLANG_DOC_COMMENT)
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('Total internal reflection')
               RETURN_STATEMENT
                 PsiElement(VlangTokenType.return)('return')
                 ADD_EXPR
@@ -6608,7 +6706,9 @@ V Language file
                 PsiElement(VlangTokenType.int)('2')
             BLOCK
               PsiElement(VlangTokenType.{)('{')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Russian roulette')
+              PsiComment(VLANG_DOC_COMMENT)
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('Russian roulette')
               ASSIGNMENT_STATEMENT
                 LEFT_HAND_EXPR_LIST
                   REFERENCE_EXPRESSION
@@ -6832,7 +6932,9 @@ V Language file
                 PsiElement(VlangTokenType.identifier)('tmp')
             PsiElement(VlangTokenType.))(')')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//*********************** beam scan routine *********************************')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('*********************** beam scan routine *********************************')
   FUNCTION_DECLARATION
     PsiElement(VlangTokenType.fn)('fn')
     PsiElement(VlangTokenType.identifier)('ray_trace')
@@ -6919,7 +7021,9 @@ V Language file
                   REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('h')
               PsiElement(VlangTokenType.))(')')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// inverse costants')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('inverse costants')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -7193,7 +7297,9 @@ V Language file
                 PsiElement(VlangTokenType.identifier)('Vec')
             PsiElement(VlangTokenType.{)('{')
             PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// speed-up constants')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('speed-up constants')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -7228,7 +7334,9 @@ V Language file
                   LITERAL
                     PsiElement(VlangTokenType.float)('2.0')
               PsiElement(VlangTokenType.))(')')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// OpenMP injection point! #pragma omp parallel for schedule(dynamic, 1) shared(c)')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('OpenMP injection point! #pragma omp parallel for schedule(dynamic, 1) shared(c)')
       FOR_STATEMENT
         PsiElement(VlangTokenType.for)('for')
         FOR_CLAUSE
@@ -7444,7 +7552,9 @@ V Language file
                                 PsiElement(VlangTokenType.identifier)('i')
                               PsiElement(VlangTokenType.])(']')
                       PsiElement(VlangTokenType.})('}')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// we use sx and sy to perform a square subsampling of 4 samples')
+              PsiComment(VLANG_DOC_COMMENT)
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('we use sx and sy to perform a square subsampling of 4 samples')
               FOR_STATEMENT
                 PsiElement(VlangTokenType.for)('for')
                 FOR_CLAUSE
@@ -8348,7 +8458,9 @@ V Language file
                     PsiElement(VlangTokenType.()('(')
                     PsiElement(VlangTokenType.))(')')
               PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// change the seed for a different result')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('change the seed for a different result')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           CALL_EXPR

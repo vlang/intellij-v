@@ -6,6 +6,7 @@ import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.PsiParserFacade
 import com.intellij.psi.util.PsiTreeUtil
 import org.vlang.lang.VlangLanguage
+import org.vlang.lang.doc.psi.VlangDocComment
 import org.vlang.lang.psi.*
 
 object VlangElementFactory {
@@ -81,6 +82,13 @@ object VlangElementFactory {
         return PsiTreeUtil.findChildOfType(
             createFileFromText(project, "${expression.text}!"),
             VlangDotExpression::class.java
+        )!!
+    }
+
+    fun createDocComment(project: Project, text: String): VlangDocComment {
+        return PsiTreeUtil.findChildOfType(
+            createFileFromText(project, text),
+            VlangDocComment::class.java
         )!!
     }
 

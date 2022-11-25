@@ -57,7 +57,7 @@ class VlangParameterInfoHandler : ParameterInfoHandlerWithTabActionSupport<Vlang
                 return null
             }
 
-            val signature = if (type is VlangSignatureOwner) type.getSignature() else null
+            val signature = if (type is VlangFunctionTypeEx) type.signature else null
             if (signature == null) {
                 context.isUIComponentEnabled = false
                 return null

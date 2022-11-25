@@ -34,7 +34,7 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
         val ref = expression.reference
         if (ref is VlangReference) {
             val refExpression = ref.element as? VlangReferenceExpression
-            val variants = VlangStructLiteralCompletion.allowedVariants(refExpression)
+            val variants = VlangStructLiteralCompletion.allowedVariants(refExpression, element)
 
             fillStructFieldNameVariants(result, variants, refExpression)
 

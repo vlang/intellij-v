@@ -56,4 +56,9 @@ public class VlangGlobalVariableDeclarationImpl extends VlangCompositeElementImp
     return findChildByType(RPAREN);
   }
 
+  @Override
+  public boolean isMultiline() {
+    return VlangPsiImplUtil.isMultiline(this);
+  }
+
 }

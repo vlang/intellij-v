@@ -216,7 +216,12 @@ V Language file
                 PsiElement(VlangTokenType.identifier)('print_help_for_command')
           PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// print_help_for_command outputs the help message of `help_cmd`.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('print_help_for_command outputs the help message of ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`help_cmd`')
+    PsiElement(VlangTokenType.<DOC_DATA>)('.')
   FUNCTION_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -487,7 +492,15 @@ V Language file
                         PsiElement(VlangTokenType.})('}')
                 PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// help_message returns a generated help message as a `string` for the `Command`.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('help_message returns a generated help message as a ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`string`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' for the ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`Command`')
+    PsiElement(VlangTokenType.<DOC_DATA>)('.')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -1656,8 +1669,11 @@ V Language file
         REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('help')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// pretty_description resizes description text depending on terminal width.')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Essentially, smart wrap-around')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('pretty_description resizes description text depending on terminal width.')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('Essentially, smart wrap-around')
   FUNCTION_DECLARATION
     PsiElement(VlangTokenType.fn)('fn')
     PsiElement(VlangTokenType.identifier)('pretty_description')
@@ -1713,7 +1729,9 @@ V Language file
             ARGUMENT_LIST
               PsiElement(VlangTokenType.()('(')
               PsiElement(VlangTokenType.))(')')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Don't prettify if the terminal is that small, it won't be pretty anyway.')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('Don't prettify if the terminal is that small, it won't be pretty anyway.')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           IF_EXPRESSION
@@ -1767,7 +1785,9 @@ V Language file
             PsiElement(VlangTokenType.-)('-')
             REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('indent_len')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Give us enough room, better a little bigger than smaller')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('Give us enough room, better a little bigger than smaller')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -1957,7 +1977,9 @@ V Language file
                           PsiElement(VlangTokenType.identifier)('i')
                         PsiElement(VlangTokenType.--)('--')
                   PsiElement(VlangTokenType.})('}')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// indent was already done the first iteration')
+              PsiComment(VLANG_DOC_COMMENT)
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('indent was already done the first iteration')
               SIMPLE_STATEMENT
                 LEFT_HAND_EXPR_LIST
                   IF_EXPRESSION
@@ -2026,7 +2048,9 @@ V Language file
                 REFERENCE_EXPRESSION
                   PsiElement(VlangTokenType.identifier)('i')
               PsiElement(VlangTokenType.})('}')
-          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// We need this even though it should never happen')
+          PsiComment(VLANG_DOC_COMMENT)
+            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+            PsiElement(VlangTokenType.<DOC_DATA>)('We need this even though it should never happen')
           SIMPLE_STATEMENT
             LEFT_HAND_EXPR_LIST
               IF_EXPRESSION

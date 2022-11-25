@@ -269,9 +269,13 @@ V Language file
                   ATTRIBUTE_IDENTIFIER
                     PsiElement(VlangTokenType.identifier)('required')
             PsiElement(VlangTokenType.])(']')
-        PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// skips the local scopes and registers only')
-        PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// the top-level ones regardless of its')
-        PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// visibility')
+        PsiComment(VLANG_DOC_COMMENT)
+          PsiElement(VlangTokenType.<DOC_GAP>)('//')
+          PsiElement(VlangTokenType.<DOC_DATA>)('skips the local scopes and registers only')
+          PsiElement(VlangTokenType.<DOC_GAP>)('//')
+          PsiElement(VlangTokenType.<DOC_DATA>)('the top-level ones regardless of its')
+          PsiElement(VlangTokenType.<DOC_GAP>)('//')
+          PsiElement(VlangTokenType.<DOC_DATA>)('visibility')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('is_import')
@@ -852,7 +856,9 @@ V Language file
                           PsiElement(VlangTokenType.else)('else')
                           BLOCK
                             PsiElement(VlangTokenType.{)('{')
-                            PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// final_params << d.str()')
+                            PsiComment(VLANG_DOC_COMMENT)
+                              PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                              PsiElement(VlangTokenType.<DOC_DATA>)('final_params << d.str()')
                             RETURN_STATEMENT
                               PsiElement(VlangTokenType.return)('return')
                               STRING_LITERAL
@@ -1095,8 +1101,13 @@ V Language file
           PsiElement(VlangTokenType.?)('?')
     BLOCK
       PsiElement(VlangTokenType.{)('{')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Most of the checking is already done in `import_modules_from_trees`')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Check only the symbols if they are available')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('Most of the checking is already done in ')
+        VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+          PsiElement(VlangTokenType.<DOC_DATA>)('`import_modules_from_trees`')
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('Check only the symbols if they are available')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -1175,7 +1186,9 @@ V Language file
                     PsiElement(VlangTokenType..)('.')
                     PsiElement(VlangTokenType.identifier)('text')
               PsiElement(VlangTokenType.))(')')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// defer { unsafe { module_name.free() } }')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('defer { unsafe { module_name.free() } }')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -1217,7 +1230,11 @@ V Language file
             PsiElement(VlangTokenType.or)('or')
             BLOCK
               PsiElement(VlangTokenType.{)('{')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// `import_modules_from_trees` already reported it')
+              PsiComment(VLANG_DOC_COMMENT)
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+                  PsiElement(VlangTokenType.<DOC_DATA>)('`import_modules_from_trees`')
+                PsiElement(VlangTokenType.<DOC_DATA>)(' already reported it')
               RETURN_STATEMENT
                 PsiElement(VlangTokenType.return)('return')
               PsiElement(VlangTokenType.})('}')
@@ -2842,7 +2859,9 @@ V Language file
                             PsiElement(VlangTokenType.or)('or')
                             BLOCK
                               PsiElement(VlangTokenType.{)('{')
-                              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// an.messages.report(err)')
+                              PsiComment(VLANG_DOC_COMMENT)
+                                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                                PsiElement(VlangTokenType.<DOC_DATA>)('an.messages.report(err)')
                               PsiElement(VlangTokenType.})('}')
                       PsiElement(VlangTokenType.})('}')
                     PsiElement(VlangTokenType..)('.')
@@ -3341,7 +3360,9 @@ V Language file
                               PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                         BLOCK
                           PsiElement(VlangTokenType.{)('{')
-                          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// ignore _ variables in invalid assignment errors')
+                          PsiComment(VLANG_DOC_COMMENT)
+                            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                            PsiElement(VlangTokenType.<DOC_DATA>)('ignore _ variables in invalid assignment errors')
                           ASSIGNMENT_STATEMENT
                             LEFT_HAND_EXPR_LIST
                               REFERENCE_EXPRESSION
@@ -5118,7 +5139,9 @@ V Language file
                   PsiElement(VlangTokenType.))(')')
             BLOCK
               PsiElement(VlangTokenType.{)('{')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// TODO:')
+              PsiComment(VLANG_DOC_COMMENT)
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('TODO:')
               RETURN_STATEMENT
                 PsiElement(VlangTokenType.return)('return')
               PsiElement(VlangTokenType.})('}')
@@ -5354,7 +5377,9 @@ V Language file
                               PsiElement(VlangTokenType.identifier)('multi_return')
                         BLOCK
                           PsiElement(VlangTokenType.{)('{')
-                          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// got return count = existing number of nodes + multi return type size')
+                          PsiComment(VLANG_DOC_COMMENT)
+                            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                            PsiElement(VlangTokenType.<DOC_DATA>)('got return count = existing number of nodes + multi return type size')
                           ASSIGNMENT_STATEMENT
                             LEFT_HAND_EXPR_LIST
                               REFERENCE_EXPRESSION
@@ -5406,8 +5431,11 @@ V Language file
                               PsiElement(VlangTokenType.identifier)('optional')
                         BLOCK
                           PsiElement(VlangTokenType.{)('{')
-                          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// TODO: use proper checking in the future')
-                          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// for interfaces not limited to IError')
+                          PsiComment(VLANG_DOC_COMMENT)
+                            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                            PsiElement(VlangTokenType.<DOC_DATA>)('TODO: use proper checking in the future')
+                            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                            PsiElement(VlangTokenType.<DOC_DATA>)('for interfaces not limited to IError')
                           SIMPLE_STATEMENT
                             LEFT_HAND_EXPR_LIST
                               IF_EXPRESSION
@@ -6945,8 +6973,11 @@ V Language file
                 PsiElement(VlangTokenType.identifier)('analyzer')
               PsiElement(VlangTokenType..)('.')
               PsiElement(VlangTokenType.identifier)('comparative_operators')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// is_and := op in and_operators')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// is_or := op in or_operators')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('is_and := op in and_operators')
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('is_or := op in or_operators')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -7220,7 +7251,9 @@ V Language file
                       PsiElement(VlangTokenType.identifier)('is_additive')
                   BLOCK
                     PsiElement(VlangTokenType.{)('{')
-                    PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// check if left and right are both numeric types')
+                    PsiComment(VLANG_DOC_COMMENT)
+                      PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                      PsiElement(VlangTokenType.<DOC_DATA>)('check if left and right are both numeric types')
                     SIMPLE_STATEMENT
                       LEFT_HAND_EXPR_LIST
                         IF_EXPRESSION
@@ -7687,7 +7720,9 @@ V Language file
                                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                               BLOCK
                                 PsiElement(VlangTokenType.{)('{')
-                                PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// check if left and right are both numeric types')
+                                PsiComment(VLANG_DOC_COMMENT)
+                                  PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                                  PsiElement(VlangTokenType.<DOC_DATA>)('check if left and right are both numeric types')
                                 RETURN_STATEMENT
                                   PsiElement(VlangTokenType.return)('return')
                                   CALL_EXPR
@@ -8274,10 +8309,15 @@ V Language file
                                                   PsiElement(VlangTokenType.))(')')
                                             BLOCK
                                               PsiElement(VlangTokenType.{)('{')
-                                              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// trigger error only if len field exists since setting the len')
-                                              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// field will allocate and insert default values into the array')
-                                              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// which the sumtype array cannot since the value is ambiguous and')
-                                              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// null is not allowed')
+                                              PsiComment(VLANG_DOC_COMMENT)
+                                                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                                                PsiElement(VlangTokenType.<DOC_DATA>)('trigger error only if len field exists since setting the len')
+                                                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                                                PsiElement(VlangTokenType.<DOC_DATA>)('field will allocate and insert default values into the array')
+                                                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                                                PsiElement(VlangTokenType.<DOC_DATA>)('which the sumtype array cannot since the value is ambiguous and')
+                                                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                                                PsiElement(VlangTokenType.<DOC_DATA>)('null is not allowed')
                                               SIMPLE_STATEMENT
                                                 LEFT_HAND_EXPR_LIST
                                                   IF_EXPRESSION
@@ -9104,13 +9144,18 @@ V Language file
                                                     PsiElement(VlangTokenType.))(')')
                                           PsiElement(VlangTokenType.})('}')
                                   PsiElement(VlangTokenType.})('}')
-                              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// .element {}')
-                              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// .spread_operator {}')
+                              PsiComment(VLANG_DOC_COMMENT)
+                                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                                PsiElement(VlangTokenType.<DOC_DATA>)('.element {}')
+                                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                                PsiElement(VlangTokenType.<DOC_DATA>)('.spread_operator {}')
                               MATCH_ELSE_ARM_CLAUSE
                                 PsiElement(VlangTokenType.else)('else')
                                 BLOCK
                                   PsiElement(VlangTokenType.{)('{')
-                                  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// TODO: error')
+                                  PsiComment(VLANG_DOC_COMMENT)
+                                    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                                    PsiElement(VlangTokenType.<DOC_DATA>)('TODO: error')
                                   PsiElement(VlangTokenType.})('}')
                             PsiElement(VlangTokenType.})('}')
                       PsiElement(VlangTokenType.})('}')
@@ -9765,7 +9810,12 @@ V Language file
                                     PsiElement(VlangTokenType.identifier)('void_sym')
                               PsiElement(VlangTokenType.})('}')
                       PsiElement(VlangTokenType.})('}')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// NOTE: transfer this to `store.infer_symbol_from_node` if possible')
+              PsiComment(VLANG_DOC_COMMENT)
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('NOTE: transfer this to ')
+                VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+                  PsiElement(VlangTokenType.<DOC_DATA>)('`store.infer_symbol_from_node`')
+                PsiElement(VlangTokenType.<DOC_DATA>)(' if possible')
               SIMPLE_STATEMENT
                 VAR_DECLARATION
                   VAR_DEFINITION
@@ -11198,7 +11248,9 @@ V Language file
                             PsiElement(VlangTokenType.))(')')
                     PsiElement(VlangTokenType.))(')')
               PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// check arguments')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('check arguments')
       FOR_STATEMENT
         PsiElement(VlangTokenType.for)('for')
         RANGE_CLAUSE
@@ -11254,19 +11306,38 @@ V Language file
                   CONTINUE_STATEMENT
                     PsiElement(VlangTokenType.continue)('continue')
                   PsiElement(VlangTokenType.})('}')
-          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// TODO:')
-          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// mut returned_sym := an.expression(arg_node)')
-          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// if returned_sym.is_returnable() {')
-          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// \treturned_sym = arg_sym.return_sym')
-          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// }')
-          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// if returned_sym != arg_sym.return_sym {')
-          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// \tan.custom_report(')
-          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// \t\tanalyzer.invalid_argument_error,')
-          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// \t\targ_node,')
-          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// \t\t[returned_sym, arg_sym.return_sym],')
-          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// \t\t{2: i.str(), 3: fn_sym.name}')
-          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// \t)')
-          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// }')
+          PsiComment(VLANG_DOC_COMMENT)
+            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+            PsiElement(VlangTokenType.<DOC_DATA>)('TODO:')
+            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+            PsiElement(VlangTokenType.<DOC_DATA>)('mut returned_sym := an.expression(arg_node)')
+            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+            PsiElement(VlangTokenType.<DOC_DATA>)('if returned_sym.is_returnable() {')
+            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+            PsiElement(VlangTokenType.<DOC_DATA>)('\treturned_sym = arg_sym.return_sym')
+            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+            PsiElement(VlangTokenType.<DOC_DATA>)('}')
+          PsiComment(VLANG_DOC_COMMENT)
+            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+            PsiElement(VlangTokenType.<DOC_DATA>)('if returned_sym != arg_sym.return_sym {')
+            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+            PsiElement(VlangTokenType.<DOC_DATA>)('\tan.custom_report(')
+            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+            PsiElement(VlangTokenType.<DOC_DATA>)('\t\tanalyzer.invalid_argument_error,')
+            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+            PsiElement(VlangTokenType.<DOC_DATA>)('\t\targ_node,')
+            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+            PsiElement(VlangTokenType.<DOC_DATA>)('\t\t')
+            VlangDocLinkReferenceShortImpl(VlangTokenType.<DOC_SHORT_REFERENCE_LINK>)
+              VlangDocLinkLabelImpl(VlangTokenType.<DOC_LINK_LABEL>)
+                PsiElement(VlangTokenType.<DOC_DATA>)('[returned_sym, arg_sym.return_sym]')
+            PsiElement(VlangTokenType.<DOC_DATA>)(',')
+            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+            PsiElement(VlangTokenType.<DOC_DATA>)('\t\t{2: i.str(), 3: fn_sym.name}')
+            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+            PsiElement(VlangTokenType.<DOC_DATA>)('\t)')
+            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+            PsiElement(VlangTokenType.<DOC_DATA>)('}')
           SIMPLE_STATEMENT
             LEFT_HAND_EXPR_LIST
               OR_BLOCK_EXPR
@@ -11288,7 +11359,9 @@ V Language file
                   PsiElement(VlangTokenType.{)('{')
                   PsiElement(VlangTokenType.})('}')
           PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// NOTE: this opt check is madness but whatever')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('NOTE: this opt check is madness but whatever')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           IF_EXPRESSION
@@ -11592,7 +11665,9 @@ V Language file
                         PsiElement(VlangTokenType.identifier)('optional')
                   BLOCK
                     PsiElement(VlangTokenType.{)('{')
-                    PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// let parent node handle the error')
+                    PsiComment(VLANG_DOC_COMMENT)
+                      PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                      PsiElement(VlangTokenType.<DOC_DATA>)('let parent node handle the error')
                     SIMPLE_STATEMENT
                       VAR_DECLARATION
                         VAR_DEFINITION
@@ -12267,7 +12342,9 @@ V Language file
                         PsiElement(VlangTokenType.))(')')
                   BLOCK
                     PsiElement(VlangTokenType.{)('{')
-                    PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// TODO: opt if expr check')
+                    PsiComment(VLANG_DOC_COMMENT)
+                      PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                      PsiElement(VlangTokenType.<DOC_DATA>)('TODO: opt if expr check')
                     SIMPLE_STATEMENT
                       LEFT_HAND_EXPR_LIST
                         CALL_EXPR
@@ -13018,7 +13095,9 @@ V Language file
                           PsiElement(VlangTokenType.identifier)('expression')
                     BLOCK
                       PsiElement(VlangTokenType.{)('{')
-                      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// TODO: this error is for if expression only')
+                      PsiComment(VLANG_DOC_COMMENT)
+                        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                        PsiElement(VlangTokenType.<DOC_DATA>)('TODO: this error is for if expression only')
                       RETURN_STATEMENT
                         PsiElement(VlangTokenType.return)('return')
                         CALL_EXPR
@@ -13061,13 +13140,17 @@ V Language file
                               PsiElement(VlangTokenType.))(')')
                         PsiElement(VlangTokenType.})('}')
               PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// TODO:')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('TODO:')
       RETURN_STATEMENT
         PsiElement(VlangTokenType.return)('return')
         REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('void_sym')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// TODO: tests for match sumtypes is missing')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('TODO: tests for match sumtypes is missing')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -13381,7 +13464,9 @@ V Language file
                     PsiElement(VlangTokenType.])(']')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
-                  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// TODO:')
+                  PsiComment(VLANG_DOC_COMMENT)
+                    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                    PsiElement(VlangTokenType.<DOC_DATA>)('TODO:')
                   BREAK_STATEMENT
                     PsiElement(VlangTokenType.break)('break')
                   PsiElement(VlangTokenType.})('}')
@@ -14240,7 +14325,9 @@ V Language file
                             PsiElement(VlangTokenType.))(')')
                     PsiElement(VlangTokenType.})('}')
           PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// check match's exhaustiveness if no default case found')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('check match's exhaustiveness if no default case found')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           IF_EXPRESSION
@@ -14639,7 +14726,9 @@ V Language file
                     PsiElement(VlangTokenType.identifier)('index_expression')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
-                  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// TODO: temporary fix')
+                  PsiComment(VLANG_DOC_COMMENT)
+                    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                    PsiElement(VlangTokenType.<DOC_DATA>)('TODO: temporary fix')
                   RETURN_STATEMENT
                     PsiElement(VlangTokenType.return)('return')
                     CALL_EXPR
@@ -15060,17 +15149,29 @@ V Language file
                                 PsiElement(VlangTokenType.identifier)('field')
                         BLOCK
                           PsiElement(VlangTokenType.{)('{')
-                          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// if sym.name == an.cur_fn_name && sym.kind == .variable {')
-                          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// \tparent := node.parent()?')
-                          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// \tif parent.type_name == .call_expression {')
-                          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// \t\tan.report(parent, errors.ambiguous_call_error,')
-                          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// \t\t\t'', // an.cur_fn_name')
-                          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// \t\t\t'', // an.cur_fn_name')
-                          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// \t\t\t'', // an.cur_fn_name')
-                          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// \t\t)')
-                          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// \t}')
-                          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// \treturn void_sym')
-                          PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// }')
+                          PsiComment(VLANG_DOC_COMMENT)
+                            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                            PsiElement(VlangTokenType.<DOC_DATA>)('if sym.name == an.cur_fn_name && sym.kind == .variable {')
+                            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                            PsiElement(VlangTokenType.<DOC_DATA>)('\tparent := node.parent()?')
+                            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                            PsiElement(VlangTokenType.<DOC_DATA>)('\tif parent.type_name == .call_expression {')
+                            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                            PsiElement(VlangTokenType.<DOC_DATA>)('\t\tan.report(parent, errors.ambiguous_call_error,')
+                            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                            PsiElement(VlangTokenType.<DOC_DATA>)('\t\t\t'', // an.cur_fn_name')
+                            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                            PsiElement(VlangTokenType.<DOC_DATA>)('\t\t\t'', // an.cur_fn_name')
+                            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                            PsiElement(VlangTokenType.<DOC_DATA>)('\t\t\t'', // an.cur_fn_name')
+                            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                            PsiElement(VlangTokenType.<DOC_DATA>)('\t\t)')
+                            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                            PsiElement(VlangTokenType.<DOC_DATA>)('\t}')
+                            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                            PsiElement(VlangTokenType.<DOC_DATA>)('\treturn void_sym')
+                            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                            PsiElement(VlangTokenType.<DOC_DATA>)('}')
                           SIMPLE_STATEMENT
                             LEFT_HAND_EXPR_LIST
                               IF_EXPRESSION
@@ -15247,7 +15348,9 @@ V Language file
                                                     PsiElement(VlangTokenType.))(')')
                                               BLOCK
                                                 PsiElement(VlangTokenType.{)('{')
-                                                PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// expression_list')
+                                                PsiComment(VLANG_DOC_COMMENT)
+                                                  PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                                                  PsiElement(VlangTokenType.<DOC_DATA>)('expression_list')
                                                 SIMPLE_STATEMENT
                                                   LEFT_HAND_EXPR_LIST
                                                     IF_EXPRESSION
@@ -15391,7 +15494,9 @@ V Language file
                               REFERENCE_EXPRESSION
                                 PsiElement(VlangTokenType.identifier)('sym')
                             PsiElement(VlangTokenType.})('}')
-                  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// return an.report(node, errors.unknown_node_type_error, node.raw_node.type_name())')
+                  PsiComment(VLANG_DOC_COMMENT)
+                    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                    PsiElement(VlangTokenType.<DOC_DATA>)('return an.report(node, errors.unknown_node_type_error, node.raw_node.type_name())')
                   PsiElement(VlangTokenType.})('}')
             PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
@@ -15621,7 +15726,9 @@ V Language file
                   PsiElement(VlangTokenType.))(')')
           PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// analyze analyzes the given tree')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('analyze analyzes the given tree')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')

@@ -22,12 +22,6 @@ public interface VlangGlobalVariableDeclaration extends VlangAttributeOwner {
   @Nullable
   PsiElement getRparen();
 
-  //WARNING: addSpec(...) is skipped
-  //matching addSpec(VlangGlobalVariableDeclaration, ...)
-  //methods are not found in VlangPsiImplUtil
-
-  //WARNING: deleteSpec(...) is skipped
-  //matching deleteSpec(VlangGlobalVariableDeclaration, ...)
-  //methods are not found in VlangPsiImplUtil
+  boolean isMultiline();
 
 }

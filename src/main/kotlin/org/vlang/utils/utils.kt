@@ -39,6 +39,12 @@ fun CapturingProcessHandler.runProcessWithGlobalProgress(timeoutInMilliseconds: 
     return runProcess(ProgressManager.getGlobalProgressIndicator(), timeoutInMilliseconds)
 }
 
+fun String?.indexesOf(string: String): List<Int> =
+    string.toRegex()
+        .findAll(this?: "")
+        .map { it.range.first }
+        .toList()
+
 inline fun <reified T: PsiElement> PsiElement.parentNth(depth: Int): T? {
     var parent: PsiElement? = this
     repeat(depth) {
@@ -59,9 +65,21 @@ inline fun <reified T : PsiElement> PsiElement.parentOfType(vararg stopAt: KClas
     return PsiTreeUtil.getParentOfType(this, T::class.java, true, *stopAt.map { it.java }.toTypedArray())
 }
 
+inline fun <reified T : PsiElement> PsiElement.ancestorStrict(): T? =
+    PsiTreeUtil.getParentOfType(this, T::class.java, /* strict */ true)
+
+inline fun <reified T : PsiElement> PsiElement.descendantOfTypeStrict(): T? =
+    PsiTreeUtil.findChildOfType(this, T::class.java, /* strict */ true)
+
+inline fun <reified T : PsiElement> PsiElement.childOfType(): T? =
+    PsiTreeUtil.getChildOfType(this, T::class.java)
+
+fun PsiElement?.getPrevNonWhitespaceSibling(): PsiElement? =
+    PsiTreeUtil.skipWhitespacesBackward(this)
+
 fun CapturingProcessHandler.runProcess(
     indicator: ProgressIndicator?,
-    timeoutInMilliseconds: Int? = null
+    timeoutInMilliseconds: Int? = null,
 ): ProcessOutput {
     return when {
         indicator != null && timeoutInMilliseconds != null ->

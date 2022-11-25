@@ -150,7 +150,9 @@ V Language file
         BLOCK
           PsiElement(VlangTokenType.{)('{')
           PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// use system default C compiler if found')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('use system default C compiler if found')
   SIMPLE_STATEMENT
     VAR_DECLARATION
       VAR_DEFINITION

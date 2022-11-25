@@ -156,4 +156,19 @@
       <option name="FONT_TYPE" value="1"/>
     </value>
   </option>
+  <option name="org.vlang.GENERIC_PARAMETER">
+    <value>
+      <option name="FOREGROUND" value="20999D"/>
+    </value>
+  </option>
+  <option name="org.vlang.DOC_EMPHASIS">
+    <value>
+      <option name="FONT_TYPE" value="2"/>
+    </value>
+  </option>
+  <option name="org.vlang.DOC_STRONG">
+    <value>
+      <option name="FONT_TYPE" value="1" />
+    </value>
+  </option>
 </list>

@@ -319,10 +319,6 @@ object VlangParserUtil : GeneratedParserUtilBase() {
     fun beforeBlockExpression(builder: PsiBuilder, level: Int): Boolean {
         val m = builder.mark()
         val r = VlangParser.Expression(builder, level + 1, -1)
-        if (!r) {
-            println()
-        }
-
         if (r && nextTokenIs(builder, LBRACE)) {
             // Значит парсинг можно продолжать
             m.drop()

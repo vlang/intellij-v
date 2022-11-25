@@ -65,6 +65,14 @@ mut:
 	<MUTABLE_FIELD>count_use</MUTABLE_FIELD> <BUILTIN_TYPE>int</BUILTIN_TYPE>
 }
 
+// <DOC_HEADING># Header</DOC_HEADING>
+// You can use <DOC_STRONG>**Bold**</DOC_STRONG> or <DOC_EMPHASIS>*Italic*</DOC_EMPHASIS> text.
+// Also you can use <DOC_CODE>`code`</DOC_CODE> text.
+// <DOC_CODE>```</DOC_CODE>
+// <DOC_CODE>assert s.private_method() == 0</DOC_CODE>
+// <DOC_CODE>```</DOC_CODE>
+// You can use <DOC_LINK>[link](https://vlang.io)</DOC_LINK>.
+// And other markdown features like lists.
 fn (mut <MUTABLE_RECEIVER>cs</MUTABLE_RECEIVER> <PUBLIC_STRUCT>PublicCodeStorage</PUBLIC_STRUCT>) <FUNCTION>private_method</FUNCTION>() {
 	<MUTABLE_RECEIVER>cs</MUTABLE_RECEIVER>.<PUBLIC_FUNCTION>public_method</FUNCTION>()
 }
@@ -120,7 +128,7 @@ fn <FUNCTION>main</FUNCTION>() {
 
 <USED_LABEL>label</USED_LABEL>:
 	<VARIABLE>database_name</VARIABLE> := 'database'
-	<VARIABLE>db</VARIABLE> := sqlite.<PUBLIC_FUNCTION>connect</PUBLIC_FUNCTION>('$\{database_name}.sql') or { <PUBLIC_FUNCTION>panic</PUBLIC_FUNCTION>(err) }
+	<VARIABLE>db</VARIABLE> := sqlite.<PUBLIC_FUNCTION>connect</PUBLIC_FUNCTION>('<STRING_INTERPOLATION>${"\${"}</STRING_INTERPOLATION>database_name<STRING_INTERPOLATION>}</STRING_INTERPOLATION>.sql') or { <PUBLIC_FUNCTION>panic</PUBLIC_FUNCTION>(err) }
 	<KEYWORD>sql</KEYWORD> <VARIABLE>db</VARIABLE> {
 		<SQL_KEYWORD>create</SQL_KEYWORD> <SQL_KEYWORD>table</SQL_KEYWORD> <PUBLIC_STRUCT>PublicCodeStorage</PUBLIC_STRUCT>
 	}

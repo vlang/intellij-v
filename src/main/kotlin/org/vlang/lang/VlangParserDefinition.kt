@@ -7,11 +7,11 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElement
 import org.vlang.lang.VlangTypes.Factory
+import org.vlang.lang.doc.psi.impl.VlangDocCommentImpl
 import org.vlang.lang.lexer.VlangLexer
-import org.vlang.lang.psi.VlangDocTokenTypes
+import org.vlang.lang.psi.VlangDocElementTypes
 import org.vlang.lang.psi.VlangFile
 import org.vlang.lang.psi.VlangTokenTypes
-import org.vlang.lang.psi.impl.VlangDocCommentImpl
 
 class VlangParserDefinition : ParserDefinition {
     override fun createLexer(project: Project) = VlangLexer()
@@ -31,8 +31,8 @@ class VlangParserDefinition : ParserDefinition {
     override fun spaceExistenceTypeBetweenTokens(left: ASTNode, right: ASTNode) = SpaceRequirements.MAY
 
     override fun createElement(node: ASTNode): PsiElement {
-        if (node.elementType == VlangDocTokenTypes.DOC_COMMENT) {
-            return VlangDocCommentImpl(node)
+        if (node.elementType == VlangDocElementTypes.DOC_COMMENT) {
+            return VlangDocCommentImpl(node.elementType, node.text)
         }
         return Factory.createElement(node)
     }

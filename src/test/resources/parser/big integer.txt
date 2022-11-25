@@ -49,16 +49,28 @@ V Language file
           PsiElement(VlangTokenType.()('(')
           PsiElement(VlangTokenType.))(')')
     PsiElement(VlangTokenType.))(')')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// big.Integer')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// -----------')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// It has the following properties:')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// 1. Every "digit" is an integer in the range [0, 2^32).')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// 2. The signum can be one of three values: -1, 0, +1 for')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// \t\tnegative, zero, and positive values, respectively.')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// 3. There should be no leading zeros in the digit array.')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// 4. The digits are stored in little endian format, that is,')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//\t\tthe digits with a lower positional value (towards the right')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('//\t\twhen represented as a string) have a lower index, and vice versa.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    VlangDocSetextHeadingImpl(VlangTokenType.<DOC_SETEXT_HEADING>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('big.Integer')
+      PsiElement(VlangTokenType.<DOC_GAP>)('//')
+      PsiElement(VlangTokenType.<DOC_DATA>)('-----------')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('It has the following properties:')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('1. Every "digit" is an integer in the range [0, 2^32).')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('2. The signum can be one of three values: -1, 0, +1 for')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('\t\tnegative, zero, and positive values, respectively.')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('3. There should be no leading zeros in the digit array.')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('4. The digits are stored in little endian format, that is,')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('\tthe digits with a lower positional value (towards the right')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('\twhen represented as a string) have a lower index, and vice versa.')
   STRUCT_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -317,7 +329,12 @@ V Language file
                     PsiElement(VlangTokenType.int)('1')
               PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// integer_from_int creates a new `big.Integer` from the given int value.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('integer_from_int creates a new ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`big.Integer`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' from the given int value.')
   FUNCTION_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -421,7 +438,12 @@ V Language file
                   PsiElement(VlangTokenType.))(')')
           PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// integer_from_u32 creates a new `big.Integer` from the given u32 value.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('integer_from_u32 creates a new ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`big.Integer`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' from the given u32 value.')
   FUNCTION_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -498,7 +520,12 @@ V Language file
                 PsiElement(VlangTokenType.int)('1')
           PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// integer_from_i64 creates a new `big.Integer` from the given i64 value.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('integer_from_i64 creates a new ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`big.Integer`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' from the given i64 value.')
   FUNCTION_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -720,7 +747,12 @@ V Language file
                     PsiElement(VlangTokenType.})('}')
                 PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// integer_from_u64 creates a new `big.Integer` from the given u64 value.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('integer_from_u64 creates a new ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`big.Integer`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' from the given u64 value.')
   FUNCTION_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -929,10 +961,19 @@ V Language file
             LITERAL
               PsiElement(VlangTokenType.int)('1')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// integer_from_bytes creates a new `big.Integer` from the given byte array.')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// By default, positive integers are assumed.')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// If you want a negative integer, use in the following manner:')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// `value := big.integer_from_bytes(bytes, signum: -1)`')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('integer_from_bytes creates a new ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`big.Integer`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' from the given byte array.')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('By default, positive integers are assumed.')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('If you want a negative integer, use in the following manner:')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`value := big.integer_from_bytes(bytes, signum: -1)`')
   FUNCTION_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
@@ -983,7 +1024,9 @@ V Language file
             PsiElement(VlangTokenType.identifier)('Integer')
     BLOCK
       PsiElement(VlangTokenType.{)('{')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Thank you to Miccah (@mcastorina) for this implementation and relevant unit tests.')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('Thank you to Miccah (@mcastorina) for this implementation and relevant unit tests.')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           IF_EXPRESSION
@@ -1012,7 +1055,9 @@ V Language file
                           PsiElement(VlangTokenType.int)('0')
                     PsiElement(VlangTokenType.))(')')
               PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// pad input')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('pad input')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -1140,7 +1185,9 @@ V Language file
                   LITERAL
                     PsiElement(VlangTokenType.int)('4')
             PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// combine every 4 bytes into a u32 and insert into n.digits')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('combine every 4 bytes into a u32 and insert into n.digits')
       FOR_STATEMENT
         PsiElement(VlangTokenType.for)('for')
         FOR_CLAUSE
@@ -1380,8 +1427,17 @@ V Language file
                 PsiElement(VlangTokenType.identifier)('signum')
           PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// integer_from_string creates a new `big.Integer` from the decimal digits specified in the given string.')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// For other bases, use `big.integer_from_radix` instead.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('integer_from_string creates a new ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`big.Integer`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' from the decimal digits specified in the given string.')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('For other bases, use ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`big.integer_from_radix`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' instead.')
   FUNCTION_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -1430,7 +1486,12 @@ V Language file
                   PsiElement(VlangTokenType.int)('10')
             PsiElement(VlangTokenType.))(')')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// integer_from_radix creates a new `big.Integer` from the given string and radix.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('integer_from_radix creates a new ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`big.Integer`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' from the given string and radix.')
   FUNCTION_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -2245,7 +2306,9 @@ V Language file
                       PsiElement(VlangTokenType.int)('0')
                   PsiElement(VlangTokenType.})('}')
           PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Store the accumulated value into the digit array')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('Store the accumulated value into the digit array')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           IF_EXPRESSION
@@ -2658,7 +2721,9 @@ V Language file
                   PsiElement(VlangTokenType.identifier)('signum')
           PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// abs returns the absolute value of the integer.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('abs returns the absolute value of the integer.')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -2752,7 +2817,9 @@ V Language file
                     PsiElement(VlangTokenType.})('}')
               PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// neg returns the result of negation of the integer.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('neg returns the result of negation of the integer.')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -2889,7 +2956,9 @@ V Language file
             PsiElement(VlangTokenType.identifier)('Integer')
     BLOCK
       PsiElement(VlangTokenType.{)('{')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Quick exits')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('Quick exits')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           IF_EXPRESSION
@@ -2944,7 +3013,9 @@ V Language file
                     PsiElement(VlangTokenType.()('(')
                     PsiElement(VlangTokenType.))(')')
               PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Non-zero cases')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('Non-zero cases')
       RETURN_STATEMENT
         PsiElement(VlangTokenType.return)('return')
         IF_EXPRESSION
@@ -2983,7 +3054,9 @@ V Language file
             PsiElement(VlangTokenType.else)('else')
             BLOCK
               PsiElement(VlangTokenType.{)('{')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Unequal signs')
+              PsiComment(VLANG_DOC_COMMENT)
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('Unequal signs')
               SIMPLE_STATEMENT
                 LEFT_HAND_EXPR_LIST
                   CALL_EXPR
@@ -3039,7 +3112,9 @@ V Language file
             PsiElement(VlangTokenType.identifier)('Integer')
     BLOCK
       PsiElement(VlangTokenType.{)('{')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Quick exits')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('Quick exits')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           IF_EXPRESSION
@@ -3094,7 +3169,9 @@ V Language file
                     PsiElement(VlangTokenType.()('(')
                     PsiElement(VlangTokenType.))(')')
               PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Non-zero cases')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('Non-zero cases')
       RETURN_STATEMENT
         PsiElement(VlangTokenType.return)('return')
         IF_EXPRESSION
@@ -3577,7 +3654,9 @@ V Language file
             PsiElement(VlangTokenType.identifier)('Integer')
     BLOCK
       PsiElement(VlangTokenType.{)('{')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Quick exits')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('Quick exits')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           IF_EXPRESSION
@@ -3657,7 +3736,9 @@ V Language file
                     PsiElement(VlangTokenType.()('(')
                     PsiElement(VlangTokenType.))(')')
               PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// The final sign is the product of the signs')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('The final sign is the product of the signs')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -3773,7 +3854,9 @@ V Language file
                 PsiElement(VlangTokenType.identifier)('storage')
           PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// div_mod returns the quotient and remainder of the integer division.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('div_mod returns the quotient and remainder of the integer division.')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -3824,7 +3907,9 @@ V Language file
           PsiElement(VlangTokenType.))(')')
     BLOCK
       PsiElement(VlangTokenType.{)('{')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Quick exits')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('Quick exits')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           IF_EXPRESSION
@@ -4077,7 +4162,9 @@ V Language file
                               PsiElement(VlangTokenType.identifier)('r')
                         PsiElement(VlangTokenType.})('}')
               PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Division for positive integers')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('Division for positive integers')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -4461,7 +4548,15 @@ V Language file
         REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('r')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// pow returns the integer `a` raised to the power of the u32 `exponent`.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('pow returns the integer ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`a`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' raised to the power of the u32 ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`exponent`')
+    PsiElement(VlangTokenType.<DOC_DATA>)('.')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -4632,7 +4727,18 @@ V Language file
           REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('y')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// mod_pow returns the integer `a` raised to the power of the u32 `exponent` modulo the integer `divisor`.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('mod_pow returns the integer ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`a`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' raised to the power of the u32 ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`exponent`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' modulo the integer ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`divisor`')
+    PsiElement(VlangTokenType.<DOC_DATA>)('.')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -4826,7 +4932,18 @@ V Language file
           REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('divisor')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// big_mod_power returns the integer `a` raised to the power of the integer `exponent` modulo the integer `divisor`.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('big_mod_power returns the integer ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`a`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' raised to the power of the integer ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`exponent`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' modulo the integer ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`divisor`')
+    PsiElement(VlangTokenType.<DOC_DATA>)('.')
   METHOD_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
@@ -4977,7 +5094,9 @@ V Language file
                   LITERAL
                     PsiElement(VlangTokenType.int)('0')
               PsiElement(VlangTokenType.))(')')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// For all but the last digit of the exponent')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('For all but the last digit of the exponent')
       FOR_STATEMENT
         PsiElement(VlangTokenType.for)('for')
         RANGE_CLAUSE
@@ -5087,7 +5206,9 @@ V Language file
                   PsiElement(VlangTokenType.int)('1')
               PsiElement(VlangTokenType.})('}')
           PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Last digit of the exponent')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('Last digit of the exponent')
       ASSIGNMENT_STATEMENT
         LEFT_HAND_EXPR_LIST
           REFERENCE_EXPRESSION
@@ -5179,7 +5300,12 @@ V Language file
           REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('divisor')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// inc returns the integer `a` incremented by 1.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('inc returns the integer ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`a`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' incremented by 1.')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -5217,7 +5343,12 @@ V Language file
           REFERENCE_EXPRESSION
             PsiElement(VlangTokenType.identifier)('one_int')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// dec returns the integer `a` decremented by 1.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('dec returns the integer ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`a`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' decremented by 1.')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -5342,8 +5473,26 @@ V Language file
               PsiElement(VlangTokenType..)('.')
               PsiElement(VlangTokenType.identifier)('digits')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// abs_cmp returns the result of comparing the magnitudes of the integers `a` and `b`.')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// It returns a negative int if `|a| < |b|`, 0 if `|a| == |b|`, and a positive int if `|a| > |b|`.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('abs_cmp returns the result of comparing the magnitudes of the integers ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`a`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' and ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`b`')
+    PsiElement(VlangTokenType.<DOC_DATA>)('.')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('It returns a negative int if ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`|a| < |b|`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(', 0 if ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`|a| == |b|`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(', and a positive int if ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`|a| > |b|`')
+    PsiElement(VlangTokenType.<DOC_DATA>)('.')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -5444,7 +5593,9 @@ V Language file
             PsiElement(VlangTokenType.identifier)('bool')
     BLOCK
       PsiElement(VlangTokenType.{)('{')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Quick exits based on signum value:')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('Quick exits based on signum value:')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           IF_EXPRESSION
@@ -5491,7 +5642,9 @@ V Language file
                 LITERAL
                   PsiElement(VlangTokenType.false)('false')
               PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// They have equal sign')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('They have equal sign')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -5516,13 +5669,17 @@ V Language file
                 PsiElement(VlangTokenType.int)('0')
             BLOCK
               PsiElement(VlangTokenType.{)('{')
-              PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Are they both zero?')
+              PsiComment(VLANG_DOC_COMMENT)
+                PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                PsiElement(VlangTokenType.<DOC_DATA>)('Are they both zero?')
               RETURN_STATEMENT
                 PsiElement(VlangTokenType.return)('return')
                 LITERAL
                   PsiElement(VlangTokenType.false)('false')
               PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// If they are negative, the one with the larger absolute value is smaller')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('If they are negative, the one with the larger absolute value is smaller')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -5628,7 +5785,9 @@ V Language file
                       PsiElement(VlangTokenType.))(')')
               PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// get_bit checks whether the bit at the given index is set.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('get_bit checks whether the bit at the given index is set.')
   METHOD_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
@@ -5765,7 +5924,9 @@ V Language file
           LITERAL
             PsiElement(VlangTokenType.int)('0')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// set_bit sets the bit at the given index to the given value.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('set_bit sets the bit at the given index to the given value.')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -6016,7 +6177,15 @@ V Language file
                 PsiElement(VlangTokenType.identifier)('copy')
           PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// bitwise_or returns the "bitwise or" of the integers `a` and `b`.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('bitwise_or returns the "bitwise or" of the integers ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`a`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' and ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`b`')
+    PsiElement(VlangTokenType.<DOC_DATA>)('.')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -6221,7 +6390,15 @@ V Language file
                     PsiElement(VlangTokenType.})('}')
           PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// bitwise_and returns the "bitwise and" of the integers `a` and `b`.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('bitwise_and returns the "bitwise and" of the integers ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`a`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' and ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`b`')
+    PsiElement(VlangTokenType.<DOC_DATA>)('.')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -6426,7 +6603,12 @@ V Language file
                     PsiElement(VlangTokenType.})('}')
           PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// bitwise_not returns the "bitwise not" of the integer `a`.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('bitwise_not returns the "bitwise not" of the integer ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`a`')
+    PsiElement(VlangTokenType.<DOC_DATA>)('.')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -6580,7 +6762,15 @@ V Language file
                     PsiElement(VlangTokenType.})('}')
           PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// bitwise_xor returns the "bitwise exclusive or" of the integers `a` and `b`.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('bitwise_xor returns the "bitwise exclusive or" of the integers ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`a`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' and ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`b`')
+    PsiElement(VlangTokenType.<DOC_DATA>)('.')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -6785,7 +6975,15 @@ V Language file
                     PsiElement(VlangTokenType.})('}')
           PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// lshift returns the integer `a` shifted left by `amount` bits.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('lshift returns the integer ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`a`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' shifted left by ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`amount`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' bits.')
   METHOD_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
@@ -7061,7 +7259,15 @@ V Language file
                 PsiElement(VlangTokenType.identifier)('signum')
           PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// rshift returns the integer `a` shifted right by `amount` bits.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('rshift returns the integer ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`a`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' shifted right by ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`amount`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' bits.')
   METHOD_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
@@ -7357,7 +7563,12 @@ V Language file
                 PsiElement(VlangTokenType.identifier)('signum')
           PsiElement(VlangTokenType.})('}')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// binary_str returns the binary string representation of the integer `a`.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('binary_str returns the binary string representation of the integer ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`a`')
+    PsiElement(VlangTokenType.<DOC_DATA>)('.')
   METHOD_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
@@ -7396,7 +7607,9 @@ V Language file
             PsiElement(VlangTokenType.identifier)('string')
     BLOCK
       PsiElement(VlangTokenType.{)('{')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// We have the zero integer')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('We have the zero integer')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           IF_EXPRESSION
@@ -7420,7 +7633,9 @@ V Language file
                     PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('0')
                     PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Add the sign if present')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('Add the sign if present')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -7639,7 +7854,12 @@ V Language file
             PsiElement(VlangTokenType.()('(')
             PsiElement(VlangTokenType.))(')')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// hex returns the hexadecimal string representation of the integer `a`.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('hex returns the hexadecimal string representation of the integer ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`a`')
+    PsiElement(VlangTokenType.<DOC_DATA>)('.')
   METHOD_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
@@ -7678,7 +7898,9 @@ V Language file
             PsiElement(VlangTokenType.identifier)('string')
     BLOCK
       PsiElement(VlangTokenType.{)('{')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// We have the zero integer')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('We have the zero integer')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           IF_EXPRESSION
@@ -7702,7 +7924,9 @@ V Language file
                     PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('0')
                     PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.})('}')
-      PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Add the sign if present')
+      PsiComment(VLANG_DOC_COMMENT)
+        PsiElement(VlangTokenType.<DOC_GAP>)('//')
+        PsiElement(VlangTokenType.<DOC_DATA>)('Add the sign if present')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -7924,7 +8148,12 @@ V Language file
             PsiElement(VlangTokenType.()('(')
             PsiElement(VlangTokenType.))(')')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// radix_str returns the string representation of the integer `a` in the specified radix.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('radix_str returns the string representation of the integer ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`a`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' in the specified radix.')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -8332,7 +8561,12 @@ V Language file
             PsiElement(VlangTokenType.()('(')
             PsiElement(VlangTokenType.))(')')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// str returns the decimal string representation of the integer `a`.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('str returns the decimal string representation of the integer ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`a`')
+    PsiElement(VlangTokenType.<DOC_DATA>)('.')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -8738,8 +8972,14 @@ V Language file
             PsiElement(VlangTokenType.()('(')
             PsiElement(VlangTokenType.))(')')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// int returns the integer value of the integer `a`.')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// NOTE: This may cause loss of precision.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('int returns the integer value of the integer ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`a`')
+    PsiElement(VlangTokenType.<DOC_DATA>)('.')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('NOTE: This may cause loss of precision.')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -8830,8 +9070,11 @@ V Language file
             PsiElement(VlangTokenType..)('.')
             PsiElement(VlangTokenType.identifier)('signum')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// bytes returns the a byte representation of the integer a, along with the signum int.')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// NOTE: The byte array returned is in big endian order.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('bytes returns the a byte representation of the integer a, along with the signum int.')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('NOTE: The byte array returned is in big endian order.')
   METHOD_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
@@ -9180,7 +9423,12 @@ V Language file
           PsiElement(VlangTokenType..)('.')
           PsiElement(VlangTokenType.identifier)('signum')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// factorial returns the factorial of the integer `a`.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('factorial returns the factorial of the integer ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`a`')
+    PsiElement(VlangTokenType.<DOC_DATA>)('.')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -9288,7 +9536,9 @@ V Language file
         REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('product')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// isqrt returns the closest integer square root of the given integer.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('isqrt returns the closest integer square root of the given integer.')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -9866,7 +10116,15 @@ V Language file
                   PsiElement(VlangTokenType.int)('32')
             PsiElement(VlangTokenType.))(')')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// gcd returns the greatest common divisor of the two integers `a` and `b`.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('gcd returns the greatest common divisor of the two integers ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`a`')
+    PsiElement(VlangTokenType.<DOC_DATA>)(' and ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`b`')
+    PsiElement(VlangTokenType.<DOC_DATA>)('.')
   METHOD_DECLARATION
     SYMBOL_VISIBILITY
       PsiElement(VlangTokenType.pub)('pub')
@@ -10219,9 +10477,13 @@ V Language file
         REFERENCE_EXPRESSION
           PsiElement(VlangTokenType.identifier)('b')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Inspired by the 2013-christmas-special by D. Lemire & R. Corderoy https://en.algorithmica.org/hpc/analyzing-performance/gcd/')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// For more information, refer to the Wikipedia article: https://en.wikipedia.org/wiki/Binary_GCD_algorithm')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// Discussion and further information: https://lemire.me/blog/2013/12/26/fastest-way-to-compute-the-greatest-common-divisor/')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('Inspired by the 2013-christmas-special by D. Lemire & R. Corderoy https://en.algorithmica.org/hpc/analyzing-performance/gcd/')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('For more information, refer to the Wikipedia article: https://en.wikipedia.org/wiki/Binary_GCD_algorithm')
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('Discussion and further information: https://lemire.me/blog/2013/12/26/fastest-way-to-compute-the-greatest-common-divisor/')
   FUNCTION_DECLARATION
     PsiElement(VlangTokenType.fn)('fn')
     PsiElement(VlangTokenType.identifier)('gcd_binary')
@@ -10466,7 +10728,12 @@ V Language file
                   PsiElement(VlangTokenType.identifier)('shift')
             PsiElement(VlangTokenType.))(')')
       PsiElement(VlangTokenType.})('}')
-  PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// bit_len returns the number of bits required to represent the integer `a`.')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('bit_len returns the number of bits required to represent the integer ')
+    VlangDocCodeSpanImpl(VlangTokenType.<DOC_CODE_SPAN>)
+      PsiElement(VlangTokenType.<DOC_DATA>)('`a`')
+    PsiElement(VlangTokenType.<DOC_DATA>)('.')
   METHOD_DECLARATION
     ATTRIBUTES
       ATTRIBUTE

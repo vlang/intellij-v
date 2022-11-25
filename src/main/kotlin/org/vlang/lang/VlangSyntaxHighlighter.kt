@@ -5,7 +5,7 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighterBase
 import com.intellij.psi.tree.IElementType
 import org.vlang.ide.colors.VlangColor
 import org.vlang.lang.VlangTypes.*
-import org.vlang.lang.psi.VlangDocTokenTypes.DOC_COMMENT
+import org.vlang.lang.psi.VlangDocElementTypes.DOC_COMMENT
 import org.vlang.lang.psi.VlangTokenTypes.BOOL_LITERALS
 import org.vlang.lang.psi.VlangTokenTypes.COMMENTS
 import org.vlang.lang.psi.VlangTokenTypes.KEYWORDS
@@ -22,7 +22,7 @@ class VlangSyntaxHighlighter : SyntaxHighlighterBase() {
     companion object {
         fun map(tokenType: IElementType): VlangColor? = when (tokenType) {
             LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY     -> VlangColor.VALID_STRING_ESCAPE
-            DOC_COMMENT                              -> VlangColor.BLOCK_COMMENT
+            DOC_COMMENT                              -> VlangColor.LINE_COMMENT
 
             LPAREN, RPAREN                           -> VlangColor.PARENTHESES
             LBRACE, RBRACE                           -> VlangColor.BRACES

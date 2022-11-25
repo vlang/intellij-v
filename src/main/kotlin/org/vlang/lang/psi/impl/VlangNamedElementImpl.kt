@@ -9,6 +9,7 @@ import com.intellij.psi.util.*
 import com.intellij.ui.IconManager
 import com.intellij.util.PlatformIcons
 import org.vlang.ide.ui.VIcons
+import org.vlang.lang.doc.psi.VlangDocComment
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.VlangPsiTreeUtil.getChildOfType
 import org.vlang.lang.psi.VlangPsiTreeUtil.parentStubOfType
@@ -151,5 +152,9 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
 
     override fun getNameIdentifier(): PsiElement? {
         return getIdentifier()
+    }
+
+    override fun getDocumentation(): VlangDocComment? {
+        return PsiTreeUtil.getPrevSiblingOfType(this, VlangDocComment::class.java)
     }
 }

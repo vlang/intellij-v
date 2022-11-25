@@ -10,8 +10,8 @@ import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.util.text.CharArrayUtil
-import org.vlang.lang.psi.VlangDocComment
-import org.vlang.lang.psi.VlangDocTokenTypes
+import org.vlang.lang.doc.psi.VlangDocComment
+import org.vlang.lang.psi.VlangDocElementTypes
 import org.vlang.lang.psi.VlangTokenTypes
 
 class VlangCommenter : CodeDocumentationAwareCommenterEx, SelfManagingCommenter<VlangCommenter.VlangCommenterDataHolder> {
@@ -31,7 +31,7 @@ class VlangCommenter : CodeDocumentationAwareCommenterEx, SelfManagingCommenter<
 
     override fun getBlockCommentTokenType() = VlangTokenTypes.MULTI_LINE_COMMENT
 
-    override fun getDocumentationCommentTokenType() = VlangDocTokenTypes.DOC_COMMENT
+    override fun getDocumentationCommentTokenType() = VlangDocElementTypes.DOC_COMMENT
 
     override fun getDocumentationCommentPrefix() = "/**"
 
@@ -39,12 +39,12 @@ class VlangCommenter : CodeDocumentationAwareCommenterEx, SelfManagingCommenter<
 
     override fun getDocumentationCommentSuffix() = "*/"
 
-    override fun isDocumentationComment(element: PsiComment) = element is VlangDocComment
+    override fun isDocumentationComment(element: PsiComment) =
+        element is VlangDocComment
 
     override fun isDocumentationCommentText(element: PsiElement): Boolean {
         val node = element.node ?: return false
-        return node.elementType === VlangDocTokenTypes.DOC_COMMENT_TAG ||
-                node.elementType === VlangDocTokenTypes.DOC_COMMENT_BODY
+        return node.elementType == VlangDocElementTypes.DOC_COMMENT
     }
 
     override fun getBlockCommentPrefix(selectionStart: Int, document: Document, data: VlangCommenterDataHolder): String {
@@ -55,7 +55,7 @@ class VlangCommenter : CodeDocumentationAwareCommenterEx, SelfManagingCommenter<
         return blockCommentSuffix
     }
 
-    override fun insertBlockComment(startOffset: Int, endOffset: Int, document: Document, data: VlangCommenterDataHolder): TextRange? {
+    override fun insertBlockComment(startOffset: Int, endOffset: Int, document: Document, data: VlangCommenterDataHolder): TextRange {
         return SelfManagingCommenterUtil.insertBlockComment(
             startOffset, endOffset,
             document, blockCommentPrefix, blockCommentSuffix,

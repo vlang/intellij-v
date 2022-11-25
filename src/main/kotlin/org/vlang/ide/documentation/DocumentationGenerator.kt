@@ -21,6 +21,7 @@ import org.vlang.ide.documentation.DocumentationUtils.line
 import org.vlang.ide.documentation.DocumentationUtils.part
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.completion.VlangCompletionUtil
+import org.vlang.lang.doc.psi.VlangDocComment
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
@@ -185,7 +186,20 @@ object DocumentationGenerator {
     }
 
     private fun StringBuilder.generateModuleCommentsPart(element: VlangModuleClause) {
-        val comments = CommentsConverter.toHtml(CommentsConverter.getCommentsForModule(element))
+        val commentsList = CommentsConverter.getCommentsForModule(element)
+        if (commentsList.any {it is VlangDocComment}) {
+            append(DocumentationMarkup.CONTENT_START)
+            for (comment in commentsList) {
+                if (comment is VlangDocComment) {
+                    append(comment.documentationAsHtml())
+                    append("\n")
+                }
+            }
+            append(DocumentationMarkup.CONTENT_END)
+            return
+        }
+
+        val comments = CommentsConverter.toHtml(commentsList)
         if (comments.isNotEmpty()) {
             append(DocumentationMarkup.CONTENT_START)
             append(comments)
@@ -688,7 +702,20 @@ object DocumentationGenerator {
     }
 
     private fun StringBuilder.generateCommentsPart(element: PsiElement?) {
-        val comments = CommentsConverter.toHtml(CommentsConverter.getCommentsForElement(element))
+        val commentsList = CommentsConverter.getCommentsForElement(element)
+        if (commentsList.any {it is VlangDocComment}) {
+            append(DocumentationMarkup.CONTENT_START)
+            for (comment in commentsList) {
+                if (comment is VlangDocComment) {
+                    append(comment.documentationAsHtml())
+                    append("\n")
+                }
+            }
+            append(DocumentationMarkup.CONTENT_END)
+            return
+        }
+
+        val comments = CommentsConverter.toHtml(commentsList)
         if (comments.isNotEmpty()) {
             append(DocumentationMarkup.CONTENT_START)
             append(comments)

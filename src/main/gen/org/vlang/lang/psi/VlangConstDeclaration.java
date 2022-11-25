@@ -25,4 +25,6 @@ public interface VlangConstDeclaration extends VlangAttributeOwner {
   @NotNull
   PsiElement getConst();
 
+  boolean isMultiline();
+
 }

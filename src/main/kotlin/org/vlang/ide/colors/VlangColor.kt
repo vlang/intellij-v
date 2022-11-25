@@ -98,6 +98,14 @@ enum class VlangColor(readableName: @NlsContexts.AttributeDescriptor String, def
 
     // Generics
     GENERIC_PARAMETER("Generics//Generic parameter", Default.IDENTIFIER),
+
+    // Docs
+    DOC_COMMENT("Doc//Comment", Default.DOC_COMMENT),
+    DOC_HEADING("Doc//Heading", Default.DOC_COMMENT_TAG),
+    DOC_LINK("Doc//Link", Default.DOC_COMMENT_TAG_VALUE),
+    DOC_EMPHASIS("Doc//Italic"),
+    DOC_STRONG("Doc//Bold"),
+    DOC_CODE("Doc//Code", Default.DOC_COMMENT_MARKUP),
     ;
 
     val textAttributesKey = TextAttributesKey.createTextAttributesKey("org.vlang.$name", default)

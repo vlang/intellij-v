@@ -4,11 +4,16 @@ import com.intellij.psi.PsiElement
 import org.jetbrains.annotations.Contract
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.impl.VlangPsiImplUtil
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 
 internal object VlangStructLiteralCompletion {
-    fun allowedVariants(structFieldReference: VlangReferenceExpression?): Variants {
+    fun allowedVariants(structFieldReference: VlangReferenceExpression?, refElement: PsiElement): Variants {
         if (structFieldReference == null) {
+            return Variants.NONE
+        }
+
+        if (VlangPsiImplUtil.prevDot(refElement)) {
             return Variants.NONE
         }
 
