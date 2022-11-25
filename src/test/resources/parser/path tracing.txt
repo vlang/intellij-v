@@ -1954,8 +1954,7 @@ V Language file
                   VALUE
                     ENUM_FETCH
                       PsiElement(VlangTokenType..)('.')
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('diff')
+                      PsiElement(VlangTokenType.identifier)('diff')
                 PsiElement(VlangTokenType.})('}')
               PsiElement(VlangTokenType.,)(',')
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* Left */')
@@ -2063,8 +2062,7 @@ V Language file
                   VALUE
                     ENUM_FETCH
                       PsiElement(VlangTokenType..)('.')
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('diff')
+                      PsiElement(VlangTokenType.identifier)('diff')
                 PsiElement(VlangTokenType.})('}')
               PsiElement(VlangTokenType.,)(',')
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* Rght */')
@@ -2166,8 +2164,7 @@ V Language file
                   VALUE
                     ENUM_FETCH
                       PsiElement(VlangTokenType..)('.')
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('diff')
+                      PsiElement(VlangTokenType.identifier)('diff')
                 PsiElement(VlangTokenType.})('}')
               PsiElement(VlangTokenType.,)(',')
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* Back */')
@@ -2261,8 +2258,7 @@ V Language file
                   VALUE
                     ENUM_FETCH
                       PsiElement(VlangTokenType..)('.')
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('diff')
+                      PsiElement(VlangTokenType.identifier)('diff')
                 PsiElement(VlangTokenType.})('}')
               PsiElement(VlangTokenType.,)(',')
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* Frnt */')
@@ -2364,8 +2360,7 @@ V Language file
                   VALUE
                     ENUM_FETCH
                       PsiElement(VlangTokenType..)('.')
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('diff')
+                      PsiElement(VlangTokenType.identifier)('diff')
                 PsiElement(VlangTokenType.})('}')
               PsiElement(VlangTokenType.,)(',')
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* Botm */')
@@ -2473,8 +2468,7 @@ V Language file
                   VALUE
                     ENUM_FETCH
                       PsiElement(VlangTokenType..)('.')
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('diff')
+                      PsiElement(VlangTokenType.identifier)('diff')
                 PsiElement(VlangTokenType.})('}')
               PsiElement(VlangTokenType.,)(',')
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* Top */')
@@ -2587,8 +2581,7 @@ V Language file
                   VALUE
                     ENUM_FETCH
                       PsiElement(VlangTokenType..)('.')
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('spec')
+                      PsiElement(VlangTokenType.identifier)('spec')
                 PsiElement(VlangTokenType.})('}')
               PsiElement(VlangTokenType.,)(',')
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* Mirr */')
@@ -2701,8 +2694,7 @@ V Language file
                   VALUE
                     ENUM_FETCH
                       PsiElement(VlangTokenType..)('.')
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('refr')
+                      PsiElement(VlangTokenType.identifier)('refr')
                 PsiElement(VlangTokenType.})('}')
               PsiElement(VlangTokenType.,)(',')
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* Glas */')
@@ -2808,8 +2800,7 @@ V Language file
                   VALUE
                     ENUM_FETCH
                       PsiElement(VlangTokenType..)('.')
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('diff')
+                      PsiElement(VlangTokenType.identifier)('diff')
                 PsiElement(VlangTokenType.})('}')
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* Lite */')
               PsiElement(VlangTokenType.,)(',')
@@ -2949,8 +2940,7 @@ V Language file
                   VALUE
                     ENUM_FETCH
                       PsiElement(VlangTokenType..)('.')
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('diff')
+                      PsiElement(VlangTokenType.identifier)('diff')
                 PsiElement(VlangTokenType.})('}')
               PsiElement(VlangTokenType.,)(',')
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* sun */')
@@ -3082,8 +3072,7 @@ V Language file
                   VALUE
                     ENUM_FETCH
                       PsiElement(VlangTokenType..)('.')
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('diff')
+                      PsiElement(VlangTokenType.identifier)('diff')
                 PsiElement(VlangTokenType.})('}')
               PsiElement(VlangTokenType.,)(',')
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* horizon sun2 */')
@@ -3231,8 +3220,7 @@ V Language file
                   VALUE
                     ENUM_FETCH
                       PsiElement(VlangTokenType..)('.')
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('diff')
+                      PsiElement(VlangTokenType.identifier)('diff')
                 PsiElement(VlangTokenType.})('}')
               PsiElement(VlangTokenType.,)(',')
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* sky */')
@@ -3336,8 +3324,7 @@ V Language file
                   VALUE
                     ENUM_FETCH
                       PsiElement(VlangTokenType..)('.')
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('diff')
+                      PsiElement(VlangTokenType.identifier)('diff')
                 PsiElement(VlangTokenType.})('}')
               PsiElement(VlangTokenType.,)(',')
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* grnd */')
@@ -3452,8 +3439,7 @@ V Language file
                   VALUE
                     ENUM_FETCH
                       PsiElement(VlangTokenType..)('.')
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('diff')
+                      PsiElement(VlangTokenType.identifier)('diff')
                 PsiElement(VlangTokenType.})('}')
               PsiElement(VlangTokenType.,)(',')
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* horizon brightener */')
@@ -3563,8 +3549,7 @@ V Language file
                   VALUE
                     ENUM_FETCH
                       PsiElement(VlangTokenType..)('.')
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('diff')
+                      PsiElement(VlangTokenType.identifier)('diff')
                 PsiElement(VlangTokenType.})('}')
               PsiElement(VlangTokenType.,)(',')
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* mountains */')
@@ -3677,8 +3662,7 @@ V Language file
                   VALUE
                     ENUM_FETCH
                       PsiElement(VlangTokenType..)('.')
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('spec')
+                      PsiElement(VlangTokenType.identifier)('spec')
                 PsiElement(VlangTokenType.})('}')
               PsiElement(VlangTokenType.,)(',')
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* white Mirr */')
@@ -3791,8 +3775,7 @@ V Language file
                   VALUE
                     ENUM_FETCH
                       PsiElement(VlangTokenType..)('.')
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('refr')
+                      PsiElement(VlangTokenType.identifier)('refr')
                 PsiElement(VlangTokenType.})('}')
               PsiElement(VlangTokenType.,)(',')
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* Glas */')
@@ -3905,8 +3888,7 @@ V Language file
                   VALUE
                     ENUM_FETCH
                       PsiElement(VlangTokenType..)('.')
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('refr')
+                      PsiElement(VlangTokenType.identifier)('refr')
                 PsiElement(VlangTokenType.})('}')
               PsiComment(VlangTokenType.VLANG_MULTI_LINE_COMMENT)('/* Glas2 */')
               PsiElement(VlangTokenType.,)(',')
@@ -4056,8 +4038,7 @@ V Language file
                   VALUE
                     ENUM_FETCH
                       PsiElement(VlangTokenType..)('.')
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('refr')
+                      PsiElement(VlangTokenType.identifier)('refr')
                 PsiElement(VlangTokenType.})('}')
               PsiElement(VlangTokenType.,)(',')
               LITERAL_VALUE_EXPRESSION
@@ -4200,8 +4181,7 @@ V Language file
                   VALUE
                     ENUM_FETCH
                       PsiElement(VlangTokenType..)('.')
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('diff')
+                      PsiElement(VlangTokenType.identifier)('diff')
                 PsiElement(VlangTokenType.})('}')
               PsiElement(VlangTokenType.,)(',')
               LITERAL_VALUE_EXPRESSION
@@ -4338,8 +4318,7 @@ V Language file
                   VALUE
                     ENUM_FETCH
                       PsiElement(VlangTokenType..)('.')
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('spec')
+                      PsiElement(VlangTokenType.identifier)('spec')
                 PsiElement(VlangTokenType.})('}')
               PsiElement(VlangTokenType.,)(',')
             PsiElement(VlangTokenType.])(']')
@@ -5593,8 +5572,7 @@ V Language file
               PsiElement(VlangTokenType.==)('==')
               ENUM_FETCH
                 PsiElement(VlangTokenType..)('.')
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('diff')
+                PsiElement(VlangTokenType.identifier)('diff')
             BLOCK
               PsiElement(VlangTokenType.{)('{')
               PsiComment(VLANG_DOC_COMMENT)
@@ -5992,8 +5970,7 @@ V Language file
                         PsiElement(VlangTokenType.==)('==')
                         ENUM_FETCH
                           PsiElement(VlangTokenType..)('.')
-                          REFERENCE_EXPRESSION
-                            PsiElement(VlangTokenType.identifier)('spec')
+                          PsiElement(VlangTokenType.identifier)('spec')
                       BLOCK
                         PsiElement(VlangTokenType.{)('{')
                         PsiComment(VLANG_DOC_COMMENT)

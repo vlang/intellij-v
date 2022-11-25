@@ -28,15 +28,27 @@ public class VlangEnumFetchImpl extends VlangExpressionImpl implements VlangEnum
   }
 
   @Override
-  @Nullable
-  public VlangReferenceExpression getReferenceExpression() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangReferenceExpression.class);
+  @NotNull
+  public PsiElement getDot() {
+    return notNullChild(findChildByType(DOT));
   }
 
   @Override
   @NotNull
-  public PsiElement getDot() {
-    return notNullChild(findChildByType(DOT));
+  public PsiElement getIdentifier() {
+    return notNullChild(findChildByType(IDENTIFIER));
+  }
+
+  @Override
+  @NotNull
+  public VlangReference getReference() {
+    return VlangPsiImplUtil.getReference(this);
+  }
+
+  @Override
+  @Nullable
+  public VlangCompositeElement getQualifier() {
+    return VlangPsiImplUtil.getQualifier(this);
   }
 
 }

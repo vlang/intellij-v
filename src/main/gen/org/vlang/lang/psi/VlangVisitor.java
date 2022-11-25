@@ -213,6 +213,7 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitEnumFetch(@NotNull VlangEnumFetch o) {
     visitExpression(o);
+    // visitReferenceExpressionBase(o);
   }
 
   public void visitEnumFieldDeclaration(@NotNull VlangEnumFieldDeclaration o) {
@@ -393,7 +394,7 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitInExpression(@NotNull VlangInExpression o) {
-    visitExpression(o);
+    visitBinaryExpr(o);
   }
 
   public void visitIncDecExpression(@NotNull VlangIncDecExpression o) {
@@ -426,7 +427,7 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitIsExpression(@NotNull VlangIsExpression o) {
-    visitExpression(o);
+    visitBinaryExpr(o);
   }
 
   public void visitIsRefTypeCallExpr(@NotNull VlangIsRefTypeCallExpr o) {
@@ -558,11 +559,11 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitNotInExpression(@NotNull VlangNotInExpression o) {
-    visitExpression(o);
+    visitBinaryExpr(o);
   }
 
   public void visitNotIsExpression(@NotNull VlangNotIsExpression o) {
-    visitExpression(o);
+    visitBinaryExpr(o);
   }
 
   public void visitOffsetOfCallExpr(@NotNull VlangOffsetOfCallExpr o) {

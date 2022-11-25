@@ -269,8 +269,7 @@ V Language file
                   PsiElement(VlangTokenType.!=)('!=')
                   ENUM_FETCH
                     PsiElement(VlangTokenType..)('.')
-                    REFERENCE_EXPRESSION
-                      PsiElement(VlangTokenType.identifier)('import_declaration')
+                    PsiElement(VlangTokenType.identifier)('import_declaration')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   CONTINUE_STATEMENT

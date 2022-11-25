@@ -160,8 +160,7 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('points')
+                  PsiElement(VlangTokenType.identifier)('points')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   RETURN_STATEMENT
@@ -181,8 +180,7 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('moves')
+                  PsiElement(VlangTokenType.identifier)('moves')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   RETURN_STATEMENT

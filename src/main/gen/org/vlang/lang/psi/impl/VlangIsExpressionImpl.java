@@ -10,7 +10,7 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangIsExpressionImpl extends VlangExpressionImpl implements VlangIsExpression {
+public class VlangIsExpressionImpl extends VlangBinaryExprImpl implements VlangIsExpression {
 
   public VlangIsExpressionImpl(@NotNull ASTNode node) {
     super(node);

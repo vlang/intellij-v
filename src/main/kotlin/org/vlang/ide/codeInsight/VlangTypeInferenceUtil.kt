@@ -24,6 +24,13 @@ object VlangTypeInferenceUtil {
     }
 
     fun getContextType(element: PsiElement): VlangTypeEx? {
+        if (element is VlangArrayCreation) {
+            val type = element.arrayCreationList?.expressionList?.firstOrNull()?.getType(null)
+            if (type != null) {
+                return type
+            }
+        }
+
         if (element.parent is VlangValue) {
             val parentElement = element.parentNth<VlangElement>(2)
             val key = parentElement?.key
@@ -37,6 +44,39 @@ object VlangTypeInferenceUtil {
             }
         }
 
+        if (element.parent is VlangDefaultFieldValue) {
+            val fieldDeclaration = element.parentOfType<VlangFieldDeclaration>() ?: return null
+            return fieldDeclaration.type.toEx()
+        }
+
+        if (element.parent is VlangArrayCreationList) {
+            return getContextType(element.parent.parent)
+        }
+
+        if (element.parent is VlangBinaryExpr) {
+            val binaryExpr = element.parent as VlangBinaryExpr
+            val right = binaryExpr.right!!
+            if (binaryExpr.right != null && right.isEquivalentTo(element)) {
+                val left = binaryExpr.left
+                return left.getType(null)
+            }
+        }
+
+        if (element.parent is VlangAssignmentStatement) {
+            val assign = element.parent as VlangAssignmentStatement
+            // TODO: support multi assign
+            val assignExpression = assign.leftHandExprList.expressionList.firstOrNull() as? VlangTypeOwner ?: return null
+            return assignExpression.getType(null)
+        }
+
+        if (element.parent is VlangMatchArm) {
+            val parentMatch = element.parentOfType<VlangMatchExpression>()
+            if (parentMatch != null) {
+                val matchExpression = parentMatch.expression as? VlangTypeOwner ?: return null
+                return matchExpression.getType(null)
+            }
+        }
+
         val callExpr = VlangCodeInsightUtil.getCallExpr(element)
         if (callExpr != null) {
             val index = callExpr.paramIndexOf(element)
@@ -47,34 +87,6 @@ object VlangTypeInferenceUtil {
 
             val param = params.getOrNull(index) ?: return null
             return param.type.toEx()
-        }
-
-        if (element.parent is VlangDefaultFieldValue) {
-            val fieldDeclaration = element.parentOfType<VlangFieldDeclaration>() ?: return null
-            return fieldDeclaration.type.toEx()
-        }
-
-        if (element.parent is VlangBinaryExpr) {
-            val binaryExpr = element.parent as VlangBinaryExpr
-            if (binaryExpr.right != null && binaryExpr.right!!.isEquivalentTo(element)) {
-                val left = binaryExpr.left
-                return left.getType(null)
-            }
-        }
-
-        if (element.parent is VlangAssignmentStatement) {
-            val assign = element.parent as VlangAssignmentStatement
-            // TODO: support multi assign
-            val assignExpression = assign.leftHandExprList.expressionList.firstOrNull() as? VlangReferenceExpression ?: return null
-            return assignExpression.getType(null)
-        }
-
-        if (element.parent is VlangMatchArm) {
-            val parentMatch = element.parentOfType<VlangMatchExpression>()
-            if (parentMatch != null) {
-                val matchExpression = parentMatch.expression as? VlangReferenceExpression ?: return null
-                return matchExpression.getType(null)
-            }
         }
 
         return null

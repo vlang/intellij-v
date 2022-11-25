@@ -729,6 +729,16 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getReference(o: VlangEnumFetch): VlangReference {
+        return VlangReference(o, false)
+    }
+
+    @JvmStatic
+    fun getQualifier(o: VlangEnumFetch): VlangCompositeElement? {
+        return null
+    }
+
+    @JvmStatic
     fun getType(o: VlangSqlExpression, context: ResolveState?): VlangTypeEx? {
         val lastStatement = o.sqlBlock.sqlBlockStatementList.lastOrNull() ?: return null
         if (lastStatement is VlangSqlSelectStatement) {
@@ -1070,6 +1080,8 @@ object VlangPsiImplUtil {
     private fun isBoolExpr(expr: VlangExpression) = expr is VlangConditionalExpr ||
             expr is VlangInExpression ||
             expr is VlangNotInExpression ||
+            expr is VlangIsExpression ||
+            expr is VlangNotIsExpression ||
             expr is VlangAndExpr ||
             expr is VlangOrExpr ||
             expr is VlangSelectExpression

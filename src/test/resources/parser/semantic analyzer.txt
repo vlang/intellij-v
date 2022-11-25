@@ -344,8 +344,7 @@ V Language file
             PsiElement(VlangTokenType.==)('==')
             ENUM_FETCH
               PsiElement(VlangTokenType..)('.')
-              REFERENCE_EXPRESSION
-                PsiElement(VlangTokenType.identifier)('function')
+              PsiElement(VlangTokenType.identifier)('function')
       PsiElement(VlangTokenType.})('}')
   METHOD_DECLARATION
     PsiElement(VlangTokenType.fn)('fn')
@@ -610,8 +609,7 @@ V Language file
                     VALUE
                       ENUM_FETCH
                         PsiElement(VlangTokenType..)('.')
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('error')
+                        PsiElement(VlangTokenType.identifier)('error')
                   ELEMENT
                     KEY
                       FIELD_NAME
@@ -1527,8 +1525,7 @@ V Language file
                           PsiElement(VlangTokenType.==)('==')
                           ENUM_FETCH
                             PsiElement(VlangTokenType..)('.')
-                            REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('variable')
+                            PsiElement(VlangTokenType.identifier)('variable')
                         PsiElement(VlangTokenType.&&)('&&')
                         REFERENCE_EXPRESSION
                           REFERENCE_EXPRESSION
@@ -2233,8 +2230,7 @@ V Language file
                                             PsiElement(VlangTokenType.==)('==')
                                             ENUM_FETCH
                                               PsiElement(VlangTokenType..)('.')
-                                              REFERENCE_EXPRESSION
-                                                PsiElement(VlangTokenType.identifier)('int_literal')
+                                              PsiElement(VlangTokenType.identifier)('int_literal')
                                           PsiElement(VlangTokenType.&&)('&&')
                                           CONDITIONAL_EXPR
                                             CALL_EXPR
@@ -2730,8 +2726,7 @@ V Language file
                     PsiElement(VlangTokenType.==)('==')
                     ENUM_FETCH
                       PsiElement(VlangTokenType..)('.')
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('placeholder')
+                      PsiElement(VlangTokenType.identifier)('placeholder')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   SIMPLE_STATEMENT
@@ -2832,40 +2827,37 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    LITERAL_VALUE_EXPRESSION
-                      TYPE
-                        TYPE_MODIFIERS
-                          <empty list>
-                        TYPE_REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('import_declaration')
-                      PsiElement(VlangTokenType.{)('{')
-                      ELEMENT
-                        VALUE
-                          OR_BLOCK_EXPR
-                            CALL_EXPR
-                              REFERENCE_EXPRESSION
+                  PsiElement(VlangTokenType.identifier)('import_declaration')
+                BLOCK
+                  PsiElement(VlangTokenType.{)('{')
+                  SIMPLE_STATEMENT
+                    LEFT_HAND_EXPR_LIST
+                      OR_BLOCK_EXPR
+                        CALL_EXPR
+                          REFERENCE_EXPRESSION
+                            REFERENCE_EXPRESSION
+                              PsiElement(VlangTokenType.identifier)('an')
+                            PsiElement(VlangTokenType..)('.')
+                            PsiElement(VlangTokenType.identifier)('import_decl')
+                          ARGUMENT_LIST
+                            PsiElement(VlangTokenType.()('(')
+                            ELEMENT
+                              VALUE
                                 REFERENCE_EXPRESSION
-                                  PsiElement(VlangTokenType.identifier)('an')
-                                PsiElement(VlangTokenType..)('.')
-                                PsiElement(VlangTokenType.identifier)('import_decl')
-                              ARGUMENT_LIST
-                                PsiElement(VlangTokenType.()('(')
-                                ELEMENT
-                                  VALUE
-                                    REFERENCE_EXPRESSION
-                                      PsiElement(VlangTokenType.identifier)('current_node')
-                                PsiElement(VlangTokenType.))(')')
-                            PsiElement(VlangTokenType.or)('or')
-                            BLOCK
-                              PsiElement(VlangTokenType.{)('{')
-                              PsiComment(VLANG_DOC_COMMENT)
-                                PsiElement(VlangTokenType.<DOC_GAP>)('//')
-                                PsiElement(VlangTokenType.<DOC_DATA>)('an.messages.report(err)')
-                              PsiElement(VlangTokenType.})('}')
-                      PsiElement(VlangTokenType.})('}')
-                    PsiElement(VlangTokenType..)('.')
-                    PsiElement(VlangTokenType.identifier)('const_declaration')
+                                  PsiElement(VlangTokenType.identifier)('current_node')
+                            PsiElement(VlangTokenType.))(')')
+                        PsiElement(VlangTokenType.or)('or')
+                        BLOCK
+                          PsiElement(VlangTokenType.{)('{')
+                          PsiComment(VLANG_DOC_COMMENT)
+                            PsiElement(VlangTokenType.<DOC_GAP>)('//')
+                            PsiElement(VlangTokenType.<DOC_DATA>)('an.messages.report(err)')
+                          PsiElement(VlangTokenType.})('}')
+                  PsiElement(VlangTokenType.})('}')
+              MATCH_ARM
+                ENUM_FETCH
+                  PsiElement(VlangTokenType..)('.')
+                  PsiElement(VlangTokenType.identifier)('const_declaration')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   SIMPLE_STATEMENT
@@ -2887,32 +2879,29 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    LITERAL_VALUE_EXPRESSION
-                      TYPE
-                        TYPE_MODIFIERS
-                          <empty list>
-                        TYPE_REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('struct_declaration')
-                      PsiElement(VlangTokenType.{)('{')
-                      ELEMENT
-                        VALUE
-                          CALL_EXPR
-                            REFERENCE_EXPRESSION
+                  PsiElement(VlangTokenType.identifier)('struct_declaration')
+                BLOCK
+                  PsiElement(VlangTokenType.{)('{')
+                  SIMPLE_STATEMENT
+                    LEFT_HAND_EXPR_LIST
+                      CALL_EXPR
+                        REFERENCE_EXPRESSION
+                          REFERENCE_EXPRESSION
+                            PsiElement(VlangTokenType.identifier)('an')
+                          PsiElement(VlangTokenType..)('.')
+                          PsiElement(VlangTokenType.identifier)('struct_decl')
+                        ARGUMENT_LIST
+                          PsiElement(VlangTokenType.()('(')
+                          ELEMENT
+                            VALUE
                               REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('an')
-                              PsiElement(VlangTokenType..)('.')
-                              PsiElement(VlangTokenType.identifier)('struct_decl')
-                            ARGUMENT_LIST
-                              PsiElement(VlangTokenType.()('(')
-                              ELEMENT
-                                VALUE
-                                  REFERENCE_EXPRESSION
-                                    PsiElement(VlangTokenType.identifier)('current_node')
-                              PsiElement(VlangTokenType.))(')')
-                      PsiElement(VlangTokenType.})('}')
-                    PsiElement(VlangTokenType..)('.')
-                    PsiElement(VlangTokenType.identifier)('interface_declaration')
+                                PsiElement(VlangTokenType.identifier)('current_node')
+                          PsiElement(VlangTokenType.))(')')
+                  PsiElement(VlangTokenType.})('}')
+              MATCH_ARM
+                ENUM_FETCH
+                  PsiElement(VlangTokenType..)('.')
+                  PsiElement(VlangTokenType.identifier)('interface_declaration')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   SIMPLE_STATEMENT
@@ -2934,37 +2923,34 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    LITERAL_VALUE_EXPRESSION
-                      TYPE
-                        TYPE_MODIFIERS
-                          <empty list>
-                        TYPE_REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('enum_declaration')
-                      PsiElement(VlangTokenType.{)('{')
-                      ELEMENT
-                        VALUE
-                          OR_BLOCK_EXPR
-                            CALL_EXPR
-                              REFERENCE_EXPRESSION
+                  PsiElement(VlangTokenType.identifier)('enum_declaration')
+                BLOCK
+                  PsiElement(VlangTokenType.{)('{')
+                  SIMPLE_STATEMENT
+                    LEFT_HAND_EXPR_LIST
+                      OR_BLOCK_EXPR
+                        CALL_EXPR
+                          REFERENCE_EXPRESSION
+                            REFERENCE_EXPRESSION
+                              PsiElement(VlangTokenType.identifier)('an')
+                            PsiElement(VlangTokenType..)('.')
+                            PsiElement(VlangTokenType.identifier)('enum_decl')
+                          ARGUMENT_LIST
+                            PsiElement(VlangTokenType.()('(')
+                            ELEMENT
+                              VALUE
                                 REFERENCE_EXPRESSION
-                                  PsiElement(VlangTokenType.identifier)('an')
-                                PsiElement(VlangTokenType..)('.')
-                                PsiElement(VlangTokenType.identifier)('enum_decl')
-                              ARGUMENT_LIST
-                                PsiElement(VlangTokenType.()('(')
-                                ELEMENT
-                                  VALUE
-                                    REFERENCE_EXPRESSION
-                                      PsiElement(VlangTokenType.identifier)('current_node')
-                                PsiElement(VlangTokenType.))(')')
-                            PsiElement(VlangTokenType.or)('or')
-                            BLOCK
-                              PsiElement(VlangTokenType.{)('{')
-                              PsiElement(VlangTokenType.})('}')
-                      PsiElement(VlangTokenType.})('}')
-                    PsiElement(VlangTokenType..)('.')
-                    PsiElement(VlangTokenType.identifier)('function_declaration')
+                                  PsiElement(VlangTokenType.identifier)('current_node')
+                            PsiElement(VlangTokenType.))(')')
+                        PsiElement(VlangTokenType.or)('or')
+                        BLOCK
+                          PsiElement(VlangTokenType.{)('{')
+                          PsiElement(VlangTokenType.})('}')
+                  PsiElement(VlangTokenType.})('}')
+              MATCH_ARM
+                ENUM_FETCH
+                  PsiElement(VlangTokenType..)('.')
+                  PsiElement(VlangTokenType.identifier)('function_declaration')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   SIMPLE_STATEMENT
@@ -2986,8 +2972,7 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('type_declaration')
+                  PsiElement(VlangTokenType.identifier)('type_declaration')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   SIMPLE_STATEMENT
@@ -3763,8 +3748,7 @@ V Language file
                                                       PsiElement(VlangTokenType.==)('==')
                                                       ENUM_FETCH
                                                         PsiElement(VlangTokenType..)('.')
-                                                        REFERENCE_EXPRESSION
-                                                          PsiElement(VlangTokenType.identifier)('unary_expression')
+                                                        PsiElement(VlangTokenType.identifier)('unary_expression')
                                                     PsiElement(VlangTokenType.&&)('&&')
                                                     CONDITIONAL_EXPR
                                                       REFERENCE_EXPRESSION
@@ -3817,8 +3801,7 @@ V Language file
                                                             PsiElement(VlangTokenType.==)('==')
                                                             ENUM_FETCH
                                                               PsiElement(VlangTokenType..)('.')
-                                                              REFERENCE_EXPRESSION
-                                                                PsiElement(VlangTokenType.identifier)('chan_')
+                                                              PsiElement(VlangTokenType.identifier)('chan_')
                                                           BLOCK
                                                             PsiElement(VlangTokenType.{)('{')
                                                             ASSIGNMENT_STATEMENT
@@ -4069,8 +4052,7 @@ V Language file
                   PsiElement(VlangTokenType.==)('==')
                   ENUM_FETCH
                     PsiElement(VlangTokenType..)('.')
-                    REFERENCE_EXPRESSION
-                      PsiElement(VlangTokenType.identifier)('return_statement')
+                    PsiElement(VlangTokenType.identifier)('return_statement')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   ASSIGNMENT_STATEMENT
@@ -4662,8 +4644,7 @@ V Language file
               PsiElement(VlangTokenType.!=)('!=')
               ENUM_FETCH
                 PsiElement(VlangTokenType..)('.')
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('chan_')
+                PsiElement(VlangTokenType.identifier)('chan_')
             BLOCK
               PsiElement(VlangTokenType.{)('{')
               SIMPLE_STATEMENT
@@ -4924,8 +4905,7 @@ V Language file
                       PsiElement(VlangTokenType.==)('==')
                       ENUM_FETCH
                         PsiElement(VlangTokenType..)('.')
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('defer_statement')
+                        PsiElement(VlangTokenType.identifier)('defer_statement')
                     BLOCK
                       PsiElement(VlangTokenType.{)('{')
                       ASSIGNMENT_STATEMENT
@@ -4976,8 +4956,7 @@ V Language file
                                       PsiElement(VlangTokenType.==)('==')
                                       ENUM_FETCH
                                         PsiElement(VlangTokenType..)('.')
-                                        REFERENCE_EXPRESSION
-                                          PsiElement(VlangTokenType.identifier)('for_statement')
+                                        PsiElement(VlangTokenType.identifier)('for_statement')
                                     BLOCK
                                       PsiElement(VlangTokenType.{)('{')
                                       ASSIGNMENT_STATEMENT
@@ -5005,8 +4984,7 @@ V Language file
                             PsiElement(VlangTokenType.==)('==')
                             ENUM_FETCH
                               PsiElement(VlangTokenType..)('.')
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('for_statement')
+                              PsiElement(VlangTokenType.identifier)('for_statement')
                           BLOCK
                             PsiElement(VlangTokenType.{)('{')
                             ASSIGNMENT_STATEMENT
@@ -5194,8 +5172,7 @@ V Language file
                       PsiElement(VlangTokenType.==)('==')
                       ENUM_FETCH
                         PsiElement(VlangTokenType..)('.')
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('multi_return')
+                        PsiElement(VlangTokenType.identifier)('multi_return')
                     BLOCK
                       PsiElement(VlangTokenType.{)('{')
                       SIMPLE_STATEMENT
@@ -5373,8 +5350,7 @@ V Language file
                           PsiElement(VlangTokenType.==)('==')
                           ENUM_FETCH
                             PsiElement(VlangTokenType..)('.')
-                            REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('multi_return')
+                            PsiElement(VlangTokenType.identifier)('multi_return')
                         BLOCK
                           PsiElement(VlangTokenType.{)('{')
                           PsiComment(VLANG_DOC_COMMENT)
@@ -5427,8 +5403,7 @@ V Language file
                           PsiElement(VlangTokenType.==)('==')
                           ENUM_FETCH
                             PsiElement(VlangTokenType..)('.')
-                            REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('optional')
+                            PsiElement(VlangTokenType.identifier)('optional')
                         BLOCK
                           PsiElement(VlangTokenType.{)('{')
                           PsiComment(VLANG_DOC_COMMENT)
@@ -5625,8 +5600,7 @@ V Language file
                                                 PsiElement(VlangTokenType.==)('==')
                                                 ENUM_FETCH
                                                   PsiElement(VlangTokenType..)('.')
-                                                  REFERENCE_EXPRESSION
-                                                    PsiElement(VlangTokenType.identifier)('ref')
+                                                  PsiElement(VlangTokenType.identifier)('ref')
                                               PsiElement(VlangTokenType.&&)('&&')
                                               CONDITIONAL_EXPR
                                                 REFERENCE_EXPRESSION
@@ -6046,37 +6020,34 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    LITERAL_VALUE_EXPRESSION
-                      TYPE
-                        TYPE_MODIFIERS
-                          <empty list>
-                        TYPE_REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('assignment_statement')
-                      PsiElement(VlangTokenType.{)('{')
-                      ELEMENT
-                        VALUE
-                          OR_BLOCK_EXPR
-                            CALL_EXPR
-                              REFERENCE_EXPRESSION
+                  PsiElement(VlangTokenType.identifier)('assignment_statement')
+                BLOCK
+                  PsiElement(VlangTokenType.{)('{')
+                  SIMPLE_STATEMENT
+                    LEFT_HAND_EXPR_LIST
+                      OR_BLOCK_EXPR
+                        CALL_EXPR
+                          REFERENCE_EXPRESSION
+                            REFERENCE_EXPRESSION
+                              PsiElement(VlangTokenType.identifier)('an')
+                            PsiElement(VlangTokenType..)('.')
+                            PsiElement(VlangTokenType.identifier)('assignment_statement')
+                          ARGUMENT_LIST
+                            PsiElement(VlangTokenType.()('(')
+                            ELEMENT
+                              VALUE
                                 REFERENCE_EXPRESSION
-                                  PsiElement(VlangTokenType.identifier)('an')
-                                PsiElement(VlangTokenType..)('.')
-                                PsiElement(VlangTokenType.identifier)('assignment_statement')
-                              ARGUMENT_LIST
-                                PsiElement(VlangTokenType.()('(')
-                                ELEMENT
-                                  VALUE
-                                    REFERENCE_EXPRESSION
-                                      PsiElement(VlangTokenType.identifier)('node')
-                                PsiElement(VlangTokenType.))(')')
-                            PsiElement(VlangTokenType.or)('or')
-                            BLOCK
-                              PsiElement(VlangTokenType.{)('{')
-                              PsiElement(VlangTokenType.})('}')
-                      PsiElement(VlangTokenType.})('}')
-                    PsiElement(VlangTokenType..)('.')
-                    PsiElement(VlangTokenType.identifier)('assert_statement')
+                                  PsiElement(VlangTokenType.identifier)('node')
+                            PsiElement(VlangTokenType.))(')')
+                        PsiElement(VlangTokenType.or)('or')
+                        BLOCK
+                          PsiElement(VlangTokenType.{)('{')
+                          PsiElement(VlangTokenType.})('}')
+                  PsiElement(VlangTokenType.})('}')
+              MATCH_ARM
+                ENUM_FETCH
+                  PsiElement(VlangTokenType..)('.')
+                  PsiElement(VlangTokenType.identifier)('assert_statement')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   SIMPLE_STATEMENT
@@ -6103,37 +6074,34 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    LITERAL_VALUE_EXPRESSION
-                      TYPE
-                        TYPE_MODIFIERS
-                          <empty list>
-                        TYPE_REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('send_statement')
-                      PsiElement(VlangTokenType.{)('{')
-                      ELEMENT
-                        VALUE
-                          OR_BLOCK_EXPR
-                            CALL_EXPR
-                              REFERENCE_EXPRESSION
+                  PsiElement(VlangTokenType.identifier)('send_statement')
+                BLOCK
+                  PsiElement(VlangTokenType.{)('{')
+                  SIMPLE_STATEMENT
+                    LEFT_HAND_EXPR_LIST
+                      OR_BLOCK_EXPR
+                        CALL_EXPR
+                          REFERENCE_EXPRESSION
+                            REFERENCE_EXPRESSION
+                              PsiElement(VlangTokenType.identifier)('an')
+                            PsiElement(VlangTokenType..)('.')
+                            PsiElement(VlangTokenType.identifier)('send_statement')
+                          ARGUMENT_LIST
+                            PsiElement(VlangTokenType.()('(')
+                            ELEMENT
+                              VALUE
                                 REFERENCE_EXPRESSION
-                                  PsiElement(VlangTokenType.identifier)('an')
-                                PsiElement(VlangTokenType..)('.')
-                                PsiElement(VlangTokenType.identifier)('send_statement')
-                              ARGUMENT_LIST
-                                PsiElement(VlangTokenType.()('(')
-                                ELEMENT
-                                  VALUE
-                                    REFERENCE_EXPRESSION
-                                      PsiElement(VlangTokenType.identifier)('node')
-                                PsiElement(VlangTokenType.))(')')
-                            PsiElement(VlangTokenType.or)('or')
-                            BLOCK
-                              PsiElement(VlangTokenType.{)('{')
-                              PsiElement(VlangTokenType.})('}')
-                      PsiElement(VlangTokenType.})('}')
-                    PsiElement(VlangTokenType..)('.')
-                    PsiElement(VlangTokenType.identifier)('short_var_declaration')
+                                  PsiElement(VlangTokenType.identifier)('node')
+                            PsiElement(VlangTokenType.))(')')
+                        PsiElement(VlangTokenType.or)('or')
+                        BLOCK
+                          PsiElement(VlangTokenType.{)('{')
+                          PsiElement(VlangTokenType.})('}')
+                  PsiElement(VlangTokenType.})('}')
+              MATCH_ARM
+                ENUM_FETCH
+                  PsiElement(VlangTokenType..)('.')
+                  PsiElement(VlangTokenType.identifier)('short_var_declaration')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   SIMPLE_STATEMENT
@@ -6160,32 +6128,29 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    LITERAL_VALUE_EXPRESSION
-                      TYPE
-                        TYPE_MODIFIERS
-                          <empty list>
-                        TYPE_REFERENCE_EXPRESSION
+                  PsiElement(VlangTokenType.identifier)('break_statement')
+                BLOCK
+                  PsiElement(VlangTokenType.{)('{')
+                  SIMPLE_STATEMENT
+                    LEFT_HAND_EXPR_LIST
+                      CALL_EXPR
+                        REFERENCE_EXPRESSION
+                          REFERENCE_EXPRESSION
+                            PsiElement(VlangTokenType.identifier)('an')
+                          PsiElement(VlangTokenType..)('.')
                           PsiElement(VlangTokenType.identifier)('break_statement')
-                      PsiElement(VlangTokenType.{)('{')
-                      ELEMENT
-                        VALUE
-                          CALL_EXPR
-                            REFERENCE_EXPRESSION
+                        ARGUMENT_LIST
+                          PsiElement(VlangTokenType.()('(')
+                          ELEMENT
+                            VALUE
                               REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('an')
-                              PsiElement(VlangTokenType..)('.')
-                              PsiElement(VlangTokenType.identifier)('break_statement')
-                            ARGUMENT_LIST
-                              PsiElement(VlangTokenType.()('(')
-                              ELEMENT
-                                VALUE
-                                  REFERENCE_EXPRESSION
-                                    PsiElement(VlangTokenType.identifier)('node')
-                              PsiElement(VlangTokenType.))(')')
-                      PsiElement(VlangTokenType.})('}')
-                    PsiElement(VlangTokenType..)('.')
-                    PsiElement(VlangTokenType.identifier)('for_statement')
+                                PsiElement(VlangTokenType.identifier)('node')
+                          PsiElement(VlangTokenType.))(')')
+                  PsiElement(VlangTokenType.})('}')
+              MATCH_ARM
+                ENUM_FETCH
+                  PsiElement(VlangTokenType..)('.')
+                  PsiElement(VlangTokenType.identifier)('for_statement')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   SIMPLE_STATEMENT
@@ -6207,50 +6172,47 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    LITERAL_VALUE_EXPRESSION
-                      TYPE
-                        TYPE_MODIFIERS
-                          <empty list>
-                        TYPE_REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('defer_statement')
-                      PsiElement(VlangTokenType.{)('{')
-                      ELEMENT
-                        VALUE
-                          CALL_EXPR
-                            REFERENCE_EXPRESSION
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('an')
-                              PsiElement(VlangTokenType..)('.')
-                              PsiElement(VlangTokenType.identifier)('statement')
-                            ARGUMENT_LIST
-                              PsiElement(VlangTokenType.()('(')
-                              ELEMENT
-                                VALUE
-                                  OR_BLOCK_EXPR
-                                    CALL_EXPR
-                                      REFERENCE_EXPRESSION
-                                        REFERENCE_EXPRESSION
-                                          PsiElement(VlangTokenType.identifier)('node')
-                                        PsiElement(VlangTokenType..)('.')
-                                        PsiElement(VlangTokenType.identifier)('named_child')
-                                      ARGUMENT_LIST
-                                        PsiElement(VlangTokenType.()('(')
-                                        ELEMENT
-                                          VALUE
-                                            LITERAL
-                                              PsiElement(VlangTokenType.int)('0')
-                                        PsiElement(VlangTokenType.))(')')
-                                    PsiElement(VlangTokenType.or)('or')
-                                    BLOCK
-                                      PsiElement(VlangTokenType.{)('{')
-                                      RETURN_STATEMENT
-                                        PsiElement(VlangTokenType.return)('return')
-                                      PsiElement(VlangTokenType.})('}')
-                              PsiElement(VlangTokenType.))(')')
-                      PsiElement(VlangTokenType.})('}')
-                    PsiElement(VlangTokenType..)('.')
-                    PsiElement(VlangTokenType.identifier)('return_statement')
+                  PsiElement(VlangTokenType.identifier)('defer_statement')
+                BLOCK
+                  PsiElement(VlangTokenType.{)('{')
+                  SIMPLE_STATEMENT
+                    LEFT_HAND_EXPR_LIST
+                      CALL_EXPR
+                        REFERENCE_EXPRESSION
+                          REFERENCE_EXPRESSION
+                            PsiElement(VlangTokenType.identifier)('an')
+                          PsiElement(VlangTokenType..)('.')
+                          PsiElement(VlangTokenType.identifier)('statement')
+                        ARGUMENT_LIST
+                          PsiElement(VlangTokenType.()('(')
+                          ELEMENT
+                            VALUE
+                              OR_BLOCK_EXPR
+                                CALL_EXPR
+                                  REFERENCE_EXPRESSION
+                                    REFERENCE_EXPRESSION
+                                      PsiElement(VlangTokenType.identifier)('node')
+                                    PsiElement(VlangTokenType..)('.')
+                                    PsiElement(VlangTokenType.identifier)('named_child')
+                                  ARGUMENT_LIST
+                                    PsiElement(VlangTokenType.()('(')
+                                    ELEMENT
+                                      VALUE
+                                        LITERAL
+                                          PsiElement(VlangTokenType.int)('0')
+                                    PsiElement(VlangTokenType.))(')')
+                                PsiElement(VlangTokenType.or)('or')
+                                BLOCK
+                                  PsiElement(VlangTokenType.{)('{')
+                                  RETURN_STATEMENT
+                                    PsiElement(VlangTokenType.return)('return')
+                                  PsiElement(VlangTokenType.})('}')
+                          PsiElement(VlangTokenType.))(')')
+                  PsiElement(VlangTokenType.})('}')
+              MATCH_ARM
+                ENUM_FETCH
+                  PsiElement(VlangTokenType..)('.')
+                  PsiElement(VlangTokenType.identifier)('return_statement')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   SIMPLE_STATEMENT
@@ -6272,37 +6234,33 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    LITERAL_VALUE_EXPRESSION
-                      TYPE
-                        TYPE_MODIFIERS
-                          <empty list>
-                        TYPE_REFERENCE_EXPRESSION
+                  PsiElement(VlangTokenType.identifier)('block')
+                BLOCK
+                  PsiElement(VlangTokenType.{)('{')
+                  SIMPLE_STATEMENT
+                    LEFT_HAND_EXPR_LIST
+                      CALL_EXPR
+                        REFERENCE_EXPRESSION
+                          REFERENCE_EXPRESSION
+                            PsiElement(VlangTokenType.identifier)('an')
+                          PsiElement(VlangTokenType..)('.')
                           PsiElement(VlangTokenType.identifier)('block')
-                      PsiElement(VlangTokenType.{)('{')
-                      ELEMENT
-                        VALUE
-                          CALL_EXPR
-                            REFERENCE_EXPRESSION
+                        ARGUMENT_LIST
+                          PsiElement(VlangTokenType.()('(')
+                          ELEMENT
+                            VALUE
                               REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('an')
-                              PsiElement(VlangTokenType..)('.')
-                              PsiElement(VlangTokenType.identifier)('block')
-                            ARGUMENT_LIST
-                              PsiElement(VlangTokenType.()('(')
-                              ELEMENT
-                                VALUE
-                                  REFERENCE_EXPRESSION
-                                    PsiElement(VlangTokenType.identifier)('node')
-                              PsiElement(VlangTokenType.))(')')
-                      PsiElement(VlangTokenType.})('}')
-                    PsiElement(VlangTokenType..)('.')
-                    PsiElement(VlangTokenType.identifier)('inc_statement')
+                                PsiElement(VlangTokenType.identifier)('node')
+                          PsiElement(VlangTokenType.))(')')
+                  PsiElement(VlangTokenType.})('}')
+              MATCH_ARM
+                ENUM_FETCH
+                  PsiElement(VlangTokenType..)('.')
+                  PsiElement(VlangTokenType.identifier)('inc_statement')
                 PsiElement(VlangTokenType.,)(',')
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('dec_statement')
+                  PsiElement(VlangTokenType.identifier)('dec_statement')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   SIMPLE_STATEMENT
@@ -6397,8 +6355,7 @@ V Language file
                                     PsiElement(VlangTokenType.==)('==')
                                     ENUM_FETCH
                                       PsiElement(VlangTokenType..)('.')
-                                      REFERENCE_EXPRESSION
-                                        PsiElement(VlangTokenType.identifier)('identifier')
+                                      PsiElement(VlangTokenType.identifier)('identifier')
                                 BLOCK
                                   PsiElement(VlangTokenType.{)('{')
                                   SIMPLE_STATEMENT
@@ -6679,8 +6636,7 @@ V Language file
                 PsiElement(VlangTokenType.==)('==')
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('float_literal')
+                  PsiElement(VlangTokenType.identifier)('float_literal')
               PsiElement(VlangTokenType.||)('||')
               PARENTHESES_EXPR
                 PsiElement(VlangTokenType.()('(')
@@ -6691,8 +6647,7 @@ V Language file
                     PsiElement(VlangTokenType.==)('==')
                     ENUM_FETCH
                       PsiElement(VlangTokenType..)('.')
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('int_literal')
+                      PsiElement(VlangTokenType.identifier)('int_literal')
                   PsiElement(VlangTokenType.&&)('&&')
                   CONDITIONAL_EXPR
                     CALL_EXPR
@@ -7141,8 +7096,7 @@ V Language file
                               PsiElement(VlangTokenType.==)('==')
                               ENUM_FETCH
                                 PsiElement(VlangTokenType..)('.')
-                                REFERENCE_EXPRESSION
-                                  PsiElement(VlangTokenType.identifier)('array_')
+                                PsiElement(VlangTokenType.identifier)('array_')
                             PsiElement(VlangTokenType.&&)('&&')
                             CONDITIONAL_EXPR
                               INDEX_OR_SLICE_EXPR
@@ -7528,8 +7482,7 @@ V Language file
                                         PsiElement(VlangTokenType.==)('==')
                                         ENUM_FETCH
                                           PsiElement(VlangTokenType..)('.')
-                                          REFERENCE_EXPRESSION
-                                            PsiElement(VlangTokenType.identifier)('optional')
+                                          PsiElement(VlangTokenType.identifier)('optional')
                                       PsiElement(VlangTokenType.&&)('&&')
                                       CONDITIONAL_EXPR
                                         REFERENCE_EXPRESSION
@@ -7554,8 +7507,7 @@ V Language file
                                         PsiElement(VlangTokenType.==)('==')
                                         ENUM_FETCH
                                           PsiElement(VlangTokenType..)('.')
-                                          REFERENCE_EXPRESSION
-                                            PsiElement(VlangTokenType.identifier)('optional')
+                                          PsiElement(VlangTokenType.identifier)('optional')
                                       PsiElement(VlangTokenType.&&)('&&')
                                       CONDITIONAL_EXPR
                                         REFERENCE_EXPRESSION
@@ -7582,8 +7534,7 @@ V Language file
                                           PsiElement(VlangTokenType.==)('==')
                                           ENUM_FETCH
                                             PsiElement(VlangTokenType..)('.')
-                                            REFERENCE_EXPRESSION
-                                              PsiElement(VlangTokenType.identifier)('optional')
+                                            PsiElement(VlangTokenType.identifier)('optional')
                                         BLOCK
                                           PsiElement(VlangTokenType.{)('{')
                                           RETURN_STATEMENT
@@ -7624,8 +7575,7 @@ V Language file
                                                 PsiElement(VlangTokenType.==)('==')
                                                 ENUM_FETCH
                                                   PsiElement(VlangTokenType..)('.')
-                                                  REFERENCE_EXPRESSION
-                                                    PsiElement(VlangTokenType.identifier)('optional')
+                                                  PsiElement(VlangTokenType.identifier)('optional')
                                               BLOCK
                                                 PsiElement(VlangTokenType.{)('{')
                                                 RETURN_STATEMENT
@@ -7828,8 +7778,7 @@ V Language file
               PsiElement(VlangTokenType.!=)('!=')
               ENUM_FETCH
                 PsiElement(VlangTokenType..)('.')
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('literal_value')
+                PsiElement(VlangTokenType.identifier)('literal_value')
             BLOCK
               PsiElement(VlangTokenType.{)('{')
               RETURN_STATEMENT
@@ -7880,8 +7829,7 @@ V Language file
                   PsiElement(VlangTokenType.==)('==')
                   ENUM_FETCH
                     PsiElement(VlangTokenType..)('.')
-                    REFERENCE_EXPRESSION
-                      PsiElement(VlangTokenType.identifier)('keyed_element')
+                    PsiElement(VlangTokenType.identifier)('keyed_element')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   SIMPLE_STATEMENT
@@ -8080,13 +8028,11 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('array_')
+                  PsiElement(VlangTokenType.identifier)('array_')
                 PsiElement(VlangTokenType.,)(',')
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('variadic')
+                  PsiElement(VlangTokenType.identifier)('variadic')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   SIMPLE_STATEMENT
@@ -8171,8 +8117,7 @@ V Language file
                             PsiElement(VlangTokenType.==)('==')
                             ENUM_FETCH
                               PsiElement(VlangTokenType..)('.')
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('placeholder')
+                              PsiElement(VlangTokenType.identifier)('placeholder')
                         BLOCK
                           PsiElement(VlangTokenType.{)('{')
                           RETURN_STATEMENT
@@ -8235,8 +8180,7 @@ V Language file
                                 PsiElement(VlangTokenType.==)('==')
                                 ENUM_FETCH
                                   PsiElement(VlangTokenType..)('.')
-                                  REFERENCE_EXPRESSION
-                                    PsiElement(VlangTokenType.identifier)('sumtype')
+                                  PsiElement(VlangTokenType.identifier)('sumtype')
                               BLOCK
                                 PsiElement(VlangTokenType.{)('{')
                                 SIMPLE_STATEMENT
@@ -8252,8 +8196,7 @@ V Language file
                                         PsiElement(VlangTokenType.==)('==')
                                         ENUM_FETCH
                                           PsiElement(VlangTokenType..)('.')
-                                          REFERENCE_EXPRESSION
-                                            PsiElement(VlangTokenType.identifier)('fixed_array_type')
+                                          PsiElement(VlangTokenType.identifier)('fixed_array_type')
                                       BLOCK
                                         PsiElement(VlangTokenType.{)('{')
                                         RETURN_STATEMENT
@@ -8375,8 +8318,7 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('map_')
+                  PsiElement(VlangTokenType.identifier)('map_')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   SIMPLE_STATEMENT
@@ -8461,8 +8403,7 @@ V Language file
                             PsiElement(VlangTokenType.==)('==')
                             ENUM_FETCH
                               PsiElement(VlangTokenType..)('.')
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('placeholder')
+                              PsiElement(VlangTokenType.identifier)('placeholder')
                         BLOCK
                           PsiElement(VlangTokenType.{)('{')
                           SIMPLE_STATEMENT
@@ -8593,8 +8534,7 @@ V Language file
                             PsiElement(VlangTokenType.==)('==')
                             ENUM_FETCH
                               PsiElement(VlangTokenType..)('.')
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('placeholder')
+                              PsiElement(VlangTokenType.identifier)('placeholder')
                         BLOCK
                           PsiElement(VlangTokenType.{)('{')
                           SIMPLE_STATEMENT
@@ -8647,18 +8587,15 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('chan_')
+                  PsiElement(VlangTokenType.identifier)('chan_')
                 PsiElement(VlangTokenType.,)(',')
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('ref')
+                  PsiElement(VlangTokenType.identifier)('ref')
                 PsiElement(VlangTokenType.,)(',')
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('optional')
+                  PsiElement(VlangTokenType.identifier)('optional')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   SIMPLE_STATEMENT
@@ -8740,8 +8677,7 @@ V Language file
                             PsiElement(VlangTokenType.==)('==')
                             ENUM_FETCH
                               PsiElement(VlangTokenType..)('.')
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('placeholder')
+                              PsiElement(VlangTokenType.identifier)('placeholder')
                         BLOCK
                           PsiElement(VlangTokenType.{)('{')
                           SIMPLE_STATEMENT
@@ -8794,8 +8730,7 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('placeholder')
+                  PsiElement(VlangTokenType.identifier)('placeholder')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   SIMPLE_STATEMENT
@@ -8838,8 +8773,7 @@ V Language file
                             PsiElement(VlangTokenType.==)('==')
                             ENUM_FETCH
                               PsiElement(VlangTokenType..)('.')
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('typedef')
+                              PsiElement(VlangTokenType.identifier)('typedef')
                           PsiElement(VlangTokenType.&&)('&&')
                           CONDITIONAL_EXPR
                             REFERENCE_EXPRESSION
@@ -8853,8 +8787,7 @@ V Language file
                             PsiElement(VlangTokenType.==)('==')
                             ENUM_FETCH
                               PsiElement(VlangTokenType..)('.')
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('map_')
+                              PsiElement(VlangTokenType.identifier)('map_')
                         BLOCK
                           PsiElement(VlangTokenType.{)('{')
                           RETURN_STATEMENT
@@ -9085,8 +9018,7 @@ V Language file
                               MATCH_ARM
                                 ENUM_FETCH
                                   PsiElement(VlangTokenType..)('.')
-                                  REFERENCE_EXPRESSION
-                                    PsiElement(VlangTokenType.identifier)('keyed_element')
+                                  PsiElement(VlangTokenType.identifier)('keyed_element')
                                 BLOCK
                                   PsiElement(VlangTokenType.{)('{')
                                   SIMPLE_STATEMENT
@@ -9187,8 +9119,7 @@ V Language file
                               PsiElement(VlangTokenType.!=)('!=')
                               ENUM_FETCH
                                 PsiElement(VlangTokenType..)('.')
-                                REFERENCE_EXPRESSION
-                                  PsiElement(VlangTokenType.identifier)('field')
+                                PsiElement(VlangTokenType.identifier)('field')
                             BLOCK
                               PsiElement(VlangTokenType.{)('{')
                               CONTINUE_STATEMENT
@@ -9229,8 +9160,7 @@ V Language file
                               PsiElement(VlangTokenType.==)('==')
                               ENUM_FETCH
                                 PsiElement(VlangTokenType..)('.')
-                                REFERENCE_EXPRESSION
-                                  PsiElement(VlangTokenType.identifier)('ref')
+                                PsiElement(VlangTokenType.identifier)('ref')
                             BLOCK
                               PsiElement(VlangTokenType.{)('{')
                               SIMPLE_STATEMENT
@@ -9527,8 +9457,7 @@ V Language file
                       PsiElement(VlangTokenType.==)('==')
                       ENUM_FETCH
                         PsiElement(VlangTokenType..)('.')
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('optional')
+                        PsiElement(VlangTokenType.identifier)('optional')
                     BLOCK
                       PsiElement(VlangTokenType.{)('{')
                       RETURN_STATEMENT
@@ -9635,18 +9564,15 @@ V Language file
                                 ARRAY_CREATION_LIST
                                   ENUM_FETCH
                                     PsiElement(VlangTokenType..)('.')
-                                    REFERENCE_EXPRESSION
-                                      PsiElement(VlangTokenType.identifier)('ref')
+                                    PsiElement(VlangTokenType.identifier)('ref')
                                   PsiElement(VlangTokenType.,)(',')
                                   ENUM_FETCH
                                     PsiElement(VlangTokenType..)('.')
-                                    REFERENCE_EXPRESSION
-                                      PsiElement(VlangTokenType.identifier)('chan_')
+                                    PsiElement(VlangTokenType.identifier)('chan_')
                                   PsiElement(VlangTokenType.,)(',')
                                   ENUM_FETCH
                                     PsiElement(VlangTokenType..)('.')
-                                    REFERENCE_EXPRESSION
-                                      PsiElement(VlangTokenType.identifier)('optional')
+                                    PsiElement(VlangTokenType.identifier)('optional')
                                 PsiElement(VlangTokenType.])(']')
                             BLOCK
                               PsiElement(VlangTokenType.{)('{')
@@ -9676,8 +9602,7 @@ V Language file
                                     PsiElement(VlangTokenType.==)('==')
                                     ENUM_FETCH
                                       PsiElement(VlangTokenType..)('.')
-                                      REFERENCE_EXPRESSION
-                                        PsiElement(VlangTokenType.identifier)('array_')
+                                      PsiElement(VlangTokenType.identifier)('array_')
                                   BLOCK
                                     PsiElement(VlangTokenType.{)('{')
                                     ASSIGNMENT_STATEMENT
@@ -9736,8 +9661,7 @@ V Language file
                                           PsiElement(VlangTokenType.==)('==')
                                           ENUM_FETCH
                                             PsiElement(VlangTokenType..)('.')
-                                            REFERENCE_EXPRESSION
-                                              PsiElement(VlangTokenType.identifier)('map_')
+                                            PsiElement(VlangTokenType.identifier)('map_')
                                         BLOCK
                                           PsiElement(VlangTokenType.{)('{')
                                           ASSIGNMENT_STATEMENT
@@ -9891,8 +9815,7 @@ V Language file
                           PsiElement(VlangTokenType.!=)('!=')
                           ENUM_FETCH
                             PsiElement(VlangTokenType..)('.')
-                            REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('embedded_field')
+                            PsiElement(VlangTokenType.identifier)('embedded_field')
                         BLOCK
                           PsiElement(VlangTokenType.{)('{')
                           CONTINUE_STATEMENT
@@ -9992,8 +9915,7 @@ V Language file
                                     PsiElement(VlangTokenType.==)('==')
                                     ENUM_FETCH
                                       PsiElement(VlangTokenType..)('.')
-                                      REFERENCE_EXPRESSION
-                                        PsiElement(VlangTokenType.identifier)('function')
+                                      PsiElement(VlangTokenType.identifier)('function')
                                   BLOCK
                                     PsiElement(VlangTokenType.{)('{')
                                     SIMPLE_STATEMENT
@@ -10060,8 +9982,7 @@ V Language file
                                             PsiElement(VlangTokenType.==)('==')
                                             ENUM_FETCH
                                               PsiElement(VlangTokenType..)('.')
-                                              REFERENCE_EXPRESSION
-                                                PsiElement(VlangTokenType.identifier)('call_expression')
+                                              PsiElement(VlangTokenType.identifier)('call_expression')
                                           BLOCK
                                             PsiElement(VlangTokenType.{)('{')
                                             ASSIGNMENT_STATEMENT
@@ -10181,8 +10102,7 @@ V Language file
                               PsiElement(VlangTokenType.==)('==')
                               ENUM_FETCH
                                 PsiElement(VlangTokenType..)('.')
-                                REFERENCE_EXPRESSION
-                                  PsiElement(VlangTokenType.identifier)('call_expression')
+                                PsiElement(VlangTokenType.identifier)('call_expression')
                             BLOCK
                               PsiElement(VlangTokenType.{)('{')
                               ASSIGNMENT_STATEMENT
@@ -10845,8 +10765,7 @@ V Language file
                     VALUE
                       ENUM_FETCH
                         PsiElement(VlangTokenType..)('.')
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('array_')
+                        PsiElement(VlangTokenType.identifier)('array_')
                   PsiElement(VlangTokenType.})('}')
             SIMPLE_STATEMENT
               LEFT_HAND_EXPR_LIST
@@ -11068,8 +10987,7 @@ V Language file
                       PsiElement(VlangTokenType.==)('==')
                       ENUM_FETCH
                         PsiElement(VlangTokenType..)('.')
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('selector_expression')
+                        PsiElement(VlangTokenType.identifier)('selector_expression')
                     BLOCK
                       PsiElement(VlangTokenType.{)('{')
                       RETURN_STATEMENT
@@ -11500,8 +11418,7 @@ V Language file
                                         PsiElement(VlangTokenType.!=)('!=')
                                         ENUM_FETCH
                                           PsiElement(VlangTokenType..)('.')
-                                          REFERENCE_EXPRESSION
-                                            PsiElement(VlangTokenType.identifier)('optional')
+                                          PsiElement(VlangTokenType.identifier)('optional')
                                     BLOCK
                                       PsiElement(VlangTokenType.{)('{')
                                       SIMPLE_STATEMENT
@@ -11564,8 +11481,7 @@ V Language file
                                             PsiElement(VlangTokenType.!=)('!=')
                                             ENUM_FETCH
                                               PsiElement(VlangTokenType..)('.')
-                                              REFERENCE_EXPRESSION
-                                                PsiElement(VlangTokenType.identifier)('optional')
+                                              PsiElement(VlangTokenType.identifier)('optional')
                                           BLOCK
                                             PsiElement(VlangTokenType.{)('{')
                                             SIMPLE_STATEMENT
@@ -11661,8 +11577,7 @@ V Language file
                     PsiElement(VlangTokenType.==)('==')
                     ENUM_FETCH
                       PsiElement(VlangTokenType..)('.')
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('optional')
+                      PsiElement(VlangTokenType.identifier)('optional')
                   BLOCK
                     PsiElement(VlangTokenType.{)('{')
                     PsiComment(VLANG_DOC_COMMENT)
@@ -11719,8 +11634,7 @@ V Language file
                                     PsiElement(VlangTokenType.==)('==')
                                     ENUM_FETCH
                                       PsiElement(VlangTokenType..)('.')
-                                      REFERENCE_EXPRESSION
-                                        PsiElement(VlangTokenType.identifier)('expression')
+                                      PsiElement(VlangTokenType.identifier)('expression')
                                   BLOCK
                                     PsiElement(VlangTokenType.{)('{')
                                     ASSIGNMENT_STATEMENT
@@ -11948,8 +11862,7 @@ V Language file
                       PsiElement(VlangTokenType.==)('==')
                       ENUM_FETCH
                         PsiElement(VlangTokenType..)('.')
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('parenthesized_expression')
+                        PsiElement(VlangTokenType.identifier)('parenthesized_expression')
                     BLOCK
                       PsiElement(VlangTokenType.{)('{')
                       SIMPLE_STATEMENT
@@ -12642,8 +12555,7 @@ V Language file
                       PsiElement(VlangTokenType.==)('==')
                       ENUM_FETCH
                         PsiElement(VlangTokenType..)('.')
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('placeholder')
+                        PsiElement(VlangTokenType.identifier)('placeholder')
                   BLOCK
                     PsiElement(VlangTokenType.{)('{')
                     RETURN_STATEMENT
@@ -12685,8 +12597,7 @@ V Language file
                             PsiElement(VlangTokenType.==)('==')
                             ENUM_FETCH
                               PsiElement(VlangTokenType..)('.')
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('enum_')
+                              PsiElement(VlangTokenType.identifier)('enum_')
                           PsiElement(VlangTokenType.&&)('&&')
                           CONDITIONAL_EXPR
                             REFERENCE_EXPRESSION
@@ -12697,8 +12608,7 @@ V Language file
                             PsiElement(VlangTokenType.==)('==')
                             ENUM_FETCH
                               PsiElement(VlangTokenType..)('.')
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('int_literal')
+                              PsiElement(VlangTokenType.identifier)('int_literal')
                         BLOCK
                           PsiElement(VlangTokenType.{)('{')
                           RETURN_STATEMENT
@@ -12893,8 +12803,7 @@ V Language file
               PsiElement(VlangTokenType.!=)('!=')
               ENUM_FETCH
                 PsiElement(VlangTokenType..)('.')
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('array_')
+                PsiElement(VlangTokenType.identifier)('array_')
             BLOCK
               PsiElement(VlangTokenType.{)('{')
               RETURN_STATEMENT
@@ -13091,8 +13000,7 @@ V Language file
                       PsiElement(VlangTokenType.!=)('!=')
                       ENUM_FETCH
                         PsiElement(VlangTokenType..)('.')
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('expression')
+                        PsiElement(VlangTokenType.identifier)('expression')
                     BLOCK
                       PsiElement(VlangTokenType.{)('{')
                       PsiComment(VLANG_DOC_COMMENT)
@@ -13374,8 +13282,7 @@ V Language file
               PsiElement(VlangTokenType.==)('==')
               ENUM_FETCH
                 PsiElement(VlangTokenType..)('.')
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('sumtype')
+                PsiElement(VlangTokenType.identifier)('sumtype')
             BLOCK
               PsiElement(VlangTokenType.{)('{')
               ASSIGNMENT_STATEMENT
@@ -13454,13 +13361,11 @@ V Language file
                     ARRAY_CREATION_LIST
                       ENUM_FETCH
                         PsiElement(VlangTokenType..)('.')
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('expression_case')
+                        PsiElement(VlangTokenType.identifier)('expression_case')
                       PsiElement(VlangTokenType.,)(',')
                       ENUM_FETCH
                         PsiElement(VlangTokenType..)('.')
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('default_case')
+                        PsiElement(VlangTokenType.identifier)('default_case')
                     PsiElement(VlangTokenType.])(']')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
@@ -13484,8 +13389,7 @@ V Language file
                         PsiElement(VlangTokenType.==)('==')
                         ENUM_FETCH
                           PsiElement(VlangTokenType..)('.')
-                          REFERENCE_EXPRESSION
-                            PsiElement(VlangTokenType.identifier)('expression_case')
+                          PsiElement(VlangTokenType.identifier)('expression_case')
                       BLOCK
                         PsiElement(VlangTokenType.{)('{')
                         SIMPLE_STATEMENT
@@ -13672,8 +13576,7 @@ V Language file
                                     PsiElement(VlangTokenType.==)('==')
                                     ENUM_FETCH
                                       PsiElement(VlangTokenType..)('.')
-                                      REFERENCE_EXPRESSION
-                                        PsiElement(VlangTokenType.identifier)('type_')
+                                      PsiElement(VlangTokenType.identifier)('type_')
                                   BLOCK
                                     PsiElement(VlangTokenType.{)('{')
                                     SIMPLE_STATEMENT
@@ -13762,8 +13665,7 @@ V Language file
                                           PsiElement(VlangTokenType.==)('==')
                                           ENUM_FETCH
                                             PsiElement(VlangTokenType..)('.')
-                                            REFERENCE_EXPRESSION
-                                              PsiElement(VlangTokenType.identifier)('range')
+                                            PsiElement(VlangTokenType.identifier)('range')
                                         BLOCK
                                           PsiElement(VlangTokenType.{)('{')
                                           SIMPLE_STATEMENT
@@ -14080,8 +13982,7 @@ V Language file
                               PsiElement(VlangTokenType.==)('==')
                               ENUM_FETCH
                                 PsiElement(VlangTokenType..)('.')
-                                REFERENCE_EXPRESSION
-                                  PsiElement(VlangTokenType.identifier)('default_case')
+                                PsiElement(VlangTokenType.identifier)('default_case')
                             BLOCK
                               PsiElement(VlangTokenType.{)('{')
                               ASSIGNMENT_STATEMENT
@@ -14561,18 +14462,15 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('true_')
+                  PsiElement(VlangTokenType.identifier)('true_')
                 PsiElement(VlangTokenType.,)(',')
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('false_')
+                  PsiElement(VlangTokenType.identifier)('false_')
                 PsiElement(VlangTokenType.,)(',')
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('none_')
+                  PsiElement(VlangTokenType.identifier)('none_')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   RETURN_STATEMENT
@@ -14597,8 +14495,7 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('call_expression')
+                  PsiElement(VlangTokenType.identifier)('call_expression')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   RETURN_STATEMENT
@@ -14620,8 +14517,7 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('array')
+                  PsiElement(VlangTokenType.identifier)('array')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   RETURN_STATEMENT
@@ -14643,8 +14539,7 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('selector_expression')
+                  PsiElement(VlangTokenType.identifier)('selector_expression')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   RETURN_STATEMENT
@@ -14666,8 +14561,7 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('type_initializer')
+                  PsiElement(VlangTokenType.identifier)('type_initializer')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   RETURN_STATEMENT
@@ -14689,8 +14583,7 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('binary_expression')
+                  PsiElement(VlangTokenType.identifier)('binary_expression')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   RETURN_STATEMENT
@@ -14717,13 +14610,11 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('unary_expression')
+                  PsiElement(VlangTokenType.identifier)('unary_expression')
                 PsiElement(VlangTokenType.,)(',')
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('index_expression')
+                  PsiElement(VlangTokenType.identifier)('index_expression')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   PsiComment(VLANG_DOC_COMMENT)
@@ -14751,13 +14642,11 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('int_literal')
+                  PsiElement(VlangTokenType.identifier)('int_literal')
                 PsiElement(VlangTokenType.,)(',')
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('float_literal')
+                  PsiElement(VlangTokenType.identifier)('float_literal')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   RETURN_STATEMENT
@@ -14782,8 +14671,7 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('parenthesized_expression')
+                  PsiElement(VlangTokenType.identifier)('parenthesized_expression')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   RETURN_STATEMENT
@@ -14824,8 +14712,7 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('mutable_expression')
+                  PsiElement(VlangTokenType.identifier)('mutable_expression')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   SIMPLE_STATEMENT
@@ -14893,8 +14780,7 @@ V Language file
                             PsiElement(VlangTokenType.==)('==')
                             ENUM_FETCH
                               PsiElement(VlangTokenType..)('.')
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('variable')
+                              PsiElement(VlangTokenType.identifier)('variable')
                           PsiElement(VlangTokenType.&&)('&&')
                           UNARY_EXPR
                             PsiElement(VlangTokenType.!)('!')
@@ -14958,8 +14844,7 @@ V Language file
                                 PsiElement(VlangTokenType.==)('==')
                                 ENUM_FETCH
                                   PsiElement(VlangTokenType..)('.')
-                                  REFERENCE_EXPRESSION
-                                    PsiElement(VlangTokenType.identifier)('ref')
+                                  PsiElement(VlangTokenType.identifier)('ref')
                               BLOCK
                                 PsiElement(VlangTokenType.{)('{')
                                 RETURN_STATEMENT
@@ -14984,8 +14869,7 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('match_expression')
+                  PsiElement(VlangTokenType.identifier)('match_expression')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   RETURN_STATEMENT
@@ -15012,8 +14896,7 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('if_expression')
+                  PsiElement(VlangTokenType.identifier)('if_expression')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   RETURN_STATEMENT
@@ -15040,8 +14923,7 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('type_cast_expression')
+                  PsiElement(VlangTokenType.identifier)('type_cast_expression')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   RETURN_STATEMENT
@@ -15063,8 +14945,7 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('spread_operator')
+                  PsiElement(VlangTokenType.identifier)('spread_operator')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   RETURN_STATEMENT
@@ -15133,8 +15014,7 @@ V Language file
                             PsiElement(VlangTokenType.==)('==')
                             ENUM_FETCH
                               PsiElement(VlangTokenType..)('.')
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('variable')
+                              PsiElement(VlangTokenType.identifier)('variable')
                           PsiElement(VlangTokenType.||)('||')
                           CONDITIONAL_EXPR
                             REFERENCE_EXPRESSION
@@ -15145,8 +15025,7 @@ V Language file
                             PsiElement(VlangTokenType.==)('==')
                             ENUM_FETCH
                               PsiElement(VlangTokenType..)('.')
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('field')
+                              PsiElement(VlangTokenType.identifier)('field')
                         BLOCK
                           PsiElement(VlangTokenType.{)('{')
                           PsiComment(VLANG_DOC_COMMENT)
@@ -15209,13 +15088,11 @@ V Language file
                                             ARRAY_CREATION_LIST
                                               ENUM_FETCH
                                                 PsiElement(VlangTokenType..)('.')
-                                                REFERENCE_EXPRESSION
-                                                  PsiElement(VlangTokenType.identifier)('inc_statement')
+                                                PsiElement(VlangTokenType.identifier)('inc_statement')
                                               PsiElement(VlangTokenType.,)(',')
                                               ENUM_FETCH
                                                 PsiElement(VlangTokenType..)('.')
-                                                REFERENCE_EXPRESSION
-                                                  PsiElement(VlangTokenType.identifier)('dec_statement')
+                                                PsiElement(VlangTokenType.identifier)('dec_statement')
                                             PsiElement(VlangTokenType.])(']')
                                         BLOCK
                                           PsiElement(VlangTokenType.{)('{')
@@ -15277,8 +15154,7 @@ V Language file
                                                           PsiElement(VlangTokenType.==)('==')
                                                           ENUM_FETCH
                                                             PsiElement(VlangTokenType..)('.')
-                                                            REFERENCE_EXPRESSION
-                                                              PsiElement(VlangTokenType.identifier)('variable')
+                                                            PsiElement(VlangTokenType.identifier)('variable')
                                                         PsiElement(VlangTokenType.&&)('&&')
                                                         UNARY_EXPR
                                                           PsiElement(VlangTokenType.!)('!')
@@ -15364,8 +15240,7 @@ V Language file
                                                         PsiElement(VlangTokenType.==)('==')
                                                         ENUM_FETCH
                                                           PsiElement(VlangTokenType..)('.')
-                                                          REFERENCE_EXPRESSION
-                                                            PsiElement(VlangTokenType.identifier)('assignment_statement')
+                                                          PsiElement(VlangTokenType.identifier)('assignment_statement')
                                                       BLOCK
                                                         PsiElement(VlangTokenType.{)('{')
                                                         SIMPLE_STATEMENT
@@ -15426,8 +15301,7 @@ V Language file
                                                                         PsiElement(VlangTokenType.==)('==')
                                                                         ENUM_FETCH
                                                                           PsiElement(VlangTokenType..)('.')
-                                                                          REFERENCE_EXPRESSION
-                                                                            PsiElement(VlangTokenType.identifier)('variable')
+                                                                          PsiElement(VlangTokenType.identifier)('variable')
                                                                       PsiElement(VlangTokenType.&&)('&&')
                                                                       UNARY_EXPR
                                                                         PsiElement(VlangTokenType.!)('!')
@@ -15557,66 +15431,59 @@ V Language file
               MATCH_ARM
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    LITERAL_VALUE_EXPRESSION
-                      TYPE
-                        TYPE_MODIFIERS
-                          <empty list>
-                        TYPE_REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('top_level_declaration')
-                      PsiElement(VlangTokenType.{)('{')
-                      ELEMENT
-                        VALUE
-                          CALL_EXPR
-                            REFERENCE_EXPRESSION
+                  PsiElement(VlangTokenType.identifier)('top_level_declaration')
+                BLOCK
+                  PsiElement(VlangTokenType.{)('{')
+                  SIMPLE_STATEMENT
+                    LEFT_HAND_EXPR_LIST
+                      CALL_EXPR
+                        REFERENCE_EXPRESSION
+                          REFERENCE_EXPRESSION
+                            PsiElement(VlangTokenType.identifier)('an')
+                          PsiElement(VlangTokenType..)('.')
+                          PsiElement(VlangTokenType.identifier)('top_level_statement')
+                        ARGUMENT_LIST
+                          PsiElement(VlangTokenType.()('(')
+                          ELEMENT
+                            VALUE
                               REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('an')
-                              PsiElement(VlangTokenType..)('.')
-                              PsiElement(VlangTokenType.identifier)('top_level_statement')
-                            ARGUMENT_LIST
-                              PsiElement(VlangTokenType.()('(')
-                              ELEMENT
-                                VALUE
-                                  REFERENCE_EXPRESSION
-                                    PsiElement(VlangTokenType.identifier)('node')
-                              PsiElement(VlangTokenType.))(')')
-                      PsiElement(VlangTokenType.})('}')
-                    PsiElement(VlangTokenType..)('.')
-                    PsiElement(VlangTokenType.identifier)('statement')
+                                PsiElement(VlangTokenType.identifier)('node')
+                          PsiElement(VlangTokenType.))(')')
+                  PsiElement(VlangTokenType.})('}')
+              MATCH_ARM
+                ENUM_FETCH
+                  PsiElement(VlangTokenType..)('.')
+                  PsiElement(VlangTokenType.identifier)('statement')
                 PsiElement(VlangTokenType.,)(',')
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    LITERAL_VALUE_EXPRESSION
-                      TYPE
-                        TYPE_MODIFIERS
-                          <empty list>
-                        TYPE_REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('simple_statement')
-                      PsiElement(VlangTokenType.{)('{')
-                      ELEMENT
-                        VALUE
-                          CALL_EXPR
-                            REFERENCE_EXPRESSION
+                  PsiElement(VlangTokenType.identifier)('simple_statement')
+                BLOCK
+                  PsiElement(VlangTokenType.{)('{')
+                  SIMPLE_STATEMENT
+                    LEFT_HAND_EXPR_LIST
+                      CALL_EXPR
+                        REFERENCE_EXPRESSION
+                          REFERENCE_EXPRESSION
+                            PsiElement(VlangTokenType.identifier)('an')
+                          PsiElement(VlangTokenType..)('.')
+                          PsiElement(VlangTokenType.identifier)('statement')
+                        ARGUMENT_LIST
+                          PsiElement(VlangTokenType.()('(')
+                          ELEMENT
+                            VALUE
                               REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('an')
-                              PsiElement(VlangTokenType..)('.')
-                              PsiElement(VlangTokenType.identifier)('statement')
-                            ARGUMENT_LIST
-                              PsiElement(VlangTokenType.()('(')
-                              ELEMENT
-                                VALUE
-                                  REFERENCE_EXPRESSION
-                                    PsiElement(VlangTokenType.identifier)('node')
-                              PsiElement(VlangTokenType.))(')')
-                      PsiElement(VlangTokenType.})('}')
-                    PsiElement(VlangTokenType..)('.')
-                    PsiElement(VlangTokenType.identifier)('expression')
+                                PsiElement(VlangTokenType.identifier)('node')
+                          PsiElement(VlangTokenType.))(')')
+                  PsiElement(VlangTokenType.})('}')
+              MATCH_ARM
+                ENUM_FETCH
+                  PsiElement(VlangTokenType..)('.')
+                  PsiElement(VlangTokenType.identifier)('expression')
                 PsiElement(VlangTokenType.,)(',')
                 ENUM_FETCH
                   PsiElement(VlangTokenType..)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(VlangTokenType.identifier)('expression_with_blocks')
+                  PsiElement(VlangTokenType.identifier)('expression_with_blocks')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
                   SIMPLE_STATEMENT

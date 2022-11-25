@@ -12,7 +12,7 @@ open class ResolveEnumFetchTest : ResolveTestBase() {
             
             fn main() {
                 mut color := Colors.red
-                color = .<caret>green
+                color = ./*caret*/green
             }
         """.trimIndent())
 
@@ -31,7 +31,7 @@ open class ResolveEnumFetchTest : ResolveTestBase() {
             fn main() {
                 mut color := Colors.red
                 match color {
-                .<caret>green {}
+                ./*caret*/green {}
                 }
             }
         """.trimIndent())
@@ -49,7 +49,7 @@ open class ResolveEnumFetchTest : ResolveTestBase() {
             }
             
             struct WithColor {
-                color Colors = .<caret>green
+                color Colors = ./*caret*/green
             }
         """.trimIndent())
 
@@ -67,7 +67,7 @@ open class ResolveEnumFetchTest : ResolveTestBase() {
             
             fn main() {
                 mut color := Colors.red
-                color + .<caret>green
+                color + ./*caret*/green
             }
         """.trimIndent())
 
@@ -86,7 +86,7 @@ open class ResolveEnumFetchTest : ResolveTestBase() {
             fn take_color(color Colors) {}
             
             fn main() {
-                take_color(.<caret>green)
+                take_color(./*caret*/green)
             }
         """.trimIndent())
 
@@ -108,11 +108,50 @@ open class ResolveEnumFetchTest : ResolveTestBase() {
             
             fn main() {
                 WithColor{
-                    color: .<caret>green
+                    color: ./*caret*/green
                 }
             }
         """.trimIndent())
 
+        assertReferencedTo("ENUM_FIELD_DEFINITION green")
+    }
+
+    fun `test in array in binary expr`() {
+        mainFile("a.v", """
+            module main
+            
+            enum Colors {
+                red
+                green
+            }
+            
+            fn main() {
+                mut color := Colors.red
+                if color in [./*caret*/red, ./*caret*/green] {
+                    
+                }
+            }
+        """.trimIndent())
+
+        assertReferencedTo("ENUM_FIELD_DEFINITION red")
+        assertReferencedTo("ENUM_FIELD_DEFINITION green")
+    }
+
+    fun `test in array`() {
+        mainFile("a.v", """
+            module main
+            
+            enum Colors {
+                red
+                green
+            }
+            
+            fn main() {
+                mut colors := [Colors./*caret*/red, ./*caret*/green]
+            }
+        """.trimIndent())
+
+        assertReferencedTo("ENUM_FIELD_DEFINITION red")
         assertReferencedTo("ENUM_FIELD_DEFINITION green")
     }
 }

@@ -5,10 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangInExpression extends VlangExpression {
-
-  @NotNull
-  List<VlangExpression> getExpressionList();
+public interface VlangInExpression extends VlangBinaryExpr {
 
   @NotNull
   PsiElement getIn();

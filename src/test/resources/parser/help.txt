@@ -108,8 +108,7 @@ V Language file
             VALUE
               ENUM_FETCH
                 PsiElement(VlangTokenType..)('.')
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('bool')
+                PsiElement(VlangTokenType.identifier)('bool')
           ELEMENT
             KEY
               FIELD_NAME

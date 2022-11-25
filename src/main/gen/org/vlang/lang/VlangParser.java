@@ -6279,7 +6279,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // 14: POSTFIX(NotIsExpression)
   // 15: POSTFIX(AsExpression)
   // 16: ATOM(DotExpression) ATOM(Literal) ATOM(FunctionLit)
-  // 17: PREFIX(EnumFetch)
+  // 17: ATOM(EnumFetch)
   // 18: PREFIX(MutExpression)
   // 19: PREFIX(SharedExpression)
   // 20: PREFIX(GoExpression)
@@ -6640,16 +6640,15 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
+  // '.' identifier
   public static boolean EnumFetch(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "EnumFetch")) return false;
     if (!nextTokenIsSmart(b, DOT)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, null);
-    r = consumeTokenSmart(b, DOT);
-    p = r;
-    r = p && Expression(b, l, 17);
-    exit_section_(b, l, m, ENUM_FETCH, r, p, null);
-    return r || p;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokensSmart(b, 2, DOT, IDENTIFIER);
+    exit_section_(b, m, ENUM_FETCH, r);
+    return r;
   }
 
   public static boolean MutExpression(PsiBuilder b, int l) {

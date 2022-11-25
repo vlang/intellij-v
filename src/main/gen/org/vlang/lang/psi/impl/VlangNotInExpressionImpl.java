@@ -10,7 +10,7 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangNotInExpressionImpl extends VlangExpressionImpl implements VlangNotInExpression {
+public class VlangNotInExpressionImpl extends VlangBinaryExprImpl implements VlangNotInExpression {
 
   public VlangNotInExpressionImpl(@NotNull ASTNode node) {
     super(node);
@@ -25,12 +25,6 @@ public class VlangNotInExpressionImpl extends VlangExpressionImpl implements Vla
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof VlangVisitor) accept((VlangVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @NotNull
-  public List<VlangExpression> getExpressionList() {
-    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangExpression.class);
   }
 
   @Override

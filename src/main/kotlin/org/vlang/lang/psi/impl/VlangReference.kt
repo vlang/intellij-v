@@ -309,11 +309,11 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             }
         }
 
-        when (val parent = myElement.parent) {
-            is VlangEnumFetch -> {
-                return processEnumFetch(parent, processor, state)
-            }
+        if (myElement is VlangEnumFetch) {
+            return processEnumFetch(myElement as VlangEnumFetch, processor, state)
+        }
 
+        when (myElement.parent) {
             is VlangFieldName -> {
                 if (!processTrailingStructParams(processor, state)) return false
                 if (!processLiteralValueField(processor, state)) return false
