@@ -194,7 +194,7 @@ The plugin provides support for V language
         <localInspection language="vlang" groupPath="V"
                          groupName="General" shortName="VlangCannotInferTypeInspection"
                          displayName="Cannot infer type"
-                         enabledByDefault="true" level="ERROR"
+                         enabledByDefault="false" level="ERROR"
                          implementationClass="org.vlang.ide.inspections.general.VlangCannotInferTypeInspection"/>
         <!-- General inspections End -->
 
