@@ -43,6 +43,11 @@ object VlangElementFactory {
         return PsiTreeUtil.findChildOfType(file, VlangVarModifiers::class.java)!!
     }
 
+    fun createVisibilityModifiers(project: Project, name: String): VlangSymbolVisibility {
+        val file = createFileFromText(project, "$name fn main() {}")
+        return PsiTreeUtil.findChildOfType(file, VlangSymbolVisibility::class.java)!!
+    }
+
     fun createComma(project: Project): PsiElement {
         return PsiTreeUtil.findChildOfType(
             createFileFromText(project, "fn main() { 1,2 }"),

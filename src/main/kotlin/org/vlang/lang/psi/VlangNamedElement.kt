@@ -4,12 +4,10 @@ import com.intellij.navigation.NavigationItem
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNameIdentifierOwner
 
-interface VlangNamedElement : VlangTypeOwner, VlangDocumentationOwner, VlangCompositeElement, PsiNameIdentifierOwner, NavigationItem {
+interface VlangNamedElement : VlangTypeOwner, VlangVisibilityOwner, VlangDocumentationOwner, VlangCompositeElement, PsiNameIdentifierOwner, NavigationItem {
     fun isBlank(): Boolean
-    fun isPublic(): Boolean
     fun isGlobal(): Boolean
     fun getIdentifier(): PsiElement?
     fun getQualifiedName(): String?
-    fun getSymbolVisibility(): VlangSymbolVisibility?
     fun getOwner(): PsiElement?
 }

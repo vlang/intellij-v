@@ -304,6 +304,16 @@ The plugin provides support for V language
 
         <!-- Intentions -->
         <intentionAction>
+            <className>org.vlang.ide.intentions.VlangMakePublicIntention</className>
+            <category>V</category>
+        </intentionAction>
+
+        <intentionAction>
+            <className>org.vlang.ide.intentions.VlangMakePrivateIntention</className>
+            <category>V</category>
+        </intentionAction>
+
+        <intentionAction>
             <className>org.vlang.ide.intentions.VlangMethodToFunctionIntention</className>
             <category>V</category>
         </intentionAction>

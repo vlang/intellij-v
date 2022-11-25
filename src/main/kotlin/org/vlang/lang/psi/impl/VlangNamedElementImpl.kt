@@ -37,6 +37,40 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
         return getSymbolVisibility()?.pub != null
     }
 
+    override fun makePublic() {
+        val newVisibility = VlangElementFactory.createVisibilityModifiers(project, "pub")
+
+        var element = this as PsiElement
+        val (visibility, child) = if (this is VlangConstDefinition) {
+            val declaration = parent as VlangConstDeclaration
+            element = declaration
+            declaration.symbolVisibility to declaration.firstChild
+        } else {
+            getSymbolVisibility() to firstChild
+        }
+
+        if (visibility != null) {
+            visibility.replace(newVisibility)
+        } else {
+            val space = VlangElementFactory.createSpace(project)
+            element.addAfter(
+                space,
+                element.addBefore(newVisibility, child)
+            )
+        }
+    }
+
+    override fun makePrivate() {
+        val visibility = getSymbolVisibility()
+        if (visibility?.builtinGlobal != null) {
+            val newVisibility = VlangElementFactory.createVisibilityModifiers(project, "__builtin")
+            visibility.replace(newVisibility)
+            return
+        }
+
+        visibility?.delete()
+    }
+
     override fun isGlobal(): Boolean {
         return getSymbolVisibility()?.builtinGlobal != null
     }
