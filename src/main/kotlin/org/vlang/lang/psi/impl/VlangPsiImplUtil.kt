@@ -1014,8 +1014,7 @@ object VlangPsiImplUtil {
             val block = expr.block
             val lastStatement = block?.statementList?.lastOrNull() ?: return null
             val lastExpressionList = lastStatement.childrenOfType<VlangLeftHandExprList>().lastOrNull()
-            val lastExpression = lastExpressionList?.expressionList?.lastOrNull()
-            return lastExpression?.getType(context)
+            return getTypeInner(lastExpressionList, context)
         }
 
         // [type, type] -> type[]
@@ -1044,21 +1043,28 @@ object VlangPsiImplUtil {
             val lastIfExpressionList = lastIfStatement?.childrenOfType<VlangLeftHandExprList>()?.lastOrNull()
             val lastElseExpressionList = lastElseStatement?.childrenOfType<VlangLeftHandExprList>()?.lastOrNull()
 
-            val lastIfExpression = lastIfExpressionList?.expressionList?.lastOrNull()
-            val lastElseExpression = lastElseExpressionList?.expressionList?.lastOrNull()
-
-            val ifType = lastIfExpression?.getType(context)
-            val elseType = lastElseExpression?.getType(context)
+            val ifType = getTypeInner(lastIfExpressionList, context)
+            val elseType = getTypeInner(lastElseExpressionList, context)
 
             if (ifType == null) return elseType
             if (elseType == null) return ifType
             if (ifType.toString() == elseType.toString()) return ifType
 
             // TODO: union type of if and else types
-            return VlangAnyTypeEx.INSTANCE
+            return ifType
         }
 
         return null
+    }
+
+    private fun getTypeInner(expr: VlangLeftHandExprList?, context: ResolveState?): VlangTypeEx? {
+        if (expr == null) return null
+
+        val types = expr.expressionList.map { it.getType(context) ?: VlangAnyTypeEx.INSTANCE }
+        if (types.size == 1) {
+            return types.first()
+        }
+        return VlangTupleTypeEx(types, expr)
     }
 
     private fun processTypeCast(callRef: VlangReferenceExpression?, expr: VlangExpression): VlangTypeEx? {

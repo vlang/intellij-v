@@ -31,4 +31,12 @@ fn main() {
 		val
 	}
 	expr_type(e, 'int')
+
+	a1, a2 := if true { 'a', 10 } else { 'b', 10 }
+	expr_type(a1, 'string')
+	expr_type(a2, 'int')
+
+	a3, a4 := if true { unsafe { 'a', 10 } } else { 'b', 10 }
+	expr_type(a3, 'string')
+	expr_type(a4, 'int')
 }
