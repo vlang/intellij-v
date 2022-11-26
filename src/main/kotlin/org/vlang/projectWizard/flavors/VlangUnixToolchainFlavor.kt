@@ -8,7 +8,7 @@ import kotlin.io.path.isDirectory
 
 class VlangUnixToolchainFlavor : VlangToolchainFlavor() {
     override fun getHomePathCandidates(): Sequence<Path> {
-        return sequenceOf("/usr/local/bin", "/usr/bin")
+        return sequenceOf("/usr/local", "/usr")
             .map { it.toPath() }
             .filter { it.isDirectory() }
     }

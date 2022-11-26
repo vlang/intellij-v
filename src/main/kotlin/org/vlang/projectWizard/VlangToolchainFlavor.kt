@@ -25,7 +25,7 @@ abstract class VlangToolchainFlavor {
      * @return true if paths points to a valid home.
      */
     protected open fun isValidToolchainPath(path: Path): Boolean {
-        return path.isDirectory() && hasExecutable(path, "v")
+        return path.isDirectory() && hasExecutable(path, "v") && path.resolve("vlib").isDirectory()
     }
 
     protected open fun hasExecutable(path: Path, toolName: String): Boolean = path.hasExecutable(toolName)
