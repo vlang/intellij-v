@@ -721,9 +721,8 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
                 }
 
                 val name = state.get(ACTUAL_NAME) ?: when (element) {
-                    is PsiNamedElement   -> element.name
-                    is VlangModuleClause -> element.name
-                    else                 -> null
+                    is PsiNamedElement -> element.name
+                    else               -> null
                 }
 
                 val ident = state.get(SEARCH_NAME) ?: reference.getIdentifier()?.text ?: return true

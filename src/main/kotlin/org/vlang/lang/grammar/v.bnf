@@ -105,6 +105,7 @@
 
   implements("(Struct|Interface|Enum|GlobalVariable|Function|Method|TypeAlias|Const)Declaration|ModuleClause")="org.vlang.lang.psi.VlangAttributeOwner"
   implements("(Function|Method)Declaration|(Struct|Interface|Alias)Type|FunctionLit|InterfaceMethodDefinition")="org.vlang.lang.psi.VlangGenericParametersOwner"
+  implements("CallExpr|Type")="org.vlang.lang.psi.VlangGenericArgumentsOwner"
 
   implements("(Function)Declaration")="org.vlang.lang.psi.VlangScopeHolder"
 

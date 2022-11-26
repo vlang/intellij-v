@@ -31,6 +31,14 @@ object VlangCodeInsightUtil {
         return "'${owner.name}'"
     }
 
+    fun getLiteralValueExpr(element: PsiElement): VlangLiteralValueExpression? {
+        val parentValue = element.parentOfType<VlangValue>(VlangBlock::class)
+        if (parentValue != null) {
+            return parentValue.parentNth(2)
+        }
+        return element.parentOfType(VlangBlock::class)
+    }
+
     fun getCallExpr(element: PsiElement): VlangCallExpr? {
         val parentValue = element.parentOfType<VlangValue>(VlangBlock::class)
         if (parentValue != null) {

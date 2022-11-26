@@ -1,5 +1,6 @@
 package org.vlang.ide.codeInsight
 
+import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.types.VlangAliasTypeEx
@@ -9,19 +10,60 @@ import org.vlang.lang.psi.types.VlangPointerTypeEx
 import org.vlang.lang.psi.types.VlangTypeEx
 
 object VlangGenericInferer {
-    fun inferGenericCall(call: VlangCallExpr, caller: VlangSignatureOwner, resultType: VlangTypeEx): VlangTypeEx? {
-        // foo.bar<T>()
-        // ^^^ qualifier
-        val qualifier = (call.expression as? VlangReferenceExpression)?.getQualifier() as? VlangTypeOwner
-        val qualifierType = qualifier?.getType(null)
-        // foo := Foo<int>
-        val instantiation = extractInstantiation(qualifierType)
-        if (instantiation != null) {
+    fun inferGenericCall(
+        argumentsOwner: VlangGenericArgumentsOwner,
+        parametersOwner: VlangGenericParametersOwner,
+        resultType: VlangTypeEx,
+    ): VlangTypeEx {
+        val genericTsMap = inferGenericTsMap(argumentsOwner, parametersOwner)
+        return resultType.substituteGenerics(genericTsMap)
+    }
+
+    fun inferGenericTsMap(
+        argumentsOwner: VlangGenericArgumentsOwner,
+        parametersOwner: VlangGenericParametersOwner,
+    ): Map<String, VlangTypeEx> {
+        // only call can have qualifier
+        if (argumentsOwner is VlangCallExpr) {
             // foo.bar<T>()
-            return inferGenericMethodCall(call, caller, resultType, instantiation)
+            // ^^^ qualifier
+            val qualifier = (argumentsOwner.expression as? VlangReferenceExpression)?.getQualifier() as? VlangTypeOwner
+            val qualifierType = qualifier?.getType(null)
+            // foo := Foo<int>
+            val instantiation = extractInstantiation(qualifierType)
+            if (instantiation != null) {
+                // foo.bar<T>()
+                val qualifierSpecializationMap = inferQualifierGenericTsMap(argumentsOwner.project, instantiation)
+                return inferSimpleGenericTsMap(argumentsOwner, parametersOwner, qualifierSpecializationMap)
+            }
         }
 
-        return inferSimpleCall(caller, call, resultType)
+        return inferSimpleGenericTsMap(argumentsOwner, parametersOwner)
+    }
+
+    fun getGenericParameters(
+        argumentsOwner: VlangGenericArgumentsOwner,
+        parametersOwner: VlangGenericParametersOwner,
+    ): List<String> {
+        // only call can have qualifier
+        if (argumentsOwner is VlangCallExpr) {
+            // foo.bar<T>()
+            // ^^^ qualifier
+            val qualifier = (argumentsOwner.expression as? VlangReferenceExpression)?.getQualifier() as? VlangTypeOwner
+            val qualifierType = qualifier?.getType(null)
+            // foo := Foo<int>
+            val instantiation = extractInstantiation(qualifierType)
+            if (instantiation != null) {
+                // foo.bar<T>()
+                val instantiationParameters = instantiation.extractInstantiationTs(argumentsOwner.project)
+                val genericParameters = getGenericParameters(parametersOwner)
+                val parameters = genericParameters.toMutableSet()
+                parameters.addAll(instantiationParameters)
+                return parameters.toList()
+            }
+        }
+
+        return getGenericParameters(parametersOwner)
     }
 
     private fun extractInstantiation(qualifierType: VlangTypeEx?): VlangGenericInstantiationEx? {
@@ -40,52 +82,62 @@ object VlangGenericInferer {
         return null
     }
 
-    private fun inferSimpleCall(
-        caller: VlangSignatureOwner,
-        call: VlangCallExpr,
-        resultType: VlangTypeEx,
-        additionalSpecializationMap: Map<String, VlangTypeEx> = emptyMap()
-    ): VlangTypeEx {
-        val genericParameters = caller.genericParameters?.genericParameterList?.genericParameterList ?: emptyList()
-        val arguments = call.parameters
-        val genericArguments = call.genericArguments?.typeListNoPin?.typeList?.map { it.toEx() }
-        val parameters = caller.getSignature()?.parameters?.paramDefinitionList
-        val parametersTypes = parameters?.map { it.getType(null) } ?: emptyList()
-        val argumentTypes = arguments.map { it.getType(null) }
+    private fun inferSimpleGenericTsMap(
+        argumentsOwner: VlangGenericArgumentsOwner,
+        genericParametersOwner: VlangGenericParametersOwner,
+        additionalSpecializationMap: Map<String, VlangTypeEx> = emptyMap(),
+    ): Map<String, VlangTypeEx> {
+        val genericParameters = getGenericParameters(genericParametersOwner)
+
+        // No data for inference, call is not generic.
+        if (genericParameters.isEmpty() && additionalSpecializationMap.isEmpty()) {
+            return emptyMap()
+        }
+
+        val genericArguments = argumentsOwner.genericArguments?.typeListNoPin?.typeList?.map { it.toEx() }
 
         // foo<int, string>()
         //    ^^^^^^^^^^^^^ explicit generic arguments
+        // Array<string>{}
+        //      ^^^^^^^^ explicit generic arguments
         if (genericArguments != null) {
             // T: int
             // U: string
-            val explicitSpecializationNameMap = genericParameters.map { it.name!! }.zip(genericArguments).toMap()
-            return resultType.substituteGenerics(explicitSpecializationNameMap + additionalSpecializationMap)
+            val explicitSpecializationNameMap = genericParameters.zip(genericArguments).toMap()
+            return explicitSpecializationNameMap + additionalSpecializationMap
         }
+
+        // We can reify generic Ts only for calls, not for struct initialization.
+        if (genericParametersOwner !is VlangSignatureOwner || argumentsOwner !is VlangCallExpr) {
+            return emptyMap()
+        }
+
+        val arguments = argumentsOwner.parameters
+        val parameters = genericParametersOwner.getSignature()?.parameters?.paramDefinitionList
+        val parametersTypes = parameters?.map { it.getType(null) } ?: emptyList()
+        val argumentTypes = arguments.map { it.getType(null) }
 
         // foo(100, 'hello')
         val reifier = VlangGenericReifier()
         reifier.reifyGenericTs(parametersTypes, argumentTypes)
         // T: int
         // U: string
-        return resultType.substituteGenerics(reifier.implicitSpecializationNameMap + additionalSpecializationMap)
+        return reifier.implicitSpecializationNameMap + additionalSpecializationMap
     }
 
-    private fun inferGenericMethodCall(
-        call: VlangCallExpr,
-        caller: VlangSignatureOwner,
-        resultType: VlangTypeEx,
+    private fun inferQualifierGenericTsMap(
+        project: Project,
         qualifierType: VlangGenericInstantiationEx,
-    ): VlangTypeEx {
-        val qualifierGenericTs = qualifierType.extractInstantiationTs(call.project)
+    ): Map<String, VlangTypeEx> {
+        val qualifierGenericTs = qualifierType.extractInstantiationTs(project)
         if (qualifierGenericTs.isEmpty()) {
-            return resultType
+            return emptyMap()
         }
-        val qualifierSpecializationMap = qualifierGenericTs.zip(qualifierType.specialization).toMap()
-
-        return inferSimpleCall(caller, call, resultType, qualifierSpecializationMap)
+        return qualifierGenericTs.zip(qualifierType.specialization).toMap()
     }
 
     /**
+     * ```
      * struct Foo<T, U> {
      *   a T
      *   b U
@@ -94,8 +146,13 @@ object VlangGenericInferer {
      * foo := Foo<int, string>{}
      * foo.a -> int
      * foo.b -> string
+     * ```
      */
-    fun inferGenericFetch(resolved: PsiElement, expr: VlangReferenceExpression, genericType: VlangTypeEx): VlangTypeEx? {
+    fun inferGenericFetch(
+        resolved: PsiElement,
+        expr: VlangReferenceExpression,
+        genericType: VlangTypeEx,
+    ): VlangTypeEx? {
         if (resolved !is VlangFieldDefinition) {
             return genericType
         }
@@ -118,4 +175,7 @@ object VlangGenericInferer {
 
         return genericType.substituteGenerics(specializationMap)
     }
+
+    private fun getGenericParameters(caller: VlangGenericParametersOwner) =
+        caller.genericParameters?.genericParameterList?.genericParameterList?.map { it.name!! } ?: emptyList()
 }

@@ -3,15 +3,18 @@ package org.vlang.lang.completion
 import com.intellij.codeInsight.completion.CompletionType
 import com.intellij.codeInsight.lookup.Lookup.NORMAL_SELECT_CHAR
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.intellij.lang.annotations.Language
+import org.vlang.documentation.DocumentationTestBase
 
 abstract class CompletionTestBase : BasePlatformTestCase() {
     override fun getTestDataPath() = "src/test/resources/completion"
 
     protected open fun doTestCompletion(
         txt: String,
-        after: String,
+        @Language("vlang") after: String,
     ) {
-        myFixture.configureByText("a.v", txt)
+        val newText = txt.replace(CARET, CARET_ORIGINAL)
+        myFixture.configureByText("a.v", newText)
         val variants = myFixture.complete(CompletionType.BASIC)
         if (variants != null) {
             myFixture.finishLookup(NORMAL_SELECT_CHAR)
@@ -24,31 +27,32 @@ abstract class CompletionTestBase : BasePlatformTestCase() {
     }
 
     fun checkIncludes(
-        txt: String,
+        @Language("vlang") txt: String,
         count: Int,
         vararg variants: String,
     ) = doTestVariants(txt, CompletionType.BASIC, count, CheckType.INCLUDES, *variants)
 
     fun checkEquals(
-        txt: String,
+        @Language("vlang") txt: String,
         count: Int,
         vararg variants: String,
     ) = doTestVariants(txt, CompletionType.BASIC, count, CheckType.EQUALS, *variants)
 
     fun checkExcludes(
-        txt: String,
+        @Language("vlang") txt: String,
         count: Int,
         vararg variants: String,
     ) = doTestVariants(txt, CompletionType.BASIC, count, CheckType.EXCLUDES, *variants)
 
     protected fun doTestVariants(
-        txt: String,
+        @Language("vlang") txt: String,
         type: CompletionType,
         count: Int,
         checkType: CheckType,
         vararg variants: String,
     ) {
-        myFixture.configureByText("a.v", txt)
+        val newText = txt.replace(CARET, CARET_ORIGINAL)
+        myFixture.configureByText("a.v", newText)
         doTestVariantsInner(type, count, checkType, *variants)
     }
 
@@ -81,5 +85,10 @@ abstract class CompletionTestBase : BasePlatformTestCase() {
                 assertTrue("Unexpected variants: $varList", varList.isEmpty())
             }
         }
+    }
+
+    companion object {
+        const val CARET = "/*caret*/"
+        const val CARET_ORIGINAL = "<caret>"
     }
 }

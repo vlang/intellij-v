@@ -4,13 +4,14 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.childrenOfType
 import org.vlang.lang.psi.VlangGenericParametersOwner
+import org.vlang.lang.psi.VlangNamedElement
 import org.vlang.lang.psi.VlangTypeOwner
 
 class VlangGenericInstantiationEx(
     val inner: VlangTypeEx,
     val specialization: List<VlangTypeEx>,
     anchor: PsiElement,
-) : VlangBaseTypeEx(anchor) {
+) : VlangBaseTypeEx(anchor), VlangResolvableTypeEx<VlangNamedElement> {
 
     override fun toString() = "$inner<${specialization.joinToString(", ")}>"
 
@@ -52,6 +53,14 @@ class VlangGenericInstantiationEx(
         for (type in specialization) {
             type.accept(visitor)
         }
+    }
+
+    override fun resolve(project: Project): VlangNamedElement? {
+        if (inner is VlangResolvableTypeEx<*>) {
+            return inner.resolve(project)
+        }
+
+        return null
     }
 
     override fun substituteGenerics(nameMap: Map<String, VlangTypeEx>): VlangTypeEx {

@@ -115,6 +115,7 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitCallExpr(@NotNull VlangCallExpr o) {
     visitExpression(o);
+    // visitGenericArgumentsOwner(o);
   }
 
   public void visitCapture(@NotNull VlangCapture o) {
@@ -822,7 +823,7 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitType(@NotNull VlangType o) {
-    visitCompositeElement(o);
+    visitGenericArgumentsOwner(o);
   }
 
   public void visitTypeAliasDeclaration(@NotNull VlangTypeAliasDeclaration o) {
@@ -896,6 +897,10 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitAttributeOwner(@NotNull VlangAttributeOwner o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitGenericArgumentsOwner(@NotNull VlangGenericArgumentsOwner o) {
     visitCompositeElement(o);
   }
 

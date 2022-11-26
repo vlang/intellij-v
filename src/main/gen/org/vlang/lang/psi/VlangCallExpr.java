@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangCallExpr extends VlangExpression {
+public interface VlangCallExpr extends VlangExpression, VlangGenericArgumentsOwner {
 
   @Nullable
   VlangAnonymousStructValueExpression getAnonymousStructValueExpression();

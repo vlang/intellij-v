@@ -17,6 +17,9 @@ abstract class VlangLightType<E : VlangCompositeElement>(
         setNavigationElement(element)
     }
 
+    override val genericArguments: VlangGenericArguments?
+        get() = null
+
     override fun getContainingFile(): PsiFile = element.containingFile
 
     override fun getTypeReferenceExpression() = null
@@ -28,8 +31,6 @@ abstract class VlangLightType<E : VlangCompositeElement>(
     override fun getElementType() = null
 
     override fun getStub(): VlangTypeStub? = null
-
-    override fun getGenericArguments() = null
 
     override fun getUnderlyingType(): VlangType? = getUnderlyingType(this)
 

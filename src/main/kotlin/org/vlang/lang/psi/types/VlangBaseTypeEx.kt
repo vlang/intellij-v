@@ -52,6 +52,20 @@ abstract class VlangBaseTypeEx(protected val anchor: PsiElement? = null) : UserD
             return isGeneric
         }
 
+        fun VlangTypeEx.getGenericTs(): Set<String> {
+            val genericTs = mutableSetOf<String>()
+            accept(object : VlangTypeVisitor {
+                override fun enter(type: VlangTypeEx): Boolean {
+                    if (type is VlangGenericTypeEx) {
+                        genericTs.add(type.name())
+                        return false
+                    }
+                    return true
+                }
+            })
+            return genericTs
+        }
+
         fun VlangType?.toEx(): VlangTypeEx {
             if (this == null) {
                 return VlangUnknownTypeEx.INSTANCE

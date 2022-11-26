@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import org.vlang.lang.stubs.VlangTypeStub;
 
-public interface VlangType extends VlangCompositeElement, StubBasedPsiElement<VlangTypeStub> {
+public interface VlangType extends VlangGenericArgumentsOwner, StubBasedPsiElement<VlangTypeStub> {
 
   @Nullable
   VlangGenericArguments getGenericArguments();
