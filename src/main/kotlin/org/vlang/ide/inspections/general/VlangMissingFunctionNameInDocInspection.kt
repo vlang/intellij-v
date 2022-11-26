@@ -12,7 +12,7 @@ import org.vlang.lang.doc.psi.VlangDocComment
 import org.vlang.lang.psi.VlangFunctionDeclaration
 import org.vlang.lang.psi.VlangVisitor
 import org.vlang.lang.psi.impl.VlangElementFactory
-import org.vlang.utils.parentOfType
+import org.vlang.utils.parentOfTypeWithStop
 
 class VlangMissingFunctionNameInDocInspection : VlangBaseInspection() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
@@ -43,7 +43,7 @@ class VlangMissingFunctionNameInDocInspection : VlangBaseInspection() {
             override fun getFamilyName() = "Add missing name"
 
             override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
-                val decl = descriptor.psiElement.parentOfType<VlangFunctionDeclaration>() ?: return
+                val decl = descriptor.psiElement.parentOfTypeWithStop<VlangFunctionDeclaration>() ?: return
                 val comment = decl.getDocumentation() ?: return
                 val owner = comment.owner as? VlangFunctionDeclaration ?: return
                 val name = owner.name

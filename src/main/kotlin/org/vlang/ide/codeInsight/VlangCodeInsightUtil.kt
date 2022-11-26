@@ -10,7 +10,7 @@ import org.vlang.lang.psi.*
 import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.utils.parentNth
-import org.vlang.utils.parentOfType
+import org.vlang.utils.parentOfTypeWithStop
 
 object VlangCodeInsightUtil {
     const val BUILTIN_MODULE = "builtin"
@@ -32,19 +32,19 @@ object VlangCodeInsightUtil {
     }
 
     fun getLiteralValueExpr(element: PsiElement): VlangLiteralValueExpression? {
-        val parentValue = element.parentOfType<VlangValue>(VlangBlock::class)
+        val parentValue = element.parentOfTypeWithStop<VlangValue>(VlangBlock::class)
         if (parentValue != null) {
             return parentValue.parentNth(2)
         }
-        return element.parentOfType(VlangBlock::class)
+        return element.parentOfTypeWithStop(VlangBlock::class)
     }
 
     fun getCallExpr(element: PsiElement): VlangCallExpr? {
-        val parentValue = element.parentOfType<VlangValue>(VlangBlock::class)
+        val parentValue = element.parentOfTypeWithStop<VlangValue>(VlangBlock::class)
         if (parentValue != null) {
-            return parentValue.parentNth(3)
+            return parentValue.parentNth(3) ?: element.parentOfTypeWithStop(VlangBlock::class)
         }
-        return element.parentOfType(VlangBlock::class)
+        return element.parentOfTypeWithStop(VlangBlock::class)
     }
 
     fun getCalledParams(callExpr: VlangCallExpr?): List<VlangTypeEx>? {
@@ -62,13 +62,20 @@ object VlangCodeInsightUtil {
         return true
     }
 
-    fun isArrayMethodCall(callExpr: VlangCallExpr): Boolean {
+    fun isArrayMethodCall(callExpr: VlangCallExpr, vararg methodNames: String): Boolean {
         val function = callExpr.resolve() ?: return false
-        return function is VlangMethodDeclaration && function.receiverType?.textMatches("array") == true
+        if (function !is VlangMethodDeclaration) {
+            return false
+        }
+        if (function.name !in methodNames) {
+            return false
+        }
+
+        return function.receiverType?.textMatches("array") == true
     }
 
     fun insideOrGuard(element: PsiElement): Boolean {
-        return element.parentOfType<VlangOrBlockExpr>() != null
+        return element.parentOfTypeWithStop<VlangOrBlockExpr>() != null
     }
 
     fun takeZeroArguments(owner: VlangSignatureOwner): Boolean {
@@ -77,7 +84,7 @@ object VlangCodeInsightUtil {
 
     fun insideElseBlockIfGuard(element: PsiElement): Boolean {
         element.parentOfType<VlangElseStatement>(true) ?: return false
-        val parentIf = element.parentOfType<VlangIfExpression>() ?: return false
+        val parentIf = element.parentOfTypeWithStop<VlangIfExpression>() ?: return false
 
         // if err used in nested if
         if (PsiTreeUtil.isAncestor(parentIf.expression, element, false)) {

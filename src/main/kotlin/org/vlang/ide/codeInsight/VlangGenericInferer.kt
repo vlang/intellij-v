@@ -2,12 +2,10 @@ package org.vlang.ide.codeInsight
 
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.PsiTreeUtil
 import org.vlang.lang.psi.*
-import org.vlang.lang.psi.types.VlangAliasTypeEx
+import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
-import org.vlang.lang.psi.types.VlangGenericInstantiationEx
-import org.vlang.lang.psi.types.VlangPointerTypeEx
-import org.vlang.lang.psi.types.VlangTypeEx
 
 object VlangGenericInferer {
     fun inferGenericCall(
@@ -174,6 +172,23 @@ object VlangGenericInferer {
         }
 
         return genericType.substituteGenerics(specializationMap)
+    }
+
+    // Not real "generic", some kind of pseudo generic for builtin cases
+    fun inferGenericIt(expr: VlangReferenceExpression): VlangTypeEx? {
+        var callExpr = VlangCodeInsightUtil.getCallExpr(expr) ?: return null
+        while (PsiTreeUtil.isAncestor(callExpr.expression, expr, false)) {
+            callExpr = VlangCodeInsightUtil.getCallExpr(callExpr) ?: return null
+        }
+
+        val type = VlangTypeInferenceUtil.callerType(callExpr)
+        val elementType = if (type is VlangArrayTypeEx) {
+            type.inner
+        } else {
+            VlangAnyTypeEx.INSTANCE
+        }
+
+        return elementType
     }
 
     private fun getGenericParameters(caller: VlangGenericParametersOwner) =

@@ -19,6 +19,7 @@ import org.vlang.ide.codeInsight.VlangGenericInferer
 import org.vlang.ide.codeInsight.VlangTypeInferenceUtil
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.impl.VlangPsiImplUtil.prevDot
 import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.getGenericTs
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.isGeneric
@@ -40,6 +41,9 @@ class VlangClosureCompletionContributor : CompletionContributor() {
             result: CompletionResultSet,
         ) {
             val pos = parameters.position
+            if (prevDot(pos)) {
+                return
+            }
 
             val contextType = VlangTypeInferenceUtil.getContextType(pos.parent)
 

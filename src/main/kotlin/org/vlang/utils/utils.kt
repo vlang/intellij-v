@@ -61,7 +61,7 @@ inline fun <reified T: PsiElement, reified T2: PsiElement> PsiElement.insideAny(
     return parentOfTypes(T::class, T2::class) != null
 }
 
-inline fun <reified T : PsiElement> PsiElement.parentOfType(vararg stopAt: KClass<out PsiElement>): T? {
+inline fun <reified T : PsiElement> PsiElement.parentOfTypeWithStop(vararg stopAt: KClass<out PsiElement>): T? {
     return PsiTreeUtil.getParentOfType(this, T::class.java, true, *stopAt.map { it.java }.toTypedArray())
 }
 

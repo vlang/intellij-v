@@ -354,8 +354,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         }
 
         if (element.inside<VlangArgumentList>()) {
-            // disabled for now
-//            if (!processPseudoParams(processor, state)) return false
+            if (!processPseudoParams(processor, state)) return false
         }
 
         if (!processBlock(processor, state, true)) return false
@@ -648,17 +647,30 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             return true
         }
 
-        val callExpr = VlangCodeInsightUtil.getCallExpr(myElement) ?: return true
+        var callExpr = VlangCodeInsightUtil.getCallExpr(myElement) ?: return true
+        while (PsiTreeUtil.isAncestor(callExpr.expression, myElement, false)) {
+            callExpr = VlangCodeInsightUtil.getCallExpr(callExpr) ?: return true
+        }
+
+        if (!VlangCodeInsightUtil.isArrayMethodCall(callExpr, "filter", "map", "any")) {
+            return true
+        }
+
         val resolved = callExpr.resolve() as? VlangSignatureOwner ?: return true
         val params = resolved.getSignature()?.parameters?.paramDefinitionList ?: return true
 
-        val paramType = VlangTypeInferenceUtil.getContextType(myElement)
+        val arguments = callExpr.argumentList.elementList
+        val argument = arguments.find { PsiTreeUtil.isAncestor(it, myElement, false) }
+        val index = arguments.indexOf(argument)
+        val paramType = params.getOrNull(index)?.type?.toEx() ?: return true
+
         val functionType = paramType as? VlangFunctionTypeEx ?: return true
         val lambdaParams = functionType.signature.parameters.paramDefinitionList
         if (lambdaParams.size == 1) {
             val param = params.first { it.type.toEx() is VlangFunctionTypeEx }
             val functionTypeParam =
-                (param.type.toEx() as VlangFunctionTypeEx).signature.parameters.paramDefinitionList.firstOrNull() ?: return true
+                (param.type.toEx() as VlangFunctionTypeEx).signature.parameters.paramDefinitionList.firstOrNull()
+                    ?: return true
 
             val searchName = functionTypeParam.name ?: ""
             val newState = state.put(SEARCH_NAME, searchName).put(ACTUAL_NAME, searchName)

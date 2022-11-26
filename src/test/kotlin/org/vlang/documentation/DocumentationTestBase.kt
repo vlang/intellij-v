@@ -1,9 +1,10 @@
 package org.vlang.documentation
 
 import com.intellij.codeInsight.documentation.DocumentationManager
+import com.intellij.psi.util.parentOfTypes
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.vlang.lang.psi.VlangNamedElement
-import org.vlang.utils.parentOfType
+import org.vlang.lang.psi.VlangReferenceExpression
 import java.io.File
 
 @Suppress("DEPRECATION")
@@ -23,8 +24,13 @@ abstract class DocumentationTestBase : BasePlatformTestCase() {
             val originalElement = myFixture.file.findElementAt(offset)
             check(originalElement != null) { "No element at caret" }
 
-            val element = originalElement.parentOfType<VlangNamedElement>()
+            var element = originalElement.parentOfTypes(VlangNamedElement::class, VlangReferenceExpression::class)
             check(element != null) { "No named element at caret" }
+
+            if (element is VlangReferenceExpression) {
+                element = element.resolve() as? VlangNamedElement
+                check(element != null) { "Can't resolve element" }
+            }
 
             val documentationProvider = DocumentationManager.getProviderFromElement(element)
             val generateDoc = documentationProvider.generateDoc(element, originalElement)

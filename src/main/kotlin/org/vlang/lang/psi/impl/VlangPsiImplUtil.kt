@@ -918,6 +918,14 @@ object VlangPsiImplUtil {
                 return VlangStringTypeEx.INSTANCE
             }
 
+            // 'it' variable in map/filter/any methods of array
+            if (VlangCompletionUtil.isSpecialItVariable(expr.getIdentifier())) {
+                val resolved = expr.reference.resolve()
+                if (resolved is VlangTypeOwner) {
+                    return VlangGenericInferer.inferGenericIt(expr)
+                }
+            }
+
             // expr or { err }
             // if a := foo() { ... } else { err }
             if (VlangCodeInsightUtil.isErrVariable(expr.getIdentifier()) &&
@@ -1160,14 +1168,18 @@ object VlangPsiImplUtil {
         if (returnType is VlangBuiltinArrayTypeEx) {
             if (resolved.name == VlangTypeInferenceUtil.ARRAY_MAP_METHOD) {
                 val firstArg = expr.parameters.firstOrNull()
-                val firstArgType = firstArg?.getType(null)
+                val firstArgType = firstArg?.getType(null) ?: return null
 
+                // map(fn (int) <type> { ... }) -> array<type>
                 if (firstArgType is VlangFunctionTypeEx) {
                     val innerType = firstArgType.result
                     if (innerType != null) {
                         return VlangArrayTypeEx(innerType, firstArg)
                     }
                 }
+
+                // map(it > 10) -> array<bool>
+                return VlangArrayTypeEx(firstArgType, expr)
             }
 
             return VlangTypeInferenceUtil.callerType(expr)

@@ -187,7 +187,7 @@ object DocumentationGenerator {
 
     private fun StringBuilder.generateModuleCommentsPart(element: VlangModuleClause) {
         val commentsList = CommentsConverter.getCommentsForModule(element)
-        if (commentsList.any {it is VlangDocComment}) {
+        if (commentsList.any { it is VlangDocComment }) {
             append(DocumentationMarkup.CONTENT_START)
             for (comment in commentsList) {
                 if (comment is VlangDocComment) {
@@ -482,10 +482,25 @@ object DocumentationGenerator {
         }
     }
 
-    fun VlangParamDefinition.generateDoc(): String {
+    fun VlangParamDefinition.generateDoc(originalElement: PsiElement?): String {
         return buildString {
             generateModuleName(containingFile)
             append(DocumentationMarkup.DEFINITION_START)
+
+            // special case for 'it' in array methods
+            if (name == null && originalElement?.text == "it") {
+                part("variable", asKeyword)
+                part("it", asDeclaration)
+
+                val original = originalElement.parent as? VlangTypeOwner
+                val originalType = original?.getType(null)
+                append(
+                    originalType?.generateDoc(this@generateDoc) ?: DocumentationUtils.colorize("unknown", asDeclaration)
+                )
+                append(DocumentationMarkup.DEFINITION_END)
+                return@buildString
+            }
+
             val type = getType(null)
 
             part(varModifiers.generateDoc())
@@ -703,7 +718,7 @@ object DocumentationGenerator {
 
     private fun StringBuilder.generateCommentsPart(element: PsiElement?) {
         val commentsList = CommentsConverter.getCommentsForElement(element)
-        if (commentsList.any {it is VlangDocComment}) {
+        if (commentsList.any { it is VlangDocComment }) {
             append(DocumentationMarkup.CONTENT_START)
             for (comment in commentsList) {
                 if (comment is VlangDocComment) {
