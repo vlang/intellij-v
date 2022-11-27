@@ -86,21 +86,45 @@ open class VlangControlFlowBuilder(private val scopeHolder: PsiElement) {
                 val resolved = refExpr?.resolve() ?: continue
 
                 if (resolved is VlangVarDefinition) {
-                    addInstruction(VlangAccessVariableInstructionImpl(expr, resolved, ReadWriteAccessDetector.Access.Write))
+                    addInstruction(
+                        VlangAccessVariableInstructionImpl(
+                            expr,
+                            resolved,
+                            ReadWriteAccessDetector.Access.Write
+                        )
+                    )
                 }
 
                 if (resolved is VlangFieldDefinition) {
-                    addInstruction(VlangAccessFieldInstructionImpl(expr, resolved, ReadWriteAccessDetector.Access.Write))
+                    addInstruction(
+                        VlangAccessFieldInstructionImpl(
+                            expr,
+                            resolved,
+                            ReadWriteAccessDetector.Access.Write
+                        )
+                    )
                 }
 
                 val qualifier = refExpr.getQualifier()
                 visitQualifier(qualifier) { next ->
                     if (next is VlangVarDefinition) {
-                        addInstruction(VlangAccessVariableInstructionImpl(expr, next, ReadWriteAccessDetector.Access.Write))
+                        addInstruction(
+                            VlangAccessVariableInstructionImpl(
+                                expr,
+                                next,
+                                ReadWriteAccessDetector.Access.Write
+                            )
+                        )
                     }
 
                     if (next is VlangFieldDefinition) {
-                        addInstruction(VlangAccessFieldInstructionImpl(expr, next, ReadWriteAccessDetector.Access.Write))
+                        addInstruction(
+                            VlangAccessFieldInstructionImpl(
+                                expr,
+                                next,
+                                ReadWriteAccessDetector.Access.Write
+                            )
+                        )
                     }
                 }
             }

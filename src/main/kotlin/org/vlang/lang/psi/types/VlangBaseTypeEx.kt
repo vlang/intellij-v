@@ -99,6 +99,7 @@ abstract class VlangBaseTypeEx(protected val anchor: PsiElement? = null) : UserD
                 is VlangInterfaceType -> VlangInterfaceTypeEx(parentName(type), type)
                 is VlangOptionType    -> VlangOptionTypeEx(type.type?.toEx(), type)
                 is VlangResultType    -> VlangResultTypeEx(type.type?.toEx(), type)
+                is VlangThreadType    -> VlangThreadTypeEx(type.type?.toEx() ?: VlangVoidTypeEx.INSTANCE, type)
                 is VlangSharedType    -> VlangSharedTypeEx(type.type.toEx(), type)
                 is VlangPointerType   -> VlangPointerTypeEx(type.type.toEx(), type)
                 is VlangArrayType     -> VlangArrayTypeEx(type.type.toEx(), type)

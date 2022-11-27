@@ -233,6 +233,10 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         }
 
         if (typ is VlangArrayTypeEx) {
+            if (typ.inner is VlangThreadTypeEx) {
+                return processBuiltinWaitGroupTypeMethods(project, processor, newState)
+            }
+
             if (!processMethods(typ, processor, newState, localResolve)) return false
             return processBuiltinTypeMethods(project, "array", processor, newState)
         }
@@ -247,12 +251,45 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             return processBuiltinChannelTypeMethods(project, processor, newState)
         }
 
+        if (typ is VlangThreadTypeEx) {
+            if (!processMethods(typ, processor, newState, localResolve)) return false
+            return processBuiltinThreadTypeMethods(project, processor, newState)
+        }
+
         if (typ is VlangGenericInstantiationEx) {
             if (!processType(typ.inner, processor, newState)) return false
         }
 
         if (!processMethods(typ, processor, newState, localResolve)) return false
         return true
+    }
+
+    private fun processBuiltinWaitGroupTypeMethods(
+        project: Project,
+        processor: VlangScopeProcessor,
+        newState: ResolveState,
+    ): Boolean {
+        val vlib = VlangConfiguration.getInstance(project).builtinLocation?.parent
+        val syncDir = vlib?.findChild("sync") ?: return false
+        val virtualFile = syncDir.findChild("waitgroup.c.v") ?: return false
+        val psiFile = PsiManager.getInstance(project).findFile(virtualFile) as? VlangFile ?: return false
+        val struct = psiFile.getStructs()
+            .firstOrNull { it.name == "WaitGroup" } ?: return false
+        return processExistingType(struct.structType.toEx(), processor, newState)
+    }
+
+    private fun processBuiltinThreadTypeMethods(
+        project: Project,
+        processor: VlangScopeProcessor,
+        newState: ResolveState,
+    ): Boolean {
+        val vlib = VlangConfiguration.getInstance(project).builtinLocation?.parent
+        val syncDir = vlib?.findChild("os") ?: return false
+        val virtualFile = syncDir.findChild("process.v") ?: return false
+        val psiFile = PsiManager.getInstance(project).findFile(virtualFile) as? VlangFile ?: return false
+        val struct = psiFile.getStructs()
+            .firstOrNull { it.name == "Process" } ?: return false
+        return processExistingType(struct.structType.toEx(), processor, newState)
     }
 
     private fun processBuiltinTypeMethods(

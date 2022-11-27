@@ -1100,6 +1100,10 @@ object VlangPsiImplUtil {
             return expr.type.toEx()
         }
 
+        if (expr is VlangSpawnExpression) {
+            return VlangThreadTypeEx(expr.expression?.getType(context), expr)
+        }
+
         return null
     }
 

@@ -3,12 +3,12 @@ package org.vlang.lang.psi.types
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 
-class VlangResultTypeEx(val inner: VlangTypeEx?, anchor: PsiElement) : VlangBaseTypeEx(anchor) {
-    override fun toString() = "!".safeAppend(inner)
+class VlangThreadTypeEx(val inner: VlangTypeEx?, anchor: PsiElement) : VlangBaseTypeEx(anchor) {
+    override fun toString() = "thread ".safeAppend(inner)
 
-    override fun qualifiedName(): String  = "!".safeAppend(inner?.qualifiedName())
+    override fun qualifiedName(): String  = "thread ".safeAppend(inner?.qualifiedName())
 
-    override fun readableName(context: PsiElement) = "!".safeAppend(inner?.readableName(context))
+    override fun readableName(context: PsiElement) = "thread ".safeAppend(inner?.readableName(context))
 
     override fun module() = inner?.module() ?: super.module()
 
@@ -17,13 +17,13 @@ class VlangResultTypeEx(val inner: VlangTypeEx?, anchor: PsiElement) : VlangBase
             is VlangAnyTypeEx     -> true
             is VlangUnknownTypeEx -> true
             is VlangVoidPtrTypeEx -> true
-            is VlangResultTypeEx  -> rhs.inner?.let { inner?.isAssignableFrom(it, project) } ?: false
+            is VlangThreadTypeEx  -> rhs.inner?.let { inner?.isAssignableFrom(it, project) } ?: false
             else                  -> inner?.isAssignableFrom(rhs, project) ?: false
         }
     }
 
     override fun isEqual(rhs: VlangTypeEx): Boolean {
-        if (rhs !is VlangResultTypeEx) {
+        if (rhs !is VlangThreadTypeEx) {
             return false
         }
 
@@ -47,6 +47,6 @@ class VlangResultTypeEx(val inner: VlangTypeEx?, anchor: PsiElement) : VlangBase
     }
 
     override fun substituteGenerics(nameMap: Map<String, VlangTypeEx>): VlangTypeEx {
-        return VlangResultTypeEx(inner?.substituteGenerics(nameMap), anchor!!)
+        return VlangThreadTypeEx(inner?.substituteGenerics(nameMap), anchor!!)
     }
 }
