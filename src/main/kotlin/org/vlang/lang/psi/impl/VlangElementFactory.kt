@@ -119,4 +119,10 @@ object VlangElementFactory {
         val file = createFileFromText(project, text)
         return file.getImportList()
     }
+
+    fun createBlock(project: Project): VlangBlock {
+        val function = createFileFromText(project, "module a; fn t() {\n}").getFunctions().firstOrNull()
+            ?: error("Impossible situation! Parser is broken.")
+        return function.getBlock()!!
+    }
 }

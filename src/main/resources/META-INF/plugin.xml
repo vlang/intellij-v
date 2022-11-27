@@ -206,6 +206,12 @@ The plugin provides support for V language
                          displayName="Attempt to assign to immutable variable/receiver or constant"
                          enabledByDefault="true" level="ERROR"
                          implementationClass="org.vlang.ide.inspections.validityIssues.VlangReassignImmutableSymbolInspection"/>
+
+        <localInspection language="vlang" groupPath="V"
+                         groupName="Validity issues" shortName="VlangModuleNameDoesntMatchDirectoryNameInspection"
+                         displayName="Module name doesn't match directory name"
+                         enabledByDefault="true" level="ERROR"
+                         implementationClass="org.vlang.ide.inspections.validityIssues.VlangModuleNameDoesntMatchDirectoryNameInspection"/>
         <!-- Validity issues inspections End -->
 
         <!-- Unsafe inspections -->
@@ -248,6 +254,12 @@ The plugin provides support for V language
                          displayName="Function and method naming convention"
                          enabledByDefault="true" level="ERROR"
                          implementationClass="org.vlang.ide.inspections.namingConventions.VlangFunctionNamingConventionInspection"/>
+
+        <localInspection language="vlang" groupPath="V"
+                         groupName="Naming conventions" shortName="VlangModuleNamingConventionInspection"
+                         displayName="Module naming convention"
+                         enabledByDefault="true" level="ERROR"
+                         implementationClass="org.vlang.ide.inspections.namingConventions.VlangModuleNamingConventionInspection"/>
 
         <localInspection language="vlang" groupPath="V"
                          groupName="Naming conventions" shortName="VlangFieldNamingConventionInspection"

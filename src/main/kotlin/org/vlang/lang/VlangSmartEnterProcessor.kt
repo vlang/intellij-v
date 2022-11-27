@@ -6,6 +6,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.impl.VlangElementFactory
 
 class VlangSmartEnterProcessor : SmartEnterProcessorWithFixers() {
     init {
