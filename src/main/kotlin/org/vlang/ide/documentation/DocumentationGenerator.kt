@@ -330,9 +330,9 @@ object DocumentationGenerator {
     private fun VlangGenericParameters?.generateDoc(): String? {
         if (this == null) return null
 
-        val parameters = this@generateDoc.genericParameterList.genericParameterList
+        val parameters = this@generateDoc.parameters
         val names = parameters.mapNotNull { it.name }
-        return names.joinToString(", ", prefix = "<".escapeHTML(), postfix = ">".escapeHTML()) {
+        return names.joinToString(", ", prefix = "[".escapeHTML(), postfix = "]".escapeHTML()) {
             colorize(it, asGeneric)
         }
     }

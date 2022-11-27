@@ -44,7 +44,7 @@ private fun documentationAsHtml(
     val documentationText = try {
         processDocumentationText(context, rawDocumentationText)
     } catch (e: Exception) {
-        return rawDocumentationText
+        rawDocumentationText
     }
 
     val flavour = VDocMarkdownFlavourDescriptor(context, null, renderMode)
@@ -176,8 +176,7 @@ private class VlangCodeFenceProvider(
         loop@ for (child in childrenToConsider) {
             if (isContentStarted && child.type in listOf(MarkdownTokenTypes.CODE_FENCE_CONTENT, MarkdownTokenTypes.EOL)) {
                 val rawLine = HtmlGenerator.trimIndents(child.getTextInNode(text), indentBefore)
-                val trimmedLine = rawLine.trimStart()
-                codeText.append(trimmedLine)
+                codeText.append(rawLine)
                 lastChildWasContent = child.type == MarkdownTokenTypes.CODE_FENCE_CONTENT
             }
 

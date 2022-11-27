@@ -58,3 +58,22 @@ fn /*caret*/foo7() {}
 // Yes!
 // Great.
 fn /*caret*/foo8() {}
+
+// foo9 what about multiline examples?
+// Example:
+// ```v
+// fn main() {
+// 	mut a := ['hi', '1', '5', '3']
+// 	a.sort_with_compare(fn (a &string, b &string) int {
+// 		if a < b {
+// 			return -1
+// 		}
+// 		if a > b {
+// 			return 1
+// 		}
+// 		return 0
+// 	})
+// 	assert a == ['1', '3', '5', 'hi']
+// }
+// ```
+fn /*caret*/foo9() {}
