@@ -4,6 +4,8 @@
 <img src="docs/cover.png">
 </p>
 
+![](https://img.shields.io/badge/Status-Closed%20alpha%20test-orange?logo=IntelliJIDEA)
+![](https://img.shields.io/badge/Beta%20Release-01.01.2023-orange?logo=semantic-release)
 ![Build](https://github.com/i582/vlang-idea/workflows/Build/badge.svg)
 [![Version](https://img.shields.io/jetbrains/plugin/v/20287-vlang.svg)](https://plugins.jetbrains.com/plugin/20287-vlang)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/20287-vlang.svg)](https://plugins.jetbrains.com/plugin/20287-vlang)
