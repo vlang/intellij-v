@@ -100,7 +100,7 @@ object VlangGenericInferer {
             return emptyMap()
         }
 
-        val genericArguments = argumentsOwner.genericArguments?.typeListNoPin?.typeList?.map { it.toEx() }
+        val genericArguments = argumentsOwner.genericArguments?.typeArguments?.map { it.toEx() }
 
         // foo<int, string>()
         //    ^^^^^^^^^^^^^ explicit generic arguments
@@ -200,5 +200,5 @@ object VlangGenericInferer {
     }
 
     private fun getGenericParameters(caller: VlangGenericParametersOwner) =
-        caller.genericParameters?.genericParameterList?.genericParameterList?.map { it.name!! } ?: emptyList()
+        caller.genericParameters?.parameters?.map { it.name!! } ?: emptyList()
 }

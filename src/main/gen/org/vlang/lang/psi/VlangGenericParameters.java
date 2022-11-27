@@ -8,12 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface VlangGenericParameters extends VlangCompositeElement {
 
   @NotNull
-  VlangGenericParameterList getGenericParameterList();
-
-  @NotNull
-  PsiElement getGreater();
-
-  @NotNull
-  PsiElement getLess();
+  List<VlangGenericParameter> getParameters();
 
 }

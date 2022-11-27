@@ -412,29 +412,29 @@ class ClosureCompletionTest : CompletionTestBase() {
     fun `test closure for field of generic struct init`() = doTestCompletion("""
         module main
         
-        struct Array<T> {}
+        struct Array[T] {}
         
-        struct User<T> {
-            field fn (Array<T>)
+        struct User[T] {
+            field fn (Array[T])
         }
         
         fn main() {
-            User<string>{
+            User[string]{
                 field: fn/*caret*/
             }
         }
     """.trimIndent(), """
         module main
         
-        struct Array<T> {}
+        struct Array[T] {}
         
-        struct User<T> {
-            field fn (Array<T>)
+        struct User[T] {
+            field fn (Array[T])
         }
         
         fn main() {
-            User<string>{
-                field: fn (EXPECTED_USER_INPUT_FOR_it Array<string>) {
+            User[string]{
+                field: fn (EXPECTED_USER_INPUT_FOR_it Array[string]) {
         			
         		}
             }

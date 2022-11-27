@@ -111,7 +111,7 @@ open class VlangCompositeElementImpl(node: ASTNode) : ASTWrapperPsiElement(node)
         }
 
         private fun processGenericParameters(parent: VlangGenericParametersOwner, processor: PsiScopeProcessor): Boolean {
-            val parameterList = parent.genericParameters?.genericParameterList?.genericParameterList ?: return true
+            val parameterList = parent.genericParameters?.parameters ?: return true
 
             return VlangPsiImplUtil.processNamedElements(
                 processor,

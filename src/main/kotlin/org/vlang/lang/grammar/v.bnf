@@ -538,14 +538,22 @@ VarModifier ::= mut | shared | volatile | static
 
 SymbolVisibility ::= pub | '__global'
 
-GenericParameters ::= '<' GenericParameterList '>' {pin=3}
-GenericParametersFirstPin ::= '<' GenericParameterList '>' {pin=3 elementType=GenericParameters}
+GenericParameters ::= GenericParametersOld | GenericParametersNew {
+  methods=[getParameters]
+}
+GenericParametersOld ::= '<' GenericParameterList? '>' {pin=3 elementType=GenericParameters}
+GenericParametersNew ::= '[' GenericParameterList? ']' {pin=3 elementType=GenericParameters}
+
 GenericParameterList ::= GenericParameter (',' GenericParameter)* ','?
 GenericParameter ::= identifier {
   stubClass="org.vlang.lang.stubs.VlangGenericParameterStub"
 }
 
-GenericArguments ::= '<' TypeListNoPin '>' {pin=3}
+GenericArguments ::= GenericArgumentsOld | GenericArgumentsNew {
+  methods=[getTypeArguments]
+}
+GenericArgumentsOld ::= '<' TypeListNoPin? '>' {pin=3 elementType=GenericArguments}
+GenericArgumentsNew ::= <<leftBracket>> TypeListNoPin? ']' {pin=3 elementType=GenericArguments}
 
 FunctionDeclaration ::= Attributes? SymbolVisibility? fn identifier GenericParameters? Signature BlockWithConsume? {
   pin=4
@@ -653,7 +661,7 @@ private MaxGroup ::=
   | FunctionLit
 
 // fn [[<captures>]] [<generics>] (...) {...}
-FunctionLit ::= fn CaptureList? GenericParametersFirstPin? Signature Block {
+FunctionLit ::= fn CaptureList? GenericParameters? Signature Block {
   pin=1
   methods=[addCapture processDeclarations]
 }

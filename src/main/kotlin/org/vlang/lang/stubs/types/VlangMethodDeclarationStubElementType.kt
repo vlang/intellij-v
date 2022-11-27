@@ -82,6 +82,11 @@ class VlangMethodDeclarationStubElementType(name: String) :
                 return text.substringBefore("<")
             }
 
+            if (text.contains("[") && !text.contains("map[") && !text.startsWith("[")) {
+                // Foo[T] -> Foo
+                return text.substringBefore("[")
+            }
+
             return text
         }
     }

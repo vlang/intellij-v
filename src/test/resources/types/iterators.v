@@ -34,7 +34,7 @@ fn main() {
 
 	c3 := Counter3<Counter3<int>>{}
 	for value in c3 {
-		expr_type(value, 'Counter3<int>')
+		expr_type(value, 'Counter3[int]')
 		for value1 in value {
 			expr_type(value1, 'int')
 		}

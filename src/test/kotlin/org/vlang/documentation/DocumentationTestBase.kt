@@ -3,6 +3,7 @@ package org.vlang.documentation
 import com.intellij.codeInsight.documentation.DocumentationManager
 import com.intellij.psi.util.parentOfTypes
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
 import org.vlang.lang.psi.VlangNamedElement
 import org.vlang.lang.psi.VlangReferenceExpression
 import java.io.File

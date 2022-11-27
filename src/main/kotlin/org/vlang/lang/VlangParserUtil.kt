@@ -219,6 +219,22 @@ object VlangParserUtil : GeneratedParserUtilBase() {
     }
 
     @JvmStatic
+    fun leftBracket(builder: PsiBuilder, level: Int): Boolean {
+        val marker = builder.mark()
+        if (!consumeToken(builder, LBRACK)) {
+            marker.rollbackTo()
+            return false
+        }
+        // before [ should not be whitespace
+        if (builder.rawLookup(-2) == VlangTokenTypes.WS) {
+            marker.rollbackTo()
+            return false
+        }
+        marker.collapse(LBRACK)
+        return true
+    }
+
+    @JvmStatic
     fun gtGtGt(builder: PsiBuilder, level: Int): Boolean {
         val marker = builder.mark()
         if (!consumeToken(builder, GREATER)) {

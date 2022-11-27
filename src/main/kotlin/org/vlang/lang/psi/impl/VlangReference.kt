@@ -394,6 +394,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
         return !PsiTreeUtil.isAncestor(parentMethod.receiver, identifier!!, false)
                 || VlangPsiImplUtil.prevAngleParen(identifier!!)
+                || VlangPsiImplUtil.prevLeftBracket(identifier!!)
                 || VlangPsiImplUtil.prevComma(identifier!!)
     }
 
@@ -402,11 +403,15 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         processor: VlangScopeProcessor,
         state: ResolveState,
     ): Boolean {
-        val receiverType = parentMethod.receiverType.toEx()
+        var receiverType = parentMethod.receiverType.toEx()
+        if (receiverType is VlangPointerTypeEx) {
+            receiverType = receiverType.inner
+        }
+
         if (receiverType is VlangGenericInstantiationEx && receiverType.inner is VlangResolvableTypeEx<*>) {
-            val resolved = receiverType.inner.resolve(project) ?: return false
+            val resolved = (receiverType.inner as VlangResolvableTypeEx<*>).resolve(project) ?: return false
             val genericParametersOwner = resolved.childrenOfType<VlangGenericParametersOwner>().firstOrNull() ?: return false
-            val genericParameters = genericParametersOwner.genericParameters?.genericParameterList?.genericParameterList
+            val genericParameters = genericParametersOwner.genericParameters?.parameters
                 ?: return false
             if (!processNamedElements(processor, state, genericParameters, false)) return false
         }

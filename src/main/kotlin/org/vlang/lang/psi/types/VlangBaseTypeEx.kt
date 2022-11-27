@@ -74,7 +74,7 @@ abstract class VlangBaseTypeEx(protected val anchor: PsiElement? = null) : UserD
             val type = toExInner()
 
             if (genericArguments != null) {
-                val genericArguments = genericArguments!!.typeListNoPin.typeList.map { it.toEx() }
+                val genericArguments = genericArguments!!.typeArguments.map { it.toEx() }
                 return VlangGenericInstantiationEx(type, genericArguments, this)
             }
 

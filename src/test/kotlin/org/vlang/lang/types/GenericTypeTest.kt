@@ -140,8 +140,8 @@ class GenericTypeTest : TypeTestBase() {
         
         fn main() {
             foo := Foo<Foo<int>>{}
-            expr_type(foo, 'Foo<Foo<int>>')
-            expr_type(foo.bar(), 'Foo<int>')
+            expr_type(foo, 'Foo[Foo[int]]')
+            expr_type(foo.bar(), 'Foo[int]')
             expr_type(foo.bar().bar(), 'int')
         }
         """.trimIndent()

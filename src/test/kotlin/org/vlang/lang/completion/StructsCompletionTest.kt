@@ -21,7 +21,7 @@ class StructsCompletionTest : CompletionTestBase() {
         }
         
         fn main() {
-            Array<T>{<caret>}
+            Array[T]{<caret>}
         }
         """.trimIndent()
     )
@@ -35,7 +35,7 @@ class StructsCompletionTest : CompletionTestBase() {
         }
         
         fn main() {
-            Ar<caret><T>{}
+            Ar<caret>[T]{}
         }
         """.trimIndent(),
         """
@@ -46,7 +46,7 @@ class StructsCompletionTest : CompletionTestBase() {
         }
         
         fn main() {
-            Array<caret><T>{}
+            Array<caret>[T]{}
         }
         """.trimIndent()
     )

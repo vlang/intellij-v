@@ -28,20 +28,8 @@ public class VlangGenericArgumentsImpl extends VlangCompositeElementImpl impleme
 
   @Override
   @NotNull
-  public VlangTypeListNoPin getTypeListNoPin() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangTypeListNoPin.class));
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getGreater() {
-    return notNullChild(findChildByType(GREATER));
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getLess() {
-    return notNullChild(findChildByType(LESS));
+  public List<VlangType> getTypeArguments() {
+    return VlangPsiImplUtil.getTypeArguments(this);
   }
 
 }

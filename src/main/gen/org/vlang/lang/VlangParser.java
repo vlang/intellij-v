@@ -978,7 +978,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // GenericArguments? ArgumentList
   public static boolean CallExpr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "CallExpr")) return false;
-    if (!nextTokenIs(b, "<call expr>", LESS, LPAREN)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _LEFT_, CALL_EXPR, "<call expr>");
     r = CallExpr_0(b, l + 1);
@@ -2414,17 +2413,56 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '<' TypeListNoPin '>'
+  // GenericArgumentsOld | GenericArgumentsNew
   public static boolean GenericArguments(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "GenericArguments")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _COLLAPSE_, GENERIC_ARGUMENTS, "<generic arguments>");
+    r = GenericArgumentsOld(b, l + 1);
+    if (!r) r = GenericArgumentsNew(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // <<leftBracket>> TypeListNoPin? ']'
+  public static boolean GenericArgumentsNew(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GenericArgumentsNew")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, GENERIC_ARGUMENTS, "<generic arguments new>");
+    r = leftBracket(b, l + 1);
+    r = r && GenericArgumentsNew_1(b, l + 1);
+    r = r && consumeToken(b, RBRACK);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // TypeListNoPin?
+  private static boolean GenericArgumentsNew_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GenericArgumentsNew_1")) return false;
+    TypeListNoPin(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // '<' TypeListNoPin? '>'
+  public static boolean GenericArgumentsOld(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GenericArgumentsOld")) return false;
     if (!nextTokenIs(b, LESS)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, LESS);
-    r = r && TypeListNoPin(b, l + 1);
+    r = r && GenericArgumentsOld_1(b, l + 1);
     r = r && consumeToken(b, GREATER);
     exit_section_(b, m, GENERIC_ARGUMENTS, r);
     return r;
+  }
+
+  // TypeListNoPin?
+  private static boolean GenericArgumentsOld_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GenericArgumentsOld_1")) return false;
+    TypeListNoPin(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -2485,31 +2523,58 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '<' GenericParameterList '>'
+  // GenericParametersOld | GenericParametersNew
   public static boolean GenericParameters(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "GenericParameters")) return false;
+    if (!nextTokenIs(b, "<generic parameters>", LBRACK, LESS)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _COLLAPSE_, GENERIC_PARAMETERS, "<generic parameters>");
+    r = GenericParametersOld(b, l + 1);
+    if (!r) r = GenericParametersNew(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // '[' GenericParameterList? ']'
+  public static boolean GenericParametersNew(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GenericParametersNew")) return false;
+    if (!nextTokenIs(b, LBRACK)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LBRACK);
+    r = r && GenericParametersNew_1(b, l + 1);
+    r = r && consumeToken(b, RBRACK);
+    exit_section_(b, m, GENERIC_PARAMETERS, r);
+    return r;
+  }
+
+  // GenericParameterList?
+  private static boolean GenericParametersNew_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GenericParametersNew_1")) return false;
+    GenericParameterList(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // '<' GenericParameterList? '>'
+  public static boolean GenericParametersOld(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GenericParametersOld")) return false;
     if (!nextTokenIs(b, LESS)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, LESS);
-    r = r && GenericParameterList(b, l + 1);
+    r = r && GenericParametersOld_1(b, l + 1);
     r = r && consumeToken(b, GREATER);
     exit_section_(b, m, GENERIC_PARAMETERS, r);
     return r;
   }
 
-  /* ********************************************************** */
-  // '<' GenericParameterList '>'
-  public static boolean GenericParametersFirstPin(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "GenericParametersFirstPin")) return false;
-    if (!nextTokenIs(b, LESS)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, LESS);
-    r = r && GenericParameterList(b, l + 1);
-    r = r && consumeToken(b, GREATER);
-    exit_section_(b, m, GENERIC_PARAMETERS, r);
-    return r;
+  // GenericParameterList?
+  private static boolean GenericParametersOld_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GenericParametersOld_1")) return false;
+    GenericParameterList(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -6609,7 +6674,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // fn CaptureList? GenericParametersFirstPin? Signature Block
+  // fn CaptureList? GenericParameters? Signature Block
   public static boolean FunctionLit(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionLit")) return false;
     if (!nextTokenIsSmart(b, FN)) return false;
@@ -6632,10 +6697,10 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // GenericParametersFirstPin?
+  // GenericParameters?
   private static boolean FunctionLit_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionLit_2")) return false;
-    GenericParametersFirstPin(b, l + 1);
+    GenericParameters(b, l + 1);
     return true;
   }
 

@@ -28,20 +28,8 @@ public class VlangGenericParametersImpl extends VlangCompositeElementImpl implem
 
   @Override
   @NotNull
-  public VlangGenericParameterList getGenericParameterList() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangGenericParameterList.class));
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getGreater() {
-    return notNullChild(findChildByType(GREATER));
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getLess() {
-    return notNullChild(findChildByType(LESS));
+  public List<VlangGenericParameter> getParameters() {
+    return VlangPsiImplUtil.getParameters(this);
   }
 
 }

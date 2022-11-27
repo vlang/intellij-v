@@ -13,20 +13,20 @@ class VlangGenericInstantiationEx(
     anchor: PsiElement,
 ) : VlangBaseTypeEx(anchor), VlangResolvableTypeEx<VlangNamedElement> {
 
-    override fun toString() = "$inner<${specialization.joinToString(", ")}>"
+    override fun toString() = "$inner[${specialization.joinToString(", ")}]"
 
     override fun qualifiedName(): String = buildString {
         append(inner.qualifiedName())
-        append("<")
+        append("[")
         append(specialization.joinToString(", ") { it.qualifiedName() })
-        append(">")
+        append("]")
     }
 
     override fun readableName(context: PsiElement) = buildString {
         append(inner.readableName(context))
-        append("<")
+        append("[")
         append(specialization.joinToString(", ") { it.readableName(context) })
-        append(">")
+        append("]")
     }
 
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
@@ -91,5 +91,5 @@ class VlangGenericInstantiationEx(
     }
 
     private fun extractGenericParameters(resolvedType: VlangGenericParametersOwner) =
-        resolvedType.genericParameters?.genericParameterList?.genericParameterList?.map { it.name!! } ?: emptyList()
+        resolvedType.genericParameters?.parameters?.map { it.name!! } ?: emptyList()
 }

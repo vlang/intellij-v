@@ -143,7 +143,7 @@ class FunctionCompletionTest : CompletionTestBase() {
         """
         module main
         
-        fn foo<T>() {}
+        fn foo[T]() {}
         
         fn main() {
             fo<caret>
@@ -152,10 +152,10 @@ class FunctionCompletionTest : CompletionTestBase() {
         """
         module main
         
-        fn foo<T>() {}
+        fn foo[T]() {}
         
         fn main() {
-            foo<<caret>T>()
+            foo[<caret>T]()
         }
         """.trimIndent()
     )
@@ -167,7 +167,7 @@ class FunctionCompletionTest : CompletionTestBase() {
         fn foo<T>() {}
         
         fn main() {
-            fo<caret><int>()
+            fo<caret>[int]()
         }
         """.trimIndent(),
         """
@@ -176,7 +176,7 @@ class FunctionCompletionTest : CompletionTestBase() {
         fn foo<T>() {}
         
         fn main() {
-            foo<<caret>int>()
+            foo[<caret>int]()
         }
         """.trimIndent()
     )
@@ -185,7 +185,7 @@ class FunctionCompletionTest : CompletionTestBase() {
         """
         module main
         
-        fn foo<T, U, N>() {}
+        fn foo[T, U, N]() {}
         
         fn main() {
             fo<caret>
@@ -194,10 +194,10 @@ class FunctionCompletionTest : CompletionTestBase() {
         """
         module main
         
-        fn foo<T, U, N>() {}
+        fn foo[T, U, N]() {}
         
         fn main() {
-            foo<<caret>T, U, N>()
+            foo[<caret>T, U, N]()
         }
         """.trimIndent()
     )

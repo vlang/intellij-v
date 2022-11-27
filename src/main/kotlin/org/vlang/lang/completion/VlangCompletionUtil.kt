@@ -491,12 +491,12 @@ object VlangCompletionUtil {
 
             val prevChar = context.document.charsSequence.getOrNull(caretOffset)
             val withParenAfterCursor = prevChar == '('
-            val withAngleParenAfterCursor = prevChar == '<'
+            val withLeftBracketParenAfterCursor = prevChar == '['
 
             if (!withParenAfterCursor && !isGeneric) {
                 context.document.insertString(caretOffset, "()")
             }
-            if (!withAngleParenAfterCursor && isGeneric) {
+            if (!withLeftBracketParenAfterCursor && isGeneric) {
                 val endVariable = if (!takeZeroArguments) "\$END$" else ""
                 genericParametersInsertHandler(function.genericParameters!!, "($endVariable)")
                     .handleInsert(context, item)
@@ -511,12 +511,12 @@ object VlangCompletionUtil {
     }
 
     private fun genericParametersInsertHandler(params: VlangGenericParameters, suffix: String = ""): TemplateStringInsertHandler {
-        val paramList = params.genericParameterList.genericParameterList.map {
+        val paramList = params.parameters.map {
             it.name!!
         }
 
         return TemplateStringInsertHandler(
-            "<" + paramList.joinToString(", ") { "\$$it$" } + ">" + suffix, true,
+            "[" + paramList.joinToString(", ") { "\$$it$" } + "]" + suffix, true,
             *paramList.map {
                 it to ConstantNode(it)
             }.toTypedArray()
@@ -535,10 +535,10 @@ object VlangCompletionUtil {
             val caretOffset = context.editor.caretModel.offset
 
             val prevChar = context.document.charsSequence.getOrNull(caretOffset)
-            val withAngleParenAfterCursor = prevChar == '<'
+            val withLeftBracketParenAfterCursor = prevChar == '['
 
             val isGeneric = struct.genericParameters != null
-            if (isGeneric && !withAngleParenAfterCursor) {
+            if (isGeneric && !withLeftBracketParenAfterCursor) {
                 val suffix = if (needBrackets) "{\$END$}" else ""
                 genericParametersInsertHandler(struct.genericParameters!!, suffix)
                     .handleInsert(context, item)

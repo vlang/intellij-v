@@ -209,6 +209,16 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getParameters(o: VlangGenericParameters): List<VlangGenericParameter> {
+        return o.childrenOfType<VlangGenericParameterList>().firstOrNull()?.genericParameterList ?: emptyList()
+    }
+
+    @JvmStatic
+    fun getTypeArguments(o: VlangGenericArguments): List<VlangType> {
+        return o.childrenOfType<VlangTypeListNoPin>().firstOrNull()?.typeList ?: emptyList()
+    }
+
+    @JvmStatic
     fun getIdentifier(o: VlangFieldName): PsiElement? {
         return o.referenceExpression.getIdentifier()
     }
@@ -602,6 +612,11 @@ object VlangPsiImplUtil {
     fun prevAngleParen(e: PsiElement?): Boolean {
         val prev = if (e == null) null else PsiTreeUtil.prevVisibleLeaf(e)
         return prev is LeafElement && (prev as LeafElement).elementType === VlangTypes.LESS
+    }
+
+    fun prevLeftBracket(e: PsiElement?): Boolean {
+        val prev = if (e == null) null else PsiTreeUtil.prevVisibleLeaf(e)
+        return prev is LeafElement && (prev as LeafElement).elementType === VlangTypes.LBRACK
     }
 
     fun prevComma(e: PsiElement?): Boolean {
