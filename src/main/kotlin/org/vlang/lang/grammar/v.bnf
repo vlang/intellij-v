@@ -157,8 +157,8 @@ ImportDeclaration ::= import ImportSpec {
 // <part1>.<part2>
 // <part1> { <ref> }
 // <part1> as <alias>
-ImportSpec ::= ImportPath (SelectiveImportList | ImportAlias)? {
-  methods=[getIdentifier getLastPart getLastPartPsi getName getImportedName]
+ImportSpec ::= ImportPath ImportAlias? SelectiveImportList? {
+  methods=[getIdentifier getLastPart getLastPartPsi getName getImportedName getAliasName getPathName resolve]
 }
 
 // <part1>
@@ -180,7 +180,7 @@ SelectiveImportList ::= '{' ReferenceExpression (list_separator ReferenceExpress
 ImportAlias ::= as ImportAliasName {
   pin=1
   stubClass="org.vlang.lang.stubs.VlangImportAliasStub"
-  methods=[getName getIdentifier]
+  methods=[getName getIdentifier getQualifiedName]
 }
 
 ImportAliasName ::= identifier {
@@ -903,7 +903,7 @@ UnpackingExpression ::= '...' Expression {pin=1}
 // .<ident>
 EnumFetch ::= '.' identifier {
   pin=2
-  methods=[getReference getQualifier]
+  methods=[getReference getQualifier resolve]
 }
 
 // <expr>..<expr>

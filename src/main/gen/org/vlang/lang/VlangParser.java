@@ -2926,7 +2926,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ImportPath (SelectiveImportList | ImportAlias)?
+  // ImportPath ImportAlias? SelectiveImportList?
   public static boolean ImportSpec(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ImportSpec")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
@@ -2934,24 +2934,23 @@ public class VlangParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = ImportPath(b, l + 1);
     r = r && ImportSpec_1(b, l + 1);
+    r = r && ImportSpec_2(b, l + 1);
     exit_section_(b, m, IMPORT_SPEC, r);
     return r;
   }
 
-  // (SelectiveImportList | ImportAlias)?
+  // ImportAlias?
   private static boolean ImportSpec_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ImportSpec_1")) return false;
-    ImportSpec_1_0(b, l + 1);
+    ImportAlias(b, l + 1);
     return true;
   }
 
-  // SelectiveImportList | ImportAlias
-  private static boolean ImportSpec_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ImportSpec_1_0")) return false;
-    boolean r;
-    r = SelectiveImportList(b, l + 1);
-    if (!r) r = ImportAlias(b, l + 1);
-    return r;
+  // SelectiveImportList?
+  private static boolean ImportSpec_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ImportSpec_2")) return false;
+    SelectiveImportList(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */

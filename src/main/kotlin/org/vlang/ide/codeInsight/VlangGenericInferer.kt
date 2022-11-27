@@ -77,6 +77,14 @@ object VlangGenericInferer {
             return extractInstantiation(qualifierType.inner)
         }
 
+        if (qualifierType is VlangOptionTypeEx) {
+            return extractInstantiation(qualifierType.inner)
+        }
+
+        if (qualifierType is VlangResultTypeEx) {
+            return extractInstantiation(qualifierType.inner)
+        }
+
         return null
     }
 

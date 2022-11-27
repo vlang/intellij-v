@@ -6,7 +6,9 @@ import com.intellij.psi.PsiReferenceBase
 import com.intellij.psi.impl.source.resolve.ResolveCache
 import com.intellij.util.ArrayUtil
 
-abstract class VlangCachedReference<T : PsiElement>(element: T) : PsiReferenceBase<T>(element, TextRange.from(0, element.textLength)) {
+abstract class VlangCachedReference<T : PsiElement>(element: T) :
+    PsiReferenceBase<T>(element, TextRange.from(0, element.textLength)) {
+
     protected val project = element.project
 
     override fun resolve(): PsiElement? {
@@ -23,8 +25,7 @@ abstract class VlangCachedReference<T : PsiElement>(element: T) : PsiReferenceBa
     abstract fun processResolveVariants(processor: VlangScopeProcessor): Boolean
 
     override fun handleElementRename(newElementName: String): PsiElement {
-        myElement!!.replace(VlangElementFactory.createIdentifierFromText(myElement!!.project, newElementName))
-        return myElement
+        return myElement!!.replace(VlangElementFactory.createIdentifierFromText(myElement!!.project, newElementName))
     }
 
     override fun getVariants(): Array<Any> = ArrayUtil.EMPTY_OBJECT_ARRAY
@@ -34,6 +35,7 @@ abstract class VlangCachedReference<T : PsiElement>(element: T) : PsiReferenceBa
     override fun hashCode() = element.hashCode()
 
     companion object {
-        private val MY_RESOLVER = ResolveCache.AbstractResolver { r: VlangCachedReference<*>, b: Boolean -> r.resolveInner() }
+        private val MY_RESOLVER =
+            ResolveCache.AbstractResolver { r: VlangCachedReference<*>, b: Boolean -> r.resolveInner() }
     }
 }

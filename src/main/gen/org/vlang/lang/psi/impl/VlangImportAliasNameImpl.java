@@ -9,7 +9,7 @@ import com.intellij.psi.PsiElementVisitor;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
-import org.vlang.lang.psi.impl.imports.VlangImportReference;
+import org.vlang.lang.psi.impl.imports.VlangModuleReference;
 
 public class VlangImportAliasNameImpl extends VlangCompositeElementImpl implements VlangImportAliasName {
 
@@ -35,7 +35,7 @@ public class VlangImportAliasNameImpl extends VlangCompositeElementImpl implemen
 
   @Override
   @NotNull
-  public VlangImportReference<VlangImportAliasName> getReference() {
+  public VlangModuleReference<VlangImportAliasName> getReference() {
     return VlangPsiImplUtil.getReference(this);
   }
 

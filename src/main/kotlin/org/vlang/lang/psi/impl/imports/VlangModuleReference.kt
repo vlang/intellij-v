@@ -3,15 +3,13 @@ package org.vlang.lang.psi.impl.imports
 import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveState
 import com.intellij.psi.SmartPointerManager
-import com.intellij.psi.search.GlobalSearchScope
-import org.vlang.lang.psi.VlangFile
-import org.vlang.lang.psi.VlangImportName
-import org.vlang.lang.psi.VlangImportSpec
+import com.intellij.psi.util.parentOfType
+import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.*
+import org.vlang.lang.psi.impl.VlangElementFactory
 import org.vlang.lang.stubs.index.VlangModulesIndex
 
-class VlangImportReference<T : PsiElement>(element: T, private val importSpec: VlangImportSpec) : VlangCachedReference<T>(element) {
-
+class VlangModuleReference<T : PsiElement>(element: T) : VlangCachedReference<T>(element) {
     override fun bindToElement(element: PsiElement): PsiElement {
         return element // TODO
     }
@@ -44,25 +42,23 @@ class VlangImportReference<T : PsiElement>(element: T, private val importSpec: V
     private fun processModules(processor: VlangScopeProcessor, state: ResolveState): Boolean {
         val element = element
 
-        if (element is VlangImportName) {
-            val name = element.getQualifiedName()
-
-            val modules = VlangModulesIndex.find(name, element.project, null, null)
-            if (modules.isEmpty()) {
-                return findModuleDirectory(element, name, processor, state)
+        val fqn = when (element) {
+            is VlangImportAliasName -> {
+                val importSpec = element.parentOfType<VlangImportSpec>() ?: return true
+                importSpec.importPath.qualifiedName
             }
 
-            return processModules(modules, processor, state, name)
+            is VlangImportName      -> element.getQualifiedName()
+            else                    -> return true
         }
 
-        val name = importSpec.importPath.text ?: return true
 
-        val modules = VlangModulesIndex.find(name, element.project, GlobalSearchScope.allScope(element.project), null)
-
-        return modules.any {
-            val dir = it.parent ?: return@any false
-            !processor.execute(dir, state.put(VlangReferenceBase.ACTUAL_NAME, name))
+        val modules = VlangModulesIndex.find(fqn, element.project, null, null)
+        if (modules.isEmpty()) {
+            return findModuleDirectory(fqn, processor, state)
         }
+
+        return processModules(modules, processor, state, fqn)
     }
 
     private fun processModules(
@@ -72,11 +68,11 @@ class VlangImportReference<T : PsiElement>(element: T, private val importSpec: V
         name: String?,
     ) = modules.any {
         val dir = it.parent ?: return@any false
-        !processor.execute(dir, state.put(VlangReferenceBase.ACTUAL_NAME, name))
+        val module = VlangModule.fromDirectory(dir)
+        !processor.execute(module.toPsi(), state.put(VlangReferenceBase.ACTUAL_NAME, name))
     }
 
     private fun findModuleDirectory(
-        element: VlangImportName,
         name: String,
         processor: VlangScopeProcessor,
         state: ResolveState,
@@ -87,7 +83,7 @@ class VlangImportReference<T : PsiElement>(element: T, private val importSpec: V
         // module and from there find the folder that contains the original
         // module we're looking for.
 
-        val submodules = VlangModulesIndex.getSubmodulesOfAnyDepth(element.project, name)
+        val submodules = VlangModulesIndex.getSubmodulesOfAnyDepth(project, name)
         val minSubmodule = submodules.minByOrNull { it.name } ?: return true
 
         val countMinSubmoduleDots = minSubmodule.getModuleQualifiedName().count { it == '.' }

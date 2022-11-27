@@ -4,6 +4,7 @@ package org.vlang.lang.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import org.vlang.lang.psi.impl.VlangModule;
 
 public interface VlangImportSpec extends VlangCompositeElement {
 
@@ -30,5 +31,14 @@ public interface VlangImportSpec extends VlangCompositeElement {
 
   @NotNull
   String getImportedName();
+
+  @Nullable
+  String getAliasName();
+
+  @NotNull
+  String getPathName();
+
+  @NotNull
+  List<VlangModule> resolve();
 
 }

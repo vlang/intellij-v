@@ -10,7 +10,7 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.stubs.VlangImportNameStub;
 import org.vlang.lang.psi.*;
-import org.vlang.lang.psi.impl.imports.VlangImportReference;
+import org.vlang.lang.psi.impl.imports.VlangModuleReference;
 import com.intellij.psi.stubs.IStubElementType;
 
 public class VlangImportNameImpl extends VlangNamedElementImpl<VlangImportNameStub> implements VlangImportName {
@@ -70,13 +70,13 @@ public class VlangImportNameImpl extends VlangNamedElementImpl<VlangImportNameSt
 
   @Override
   @NotNull
-  public VlangImportReference<VlangImportName> getReference() {
+  public VlangModuleReference<VlangImportName> getReference() {
     return VlangPsiImplUtil.getReference(this);
   }
 
   @Override
-  @Nullable
-  public PsiElement resolve() {
+  @NotNull
+  public List<VlangModule> resolve() {
     return VlangPsiImplUtil.resolve(this);
   }
 

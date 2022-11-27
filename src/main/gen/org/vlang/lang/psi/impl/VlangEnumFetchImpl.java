@@ -51,4 +51,10 @@ public class VlangEnumFetchImpl extends VlangExpressionImpl implements VlangEnum
     return VlangPsiImplUtil.getQualifier(this);
   }
 
+  @Override
+  @Nullable
+  public PsiElement resolve() {
+    return VlangPsiImplUtil.resolve(this);
+  }
+
 }

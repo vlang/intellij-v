@@ -4,7 +4,7 @@ package org.vlang.lang.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import org.vlang.lang.psi.impl.imports.VlangImportReference;
+import org.vlang.lang.psi.impl.imports.VlangModuleReference;
 
 public interface VlangImportAliasName extends VlangCompositeElement {
 
@@ -12,6 +12,6 @@ public interface VlangImportAliasName extends VlangCompositeElement {
   PsiElement getIdentifier();
 
   @NotNull
-  VlangImportReference<VlangImportAliasName> getReference();
+  VlangModuleReference<VlangImportAliasName> getReference();
 
 }

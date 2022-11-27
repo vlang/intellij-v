@@ -6,7 +6,8 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import org.vlang.lang.stubs.VlangImportNameStub;
-import org.vlang.lang.psi.impl.imports.VlangImportReference;
+import org.vlang.lang.psi.impl.VlangModule;
+import org.vlang.lang.psi.impl.imports.VlangModuleReference;
 
 public interface VlangImportName extends VlangNamedElement, StubBasedPsiElement<VlangImportNameStub> {
 
@@ -28,10 +29,10 @@ public interface VlangImportName extends VlangNamedElement, StubBasedPsiElement<
   int getTextOffset();
 
   @NotNull
-  VlangImportReference<VlangImportName> getReference();
+  VlangModuleReference<VlangImportName> getReference();
 
-  @Nullable
-  PsiElement resolve();
+  @NotNull
+  List<VlangModule> resolve();
 
   @NotNull
   String getQualifiedName();

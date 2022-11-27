@@ -208,4 +208,31 @@ class GenericTypeTest : TypeTestBase() {
         }
         """.trimIndent()
     )
+
+
+    fun `test alias for generic struct with field with optional and result type`() = doTest(
+        """
+        struct Foo<T> {
+            field T
+        }
+        
+        type FooT = Foo<int>
+        type FooT2 = Foo<string>
+        
+        fn get_result() ?FooT {
+            return FooT{}
+        }
+        
+        fn get_optional() !FooT2 {
+            return FooT2{}
+        }
+        
+        fn main() {
+            foo := get_result()
+            expr_type(foo?.field, 'int')
+            foo2 := get_optional()
+            expr_type(foo2!.field, 'string')
+        }
+        """.trimIndent()
+    )
 }

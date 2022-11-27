@@ -25,7 +25,7 @@ import org.vlang.lang.codeInsight.controlFlow.VlangControlFlow
 import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangReferenceBase.Companion.LOCAL_RESOLVE
-import org.vlang.lang.psi.impl.imports.VlangImportReference
+import org.vlang.lang.psi.impl.imports.VlangModuleReference
 import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.isGeneric
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
@@ -154,7 +154,27 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getAliasName(o: VlangImportSpec): String? {
+        return o.importAlias?.name
+    }
+
+    @JvmStatic
+    fun getPathName(o: VlangImportSpec): String {
+        return o.importPath.lastPart
+    }
+
+    @JvmStatic
+    fun resolve(o: VlangImportSpec): List<VlangModule> {
+        return o.importPath.importNameList.lastOrNull()?.resolve() ?: emptyList()
+    }
+
+    @JvmStatic
     fun getQualifiedName(o: VlangImportPath): String {
+        if (o.importNameList.isEmpty()) {
+            // TODO: looks like hack
+            return o.firstChild?.text ?: ""
+        }
+
         return o.importNameList.joinToString(".") { it.text }
     }
 
@@ -165,7 +185,7 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getLastPartPsi(o: VlangImportPath): PsiElement {
-        return o.importNameList.last()
+        return o.importNameList.lastOrNull() ?: o.firstChild
     }
 
     @JvmStatic
@@ -209,13 +229,14 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getReference(o: VlangImportName): VlangImportReference<VlangImportName> {
-        return VlangImportReference(o, o.parentOfType()!!)
+    fun getReference(o: VlangImportName): VlangModuleReference<VlangImportName> {
+        return VlangModuleReference(o)
     }
 
     @JvmStatic
-    fun resolve(o: VlangImportName): PsiElement? {
-        return o.reference.resolve()
+    fun resolve(o: VlangImportName): List<VlangModule> {
+        val target = o.reference.resolve() as? VlangPomTargetPsiElement ?: return emptyList()
+        return listOf(target.target)
     }
 
     @JvmStatic
@@ -630,8 +651,13 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getReference(o: VlangImportAliasName): VlangImportReference<VlangImportAliasName> {
-        return VlangImportReference(o, o.parent.parent as VlangImportSpec)
+    fun getQualifiedName(o: VlangImportAlias): String {
+        return o.name
+    }
+
+    @JvmStatic
+    fun getReference(o: VlangImportAliasName): VlangModuleReference<VlangImportAliasName> {
+        return VlangModuleReference(o)
     }
 
     @JvmStatic
@@ -736,6 +762,11 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun getQualifier(o: VlangEnumFetch): VlangCompositeElement? {
         return null
+    }
+
+    @JvmStatic
+    fun resolve(o: VlangEnumFetch): PsiElement? {
+        return o.reference.resolve()
     }
 
     @JvmStatic
@@ -861,6 +892,7 @@ object VlangPsiImplUtil {
             return exprType
         }
 
+        // 0..10 -> int[]
         if (expr is VlangRangeExpr && expr.tripleDot == null) {
             return VlangArrayTypeEx(VlangPrimitiveTypeEx.INT, expr)
         }

@@ -83,6 +83,8 @@ The plugin provides support for V language
                                     implementationClass="org.vlang.ide.injection.VlangLanguageInjectionPerformer"/>
 
         <!-- Searches -->
+        <referencesSearch implementation="org.vlang.lang.usages.VlangModuleClauseUsagesSearcher"/>
+
         <definitionsScopedSearch implementation="org.vlang.lang.search.VlangInheritorsSearch"/>
         <definitionsScopedSearch implementation="org.vlang.lang.search.VlangMethodInheritorsSearch"/>
         <definitionsScopedSearch implementation="org.vlang.lang.search.VlangFieldInheritorsSearch"/>

@@ -154,8 +154,8 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
         } ?: emptyList()
     }
 
-    fun resolveImportName(name: String): String? {
-        return resolveImportNameAndSpec(name).first
+    fun resolveImportSpec(name: String): VlangImportSpec? {
+        return resolveImportNameAndSpec(name).second
     }
 
     fun resolveImportNameAndSpec(name: String): Triple<String?, VlangImportSpec?, Boolean> {

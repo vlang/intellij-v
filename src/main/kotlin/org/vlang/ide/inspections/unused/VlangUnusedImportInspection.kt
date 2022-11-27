@@ -7,27 +7,56 @@ import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElementVisitor
-import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.ide.codeInsight.imports.VlangImportOptimizer
 import org.vlang.ide.inspections.VlangBaseInspection
+import org.vlang.lang.psi.VlangFile
 import org.vlang.lang.psi.VlangImportList
 import org.vlang.lang.psi.VlangVisitor
 
 class VlangUnusedImportInspection : VlangBaseInspection() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
+        val file = holder.file as VlangFile
+        val imports = file.getImports()
+        val unusedImports = VlangImportOptimizer.collectUnusedImports(file, imports)
+
         return object : VlangVisitor() {
             override fun visitImportList(o: VlangImportList) {
                 super.visitImportList(o)
 
                 for (importDeclaration in o.importDeclarationList) {
                     val importSpec = importDeclaration.importSpec ?: continue
-                    if (VlangCodeInsightUtil.isImportUsed(importSpec)) {
+
+                    if (importSpec.importAlias != null) {
+                        if (unusedImports.unusedAliases.contains(importSpec.importAlias)) {
+                            holder.registerProblem(
+                                importSpec.importAlias!!,
+                                "Unused import alias",
+                                ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+                                OPTIMIZE_QUICK_FIX,
+                            )
+                        }
+                    }
+
+                    if (importSpec.selectiveImportList != null) {
+                        for (selectiveImportSymbol in importSpec.selectiveImportList!!.referenceExpressionList) {
+                            if (unusedImports.unusedSelectiveImportSymbol.contains(selectiveImportSymbol)) {
+                                holder.registerProblem(
+                                    selectiveImportSymbol,
+                                    "Unused imported symbol '${selectiveImportSymbol.text}'",
+                                    ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+                                    OPTIMIZE_QUICK_FIX,
+                                )
+                            }
+                        }
+                    }
+
+                    if (!unusedImports.unusedImports.contains(importSpec)) {
                         continue
                     }
 
                     holder.registerProblem(
                         importDeclaration,
-                        "Unused import '${importSpec.importedName}'",
+                        "Unused import '${importSpec.pathName}'",
                         ProblemHighlightType.LIKE_UNUSED_SYMBOL,
                         OPTIMIZE_QUICK_FIX
                     )

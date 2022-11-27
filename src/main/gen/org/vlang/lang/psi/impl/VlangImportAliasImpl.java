@@ -56,4 +56,10 @@ public class VlangImportAliasImpl extends VlangNamedElementImpl<VlangImportAlias
     return VlangPsiImplUtil.getIdentifier(this);
   }
 
+  @Override
+  @NotNull
+  public String getQualifiedName() {
+    return VlangPsiImplUtil.getQualifiedName(this);
+  }
+
 }

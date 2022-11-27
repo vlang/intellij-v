@@ -20,4 +20,7 @@ public interface VlangEnumFetch extends VlangExpression, VlangReferenceExpressio
   @Nullable
   VlangCompositeElement getQualifier();
 
+  @Nullable
+  PsiElement resolve();
+
 }

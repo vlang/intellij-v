@@ -99,6 +99,10 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
 
         val name = name ?: return null
         val moduleName = containingFile.getModuleQualifiedName()
+        if (this is VlangModuleClause) {
+            return moduleName
+        }
+
         return VlangPsiImplUtil.getFqn(moduleName, name)
     }
 

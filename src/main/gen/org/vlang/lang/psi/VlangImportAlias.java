@@ -21,4 +21,7 @@ public interface VlangImportAlias extends VlangNamedElement, StubBasedPsiElement
   @Nullable
   PsiElement getIdentifier();
 
+  @NotNull
+  String getQualifiedName();
+
 }

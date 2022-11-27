@@ -3,8 +3,10 @@ package org.vlang.integration.resolve
 import com.intellij.psi.PsiDirectory
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
+import org.intellij.lang.annotations.Language
 import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
 import org.vlang.lang.psi.VlangNamedElement
+import org.vlang.lang.psi.impl.VlangPomTargetPsiElement
 
 abstract class IntegrationTestBase : BasePlatformTestCase() {
     override fun getTestDataPath() = "src/test/resources/integration"
@@ -40,12 +42,22 @@ abstract class IntegrationTestBase : BasePlatformTestCase() {
                 return
             }
 
+            if (resolved is VlangPomTargetPsiElement) {
+                val expected = "MODULE ${resolved.target.name}"
+                check(expected == name) { "Expected to resolve to $name, but got $expected" }
+                return
+            }
+
             check(resolved is VlangNamedElement) { "Expected VlangNamedElement but got $resolved" }
 
             val kind = resolved.toString()
             val resolvedName = if (!qualifier) resolved.name else resolved.getQualifiedName()
             val expected = "$kind $resolvedName"
             check(expected == name) { "Expected to resolve to $name, but got $expected" }
+        }
+
+        fun file(name: String, @Language("vlang") content: String) {
+            myFixture.configureByText(name, content)
         }
 
         companion object {
