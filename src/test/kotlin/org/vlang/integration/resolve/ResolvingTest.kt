@@ -21,4 +21,17 @@ class ResolvingTest : IntegrationTestBase() {
         assertReferencedTo(0, "STRUCT_DECLARATION builtin.string")
         assertReferencedTo(1, "FUNCTION_DECLARATION builtin.println")
     }
+
+    fun `test qualifier name with current module mane`() = doTest {
+        myFixture.configureByText("a.v", """
+            module foo
+            
+            fn boo() {
+                /*caret 0*/foo./*caret 1*/boo()
+            }
+        """.trimIndent())
+
+        assertReferencedTo(0, "MODULE foo")
+        assertReferencedTo(1, "FUNCTION_DECLARATION foo.boo")
+    }
 }

@@ -442,7 +442,16 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         }
 
         val searchName = identifier!!.text
-        val spec = file.resolveImportSpec(searchName) ?: return true
+        val spec = file.resolveImportSpec(searchName)
+        if (spec == null) {
+            // when use `cat.new()` in `car` module.
+            val currentModule = file.getModuleName()
+            if (currentModule != null && searchName == currentModule && file.containingDirectory != null) {
+                val module = VlangModule.fromDirectory(file.containingDirectory!!)
+                if (!processor.execute(module.toPsi(), state.put(ACTUAL_NAME, searchName))) return false
+            }
+            return true
+        }
 
         if (spec.selectiveImportList != null) {
             if (!processQualifierExpression(spec.importPath, processor, state)) return false
@@ -721,7 +730,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         if (definition is PsiDirectory && reference is VlangReferenceExpressionBase) return true
         if (reference is VlangLabelRef && definition !is VlangLabelDefinition) return false
 
-        val definitionFile = definition.containingFile
+        val definitionFile = definition.containingFile ?: return true
         val referenceFile = reference.containingFile
 
         val inSameFile = definitionFile.isEquivalentTo(referenceFile)
