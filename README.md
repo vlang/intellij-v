@@ -19,7 +19,7 @@ This plugin adds support of [V](https://vlang.io) language to JetBrains IDEs.
 ## Installation & Usage
 
 For installation options, see the [Quick Start Guide](https://plugins.jetbrains.com/plugin/20287-vlang/docs/#install-update-the-plugin).
-If you want to jump straight in use following instructions:
+If you want to jump straight in, use following instructions:
 
 - Using IDE built-in plugin system:
   
