@@ -7,6 +7,7 @@ import com.intellij.execution.process.ProcessEvent
 import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.SystemInfo
 import com.intellij.task.*
 import com.intellij.util.execution.ParametersListUtil
 import org.jetbrains.concurrency.AsyncPromise
@@ -93,7 +94,7 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
             .withParameters("-color")
             .withWorkDirectory(workingDir)
 
-        val binName = File(conf.fileName).nameWithoutExtension
+        val binName = binaryName(conf)
         if (outputDir != null) {
             commandLine.withParameters("-o", File(outputDir, binName).absolutePath)
         } else {
@@ -124,6 +125,16 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
             is ModuleBuildTask          -> true
             is ProjectModelBuildTask<*> -> true
             else                        -> false
+        }
+    }
+
+    companion object {
+        fun binaryName(conf: VlangRunConfiguration): String {
+            val name = File(conf.fileName).nameWithoutExtension
+            if (SystemInfo.isWindows) {
+                return "$name.exe"
+            }
+            return name
         }
     }
 }
