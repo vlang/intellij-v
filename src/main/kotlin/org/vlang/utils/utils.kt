@@ -6,6 +6,7 @@ import com.intellij.openapi.editor.Document
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.ProgressManager
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectLocator
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiDocumentManager
@@ -27,6 +28,8 @@ import kotlin.streams.asSequence
 val Document.virtualFile: VirtualFile?
     get() = FileDocumentManager.getInstance().getFile(this)
 
+fun Document.psiFile(project: Project) = PsiDocumentManager.getInstance(project).getPsiFile(this)
+
 val VirtualFile.isNotVlangFile: Boolean get() = !isVlangFile
 val VirtualFile.isVlangFile: Boolean get() = fileType == VlangFileType.INSTANCE
 val VirtualFile.isTestFile: Boolean get() = name.endsWith("_test.v")
@@ -34,6 +37,7 @@ val VirtualFile.isTestFile: Boolean get() = name.endsWith("_test.v")
 val VirtualFile.guessProjectForFile get() = ProjectLocator.getInstance().guessProjectForFile(this)
 
 val VirtualFile.pathAsPath: Path get() = Paths.get(path)
+
 
 fun CapturingProcessHandler.runProcessWithGlobalProgress(timeoutInMilliseconds: Int? = null): ProcessOutput {
     return runProcess(ProgressManager.getGlobalProgressIndicator(), timeoutInMilliseconds)

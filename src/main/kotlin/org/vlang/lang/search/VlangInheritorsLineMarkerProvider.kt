@@ -13,6 +13,7 @@ import com.intellij.util.CommonProcessors
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.*
+import java.awt.event.MouseEvent
 
 class VlangInheritorsLineMarkerProvider : LineMarkerProviderDescriptor() {
     override fun getName() = "Go to Implementations"
@@ -74,14 +75,7 @@ class VlangInheritorsLineMarkerProvider : LineMarkerProviderDescriptor() {
         return VlangGotoUtil.createInfo(anchor, { event, element ->
             val named = element.parent.parent as? VlangNamedElement ?: return@createInfo
 
-            VlangGotoUtil.showPopup(
-                "Implementations of $name",
-                { size -> "Type '$name' implemented in $size types" },
-                event,
-                VlangGotoUtil.param(named),
-                VlangGotoUtil.getDefaultRenderer(named),
-                VlangInheritorsSearch(),
-            )
+            showImplementationPopup(name, event, named)
         }, "Go to Implementations", AllIcons.Gutter.ImplementedMethod, IdeActions.ACTION_GOTO_IMPLEMENTATION)
     }
 
@@ -115,5 +109,22 @@ class VlangInheritorsLineMarkerProvider : LineMarkerProviderDescriptor() {
                 VlangFieldInheritorsSearch(),
             )
         }, "Go to Implementations", AllIcons.Gutter.ImplementedMethod, IdeActions.ACTION_GOTO_IMPLEMENTATION)
+    }
+
+    companion object {
+        fun showImplementationPopup(
+            name: String,
+            event: MouseEvent?,
+            named: VlangNamedElement,
+        ) {
+            VlangGotoUtil.showPopup(
+                "Implementations of $name",
+                { size -> "Type '$name' implemented in $size types" },
+                event,
+                VlangGotoUtil.param(named),
+                VlangGotoUtil.getDefaultRenderer(named),
+                VlangInheritorsSearch(),
+            )
+        }
     }
 }

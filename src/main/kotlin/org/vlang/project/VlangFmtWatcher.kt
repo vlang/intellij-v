@@ -68,7 +68,7 @@ class VlangFmtWatcher {
 
         private fun reformatDocuments(project: Project, documents: List<Document>) {
             if (!project.vfmtSettings.runVfmtOnSave) return
-            val vfmt = project.toolchain.vfmt() ?: return
+            val vfmt = project.toolchain.vfmt()
             documents.forEach { vfmt.reformatDocument(project, it) }
         }
     }

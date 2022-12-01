@@ -113,6 +113,8 @@ The plugin provides support for V language
         <codeInsight.parameterNameHints language="vlang" id="VlangParameterNameHintsProvider"
                                         implementationClass="org.vlang.ide.hints.VlangParameterNameHintsProvider"/>
         <codeInsight.typeInfo language="vlang" implementationClass="org.vlang.ide.codeInsight.VlangTypeInfoProvider"/>
+        <codeInsight.daemonBoundCodeVisionProvider implementation="org.vlang.ide.hints.VlangUsagesCodeVisionProvider"/>
+        <codeInsight.daemonBoundCodeVisionProvider implementation="org.vlang.ide.hints.VlangInheritorsCodeVisionProvider"/>
 <!--        <typeDeclarationProvider implementation="com.goide.editor.GoTypeDeclarationProvider"/>-->
 
         <annotator language="vlang" order="first" id="org.vlang.lang.annotator.VlangAnnotator"
