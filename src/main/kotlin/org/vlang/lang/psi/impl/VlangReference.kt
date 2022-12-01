@@ -545,7 +545,9 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         }
 
         val currentModule = file.getModuleQualifiedName()
-        file.getImports()
+        val imports = file.getImports()
+
+        imports
             .filter { it.importAlias == null }
             .map { it.importPath.lastPart }
             .flatMap { VlangModulesFingerprintIndex.find(it, element.project, null) }
@@ -554,8 +556,16 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
                 if (!processor.execute(it, state)) return false
             }
 
-        file.getImports()
+        imports
             .mapNotNull { it.importAlias }
+            .forEach {
+                if (!processor.execute(it, state)) return false
+            }
+
+        imports
+            .mapNotNull { it.selectiveImportList?.referenceExpressionList }
+            .flatten()
+            .mapNotNull { it.resolve() }
             .forEach {
                 if (!processor.execute(it, state)) return false
             }
