@@ -52,6 +52,11 @@ object VlangElementTypeFactory {
         "VAR_DEFINITION"              -> VlangVarDefinitionStubElementType(name)
         "LABEL_DEFINITION"            -> VlangLabelDefinitionStubElementType(name)
         "GENERIC_PARAMETER"           -> VlangGenericParameterStubElementType(name)
+        "GENERIC_PARAMETERS"          -> VlangGenericParametersStubElementType(name)
+        "SIGNATURE"                   -> VlangSignatureStubElementType(name)
+        "PARAMETERS"                  -> VlangParametersStubElementType(name)
+        "RESULT"                      -> VlangResultStubElementType(name)
+        "TYPE_UNION_LIST"             -> VlangTypeUnionListStubElementType(name)
 
         else                          -> {
             val c = TYPES[name] ?: throw RuntimeException("Unknown element type: $name")

@@ -17,16 +17,17 @@ class VlangStructDeclarationStubElementType(name: String) :
     }
 
     override fun createStub(psi: VlangStructDeclaration, parentStub: StubElement<*>?): VlangStructDeclarationStub {
-        return VlangStructDeclarationStub(parentStub, this, psi.name, psi.isPublic())
+        return VlangStructDeclarationStub(parentStub, this, psi.name, psi.isUnion, psi.isPublic())
     }
 
     override fun serialize(stub: VlangStructDeclarationStub, dataStream: StubOutputStream) {
         dataStream.writeName(stub.name)
+        dataStream.writeBoolean(stub.isUnion)
         dataStream.writeBoolean(stub.isPublic)
     }
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): VlangStructDeclarationStub {
-        return VlangStructDeclarationStub(parentStub, this, dataStream.readName(), dataStream.readBoolean())
+        return VlangStructDeclarationStub(parentStub, this, dataStream.readName(), dataStream.readBoolean(), dataStream.readBoolean())
     }
 
     override fun getExtraIndexKeys() = EXTRA_KEYS

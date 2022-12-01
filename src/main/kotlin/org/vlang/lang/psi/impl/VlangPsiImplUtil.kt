@@ -36,6 +36,11 @@ import org.vlang.utils.parentNth
 object VlangPsiImplUtil {
     @JvmStatic
     fun getName(o: VlangFunctionDeclaration): String {
+        val stub = o.stub
+        if (stub != null) {
+            return stub.name ?: ""
+        }
+
         return o.getIdentifier().text ?: ""
     }
 
@@ -88,21 +93,41 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getName(o: VlangStructDeclaration): String {
+        val stub = o.stub
+        if (stub != null) {
+            return stub.name ?: ""
+        }
+
         return o.getIdentifier()?.text ?: ""
     }
 
     @JvmStatic
     fun isUnion(o: VlangStructDeclaration): Boolean {
+        val stub = o.stub
+        if (stub != null) {
+            return stub.isUnion
+        }
+
         return o.structType.isUnion
     }
 
     @JvmStatic
     fun getName(o: VlangEnumDeclaration): String {
+        val stub = o.stub
+        if (stub != null) {
+            return stub.name ?: ""
+        }
+
         return o.getIdentifier()?.text ?: ""
     }
 
     @JvmStatic
     fun getName(o: VlangInterfaceDeclaration): String {
+        val stub = o.stub
+        if (stub != null) {
+            return stub.name ?: ""
+        }
+
         return o.interfaceType.identifier?.text ?: ""
     }
 
@@ -115,11 +140,21 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getName(o: VlangConstDefinition): String {
+        val stub = o.stub
+        if (stub != null) {
+            return stub.name ?: ""
+        }
+
         return o.getIdentifier().text ?: ""
     }
 
     @JvmStatic
     fun getName(o: VlangTypeAliasDeclaration): String {
+        val stub = o.stub
+        if (stub != null) {
+            return stub.name ?: ""
+        }
+
         return o.getIdentifier()?.text ?: ""
     }
 
@@ -677,16 +712,31 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getName(o: VlangModuleClause): String {
+        val stub = o.stub
+        if (stub != null) {
+            return stub.name ?: ""
+        }
+
         return o.getIdentifier()?.text ?: "<unknown>"
     }
 
     @JvmStatic
     fun getName(o: VlangImportAlias): String {
+        val stub = o.stub
+        if (stub != null) {
+            return stub.name ?: ""
+        }
+
         return o.importAliasName?.identifier?.text ?: ""
     }
 
     @JvmStatic
     fun getName(o: VlangParamDefinition): String? {
+        val stub = o.stub
+        if (stub != null) {
+            return stub.name ?: ""
+        }
+
         return o.getIdentifier()?.text
     }
 
@@ -802,6 +852,11 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getName(o: VlangReceiver): String? {
+        val stub = o.stub
+        if (stub != null) {
+            return stub.name ?: ""
+        }
+
         return o.getIdentifier().text
     }
 
@@ -1578,15 +1633,8 @@ object VlangPsiImplUtil {
         return true
     }
 
-    fun traverser(): SyntaxTraverser<PsiElement?> {
-        return SyntaxTraverser.psiTraverser()
-            .forceDisregardTypes(Conditions.equalTo(GeneratedParserUtilBase.DUMMY_BLOCK))
-    }
-
-    fun canBeAutoImported(file: VlangFile, allowMain: Boolean, module: Module?): Boolean {
-        return file.getModuleName() != "main"
-//        return if (VlangPsiImplUtil.isBuiltinFile(file) || !allowMain && file.packageName == "main") {
-//            false
-//        } else VlangPsiImplUtil.allowed(file, null, module) && !VlangUtil.isExcludedFile(file)
+    fun canBeAutoImported(file: VlangFile): Boolean {
+        val moduleName = file.getModuleName()
+        return moduleName != "main" && moduleName != "builtin"
     }
 }

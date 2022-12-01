@@ -42,7 +42,7 @@ public class VlangStructTypeImpl extends VlangTypeImpl implements VlangStructTyp
   @Override
   @Nullable
   public VlangGenericParameters getGenericParameters() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangGenericParameters.class);
+    return VlangPsiTreeUtil.getStubChildOfType(this, VlangGenericParameters.class);
   }
 
   @Override

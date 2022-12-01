@@ -85,7 +85,7 @@ public interface VlangTypes {
   IElementType FUNCTION_TYPE = VlangElementTypeFactory.stubFactory("FUNCTION_TYPE");
   IElementType GENERIC_ARGUMENTS = new VlangCompositeElementType("GENERIC_ARGUMENTS");
   IElementType GENERIC_PARAMETER = VlangElementTypeFactory.stubFactory("GENERIC_PARAMETER");
-  IElementType GENERIC_PARAMETERS = new VlangCompositeElementType("GENERIC_PARAMETERS");
+  IElementType GENERIC_PARAMETERS = VlangElementTypeFactory.stubFactory("GENERIC_PARAMETERS");
   IElementType GENERIC_PARAMETER_LIST = new VlangCompositeElementType("GENERIC_PARAMETER_LIST");
   IElementType GLOBAL_VARIABLE_DECLARATION = new VlangCompositeElementType("GLOBAL_VARIABLE_DECLARATION");
   IElementType GLOBAL_VARIABLE_DEFINITION = VlangElementTypeFactory.stubFactory("GLOBAL_VARIABLE_DEFINITION");
@@ -148,7 +148,7 @@ public interface VlangTypes {
   IElementType OPTION_TYPE = VlangElementTypeFactory.stubFactory("OPTION_TYPE");
   IElementType OR_BLOCK_EXPR = new VlangCompositeElementType("OR_BLOCK_EXPR");
   IElementType OR_EXPR = new VlangCompositeElementType("OR_EXPR");
-  IElementType PARAMETERS = new VlangCompositeElementType("PARAMETERS");
+  IElementType PARAMETERS = VlangElementTypeFactory.stubFactory("PARAMETERS");
   IElementType PARAM_DEFINITION = VlangElementTypeFactory.stubFactory("PARAM_DEFINITION");
   IElementType PARENTHESES_EXPR = new VlangCompositeElementType("PARENTHESES_EXPR");
   IElementType PLAIN_ATTRIBUTE = new VlangCompositeElementType("PLAIN_ATTRIBUTE");
@@ -157,7 +157,7 @@ public interface VlangTypes {
   IElementType RANGE_EXPR = new VlangCompositeElementType("RANGE_EXPR");
   IElementType RECEIVER = VlangElementTypeFactory.stubFactory("RECEIVER");
   IElementType REFERENCE_EXPRESSION = new VlangCompositeElementType("REFERENCE_EXPRESSION");
-  IElementType RESULT = new VlangCompositeElementType("RESULT");
+  IElementType RESULT = VlangElementTypeFactory.stubFactory("RESULT");
   IElementType RESULT_TYPE = VlangElementTypeFactory.stubFactory("RESULT_TYPE");
   IElementType RETURN_STATEMENT = new VlangCompositeElementType("RETURN_STATEMENT");
   IElementType SELECTIVE_IMPORT_LIST = new VlangCompositeElementType("SELECTIVE_IMPORT_LIST");
@@ -172,7 +172,7 @@ public interface VlangTypes {
   IElementType SHARED_EXPRESSION = new VlangCompositeElementType("SHARED_EXPRESSION");
   IElementType SHARED_TYPE = VlangElementTypeFactory.stubFactory("SHARED_TYPE");
   IElementType SHORT_STRING_TEMPLATE_ENTRY = new VlangCompositeElementType("SHORT_STRING_TEMPLATE_ENTRY");
-  IElementType SIGNATURE = new VlangCompositeElementType("SIGNATURE");
+  IElementType SIGNATURE = VlangElementTypeFactory.stubFactory("SIGNATURE");
   IElementType SIMPLE_STATEMENT = new VlangCompositeElementType("SIMPLE_STATEMENT");
   IElementType SIZE_OF_CALL_EXPR = new VlangCompositeElementType("SIZE_OF_CALL_EXPR");
   IElementType SPAWN_EXPRESSION = new VlangCompositeElementType("SPAWN_EXPRESSION");
@@ -214,7 +214,7 @@ public interface VlangTypes {
   IElementType TYPE_MODIFIERS = new VlangCompositeElementType("TYPE_MODIFIERS");
   IElementType TYPE_OF_CALL_EXPR = new VlangCompositeElementType("TYPE_OF_CALL_EXPR");
   IElementType TYPE_REFERENCE_EXPRESSION = new VlangCompositeElementType("TYPE_REFERENCE_EXPRESSION");
-  IElementType TYPE_UNION_LIST = new VlangCompositeElementType("TYPE_UNION_LIST");
+  IElementType TYPE_UNION_LIST = VlangElementTypeFactory.stubFactory("TYPE_UNION_LIST");
   IElementType UNARY_EXPR = new VlangCompositeElementType("UNARY_EXPR");
   IElementType UNPACKING_EXPRESSION = new VlangCompositeElementType("UNPACKING_EXPRESSION");
   IElementType UNSAFE_EXPRESSION = new VlangCompositeElementType("UNSAFE_EXPRESSION");

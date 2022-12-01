@@ -36,13 +36,13 @@ public class VlangFunctionTypeImpl extends VlangTypeImpl implements VlangFunctio
   @Override
   @Nullable
   public VlangGenericParameters getGenericParameters() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangGenericParameters.class);
+    return VlangPsiTreeUtil.getStubChildOfType(this, VlangGenericParameters.class);
   }
 
   @Override
   @Nullable
   public VlangSignature getSignature() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangSignature.class);
+    return VlangPsiTreeUtil.getStubChildOfType(this, VlangSignature.class);
   }
 
   @Override

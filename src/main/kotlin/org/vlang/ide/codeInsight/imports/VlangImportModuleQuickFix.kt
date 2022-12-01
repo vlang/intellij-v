@@ -31,6 +31,7 @@ import org.vlang.lang.psi.VlangReferenceExpression
 import org.vlang.lang.psi.VlangTypeReferenceExpression
 import org.vlang.lang.psi.impl.VlangPsiImplUtil
 import org.vlang.lang.psi.impl.VlangReference
+import org.vlang.lang.stubs.index.VlangModulesFingerprintIndex
 import org.vlang.lang.stubs.index.VlangModulesIndex
 
 class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, HintAction, HighPriorityAction {
@@ -46,14 +47,15 @@ class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, H
         moduleName = reference.canonicalText
     }
 
-    fun getReference(element: PsiElement?): PsiReference? {
-        if (element != null && element.isValid) {
-            for (reference in element.references) {
-                if (isSupportedReference(reference)) {
-                    return reference
-                }
+    fun getReference(element: PsiElement): PsiReference? {
+        if (!element.isValid) return null
+
+        for (reference in element.references) {
+            if (isSupportedReference(reference)) {
+                return reference
             }
         }
+
         return null
     }
 
@@ -105,6 +107,7 @@ class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, H
         if (element == null || !element.isValid) {
             return false
         }
+
         val reference = getReference(element)
         if (reference == null || reference.resolve() != null) {
             return false
@@ -118,22 +121,23 @@ class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, H
         val file = element.containingFile
         val firstModuleToImport = ContainerUtil.getFirstItem(modulesToImport)
 
-        // autoimport on trying to fix
+        // auto import on trying to fix
         if (modulesToImport.size == 1) {
-            if (VlangCodeInsightSettings.getInstance().isAddUnambiguousImportsOnTheFly && !LaterInvocator.isInModalContext() &&
-                (ApplicationManager.getApplication().isUnitTestMode || DaemonListeners.canChangeFileSilently(file))
+            if (VlangCodeInsightSettings.getInstance().isAddUnambiguousImportsOnTheFly &&
+                (ApplicationManager.getApplication().isUnitTestMode || DaemonListeners.canChangeFileSilently(file, true))
             ) {
                 CommandProcessor.getInstance().runUndoTransparentAction { perform(file, firstModuleToImport) }
                 return true
             }
         }
 
-        // show hint on failed autoimport
+        // show hint on failed auto import
         if (showHint) {
             if (ApplicationManager.getApplication().isUnitTestMode) return false
             if (HintManager.getInstance().hasShownHintsThatWillHideByOtherHint(true)) return false
             if (!VlangCodeInsightSettings.getInstance().isShowImportPopup) return false
             val referenceRange = reference.rangeInElement.shiftRight(element.textRange.startOffset)
+
             HintManager.getInstance().showQuestionHint(
                 editor,
                 ShowAutoImportPass.getMessage(modulesToImport.size > 1, ContainerUtil.getFirstItem(modulesToImport)),
@@ -147,6 +151,7 @@ class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, H
             }
             return true
         }
+
         return false
     }
 
@@ -155,6 +160,11 @@ class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, H
             editor != null || modulesToImport.size == 1,
             "Cannot invoke fix with ambiguous imports on null editor"
         )
+
+        if (modulesToImport.size == 1) {
+            perform(file, modulesToImport.first())
+            return
+        }
 
         if (modulesToImport.size > 1 && editor != null) {
             val list = JBList(modulesToImport)
@@ -167,7 +177,7 @@ class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, H
                     icon = VIcons.Module
                     append(shortName)
                     append(" ($name)", SimpleTextAttributes.GRAY_ATTRIBUTES)
-                    border = JBUI.Borders.empty(2, 4, 2, 4)
+                    border = JBUI.Borders.empty(2, 4)
                 }
             }
 
@@ -187,12 +197,11 @@ class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, H
             builder.scrollPane.border = null
             builder.scrollPane.viewportBorder = null
             popup.showInBestPositionFor(editor)
-        } else if (modulesToImport.size == 1) {
-            perform(file, modulesToImport.first())
-        } else {
-            val modules = modulesToImport.joinToString(", ")
-            throw IncorrectOperationException("Cannot invoke fix with ambiguous imports on editor ()$editor. Modules: $modules")
+            return
         }
+
+        val modules = modulesToImport.joinToString(", ")
+        throw IncorrectOperationException("Cannot invoke fix with ambiguous imports on editor ()$editor. Modules: $modules")
     }
 
     private fun perform(file: PsiFile, pathToImport: String?) {
@@ -231,29 +240,16 @@ class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, H
 
         fun getImportVariantsToImport(moduleName: String, context: PsiElement): List<String> {
             val contextFile = context.containingFile
-            val imported =
-                if (contextFile is VlangFile) contextFile.getImportedModulesMap().map { it.key }.toSet() else emptySet()
+            val imported = if (contextFile is VlangFile) contextFile.getImportedModulesMap().map { it.key }.toSet() else emptySet()
             val project = context.project
-            val parentDirectory = contextFile?.parent
-//            val testTargetModule: String = VlangTestFinder.getTestTargetModule(contextFile)
-            val module: Module? = if (contextFile != null) ModuleUtilCore.findModuleForPsiElement(contextFile) else null
-//            val vendoringEnabled: Boolean = VlangVendoringUtil.isVendoringEnabled(module)
-//            val scope: GlobalSearchScope = VlangUtil.VlangPathResolveScope(context)
-//            val modules: Collection<VlangFile> =
-//                StubIndex.getElements(VlangModulesIndex.KEY, moduleName, project, scope, VlangFile::class.java)
-
-            val modules = VlangModulesIndex.getAll(project)
+            val modules = VlangModulesFingerprintIndex.find(moduleName, project, null)
 
             return modules.mapNotNull { file ->
-//                if (parentDirectory != null && parentDirectory.isEquivalentTo(file.parent)) {
-//                    if (testTargetModule != file.getModuleName()) {
-//                        return@mapNotNull null
-//                    }
-//                }
-                if (!VlangPsiImplUtil.canBeAutoImported(file, false, module)) {
+                if (!VlangPsiImplUtil.canBeAutoImported(file)) {
                     return@mapNotNull null
                 }
-                val importPath = file.getModuleQualifiedName() // file.getImportPath(vendoringEnabled)
+
+                val importPath = file.getModuleQualifiedName()
                 val parts = importPath.split('.')
                 val shortName = parts.last()
                 if (shortName != moduleName) {

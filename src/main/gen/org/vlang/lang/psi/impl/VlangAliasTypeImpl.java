@@ -36,13 +36,13 @@ public class VlangAliasTypeImpl extends VlangTypeImpl implements VlangAliasType 
   @Override
   @Nullable
   public VlangGenericParameters getGenericParameters() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangGenericParameters.class);
+    return VlangPsiTreeUtil.getStubChildOfType(this, VlangGenericParameters.class);
   }
 
   @Override
   @Nullable
   public VlangTypeUnionList getTypeUnionList() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeUnionList.class);
+    return VlangPsiTreeUtil.getStubChildOfType(this, VlangTypeUnionList.class);
   }
 
   @Override

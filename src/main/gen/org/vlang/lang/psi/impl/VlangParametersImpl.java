@@ -8,9 +8,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
+import org.vlang.lang.stubs.VlangParametersStub;
 import org.vlang.lang.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class VlangParametersImpl extends VlangCompositeElementImpl implements VlangParameters {
+public class VlangParametersImpl extends VlangStubbedElementImpl<VlangParametersStub> implements VlangParameters {
+
+  public VlangParametersImpl(@NotNull VlangParametersStub stub, @NotNull IStubElementType<?, ?> type) {
+    super(stub, type);
+  }
 
   public VlangParametersImpl(@NotNull ASTNode node) {
     super(node);
@@ -29,7 +35,7 @@ public class VlangParametersImpl extends VlangCompositeElementImpl implements Vl
   @Override
   @NotNull
   public List<VlangParamDefinition> getParamDefinitionList() {
-    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangParamDefinition.class);
+    return VlangPsiTreeUtil.getStubChildrenOfTypeAsList(this, VlangParamDefinition.class);
   }
 
   @Override

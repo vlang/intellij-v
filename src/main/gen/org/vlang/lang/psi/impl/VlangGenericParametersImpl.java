@@ -8,9 +8,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
+import org.vlang.lang.stubs.VlangGenericParametersStub;
 import org.vlang.lang.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class VlangGenericParametersImpl extends VlangCompositeElementImpl implements VlangGenericParameters {
+public class VlangGenericParametersImpl extends VlangStubbedElementImpl<VlangGenericParametersStub> implements VlangGenericParameters {
+
+  public VlangGenericParametersImpl(@NotNull VlangGenericParametersStub stub, @NotNull IStubElementType<?, ?> type) {
+    super(stub, type);
+  }
 
   public VlangGenericParametersImpl(@NotNull ASTNode node) {
     super(node);

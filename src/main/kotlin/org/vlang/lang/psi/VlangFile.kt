@@ -4,6 +4,7 @@ import com.intellij.extapi.psi.PsiFileBase
 import com.intellij.openapi.project.guessProjectDir
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElement
+import com.intellij.psi.SyntaxTraverser
 import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.CachedValueProvider
@@ -25,7 +26,6 @@ import org.vlang.lang.stubs.types.VlangInterfaceDeclarationStubElementType
 import org.vlang.lang.stubs.types.VlangStructDeclarationStubElementType
 
 class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, VlangLanguage.INSTANCE) {
-
     override fun getFileType() = VlangFileType.INSTANCE
 
     override fun toString() = "V Language file"
@@ -78,9 +78,8 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
 
     fun getModuleName(): String? {
         val stub = stub as? VlangFileStub
-        val moduleName = stub?.getModuleName()
-        if (moduleName != null) {
-            return moduleName
+        if (stub != null) {
+            return stub.getModuleName()
         }
 
         return getModule()?.name
@@ -158,7 +157,7 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
         return resolveImportNameAndSpec(name).second
     }
 
-    fun resolveImportNameAndSpec(name: String): Triple<String?, VlangImportSpec?, Boolean> {
+    private fun resolveImportNameAndSpec(name: String): Triple<String?, VlangImportSpec?, Boolean> {
         val imports = getImports()
         for (import in imports) {
             if (import.importAlias?.name == name) {
@@ -172,11 +171,6 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
             if (selectiveImport) {
                 return Triple(import.importPath.qualifiedName + "." + name, import, true)
             }
-
-//            val importName = import.name
-//            if (importName == name) {
-//                return importName to import
-//            }
 
             if (import.importPath.lastPart == name) {
                 return Triple(import.importPath.qualifiedName, import, false)
@@ -251,7 +245,7 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
                 if (stub != null) {
                     getChildrenByType(stub!!, elementType, arrayFactory)
                 } else {
-                    VlangPsiImplUtil.traverser()
+                    SyntaxTraverser.psiApi()
                         .children(this)
                         .filter(T::class.java)
                         .toList()

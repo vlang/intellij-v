@@ -37,13 +37,13 @@ public class VlangInterfaceMethodDefinitionImpl extends VlangNamedElementImpl<Vl
   @Override
   @Nullable
   public VlangGenericParameters getGenericParameters() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangGenericParameters.class);
+    return VlangPsiTreeUtil.getStubChildOfType(this, VlangGenericParameters.class);
   }
 
   @Override
   @NotNull
   public VlangSignature getSignature() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangSignature.class));
+    return notNullChild(VlangPsiTreeUtil.getStubChildOfType(this, VlangSignature.class));
   }
 
   @Override

@@ -36,7 +36,7 @@ public class VlangInterfaceTypeImpl extends VlangTypeImpl implements VlangInterf
   @Override
   @Nullable
   public VlangGenericParameters getGenericParameters() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangGenericParameters.class);
+    return VlangPsiTreeUtil.getStubChildOfType(this, VlangGenericParameters.class);
   }
 
   @Override

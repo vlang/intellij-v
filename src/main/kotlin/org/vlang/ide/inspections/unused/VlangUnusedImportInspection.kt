@@ -4,6 +4,7 @@ import com.intellij.codeInspection.LocalQuickFix
 import com.intellij.codeInspection.ProblemDescriptor
 import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.codeInspection.ProblemsHolder
+import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElementVisitor
@@ -72,7 +73,8 @@ class VlangUnusedImportInspection : VlangBaseInspection() {
             override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
                 val element = descriptor.psiElement ?: return
                 val file = element.containingFile
-                WriteCommandAction.runWriteCommandAction(project, VlangImportOptimizer().processFile(file))
+                val runnable = VlangImportOptimizer().processFile(file)
+                runnable.run()
             }
         }
     }

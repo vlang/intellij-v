@@ -110,10 +110,10 @@
   implements("(Function)Declaration")="org.vlang.lang.psi.VlangScopeHolder"
 
   extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
-  extends("Type")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
+  extends("Type|GenericParameters|Signature|Result|Parameters|TypeUnionList")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
   extends("ModuleClause|(Struct|TypeAlias|Union|Enum|Interface)Declaration|(Var|Label|Param|Field|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
 
-  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum|Interface)Declaration|.*Type|(Var|Label|Field|Param|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
+  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum|Interface)Declaration|.*Type|(Var|Label|Field|Param|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter|GenericParameters|Parameters|Result|Signature|TypeUnionList")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
 
   extends("Sql.*Statement")=SqlBlockStatement
   extends(".*Statement")=Statement
@@ -493,7 +493,10 @@ AliasType ::= identifier GenericParameters? '=' TypeUnionList {
 }
 
 // <type> [ | <type2>]...
-TypeUnionList ::= Type (semi? '|' Type)* {pin=1}
+TypeUnionList ::= Type (semi? '|' Type)* {
+  pin=1
+  stubClass="org.vlang.lang.stubs.VlangTypeUnionListStub"
+}
 
 
 // const declarations
@@ -539,6 +542,7 @@ VarModifier ::= mut | shared | volatile | static
 SymbolVisibility ::= pub | '__global'
 
 GenericParameters ::= GenericParametersOld | GenericParametersNew {
+  stubClass="org.vlang.lang.stubs.VlangGenericParametersStub"
   methods=[getParameters]
 }
 GenericParametersOld ::= '<' GenericParameterList? '>' {pin=3 elementType=GenericParameters}
@@ -744,9 +748,17 @@ FunctionType ::= fn GenericParameters? Signature {
 
 // signature
 // (...) ...
-Signature ::= Parameters Result? {pin=1}
-Result ::= Type
-Parameters ::= '(' ParameterList? ','? ')' {pin=1}
+Signature ::= Parameters Result? {
+  pin=1
+  stubClass="org.vlang.lang.stubs.VlangSignatureStub"
+}
+Result ::= Type {
+  stubClass="org.vlang.lang.stubs.VlangResultStub"
+}
+Parameters ::= '(' ParameterList? ','? ')' {
+  pin=1
+  stubClass="org.vlang.lang.stubs.VlangParametersStub"
+}
 
 private ParameterList ::= ParamDefinition (',' (ParamDefinition | &')'))* list_separator? {pin(".*")=1}
 
