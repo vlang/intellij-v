@@ -197,4 +197,15 @@ class CompletionTest : CompletionTestBase() {
         }
         """.trimIndent()
     )
+
+    fun `test return in bool function`() = checkIncludes(
+        """
+        module main
+        
+        fn foo() bool {
+            ret/*caret*/
+        }
+        """.trimIndent(), 0,
+        "return true", "return false"
+    )
 }

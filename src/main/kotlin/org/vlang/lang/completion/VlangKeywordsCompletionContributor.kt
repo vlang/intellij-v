@@ -93,11 +93,6 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         extend(
             CompletionType.BASIC,
             identifier(),
-            ReturnKeywordCompletionProvider()
-        )
-        extend(
-            CompletionType.BASIC,
-            identifier(),
             KeywordsCompletionProvider(
                 "else",
                 "atomic",
@@ -230,29 +225,6 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
                             .bold(), KEYWORD_PRIORITY.toDouble()
                     )
                 }
-            )
-        }
-    }
-
-    private inner class ReturnKeywordCompletionProvider : CompletionProvider<CompletionParameters>() {
-        override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
-            if (shouldSuppress(parameters, result)) return
-
-            val signatureOwner = parameters.position.parentOfType<VlangSignatureOwner>() ?: return
-
-            val resultType = signatureOwner.getSignature()?.result
-
-            result.addElement(
-                PrioritizedLookupElement.withPriority(
-                    LookupElementBuilder.create("return")
-                        .withInsertHandler { ctx, item ->
-                            if (resultType != null) {
-                                VlangCompletionUtil.StringInsertHandler(" ", 1).handleInsert(ctx, item)
-                                VlangCompletionUtil.showCompletion(ctx.editor)
-                            }
-                        }
-                        .bold(), KEYWORD_PRIORITY.toDouble()
-                )
             )
         }
     }
@@ -545,7 +517,7 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
             )
     }
 
-    private fun identifier() = insideBlockPattern(VlangTypes.IDENTIFIER)
+    fun identifier() = insideBlockPattern(VlangTypes.IDENTIFIER)
         .andNot(
             insideWithLabelStatement(VlangTypes.IDENTIFIER)
         )
@@ -582,20 +554,22 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         return psiElement().withElementType(TokenSet.create(*tokenTypes))
     }
 
-    private fun shouldSuppress(parameters: CompletionParameters, result: CompletionResultSet): Boolean {
-        val pos = parameters.position
+    companion object {
+        fun shouldSuppress(parameters: CompletionParameters, result: CompletionResultSet): Boolean {
+            val pos = parameters.position
 
-        if (VlangCompletionUtil.shouldSuppressCompletion(pos)) {
-            return true
-        }
+            if (VlangCompletionUtil.shouldSuppressCompletion(pos)) {
+                return true
+            }
 
-        if (pos.parentOfType<VlangLiteralValueExpression>() != null) {
-            return true
-        }
+            if (pos.parentOfType<VlangLiteralValueExpression>() != null) {
+                return true
+            }
 
-        if (VlangPsiImplUtil.prevDot(pos)) {
-            return true
+            if (VlangPsiImplUtil.prevDot(pos)) {
+                return true
+            }
+            return false
         }
-        return false
     }
 }

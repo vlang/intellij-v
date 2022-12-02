@@ -370,6 +370,12 @@ The plugin provides support for V language
 
         <completion.contributor
           language="vlang"
+          id="VlangReturnCompletionContributor"
+          order="after VlangCommonAttributesCompletionContributor"
+          implementationClass="org.vlang.lang.completion.VlangReturnCompletionContributor"/>
+
+        <completion.contributor
+          language="vlang"
           id="VlangClosureCompletionContributor"
           order="after VlangKeywordsCompletionContributor"
           implementationClass="org.vlang.lang.completion.VlangClosureCompletionContributor"/>

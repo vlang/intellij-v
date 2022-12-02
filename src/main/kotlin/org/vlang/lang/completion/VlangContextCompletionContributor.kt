@@ -30,6 +30,12 @@ class VlangContextCompletionContributor : CompletionContributor() {
             ReferenceCompletionProvider()
         )
 
+//        extend(
+//            CompletionType.BASIC,
+//            referenceExpression(),
+//            VlangReceiverCompletionProvider()
+//        )
+
         extend(
             CompletionType.BASIC,
             cachedReferenceExpression(),

@@ -63,6 +63,21 @@ class VlangPrimitiveTypeEx(private val name: VlangPrimitiveTypes) : VlangBaseTyp
 
     override fun substituteGenerics(nameMap: Map<String, VlangTypeEx>): VlangTypeEx = this
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as VlangPrimitiveTypeEx
+
+        if (name != other.name) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return name.hashCode()
+    }
+
     companion object {
         val BOOL = VlangPrimitiveTypeEx(VlangPrimitiveTypes.BOOL)
         val BYTE = VlangPrimitiveTypeEx(VlangPrimitiveTypes.BYTE)

@@ -1322,6 +1322,14 @@ object VlangPsiImplUtil {
         return type
     }
 
+    fun unwrapPointerOrOptionOrResultType(type: VlangTypeEx?): VlangTypeEx? {
+        if (type is VlangPointerTypeEx) {
+            return type.inner
+        }
+
+        return unwrapOptionOrResultType(type)
+    }
+
     private fun typeOrParameterType(typeOwner: VlangTypeOwner, context: ResolveState?): VlangTypeEx? {
         val type = typeOwner.getType(context)
         if (typeOwner is VlangParamDefinition && typeOwner.isVariadic && type != null) {

@@ -95,6 +95,14 @@ object VlangElementFactory {
         )!!
     }
 
+    fun createReference(project: Project, text: String): VlangReferenceExpression {
+        val children = PsiTreeUtil.findChildrenOfType(
+            createFileFromText(project, text),
+            VlangReferenceExpression::class.java
+        )
+        return children.last()
+    }
+
     fun createDocComment(project: Project, text: String): VlangDocComment {
         return PsiTreeUtil.findChildOfType(
             createFileFromText(project, text),

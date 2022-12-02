@@ -323,7 +323,7 @@ object VlangCompletionUtil {
         )
     }
 
-    private fun createFieldLookupElement(
+    fun createFieldLookupElement(
         element: VlangNamedElement, lookupString: String,
         insertHandler: InsertHandler<LookupElement>? = null,
         priority: Int = 0,
@@ -372,7 +372,7 @@ object VlangCompletionUtil {
         return if (moduleName != null) "$lastPart.$lookupString" else lookupString
     }
 
-    private fun createMethodLookupElement(
+    fun createMethodLookupElement(
         element: VlangNamedElement, lookupString: String,
         insertHandler: InsertHandler<LookupElement>? = null,
         priority: Int = 0,
@@ -433,7 +433,7 @@ object VlangCompletionUtil {
         )
     }
 
-    private fun createVariableLikeLookupElement(
+    fun createVariableLikeLookupElement(
         element: VlangNamedElement, lookupString: String,
         insertHandler: InsertHandler<LookupElement>? = null,
         priority: Int = 0,
