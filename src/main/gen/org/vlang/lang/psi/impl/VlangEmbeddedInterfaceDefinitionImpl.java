@@ -8,9 +8,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
+import org.vlang.lang.stubs.VlangEmbeddedInterfaceDefinitionStub;
 import org.vlang.lang.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class VlangEmbeddedInterfaceDefinitionImpl extends VlangCompositeElementImpl implements VlangEmbeddedInterfaceDefinition {
+public class VlangEmbeddedInterfaceDefinitionImpl extends VlangStubbedElementImpl<VlangEmbeddedInterfaceDefinitionStub> implements VlangEmbeddedInterfaceDefinition {
+
+  public VlangEmbeddedInterfaceDefinitionImpl(@NotNull VlangEmbeddedInterfaceDefinitionStub stub, @NotNull IStubElementType<?, ?> type) {
+    super(stub, type);
+  }
 
   public VlangEmbeddedInterfaceDefinitionImpl(@NotNull ASTNode node) {
     super(node);
@@ -29,7 +35,7 @@ public class VlangEmbeddedInterfaceDefinitionImpl extends VlangCompositeElementI
   @Override
   @NotNull
   public VlangType getType() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangType.class));
+    return notNullChild(VlangPsiTreeUtil.getStubChildOfType(this, VlangType.class));
   }
 
 }

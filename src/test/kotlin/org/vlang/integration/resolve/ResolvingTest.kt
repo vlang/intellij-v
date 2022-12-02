@@ -1,5 +1,7 @@
 package org.vlang.integration.resolve
 
+import org.vlang.integration.IntegrationTestBase
+
 class ResolvingTest : IntegrationTestBase() {
     fun `test hello world`() = doTest {
         myFixture.configureByText("a.v", """

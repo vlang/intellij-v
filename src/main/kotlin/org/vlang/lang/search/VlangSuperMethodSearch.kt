@@ -7,22 +7,28 @@ import org.vlang.lang.psi.VlangInterfaceDeclaration
 import org.vlang.lang.psi.VlangInterfaceMethodDeclaration
 import org.vlang.lang.psi.VlangMethodDeclaration
 import org.vlang.lang.psi.VlangNamedElement
+import org.vlang.lang.psi.VlangStructDeclaration
 
 class VlangSuperMethodSearch : QueryExecutorBase<VlangInterfaceMethodDeclaration, DefinitionsScopedSearch.SearchParameters>(true) {
     override fun processQuery(
         parameters: DefinitionsScopedSearch.SearchParameters,
-        consumer: Processor<in VlangInterfaceMethodDeclaration>
+        consumer: Processor<in VlangInterfaceMethodDeclaration>,
     ) {
         if (!parameters.isCheckDeep) return
 
         val method = parameters.element as? VlangMethodDeclaration ?: return
-        val owner = method.receiverType?.typeReferenceExpression?.resolve() as? VlangNamedElement ?: return
-        val processor = Processor<VlangNamedElement> { spec ->
-            val iface = spec as VlangInterfaceDeclaration
-            val name = method.name ?: return@Processor true
-            val ifaceMethod = iface.interfaceType.methodList.find { it.name == name }?.parent as? VlangInterfaceMethodDeclaration
+        val methodName = method.name ?: return
+        val owner = method.receiverType?.typeReferenceExpression?.resolve() as? VlangStructDeclaration ?: return
 
-            ifaceMethod == null || method == ifaceMethod || consumer.process(ifaceMethod)
+        val processor = Processor<VlangNamedElement> { interfaceDeclaration ->
+            interfaceDeclaration as VlangInterfaceDeclaration
+            val interfaceMethod = interfaceDeclaration
+                .interfaceType
+                .methodList
+                .find { it.name == methodName }
+                ?.parent as? VlangInterfaceMethodDeclaration
+
+            interfaceMethod == null || method == interfaceMethod || consumer.process(interfaceMethod)
         }
         VlangSuperSearch.processMethodOwners(processor, owner, listOf(method))
     }

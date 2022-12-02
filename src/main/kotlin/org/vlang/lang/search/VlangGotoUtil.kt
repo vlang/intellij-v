@@ -58,7 +58,7 @@ object VlangGotoUtil {
         renderer: PsiElementListCellRenderer<PsiElement>,
         search: QueryExecutorBase<T, in DefinitionsScopedSearch.SearchParameters>,
     ) {
-        val collector = PsiElementProcessor.CollectElementsWithLimit(2, ReferenceOpenHashSet())
+        val collector = PsiElementProcessor.CollectElementsWithLimit(5, ReferenceOpenHashSet())
         val progressTitle = "Searching for $findUsagesTitle..."
         val component = event?.component as? JComponent
 
@@ -125,7 +125,7 @@ object VlangGotoUtil {
 
     fun createCandidatesProcessor(
         processor: Processor<in VlangNamedElement>,
-        condition: Condition<VlangNamedElement?>,
+        condition: Condition<VlangNamedElement>,
     ): Processor<VlangNamedElement?> {
         val visitedSpecs = ReferenceOpenHashSet<VlangNamedElement>()
 

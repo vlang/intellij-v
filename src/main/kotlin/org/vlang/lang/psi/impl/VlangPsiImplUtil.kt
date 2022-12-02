@@ -403,13 +403,30 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getEmbeddedInterfacesList(o: VlangInterfaceType): List<VlangEmbeddedDefinition> {
+        return o.membersGroupList.flatMap { it.fieldDeclarationList }.mapNotNull { it.embeddedDefinition }
+    }
+
+    @JvmStatic
     fun getFieldList(o: VlangInterfaceType): List<VlangFieldDefinition> {
-        return o.membersGroupList.flatMap { it.fieldDeclarationList }.mapNotNull { it.fieldDefinition }
+        val ownFields = o.membersGroupList.flatMap { it.fieldDeclarationList }.mapNotNull { it.fieldDefinition }
+        val embedded = o.embeddedInterfacesList
+        val embeddedFields = embedded.flatMap {
+            val interfaceType = it.type.resolveType() as? VlangInterfaceType
+            interfaceType?.getFieldList() ?: emptyList()
+        }
+        return ownFields + embeddedFields
     }
 
     @JvmStatic
     fun getMethodList(o: VlangInterfaceType): List<VlangInterfaceMethodDefinition> {
-        return o.membersGroupList.flatMap { it.interfaceMethodDeclarationList }.map { it.interfaceMethodDefinition }
+        val ownMethods = o.membersGroupList.flatMap { it.interfaceMethodDeclarationList }.map { it.interfaceMethodDefinition }
+        val embedded = o.embeddedInterfacesList
+        val embeddedMethods = embedded.flatMap {
+            val interfaceType = it.type.resolveType() as? VlangInterfaceType
+            interfaceType?.methodList ?: emptyList()
+        }
+        return ownMethods + embeddedMethods
     }
 
     @JvmStatic
@@ -477,7 +494,7 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getOwner(o: VlangInterfaceMethodDefinition): VlangNamedElement {
+    fun getOwner(o: VlangInterfaceMethodDefinition): VlangInterfaceDeclaration {
         return o.parentOfType() ?: error("Can't find owner for method ${o.name}, interface method definition must be inside interface")
     }
 

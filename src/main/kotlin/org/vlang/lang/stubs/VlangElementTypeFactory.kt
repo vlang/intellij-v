@@ -33,32 +33,33 @@ object VlangElementTypeFactory {
 
     @JvmStatic
     fun stubFactory(name: String) = when (name) {
-        "FIELD_DEFINITION"            -> VlangFieldDefinitionStubElementType(name)
-        "ENUM_FIELD_DEFINITION"       -> VlangEnumFieldDefinitionStubElementType(name)
-        "FUNCTION_DECLARATION"        -> VlangFunctionDeclarationStubElementType(name)
-        "METHOD_DECLARATION"          -> VlangMethodDeclarationStubElementType(name)
-        "STRUCT_DECLARATION"          -> VlangStructDeclarationStubElementType(name)
-        "ENUM_DECLARATION"            -> VlangEnumDeclarationStubElementType(name)
-        "INTERFACE_DECLARATION"       -> VlangInterfaceDeclarationStubElementType(name)
-        "INTERFACE_METHOD_DEFINITION" -> VlangInterfaceMethodDefinitionStubElementType(name)
-        "TYPE_ALIAS_DECLARATION"      -> VlangTypeAliasDeclarationStubElementType(name)
-        "IMPORT_NAME"                 -> VlangImportNameStubElementType(name)
-        "IMPORT_ALIAS"                -> VlangImportAliasStubElementType(name)
-        "PARAM_DEFINITION"            -> VlangParamDefinitionStubElementType(name)
-        "RECEIVER"                    -> VlangReceiverStubElementType(name)
-        "CONST_DEFINITION"            -> VlangConstDefinitionStubElementType(name)
-        "GLOBAL_VARIABLE_DEFINITION"  -> VlangGlobalVariableDefinitionStubElementType(name)
-        "MODULE_CLAUSE"               -> VlangModuleClauseStubElementType.INSTANCE
-        "VAR_DEFINITION"              -> VlangVarDefinitionStubElementType(name)
-        "LABEL_DEFINITION"            -> VlangLabelDefinitionStubElementType(name)
-        "GENERIC_PARAMETER"           -> VlangGenericParameterStubElementType(name)
-        "GENERIC_PARAMETERS"          -> VlangGenericParametersStubElementType(name)
-        "SIGNATURE"                   -> VlangSignatureStubElementType(name)
-        "PARAMETERS"                  -> VlangParametersStubElementType(name)
-        "RESULT"                      -> VlangResultStubElementType(name)
-        "TYPE_UNION_LIST"             -> VlangTypeUnionListStubElementType(name)
+        "FIELD_DEFINITION"              -> VlangFieldDefinitionStubElementType(name)
+        "ENUM_FIELD_DEFINITION"         -> VlangEnumFieldDefinitionStubElementType(name)
+        "FUNCTION_DECLARATION"          -> VlangFunctionDeclarationStubElementType(name)
+        "METHOD_DECLARATION"            -> VlangMethodDeclarationStubElementType(name)
+        "STRUCT_DECLARATION"            -> VlangStructDeclarationStubElementType(name)
+        "ENUM_DECLARATION"              -> VlangEnumDeclarationStubElementType(name)
+        "INTERFACE_DECLARATION"         -> VlangInterfaceDeclarationStubElementType(name)
+        "INTERFACE_METHOD_DEFINITION"   -> VlangInterfaceMethodDefinitionStubElementType(name)
+        "TYPE_ALIAS_DECLARATION"        -> VlangTypeAliasDeclarationStubElementType(name)
+        "IMPORT_NAME"                   -> VlangImportNameStubElementType(name)
+        "IMPORT_ALIAS"                  -> VlangImportAliasStubElementType(name)
+        "PARAM_DEFINITION"              -> VlangParamDefinitionStubElementType(name)
+        "RECEIVER"                      -> VlangReceiverStubElementType(name)
+        "CONST_DEFINITION"              -> VlangConstDefinitionStubElementType(name)
+        "GLOBAL_VARIABLE_DEFINITION"    -> VlangGlobalVariableDefinitionStubElementType(name)
+        "MODULE_CLAUSE"                 -> VlangModuleClauseStubElementType.INSTANCE
+        "VAR_DEFINITION"                -> VlangVarDefinitionStubElementType(name)
+        "LABEL_DEFINITION"              -> VlangLabelDefinitionStubElementType(name)
+        "GENERIC_PARAMETER"             -> VlangGenericParameterStubElementType(name)
+        "GENERIC_PARAMETERS"            -> VlangGenericParametersStubElementType(name)
+        "SIGNATURE"                     -> VlangSignatureStubElementType(name)
+        "PARAMETERS"                    -> VlangParametersStubElementType(name)
+        "RESULT"                        -> VlangResultStubElementType(name)
+        "TYPE_UNION_LIST"               -> VlangTypeUnionListStubElementType(name)
+        "EMBEDDED_INTERFACE_DEFINITION" -> VlangEmbeddedInterfaceDefinitionStubElementType(name)
 
-        else                          -> {
+        else                            -> {
             val c = TYPES[name] ?: throw RuntimeException("Unknown element type: $name")
 
             object : VlangTypeStubElementType(name) {

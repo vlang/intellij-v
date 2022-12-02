@@ -223,6 +223,10 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             if (!isMethodRef && !processNamedElements(processor, newState, interfaceType.getFieldList(), localResolve)) return false
             if (!processNamedElements(processor, newState, interfaceType.methodList, localResolve)) return false
             if (!processMethods(typ, processor, newState, localResolve)) return false
+
+            interfaceType.embeddedInterfacesList.forEach {
+                if (!processType(it.type.toEx(), processor, newState)) return false
+            }
         }
 
         if (typ is VlangEnumTypeEx) {

@@ -56,7 +56,7 @@ public interface VlangTypes {
   IElementType ELEMENT = new VlangCompositeElementType("ELEMENT");
   IElementType ELSE_STATEMENT = new VlangCompositeElementType("ELSE_STATEMENT");
   IElementType EMBEDDED_DEFINITION = new VlangCompositeElementType("EMBEDDED_DEFINITION");
-  IElementType EMBEDDED_INTERFACE_DEFINITION = new VlangCompositeElementType("EMBEDDED_INTERFACE_DEFINITION");
+  IElementType EMBEDDED_INTERFACE_DEFINITION = VlangElementTypeFactory.stubFactory("EMBEDDED_INTERFACE_DEFINITION");
   IElementType EMPTY_SLICE = new VlangCompositeElementType("EMPTY_SLICE");
   IElementType ENUM_BACKED_TYPE_EXPR = new VlangCompositeElementType("ENUM_BACKED_TYPE_EXPR");
   IElementType ENUM_DECLARATION = VlangElementTypeFactory.stubFactory("ENUM_DECLARATION");

@@ -54,7 +54,7 @@ class VlangInheritorsSearch : QueryExecutorBase<VlangNamedElement, DefinitionsSc
         )
     }
 
-    fun processMethodOwners(
+    private fun processMethodOwners(
         processor: Processor<in VlangNamedElement>,
         typeSpec: VlangNamedElement,
         interfaceType: VlangInterfaceType,

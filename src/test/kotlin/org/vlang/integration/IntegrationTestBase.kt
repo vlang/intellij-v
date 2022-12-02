@@ -1,12 +1,19 @@
-package org.vlang.integration.resolve
+package org.vlang.integration
 
+import com.intellij.openapi.ui.naturalSorted
 import com.intellij.psi.PsiDirectory
+import com.intellij.psi.util.parentOfType
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
+import com.intellij.util.CommonProcessors
 import org.intellij.lang.annotations.Language
 import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
 import org.vlang.lang.psi.VlangNamedElement
+import org.vlang.lang.psi.VlangStructDeclaration
 import org.vlang.lang.psi.impl.VlangPomTargetPsiElement
+import org.vlang.lang.search.VlangGotoSuperHandler
+import org.vlang.lang.search.VlangGotoUtil
+import org.vlang.lang.search.VlangSuperSearch
 
 abstract class IntegrationTestBase : BasePlatformTestCase() {
     override fun getTestDataPath() = "src/test/resources/integration"
@@ -58,6 +65,23 @@ abstract class IntegrationTestBase : BasePlatformTestCase() {
 
         fun file(name: String, @Language("vlang") content: String) {
             myFixture.configureByText(name, content)
+        }
+
+        fun assertGotoSuper(caretIndex: Int, vararg superInterfaces: String) {
+            moveCaretToPos(caretIndex)
+
+            val offset = myFixture.editor.caretModel.offset
+            val structDeclaration = myFixture.file.findElementAt(offset)?.parentOfType<VlangStructDeclaration>()
+            check(structDeclaration != null) { "No struct declaration at caret $caretIndex" }
+
+            val processor = CommonProcessors.CollectProcessor<VlangNamedElement>()
+            VlangGotoSuperHandler.SUPER_SEARCH.processQuery(VlangGotoUtil.param(structDeclaration), processor)
+
+            val actual = processor.results.map { it.name }.naturalSorted()
+            val expected = superInterfaces.toList().naturalSorted()
+            check(actual == expected) {
+                "Expected to find super interfaces [${expected.joinToString(", ")}], but got [${actual.joinToString(", ")}]"
+            }
         }
 
         companion object {

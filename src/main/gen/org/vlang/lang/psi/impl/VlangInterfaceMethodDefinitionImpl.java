@@ -65,7 +65,7 @@ public class VlangInterfaceMethodDefinitionImpl extends VlangNamedElementImpl<Vl
 
   @Override
   @NotNull
-  public VlangNamedElement getOwner() {
+  public VlangInterfaceDeclaration getOwner() {
     return VlangPsiImplUtil.getOwner(this);
   }
 

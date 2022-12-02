@@ -80,8 +80,8 @@ class VlangSuperMarkerProvider : LineMarkerProviderDescriptor() {
 
         private fun showSuperTypePopup(e: MouseEvent?, identifier: PsiElement) {
             val parent = identifier.parent ?: return
-            val decl = parent.parent as? VlangNamedElement ?: return
-            VlangGotoSuperHandler.showPopup(e, decl)
+            val struct = parent.parent as? VlangStructDeclaration ?: return
+            VlangGotoSuperHandler.showPopup(e, struct)
         }
 
         private fun showSuperMethodPopup(e: MouseEvent?, identifier: PsiElement) {

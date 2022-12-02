@@ -26,6 +26,6 @@ public interface VlangInterfaceMethodDefinition extends VlangSignatureOwner, Vla
   boolean isPublic();
 
   @NotNull
-  VlangNamedElement getOwner();
+  VlangInterfaceDeclaration getOwner();
 
 }

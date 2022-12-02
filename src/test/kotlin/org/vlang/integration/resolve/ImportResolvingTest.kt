@@ -1,5 +1,7 @@
 package org.vlang.integration.resolve
 
+import org.vlang.integration.IntegrationTestBase
+
 class ImportResolvingTest : IntegrationTestBase() {
     fun `test simple modules`() = doTest {
         myFixture.copyDirectoryToProject("fixtures/SimpleModules", "")

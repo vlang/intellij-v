@@ -81,4 +81,10 @@ public class VlangInterfaceTypeImpl extends VlangTypeImpl implements VlangInterf
     return VlangPsiImplUtil.getMethodList(this);
   }
 
+  @Override
+  @NotNull
+  public List<VlangEmbeddedDefinition> getEmbeddedInterfacesList() {
+    return VlangPsiImplUtil.getEmbeddedInterfacesList(this);
+  }
+
 }

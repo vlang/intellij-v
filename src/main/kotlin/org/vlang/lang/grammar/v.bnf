@@ -110,10 +110,10 @@
   implements("(Function)Declaration")="org.vlang.lang.psi.VlangScopeHolder"
 
   extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
-  extends("Type|GenericParameters|Signature|Result|Parameters|TypeUnionList")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
+  extends("Type|GenericParameters|Signature|Result|Parameters|TypeUnionList|EmbeddedInterfaceDefinition")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
   extends("ModuleClause|(Struct|TypeAlias|Union|Enum|Interface)Declaration|(Var|Label|Param|Field|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
 
-  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum|Interface)Declaration|.*Type|(Var|Label|Field|Param|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter|GenericParameters|Parameters|Result|Signature|TypeUnionList")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
+  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum|Interface)Declaration|.*Type|(Var|Label|Field|Param|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter|GenericParameters|Parameters|Result|Signature|TypeUnionList|EmbeddedInterfaceDefinition")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
 
   extends("Sql.*Statement")=SqlBlockStatement
   extends(".*Statement")=Statement
@@ -433,7 +433,7 @@ InterfaceDeclaration ::= Attributes? SymbolVisibility? InterfaceType {
 InterfaceType ::= interface identifier GenericParameters? '{' MembersGroup* '}' {
   pin=1
   implements="org.vlang.lang.psi.VlangFieldListOwner"
-  methods=[getFieldList getMethodList]
+  methods=[getFieldList getMethodList getEmbeddedInterfacesList]
 }
 
 MembersGroup ::= WithModifiersMembersGroup | WithoutModifiersMemberGroup {
@@ -456,6 +456,7 @@ InterfaceMethodDefinition ::= identifier GenericParameters? Signature {
 
 EmbeddedInterfaceDefinition ::= Type {
   methods=[getIdentifier getName getTypeReferenceExpression getGoTypeInner]
+  stubClass="org.vlang.lang.stubs.VlangEmbeddedInterfaceDefinitionStub"
 }
 
 
