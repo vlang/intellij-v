@@ -354,7 +354,13 @@ The plugin provides support for V language
           language="vlang"
           id="VlangCommonAttributesCompletionContributor"
           order="first"
-          implementationClass="org.vlang.lang.completion.VlangCommonAttributesCompletionContributor"/>
+          implementationClass="org.vlang.lang.completion.VlangAttributesCompletionContributor"/>
+
+        <completion.contributor
+          language="vlang"
+          id="VlangMapCompletionContributor"
+          order="after VlangCommonAttributesCompletionContributor"
+          implementationClass="org.vlang.lang.completion.VlangMapCompletionContributor"/>
 
         <completion.contributor
           language="vlang"
@@ -378,7 +384,7 @@ The plugin provides support for V language
           language="vlang"
           id="VlangPrimitiveTypesContributor"
           order="after VlangModuleNameCompletionContributor"
-          implementationClass="org.vlang.lang.completion.VlangPrimitiveTypesContributor"/>
+          implementationClass="org.vlang.lang.completion.VlangTypesContributor"/>
 
         <completion.contributor
           language="vlang"

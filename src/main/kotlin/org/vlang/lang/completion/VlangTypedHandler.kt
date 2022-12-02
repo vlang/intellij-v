@@ -4,10 +4,10 @@ import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
-import com.intellij.psi.util.parentOfType
 import org.vlang.lang.completion.VlangCompletionUtil.showCompletion
 import org.vlang.lang.psi.VlangFile
 import org.vlang.lang.psi.VlangReferenceExpression
+import org.vlang.utils.inside
 
 class VlangTypedHandler : TypedHandlerDelegate() {
     override fun charTyped(c: Char, project: Project, editor: Editor, file: PsiFile): Result {
@@ -37,7 +37,12 @@ class VlangTypedHandler : TypedHandlerDelegate() {
 
         val prevElement = file.findElementAt(offset - 2)
 
-        if (c == '.' && prevElement?.parentOfType<VlangReferenceExpression>() != null) {
+        if (c == '.' && prevElement != null && prevElement.inside<VlangReferenceExpression>()) {
+            showCompletion(editor)
+            return Result.STOP
+        }
+
+        if (c == '[') {
             showCompletion(editor)
             return Result.STOP
         }

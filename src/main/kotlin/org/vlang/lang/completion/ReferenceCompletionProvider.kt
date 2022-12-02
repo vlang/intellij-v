@@ -168,6 +168,11 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
                     return false
                 }
 
+                // forbid raw map completion
+                if (e.name == "map") {
+                    return false
+                }
+
                 return e is VlangStructDeclaration ||
                         e is VlangEnumDeclaration ||
                         e is VlangTypeAliasDeclaration ||
@@ -189,6 +194,11 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
 
                 if (e.name?.startsWith("JS.") == true) {
                     return file.isJSFile()
+                }
+
+                // forbid raw map completion
+                if (e.name == "map") {
+                    return false
                 }
 
                 return state.get(LOCAL_RESOLVE) || e.isPublic()

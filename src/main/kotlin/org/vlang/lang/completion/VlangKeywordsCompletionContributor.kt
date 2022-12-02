@@ -551,7 +551,7 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         )
 
     private fun insideStruct() = onStatementBeginning(VlangTypes.IDENTIFIER)
-        .inside(VlangStructDeclaration::class.java)
+        .withSuperParent(6, VlangStructType::class.java)
 
     private fun insideBlockPattern(tokenType: IElementType): PsiElementPattern.Capture<PsiElement?> {
         return onStatementBeginning(tokenType)

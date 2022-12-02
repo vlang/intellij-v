@@ -9,7 +9,7 @@ class CompletionTest : CompletionTestBase() {
         }
         
         fn main() {
-            <caret>
+            /*caret*/
         }
         """.trimIndent(),
         1, "main", "Foo",
@@ -27,7 +27,7 @@ class CompletionTest : CompletionTestBase() {
         
         fn main() {
             foo := Foo{}
-            foo.<caret>
+            foo./*caret*/
         }
         """.trimIndent(),
         1, "name", "age",
@@ -44,7 +44,7 @@ class CompletionTest : CompletionTestBase() {
         
         fn main() {
             foo := Foo{}
-            foo.<caret>
+            foo./*caret*/
         }
         """.trimIndent(),
         1, "bar", "baz",
@@ -60,7 +60,7 @@ class CompletionTest : CompletionTestBase() {
         
         fn main() {
             foo := Foo{}
-            foo.<caret>
+            foo./*caret*/
         }
         """.trimIndent(),
         1, "name", "name",
@@ -96,7 +96,7 @@ class CompletionTest : CompletionTestBase() {
 //
 //        fn main() {
 //            foo := Foo{}
-//            "{foo.<caret>}"
+//            "{foo./*caret*/}"
 //        }
 //        """.trimIndent(),
 //        1, "name", "age",
@@ -114,7 +114,7 @@ class CompletionTest : CompletionTestBase() {
         
         fn main() {
             foo := Foo{}
-            "{<caret>}"
+            "{/*caret*/}"
         }
         """.trimIndent(),
         1, "foo",
@@ -127,7 +127,7 @@ class CompletionTest : CompletionTestBase() {
         struct Name {}
         
         fn main() {
-            Nam<caret>
+            Nam/*caret*/
         }
         """.trimIndent(),
         """
@@ -148,7 +148,7 @@ class CompletionTest : CompletionTestBase() {
         struct Name {}
         
         fn main() {
-            Nam<caret>{}
+            Nam/*caret*/{}
         }
         """.trimIndent(),
         """
@@ -176,8 +176,25 @@ class CompletionTest : CompletionTestBase() {
         
         fn main() {
             a := Colors.red
-            a = .<caret>
+            a = ./*caret*/
         }
         """.trimIndent(), 1, "red", "green"
+    )
+
+    fun `test map init`() = doTestCompletion(
+        """
+        module main
+        
+        fn main() {
+            map/*caret*/
+        }
+        """.trimIndent(),
+        """
+        module main
+        
+        fn main() {
+            map[string]int{}
+        }
+        """.trimIndent()
     )
 }
