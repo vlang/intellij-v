@@ -1913,8 +1913,7 @@ V Language file
                                   PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
                                   REFERENCE_EXPRESSION
                                     PsiElement(VlangTokenType.identifier)('digit')
-                                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' ')
-                                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('for base ')
+                                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' for base ')
                                 SHORT_STRING_TEMPLATE_ENTRY
                                   PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
                                   REFERENCE_EXPRESSION

@@ -8,9 +8,6 @@ object VlangTokenTypes {
     @JvmField val LINE_COMMENT = VlangTokenType("VLANG_LINE_COMMENT")
     @JvmField val HASH_COMMENT = VlangTokenType("VLANG_HASH_COMMENT")
     @JvmField val MULTI_LINE_COMMENT = VlangTokenType("VLANG_MULTI_LINE_COMMENT")
-    @JvmField val MULTI_LINE_COMMENT_START = VlangTokenType("VLANG_MULTI_LINE_COMMENT_START")
-    @JvmField val MULTI_LINE_COMMENT_BODY = VlangTokenType("VLANG_MULTI_LINE_COMMENT_BODY")
-    @JvmField val MULTI_LINE_COMMENT_END = VlangTokenType("VLANG_MULTI_LINE_COMMENT_END")
 
     @JvmField val WS = VlangTokenType("VLANG_WHITESPACE")
     @JvmField val NLS = VlangTokenType("VLANG_WS_NEW_LINES")

@@ -113,10 +113,8 @@ V Language file
                       SHORT_STRING_TEMPLATE_ENTRY
                         PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
                         REFERENCE_EXPRESSION
-                          REFERENCE_EXPRESSION
-                            PsiElement(VlangTokenType.identifier)('arr')
-                          PsiElement(VlangTokenType..)('.')
-                          PsiElement(VlangTokenType.identifier)('len')
+                          PsiElement(VlangTokenType.identifier)('arr')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('.len')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
       SIMPLE_STATEMENT

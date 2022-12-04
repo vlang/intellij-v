@@ -85,10 +85,6 @@ class VlangAnnotator : Annotator {
 
         return when (element.elementType) {
             VlangTypes.IDENTIFIER                 -> highlightIdentifier(element, parent)
-            VlangTypes.SHORT_TEMPLATE_ENTRY_START -> VlangColor.STRING_INTERPOLATION
-            VlangTypes.LONG_TEMPLATE_ENTRY_START  -> VlangColor.STRING_INTERPOLATION
-            VlangTypes.TEMPLATE_ENTRY_START       -> VlangColor.STRING_INTERPOLATION
-            VlangTypes.TEMPLATE_ENTRY_END         -> VlangColor.STRING_INTERPOLATION
             else                                  -> null
         }
     }

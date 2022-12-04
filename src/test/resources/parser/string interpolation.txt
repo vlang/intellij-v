@@ -378,10 +378,8 @@ V Language file
                       SHORT_STRING_TEMPLATE_ENTRY
                         PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
                         REFERENCE_EXPRESSION
-                          REFERENCE_EXPRESSION
-                            PsiElement(VlangTokenType.identifier)('res')
-                          PsiElement(VlangTokenType..)('.')
-                          PsiElement(VlangTokenType.identifier)('output')
+                          PsiElement(VlangTokenType.identifier)('res')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('.output')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
       SIMPLE_STATEMENT
@@ -399,10 +397,8 @@ V Language file
                       SHORT_STRING_TEMPLATE_ENTRY
                         PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
                         REFERENCE_EXPRESSION
-                          REFERENCE_EXPRESSION
-                            PsiElement(VlangTokenType.identifier)('name')
-                          PsiElement(VlangTokenType..)('.')
-                          PsiElement(VlangTokenType.identifier)('field')
+                          PsiElement(VlangTokenType.identifier)('name')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('.field')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
       SIMPLE_STATEMENT
@@ -420,13 +416,8 @@ V Language file
                       SHORT_STRING_TEMPLATE_ENTRY
                         PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
                         REFERENCE_EXPRESSION
-                          REFERENCE_EXPRESSION
-                            REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('name')
-                            PsiElement(VlangTokenType..)('.')
-                            PsiElement(VlangTokenType.identifier)('field')
-                          PsiElement(VlangTokenType..)('.')
-                          PsiElement(VlangTokenType.identifier)('field2')
+                          PsiElement(VlangTokenType.identifier)('name')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('.field.field2')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
       SIMPLE_STATEMENT
@@ -444,12 +435,8 @@ V Language file
                       SHORT_STRING_TEMPLATE_ENTRY
                         PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
                         REFERENCE_EXPRESSION
-                          REFERENCE_EXPRESSION
-                            PsiElement(VlangTokenType.identifier)('name')
-                          PsiElement(VlangTokenType..)('.')
-                          PsiElement(VlangTokenType.identifier)('method')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('(')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(')')
+                          PsiElement(VlangTokenType.identifier)('name')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('.method()')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
       PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// TODO: support')
@@ -468,12 +455,8 @@ V Language file
                       SHORT_STRING_TEMPLATE_ENTRY
                         PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
                         REFERENCE_EXPRESSION
-                          REFERENCE_EXPRESSION
-                            PsiElement(VlangTokenType.identifier)('name')
-                          PsiElement(VlangTokenType..)('.')
-                          PsiElement(VlangTokenType.identifier)('method')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('[')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('100]')
+                          PsiElement(VlangTokenType.identifier)('name')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('.method[100]')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
       PsiComment(VlangTokenType.VLANG_LINE_COMMENT)('// TODO: support')

@@ -141,19 +141,13 @@ V Language file
                           SHORT_STRING_TEMPLATE_ENTRY
                             PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
                             REFERENCE_EXPRESSION
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('customer')
-                              PsiElement(VlangTokenType..)('.')
-                              PsiElement(VlangTokenType.identifier)('id')
-                          PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' ')
-                          PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('- ')
+                              PsiElement(VlangTokenType.identifier)('customer')
+                          PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('.id - ')
                           SHORT_STRING_TEMPLATE_ENTRY
                             PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
                             REFERENCE_EXPRESSION
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('customer')
-                              PsiElement(VlangTokenType..)('.')
-                              PsiElement(VlangTokenType.identifier)('name')
+                              PsiElement(VlangTokenType.identifier)('customer')
+                          PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('.name')
                           PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                   PsiElement(VlangTokenType.))(')')
           PsiElement(VlangTokenType.})('}')
@@ -211,19 +205,13 @@ V Language file
                       SHORT_STRING_TEMPLATE_ENTRY
                         PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
                         REFERENCE_EXPRESSION
-                          REFERENCE_EXPRESSION
-                            PsiElement(VlangTokenType.identifier)('customer')
-                          PsiElement(VlangTokenType..)('.')
-                          PsiElement(VlangTokenType.identifier)('id')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' ')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('- ')
+                          PsiElement(VlangTokenType.identifier)('customer')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('.id - ')
                       SHORT_STRING_TEMPLATE_ENTRY
                         PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
                         REFERENCE_EXPRESSION
-                          REFERENCE_EXPRESSION
-                            PsiElement(VlangTokenType.identifier)('customer')
-                          PsiElement(VlangTokenType..)('.')
-                          PsiElement(VlangTokenType.identifier)('name')
+                          PsiElement(VlangTokenType.identifier)('customer')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('.name')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
       PsiComment(VLANG_DOC_COMMENT)

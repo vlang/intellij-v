@@ -1234,18 +1234,13 @@ V Language file
                         SHORT_STRING_TEMPLATE_ENTRY
                           PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
                           REFERENCE_EXPRESSION
-                            REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('image')
-                            PsiElement(VlangTokenType..)('.')
-                            PsiElement(VlangTokenType.identifier)('width')
-                        PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' ')
+                            PsiElement(VlangTokenType.identifier)('image')
+                        PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('.width ')
                         SHORT_STRING_TEMPLATE_ENTRY
                           PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
                           REFERENCE_EXPRESSION
-                            REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('image')
-                            PsiElement(VlangTokenType..)('.')
-                            PsiElement(VlangTokenType.identifier)('height')
+                            PsiElement(VlangTokenType.identifier)('image')
+                        PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('.height')
                         PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                 PsiElement(VlangTokenType.))(')')
             PsiElement(VlangTokenType.or)('or')
@@ -8501,26 +8496,22 @@ V Language file
                         PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
                         REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('samples')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(',')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' file_name: ')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(', file_name: ')
                       SHORT_STRING_TEMPLATE_ENTRY
                         PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
                         REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('file_name')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(',')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' scene_id: ')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(', scene_id: ')
                       SHORT_STRING_TEMPLATE_ENTRY
                         PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
                         REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('scene_id')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(',')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' width: ')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(', width: ')
                       SHORT_STRING_TEMPLATE_ENTRY
                         PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
                         REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('width')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(',')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' height: ')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(', height: ')
                       SHORT_STRING_TEMPLATE_ENTRY
                         PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
                         REFERENCE_EXPRESSION
@@ -8675,8 +8666,7 @@ V Language file
                         PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
                         REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('file_name')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(']')
-                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('. Took: ')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(']. Took: ')
                       LONG_STRING_TEMPLATE_ENTRY
                         PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_START)('${')
                         PARENTHESES_EXPR

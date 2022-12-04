@@ -341,15 +341,7 @@ V Language file
                           STRING_LITERAL
                             STRING_TEMPLATE
                               PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                              PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('could not access ')
-                              PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('"')
-                              PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('server')
-                              PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('"')
-                              PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' index in ')
-                              PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('"')
-                              PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('database')
-                              PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('"')
-                              PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)(' variable')
+                              PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('could not access "server" index in "database" variable')
                               PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                       PsiElement(VlangTokenType.))(')')
               PsiElement(VlangTokenType.})('}')

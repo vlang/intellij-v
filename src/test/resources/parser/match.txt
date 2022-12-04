@@ -552,12 +552,8 @@ V Language file
                             SHORT_STRING_TEMPLATE_ENTRY
                               PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
                               REFERENCE_EXPRESSION
-                                REFERENCE_EXPRESSION
-                                  PsiElement(VlangTokenType.identifier)('json_key')
-                                PsiElement(VlangTokenType..)('.')
-                                PsiElement(VlangTokenType.identifier)('json_str')
-                            PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('(')
-                            PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('): ')
+                                PsiElement(VlangTokenType.identifier)('json_key')
+                            PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('.json_str(): ')
                             LONG_STRING_TEMPLATE_ENTRY
                               PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_START)('${')
                               CALL_EXPR

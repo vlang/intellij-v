@@ -1972,8 +1972,7 @@ V Language file
                                         PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
                                         REFERENCE_EXPRESSION
                                           PsiElement(VlangTokenType.identifier)('new_imports')
-                                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('[')
-                                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('import_idx].absolute_module_name` not found')
+                                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('[import_idx].absolute_module_name` not found')
                                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                               ELEMENT
                                 KEY

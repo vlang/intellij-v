@@ -21,26 +21,28 @@ class VlangSyntaxHighlighter : SyntaxHighlighterBase() {
 
     companion object {
         fun map(tokenType: IElementType): VlangColor? = when (tokenType) {
-            LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY     -> VlangColor.VALID_STRING_ESCAPE
-            DOC_COMMENT                              -> VlangColor.LINE_COMMENT
+            LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY -> VlangColor.VALID_STRING_ESCAPE
+            DOC_COMMENT                          -> VlangColor.LINE_COMMENT
 
-            LPAREN, RPAREN                           -> VlangColor.PARENTHESES
-            LBRACE, RBRACE                           -> VlangColor.BRACES
-            LBRACK, RBRACK                           -> VlangColor.BRACKETS
+            LPAREN, RPAREN                       -> VlangColor.PARENTHESES
+            LBRACE, RBRACE                       -> VlangColor.BRACES
+            LBRACK, RBRACK                       -> VlangColor.BRACKETS
 
-            DOT                                      -> VlangColor.DOT
-            COMMA                                    -> VlangColor.COMMA
+            DOT                                  -> VlangColor.DOT
+            COMMA                                -> VlangColor.COMMA
 
-            TEMPLATE_ENTRY_START, TEMPLATE_ENTRY_END -> VlangColor.STRING_INTERPOLATION
+            SHORT_TEMPLATE_ENTRY_START           -> VlangColor.STRING_INTERPOLATION
+            LONG_TEMPLATE_ENTRY_START            -> VlangColor.STRING_INTERPOLATION
+            TEMPLATE_ENTRY_END                   -> VlangColor.STRING_INTERPOLATION
 
-            in KEYWORDS                              -> VlangColor.KEYWORD
-            in BOOL_LITERALS                         -> VlangColor.KEYWORD
-            in STRING_LITERALS                       -> VlangColor.STRING
-            in NUMBERS                               -> VlangColor.NUMBER
-            in OPERATORS                             -> VlangColor.OPERATOR
-            in COMMENTS                              -> VlangColor.LINE_COMMENT
+            in KEYWORDS                          -> VlangColor.KEYWORD
+            in BOOL_LITERALS                     -> VlangColor.KEYWORD
+            in STRING_LITERALS                   -> VlangColor.STRING
+            in NUMBERS                           -> VlangColor.NUMBER
+            in OPERATORS                         -> VlangColor.OPERATOR
+            in COMMENTS                          -> VlangColor.LINE_COMMENT
 
-            else                                     -> null
+            else                                 -> null
         }
     }
 }

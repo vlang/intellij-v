@@ -3597,7 +3597,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LONG_TEMPLATE_ENTRY_START Expression FormatSpecifier? TEMPLATE_ENTRY_END
+  // LONG_TEMPLATE_ENTRY_START Expression semi? FormatSpecifier? TEMPLATE_ENTRY_END
   public static boolean LongStringTemplateEntry(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LongStringTemplateEntry")) return false;
     if (!nextTokenIs(b, LONG_TEMPLATE_ENTRY_START)) return false;
@@ -3607,14 +3607,22 @@ public class VlangParser implements PsiParser, LightPsiParser {
     p = r; // pin = 1
     r = r && report_error_(b, Expression(b, l + 1, -1));
     r = p && report_error_(b, LongStringTemplateEntry_2(b, l + 1)) && r;
+    r = p && report_error_(b, LongStringTemplateEntry_3(b, l + 1)) && r;
     r = p && consumeToken(b, TEMPLATE_ENTRY_END) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
-  // FormatSpecifier?
+  // semi?
   private static boolean LongStringTemplateEntry_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LongStringTemplateEntry_2")) return false;
+    semi(b, l + 1);
+    return true;
+  }
+
+  // FormatSpecifier?
+  private static boolean LongStringTemplateEntry_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LongStringTemplateEntry_3")) return false;
     FormatSpecifier(b, l + 1);
     return true;
   }

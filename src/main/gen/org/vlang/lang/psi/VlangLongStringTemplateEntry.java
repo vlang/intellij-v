@@ -17,6 +17,12 @@ public interface VlangLongStringTemplateEntry extends VlangCompositeElement {
   PsiElement getLongTemplateEntryStart();
 
   @Nullable
+  PsiElement getSemicolon();
+
+  @Nullable
+  PsiElement getSemicolonSynthetic();
+
+  @Nullable
   PsiElement getTemplateEntryEnd();
 
 }
