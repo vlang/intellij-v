@@ -2,6 +2,8 @@ package org.vlang.ide
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.startup.StartupActivity
+import com.intellij.openapi.util.registry.Registry
+import com.jetbrains.cidr.execution.debugger.evaluation.CidrValue
 import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
 import org.vlang.configurations.VlangToolchainsState
 import org.vlang.projectWizard.VlangToolchainFlavor
@@ -23,6 +25,10 @@ class VlangPostStartupActivity : StartupActivity {
         if (project.projectSettings.toolchainLocation.isEmpty() && knownToolchains.isNotEmpty()) {
             project.projectSettings.setToolchain(project, knownToolchains.first())
         }
+
+        Registry.get("cidr.debugger.value.stringEvaluator").setValue(false)
+        Registry.get("cidr.debugger.lldb.statics").setValue(false)
+        project.putUserData(CidrValue.DO_NOT_SHOW_ADDRESSES, true)
     }
 
     companion object {

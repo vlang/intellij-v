@@ -4,9 +4,11 @@ import com.intellij.execution.Executor
 import com.intellij.execution.configurations.ConfigurationFactory
 import com.intellij.execution.configurations.RunConfigurationBase
 import com.intellij.execution.configurations.RunProfileState
+import com.intellij.execution.executors.DefaultDebugExecutor
 import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.openapi.project.Project
 import org.jdom.Element
+import org.vlang.debugger.runconfig.VlangDebugConfigurationRunState
 
 open class VlangRunConfiguration(project: Project, factory: ConfigurationFactory?, name: String?) :
     RunConfigurationBase<VlangRunConfigurationOptions>(project, factory, name) {
@@ -113,6 +115,10 @@ open class VlangRunConfiguration(project: Project, factory: ConfigurationFactory
     }
 
     override fun getState(executor: Executor, executionEnvironment: ExecutionEnvironment): RunProfileState? {
+        if (executor is DefaultDebugExecutor) {
+            return VlangDebugConfigurationRunState(executionEnvironment, this)
+        }
+
         return VlangRunConfigurationRunState(executionEnvironment, this)
     }
 

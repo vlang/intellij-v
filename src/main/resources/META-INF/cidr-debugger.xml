@@ -1,0 +1,8 @@
+<idea-plugin>
+  <extensions defaultExtensionNs="cidr.debugger">
+    <languageSupport language="vlang" implementationClass="org.vlang.debugger.lang.VlangDebuggerLanguageSupport"/>
+    <lineBreakpointFileTypesProvider implementation="org.vlang.debugger.VlangLineBreakpointFileTypesProvider"/>
+    <debugProcessConfigurator implementation="org.vlang.debugger.runconfig.VlangDebugProcessConfigurator"/>
+    <valueRendererExtension implementation="org.vlang.debugger.VlangValueRendererExtension"/>
+  </extensions>
+</idea-plugin>

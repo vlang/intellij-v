@@ -92,6 +92,7 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
             .withEnvironment(conf.envs)
             .withParameters(pathToBuild)
             .withParameters("-color")
+            .withParameters("-g")
             .withWorkDirectory(workingDir)
 
         val binName = binaryName(conf)

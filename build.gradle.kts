@@ -6,7 +6,7 @@ plugins {
     // Java support
     id("java")
     // Kotlin support
-    id("org.jetbrains.kotlin.jvm") version "1.7.0"
+    kotlin("jvm") version "1.7.0"
     // Gradle IntelliJ Plugin
     id("org.jetbrains.intellij") version "1.10.0"
     // Gradle Changelog Plugin
@@ -76,4 +76,7 @@ tasks {
     buildSearchableOptions {
         enabled = false
     }
+}
+dependencies {
+    implementation(kotlin("stdlib-jdk8"))
 }

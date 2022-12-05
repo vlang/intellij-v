@@ -1,0 +1,7 @@
+<idea-plugin>
+  <extensions defaultExtensionNs="com.intellij">
+    <!--suppress DeprecatedClassUsageInspection -->
+    <applicationService serviceInterface="com.jetbrains.cidr.execution.debugger.CidrEvaluatorHelper"
+                        serviceImplementation="org.vlang.debugger.lang.VlangEvaluatorHelper"/>
+  </extensions>
+</idea-plugin>

@@ -9,8 +9,8 @@ import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.VlangFunctionDeclaration
 
 class VlangRunLineMarkerProvider : RunLineMarkerContributor() {
-    private val contextAction =
-        ExecutorAction.getActions(0).firstOrNull { it.toString().startsWith("Run context configuration") }
+    private val contextActions =
+        ExecutorAction.getActions(0).filter { it.toString().contains("context configuration") }
 
     override fun getInfo(element: PsiElement): Info? {
         if (element.elementType == VlangTypes.IDENTIFIER) {
@@ -21,7 +21,7 @@ class VlangRunLineMarkerProvider : RunLineMarkerContributor() {
                     return null
                 }
 
-                return Info(AllIcons.RunConfigurations.TestState.Run, { "Run" }, contextAction)
+                return Info(AllIcons.RunConfigurations.TestState.Run, { "Run" }, *contextActions.toTypedArray())
             }
 
             return null
@@ -29,5 +29,4 @@ class VlangRunLineMarkerProvider : RunLineMarkerContributor() {
 
         return null
     }
-
 }

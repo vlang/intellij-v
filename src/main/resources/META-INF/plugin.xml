@@ -8,7 +8,9 @@ The plugin provides support for V language
     ]]></description>
 
     <depends>com.intellij.modules.platform</depends>
+    <depends optional="true" config-file="cidr-debugger.xml">com.intellij.modules.cidr.debugger</depends>
     <depends optional="true" config-file="idea-plugin.xml">com.intellij.java</depends>
+    <depends optional="true" config-file="native-debug-support.xml">com.intellij.nativeDebug</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- V File -->
@@ -420,6 +422,9 @@ The plugin provides support for V language
         <projectConfigurable parentId="MainVlangSettings" instance="org.vlang.configurations.VlangFmtSettingsConfigurable"
                              id="org.vlang.configurations.VlangProjectSettingsConfigurable"
                              dynamic="true" displayName="Vfmt"/>
+        <applicationConfigurable parentId="MainVlangSettings" instance="org.vlang.configurations.VlangDebuggerSettingsConfigurable"
+                                 id="org.vlang.configurations.VlangDebuggerSettingsConfigurable"
+                                 dynamic="true" displayName="Debugger"/>
         <projectService serviceImplementation="org.vlang.configurations.VlangConfiguration"/>
         <projectService serviceImplementation="org.vlang.configurations.VlangProjectSettingsState"/>
         <projectService serviceImplementation="org.vlang.configurations.VlangFmtSettingsState"/>
@@ -429,6 +434,7 @@ The plugin provides support for V language
         <!-- End of Project -->
 
         <notificationGroup id="V Plugin" displayType="BALLOON"/>
+        <notificationGroup id="V Debugger" displayType="BALLOON"/>
 
         <!-- Toolchains -->
         <editorNotificationProvider implementation="org.vlang.project.MissingToolchainNotificationProvider"/>
@@ -442,7 +448,9 @@ The plugin provides support for V language
 
         <stepsBeforeRunProvider implementation="org.vlang.ide.run.VlangBuildTaskProvider"/>
         <projectTaskRunner order="last" implementation="org.vlang.ide.run.VlangBuildTaskRunner"/>
+        <programRunner implementation="org.vlang.debugger.runconfig.VlangDebugRunner"/>
         <console.folding implementation="org.vlang.ide.run.VlangConsoleFolding"/>
+        <applicationService serviceImplementation="org.vlang.debugger.lang.VlangDebuggerState"/>
         <!-- Run V script Configuration End -->
 
         <!-- V Mod File -->
@@ -516,11 +524,22 @@ The plugin provides support for V language
       <toolchainFlavor id="vlang.vupToolchainFlavor"
                        implementation="org.vlang.projectWizard.flavors.VupToolchainFlavor"/>
       <!-- Toolchain flavors End -->
+
+      <!-- Debugger Renderers -->
+      <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangStringRenderer"/>
+      <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangArrayRenderer"/>
+      <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangMapRenderer"/>
+      <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangChannelRenderer"/>
+      <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangBoolRenderer"/>
+      <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangEnumRenderer"/>
+      <!-- Debugger Renderers End -->
     </extensions>
 
     <extensionPoints>
       <extensionPoint interface="org.vlang.projectWizard.VlangToolchainFlavor"
                       dynamic="true" name="toolchainFlavor"/>
+      <extensionPoint interface="org.vlang.debugger.renderers.VlangValueRenderer"
+                      dynamic="true" name="debuggerValueRenderer"/>
     </extensionPoints>
 
     <actions>
