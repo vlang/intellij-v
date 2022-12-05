@@ -137,5 +137,10 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
             }
             return name
         }
+
+        fun debugSymbolDir(conf: VlangRunConfiguration): String {
+            val name = File(conf.fileName).nameWithoutExtension
+            return "$name.dSYM"
+        }
     }
 }

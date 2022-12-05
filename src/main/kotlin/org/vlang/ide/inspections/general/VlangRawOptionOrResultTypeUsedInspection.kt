@@ -52,6 +52,10 @@ class VlangRawOptionOrResultTypeUsedInspection : VlangBaseInspection() {
                     return
                 }
 
+                if (parent is VlangFieldName) {
+                    return
+                }
+
                 val insideReturn = expr.inside<VlangReturnStatement>()
                 if (insideReturn) {
                     return

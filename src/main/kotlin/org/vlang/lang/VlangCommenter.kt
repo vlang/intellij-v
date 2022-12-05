@@ -93,7 +93,9 @@ class VlangCommenter : CodeDocumentationAwareCommenterEx, SelfManagingCommenter<
 
     override fun uncommentLine(line: Int, offset: Int, document: Document, data: VlangCommenterDataHolder) {
         if (CharArrayUtil.regionMatches(document.charsSequence, offset, lineCommentPrefix)) {
-            document.deleteString(offset, offset + lineCommentPrefix.length + 1)
+            val hasSpaceAfterPrefix = document.charsSequence[offset + lineCommentPrefix.length] == ' '
+            val endOffset = offset + lineCommentPrefix.length + if (hasSpaceAfterPrefix) 1 else 0
+            document.deleteString(offset, endOffset)
         }
     }
 

@@ -2,6 +2,7 @@ package org.vlang.ide.run
 
 import com.intellij.execution.Executor
 import com.intellij.execution.configurations.ConfigurationFactory
+import com.intellij.execution.configurations.LocatableConfiguration
 import com.intellij.execution.configurations.RunConfigurationBase
 import com.intellij.execution.configurations.RunProfileState
 import com.intellij.execution.executors.DefaultDebugExecutor
@@ -11,7 +12,8 @@ import org.jdom.Element
 import org.vlang.debugger.runconfig.VlangDebugConfigurationRunState
 
 open class VlangRunConfiguration(project: Project, factory: ConfigurationFactory?, name: String?) :
-    RunConfigurationBase<VlangRunConfigurationOptions>(project, factory, name) {
+    RunConfigurationBase<VlangRunConfigurationOptions>(project, factory, name),
+    LocatableConfiguration {
 
     override fun getOptions() = super.getOptions() as VlangRunConfigurationOptions
 
@@ -77,7 +79,7 @@ open class VlangRunConfiguration(project: Project, factory: ConfigurationFactory
         }
 
     override fun writeExternal(element: Element) {
-        super.writeExternal(element)
+        super<RunConfigurationBase>.writeExternal(element)
 
         with(element) {
             writeString("runKind", runKind.name)
@@ -92,8 +94,12 @@ open class VlangRunConfiguration(project: Project, factory: ConfigurationFactory
         }
     }
 
+    override fun isGeneratedName(): Boolean {
+        return false
+    }
+
     override fun readExternal(element: Element) {
-        super.readExternal(element)
+        super<RunConfigurationBase>.readExternal(element)
 
         with(element) {
             readString("runKind")?.let { runKind = VlangRunConfigurationEditor.RunKind.fromString(it) }

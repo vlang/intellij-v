@@ -8,6 +8,7 @@ object VlangTemplateUtil {
     private const val DEFAULT_MODULE_NAME = "main"
     private const val ATTRIBUTE_MODULE_NAME = "V_MODULE_NAME"
     private const val DEFAULT_SOURCE_DIR = "src"
+    private val IDENTIFIER_REGEX = Regex("[a-zA-Z_][a-zA-Z0-9_]*")
 
     fun setModuleNameAttribute(directory: PsiDirectory, props: Properties) {
         props.setProperty(ATTRIBUTE_MODULE_NAME, getModuleName(directory))
@@ -19,10 +20,16 @@ object VlangTemplateUtil {
             return DEFAULT_MODULE_NAME
         }
 
-        if (directory.name == DEFAULT_SOURCE_DIR) {
+        val name = directory.name
+
+        if (name == DEFAULT_SOURCE_DIR) {
             return DEFAULT_MODULE_NAME
         }
 
-        return directory.name
+        if (!name.matches(IDENTIFIER_REGEX)) {
+            return DEFAULT_MODULE_NAME
+        }
+
+        return name
     }
 }

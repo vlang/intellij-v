@@ -43,4 +43,31 @@ open class ResolveItVariableTest : ResolveTestBase() {
         assertReferencedTo("PARAM_DEFINITION null")
         assertReferencedTo("FIELD_DEFINITION age")
     }
+
+    fun `test it inside other call`() {
+        mainFile("a.v", """
+            module main
+            
+            struct Foo {
+                age int
+            }
+            
+            pub fn sum[T](array []T) !T {}
+            pub fn split(input string) []string {}
+            
+            fn process_input(input string) []int {
+                mut result := split(input)
+                    .map(sum(/*caret*/split(/*caret*/it)./*caret*/map(/*caret*/it)) or { 0 })
+                result.sort(a > b)
+                return result
+            }
+        """.trimIndent())
+
+        setupBuiltin()
+
+        assertReferencedTo("FUNCTION_DECLARATION split")
+        assertReferencedTo("PARAM_DEFINITION null")
+        assertReferencedTo("METHOD_DECLARATION map")
+        assertReferencedTo("PARAM_DEFINITION null")
+    }
 }

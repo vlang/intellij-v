@@ -5,7 +5,9 @@ import com.intellij.execution.Executor
 import com.intellij.execution.configurations.CommandLineState
 import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.execution.configurations.RunProfileState
+import com.intellij.execution.process.ProcessEvent
 import com.intellij.execution.process.ProcessHandler
+import com.intellij.execution.process.ProcessListener
 import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.execution.runners.ProgramRunner
 import com.intellij.util.execution.ParametersListUtil
@@ -39,7 +41,26 @@ class VlangRunConfigurationRunState(
                 val additionalArguments = ParametersListUtil.parse(conf.programArguments)
                 commandLine.addParameters(additionalArguments)
 
-                return VlangProcessHandler(commandLine)
+                val handler = VlangProcessHandler(commandLine)
+
+                // We need remove build artifacts after run if it's single file run conf.
+                if (conf.runKind == VlangRunConfigurationEditor.RunKind.File) {
+                    handler.addProcessListener(object : ProcessListener {
+                        override fun processTerminated(event: ProcessEvent) {
+                            removeBuildArtifacts(exe, outputDir)
+                        }
+                    })
+                }
+
+                return handler
+            }
+
+            private fun removeBuildArtifacts(exe: File, outputDir: File) {
+                exe.delete()
+                val debugSymbolDir = outputDir.resolve(VlangBuildTaskRunner.debugSymbolDir(conf))
+                if (debugSymbolDir.exists()) {
+                    debugSymbolDir.deleteRecursively()
+                }
             }
         }
 

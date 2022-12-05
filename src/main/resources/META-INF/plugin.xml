@@ -443,8 +443,7 @@ The plugin provides support for V language
 
         <!-- Run V script Configuration -->
         <configurationType implementation="org.vlang.ide.run.VlangRunConfigurationType"/>
-        <runConfigurationProducer
-          implementation="org.vlang.ide.run.VlangRunConfigurationProducer"/>
+        <runConfigurationProducer implementation="org.vlang.ide.run.VlangRunConfigurationProducer"/>
 
         <stepsBeforeRunProvider implementation="org.vlang.ide.run.VlangBuildTaskProvider"/>
         <projectTaskRunner order="last" implementation="org.vlang.ide.run.VlangBuildTaskRunner"/>

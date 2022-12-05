@@ -189,6 +189,10 @@ object VlangGenericInferer {
             callExpr = VlangCodeInsightUtil.getCallExpr(callExpr) ?: return null
         }
 
+        while (!VlangCodeInsightUtil.isArrayMethodCall(callExpr, "filter", "map", "any")) {
+            callExpr = VlangCodeInsightUtil.getCallExpr(callExpr) ?: return null
+        }
+
         val type = VlangTypeInferenceUtil.callerType(callExpr)
         val elementType = if (type is VlangArrayTypeEx) {
             type.inner

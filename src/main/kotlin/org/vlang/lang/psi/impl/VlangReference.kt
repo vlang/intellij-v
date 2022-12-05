@@ -684,8 +684,8 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             callExpr = VlangCodeInsightUtil.getCallExpr(callExpr) ?: return true
         }
 
-        if (!VlangCodeInsightUtil.isArrayMethodCall(callExpr, "filter", "map", "any")) {
-            return true
+        while (!VlangCodeInsightUtil.isArrayMethodCall(callExpr, "filter", "map", "any")) {
+            callExpr = VlangCodeInsightUtil.getCallExpr(callExpr) ?: return true
         }
 
         val resolved = callExpr.resolve() as? VlangSignatureOwner ?: return true

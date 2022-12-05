@@ -17,6 +17,8 @@ class VlangModuleNameDoesntMatchDirectoryNameInspection : VlangBaseInspection() 
                 if (moduleName == "main" || moduleName == "builtin") return
 
                 val directoryName = module.containingFile?.containingDirectory?.name
+                if (directoryName == "src") return
+
                 if (moduleName != directoryName) {
                     holder.registerProblem(
                         module,
