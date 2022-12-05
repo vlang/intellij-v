@@ -6,7 +6,7 @@ import org.vlang.ide.ui.VIcons
 class VlangFileType : LanguageFileType(VlangLanguage.INSTANCE) {
     override fun getName() = "V"
 
-    override fun getDescription() = "Vlang language file"
+    override fun getDescription() = "V language file"
 
     override fun getDefaultExtension() = FILE_EXTENSION
 

@@ -29,10 +29,12 @@ object ResolveUtil {
         place: PsiElement,
     ): Boolean {
         var run = if (lastParent == null) element.lastChild else lastParent.prevSibling
+
         while (run != null) {
             if (run is VlangCompositeElement && !run.processDeclarations(processor, substitutor, null, place)) return false
             run = run.prevSibling
         }
+
         return true
     }
 

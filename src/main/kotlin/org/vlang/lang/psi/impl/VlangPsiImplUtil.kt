@@ -1407,12 +1407,7 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getReference(o: VlangVarDefinition): PsiReference? {
-        val createRef = o.parentOfTypes(
-            VlangBlock::class,
-            VlangForStatement::class,
-            VlangIfStatement::class,
-        ) != null
-        return if (createRef) VlangVarReference(o) else null
+        return VlangVarReference(o)
     }
 
     @JvmStatic

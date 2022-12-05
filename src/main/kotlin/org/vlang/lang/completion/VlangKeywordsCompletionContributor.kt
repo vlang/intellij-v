@@ -378,6 +378,8 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
 
     private class ImportKeywordCompletionProvider : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
+            if (shouldSuppress(parameters, result)) return
+
             result.addElement(
                 PrioritizedLookupElement.withPriority(
                     LookupElementBuilder.create("import")
@@ -527,7 +529,6 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
 
     private fun insideBlockPattern(tokenType: IElementType): PsiElementPattern.Capture<PsiElement?> {
         return onStatementBeginning(tokenType)
-            .inside(VlangBlock::class.java)
     }
 
     private fun topLevelPattern(): PsiElementPattern.Capture<PsiElement?> {

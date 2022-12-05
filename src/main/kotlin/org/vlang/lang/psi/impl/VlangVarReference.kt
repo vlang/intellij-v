@@ -10,7 +10,7 @@ import org.vlang.lang.psi.VlangStatement
 import org.vlang.lang.psi.VlangVarDefinition
 
 class VlangVarReference(element: VlangVarDefinition) : VlangCachedReference<VlangVarDefinition>(element) {
-    private val contextBlock = element.parentOfType<VlangBlock>()
+    private val contextBlock = element.parentOfType<VlangBlock>() ?: element.containingFile
 
     override fun resolveInner(): PsiElement? {
         val p = VlangVarProcessor(myElement, false)

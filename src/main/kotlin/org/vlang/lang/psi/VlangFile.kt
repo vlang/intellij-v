@@ -4,7 +4,9 @@ import com.intellij.extapi.psi.PsiFileBase
 import com.intellij.openapi.project.guessProjectDir
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElement
+import com.intellij.psi.ResolveState
 import com.intellij.psi.SyntaxTraverser
+import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.CachedValueProvider
@@ -18,6 +20,7 @@ import org.vlang.ide.ui.VIcons
 import org.vlang.lang.VlangFileType
 import org.vlang.lang.VlangLanguage
 import org.vlang.lang.VlangTypes
+import org.vlang.lang.psi.impl.ResolveUtil
 import org.vlang.lang.psi.impl.VlangPsiImplUtil
 import org.vlang.lang.stubs.VlangFileStub
 import org.vlang.lang.stubs.types.VlangEnumDeclarationStubElementType
@@ -31,6 +34,15 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
     override fun toString() = "V Language file"
 
     override fun getIcon(flags: Int) = VIcons.V
+
+    override fun processDeclarations(
+        processor: PsiScopeProcessor,
+        state: ResolveState,
+        lastParent: PsiElement?,
+        place: PsiElement,
+    ): Boolean {
+        return ResolveUtil.processChildren(this, processor, state, lastParent, place)
+    }
 
     fun isTestFile(): Boolean = name.split(".").first().endsWith("_test")
 
