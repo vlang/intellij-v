@@ -17,7 +17,6 @@ class VlangDebuggerLanguageSupport : CidrDebuggerLanguageSupport() {
         return createEditorProvider()
     }
 
-
     override fun createFrameTypeDecorator(frame: CidrStackFrame): CidrFrameTypeDecorator {
         return object : CidrFrameTypeDecorator {
             override fun getFrameFunctionColoredText(
@@ -34,7 +33,6 @@ class VlangDebuggerLanguageSupport : CidrDebuggerLanguageSupport() {
 
                 return builder.build()
             }
-
 
             private fun convertType(type: String): String {
                 // main__Foo (*)(int)

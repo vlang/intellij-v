@@ -23,9 +23,7 @@ class VlangDebuggerTypesHelper(process: CidrDebugProcess) : CidrDebuggerTypesHel
 
     override fun isImplicitContextVariable(position: XSourcePosition, `var`: LLValue): Boolean = false
 
-    override fun resolveProperty(value: CidrMemberValue, dynamicTypeName: String?): XSourcePosition? {
-        return null
-    }
+    override fun resolveProperty(value: CidrMemberValue, dynamicTypeName: String?): XSourcePosition? = null
 
     override fun resolveToDeclaration(position: XSourcePosition?, `var`: LLValue): PsiElement? {
         val context = getContextElement(position)

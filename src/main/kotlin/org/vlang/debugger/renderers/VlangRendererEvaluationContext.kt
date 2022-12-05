@@ -31,14 +31,14 @@ class VlangRendererEvaluationContext(
         value: VlangValue,
         offset: Int,
         size: Int,
-        raw: Boolean
+        raw: Boolean,
     ): DebuggerDriver.ResultList<VlangValue> {
         if (!raw && childStack.add(value.llValue))
             try {
-                return VlangMapRenderer.getVariableChildren(value, offset, size)
-//                forType(value.type)
-//                    ?.getVariableChildren(value, offset, size)
-//                    ?.let { return it }
+                val renderer = evaluationContext.findRenderer(value.llValue)
+                if (renderer != null) {
+                    return renderer.getVariableChildren(value, offset, size)
+                }
             } finally {
                 childStack.remove(value.llValue)
             }

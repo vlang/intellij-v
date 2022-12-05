@@ -20,8 +20,14 @@ object VlangMapRenderer : VlangValueRenderer() {
         val type = value.llValue.type
         val (keyType, valueType) = VlangCTypeParser.parseMapType(type)
 
-        val keys = value.context.evaluate("map_keys(&${value.llValue.name})")
-        val values = value.context.evaluate("map_values(&${value.llValue.name})")
+        val varRef = if (value.llValue.address != null) {
+            "(struct map*)0x" + value.llValue.address?.toString(16)
+        } else {
+            "&" + value.llValue.name
+        }
+
+        val keys = value.context.evaluate("map_keys($varRef)")
+        val values = value.context.evaluate("map_values($varRef)")
 
         val keyData = VlangArrayRenderer.getVariableChildrenWithType(keyType, keys.withContext(value.context), offset, size).list
         val valueData = VlangArrayRenderer.getVariableChildrenWithType(valueType, values.withContext(value.context), offset, size).list
