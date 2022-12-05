@@ -519,9 +519,17 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
             )
     }
 
+    private fun insideAttribute(tokenType: IElementType): ElementPattern<out PsiElement?> {
+        return onStatementBeginning(tokenType)
+            .inside(false, psiElement(VlangAttribute::class.java))
+    }
+
     fun identifier() = insideBlockPattern(VlangTypes.IDENTIFIER)
         .andNot(
             insideWithLabelStatement(VlangTypes.IDENTIFIER)
+        )
+        .andNot(
+            insideAttribute(VlangTypes.IDENTIFIER)
         )
 
     private fun insideStruct() = onStatementBeginning(VlangTypes.IDENTIFIER)
