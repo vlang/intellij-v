@@ -382,6 +382,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
         if (!processBlock(processor, state, true)) return false
         if (!processBuiltin(processor, state)) return false
+        if (!processOsModule(file, processor, state)) return false
         if (!processImportSpec(file, processor, state)) return false
         if (!processImportedModulesForCompletion(file, processor, state)) return false
         if (!processImportedModules(file, processor, state, myElement)) return false
@@ -476,6 +477,24 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         return true
     }
 
+    private fun processOsModule(file: VlangFile, processor: VlangScopeProcessor, state: ResolveState): Boolean {
+        if (!file.isScriptScript()) return true
+
+        val stdlib = VlangConfiguration.getInstance(myElement.project).stdlibLocation ?: return true
+        val osModule = stdlib.findChild("os") ?: return true
+        val psiManager = PsiManager.getInstance(myElement.project)
+        osModule.children
+            .map { psiManager.findFile(it) }
+            .filterIsInstance<VlangFile>()
+            .filter { !it.isTestFile() && !it.isJSFile() }
+            .forEach {
+                if (!processFileEntities(it, processor, state, false))
+                    return false
+            }
+
+        return true
+    }
+
     // TODO: redone
     private fun processImportedModules(
         file: VlangFile,
@@ -525,6 +544,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             return true
         }
 
+        val isShellScript = file.isScriptScript()
         val currentModule = file.getModuleName()
         val modules = VlangModulesIndex.getAll(element.project)
         for (moduleFile in modules) {
@@ -532,6 +552,12 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             if (moduleName == currentModule || moduleName == VlangCodeInsightUtil.BUILTIN_MODULE) {
                 continue
             }
+
+            // already handled in `processOsModule`
+            if (moduleName == "os" && isShellScript) {
+                continue
+            }
+
             if (!processFileEntities(moduleFile, processor, state.put(MODULE_NAME, moduleFile.getModuleQualifiedName()), false)) {
                 return false
             }

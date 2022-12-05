@@ -44,6 +44,8 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
         return ResolveUtil.processChildren(this, processor, state, lastParent, place)
     }
 
+    fun isScriptScript(): Boolean = name.endsWith(".vsh")
+
     fun isTestFile(): Boolean = name.split(".").first().endsWith("_test")
 
     fun isCFile(): Boolean = name.endsWith(".c.v")

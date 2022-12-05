@@ -18,7 +18,7 @@ The plugin provides support for V language
                   implementationClass="org.vlang.lang.VlangFileType"
                   fieldName="INSTANCE"
                   language="vlang"
-                  extensions="v"/>
+                  extensions="v; vsh"/>
 
         <lang.parserDefinition language="vlang"
                                implementationClass="org.vlang.lang.VlangParserDefinition"/>
