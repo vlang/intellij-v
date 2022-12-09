@@ -5,6 +5,7 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.guessProjectDir
 import com.intellij.openapi.util.io.FileUtil
+import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.openapi.vfs.VfsUtilCore
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VirtualFileManager
@@ -39,6 +40,9 @@ class VlangConfiguration(private val project: Project) {
     val localModulesLocation: VirtualFile?
         get() = findFileInProject("modules")
 
+    val stubsLocation: VirtualFile?
+        get() = getStubs()
+
     private fun findFile(path: String): VirtualFile? {
         if (path.isEmpty()) return null
         return VirtualFileManager.getInstance().findFileByUrl(VfsUtilCore.pathToUrl(path))
@@ -57,5 +61,17 @@ class VlangConfiguration(private val project: Project) {
 
     private fun defaultModulesLocation(): String {
         return FileUtil.expandUserHome("~/.vmodules")
+    }
+
+    private fun getStubs(): VirtualFile? {
+        val url = this::class.java.classLoader.getResource("stubs")
+        if (url != null) {
+            val root = VfsUtil.findFileByURL(url)
+            if (root != null) {
+                return root
+            }
+        }
+
+        return null
     }
 }

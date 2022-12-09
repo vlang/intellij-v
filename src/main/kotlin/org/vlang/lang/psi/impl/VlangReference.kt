@@ -5,6 +5,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Conditions
 import com.intellij.openapi.util.RecursionManager
 import com.intellij.openapi.util.TextRange
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.*
 import com.intellij.psi.impl.source.resolve.ResolveCache
 import com.intellij.psi.search.GlobalSearchScope
@@ -383,6 +384,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         if (!processBlock(processor, state, true)) return false
         if (!processBuiltin(processor, state)) return false
         if (!processOsModule(file, processor, state)) return false
+        if (!processStubs(processor, state)) return false
         if (!processImportSpec(file, processor, state)) return false
         if (!processImportedModulesForCompletion(file, processor, state)) return false
         if (!processImportedModules(file, processor, state, myElement)) return false
@@ -495,6 +497,30 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         return true
     }
 
+    private fun processStubs(processor: VlangScopeProcessor, state: ResolveState): Boolean {
+        val stdlib = VlangConfiguration.getInstance(myElement.project).stubsLocation ?: return true
+        val psiManager = PsiManager.getInstance(myElement.project)
+        if (!processStubFile("primitives.v", stdlib, psiManager, processor, state)) return false
+        if (!processStubFile("compile_time.v", stdlib, psiManager, processor, state)) return false
+        if (!processStubFile("vweb.v", stdlib, psiManager, processor, state)) return false
+
+        return true
+    }
+
+    private fun processStubFile(
+        name: String,
+        stdlib: VirtualFile,
+        psiManager: PsiManager,
+        processor: VlangScopeProcessor,
+        state: ResolveState,
+    ): Boolean {
+        val compileTimeFile = stdlib.findChild(name) ?: return true
+        val compileTimePsiFile = psiManager.findFile(compileTimeFile) as? VlangFile ?: return true
+        if (!processFileEntities(compileTimePsiFile, processor, state, false))
+            return false
+        return true
+    }
+
     // TODO: redone
     private fun processImportedModules(
         file: VlangFile,
@@ -555,6 +581,11 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
             // already handled in `processOsModule`
             if (moduleName == "os" && isShellScript) {
+                continue
+            }
+
+            // already handled in `processStubs`
+            if (moduleName == "stubs") {
                 continue
             }
 

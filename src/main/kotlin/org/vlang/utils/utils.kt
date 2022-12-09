@@ -34,6 +34,7 @@ fun Document.psiFile(project: Project) = PsiDocumentManager.getInstance(project)
 val VirtualFile.isNotVlangFile: Boolean get() = !isVlangFile
 val VirtualFile.isVlangFile: Boolean get() = fileType == VlangFileType.INSTANCE
 val VirtualFile.isTestFile: Boolean get() = name.endsWith("_test.v")
+val VirtualFile.isStubFile: Boolean get() = path.replace("\\", "/").contains("jar!/stubs/")
 
 val VirtualFile.guessProjectForFile get() = ProjectLocator.getInstance().guessProjectForFile(this)
 

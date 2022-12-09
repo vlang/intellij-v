@@ -209,6 +209,10 @@ class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, H
             return
         }
 
+        if (!VlangPsiImplUtil.canBeAutoImported(pathToImport)) {
+            return
+        }
+
         val project = file.project
 
         CommandProcessor.getInstance().executeCommand(project, {

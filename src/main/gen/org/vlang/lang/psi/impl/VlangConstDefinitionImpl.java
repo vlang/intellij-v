@@ -64,6 +64,11 @@ public class VlangConstDefinitionImpl extends VlangNamedElementImpl<VlangConstDe
   }
 
   @Override
+  public boolean isCompileTime() {
+    return VlangPsiImplUtil.isCompileTime(this);
+  }
+
+  @Override
   @NotNull
   public String getName() {
     return VlangPsiImplUtil.getName(this);

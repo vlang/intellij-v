@@ -24,7 +24,7 @@ abstract class VlangScopeProcessorBase(
             return true
         }
 
-        val name = e.name ?: return true
+        val name = state.get(VlangReferenceBase.SEARCH_NAME) ?: e.name ?: return true
         if (name.isEmpty() || !isForCompletion && !requestedNameElement.textMatches(name)) {
             return true
         }

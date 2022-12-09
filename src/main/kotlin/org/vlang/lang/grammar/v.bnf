@@ -265,7 +265,9 @@ AttributeKey ::= AttributeIdentifier | Literal
 private AttributeValueWithColon ::= ':' AttributeValue {pin=1}
 AttributeValue ::= identifier | Literal
 
-AttributeIdentifier ::= AttributeIdentifierPrefix? (identifier | unsafe)
+AttributeIdentifier ::= AttributeIdentifierPrefix? (identifier | unsafe) {
+  methods=[getReference]
+}
 AttributeIdentifierPrefix ::= (identifier | unsafe) '.'
 // end of attributes
 
@@ -386,7 +388,7 @@ AsmBlock ::= '{' ('}' | (ASM_LINE)* '}') {pin(".*")=1}
 // struct or union
 StructDeclaration ::= Attributes? SymbolVisibility? StructType {
   stubClass="org.vlang.lang.stubs.VlangStructDeclarationStub"
-  methods=[getIdentifier getName getTypeInner isUnion]
+  methods=[getIdentifier getName getTypeInner isUnion isAttribute]
 }
 
 AnonymousStructType ::= struct '{' FieldsGroup* '}' {pin=2}
@@ -513,7 +515,7 @@ private ConstDefinitions ::= ConstDefinition (semi ConstDefinition)* semi? {pin=
 ConstDefinition ::= identifier '=' (<<withOff Expression "BLOCK?">> | (!() Expression)) {
   pin=2
   stubClass="org.vlang.lang.stubs.VlangConstDefinitionStub"
-  methods=[getTypeInner isPublic deleteDefinition getName getSymbolVisibility]
+  methods=[getTypeInner isPublic isCompileTime deleteDefinition getName getSymbolVisibility]
 }
 // end of const
 
@@ -563,7 +565,7 @@ GenericArgumentsNew ::= <<leftBracket>> TypeListNoPin? ']' {pin=3 elementType=Ge
 FunctionDeclaration ::= Attributes? SymbolVisibility? fn identifier GenericParameters? Signature BlockWithConsume? {
   pin=4
   stubClass="org.vlang.lang.stubs.VlangFunctionDeclarationStub"
-  methods=[getName getTypeInner isDefinition isNoReturn isGeneric]
+  methods=[getName getTypeInner isDefinition isNoReturn isGeneric isCompileTime]
   mixin="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationWithScopeHolder"
 }
 

@@ -4,6 +4,7 @@ package org.vlang.lang.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import org.vlang.lang.psi.impl.VlangAttributeReference;
 
 public interface VlangAttributeIdentifier extends VlangCompositeElement {
 
@@ -15,5 +16,8 @@ public interface VlangAttributeIdentifier extends VlangCompositeElement {
 
   @Nullable
   PsiElement getUnsafe();
+
+  @NotNull
+  VlangAttributeReference getReference();
 
 }

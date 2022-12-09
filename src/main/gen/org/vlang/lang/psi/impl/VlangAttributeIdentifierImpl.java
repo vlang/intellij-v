@@ -44,4 +44,10 @@ public class VlangAttributeIdentifierImpl extends VlangCompositeElementImpl impl
     return findChildByType(UNSAFE);
   }
 
+  @Override
+  @NotNull
+  public VlangAttributeReference getReference() {
+    return VlangPsiImplUtil.getReference(this);
+  }
+
 }

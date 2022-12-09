@@ -47,6 +47,12 @@ class VlangTypedHandler : TypedHandlerDelegate() {
             return Result.STOP
         }
 
+        // compile time constants and functions
+        if (c == '$' || c == '@') {
+            showCompletion(editor)
+            return Result.STOP
+        }
+
         return Result.DEFAULT
     }
 }

@@ -62,6 +62,11 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun isCompileTime(o: VlangFunctionDeclaration): Boolean {
+        return o.name.startsWith("$")
+    }
+
+    @JvmStatic
     fun scope(o: VlangFunctionDeclaration): VlangScope {
         return VlangScopeImpl(o)
     }
@@ -112,6 +117,13 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun isAttribute(o: VlangStructDeclaration): Boolean {
+        return o.attributes?.attributeList?.any {
+            VlangAttributesUtil.isAttributeStruct(it)
+        } == true
+    }
+
+    @JvmStatic
     fun getName(o: VlangEnumDeclaration): String {
         val stub = o.stub
         if (stub != null) {
@@ -136,6 +148,11 @@ object VlangPsiImplUtil {
         val decl = o.parent as? VlangConstDeclaration ?: return true
         val visibility = VlangPsiTreeUtil.getChildOfType(decl, VlangSymbolVisibility::class.java)
         return visibility?.pub != null
+    }
+
+    @JvmStatic
+    fun isCompileTime(o: VlangConstDefinition): Boolean {
+       return o.name.startsWith("@")
     }
 
     @JvmStatic
@@ -644,6 +661,11 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun getReference(o: VlangLabelRef): VlangLabelReference {
         return VlangLabelReference(o)
+    }
+
+    @JvmStatic
+    fun getReference(o: VlangAttributeIdentifier): VlangAttributeReference {
+        return VlangAttributeReference(o)
     }
 
     @JvmStatic
@@ -1654,7 +1676,11 @@ object VlangPsiImplUtil {
     }
 
     fun canBeAutoImported(file: VlangFile): Boolean {
-        val moduleName = file.getModuleName()
-        return moduleName != "main" && moduleName != "builtin"
+        val moduleName = file.getModuleName() ?: return false
+        return canBeAutoImported(moduleName)
+    }
+
+    fun canBeAutoImported(moduleName: String): Boolean {
+        return moduleName != "main" && moduleName != "builtin" && moduleName != "stubs"
     }
 }

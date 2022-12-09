@@ -20,9 +20,9 @@ import org.vlang.ide.documentation.DocumentationUtils.colorize
 import org.vlang.ide.documentation.DocumentationUtils.line
 import org.vlang.ide.documentation.DocumentationUtils.part
 import org.vlang.lang.VlangTypes
-import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.doc.psi.VlangDocComment
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.impl.VlangAttributeReference
 import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 
@@ -382,6 +382,8 @@ object DocumentationGenerator {
 
             if (this@generateDoc is VlangMethodDeclaration) {
                 part(receiver.generateMethodDoc())
+            } else if (this@generateDoc is VlangFunctionDeclaration && this@generateDoc.isCompileTime) {
+                part("compile time", asKeyword)
             }
 
             part("fn", asKeyword)
@@ -399,11 +401,25 @@ object DocumentationGenerator {
         return buildString {
             generateModuleName(containingFile)
             append(DocumentationMarkup.DEFINITION_START)
-            line(attributes?.generateDoc())
+
+            if (!isAttribute) {
+                line(attributes?.generateDoc())
+            }
 
             generateVisibilityPart(this@generateDoc)
 
-            part("struct", asKeyword)
+            when {
+                isAttribute -> part("attribute", asKeyword)
+                isUnion     -> part("union", asKeyword)
+                else        -> part("struct", asKeyword)
+            }
+
+            val name =  if (isAttribute) {
+                VlangAttributeReference.convertPascalCaseToSnakeCase(name)
+            } else {
+                name
+            }
+
             colorize(name, asDeclaration)
             appendNotNull(structType.genericParameters.generateDoc())
             append(DocumentationMarkup.DEFINITION_END)
@@ -448,6 +464,10 @@ object DocumentationGenerator {
             generateModuleName(containingFile)
             append(DocumentationMarkup.DEFINITION_START)
             generateVisibilityPart(this@generateDoc)
+
+            if (isCompileTime) {
+                part("compile time", asKeyword)
+            }
 
             part("const", asKeyword)
             part(name, asDeclaration)
@@ -698,21 +718,6 @@ object DocumentationGenerator {
             part("public", asKeyword)
         } else {
             part("private", asKeyword)
-        }
-    }
-
-    fun generateCompileTimeConstantDoc(element: VlangReferenceExpression): String? {
-        val name = element.getIdentifier().text.removePrefix("@")
-        val description = VlangCompletionUtil.compileTimeConstants[name] ?: return null
-        return buildString {
-            generateModuleName(element.containingFile)
-            append(DocumentationMarkup.DEFINITION_START)
-            part("compile-time constant", asKeyword)
-            part(name, asDeclaration)
-            append(DocumentationMarkup.DEFINITION_END)
-            append(DocumentationMarkup.CONTENT_START)
-            append(description)
-            append(DocumentationMarkup.CONTENT_END)
         }
     }
 

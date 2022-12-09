@@ -44,7 +44,8 @@ open class VlangVarProcessor(
                 e !is VlangReceiver &&
                 e !is VlangEmbeddedDefinition &&
                 e !is VlangConstDefinition &&
-                e !is VlangGenericParameter
+                e !is VlangGenericParameter &&
+                e !is VlangStructDeclaration
     }
 
     companion object {

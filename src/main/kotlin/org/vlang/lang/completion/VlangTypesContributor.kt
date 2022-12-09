@@ -15,27 +15,8 @@ class VlangTypesContributor : CompletionContributor() {
         extend(
             CompletionType.BASIC,
             psiElement(VlangTypes.IDENTIFIER).withParent(VlangTypeReferenceExpression::class.java),
-            PrimitiveTypesCompletionProvider()
-        )
-
-        extend(
-            CompletionType.BASIC,
-            psiElement(VlangTypes.IDENTIFIER).withParent(VlangTypeReferenceExpression::class.java),
             MapTypeCompletionProvider()
         )
-    }
-
-    private class PrimitiveTypesCompletionProvider : CompletionProvider<CompletionParameters>() {
-        override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
-            VlangPrimitiveTypes.values().forEach {
-                if (it == VlangPrimitiveTypes.STRING) return@forEach
-
-                result.addElement(
-                    LookupElementBuilder.create(it.value)
-                        .withIcon(VIcons.Alias)
-                )
-            }
-        }
     }
 
     private class MapTypeCompletionProvider : CompletionProvider<CompletionParameters>() {

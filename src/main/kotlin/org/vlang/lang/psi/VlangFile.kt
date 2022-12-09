@@ -115,7 +115,8 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
         val modules = VlangConfiguration.getInstance(project).modulesLocation
         val src = VlangConfiguration.getInstance(project).srcLocation
         val localModules = VlangConfiguration.getInstance(project).localModulesLocation
-        val rootDirs = listOfNotNull(projectDir, stdlib, modules, src, localModules)
+        val stubs = VlangConfiguration.getInstance(project).stubsLocation
+        val rootDirs = listOfNotNull(projectDir, stdlib, modules, src, localModules, stubs)
 
         val moduleNames = mutableListOf<String>()
         var dir = virtualFile?.parent

@@ -25,6 +25,8 @@ public interface VlangConstDefinition extends VlangNamedElement, StubBasedPsiEle
 
   boolean isPublic();
 
+  boolean isCompileTime();
+
   //WARNING: deleteDefinition(...) is skipped
   //matching deleteDefinition(VlangConstDefinition, ...)
   //methods are not found in VlangPsiImplUtil

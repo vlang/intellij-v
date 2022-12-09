@@ -441,6 +441,10 @@ The plugin provides support for V language
         <applicationService serviceImplementation="org.vlang.configurations.VlangToolchainsState"/>
         <!-- End of Toolchains -->
 
+        <!-- Stubs -->
+        <editorNotificationProvider implementation="org.vlang.project.StubFileNotificationProvider"/>
+        <!-- End of Stubs -->
+
         <!-- Run V script Configuration -->
         <configurationType implementation="org.vlang.ide.run.VlangRunConfigurationType"/>
         <runConfigurationProducer implementation="org.vlang.ide.run.VlangRunConfigurationProducer"/>

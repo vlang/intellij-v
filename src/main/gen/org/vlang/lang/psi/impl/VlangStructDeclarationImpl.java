@@ -75,4 +75,9 @@ public class VlangStructDeclarationImpl extends VlangNamedElementImpl<VlangStruc
     return VlangPsiImplUtil.isUnion(this);
   }
 
+  @Override
+  public boolean isAttribute() {
+    return VlangPsiImplUtil.isAttribute(this);
+  }
+
 }

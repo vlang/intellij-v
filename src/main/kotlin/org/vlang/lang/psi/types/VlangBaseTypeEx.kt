@@ -21,7 +21,7 @@ abstract class VlangBaseTypeEx(protected val anchor: PsiElement? = null) : UserD
         return qualifiedName().removePrefix(moduleName).removePrefix(".")
     }
 
-    override fun isBuiltin() = moduleName == VlangCodeInsightUtil.BUILTIN_MODULE
+    override fun isBuiltin() = moduleName == VlangCodeInsightUtil.BUILTIN_MODULE || moduleName == VlangCodeInsightUtil.STUBS_MODULE
 
     protected fun String?.safeAppend(str: String?): String {
         return if (this == null) str ?: "" else this + str
@@ -109,31 +109,46 @@ abstract class VlangBaseTypeEx(protected val anchor: PsiElement? = null) : UserD
                 is VlangGenericType   -> VlangGenericTypeEx(type.name, type)
                 is VlangFunctionType  -> VlangFunctionTypeEx.from(type) ?: VlangUnknownTypeEx.INSTANCE
                 is VlangAliasType     -> {
-//                  if (type.isAlias) {
-                    VlangAliasTypeEx(parentName(type), type.typeUnionList?.typeList?.firstOrNull().toEx(), type)
-//                  } TODO: stack overflow
-//                  else {
-//                      VlangSumTypeEx(parentName(type), type.typeUnionList?.typeList?.map { it.toEx() } ?: emptyList(), type)
-//                  }
-                }
+                    val typeName = parentName(type)
 
-                else                  -> {
-                    if (type.text == "any") {
+                    if (typeName == "any") {
                         return VlangAnyTypeEx.INSTANCE
                     }
-                    if (type.text == "void") {
-                        return VlangVoidTypeEx.INSTANCE
-                    }
-                    if (type.text == "voidptr") {
+                    if (typeName == "voidptr") {
                         return VlangVoidPtrTypeEx.INSTANCE
                     }
 
-                    val primitive = primitivesMap[type.text]
+                    val primitive = primitivesMap[typeName]
                     if (primitive != null) {
-                        VlangPrimitiveTypeEx(primitive)
-                    } else {
-                        VlangUnknownTypeEx.INSTANCE
+                        return VlangPrimitiveTypeEx(primitive)
                     }
+
+                    val firstType = type.typeUnionList?.typeList?.firstOrNull()
+                    if (firstType?.text == typeName) {
+                        // stubs case:
+                        //   type i32 = i32
+                        return VlangAliasTypeEx(typeName, VlangUnknownTypeEx.INSTANCE, type)
+                    }
+
+                    // TODO: Sum types.
+                    VlangAliasTypeEx(typeName, firstType.toEx(), type)
+                }
+
+                else                  -> {
+                    if (type.text == "void") {
+                        return VlangVoidTypeEx.INSTANCE
+                    }
+
+                    // only for tests
+                    // TODO: remove
+                    if (type.text == "string") {
+                        return VlangStringTypeEx.INSTANCE
+                    }
+                    if (type.text == "array") {
+                        return VlangBuiltinArrayTypeEx.INSTANCE
+                    }
+
+                    VlangUnknownTypeEx.INSTANCE
                 }
             }
         }

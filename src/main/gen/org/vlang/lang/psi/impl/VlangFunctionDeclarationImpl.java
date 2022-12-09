@@ -103,4 +103,9 @@ public class VlangFunctionDeclarationImpl extends VlangFunctionOrMethodDeclarati
     return VlangPsiImplUtil.isGeneric(this);
   }
 
+  @Override
+  public boolean isCompileTime() {
+    return VlangPsiImplUtil.isCompileTime(this);
+  }
+
 }

@@ -31,4 +31,6 @@ public interface VlangStructDeclaration extends VlangNamedElement, VlangAttribut
 
   boolean isUnion();
 
+  boolean isAttribute();
+
 }

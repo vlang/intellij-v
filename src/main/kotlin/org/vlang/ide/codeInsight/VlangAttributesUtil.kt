@@ -25,4 +25,9 @@ object VlangAttributesUtil {
             it.attributeExpressionList.any { expr -> expr.textMatches("params") }
         } ?: false
     }
+
+    fun isAttributeStruct(attribute: VlangAttribute): Boolean {
+        val expr = attribute.attributeExpressionList.firstOrNull() ?: return false
+        return expr.text == "attribute"
+    }
 }

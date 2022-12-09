@@ -34,6 +34,7 @@ class VlangAdditionalLibraryRootsProvider : AdditionalLibraryRootsProvider() {
 
     class StandardLibrary(sourceRoot: VirtualFile) : LibraryBase("V Standard Library", sourceRoot)
     class StandardModules(sourceRoot: VirtualFile) : LibraryBase("V Modules", sourceRoot)
+    class Stubs(sourceRoot: VirtualFile) : LibraryBase("V Stubs", sourceRoot)
 
     override fun getAdditionalProjectLibraries(project: Project): Collection<SyntheticLibrary> {
         val result = mutableListOf<SyntheticLibrary>()
@@ -46,8 +47,17 @@ class VlangAdditionalLibraryRootsProvider : AdditionalLibraryRootsProvider() {
         if (modulesRoot != null) {
             result.add(StandardModules(modulesRoot))
         }
+        val stubs = getStubs(project)
+        if (stubs != null) {
+            result.add(stubs)
+        }
 
         return result
+    }
+
+    private fun getStubs(project: Project): Stubs? {
+        val path = VlangConfiguration.getInstance(project).stubsLocation ?: return null
+        return Stubs(path)
     }
 
     override fun getRootsToWatch(project: Project): Collection<VirtualFile> {
@@ -63,6 +73,11 @@ class VlangAdditionalLibraryRootsProvider : AdditionalLibraryRootsProvider() {
         val modulesRoot = VlangConfiguration.getInstance(project).modulesLocation
         if (modulesRoot != null) {
             result.add(modulesRoot)
+        }
+
+        val stubs = getStubs(project)
+        if (stubs != null) {
+            result.add(stubs.sourceRoots.first())
         }
 
         return result

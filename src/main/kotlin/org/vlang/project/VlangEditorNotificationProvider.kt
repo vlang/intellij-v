@@ -27,7 +27,7 @@ abstract class VlangEditorNotificationProvider(private val project: Project) : E
         project: Project
     ): EditorNotificationPanel?
 
-    protected fun createNotification(
+    protected fun createToolchainNotification(
         message: String,
         project: Project,
         file: VirtualFile,
@@ -44,6 +44,14 @@ abstract class VlangEditorNotificationProvider(private val project: Project) : E
             }
         }
 
+    protected fun createSimpleNotification(
+        message: String,
+        project: Project,
+        file: VirtualFile,
+    ): EditorNotificationPanel =
+        EditorNotificationPanel().apply {
+            text = message
+        }
 
     private fun update(project: Project, file: VirtualFile) {
         EditorNotifications.getInstance(project).updateNotifications(file)

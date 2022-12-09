@@ -44,4 +44,6 @@ public interface VlangFunctionDeclaration extends VlangSignatureOwner, VlangFunc
 
   boolean isGeneric();
 
+  boolean isCompileTime();
+
 }

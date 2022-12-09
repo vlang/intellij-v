@@ -14,6 +14,7 @@ import org.vlang.utils.parentOfTypeWithStop
 
 object VlangCodeInsightUtil {
     const val BUILTIN_MODULE = "builtin"
+    const val STUBS_MODULE = "stubs"
     private const val ERR_VARIABLE = "err"
 
     fun isErrVariable(element: PsiElement): Boolean {
@@ -97,7 +98,8 @@ object VlangCodeInsightUtil {
 
     fun insideBuiltinModule(element: VlangCompositeElement): Boolean {
         val file = element.containingFile as VlangFile
-        return file.getModuleQualifiedName() == BUILTIN_MODULE
+        val moduleName = file.getModuleQualifiedName()
+        return moduleName == BUILTIN_MODULE || moduleName == STUBS_MODULE
     }
 
     fun insideTranslatedFile(element: VlangCompositeElement): Boolean {
