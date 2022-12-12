@@ -17,6 +17,7 @@ import org.jetbrains.concurrency.resolvedPromise
 import org.vlang.configurations.VlangConfigurationUtil
 import org.vlang.configurations.VlangProjectSettingsConfigurable
 import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
+import org.vlang.debugger.runconfig.VlangDebugRunner
 import org.vlang.notifications.VlangErrorNotification
 import org.vlang.notifications.VlangNotification
 import java.io.File
@@ -92,8 +93,17 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
             .withEnvironment(conf.envs)
             .withParameters(pathToBuild)
             .withParameters("-color")
-            .withParameters("-g")
             .withWorkDirectory(workingDir)
+
+        val isDebug = ctx.environment.runner is VlangDebugRunner
+        if (isDebug) {
+            commandLine.withParameters("-g")
+
+            // Debugging with TCC not working on Windows and Linux for some reasons
+            if (SystemInfo.isWindows || SystemInfo.isLinux) {
+                commandLine.withParameters("-cc", "gcc")
+            }
+        }
 
         val binName = binaryName(conf)
         if (outputDir != null) {
