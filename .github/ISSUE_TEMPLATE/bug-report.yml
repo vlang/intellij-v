@@ -70,3 +70,10 @@ body:
       label: Environment details (`v doctor` output)
     validations:
         required: true
+  
+  - type: textarea
+    id: ide-type
+    attributes:
+      label: IDE Type (IDEA Community/Ultimate, GoLand, CLion, etc.)
+    validations:
+        required: true
