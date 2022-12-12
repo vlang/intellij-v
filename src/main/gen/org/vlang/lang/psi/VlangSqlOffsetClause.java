@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface VlangSqlOffsetClause extends VlangCompositeElement {
 
-  @Nullable
+  @NotNull
   VlangExpression getExpression();
 
 }

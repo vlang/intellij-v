@@ -69,6 +69,11 @@ public class VlangFieldDefinitionImpl extends VlangNamedElementImpl<VlangFieldDe
   }
 
   @Override
+  public boolean isPrimary() {
+    return VlangPsiImplUtil.isPrimary(this);
+  }
+
+  @Override
   public void makeMutable() {
     VlangPsiImplUtil.makeMutable(this);
   }

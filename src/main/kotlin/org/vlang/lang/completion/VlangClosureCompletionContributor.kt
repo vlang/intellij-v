@@ -241,10 +241,11 @@ class VlangClosureCompletionContributor : CompletionContributor() {
                     // still generic, some T is not inferred
                     if (inferredType.isGeneric()) {
                         val unresolvedGenericTs = type.getGenericTs()
-                        var inferredTypeString = inferredType.toString()
-                        unresolvedGenericTs.forEach {
-                            inferredTypeString = inferredTypeString.replace(it, "\$PARAM_TYPE_$it$")
-                        }
+                        val unresolvedGenericTsMap = unresolvedGenericTs
+                            .associateWith { VlangStructTypeEx("\$PARAM_TYPE_$it$", type.anchor()) }
+                        val templateType = type.substituteGenerics(unresolvedGenericTsMap)
+
+                        val inferredTypeString = templateType.toString()
                         append(inferredTypeString)
                         return
                     }

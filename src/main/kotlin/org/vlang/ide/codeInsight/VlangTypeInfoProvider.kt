@@ -14,7 +14,7 @@ import org.vlang.lang.psi.VlangTypeOwner
 class VlangTypeInfoProvider : ExpressionTypeProvider<VlangTypeOwner>() {
     override fun getInformationHint(element: VlangTypeOwner): String {
         val type = element.getType(null) ?: return ""
-        return type.readableName(element).escapeHTML()
+        return type.readableName(element).escapeHTML().replace(" ", "&nbsp;")
     }
 
     override fun getErrorHint(): String {

@@ -26,6 +26,9 @@ public interface VlangSendStatement extends VlangStatement {
   VlangSelectElseArmClause getSelectElseArmClause();
 
   @Nullable
+  VlangShebangClause getShebangClause();
+
+  @Nullable
   VlangStatement getStatement();
 
   @NotNull

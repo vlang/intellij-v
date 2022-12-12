@@ -4,7 +4,7 @@ import org.vlang.integration.IntegrationTestBase
 
 class ResolvingTest : IntegrationTestBase() {
     fun `test hello world`() = doTest {
-        myFixture.configureByText("a.v", """
+        file("a.v", """
             fn main() {
                 /*caret 0*/println("Hello, World!")
             }
@@ -14,7 +14,7 @@ class ResolvingTest : IntegrationTestBase() {
     }
 
     fun `test builtin resolved with prefix`() = doTest {
-        myFixture.configureByText("a.v", """
+        file("a.v", """
             fn main() /*caret 0*/string {
                 /*caret 1*/println("Hello, World!")
             }
@@ -25,7 +25,7 @@ class ResolvingTest : IntegrationTestBase() {
     }
 
     fun `test qualifier name with current module mane`() = doTest {
-        myFixture.configureByText("a.v", """
+        file("a.v", """
             module foo
             
             fn boo() {
@@ -35,5 +35,20 @@ class ResolvingTest : IntegrationTestBase() {
 
         assertReferencedTo(0, "MODULE foo")
         assertReferencedTo(1, "FUNCTION_DECLARATION foo.boo")
+    }
+
+    fun `test resolve module with same name with param`() = doTest {
+        myFixture.copyDirectoryToProject("modules/simple", "simple")
+        file("a.v", """
+            module main
+            
+            import /*caret 0*/simple
+            
+            fn foo(simple /*caret 1*/simple./*caret 2*/SimpleStruct) {}
+        """.trimIndent())
+
+        assertReferencedTo(0, "MODULE simple")
+        assertReferencedTo(1, "MODULE simple")
+        assertReferencedTo(2, "STRUCT_DECLARATION simple.SimpleStruct")
     }
 }

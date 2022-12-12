@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface VlangSqlLimitClause extends VlangCompositeElement {
 
-  @Nullable
+  @NotNull
   VlangExpression getExpression();
 
 }

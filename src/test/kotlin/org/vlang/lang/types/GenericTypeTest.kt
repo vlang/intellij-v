@@ -209,7 +209,6 @@ class GenericTypeTest : TypeTestBase() {
         """.trimIndent()
     )
 
-
     fun `test alias for generic struct with field with optional and result type`() = doTest(
         """
         struct Foo<T> {
@@ -232,6 +231,18 @@ class GenericTypeTest : TypeTestBase() {
             expr_type(foo?.field, 'int')
             foo2 := get_optional()
             expr_type(foo2!.field, 'string')
+        }
+        """.trimIndent()
+    )
+
+    fun `test call with new syntax`() = doTest(
+        """
+        fn some[T]() T {}
+        
+        fn main() {
+            expr_type(some(), 'T')
+            expr_type(some[int](), 'int')
+            expr_type(some[string](), 'string')
         }
         """.trimIndent()
     )

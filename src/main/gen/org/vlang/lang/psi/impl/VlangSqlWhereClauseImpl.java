@@ -32,4 +32,16 @@ public class VlangSqlWhereClauseImpl extends VlangCompositeElementImpl implement
     return VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSemicolonSynthetic() {
+    return findChildByType(SEMICOLON_SYNTHETIC);
+  }
+
 }

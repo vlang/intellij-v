@@ -10,4 +10,10 @@ public interface VlangSqlReferenceList extends VlangCompositeElement {
   @NotNull
   List<VlangSqlReferenceListItem> getSqlReferenceListItemList();
 
+  @Nullable
+  PsiElement getSemicolon();
+
+  @Nullable
+  PsiElement getSemicolonSynthetic();
+
 }

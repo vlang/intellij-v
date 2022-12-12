@@ -63,4 +63,16 @@ public class VlangSqlSelectStatementImpl extends VlangSqlBlockStatementImpl impl
     return VlangPsiTreeUtil.getChildOfType(this, VlangSqlWhereClause.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSemicolonSynthetic() {
+    return findChildByType(SEMICOLON_SYNTHETIC);
+  }
+
 }

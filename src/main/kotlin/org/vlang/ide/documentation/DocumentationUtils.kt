@@ -22,6 +22,7 @@ object DocumentationUtils {
     val asString = loadKey(VlangColor.STRING.textAttributesKey)
     val asNumber = loadKey(VlangColor.NUMBER.textAttributesKey)
     val asGeneric = loadKey(VlangColor.GENERIC_PARAMETER.textAttributesKey)
+    val asField = loadKey(VlangColor.FIELD.textAttributesKey)
 
     @Suppress("UnstableApiUsage")
     fun StringBuilder.colorize(text: String, attrs: TextAttributes, noHtml: Boolean = false) {

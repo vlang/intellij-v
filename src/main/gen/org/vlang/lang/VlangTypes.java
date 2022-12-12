@@ -37,6 +37,7 @@ public interface VlangTypes {
   IElementType BLOCK = new VlangCompositeElementType("BLOCK");
   IElementType BREAK_STATEMENT = new VlangCompositeElementType("BREAK_STATEMENT");
   IElementType CALL_EXPR = new VlangCompositeElementType("CALL_EXPR");
+  IElementType CALL_EXPR_WITH_PROPAGATE = new VlangCompositeElementType("CALL_EXPR_WITH_PROPAGATE");
   IElementType CAPTURE = new VlangCompositeElementType("CAPTURE");
   IElementType CAPTURE_LIST = new VlangCompositeElementType("CAPTURE_LIST");
   IElementType CHANNEL_TYPE = VlangElementTypeFactory.stubFactory("CHANNEL_TYPE");
@@ -171,6 +172,7 @@ public interface VlangTypes {
   IElementType SEND_STATEMENT = new VlangCompositeElementType("SEND_STATEMENT");
   IElementType SHARED_EXPRESSION = new VlangCompositeElementType("SHARED_EXPRESSION");
   IElementType SHARED_TYPE = VlangElementTypeFactory.stubFactory("SHARED_TYPE");
+  IElementType SHEBANG_CLAUSE = new VlangCompositeElementType("SHEBANG_CLAUSE");
   IElementType SHORT_STRING_TEMPLATE_ENTRY = new VlangCompositeElementType("SHORT_STRING_TEMPLATE_ENTRY");
   IElementType SIGNATURE = VlangElementTypeFactory.stubFactory("SIGNATURE");
   IElementType SIMPLE_STATEMENT = new VlangCompositeElementType("SIMPLE_STATEMENT");
@@ -332,6 +334,7 @@ public interface VlangTypes {
   IElementType SEMICOLON_SYNTHETIC = new VlangTokenType("<NL>");
   IElementType SEND_CHANNEL = new VlangTokenType("<-");
   IElementType SHARED = new VlangTokenType("shared");
+  IElementType SHEBANG = new VlangTokenType("shebang");
   IElementType SHIFT_LEFT = new VlangTokenType("<<");
   IElementType SHIFT_LEFT_ASSIGN = new VlangTokenType("<<=");
   IElementType SHIFT_RIGHT = new VlangTokenType(">>");
@@ -438,6 +441,9 @@ public interface VlangTypes {
       }
       else if (type == CALL_EXPR) {
         return new VlangCallExprImpl(node);
+      }
+      else if (type == CALL_EXPR_WITH_PROPAGATE) {
+        return new VlangCallExprWithPropagateImpl(node);
       }
       else if (type == CAPTURE) {
         return new VlangCaptureImpl(node);
@@ -837,6 +843,9 @@ public interface VlangTypes {
       }
       else if (type == SHARED_TYPE) {
         return new VlangSharedTypeImpl(node);
+      }
+      else if (type == SHEBANG_CLAUSE) {
+        return new VlangShebangClauseImpl(node);
       }
       else if (type == SHORT_STRING_TEMPLATE_ENTRY) {
         return new VlangShortStringTemplateEntryImpl(node);

@@ -1,13 +1,11 @@
 package org.vlang.ide.codeInsight
 
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parentOfType
 import org.vlang.lang.psi.*
-import org.vlang.lang.psi.types.VlangArrayTypeEx
+import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
-import org.vlang.lang.psi.types.VlangBuiltinArrayTypeEx
-import org.vlang.lang.psi.types.VlangPointerTypeEx
-import org.vlang.lang.psi.types.VlangTypeEx
 import org.vlang.utils.inside
 import org.vlang.utils.parentNth
 
@@ -23,6 +21,11 @@ object VlangTypeInferenceUtil {
     fun builtinArrayOrPointerTo(type: VlangTypeEx): Boolean {
         if (type is VlangBuiltinArrayTypeEx) return true
         return type is VlangPointerTypeEx && type.inner is VlangBuiltinArrayTypeEx
+    }
+
+    fun builtinMapOrPointerTo(type: VlangTypeEx): Boolean {
+        if (type is VlangBuiltinMapTypeEx) return true
+        return type is VlangPointerTypeEx && type.inner is VlangBuiltinMapTypeEx
     }
 
     fun getContextType(element: PsiElement): VlangTypeEx? {
@@ -96,7 +99,20 @@ object VlangTypeInferenceUtil {
             val params = function.getSignature()?.parameters?.paramDefinitionList ?: return null
 
             val param = params.getOrNull(index) ?: return null
-            return param.type.toEx()
+            val type = param.type.toEx()
+
+            if (type is VlangMapTypeEx && element.inside<VlangMapInitExpr>()) {
+                val keyValue = element.parentOfType<VlangKeyValue>()
+                if (PsiTreeUtil.isAncestor(keyValue?.keyExpr, element, false)) {
+                    return type.key
+                }
+                if (PsiTreeUtil.isAncestor(keyValue?.valueExpr, element, false)) {
+                    return type.value
+                }
+                return type
+            }
+
+            return type
         }
 
         if (element.inside<VlangReturnStatement>()) {

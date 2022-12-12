@@ -198,14 +198,26 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             }
         }
 
+        if (typ is VlangAnonStructTypeEx) {
+            val anonStruct = typ.resolve() ?: return true
+            if (!processNamedElements(processor, newState, anonStruct.getFieldList(), true)) return false
+        }
+
         if (typ is VlangStructTypeEx) {
             val isMethodRef = element.parent is VlangCallExpr
 
-            val declaration = typ.resolve(project) ?: return false
+            val declaration = typ.resolve(project) ?: return true
             val structType = declaration.structType
 
-            if (!isMethodRef && !processNamedElements(processor, newState, structType.getFieldList(), localResolve)) return false
-            if (!processMethods(typ, processor, newState, localResolve)) return false
+            // If it is a call, then most likely it is a method call, but it
+            // could be a function call that is stored in a structure field.
+            if (isMethodRef) {
+                if (!processMethods(typ, processor, newState, localResolve)) return false
+                if (!processNamedElements(processor, newState, structType.getFieldList(), localResolve)) return false
+            } else {
+                if (!processNamedElements(processor, newState, structType.getFieldList(), localResolve)) return false
+                if (!processMethods(typ, processor, newState, localResolve)) return false
+            }
 
             structType.embeddedStructList.forEach {
                 if (!processType(it.type.toEx(), processor, newState)) return false
@@ -794,7 +806,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
     }
 
     private fun createDelegate(processor: VlangScopeProcessor): VlangVarProcessor {
-        return object : VlangVarProcessor(identifier!!, myElement, processor.isCompletion(), true) {
+        return object : VlangVarProcessor(identifier!!, myElement, processor.isCompletion()) {
             override fun crossOff(e: PsiElement): Boolean {
                 return if (e is VlangFieldDeclaration)
                     true

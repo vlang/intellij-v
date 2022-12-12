@@ -16,4 +16,10 @@ public interface VlangSqlDeleteStatement extends VlangSqlBlockStatement {
   @Nullable
   VlangSqlWhereClause getSqlWhereClause();
 
+  @Nullable
+  PsiElement getSemicolon();
+
+  @Nullable
+  PsiElement getSemicolonSynthetic();
+
 }

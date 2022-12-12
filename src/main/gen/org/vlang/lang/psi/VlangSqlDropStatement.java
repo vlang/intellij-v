@@ -10,4 +10,10 @@ public interface VlangSqlDropStatement extends VlangSqlBlockStatement {
   @Nullable
   VlangSqlTableName getSqlTableName();
 
+  @Nullable
+  PsiElement getSemicolon();
+
+  @Nullable
+  PsiElement getSemicolonSynthetic();
+
 }

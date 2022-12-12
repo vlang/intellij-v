@@ -27,6 +27,8 @@ public interface VlangFieldDefinition extends VlangMutabilityOwner, VlangNamedEl
 
   boolean isMutable();
 
+  boolean isPrimary();
+
   void makeMutable();
 
   void makeImmutable();

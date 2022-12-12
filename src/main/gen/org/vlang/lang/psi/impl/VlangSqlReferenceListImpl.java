@@ -32,4 +32,16 @@ public class VlangSqlReferenceListImpl extends VlangCompositeElementImpl impleme
     return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangSqlReferenceListItem.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSemicolonSynthetic() {
+    return findChildByType(SEMICOLON_SYNTHETIC);
+  }
+
 }

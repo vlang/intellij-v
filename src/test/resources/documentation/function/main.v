@@ -35,3 +35,11 @@ pub fn /*caret*/foo6(mut a string, shared b int, mut shared c string) !string {
 fn /*caret*/foo7(mut a string, b shared int) !string {
 
 }
+
+fn /*caret*/foo8() ! {
+
+}
+
+fn /*caret*/foo9() (int, string) {
+
+}

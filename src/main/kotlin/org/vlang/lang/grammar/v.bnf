@@ -128,11 +128,14 @@
 // [imports]
 //
 // [TopLevelDeclarations]
-File ::= ModuleClause? ImportList? TopLevelDeclaration*
+File ::= ShebangClause? ModuleClause? ImportList? TopLevelDeclaration*
 
 // General rule for explicit and implicit ';'
 private semi ::= '<NL>' | ';' | <<eof>>
 private list_separator ::= semi | ','
+
+// #!/usr/bin/env v
+ShebangClause ::= shebang
 
 // [attr] module <name>
 ModuleClause ::= Attributes? module identifier semi {
@@ -391,7 +394,11 @@ StructDeclaration ::= Attributes? SymbolVisibility? StructType {
   methods=[getIdentifier getName getTypeInner isUnion isAttribute]
 }
 
-AnonymousStructType ::= struct '{' FieldsGroup* '}' {pin=2}
+AnonymousStructType ::= struct '{' FieldsGroup* '}' {
+  pin=2
+  implements="org.vlang.lang.psi.VlangFieldListOwner"
+  methods=[getFieldList]
+}
 
 StructType ::= (struct | union) identifier GenericParameters? '{' FieldsGroup* '}' {
   pin=1
@@ -411,11 +418,11 @@ private WithModifiersFieldsGroup ::= MemberModifiers semi? FieldDeclarations {pi
 private WithoutModifiersFieldsGroup ::= !MemberModifiers FieldDeclarations
 
 private FieldDeclarations ::= FieldDeclaration+
-FieldDeclaration ::= (PlainFieldDeclaration | EmbeddedDefinition) semi
+FieldDeclaration ::= (PlainFieldDeclaration | EmbeddedDefinition) semi?
 private PlainFieldDeclaration ::= FieldDefinition Type Attribute? DefaultFieldValue?
 DefaultFieldValue ::= '=' Expression {pin=1}
 FieldDefinition ::= identifier {
-  methods=[getQualifier getQualifiedName getTypeInner isPublic isMutable makeMutable makeImmutable getOwner]
+  methods=[getQualifier getQualifiedName getTypeInner isPublic isMutable isPrimary makeMutable makeImmutable getOwner]
   implements="org.vlang.lang.psi.VlangMutabilityOwner"
   stubClass="org.vlang.lang.stubs.VlangFieldDefinitionStub"
 }
@@ -636,7 +643,7 @@ GoExpression ::= go Expression
 SpawnExpression ::= spawn Expression
 
 // { ... }
-MapInitExpr ::= <<prevIsNotType>> <<braceRuleMarker>> '{' KeyValues? '}'
+MapInitExpr ::= <<prevIsNotType>> <<braceRuleMarker>> '{' <<enterMode "MAP_KEY_VALUE">> KeyValues? <<exitMode "MAP_KEY_VALUE">> '}'
 KeyValues ::= KeyValue ((semi | ',') KeyValue)* (semi | ',')? {pin=1}
 // <key> : <value>
 KeyValue ::= Expression ':' Expression {
@@ -721,7 +728,10 @@ private TypeLit ::=
 
 // [<expr>]<type>
 ArrayType ::= '['']' Type {pin=3}
-FixedSizeArrayType ::= '[' Expression ']' Type {pin=4}
+FixedSizeArrayType ::= '[' Expression ']' Type {
+  pin=4
+  methods=[getSize]
+}
 
 // (<type>, <type>, ...)
 TupleType ::= '(' TypeListNoPin ')' {pin=3}
@@ -838,15 +848,16 @@ DumpCallExpr ::= dump '(' Expression ')' {pin=1}
 
 // just <ident> with reference
 ReferenceExpression ::= identifier { methods=[getReference getQualifier resolve getReadWriteAccess safeAccess] extends=Expression}
-left QualifiedReferenceExpression ::= semi? '.' identifier {elementType=ReferenceExpression}
+left QualifiedReferenceExpression ::= semi? '.' identifier <<checkNoColonIfMap>> {elementType=ReferenceExpression}
 left SafeQualifiedReferenceExpression ::= semi? '?.' identifier {elementType=ReferenceExpression}
 
 private RightHandExprs ::= RightHandExpr*
 
 private RightHandExpr ::=
-    IndexOrSliceExpr
-  | CompileTimeFieldReference
+    CompileTimeFieldReference
+  | (<<callExprWithPropagate>> | (!() CallExprWithPropagate))
   | (<<callExpr>> | (!() CallExpr))
+  | IndexOrSliceExpr
   | SafeQualifiedReferenceExpression
   | QualifiedReferenceExpression
   | OrBlockExpr
@@ -856,6 +867,11 @@ private RightHandExpr ::=
 // <expr>[<<generics>>](...)
 left CallExpr ::= GenericArguments? ArgumentList {
   methods=[getParameters resolve paramIndexOf]
+}
+
+// <expr>[<<generics>>](...)
+left CallExprWithPropagate ::= GenericArguments? ArgumentList ('!' | '?') {
+  extends=CallExpr
 }
 
 // .$(<dot_expr>)
@@ -943,7 +959,10 @@ MutExpression ::= mut Expression
 SharedExpression ::= shared Expression
 
 // [<list>]
-ArrayCreation ::= '[' <<enterMode "PAR">> ArrayCreationList? semi? (<<exitModeSafe "PAR">> ']' '!'?) !identifier
+// [<list>]! – fixed size array
+ArrayCreation ::= '[' <<enterMode "PAR">> ArrayCreationList? semi? (<<exitModeSafe "PAR">> ']' '!'?) !identifier {
+  methods=[isFixedSize]
+}
 // <expr1>, <expr2>, ..., <exprN>
 ArrayCreationList ::= ExpressionWithRecover (list_separator? ExpressionWithRecover)* list_separator? {pin(".*")=0}
 
@@ -1003,7 +1022,7 @@ SqlExpression ::= 'sql' BeforeBlockExpression SqlBlock {
 SqlBlock ::= '{' ('}' | (SqlBlockStatement semi)* '}') {pin(".*")=1}
 
 SqlBlockStatement ::=
-	SqlCreateStatement
+	  SqlCreateStatement
   | SqlDropStatement
   | SqlSelectStatement
   | SqlUpdateStatement
@@ -1011,25 +1030,25 @@ SqlBlockStatement ::=
   | SqlDeleteStatement
   | identifier // for completion
 
-SqlCreateStatement ::= 'create' 'table' SqlTableName {pin=1}
-SqlDropStatement ::= 'drop' 'table' SqlTableName {pin=1}
+SqlCreateStatement ::= semi? 'create' 'table' SqlTableName {pin=2}
+SqlDropStatement ::= semi? 'drop' 'table' SqlTableName {pin=2}
 
-SqlUpdateStatement ::= 'update' SqlTableName 'set' SqlUpdateList SqlWhereClause {pin=1}
+SqlUpdateStatement ::= semi? 'update' SqlTableName semi? 'set' SqlUpdateList SqlWhereClause {pin=2}
 SqlUpdateList ::= SqlUpdateItem (',' SqlUpdateItem)*
 SqlUpdateItem ::= ReferenceExpression '=' Expression
 
-SqlInsertStatement ::= 'insert' ReferenceExpression 'into' SqlTableName {pin=1}
-SqlDeleteStatement ::= 'delete' ((ReferenceExpression SqlFromClause) | SqlFromClause) SqlWhereClause? {pin=1}
-SqlSelectStatement ::= 'select' SqlSelectCountClause? SqlFromClause SqlWhereClause? SqlOrderByClause? SqlLimitClause? SqlOffsetClause? {pin=1}
-SqlSelectCountClause ::= 'count'
+SqlInsertStatement ::= semi? 'insert' ReferenceExpression semi? 'into' SqlTableName {pin=2}
+SqlDeleteStatement ::= semi? 'delete' ((ReferenceExpression SqlFromClause) | SqlFromClause) SqlWhereClause? {pin=2}
+SqlSelectStatement ::= semi? 'select' SqlSelectCountClause? SqlFromClause SqlWhereClause? SqlOrderByClause? SqlLimitClause? SqlOffsetClause? {pin=2}
+SqlSelectCountClause ::= semi? 'count'
 
-SqlFromClause ::= 'from' SqlTableName {pin=1}
-SqlWhereClause ::= 'where' Expression {pin=1}
-SqlLimitClause ::= 'limit' Expression {pin=1}
-SqlOffsetClause ::= 'offset' Expression {pin=1}
-SqlOrderByClause ::= 'order' 'by' 'desc'? SqlReferenceList {pin=1}
-SqlReferenceList ::= SqlReferenceListItem (','? SqlReferenceListItem)* {pin=1}
-SqlReferenceListItem ::= (SqlLimitClause SqlOffsetClause?) | ReferenceExpression {pin=1}
+SqlFromClause ::= semi? 'from' SqlTableName {pin=2}
+SqlWhereClause ::= semi? 'where' Expression {pin=2}
+SqlLimitClause ::= 'limit' Expression {pin=2}
+SqlOffsetClause ::= 'offset' Expression {pin=2}
+SqlOrderByClause ::= semi?  'order' 'by' 'desc'? SqlReferenceList {pin=2}
+SqlReferenceList ::= semi? SqlReferenceListItem (','? SqlReferenceListItem)* {pin=2}
+SqlReferenceListItem ::= semi? (SqlLimitClause SqlOffsetClause?) | ReferenceExpression {pin=2}
 
 SqlTableName ::= TypeReferenceExpression {pin=1}
 

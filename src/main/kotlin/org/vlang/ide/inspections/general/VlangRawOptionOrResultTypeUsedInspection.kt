@@ -1,5 +1,6 @@
 package org.vlang.ide.inspections.general
 
+import com.intellij.codeInsight.intention.preview.IntentionPreviewInfo
 import com.intellij.codeInspection.LocalQuickFix
 import com.intellij.codeInspection.ProblemDescriptor
 import com.intellij.codeInspection.ProblemsHolder
@@ -44,6 +45,13 @@ class VlangRawOptionOrResultTypeUsedInspection : VlangBaseInspection() {
                     parent is VlangDotExpression &&
                     (parent.errorPropagationExpression != null || parent.forceNoErrorPropagationExpression != null)
                 ) {
+                    return
+                }
+
+                val text = expr.parent.text
+                // TODO: should be fixed in the parser
+                //       example: some()!.foo()
+                if (text.contains("!") || text.contains("?")) {
                     return
                 }
 
@@ -98,6 +106,10 @@ class VlangRawOptionOrResultTypeUsedInspection : VlangBaseInspection() {
             editor.editor.caretModel.moveToOffset(newOrBlock.endOffset - 2)
         }
 
+        override fun generatePreview(project: Project, previewDescriptor: ProblemDescriptor): IntentionPreviewInfo {
+            return IntentionPreviewInfo.EMPTY
+        }
+
         companion object {
             val INSTANCE = AddOrBlockQuickFix()
         }
@@ -116,6 +128,10 @@ class VlangRawOptionOrResultTypeUsedInspection : VlangBaseInspection() {
             editor.editor.caretModel.moveToOffset(newPropagation.endOffset)
         }
 
+        override fun generatePreview(project: Project, previewDescriptor: ProblemDescriptor): IntentionPreviewInfo {
+            return IntentionPreviewInfo.EMPTY
+        }
+
         companion object {
             val INSTANCE = AddOptionPropagationQuickFix()
         }
@@ -132,6 +148,10 @@ class VlangRawOptionOrResultTypeUsedInspection : VlangBaseInspection() {
             val newPropagation = element.replace(propagation)
 
             editor.editor.caretModel.moveToOffset(newPropagation.endOffset)
+        }
+
+        override fun generatePreview(project: Project, previewDescriptor: ProblemDescriptor): IntentionPreviewInfo {
+            return IntentionPreviewInfo.EMPTY
         }
 
         companion object {

@@ -494,7 +494,11 @@ object VlangCompletionUtil {
             val withLeftBracketParenAfterCursor = prevChar == '['
 
             if (!withParenAfterCursor && !isGeneric) {
-                context.document.insertString(caretOffset, "()")
+                try {
+                    context.document.insertString(caretOffset, "()")
+                } catch (e: Exception) {
+                    return
+                }
             }
             if (!withLeftBracketParenAfterCursor && isGeneric) {
                 val endVariable = if (!takeZeroArguments) "\$END$" else ""

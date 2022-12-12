@@ -32,4 +32,16 @@ public class VlangSqlOrderByClauseImpl extends VlangCompositeElementImpl impleme
     return VlangPsiTreeUtil.getChildOfType(this, VlangSqlReferenceList.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSemicolonSynthetic() {
+    return findChildByType(SEMICOLON_SYNTHETIC);
+  }
+
 }

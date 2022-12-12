@@ -4,6 +4,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parentOfType
 import org.vlang.lang.psi.*
+import org.vlang.utils.parentOfTypeWithStop
 
 object VlangSqlUtil {
     val sqlKeywords = setOf(
@@ -27,6 +28,7 @@ object VlangSqlUtil {
 
     fun fieldReference(element: PsiElement): Boolean {
         return leftPartOfExpression(element) ||
+                leftPartOfUpdateItem(element) ||
                 inWhereExpression(element) ||
                 element.parentOfType<VlangSqlOrderByClause>() != null
     }
@@ -41,11 +43,19 @@ object VlangSqlUtil {
     }
 
     private fun leftPartOfExpression(element: PsiElement): Boolean {
-        val expr = element.parentOfType<VlangBinaryExpr>() ?: return false
+        val expr = element.parentOfTypeWithStop<VlangBinaryExpr>(VlangSqlBlock::class) ?: return false
         if (expr is VlangOrBlockExpr) {
             return false
         }
         return PsiTreeUtil.isAncestor(expr.left, element, false)
+    }
+
+    private fun leftPartOfUpdateItem(element: PsiElement): Boolean {
+        val expr = element.parentOfTypeWithStop<VlangSqlUpdateItem>(VlangSqlBlock::class) ?: return false
+        if (expr is VlangOrBlockExpr) {
+            return false
+        }
+        return PsiTreeUtil.isAncestor(expr.expressionList.firstOrNull(), element, false)
     }
 
     fun getTable(element: PsiElement): VlangSqlTableName? {

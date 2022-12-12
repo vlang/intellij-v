@@ -57,4 +57,10 @@ public class VlangAnonymousStructTypeImpl extends VlangTypeImpl implements Vlang
     return notNullChild(findChildByType(STRUCT));
   }
 
+  @Override
+  @NotNull
+  public List<VlangFieldDefinition> getFieldList() {
+    return VlangPsiImplUtil.getFieldList(this);
+  }
+
 }

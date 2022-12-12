@@ -3,7 +3,7 @@ package org.vlang.lang.psi.types
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 
-class VlangArrayTypeEx(val inner: VlangTypeEx, anchor: PsiElement) : VlangBaseTypeEx(anchor) {
+open class VlangArrayTypeEx(val inner: VlangTypeEx, anchor: PsiElement) : VlangBaseTypeEx(anchor) {
     override fun toString() = "[]".safeAppend(inner)
 
     override fun qualifiedName(): String  = "[]".safeAppend(inner.qualifiedName())

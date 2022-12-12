@@ -9,6 +9,7 @@ import io.ktor.util.*
 import org.vlang.ide.documentation.DocumentationUtils.appendNotNull
 import org.vlang.ide.documentation.DocumentationUtils.asAttribute
 import org.vlang.ide.documentation.DocumentationUtils.asDeclaration
+import org.vlang.ide.documentation.DocumentationUtils.asField
 import org.vlang.ide.documentation.DocumentationUtils.asGeneric
 import org.vlang.ide.documentation.DocumentationUtils.asIdentifier
 import org.vlang.ide.documentation.DocumentationUtils.asKeyword
@@ -38,12 +39,15 @@ object DocumentationGenerator {
             is VlangChannelTypeEx          -> return this.generateDoc(anchor)
             is VlangResultTypeEx           -> return this.generateDoc(anchor)
             is VlangUnionTypeEx            -> return this.generateDoc(anchor)
+            is VlangAnonStructTypeEx       -> return this.generateDoc(anchor)
             is VlangStructTypeEx           -> return this.generateDoc(anchor)
             is VlangEnumTypeEx             -> return this.generateDoc(anchor)
             is VlangInterfaceTypeEx        -> return this.generateDoc(anchor)
             is VlangFunctionTypeEx         -> return this.generateDoc(anchor)
             is VlangGenericTypeEx          -> return this.generateDoc(anchor)
             is VlangGenericInstantiationEx -> return this.generateDoc(anchor)
+            is VlangTupleTypeEx            -> return this.generateDoc(anchor)
+            is VlangPrimitiveTypeEx        -> return this.generateDoc(anchor)
         }
         return colorize(this.readableName(anchor).escapeHTML(), asType)
     }
@@ -164,6 +168,42 @@ object DocumentationGenerator {
             }
             append(">")
         }
+    }
+
+    fun VlangTupleTypeEx.generateDoc(anchor: PsiElement): String {
+        return buildString {
+            append("(")
+            types.forEachIndexed { index, param ->
+                if (index > 0) {
+                    append(", ")
+                }
+                appendNotNull(param.generateDoc(anchor))
+            }
+            append(")")
+        }
+    }
+
+    fun VlangAnonStructTypeEx.generateDoc(anchor: PsiElement): String {
+        val fields = resolve()?.getFieldList() ?: return colorize("{}", asType)
+        return buildString {
+            colorize("struct", asKeyword)
+            append(" {")
+            appendLine()
+            append(
+                fields.joinToString("\n") { field ->
+                    buildString {
+                        append("   ")
+                        part(field.name, asField)
+                        append(field.getType(null)?.generateDoc(anchor) ?: "<unknown>")
+                    }
+                }
+            )
+            append("\n}")
+        }
+    }
+
+    fun VlangPrimitiveTypeEx.generateDoc(anchor: PsiElement): String {
+        return colorize(readableName(anchor), asDeclaration)
     }
 
     private fun generateFqnTypeDoc(fqn: String): String {
@@ -414,7 +454,7 @@ object DocumentationGenerator {
                 else        -> part("struct", asKeyword)
             }
 
-            val name =  if (isAttribute) {
+            val name = if (isAttribute) {
                 VlangAttributeReference.convertPascalCaseToSnakeCase(name)
             } else {
                 name
@@ -597,7 +637,7 @@ object DocumentationGenerator {
             part("field", asKeyword)
             append(owner.toEx().generateDoc(this@generateDoc))
             append(".")
-            part(name, asDeclaration)
+            part(name, asField)
             append(type.toEx().generateDoc(this@generateDoc))
 
             val valueDoc = parent.defaultFieldValue?.expression?.generateDoc()
@@ -643,7 +683,7 @@ object DocumentationGenerator {
             part("enum field", asKeyword)
             append(owner.toEx().generateDoc(this@generateDoc))
             append(".")
-            part(name, asDeclaration)
+            part(name, asField)
 
             val valueDoc = parent?.expression?.generateDoc()
             if (valueDoc != null) {

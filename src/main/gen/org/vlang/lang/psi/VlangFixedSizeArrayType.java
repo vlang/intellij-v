@@ -19,4 +19,6 @@ public interface VlangFixedSizeArrayType extends VlangType {
   @NotNull
   PsiElement getRbrack();
 
+  int getSize();
+
 }

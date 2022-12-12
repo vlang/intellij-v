@@ -25,4 +25,6 @@ public interface VlangArrayCreation extends VlangExpression {
   @Nullable
   PsiElement getSemicolonSynthetic();
 
+  boolean isFixedSize();
+
 }

@@ -1,8 +1,6 @@
 package org.vlang.lang.psi.impl
 
 import com.intellij.codeInsight.highlighting.ReadWriteAccessDetector.Access
-import com.intellij.lang.parser.GeneratedParserUtilBase
-import com.intellij.openapi.module.Module
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Condition
 import com.intellij.openapi.util.Conditions
@@ -124,6 +122,12 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun isPrimary(o: VlangFieldDefinition): Boolean {
+        val decl = o.parent as? VlangFieldDeclaration ?: return false
+        return decl.attribute?.let { VlangAttributesUtil.isPrimaryField(it) } ?: false
+    }
+
+    @JvmStatic
     fun getName(o: VlangEnumDeclaration): String {
         val stub = o.stub
         if (stub != null) {
@@ -152,7 +156,7 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun isCompileTime(o: VlangConstDefinition): Boolean {
-       return o.name.startsWith("@")
+        return o.name.startsWith("@")
     }
 
     @JvmStatic
@@ -390,6 +394,11 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getFieldList(o: VlangAnonymousStructType): List<VlangFieldDefinition> {
+        return o.fieldsGroupList.flatMap { it.fieldDeclarationList }.mapNotNull { it.fieldDefinition }
+    }
+
+    @JvmStatic
     fun getFieldList(o: VlangStructType): List<VlangFieldDefinition> {
         return o.fieldsGroupList.flatMap { it.fieldDeclarationList }.mapNotNull { it.fieldDefinition }
     }
@@ -591,8 +600,36 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getQualifiedName(o: VlangFieldDefinition): String? {
-        val owner = o.parentOfType<VlangStructDeclaration>() ?: o.parentOfType<VlangInterfaceDeclaration>() ?: return o.getQualifiedName()
-        return owner.getQualifiedName() + "." + o.name
+        val owner = o.parentOfTypes(VlangStructDeclaration::class, VlangInterfaceDeclaration::class, VlangAnonymousStructType::class)
+
+        if (owner is VlangNamedElement) {
+            return owner.getQualifiedName() + "." + o.name
+        }
+
+        if (owner is VlangAnonymousStructType) {
+            val name = o.name ?: return null
+            val parts = mutableListOf<String>()
+
+            val containingStruct = owner.parentOfType<VlangStructDeclaration>()
+            if (containingStruct != null) {
+                val qualifiedName = containingStruct.getQualifiedName()
+                if (qualifiedName != null) {
+                    parts.add(qualifiedName)
+                }
+            } else {
+                val containingFile = owner.containingFile as? VlangFile ?: return null
+                val moduleName = containingFile.getModuleQualifiedName()
+                if (moduleName.isNotEmpty()) {
+                    parts.add(moduleName)
+                }
+            }
+
+            parts.add("<anonymous struct>")
+            parts.add(name)
+            return parts.joinToString(".")
+        }
+
+        return null
     }
 
     @JvmStatic
@@ -654,6 +691,20 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getSize(o: VlangFixedSizeArrayType): Int {
+        val expr = o.expression
+        if (expr is VlangLiteral) {
+            if (expr.isNumeric) {
+                val text = expr.text
+                if (text != null) {
+                    return text.toInt()
+                }
+            }
+        }
+        return 0
+    }
+
+    @JvmStatic
     fun getBlock(o: VlangElseStatement): VlangBlock? {
         return o.childrenOfType<VlangBlock>().firstOrNull()
     }
@@ -704,11 +755,13 @@ object VlangPsiImplUtil {
         if (list == null) {
             var importList = VlangElementFactory.createImportList(file.project, name, alias)!!
             val modulePsi = file.getModule()
+            val shebangPsi = file.getShebang()
+            val anchor = modulePsi ?: shebangPsi
 
-            importList = if (modulePsi == null) {
+            importList = if (anchor == null) {
                 file.addBefore(importList, file.firstChild) as VlangImportList
             } else {
-                val listPsi = file.addAfter(importList, modulePsi) as VlangImportList
+                val listPsi = file.addAfter(importList, anchor) as VlangImportList
                 file.addBefore(VlangElementFactory.createDoubleNewLine(file.project), listPsi)
 
                 listPsi
@@ -874,6 +927,11 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun isFixedSize(o: VlangArrayCreation): Boolean {
+        return o.not != null
+    }
+
+    @JvmStatic
     fun getType(o: VlangSqlExpression, context: ResolveState?): VlangTypeEx? {
         val lastStatement = o.sqlBlock.sqlBlockStatementList.lastOrNull() ?: return null
         if (lastStatement is VlangSqlSelectStatement) {
@@ -884,6 +942,24 @@ object VlangPsiImplUtil {
             val tableRef = VlangSqlUtil.getTable(lastStatement) ?: return null
             val table = tableRef.typeReferenceExpression.resolve() as? VlangNamedElement ?: return null
             val type = table.getType(context) ?: return null
+
+            val limitClause = lastStatement.sqlLimitClause
+            if (limitClause != null && limitClause.expression.text == "1") {
+                return type
+            }
+
+            val whereClause = lastStatement.sqlWhereClause
+            if (whereClause != null) {
+                val condition = whereClause.expression
+                if (condition is VlangConditionalExpr && condition.eq != null) {
+                    val left = condition.expressionList.firstOrNull() as? VlangReferenceExpression
+                    val resolved = left?.resolve()
+                    if (resolved is VlangFieldDefinition && resolved.isPrimary) {
+                        return type
+                    }
+                }
+            }
+
             return VlangArrayTypeEx(type, table)
         }
         return null
@@ -1117,32 +1193,31 @@ object VlangPsiImplUtil {
         }
 
         if (expr is VlangCallExpr) {
-            val callRef = expr.expression as? VlangReferenceExpression
-            if (VlangCodeInsightUtil.isTypeCast(expr)) {
-                return processTypeCast(callRef, expr)
+            val needUnwrapOptional = expr is VlangCallExprWithPropagate
+
+            val exprType = expr.expression?.getType(context) ?: return null
+            if (exprType !is VlangFunctionTypeEx) {
+                return unwrapOptionOrResultTypeIf(exprType, needUnwrapOptional)
             }
 
-            val resolved = callRef?.reference?.resolve()
-            if (resolved !is VlangSignatureOwner) {
-                if (callRef is VlangReferenceExpression) {
-                    return getTypeInner(callRef, null)
-                }
-                return null
+            val signature = exprType.signature
+            val owner = signature.parent as VlangSignatureOwner
+
+            if (owner is VlangMethodDeclaration) {
+                val type = processMapArrayMethodCall(owner, signature, expr)
+                if (type != null) return unwrapOptionOrResultTypeIf(type, needUnwrapOptional)
             }
 
-            val signature = resolved.getSignature()
-            val type = processArrayMethodCall(resolved, signature, expr)
-            if (type != null) {
-                return type
-            }
-
-            val result = signature?.result ?: return VlangVoidTypeEx.INSTANCE
+            val result = signature.result ?: return VlangVoidTypeEx.INSTANCE
             val resultType = result.type.toEx()
             if (resultType.isGeneric()) {
-                return VlangGenericInferer.inferGenericCall(expr, resolved, resultType)
+                return unwrapOptionOrResultTypeIf(
+                    VlangGenericInferer.inferGenericCall(expr, owner, resultType),
+                    needUnwrapOptional
+                )
             }
 
-            return resultType
+            return unwrapOptionOrResultTypeIf(resultType, needUnwrapOptional)
         }
 
         if (expr is VlangDotExpression) {
@@ -1166,8 +1241,13 @@ object VlangPsiImplUtil {
 
         // [type, type] -> type[]
         if (expr is VlangArrayCreation) {
-            val firstItem = expr.arrayCreationList?.expressionList?.firstOrNull()
+            val expressionList = expr.arrayCreationList?.expressionList ?: return null
+            val firstItem = expressionList.firstOrNull()
             val type = firstItem?.getType(context) ?: return null
+            if (expr.isFixedSize) {
+                return VlangFixedSizeArrayTypeEx(type, expressionList.size, firstItem)
+            }
+
             return VlangArrayTypeEx(type, firstItem)
         }
 
@@ -1211,6 +1291,24 @@ object VlangPsiImplUtil {
 
         if (expr is VlangSpawnExpression) {
             return VlangThreadTypeEx(expr.expression?.getType(context), expr)
+        }
+
+        return null
+    }
+
+    private fun processMapArrayMethodCall(
+        owner: VlangMethodDeclaration,
+        signature: VlangSignature,
+        expr: VlangCallExpr,
+    ): VlangTypeEx? {
+        val type = processArrayMethodCall(owner, signature, expr)
+        if (type != null) {
+            return type
+        }
+
+        val mapType = processMapMethodCall(owner, signature, expr)
+        if (mapType != null) {
+            return mapType
         }
 
         return null
@@ -1293,19 +1391,34 @@ object VlangPsiImplUtil {
         return inner
     }
 
-    private fun processArrayMethodCall(resolved: PsiElement?, signature: VlangSignature?, expr: VlangCallExpr): VlangTypeEx? {
-        if (resolved !is VlangMethodDeclaration) return null
-
+    private fun processMapMethodCall(resolved: VlangMethodDeclaration, signature: VlangSignature?, expr: VlangCallExpr): VlangTypeEx? {
         val receiverTypeEx = resolved.receiverType.toEx()
-        if (!VlangTypeInferenceUtil.builtinArrayOrPointerTo(receiverTypeEx)) return null
+        if (!VlangTypeInferenceUtil.builtinMapOrPointerTo(receiverTypeEx)) return null
+
+        val callerType = VlangTypeInferenceUtil.callerType(expr)
+        if (callerType !is VlangMapTypeEx) {
+            return null
+        }
+
+        return when (resolved.name) {
+            "keys"          -> VlangArrayTypeEx(callerType.key, expr)
+            "values"        -> VlangArrayTypeEx(callerType.value, expr)
+            "clone", "move" -> callerType
+            else            -> null
+        }
+    }
+
+    private fun processArrayMethodCall(resolved: VlangMethodDeclaration, signature: VlangSignature?, expr: VlangCallExpr): VlangTypeEx? {
+        val receiverType = resolved.receiverType.toEx()
+        if (!VlangTypeInferenceUtil.builtinArrayOrPointerTo(receiverType)) return null
 
         val returnType = signature?.result?.type.toEx()
 
         // like `first() voidptr`
         if (returnType is VlangVoidPtrTypeEx) {
-            val callerTypeEx = VlangTypeInferenceUtil.callerType(expr)
-            if (callerTypeEx is VlangArrayTypeEx) {
-                return callerTypeEx.inner
+            val callerType = VlangTypeInferenceUtil.callerType(expr)
+            if (callerType is VlangArrayTypeEx) {
+                return callerType.inner
             }
         }
 
@@ -1331,6 +1444,11 @@ object VlangPsiImplUtil {
         }
 
         return null
+    }
+
+    private fun unwrapOptionOrResultTypeIf(type: VlangTypeEx?, condition: Boolean): VlangTypeEx? {
+        if (!condition) return type
+        return unwrapOptionOrResultType(type)
     }
 
     private fun unwrapOptionOrResultType(type: VlangTypeEx?): VlangTypeEx? {
@@ -1532,6 +1650,10 @@ object VlangPsiImplUtil {
 
     private fun processRangeClause(o: VlangVarDefinition, decl: VlangRangeClause, context: ResolveState?): VlangTypeEx? {
         val rightType = decl.expression?.getType(context)
+        if (rightType is VlangStringTypeEx) {
+            return VlangPrimitiveTypeEx.RUNE
+        }
+
         if (rightType is VlangStructTypeEx) {
             return processIteratorStruct(o, rightType)
         }

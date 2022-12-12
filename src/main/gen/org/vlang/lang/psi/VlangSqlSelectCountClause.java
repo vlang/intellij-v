@@ -7,4 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface VlangSqlSelectCountClause extends VlangCompositeElement {
 
+  @Nullable
+  PsiElement getSemicolon();
+
+  @Nullable
+  PsiElement getSemicolonSynthetic();
+
 }

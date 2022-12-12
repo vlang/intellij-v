@@ -27,9 +27,9 @@ public class VlangSqlOffsetClauseImpl extends VlangCompositeElementImpl implemen
   }
 
   @Override
-  @Nullable
+  @NotNull
   public VlangExpression getExpression() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class);
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class));
   }
 
 }

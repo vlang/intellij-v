@@ -10,4 +10,10 @@ public interface VlangSqlOrderByClause extends VlangCompositeElement {
   @Nullable
   VlangSqlReferenceList getSqlReferenceList();
 
+  @Nullable
+  PsiElement getSemicolon();
+
+  @Nullable
+  PsiElement getSemicolonSynthetic();
+
 }

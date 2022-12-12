@@ -28,7 +28,12 @@ class VlangPostStartupActivity : StartupActivity {
 
         Registry.get("cidr.debugger.value.stringEvaluator").setValue(false)
         Registry.get("cidr.debugger.lldb.statics").setValue(false)
-        project.putUserData(CidrValue.DO_NOT_SHOW_ADDRESSES, true)
+
+        try {
+            project.putUserData(CidrValue.DO_NOT_SHOW_ADDRESSES, true)
+        } catch (e: NoClassDefFoundError) {
+            // ignore
+        }
     }
 
     companion object {

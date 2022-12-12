@@ -10,4 +10,10 @@ public interface VlangSqlWhereClause extends VlangCompositeElement {
   @Nullable
   VlangExpression getExpression();
 
+  @Nullable
+  PsiElement getSemicolon();
+
+  @Nullable
+  PsiElement getSemicolonSynthetic();
+
 }

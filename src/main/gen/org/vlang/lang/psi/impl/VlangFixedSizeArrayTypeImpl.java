@@ -57,4 +57,9 @@ public class VlangFixedSizeArrayTypeImpl extends VlangTypeImpl implements VlangF
     return notNullChild(findChildByType(RBRACK));
   }
 
+  @Override
+  public int getSize() {
+    return VlangPsiImplUtil.getSize(this);
+  }
+
 }

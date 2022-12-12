@@ -65,6 +65,12 @@ public class VlangSendStatementImpl extends VlangStatementImpl implements VlangS
 
   @Override
   @Nullable
+  public VlangShebangClause getShebangClause() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangShebangClause.class);
+  }
+
+  @Override
+  @Nullable
   public VlangStatement getStatement() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangStatement.class);
   }

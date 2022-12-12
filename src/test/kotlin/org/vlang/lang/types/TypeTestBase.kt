@@ -2,6 +2,7 @@ package org.vlang.lang.types
 
 import com.intellij.psi.PsiElement
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.intellij.lang.annotations.Language
 import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
 import org.vlang.lang.psi.VlangCallExpr
 import org.vlang.lang.psi.VlangStringLiteral
@@ -13,7 +14,7 @@ import org.vlang.utils.line
 abstract class TypeTestBase : BasePlatformTestCase() {
     override fun getTestDataPath() = "src/test/resources/types"
 
-    protected open fun doTest(text: String) {
+    protected open fun doTest(@Language("vlang") text: String) {
         myFixture.configureByText("a.v", text)
         runTypeTest(arrayOf("a.v"))
     }

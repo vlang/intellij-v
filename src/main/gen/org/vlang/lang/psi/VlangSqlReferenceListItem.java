@@ -16,4 +16,10 @@ public interface VlangSqlReferenceListItem extends VlangCompositeElement {
   @Nullable
   VlangSqlOffsetClause getSqlOffsetClause();
 
+  @Nullable
+  PsiElement getSemicolon();
+
+  @Nullable
+  PsiElement getSemicolonSynthetic();
+
 }

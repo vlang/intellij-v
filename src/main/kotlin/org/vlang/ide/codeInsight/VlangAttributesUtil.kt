@@ -30,4 +30,9 @@ object VlangAttributesUtil {
         val expr = attribute.attributeExpressionList.firstOrNull() ?: return false
         return expr.text == "attribute"
     }
+
+    fun isPrimaryField(attribute: VlangAttribute): Boolean {
+        val expr = attribute.attributeExpressionList.firstOrNull() ?: return false
+        return expr.text == "primary"
+    }
 }

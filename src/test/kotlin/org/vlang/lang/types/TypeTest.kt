@@ -27,4 +27,8 @@ class TypeTest : TypeTestBase() {
     fun `test range`() = doTestFile("range.v")
     fun `test iterators`() = doTestFile("iterators.v")
     fun `test index`() = doTestFile("index.v")
+    fun `test call`() = doTestFile("call.v")
+    fun `test map methods`() = doTestFile("map_methods.v")
+    fun `test fixed size arrays`() = doTestFile("fixed_size_arrays.v")
+    fun `test anon struct`() = doTestFile("anon_struct.v")
 }

@@ -10,4 +10,10 @@ public interface VlangSqlFromClause extends VlangCompositeElement {
   @Nullable
   VlangSqlTableName getSqlTableName();
 
+  @Nullable
+  PsiElement getSemicolon();
+
+  @Nullable
+  PsiElement getSemicolonSynthetic();
+
 }

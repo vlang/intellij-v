@@ -87,7 +87,11 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
     }
 
     fun getModule(): VlangModuleClause? {
-        return findChildByClass(VlangModuleClause::class.java)
+        return VlangPsiTreeUtil.getStubChildOfType(this, VlangModuleClause::class.java)
+    }
+
+    fun getShebang(): VlangShebangClause? {
+        return findChildByClass(VlangShebangClause::class.java)
     }
 
     fun getModuleName(): String? {
@@ -151,7 +155,7 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
             }
         }
 
-        val qualifier = qualifierNames.reversed()
+        val qualifier = qualifierNames
             .joinToString(".")
             .removePrefix("${VlangCodeInsightUtil.BUILTIN_MODULE}.")
 
@@ -210,9 +214,7 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
     fun getGlobalVariables(): List<VlangGlobalVariableDefinition> {
         val value = {
             if (stub != null) {
-                val decls =
-                    getChildrenByType(stub!!, VlangTypes.GLOBAL_VARIABLE_DECLARATION) { arrayOfNulls<VlangGlobalVariableDeclaration>(it) }
-                decls.filterNotNull().flatMap { it.globalVariableDefinitionList }
+                getChildrenByType(stub!!, VlangTypes.GLOBAL_VARIABLE_DEFINITION) { arrayOfNulls<VlangGlobalVariableDefinition>(it) }
             } else {
                 val decls = children.filterIsInstance<VlangGlobalVariableDeclaration>()
                 decls.flatMap { it.globalVariableDefinitionList }
@@ -227,8 +229,7 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
     fun getConstants(): List<VlangConstDefinition> {
         val value = {
             if (stub != null) {
-                val decls = getChildrenByType(stub!!, VlangTypes.CONST_DECLARATION) { arrayOfNulls<VlangConstDeclaration>(it) }
-                decls.filterNotNull().flatMap { it.constDefinitionList }
+                getChildrenByType(stub!!, VlangTypes.CONST_DEFINITION) { arrayOfNulls<VlangConstDefinition>(it) }
             } else {
                 val decls = children.filterIsInstance<VlangConstDeclaration>()
                 decls.flatMap { it.constDefinitionList }

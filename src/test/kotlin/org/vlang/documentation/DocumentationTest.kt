@@ -7,6 +7,7 @@ class DocumentationTest : DocumentationTestBase() {
     fun `test struct fields doc`() = doTest("struct_fields", "main.v")
     fun `test interface members doc`() = doTest("interface_members", "main.v")
     fun `test it variable doc`() = doTest("it_variable", "main.v")
+    fun `test anon structs doc`() = doTest("anon_structs", "main.v")
 
     fun `test rendered doc`() = doTest("rendered", "main.v")
 }

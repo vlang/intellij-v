@@ -11,11 +11,13 @@ class ImportResolvingTest : IntegrationTestBase() {
             import mymodule
             import mymodule2
             import mymodule.inner
+            import mymodule.inner.sub
             
             fn main() {
                 /*caret 0*/mymodule./*caret 1*/my_func()
                 /*caret 2*/inner./*caret 3*/inner()
                 /*caret 4*/mymodule2./*caret 5*/my_func2()
+                /*caret 6*/sub./*caret 7*/sub()
             }
         """.trimIndent())
 
@@ -25,6 +27,8 @@ class ImportResolvingTest : IntegrationTestBase() {
         assertReferencedTo(3, "FUNCTION_DECLARATION mymodule.inner.inner")
         assertReferencedTo(4, "MODULE mymodule2")
         assertReferencedTo(5, "FUNCTION_DECLARATION mymodule2.my_func2")
+        assertReferencedTo(6, "MODULE mymodule.inner.sub")
+        assertReferencedTo(7, "FUNCTION_DECLARATION mymodule.inner.sub.sub")
     }
 
     fun `test src based project`() = doTest {

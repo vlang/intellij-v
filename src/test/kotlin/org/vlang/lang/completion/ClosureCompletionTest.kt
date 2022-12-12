@@ -478,4 +478,44 @@ class ClosureCompletionTest : CompletionTestBase() {
             }
         }
     """.trimIndent())
+
+    fun `test closure with tuple return type`() = doTestCompletion("""
+        module main
+        
+        pub fn to_map[K, V, X, Y](m map[K]V, f fn (key K, val V) (X, Y)) map[X]Y {
+            mut mp := map[X]Y{}
+        
+            for k, v in m {
+                x, y := f(k, v)
+                mp[x] = y
+            }
+        
+            return mp
+        }
+        
+        fn main() {
+            m := map[string]int{}
+            to_map(m, fn/*caret*/)
+        }
+    """.trimIndent(), """
+        module main
+        
+        pub fn to_map[K, V, X, Y](m map[K]V, f fn (key K, val V) (X, Y)) map[X]Y {
+            mut mp := map[X]Y{}
+        
+            for k, v in m {
+                x, y := f(k, v)
+                mp[x] = y
+            }
+        
+            return mp
+        }
+        
+        fn main() {
+            m := map[string]int{}
+            to_map(m, fn (EXPECTED_USER_INPUT_FOR_key string, EXPECTED_USER_INPUT_FOR_val int) (EXPECTED_USER_INPUT_FOR_X, EXPECTED_USER_INPUT_FOR_Y) {
+        		
+        	})
+        }
+    """.trimIndent())
 }

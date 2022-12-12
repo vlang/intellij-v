@@ -41,6 +41,10 @@ object VlangCodeInsightUtil {
     }
 
     fun getCallExpr(element: PsiElement): VlangCallExpr? {
+        if (element.parent is VlangFieldName) {
+            return element.parent.parentNth(4)
+        }
+
         val parentValue = element.parentOfTypeWithStop<VlangValue>(VlangBlock::class)
         if (parentValue != null) {
             return parentValue.parentNth(3) ?: element.parentOfTypeWithStop(VlangBlock::class)

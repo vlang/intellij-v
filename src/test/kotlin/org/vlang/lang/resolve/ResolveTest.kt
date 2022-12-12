@@ -58,4 +58,19 @@ class ResolveTest : ResolveTestBase() {
         assertReferencedTo("INTERFACE_METHOD_DEFINITION name")
         assertReferencedTo("FIELD_DEFINITION name")
     }
+
+    fun `test resolve field call`() {
+        mainFile("a.v", """
+            struct Foo {
+                cb fn () string
+            }
+            
+            fn main() {
+                foo := Foo{}
+                foo.c<caret>b()
+            }
+        """.trimIndent())
+
+        assertReferencedTo("FIELD_DEFINITION cb")
+    }
 }

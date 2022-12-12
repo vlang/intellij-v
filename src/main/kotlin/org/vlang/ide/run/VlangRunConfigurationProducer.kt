@@ -13,6 +13,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import org.vlang.ide.run.VlangRunConfigurationEditor.RunKind
 import org.vlang.lang.psi.VlangFile
+import org.vlang.lang.psi.VlangSimpleStatement
 import org.vlang.utils.pathAsPath
 import kotlin.io.path.relativeTo
 
@@ -62,17 +63,16 @@ class VlangRunConfigurationProducer : LazyRunConfigurationProducer<VlangRunConfi
         }
 
         val moduleName = containingFile.getModuleName()
-        val withModule = moduleName != null
-        val runAsDirectory = withModule && element !is VlangFile
 
-        if (withModule) {
+        val runAsModule = needRunFileAsModule(containingFile)
+        if (runAsModule) {
             val configurationName = getModuleConfigurationName(project, moduleName, containingFile) ?: moduleName
             configuration.name = "V Build $configurationName"
         } else {
             configuration.name = "V Run ${containingFile.name}"
         }
 
-        configuration.runKind = if (runAsDirectory) RunKind.Directory else RunKind.File
+        configuration.runKind = if (runAsModule) RunKind.Directory else RunKind.File
         configuration.fileName = containingFile.virtualFile.path
         configuration.directory = containingFile.virtualFile.parent.path
 
@@ -113,6 +113,68 @@ class VlangRunConfigurationProducer : LazyRunConfigurationProducer<VlangRunConfi
         return "$relativeString/$moduleName"
     }
 
+    /**
+     * When the user tries to run a file through the Run icon, we need to
+     * figure out how to run that file, either as a single file or as a module.
+     * If the file has a `module` section, then we check if that file has
+     * top level expressions:
+     *
+     * For example:
+     * ```v
+     * module main
+     *
+     * import os
+     *
+     * os.read_file('file.txt') or { panic(err) } // top level expression
+     * ```
+     * Should be run as a single file, because when run as a module,
+     * an error will be given for an invalid top level statement.
+     *
+     * If the file does not have a `module` section and does not have top level
+     * expressions, then we need to check if there is a file next to this file
+     * for another platform.
+     * For example:
+     * ```
+     * main.v
+     * main_windows.v
+     * ```
+     * Should be run as a module, because in this case files for different
+     * platforms will be assembled in one module.
+     */
+    private fun needRunFileAsModule(file: VlangFile): Boolean {
+        val moduleName = file.getModuleName()
+        if (moduleName != null) {
+            return !hasTopLevelExpressions(file)
+        }
+
+        return hasFilesForOtherPlatforms(file)
+    }
+
+    private fun hasTopLevelExpressions(file: VlangFile): Boolean {
+        return file.children.any { it is VlangSimpleStatement }
+    }
+
+    private fun hasFilesForOtherPlatforms(file: VlangFile): Boolean {
+        val fileName = file.virtualFile.name.split(".").firstOrNull() ?: file.virtualFile.nameWithoutExtension
+        val directory = file.containingDirectory?.virtualFile ?: return false
+        return directory.children.any {
+            val childrenName = it.name.split(".").firstOrNull() ?: it.nameWithoutExtension
+            val platformName = childrenName.substringAfterLast("_", "unknown")
+            if (platformName == "unknown") {
+                return@any false
+            }
+
+            val nameWithoutPlatform = childrenName.substringBeforeLast("_", childrenName)
+            nameWithoutPlatform == fileName && platformName in KNOWN_PLATFORMS
+        }
+    }
+
     private fun path(project: Project, path: String): String =
         PathMacroManager.getInstance(project).expandPath(path)
+
+    companion object {
+        val KNOWN_PLATFORMS = listOf(
+            "windows", "linux", "macos", "mac", "darwin", "ios", "android", "mach", "dragonfly", "gnu", "hpux", "haiku", "qnx", "solaris"
+        )
+    }
 }

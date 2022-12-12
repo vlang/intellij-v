@@ -63,4 +63,9 @@ public class VlangArrayCreationImpl extends VlangExpressionImpl implements Vlang
     return findChildByType(SEMICOLON_SYNTHETIC);
   }
 
+  @Override
+  public boolean isFixedSize() {
+    return VlangPsiImplUtil.isFixedSize(this);
+  }
+
 }

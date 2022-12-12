@@ -81,18 +81,22 @@ object VlangElementFactory {
         )!!
     }
 
-    fun createOptionalPropagation(project: Project, expression: PsiElement): VlangDotExpression {
-        return PsiTreeUtil.findChildOfType(
-            createFileFromText(project, "${expression.text}?"),
-            VlangDotExpression::class.java
-        )!!
+    fun createOptionalPropagation(project: Project, expression: PsiElement): VlangCompositeElement {
+        val file = createFileFromText(project, "${expression.text}?")
+        val call = PsiTreeUtil.findChildOfType(file, VlangCallExprWithPropagate::class.java)
+        if (call != null) {
+            return call
+        }
+        return PsiTreeUtil.findChildOfType(file, VlangDotExpression::class.java)!!
     }
 
-    fun createResultPropagation(project: Project, expression: PsiElement): VlangDotExpression {
-        return PsiTreeUtil.findChildOfType(
-            createFileFromText(project, "${expression.text}!"),
-            VlangDotExpression::class.java
-        )!!
+    fun createResultPropagation(project: Project, expression: PsiElement): VlangCompositeElement {
+        val file = createFileFromText(project, "${expression.text}!")
+        val call = PsiTreeUtil.findChildOfType(file, VlangCallExprWithPropagate::class.java)
+        if (call != null) {
+            return call
+        }
+        return PsiTreeUtil.findChildOfType(file, VlangDotExpression::class.java)!!
     }
 
     fun createReference(project: Project, text: String): VlangReferenceExpression {

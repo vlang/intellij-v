@@ -268,6 +268,20 @@ object VlangParserUtil : GeneratedParserUtilBase() {
     }
 
     @JvmStatic
+    fun callExprWithPropagate(builder: PsiBuilder, level: Int): Boolean {
+        val m = builder.latestDoneMarker
+        if (m != null) {
+            val text = builder.originalText
+            val identifier = text.subSequence(m.startOffset, m.endOffset).toString()
+            if (identifier == "json.decode") {
+                return VlangParser.JsonCallExpr(builder, level + 1)
+            }
+        }
+
+        return VlangParser.CallExprWithPropagate(builder, level + 1)
+    }
+
+    @JvmStatic
     fun typeOrExpression(builder: PsiBuilder, level: Int): Boolean {
         val m = builder.mark()
         var r = VlangParser.Type(builder, level + 1)
@@ -320,6 +334,26 @@ object VlangParserUtil : GeneratedParserUtilBase() {
         m1.rollbackTo()
 
         return r
+    }
+
+    private val identifierRegex = Regex("[a-zA-Z0-9_.]*")
+
+    @JvmStatic
+    fun checkNoColonIfMap(builder: PsiBuilder, level: Int): Boolean {
+        if (!isLastIs(builder, level, "MAP_KEY_VALUE") || builder.latestDoneMarker?.tokenType == IDENTIFIER) {
+           return true
+        }
+
+        val text = builder.originalText.substring(builder.latestDoneMarker?.startOffset ?: 0, builder.latestDoneMarker?.endOffset ?: 1)
+        if (identifierRegex.matches(text)) {
+            return true
+        }
+
+        if (consumeToken(builder, COLON)) {
+            return false
+        }
+
+        return true
     }
 
     @JvmStatic

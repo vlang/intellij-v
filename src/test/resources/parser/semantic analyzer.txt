@@ -1113,25 +1113,23 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('symbols')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('child_by_field_name')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    STRING_LITERAL
-                      STRING_TEMPLATE
-                        PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                        PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('symbols')
-                        PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('child_by_field_name')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  STRING_LITERAL
+                    STRING_TEMPLATE
+                      PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('symbols')
+                      PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -1139,25 +1137,23 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('module_name_node')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('child_by_field_name')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    STRING_LITERAL
-                      STRING_TEMPLATE
-                        PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                        PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('path')
-                        PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('child_by_field_name')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  STRING_LITERAL
+                    STRING_TEMPLATE
+                      PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('path')
+                      PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -1243,22 +1239,20 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('list')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('symbols')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('named_child')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    LITERAL
-                      PsiElement(VlangTokenType.int)('0')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('symbols')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('named_child')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  LITERAL
+                    PsiElement(VlangTokenType.int)('0')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -1759,25 +1753,23 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('name_node')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('child_by_field_name')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    STRING_LITERAL
-                      STRING_TEMPLATE
-                        PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                        PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('name')
-                        PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('child_by_field_name')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  STRING_LITERAL
+                    STRING_TEMPLATE
+                      PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('name')
+                      PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -1785,28 +1777,26 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('decl_list_node')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('last_node_by_type')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('last_node_by_type')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  REFERENCE_EXPRESSION
                     REFERENCE_EXPRESSION
                       REFERENCE_EXPRESSION
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('v')
-                        PsiElement(VlangTokenType..)('.')
-                        PsiElement(VlangTokenType.identifier)('NodeType')
+                        PsiElement(VlangTokenType.identifier)('v')
                       PsiElement(VlangTokenType..)('.')
-                      PsiElement(VlangTokenType.identifier)('enum_member_declaration_list')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                      PsiElement(VlangTokenType.identifier)('NodeType')
+                    PsiElement(VlangTokenType..)('.')
+                    PsiElement(VlangTokenType.identifier)('enum_member_declaration_list')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -2580,25 +2570,23 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('types_node')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('child_by_field_name')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    STRING_LITERAL
-                      STRING_TEMPLATE
-                        PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                        PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('types')
-                        PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('child_by_field_name')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  STRING_LITERAL
+                    STRING_TEMPLATE
+                      PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('types')
+                      PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -3062,25 +3050,23 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('op_node')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('child_by_field_name')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    STRING_LITERAL
-                      STRING_TEMPLATE
-                        PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                        PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('operator')
-                        PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('child_by_field_name')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  STRING_LITERAL
+                    STRING_TEMPLATE
+                      PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('operator')
+                      PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -3151,25 +3137,23 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('left_node')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('child_by_field_name')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    STRING_LITERAL
-                      STRING_TEMPLATE
-                        PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                        PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('left')
-                        PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('child_by_field_name')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  STRING_LITERAL
+                    STRING_TEMPLATE
+                      PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('left')
+                      PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -3177,25 +3161,23 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('right_node')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('child_by_field_name')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    STRING_LITERAL
-                      STRING_TEMPLATE
-                        PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                        PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('right')
-                        PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('child_by_field_name')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  STRING_LITERAL
+                    STRING_TEMPLATE
+                      PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('right')
+                      PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -4205,25 +4187,23 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('right')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('child_by_field_name')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    STRING_LITERAL
-                      STRING_TEMPLATE
-                        PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                        PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('right')
-                        PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('child_by_field_name')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  STRING_LITERAL
+                    STRING_TEMPLATE
+                      PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('right')
+                      PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -4373,22 +4353,20 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('expr_node')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('named_child')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    LITERAL
-                      PsiElement(VlangTokenType.int)('0')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('named_child')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  LITERAL
+                    PsiElement(VlangTokenType.int)('0')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -4524,25 +4502,23 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('chan_node')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('child_by_field_name')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    STRING_LITERAL
-                      STRING_TEMPLATE
-                        PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                        PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('channel')
-                        PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('child_by_field_name')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  STRING_LITERAL
+                    STRING_TEMPLATE
+                      PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('channel')
+                      PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -4550,25 +4526,23 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('val_node')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('child_by_field_name')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    STRING_LITERAL
-                      STRING_TEMPLATE
-                        PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                        PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('value')
-                        PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('child_by_field_name')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  STRING_LITERAL
+                    STRING_TEMPLATE
+                      PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('value')
+                      PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -6786,25 +6760,23 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('left_node')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('child_by_field_name')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    STRING_LITERAL
-                      STRING_TEMPLATE
-                        PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                        PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('left')
-                        PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('child_by_field_name')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  STRING_LITERAL
+                    STRING_TEMPLATE
+                      PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('left')
+                      PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -6812,25 +6784,23 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('right_node')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('child_by_field_name')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    STRING_LITERAL
-                      STRING_TEMPLATE
-                        PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                        PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('right')
-                        PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('child_by_field_name')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  STRING_LITERAL
+                    STRING_TEMPLATE
+                      PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('right')
+                      PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -6838,25 +6808,23 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('op_node')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('child_by_field_name')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    STRING_LITERAL
-                      STRING_TEMPLATE
-                        PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                        PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('operator')
-                        PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('child_by_field_name')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  STRING_LITERAL
+                    STRING_TEMPLATE
+                      PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('operator')
+                      PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -7956,25 +7924,23 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('type_node')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('child_by_field_name')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    STRING_LITERAL
-                      STRING_TEMPLATE
-                        PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                        PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('type')
-                        PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('child_by_field_name')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  STRING_LITERAL
+                    STRING_TEMPLATE
+                      PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('type')
+                      PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -8038,25 +8004,23 @@ V Language file
                           <empty list>
                         PsiElement(VlangTokenType.identifier)('el_node')
                       PsiElement(VlangTokenType.:=)(':=')
-                      DOT_EXPRESSION
-                        CALL_EXPR
+                      CALL_EXPR_WITH_PROPAGATE
+                        REFERENCE_EXPRESSION
                           REFERENCE_EXPRESSION
-                            REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('type_node')
-                            PsiElement(VlangTokenType..)('.')
-                            PsiElement(VlangTokenType.identifier)('child_by_field_name')
-                          ARGUMENT_LIST
-                            PsiElement(VlangTokenType.()('(')
-                            ELEMENT
-                              VALUE
-                                STRING_LITERAL
-                                  STRING_TEMPLATE
-                                    PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                                    PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('element')
-                                    PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                            PsiElement(VlangTokenType.))(')')
-                        ERROR_PROPAGATION_EXPRESSION
-                          PsiElement(VlangTokenType.?)('?')
+                            PsiElement(VlangTokenType.identifier)('type_node')
+                          PsiElement(VlangTokenType..)('.')
+                          PsiElement(VlangTokenType.identifier)('child_by_field_name')
+                        ARGUMENT_LIST
+                          PsiElement(VlangTokenType.()('(')
+                          ELEMENT
+                            VALUE
+                              STRING_LITERAL
+                                STRING_TEMPLATE
+                                  PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('element')
+                                  PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+                          PsiElement(VlangTokenType.))(')')
+                        PsiElement(VlangTokenType.?)('?')
                   SIMPLE_STATEMENT
                     VAR_DECLARATION
                       VAR_DEFINITION
@@ -8324,25 +8288,23 @@ V Language file
                           <empty list>
                         PsiElement(VlangTokenType.identifier)('key_node')
                       PsiElement(VlangTokenType.:=)(':=')
-                      DOT_EXPRESSION
-                        CALL_EXPR
+                      CALL_EXPR_WITH_PROPAGATE
+                        REFERENCE_EXPRESSION
                           REFERENCE_EXPRESSION
-                            REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('type_node')
-                            PsiElement(VlangTokenType..)('.')
-                            PsiElement(VlangTokenType.identifier)('child_by_field_name')
-                          ARGUMENT_LIST
-                            PsiElement(VlangTokenType.()('(')
-                            ELEMENT
-                              VALUE
-                                STRING_LITERAL
-                                  STRING_TEMPLATE
-                                    PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                                    PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('key')
-                                    PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                            PsiElement(VlangTokenType.))(')')
-                        ERROR_PROPAGATION_EXPRESSION
-                          PsiElement(VlangTokenType.?)('?')
+                            PsiElement(VlangTokenType.identifier)('type_node')
+                          PsiElement(VlangTokenType..)('.')
+                          PsiElement(VlangTokenType.identifier)('child_by_field_name')
+                        ARGUMENT_LIST
+                          PsiElement(VlangTokenType.()('(')
+                          ELEMENT
+                            VALUE
+                              STRING_LITERAL
+                                STRING_TEMPLATE
+                                  PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('key')
+                                  PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+                          PsiElement(VlangTokenType.))(')')
+                        PsiElement(VlangTokenType.?)('?')
                   SIMPLE_STATEMENT
                     VAR_DECLARATION
                       VAR_DEFINITION
@@ -8455,25 +8417,23 @@ V Language file
                           <empty list>
                         PsiElement(VlangTokenType.identifier)('val_node')
                       PsiElement(VlangTokenType.:=)(':=')
-                      DOT_EXPRESSION
-                        CALL_EXPR
+                      CALL_EXPR_WITH_PROPAGATE
+                        REFERENCE_EXPRESSION
                           REFERENCE_EXPRESSION
-                            REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('type_node')
-                            PsiElement(VlangTokenType..)('.')
-                            PsiElement(VlangTokenType.identifier)('child_by_field_name')
-                          ARGUMENT_LIST
-                            PsiElement(VlangTokenType.()('(')
-                            ELEMENT
-                              VALUE
-                                STRING_LITERAL
-                                  STRING_TEMPLATE
-                                    PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                                    PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('value')
-                                    PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                            PsiElement(VlangTokenType.))(')')
-                        ERROR_PROPAGATION_EXPRESSION
-                          PsiElement(VlangTokenType.?)('?')
+                            PsiElement(VlangTokenType.identifier)('type_node')
+                          PsiElement(VlangTokenType..)('.')
+                          PsiElement(VlangTokenType.identifier)('child_by_field_name')
+                        ARGUMENT_LIST
+                          PsiElement(VlangTokenType.()('(')
+                          ELEMENT
+                            VALUE
+                              STRING_LITERAL
+                                STRING_TEMPLATE
+                                  PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('value')
+                                  PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+                          PsiElement(VlangTokenType.))(')')
+                        PsiElement(VlangTokenType.?)('?')
                   SIMPLE_STATEMENT
                     VAR_DECLARATION
                       VAR_DEFINITION
@@ -8601,22 +8561,20 @@ V Language file
                           <empty list>
                         PsiElement(VlangTokenType.identifier)('el_node')
                       PsiElement(VlangTokenType.:=)(':=')
-                      DOT_EXPRESSION
-                        CALL_EXPR
+                      CALL_EXPR_WITH_PROPAGATE
+                        REFERENCE_EXPRESSION
                           REFERENCE_EXPRESSION
-                            REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('type_node')
-                            PsiElement(VlangTokenType..)('.')
-                            PsiElement(VlangTokenType.identifier)('named_child')
-                          ARGUMENT_LIST
-                            PsiElement(VlangTokenType.()('(')
-                            ELEMENT
-                              VALUE
-                                LITERAL
-                                  PsiElement(VlangTokenType.int)('0')
-                            PsiElement(VlangTokenType.))(')')
-                        ERROR_PROPAGATION_EXPRESSION
-                          PsiElement(VlangTokenType.?)('?')
+                            PsiElement(VlangTokenType.identifier)('type_node')
+                          PsiElement(VlangTokenType..)('.')
+                          PsiElement(VlangTokenType.identifier)('named_child')
+                        ARGUMENT_LIST
+                          PsiElement(VlangTokenType.()('(')
+                          ELEMENT
+                            VALUE
+                              LITERAL
+                                PsiElement(VlangTokenType.int)('0')
+                          PsiElement(VlangTokenType.))(')')
+                        PsiElement(VlangTokenType.?)('?')
                   SIMPLE_STATEMENT
                     VAR_DECLARATION
                       VAR_DEFINITION
@@ -8736,25 +8694,23 @@ V Language file
                           <empty list>
                         PsiElement(VlangTokenType.identifier)('typ_sym')
                       PsiElement(VlangTokenType.:=)(':=')
-                      DOT_EXPRESSION
-                        CALL_EXPR
+                      CALL_EXPR_WITH_PROPAGATE
+                        REFERENCE_EXPRESSION
                           REFERENCE_EXPRESSION
                             REFERENCE_EXPRESSION
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('an')
-                              PsiElement(VlangTokenType..)('.')
-                              PsiElement(VlangTokenType.identifier)('context')
+                              PsiElement(VlangTokenType.identifier)('an')
                             PsiElement(VlangTokenType..)('.')
-                            PsiElement(VlangTokenType.identifier)('find_symbol_by_type_node')
-                          ARGUMENT_LIST
-                            PsiElement(VlangTokenType.()('(')
-                            ELEMENT
-                              VALUE
-                                REFERENCE_EXPRESSION
-                                  PsiElement(VlangTokenType.identifier)('type_node')
-                            PsiElement(VlangTokenType.))(')')
-                        ERROR_PROPAGATION_EXPRESSION
-                          PsiElement(VlangTokenType.?)('?')
+                            PsiElement(VlangTokenType.identifier)('context')
+                          PsiElement(VlangTokenType..)('.')
+                          PsiElement(VlangTokenType.identifier)('find_symbol_by_type_node')
+                        ARGUMENT_LIST
+                          PsiElement(VlangTokenType.()('(')
+                          ELEMENT
+                            VALUE
+                              REFERENCE_EXPRESSION
+                                PsiElement(VlangTokenType.identifier)('type_node')
+                          PsiElement(VlangTokenType.))(')')
+                        PsiElement(VlangTokenType.?)('?')
                   SIMPLE_STATEMENT
                     LEFT_HAND_EXPR_LIST
                       IF_EXPRESSION
@@ -8878,25 +8834,23 @@ V Language file
                           <empty list>
                         PsiElement(VlangTokenType.identifier)('body_node')
                       PsiElement(VlangTokenType.:=)(':=')
-                      DOT_EXPRESSION
-                        CALL_EXPR
+                      CALL_EXPR_WITH_PROPAGATE
+                        REFERENCE_EXPRESSION
                           REFERENCE_EXPRESSION
-                            REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('node')
-                            PsiElement(VlangTokenType..)('.')
-                            PsiElement(VlangTokenType.identifier)('child_by_field_name')
-                          ARGUMENT_LIST
-                            PsiElement(VlangTokenType.()('(')
-                            ELEMENT
-                              VALUE
-                                STRING_LITERAL
-                                  STRING_TEMPLATE
-                                    PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                                    PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('body')
-                                    PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                            PsiElement(VlangTokenType.))(')')
-                        ERROR_PROPAGATION_EXPRESSION
-                          PsiElement(VlangTokenType.?)('?')
+                            PsiElement(VlangTokenType.identifier)('node')
+                          PsiElement(VlangTokenType..)('.')
+                          PsiElement(VlangTokenType.identifier)('child_by_field_name')
+                        ARGUMENT_LIST
+                          PsiElement(VlangTokenType.()('(')
+                          ELEMENT
+                            VALUE
+                              STRING_LITERAL
+                                STRING_TEMPLATE
+                                  PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('body')
+                                  PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+                          PsiElement(VlangTokenType.))(')')
+                        PsiElement(VlangTokenType.?)('?')
                   SIMPLE_STATEMENT
                     VAR_DECLARATION
                       VAR_DEFINITION
@@ -9288,25 +9242,23 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('operand')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('child_by_field_name')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    STRING_LITERAL
-                      STRING_TEMPLATE
-                        PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                        PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('operand')
-                        PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('child_by_field_name')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  STRING_LITERAL
+                    STRING_TEMPLATE
+                      PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('operand')
+                      PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -9421,25 +9373,23 @@ V Language file
                       <empty list>
                     PsiElement(VlangTokenType.identifier)('field_node')
                   PsiElement(VlangTokenType.:=)(':=')
-                  DOT_EXPRESSION
-                    CALL_EXPR
+                  CALL_EXPR_WITH_PROPAGATE
+                    REFERENCE_EXPRESSION
                       REFERENCE_EXPRESSION
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('node')
-                        PsiElement(VlangTokenType..)('.')
-                        PsiElement(VlangTokenType.identifier)('child_by_field_name')
-                      ARGUMENT_LIST
-                        PsiElement(VlangTokenType.()('(')
-                        ELEMENT
-                          VALUE
-                            STRING_LITERAL
-                              STRING_TEMPLATE
-                                PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                                PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('field')
-                                PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                        PsiElement(VlangTokenType.))(')')
-                    ERROR_PROPAGATION_EXPRESSION
-                      PsiElement(VlangTokenType.?)('?')
+                        PsiElement(VlangTokenType.identifier)('node')
+                      PsiElement(VlangTokenType..)('.')
+                      PsiElement(VlangTokenType.identifier)('child_by_field_name')
+                    ARGUMENT_LIST
+                      PsiElement(VlangTokenType.()('(')
+                      ELEMENT
+                        VALUE
+                          STRING_LITERAL
+                            STRING_TEMPLATE
+                              PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                              PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('field')
+                              PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+                      PsiElement(VlangTokenType.))(')')
+                    PsiElement(VlangTokenType.?)('?')
               SIMPLE_STATEMENT
                 LEFT_HAND_EXPR_LIST
                   IF_EXPRESSION
@@ -10396,22 +10346,20 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('first_item_node')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('named_child')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    LITERAL
-                      PsiElement(VlangTokenType.int)('0')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('named_child')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  LITERAL
+                    PsiElement(VlangTokenType.int)('0')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -10881,25 +10829,23 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('fn_node')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('child_by_field_name')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    STRING_LITERAL
-                      STRING_TEMPLATE
-                        PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                        PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('function')
-                        PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('child_by_field_name')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  STRING_LITERAL
+                    STRING_TEMPLATE
+                      PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('function')
+                      PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -10907,25 +10853,23 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('arguments_node')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('child_by_field_name')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    STRING_LITERAL
-                      STRING_TEMPLATE
-                        PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                        PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('arguments')
-                        PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('child_by_field_name')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  STRING_LITERAL
+                    STRING_TEMPLATE
+                      PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('arguments')
+                      PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -11798,25 +11742,23 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('conseq_node')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('child_by_field_name')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    STRING_LITERAL
-                      STRING_TEMPLATE
-                        PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                        PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('consequence')
-                        PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('child_by_field_name')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  STRING_LITERAL
+                    STRING_TEMPLATE
+                      PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('consequence')
+                      PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           IF_EXPRESSION
@@ -12332,25 +12274,23 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('type_node')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('child_by_field_name')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    STRING_LITERAL
-                      STRING_TEMPLATE
-                        PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                        PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('type')
-                        PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('child_by_field_name')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  STRING_LITERAL
+                    STRING_TEMPLATE
+                      PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('type')
+                      PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -12358,25 +12298,23 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('operand_node')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('child_by_field_name')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    STRING_LITERAL
-                      STRING_TEMPLATE
-                        PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                        PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('operand')
-                        PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('child_by_field_name')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  STRING_LITERAL
+                    STRING_TEMPLATE
+                      PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('operand')
+                      PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -12737,22 +12675,20 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('expr_node')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('named_child')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    LITERAL
-                      PsiElement(VlangTokenType.int)('0')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('named_child')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  LITERAL
+                    PsiElement(VlangTokenType.int)('0')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -12760,32 +12696,30 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('expr_sym')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('an')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('expression')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
+                PsiElement(VlangTokenType.identifier)('an')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('expression')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  REFERENCE_EXPRESSION
+                    PsiElement(VlangTokenType.identifier)('expr_node')
+              PsiElement(VlangTokenType.,)(',')
+              ELEMENT
+                KEY
+                  FIELD_NAME
                     REFERENCE_EXPRESSION
-                      PsiElement(VlangTokenType.identifier)('expr_node')
-                PsiElement(VlangTokenType.,)(',')
-                ELEMENT
-                  KEY
-                    FIELD_NAME
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('as_value')
-                  PsiElement(VlangTokenType.:)(':')
-                  VALUE
-                    LITERAL
-                      PsiElement(VlangTokenType.true)('true')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                      PsiElement(VlangTokenType.identifier)('as_value')
+                PsiElement(VlangTokenType.:)(':')
+                VALUE
+                  LITERAL
+                    PsiElement(VlangTokenType.true)('true')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           IF_EXPRESSION
@@ -12945,26 +12879,24 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('last_child')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('named_child')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    ADD_EXPR
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('child_count')
-                      PsiElement(VlangTokenType.-)('-')
-                      LITERAL
-                        PsiElement(VlangTokenType.int)('1')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('named_child')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  ADD_EXPR
+                    REFERENCE_EXPRESSION
+                      PsiElement(VlangTokenType.identifier)('child_count')
+                    PsiElement(VlangTokenType.-)('-')
+                    LITERAL
+                      PsiElement(VlangTokenType.int)('1')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           IF_EXPRESSION
@@ -13122,25 +13054,23 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('cond_node')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('node')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('child_by_field_name')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    STRING_LITERAL
-                      STRING_TEMPLATE
-                        PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                        PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('condition')
-                        PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('node')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('child_by_field_name')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  STRING_LITERAL
+                    STRING_TEMPLATE
+                      PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('condition')
+                      PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -13148,22 +13078,20 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('cond_sym')
           PsiElement(VlangTokenType.:=)(':=')
-          DOT_EXPRESSION
-            CALL_EXPR
+          CALL_EXPR_WITH_PROPAGATE
+            REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('an')
-                PsiElement(VlangTokenType..)('.')
-                PsiElement(VlangTokenType.identifier)('expression')
-              ARGUMENT_LIST
-                PsiElement(VlangTokenType.()('(')
-                ELEMENT
-                  VALUE
-                    REFERENCE_EXPRESSION
-                      PsiElement(VlangTokenType.identifier)('cond_node')
-                PsiElement(VlangTokenType.))(')')
-            ERROR_PROPAGATION_EXPRESSION
-              PsiElement(VlangTokenType.?)('?')
+                PsiElement(VlangTokenType.identifier)('an')
+              PsiElement(VlangTokenType..)('.')
+              PsiElement(VlangTokenType.identifier)('expression')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  REFERENCE_EXPRESSION
+                    PsiElement(VlangTokenType.identifier)('cond_node')
+              PsiElement(VlangTokenType.))(')')
+            PsiElement(VlangTokenType.?)('?')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -14679,22 +14607,20 @@ V Language file
                         PsiElement(VlangTokenType.()('(')
                         ELEMENT
                           VALUE
-                            DOT_EXPRESSION
-                              CALL_EXPR
+                            CALL_EXPR_WITH_PROPAGATE
+                              REFERENCE_EXPRESSION
                                 REFERENCE_EXPRESSION
-                                  REFERENCE_EXPRESSION
-                                    PsiElement(VlangTokenType.identifier)('node')
-                                  PsiElement(VlangTokenType..)('.')
-                                  PsiElement(VlangTokenType.identifier)('named_child')
-                                ARGUMENT_LIST
-                                  PsiElement(VlangTokenType.()('(')
-                                  ELEMENT
-                                    VALUE
-                                      LITERAL
-                                        PsiElement(VlangTokenType.int)('0')
-                                  PsiElement(VlangTokenType.))(')')
-                              ERROR_PROPAGATION_EXPRESSION
-                                PsiElement(VlangTokenType.?)('?')
+                                  PsiElement(VlangTokenType.identifier)('node')
+                                PsiElement(VlangTokenType..)('.')
+                                PsiElement(VlangTokenType.identifier)('named_child')
+                              ARGUMENT_LIST
+                                PsiElement(VlangTokenType.()('(')
+                                ELEMENT
+                                  VALUE
+                                    LITERAL
+                                      PsiElement(VlangTokenType.int)('0')
+                                PsiElement(VlangTokenType.))(')')
+                              PsiElement(VlangTokenType.?)('?')
                         PsiElement(VlangTokenType.,)(',')
                         ELEMENT
                           VALUE
@@ -14715,22 +14641,20 @@ V Language file
                           <empty list>
                         PsiElement(VlangTokenType.identifier)('expr_node')
                       PsiElement(VlangTokenType.:=)(':=')
-                      DOT_EXPRESSION
-                        CALL_EXPR
+                      CALL_EXPR_WITH_PROPAGATE
+                        REFERENCE_EXPRESSION
                           REFERENCE_EXPRESSION
-                            REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('node')
-                            PsiElement(VlangTokenType..)('.')
-                            PsiElement(VlangTokenType.identifier)('named_child')
-                          ARGUMENT_LIST
-                            PsiElement(VlangTokenType.()('(')
-                            ELEMENT
-                              VALUE
-                                LITERAL
-                                  PsiElement(VlangTokenType.int)('0')
-                            PsiElement(VlangTokenType.))(')')
-                        ERROR_PROPAGATION_EXPRESSION
-                          PsiElement(VlangTokenType.?)('?')
+                            PsiElement(VlangTokenType.identifier)('node')
+                          PsiElement(VlangTokenType..)('.')
+                          PsiElement(VlangTokenType.identifier)('named_child')
+                        ARGUMENT_LIST
+                          PsiElement(VlangTokenType.()('(')
+                          ELEMENT
+                            VALUE
+                              LITERAL
+                                PsiElement(VlangTokenType.int)('0')
+                          PsiElement(VlangTokenType.))(')')
+                        PsiElement(VlangTokenType.?)('?')
                   SIMPLE_STATEMENT
                     VAR_DECLARATION
                       VAR_DEFINITION
@@ -14738,27 +14662,25 @@ V Language file
                           <empty list>
                         PsiElement(VlangTokenType.identifier)('got_sym')
                       PsiElement(VlangTokenType.:=)(':=')
-                      DOT_EXPRESSION
-                        CALL_EXPR
+                      CALL_EXPR_WITH_PROPAGATE
+                        REFERENCE_EXPRESSION
                           REFERENCE_EXPRESSION
-                            REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('an')
-                            PsiElement(VlangTokenType..)('.')
-                            PsiElement(VlangTokenType.identifier)('expression')
-                          ARGUMENT_LIST
-                            PsiElement(VlangTokenType.()('(')
-                            ELEMENT
-                              VALUE
-                                REFERENCE_EXPRESSION
-                                  PsiElement(VlangTokenType.identifier)('expr_node')
-                            PsiElement(VlangTokenType.,)(',')
-                            ELEMENT
-                              VALUE
-                                REFERENCE_EXPRESSION
-                                  PsiElement(VlangTokenType.identifier)('cfg')
-                            PsiElement(VlangTokenType.))(')')
-                        ERROR_PROPAGATION_EXPRESSION
-                          PsiElement(VlangTokenType.?)('?')
+                            PsiElement(VlangTokenType.identifier)('an')
+                          PsiElement(VlangTokenType..)('.')
+                          PsiElement(VlangTokenType.identifier)('expression')
+                        ARGUMENT_LIST
+                          PsiElement(VlangTokenType.()('(')
+                          ELEMENT
+                            VALUE
+                              REFERENCE_EXPRESSION
+                                PsiElement(VlangTokenType.identifier)('expr_node')
+                          PsiElement(VlangTokenType.,)(',')
+                          ELEMENT
+                            VALUE
+                              REFERENCE_EXPRESSION
+                                PsiElement(VlangTokenType.identifier)('cfg')
+                          PsiElement(VlangTokenType.))(')')
+                        PsiElement(VlangTokenType.?)('?')
                   SIMPLE_STATEMENT
                     LEFT_HAND_EXPR_LIST
                       IF_EXPRESSION

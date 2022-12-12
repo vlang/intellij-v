@@ -11,7 +11,16 @@ class VlangPrivateMembersFilter : Filter {
     override fun isVisible(treeNode: TreeElement): Boolean {
         if (treeNode is VlangStructureViewFactory.Element) {
             val psiElement = treeNode.value
-            return psiElement !is VlangNamedElement || psiElement.isPublic()
+            if (psiElement !is VlangNamedElement) {
+                return false
+            }
+
+            // show main even if it's private (default)
+            if (psiElement.name == "main") {
+                return true
+            }
+
+            return psiElement.isPublic()
         }
         return true
     }

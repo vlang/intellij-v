@@ -27,9 +27,9 @@ public class VlangSqlLimitClauseImpl extends VlangCompositeElementImpl implement
   }
 
   @Override
-  @Nullable
+  @NotNull
   public VlangExpression getExpression() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class);
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class));
   }
 
 }

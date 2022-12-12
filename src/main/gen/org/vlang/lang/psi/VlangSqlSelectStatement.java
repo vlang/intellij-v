@@ -25,4 +25,10 @@ public interface VlangSqlSelectStatement extends VlangSqlBlockStatement {
   @Nullable
   VlangSqlWhereClause getSqlWhereClause();
 
+  @Nullable
+  PsiElement getSemicolon();
+
+  @Nullable
+  PsiElement getSemicolonSynthetic();
+
 }
