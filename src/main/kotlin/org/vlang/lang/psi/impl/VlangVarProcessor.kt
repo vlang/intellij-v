@@ -18,8 +18,13 @@ open class VlangVarProcessor(
             return true
         }
 
-        return e !is VlangVarDefinition &&
-                e !is VlangParamDefinition &&
+        if (e is VlangVarDefinition) {
+            val decl = e.parent as VlangVarDeclaration
+            // forbid to resolve to `<var>` inside `<var> := <caret>`
+            return decl.expressionList.any { PsiTreeUtil.isAncestor(it, origin, false) }
+        }
+
+        return e !is VlangParamDefinition &&
                 e !is VlangReceiver &&
                 e !is VlangEmbeddedDefinition &&
                 e !is VlangConstDefinition &&

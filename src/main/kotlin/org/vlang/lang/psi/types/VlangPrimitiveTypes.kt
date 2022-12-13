@@ -20,6 +20,8 @@ enum class VlangPrimitiveTypes(val value: String, val size: Int, val numeric: Bo
     F64("f64", 8, true),
     STRING("string", -1),
     VOIDPTR("voidptr", 8),
+    BYTEPTR("byteptr", 8),
+    CHARPTR("charptr", 8),
     NIL("nil", 0);
 
     companion object {

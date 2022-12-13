@@ -2,8 +2,11 @@ package org.vlang.ide.codeInsight
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.util.elementType
 import com.intellij.psi.util.parentOfType
+import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.impl.VlangPsiImplUtil
 import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.utils.inside
@@ -15,7 +18,12 @@ object VlangTypeInferenceUtil {
     fun callerType(call: VlangCallExpr): VlangTypeEx? {
         val callExpression = call.expression as? VlangReferenceExpression ?: return null
         val caller = callExpression.getQualifier() as? VlangTypeOwner ?: return null
-        return caller.getType(null)
+        val type = caller.getType(null)
+
+        val nextLeaf = PsiTreeUtil.nextCodeLeaf(caller)
+        val needUnwrap = nextLeaf.elementType == VlangTypes.SAFE_DOT
+
+        return VlangPsiImplUtil.unwrapOptionOrResultTypeIf(type, needUnwrap)
     }
 
     fun builtinArrayOrPointerTo(type: VlangTypeEx): Boolean {

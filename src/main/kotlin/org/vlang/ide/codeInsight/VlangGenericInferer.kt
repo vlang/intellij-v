@@ -189,7 +189,7 @@ object VlangGenericInferer {
             callExpr = VlangCodeInsightUtil.getCallExpr(callExpr) ?: return null
         }
 
-        while (!VlangCodeInsightUtil.isArrayMethodCall(callExpr, "filter", "map", "any")) {
+        while (!VlangCodeInsightUtil.isArrayMethodCall(callExpr, "filter", "map", "any", "all")) {
             callExpr = VlangCodeInsightUtil.getCallExpr(callExpr) ?: return null
         }
 

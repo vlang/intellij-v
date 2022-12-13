@@ -72,3 +72,11 @@ pub type char = u8
 // voidptr is an untyped pointer.
 // Mostly used for [C interoperability](https://github.com/vlang/v/blob/master/doc/docs.md#v-and-c).
 pub type voidptr = voidptr
+
+// byteptr is a byte pointer.
+// Mostly used for [C interoperability](https://github.com/vlang/v/blob/master/doc/docs.md#v-and-c).
+pub type byteptr = byteptr
+
+// charptr is a char pointer.
+// Mostly used for [C interoperability](https://github.com/vlang/v/blob/master/doc/docs.md#v-and-c).
+pub type charptr = charptr

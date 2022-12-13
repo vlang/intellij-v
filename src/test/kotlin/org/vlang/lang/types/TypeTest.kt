@@ -31,4 +31,5 @@ class TypeTest : TypeTestBase() {
     fun `test map methods`() = doTestFile("map_methods.v")
     fun `test fixed size arrays`() = doTestFile("fixed_size_arrays.v")
     fun `test anon struct`() = doTestFile("anon_struct.v")
+    fun `test slice`() = doTestFile("slice.v")
 }

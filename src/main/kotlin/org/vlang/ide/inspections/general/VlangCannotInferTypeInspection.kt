@@ -6,6 +6,9 @@ import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiElementVisitor
 import org.vlang.ide.inspections.VlangBaseInspection
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.impl.VlangModule
+import org.vlang.lang.psi.impl.VlangPomTargetPsiElement
+import org.vlang.lang.psi.impl.imports.VlangModuleReference
 import org.vlang.lang.psi.types.VlangAnyTypeEx
 import org.vlang.lang.psi.types.VlangUnknownTypeEx
 
@@ -25,7 +28,7 @@ class VlangCannotInferTypeInspection : VlangBaseInspection() {
 
                 if (o is VlangReferenceExpression) {
                     val resolved = o.resolve()
-                    if (resolved is VlangImportName || resolved is VlangImportAlias || resolved is PsiDirectory) {
+                    if (resolved is VlangPomTargetPsiElement) {
                         return
                     }
                 }

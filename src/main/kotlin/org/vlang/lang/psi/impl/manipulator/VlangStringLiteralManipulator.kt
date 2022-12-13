@@ -18,19 +18,17 @@ class VlangStringLiteralManipulator : ElementManipulator<VlangStringLiteralImpl>
         if (element.textLength == 0) {
             return TextRange.EMPTY_RANGE
         }
+
         val s = element.text
         val quote = s[0]
-        val startOffset = if (isQuote(quote)) 1 else 0
+        val startOffset = if (isQuote(quote)) 1 else 2
         var endOffset = s.length
         if (s.length > 1) {
             val lastChar = s[s.length - 1]
             if (isQuote(quote) && lastChar == quote) {
                 endOffset = s.length - 1
             }
-            if (!isQuote(quote) && isQuote(
-                    lastChar
-                )
-            ) {
+            if (!isQuote(quote) && isQuote(lastChar)) {
                 endOffset = s.length - 1
             }
         }

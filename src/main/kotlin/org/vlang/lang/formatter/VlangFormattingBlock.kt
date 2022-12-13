@@ -42,6 +42,7 @@ class VlangFormattingBlock(
                 is VlangArrayCreation             -> true
                 is VlangSqlBlock                  -> true
                 is VlangAsmBlock                  -> true
+                is VlangArgumentList              -> true
                 else                              -> false
             } && (child !is LeafPsiElement || child is PsiComment)
 

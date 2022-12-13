@@ -12,6 +12,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.childrenOfType
 import com.intellij.util.text.CharArrayUtil
 import org.vlang.lang.doc.psi.*
+import org.vlang.lang.psi.StringLiteralEscaper
 import org.vlang.lang.psi.impl.VlangElementFactory
 import org.vlang.utils.ancestorStrict
 import org.vlang.utils.childOfType
@@ -161,7 +162,7 @@ class VlangDocCodeFenceImpl(type: IElementType) : VlangDocElementImpl(type), Vla
     }
 
     override fun createLiteralTextEscaper(): LiteralTextEscaper<VlangDocCodeFenceImpl> =
-        SimpleMultiLineTextEscaper(this)
+        StringLiteralEscaper(this)
 }
 
 class VlangDocCodeBlockImpl(type: IElementType) : VlangDocElementImpl(type), VlangDocCodeBlock
@@ -170,16 +171,4 @@ class VlangDocHtmlBlockImpl(type: IElementType) : VlangDocElementImpl(type), Vla
 class VlangDocCodeFenceStartEndImpl(type: IElementType) : VlangDocElementImpl(type), VlangDocCodeFenceStartEnd
 class VlangDocCodeFenceLangImpl(type: IElementType) : VlangDocElementImpl(type), VlangDocCodeFenceLang
 
-class SimpleMultiLineTextEscaper<T: PsiLanguageInjectionHost>(host: T) : LiteralTextEscaper<T>(host) {
-    override fun decode(rangeInsideHost: TextRange, outChars: java.lang.StringBuilder): Boolean {
-        outChars.append(rangeInsideHost.substring(myHost.text))
-        return true
-    }
-
-    override fun getOffsetInHost(offsetInDecoded: Int, rangeInsideHost: TextRange): Int {
-        return rangeInsideHost.startOffset + offsetInDecoded
-    }
-
-    override fun isOneLine(): Boolean = false
-}
 

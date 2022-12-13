@@ -63,7 +63,12 @@ class VlangAnnotator : Annotator {
             (element.parentNth<VlangCallExpr>(2) != null || element.parent is VlangTypeReferenceExpression) &&
             element.parent !is VlangAliasType
         ) {
-            return VlangColor.BUILTIN_TYPE
+            // highlight only u8(100) call, not a.u8()
+            val call = element.parentNth<VlangCallExpr>(2)
+            val callExpr = call?.expression as? VlangReferenceExpression
+            if (callExpr?.getQualifier() == null) {
+                return VlangColor.BUILTIN_TYPE
+            }
         }
 
         if ((element.text == "chan" || element.text == "thread") && element.inside<VlangType>()) {

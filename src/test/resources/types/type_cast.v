@@ -26,6 +26,8 @@ fn main() {
     expr_type(rune(1), 'rune')
     expr_type(byte(1), 'byte')
     expr_type(voidptr(1), 'voidptr')
+    expr_type(byteptr(1), 'byteptr')
+    expr_type(charptr(1), 'charptr')
 
 	expr_type(IFoo(Foo{}), 'IFoo')
 	expr_type(Type(''), 'Type')

@@ -63,4 +63,11 @@ open class VlangStructTypeEx(private val name: String, anchor: PsiElement?) :
 
         return variants.firstOrNull { !(it.containingFile as VlangFile).isTestFile() } as? VlangStructDeclaration
     }
+
+    companion object {
+        val AnyStruct = object : VlangStructTypeEx("AnyStruct", null) {
+            override val moduleName: String
+                get() = VlangCodeInsightUtil.STUBS_MODULE
+        }
+    }
 }

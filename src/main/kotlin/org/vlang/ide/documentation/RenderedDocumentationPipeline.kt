@@ -40,7 +40,7 @@ private fun documentationAsHtml(
     rawDocumentationText: String,
     context: VlangDocComment,
     renderMode: VlangDocRenderMode,
-): String? {
+): String {
     val documentationText = try {
         processDocumentationText(context, rawDocumentationText)
     } catch (e: Exception) {
@@ -70,8 +70,8 @@ fun processDocumentationText(comment: VlangDocComment, text: String): String {
     }
 
     var shift = 0
-    val exampleIndeces = newText.indexesOf("Example:")
-    for (rawIndex in exampleIndeces) {
+    val exampleIndices = newText.indexesOf("Example:")
+    for (rawIndex in exampleIndices) {
         val index = rawIndex + shift
         val line = substringToNextLine(newText, index).removePrefix("Example:")
         newText = if (line.isEmpty() || line.isBlank()) {
@@ -88,8 +88,8 @@ fun processDocumentationText(comment: VlangDocComment, text: String): String {
     }
 
     shift = 0
-    val noteIndeces = newText.indexesOf("Note:")
-    for (rawIndex in noteIndeces) {
+    val noteIndices = newText.indexesOf("Note:")
+    for (rawIndex in noteIndices) {
         val index = rawIndex + shift
         val line = substringToNextLine(newText, index).removePrefix("Note:")
         if (line.endsWith(".") || line.endsWith("!") || line.endsWith("?")) {
@@ -111,8 +111,7 @@ fun processDocumentationText(comment: VlangDocComment, text: String): String {
 
     val lines = newText.lines()
     val newLines = lines.map { line ->
-        if (line.isEmpty() ||
-            line.endsWith(".") || line.endsWith("!") || line.endsWith("?") ||
+        if (line.endsWith(".") || line.endsWith("!") || line.endsWith("?") ||
             line.matches(Regex("^[-=_*~]{3,}\$")) ||
             line.endsWith("|") ||
             line.startsWith("|") ||
@@ -185,7 +184,7 @@ private class VlangCodeFenceProvider(
             }
         }
         if (lastChildWasContent) {
-            codeText.appendLine()
+//            codeText.appendLine()
         }
 
         visitor.consumeHtml(convertToHtmlWithHighlighting(codeText.toString()))

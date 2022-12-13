@@ -403,10 +403,11 @@ The plugin provides support for V language
         <typedHandler implementation="org.vlang.lang.completion.VlangTypedHandler"/>
         <enterHandlerDelegate implementation="org.vlang.lang.completion.VlangEnterHandlerDelegate"/>
         <backspaceHandlerDelegate order="first" implementation="org.vlang.lang.completion.VlangBackspaceHandlerDelegate"/>
-
         <formattingService implementation="org.vlang.lang.formatter.VlangFormattingService"/>
 
+        <stripTrailingSpacesFilterFactory implementation="org.vlang.ide.editor.VlangStripTrailingSpacesFilterFactory"/>
         <colorSettingsPage implementation="org.vlang.ide.colors.VlangColorsSettingsPage"/>
+        <languageInjector implementation="org.vlang.ide.injection.VlangRegexLanguageInjector"/>
 
         <!--  Refactorings -->
         <statementUpDownMover implementation="org.vlang.ide.refactoring.VlangStatementUpDownMover"/>
@@ -514,6 +515,8 @@ The plugin provides support for V language
 
     <extensions defaultExtensionNs="org.vlang">
       <!-- Toolchain flavors -->
+      <toolchainFlavor id="vlang.symlinkToolchainFlavor"
+                       implementation="org.vlang.projectWizard.flavors.VlangSymlinkToolchainFlavor"/>
       <toolchainFlavor id="vlang.sysPathHomeToolchainFlavor"
                        implementation="org.vlang.projectWizard.flavors.VlangSysPathToolchainFlavor"/>
       <toolchainFlavor id="vlang.macToolchainFlavor"
@@ -524,8 +527,6 @@ The plugin provides support for V language
                        implementation="org.vlang.projectWizard.flavors.VlangUnixToolchainFlavor"/>
       <toolchainFlavor id="vlang.userHomeToolchainFlavor"
                        implementation="org.vlang.projectWizard.flavors.VlangUserHomeToolchainFlavor"/>
-      <toolchainFlavor id="vlang.vupToolchainFlavor"
-                       implementation="org.vlang.projectWizard.flavors.VupToolchainFlavor"/>
       <!-- Toolchain flavors End -->
 
       <!-- Debugger Renderers -->

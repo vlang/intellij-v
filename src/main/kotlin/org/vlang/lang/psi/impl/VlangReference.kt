@@ -160,7 +160,6 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             if (!processExistingType(type, processor, state)) return@doPreventingRecursion false
 
             true
-//            processTypeRef(type, processor, state)
         }
         return result == true
     }
@@ -225,6 +224,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
             val embedded = structType.embeddedStructList.mapNotNull { it.type.typeReferenceExpression?.resolve() as? VlangNamedElement }
             if (!processNamedElements(processor, newState, embedded, localResolve)) return false
+            if (!processMethods(VlangStructTypeEx.AnyStruct, processor, newState, localResolve)) return false
         }
 
         if (typ is VlangInterfaceTypeEx) {
@@ -275,6 +275,14 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
         if (typ is VlangGenericInstantiationEx) {
             if (!processType(typ.inner, processor, newState)) return false
+        }
+
+        if (typ == VlangPrimitiveTypeEx.BYTE) {
+            if (!processMethods(VlangPrimitiveTypeEx.U8, processor, newState, localResolve)) return false
+        }
+
+        if (typ == VlangPrimitiveTypeEx.I32) {
+            if (!processMethods(VlangPrimitiveTypeEx.INT, processor, newState, localResolve)) return false
         }
 
         if (!processMethods(typ, processor, newState, localResolve)) return false
@@ -753,7 +761,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             callExpr = VlangCodeInsightUtil.getCallExpr(callExpr) ?: return true
         }
 
-        while (!VlangCodeInsightUtil.isArrayMethodCall(callExpr, "filter", "map", "any")) {
+        while (!VlangCodeInsightUtil.isArrayMethodCall(callExpr, "filter", "map", "any", "all")) {
             callExpr = VlangCodeInsightUtil.getCallExpr(callExpr) ?: return true
         }
 

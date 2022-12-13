@@ -222,4 +222,42 @@ class TrailingStructLiteralCompletionTest : CompletionTestBase() {
         	boo(person.age, foo: 100)
         }
         """.trimIndent())
+
+    fun `test embedded struct field`() = doTestCompletion(
+        """
+        module main
+        
+        struct Embedded {
+            name string
+        }
+        
+        struct Name {
+            Embedded
+            age int
+        }
+        
+        fn foo(n Name) {}
+        
+        fn main() {
+            foo(na/*caret*/)
+        }
+        """.trimIndent(),
+        """
+        module main
+        
+        struct Embedded {
+            name string
+        }
+        
+        struct Name {
+            Embedded
+            age int
+        }
+        
+        fn foo(n Name) {}
+        
+        fn main() {
+            foo(name: )
+        }
+        """.trimIndent())
 }

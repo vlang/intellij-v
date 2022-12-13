@@ -567,6 +567,9 @@ object DocumentationGenerator {
 
             part("parameter", asKeyword)
             part(name ?: "it", asDeclaration)
+            if (isVariadic) {
+                append("...")
+            }
             append(type?.generateDoc(this@generateDoc) ?: DocumentationUtils.colorize("unknown", asDeclaration))
             append(DocumentationMarkup.DEFINITION_END)
 

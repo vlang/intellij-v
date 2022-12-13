@@ -59,6 +59,7 @@ open class ResolveItVariableTest : ResolveTestBase() {
                 mut result := split(input)
                     .map(sum(/*caret*/split(/*caret*/it)./*caret*/map(/*caret*/it)) or { 0 })
                 result.sort(a > b)
+                println(result./*caret*/all(/*caret*/it == 1))
                 return result
             }
         """.trimIndent())
@@ -68,6 +69,22 @@ open class ResolveItVariableTest : ResolveTestBase() {
         assertReferencedTo("FUNCTION_DECLARATION split")
         assertReferencedTo("PARAM_DEFINITION null")
         assertReferencedTo("METHOD_DECLARATION map")
+        assertReferencedTo("PARAM_DEFINITION null")
+        assertReferencedTo("METHOD_DECLARATION all")
+        assertReferencedTo("PARAM_DEFINITION null")
+    }
+
+    fun `test for propagation call`() {
+        mainFile("a.v", """
+            module main
+            
+            fn read_lines(s string) []string {}
+
+            fn main() {
+                read_lines('ropes-part1.input')!.map(/*caret*/it)
+            }
+        """.trimIndent())
+
         assertReferencedTo("PARAM_DEFINITION null")
     }
 }

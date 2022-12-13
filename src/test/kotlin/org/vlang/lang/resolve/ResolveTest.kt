@@ -73,4 +73,18 @@ class ResolveTest : ResolveTestBase() {
 
         assertReferencedTo("FIELD_DEFINITION cb")
     }
+
+    fun `test resolve variable in their definition`() {
+        mainFile("a.v", """
+            fn main() {
+                foo := /*caret*/foo
+                boo := /*caret*/foo
+                goo := 100 + /*caret*/goo
+            }
+        """.trimIndent())
+
+        assertUnresolved()
+        assertReferencedTo("VAR_DEFINITION foo")
+        assertUnresolved()
+    }
 }

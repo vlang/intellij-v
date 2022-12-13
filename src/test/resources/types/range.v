@@ -8,4 +8,6 @@ fn main() {
 	for rune in "value" {
 		expr_type(rune, 'rune')
 	}
+
+	expr_type(`a`...`z`, 'rune')
 }

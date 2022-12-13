@@ -97,28 +97,32 @@ class VlangPrimitiveTypeEx(private val name: VlangPrimitiveTypes) : VlangBaseTyp
         val F32 = VlangPrimitiveTypeEx(VlangPrimitiveTypes.F32)
         val F64 = VlangPrimitiveTypeEx(VlangPrimitiveTypes.F64)
         val NIL = VlangPrimitiveTypeEx(VlangPrimitiveTypes.NIL)
+        val BYTEPTR = VlangPrimitiveTypeEx(VlangPrimitiveTypes.BYTEPTR)
+        val CHARPTR = VlangPrimitiveTypeEx(VlangPrimitiveTypes.CHARPTR)
 
         fun get(name: String): VlangPrimitiveTypeEx? {
             return when (name) {
-                "bool"   -> BOOL
-                "byte"   -> BYTE
-                "rune"   -> RUNE
-                "char"   -> CHAR
-                "i16"    -> I16
-                "i32"    -> I32
-                "i64"    -> I64
-                "i8"     -> I8
-                "int"    -> INT
-                "isize"  -> ISIZE
-                "u16"    -> U16
-                "u32"    -> U32
-                "u64"    -> U64
-                "u8"     -> U8
-                "usize"  -> USIZE
-                "f32"    -> F32
-                "f64"    -> F64
-                "nil"    -> NIL
-                else     -> null
+                "bool"    -> BOOL
+                "byte"    -> BYTE
+                "rune"    -> RUNE
+                "char"    -> CHAR
+                "i16"     -> I16
+                "i32"     -> I32
+                "i64"     -> I64
+                "i8"      -> I8
+                "int"     -> INT
+                "isize"   -> ISIZE
+                "u16"     -> U16
+                "u32"     -> U32
+                "u64"     -> U64
+                "u8"      -> U8
+                "usize"   -> USIZE
+                "f32"     -> F32
+                "f64"     -> F64
+                "nil"     -> NIL
+                "byteptr" -> BYTEPTR
+                "charptr" -> CHARPTR
+                else      -> null
             }
         }
     }

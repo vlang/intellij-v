@@ -734,6 +734,20 @@ object VlangPsiImplUtil {
         return prev is LeafElement && (prev as LeafElement).elementType === VlangTypes.DOT
     }
 
+    fun prevNumber(e: PsiElement?): Boolean {
+        val prev = if (e == null) null else PsiTreeUtil.prevVisibleLeaf(e)
+        if (prev !is LeafElement) {
+            return false
+        }
+        return prev.elementType in listOf(
+            VlangTypes.INT,
+            VlangTypes.FLOAT,
+            VlangTypes.BIN,
+            VlangTypes.OCT,
+            VlangTypes.HEX,
+        )
+    }
+
     fun prevAngleParen(e: PsiElement?): Boolean {
         val prev = if (e == null) null else PsiTreeUtil.prevVisibleLeaf(e)
         return prev is LeafElement && (prev as LeafElement).elementType === VlangTypes.LESS
@@ -883,7 +897,7 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun isSlice(o: VlangIndexOrSliceExpr): Boolean {
-        val lbrack = o.lbrack ?: return false
+        val lbrack = o.lbrack ?: o.hashLbrack ?: return false
         return o.emptySlice != null ||
                 PsiTreeUtil.findSiblingForward(lbrack, VlangTypes.RANGE, false, null) != null ||
                 PsiTreeUtil.findSiblingForward(lbrack, VlangTypes.RANGE_EXPR, false, null) != null
@@ -1082,6 +1096,11 @@ object VlangPsiImplUtil {
             return VlangArrayTypeEx(VlangPrimitiveTypeEx.INT, expr)
         }
 
+        // `a`...`z` -> typeof(`a`)
+        if (expr is VlangRangeExpr && expr.tripleDot != null) {
+            return expr.expressionList.firstOrNull()?.getType(context)
+        }
+
         // dump(type) -> type
         if (expr is VlangDumpCallExpr) {
             return expr.expression?.getType(null)
@@ -1115,6 +1134,8 @@ object VlangPsiImplUtil {
             if (expr.`true` != null || expr.`false` != null) return VlangPrimitiveTypeEx.BOOL
             // nil -> nil
             if (expr.nil != null) return VlangPrimitiveTypeEx.NIL
+            // none -> none
+            if (expr.none != null) return VlangNoneTypeEx.INSTANCE
         }
 
         // type1 + type2 -> type1
@@ -1162,6 +1183,8 @@ object VlangPsiImplUtil {
             }
         }
 
+        // <int_array>[1..10] -> int[]
+        // <int_array>[1] -> int
         if (expr is VlangIndexOrSliceExpr) {
             val indexExpr = expr.expressionList.firstOrNull() ?: return null
             val indexType = indexExpr.getType(context) ?: return null
@@ -1275,6 +1298,7 @@ object VlangPsiImplUtil {
             return ifType
         }
 
+        // type.red -> type
         if (expr is VlangEnumFetch) {
             val field = expr.reference.resolve() as? VlangEnumFieldDefinition
             return field?.getTypeInner(context)
@@ -1326,6 +1350,14 @@ object VlangPsiImplUtil {
         // "1"[0] -> rune
         if (indexType is VlangStringTypeEx) {
             return VlangPrimitiveTypeEx.RUNE
+        }
+        // byteptr(...)[0] -> byte
+        if (indexType == VlangPrimitiveTypeEx.BYTEPTR) {
+            return VlangPrimitiveTypeEx.BYTE
+        }
+        // charptr(...)[0] -> byte
+        if (indexType == VlangPrimitiveTypeEx.CHARPTR) {
+            return VlangPrimitiveTypeEx.CHAR
         }
 
         return VlangAnyTypeEx.INSTANCE
@@ -1446,7 +1478,7 @@ object VlangPsiImplUtil {
         return null
     }
 
-    private fun unwrapOptionOrResultTypeIf(type: VlangTypeEx?, condition: Boolean): VlangTypeEx? {
+    fun unwrapOptionOrResultTypeIf(type: VlangTypeEx?, condition: Boolean): VlangTypeEx? {
         if (!condition) return type
         return unwrapOptionOrResultType(type)
     }

@@ -9,6 +9,7 @@ import com.intellij.psi.util.parentOfType
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangReferenceBase.Companion.LOCAL_RESOLVE
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangPointerTypeEx
 import org.vlang.lang.psi.types.VlangStructTypeEx
 import org.vlang.lang.psi.types.VlangTypeEx
@@ -61,14 +62,11 @@ class VlangFieldNameReference(element: VlangReferenceExpressionBase) :
             if (!fieldProcessor.execute(field, state)) return false
         }
 
-        return true
-//        return !(type is VlangStructType && !structType.processDeclarations(fieldProcessor, state, null, myElement))
-    }
+        structType.embeddedStructList.forEach {
+            if (!processStructType(fieldProcessor, it.type.toEx(), localResolve)) return false
+        }
 
-    fun inStructTypeKey(): Boolean {
-        val type = myElement.parentOfType<VlangLiteralValueExpression>()?.getType(null)
-        return VlangPsiImplUtil.getParentVlangValue(myElement) == null &&
-                type is VlangStructType
+        return true
     }
 
     override fun resolveInner(): PsiElement? {

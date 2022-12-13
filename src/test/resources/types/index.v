@@ -14,4 +14,10 @@ fn main() {
 
 	mm := MyMap{'a': 1, 'b': 2, 'c': 3}
 	expr_type(mm['a'], 'int')
+
+	char_pointer := charptr(0)
+	expr_type(char_pointer[0], 'char')
+
+	byte_pointer := byteptr(0)
+	expr_type(byte_pointer[0], 'byte')
 }

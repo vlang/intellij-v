@@ -3,8 +3,10 @@ package org.vlang.lang.completion
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
+import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
 import org.vlang.lang.completion.VlangCompletionUtil.showCompletion
+import org.vlang.lang.psi.VlangAttribute
 import org.vlang.lang.psi.VlangFile
 import org.vlang.lang.psi.VlangReferenceExpression
 import org.vlang.utils.inside
@@ -15,7 +17,8 @@ class VlangTypedHandler : TypedHandlerDelegate() {
             return Result.CONTINUE
         }
 
-        val chars = editor.document.charsSequence
+        val document = editor.document
+        val chars = document.charsSequence
         val offset = editor.caretModel.offset
 
         if (offset > 10) {
@@ -29,7 +32,7 @@ class VlangTypedHandler : TypedHandlerDelegate() {
         if (offset > 2) {
             val prevSymbol = chars.subSequence(offset - 2, offset - 1).first()
             if (c == '{' && prevSymbol == '$') {
-                editor.document.insertString(offset, "}")
+                document.insertString(offset, "}")
                 showCompletion(editor)
                 return Result.STOP
             }
@@ -42,13 +45,17 @@ class VlangTypedHandler : TypedHandlerDelegate() {
             return Result.STOP
         }
 
-        if (c == '[') {
+        // compile time constants and functions
+        if (c == '$' || c == '@') {
             showCompletion(editor)
             return Result.STOP
         }
 
-        // compile time constants and functions
-        if (c == '$' || c == '@') {
+        PsiDocumentManager.getInstance(project).commitDocument(document)
+        PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(document)
+
+        val parent = file.findElementAt(offset - 1)?.parent
+        if (c == '[' && parent is VlangAttribute) {
             showCompletion(editor)
             return Result.STOP
         }
