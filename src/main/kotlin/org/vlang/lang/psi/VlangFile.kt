@@ -28,8 +28,8 @@ import org.vlang.lang.stubs.types.VlangFunctionDeclarationStubElementType
 import org.vlang.lang.stubs.types.VlangInterfaceDeclarationStubElementType
 import org.vlang.lang.stubs.types.VlangStructDeclarationStubElementType
 
-class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, VlangLanguage.INSTANCE) {
-    override fun getFileType() = VlangFileType.INSTANCE
+class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, VlangLanguage) {
+    override fun getFileType() = VlangFileType
 
     override fun toString() = "V Language file"
 

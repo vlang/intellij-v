@@ -30,7 +30,7 @@ class CompletionTest : CompletionTestBase() {
             foo./*caret*/
         }
         """.trimIndent(),
-        1, "name", "age",
+        1, "name", "age", "str",
     )
 
     fun `test struct methods completion`() = checkEquals(
@@ -47,7 +47,7 @@ class CompletionTest : CompletionTestBase() {
             foo./*caret*/
         }
         """.trimIndent(),
-        1, "bar", "baz",
+        1, "bar", "baz", "str",
     )
 
     fun `test struct method and field with same name completion`() = checkEquals(
@@ -63,7 +63,7 @@ class CompletionTest : CompletionTestBase() {
             foo./*caret*/
         }
         """.trimIndent(),
-        1, "name", "name",
+        1, "name", "name", "str",
     )
 
     fun `test short string template completion`() = checkIncludes(

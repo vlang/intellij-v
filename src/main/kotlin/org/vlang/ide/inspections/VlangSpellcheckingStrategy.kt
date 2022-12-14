@@ -11,7 +11,7 @@ import org.vlang.lang.psi.VlangStringLiteral
 
 class VlangSpellcheckingStrategy : SpellcheckingStrategy() {
     override fun isMyContext(element: PsiElement): Boolean {
-        return element.language == VlangLanguage.INSTANCE
+        return element.language == VlangLanguage
     }
 
     override fun getTokenizer(element: PsiElement?): Tokenizer<*> {

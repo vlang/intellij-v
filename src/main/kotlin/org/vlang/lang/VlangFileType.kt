@@ -1,19 +1,13 @@
 package org.vlang.lang
 
 import com.intellij.openapi.fileTypes.LanguageFileType
+import com.intellij.openapi.vfs.VirtualFile
 import org.vlang.ide.ui.VIcons
 
-class VlangFileType : LanguageFileType(VlangLanguage.INSTANCE) {
+object VlangFileType : LanguageFileType(VlangLanguage) {
     override fun getName() = "V"
-
-    override fun getDescription() = "V language file"
-
-    override fun getDefaultExtension() = FILE_EXTENSION
-
+    override fun getDescription() = "V file"
+    override fun getDefaultExtension() = "v"
     override fun getIcon() = VIcons.V
-
-    companion object {
-        const val FILE_EXTENSION = "v"
-        val INSTANCE = VlangFileType()
-    }
+    override fun getCharset(file: VirtualFile, content: ByteArray): String = "UTF-8"
 }

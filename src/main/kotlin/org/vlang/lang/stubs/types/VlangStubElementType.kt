@@ -10,7 +10,7 @@ import org.vlang.lang.psi.VlangBlock
 import org.vlang.lang.psi.VlangCompositeElement
 
 abstract class VlangStubElementType<S : StubBase<T>, T : VlangCompositeElement>(debugName: String) :
-    IStubElementType<S, T>(debugName, VlangLanguage.INSTANCE) {
+    IStubElementType<S, T>(debugName, VlangLanguage) {
 
     override fun getExternalId() = "vlang." + super.toString()
 

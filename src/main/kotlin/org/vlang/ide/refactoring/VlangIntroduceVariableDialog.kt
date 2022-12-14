@@ -51,7 +51,7 @@ class VlangIntroduceVariableDialog(private val operation: VlangIntroduceOperatio
 
     private fun createNamePanel(): JComponent {
         val panel = JPanel(BorderLayout())
-        nameField = NameSuggestionsField(emptyArray(), operation.project, VlangFileType.INSTANCE)
+        nameField = NameSuggestionsField(emptyArray(), operation.project, VlangFileType)
         nameField!!.border = JBUI.Borders.empty(3, 5, 2, 3)
         nameField!!.addDataChangedListener { validateButtons() }
         val label = JLabel(UIUtil.replaceMnemonicAmpersand(RefactoringBundle.message("name.prompt")))

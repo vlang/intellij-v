@@ -1,5 +1,6 @@
 package org.vlang.ide.intentions
 
+import com.intellij.codeInsight.intention.LowPriorityAction
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
@@ -12,7 +13,7 @@ import com.intellij.refactoring.suggested.startOffset
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.VlangFunctionDeclaration
 
-class VlangFunctionToMethodIntention : BaseIntentionAction() {
+class VlangFunctionToMethodIntention : BaseIntentionAction(), LowPriorityAction {
     override fun startInWriteAction() = true
     override fun getFamilyName() = "Function to method"
     override fun getText() = "Convert function with parameter to method with receiver"

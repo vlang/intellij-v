@@ -8,18 +8,17 @@ import com.intellij.util.ProcessingContext
 import org.vlang.ide.ui.VIcons
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.VlangTypeReferenceExpression
-import org.vlang.lang.psi.types.VlangPrimitiveTypes
 
 class VlangTypesContributor : CompletionContributor() {
     init {
         extend(
             CompletionType.BASIC,
             psiElement(VlangTypes.IDENTIFIER).withParent(VlangTypeReferenceExpression::class.java),
-            MapTypeCompletionProvider()
+            MapTypeCompletionProvider
         )
     }
 
-    private class MapTypeCompletionProvider : CompletionProvider<CompletionParameters>() {
+    private object MapTypeCompletionProvider : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
             result.addElement(
                 LookupElementBuilder.create("map")

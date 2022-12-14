@@ -14,11 +14,11 @@ class VlangModuleNameCompletionContributor : CompletionContributor() {
         extend(
             CompletionType.BASIC,
             psiElement(VlangTypes.IDENTIFIER).withParent(VlangImportName::class.java),
-            ModuleNameCompletionProvider()
+            ModuleNameCompletionProvider
         )
     }
 
-    private class ModuleNameCompletionProvider : CompletionProvider<CompletionParameters>() {
+    private object ModuleNameCompletionProvider : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
             val element = parameters.position.parent as? VlangImportName ?: return
             val qualifier = element.qualifier

@@ -11,7 +11,7 @@ import org.vlang.lang.psi.*
 
 object VlangElementFactory {
     fun createFileFromText(project: Project, text: String): VlangFile {
-        return PsiFileFactory.getInstance(project).createFileFromText("dummy.v", VlangLanguage.INSTANCE, text) as VlangFile
+        return PsiFileFactory.getInstance(project).createFileFromText("dummy.v", VlangLanguage, text) as VlangFile
     }
 
     fun createVariableDeclarationStatement(project: Project, name: String, expr: PsiElement): VlangStatement {

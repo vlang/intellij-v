@@ -6,7 +6,10 @@ import com.intellij.openapi.progress.ProgressIndicatorProvider
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.roots.FileIndexFacade
 import com.intellij.pom.PomRenameableTarget
-import com.intellij.psi.*
+import com.intellij.psi.PsiDirectory
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiFile
+import com.intellij.psi.PsiNameIdentifierOwner
 import com.intellij.psi.impl.PomTargetPsiElementImpl
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.search.SearchScope
@@ -140,7 +143,7 @@ class VlangPomTargetPsiElement(project: Project, target: VlangModule) : PomTarge
     PsiNameIdentifierOwner {
 
     override fun getLanguage(): Language {
-        return VlangLanguage.INSTANCE
+        return VlangLanguage
     }
 
     override fun getNameIdentifier(): PsiElement? {

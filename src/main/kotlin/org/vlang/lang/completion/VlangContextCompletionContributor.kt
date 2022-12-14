@@ -18,32 +18,18 @@ import org.vlang.lang.utils.LabelUtil
 
 class VlangContextCompletionContributor : CompletionContributor() {
     init {
-        extend(
-            CompletionType.BASIC,
-            insideWithLabelStatement(VlangTypes.IDENTIFIER),
-            LabelCompletionProvider()
-        )
-
-        extend(
-            CompletionType.BASIC,
-            referenceExpression(),
-            ReferenceCompletionProvider()
-        )
+        extend(CompletionType.BASIC, insideStatementWithLabel(VlangTypes.IDENTIFIER), LabelCompletionProvider)
+        extend(CompletionType.BASIC, referenceExpression(), ReferenceCompletionProvider)
+        extend(CompletionType.BASIC, cachedReferenceExpression(), ReferenceCompletionProvider)
 
 //        extend(
 //            CompletionType.BASIC,
 //            referenceExpression(),
 //            VlangReceiverCompletionProvider()
 //        )
-
-        extend(
-            CompletionType.BASIC,
-            cachedReferenceExpression(),
-            ReferenceCompletionProvider()
-        )
     }
 
-    private class LabelCompletionProvider : CompletionProvider<CompletionParameters>() {
+    private object LabelCompletionProvider : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(
             parameters: CompletionParameters,
             context: ProcessingContext,
@@ -76,7 +62,7 @@ class VlangContextCompletionContributor : CompletionContributor() {
         return psiElement().withElementType(TokenSet.create(*tokenTypes))
     }
 
-    private fun insideWithLabelStatement(tokenType: IElementType): ElementPattern<out PsiElement?> {
+    private fun insideStatementWithLabel(tokenType: IElementType): ElementPattern<out PsiElement?> {
         return onStatementBeginning(tokenType)
             .inside(
                 false,
@@ -88,5 +74,4 @@ class VlangContextCompletionContributor : CompletionContributor() {
                 psiElement(VlangFunctionDeclaration::class.java)
             )
     }
-
 }

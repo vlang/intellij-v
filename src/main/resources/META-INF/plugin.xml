@@ -323,21 +323,25 @@ The plugin provides support for V language
 
         <!-- Intentions -->
         <intentionAction>
+            <language>vlang</language>
             <className>org.vlang.ide.intentions.VlangMakePublicIntention</className>
             <category>V</category>
         </intentionAction>
 
         <intentionAction>
+            <language>vlang</language>
             <className>org.vlang.ide.intentions.VlangMakePrivateIntention</className>
             <category>V</category>
         </intentionAction>
 
         <intentionAction>
+            <language>vlang</language>
             <className>org.vlang.ide.intentions.VlangMethodToFunctionIntention</className>
             <category>V</category>
         </intentionAction>
 
         <intentionAction>
+            <language>vlang</language>
             <className>org.vlang.ide.intentions.VlangFunctionToMethodIntention</className>
             <category>V</category>
         </intentionAction>

@@ -4,20 +4,17 @@ import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
+import org.vlang.lang.completion.VlangCompletionPatterns.identifier
 import org.vlang.lang.psi.VlangSignatureOwner
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangPrimitiveTypeEx
 
 class VlangReturnCompletionContributor : CompletionContributor() {
     init {
-        extend(
-            CompletionType.BASIC,
-            VlangKeywordsCompletionContributor().identifier(),
-            ReturnKeywordCompletionProvider()
-        )
+        extend(CompletionType.BASIC, identifier(), ReturnKeywordCompletionProvider)
     }
 
-    private inner class ReturnKeywordCompletionProvider : CompletionProvider<CompletionParameters>() {
+    private object ReturnKeywordCompletionProvider : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
             if (VlangKeywordsCompletionContributor.shouldSuppress(parameters, result)) return
 

@@ -17,7 +17,7 @@ class VlangAttributesCompletionContributor : CompletionContributor() {
         extend(
             CompletionType.BASIC,
             psiElement(VlangTypes.IDENTIFIER).withParent(VlangAttributeIdentifier::class.java),
-            CommonAttributeCompletionProvider()
+            CommonAttributeCompletionProvider
         )
 
         extend(
@@ -25,25 +25,17 @@ class VlangAttributesCompletionContributor : CompletionContributor() {
             psiElement(VlangTypes.IDENTIFIER)
                 .withParent(VlangAttributeIdentifier::class.java)
                 .inside(VlangFieldDeclaration::class.java),
-            JsonAttributeCompletionProvider()
+            JsonAttributeCompletionProvider
         )
 
         extend(
             CompletionType.BASIC,
             psiElement(VlangTypes.IDENTIFIER).withParent(VlangAttributeIdentifier::class.java),
-            AttributeWithColonCompletionProvider("sql", "table", "deprecated", "deprecated_after", "export", "callconv")
+            AttributeWithColonCompletionProvider
         )
     }
 
-    private class CommonAttributeCompletionProvider : CompletionProvider<CompletionParameters>() {
-        companion object {
-            private val ATTRIBUTES = listOf(
-                "params", "noinit", "required", "skip", "assert_continues",
-                "unsafe", "manualfree", "heap", "nonnull", "primary", "inline",
-                "direct_array_access", "live", "flag", "noinline", "noreturn", "typedef", "console",
-            )
-        }
-
+    private object CommonAttributeCompletionProvider : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
             result.addAllElements(
                 ATTRIBUTES.map {
@@ -51,12 +43,18 @@ class VlangAttributesCompletionContributor : CompletionContributor() {
                 }
             )
         }
+
+        private val ATTRIBUTES = listOf(
+            "params", "noinit", "required", "skip", "assert_continues",
+            "unsafe", "manualfree", "heap", "nonnull", "primary", "inline",
+            "direct_array_access", "live", "flag", "noinline", "noreturn", "typedef", "console",
+        )
     }
 
-    private class AttributeWithColonCompletionProvider(vararg val names: String) : CompletionProvider<CompletionParameters>() {
+    private object AttributeWithColonCompletionProvider : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
             result.addAllElements(
-                names.map {
+                ATTRIBUTES.map {
                     LookupElementBuilder.create(it)
                         .withIcon(AllIcons.Nodes.ObjectTypeAttribute)
                         .withTailText(": 'value'", true)
@@ -65,16 +63,16 @@ class VlangAttributesCompletionContributor : CompletionContributor() {
             )
         }
 
-        companion object {
-            val INSERT_HANDLER = InsertHandler<LookupElement> { context, item ->
-                val offset = context.tailOffset
-                context.document.insertString(offset, ": ''")
-                context.editor.caretModel.moveToOffset(offset + 3)
-            }
+        val ATTRIBUTES = listOf("sql", "table", "deprecated", "deprecated_after", "export", "callconv")
+
+        val INSERT_HANDLER = InsertHandler<LookupElement> { context, item ->
+            val offset = context.tailOffset
+            context.document.insertString(offset, ": ''")
+            context.editor.caretModel.moveToOffset(offset + 3)
         }
     }
 
-    private class JsonAttributeCompletionProvider : CompletionProvider<CompletionParameters>() {
+    private object JsonAttributeCompletionProvider : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
             val element = LookupElementBuilder.create("json")
                 .withIcon(AllIcons.Nodes.ObjectTypeAttribute)
@@ -83,20 +81,17 @@ class VlangAttributesCompletionContributor : CompletionContributor() {
             result.addElement(element)
         }
 
-        companion object {
-            val INSERT_HANDLER = InsertHandler<LookupElement> { context, item ->
-                val offset = context.tailOffset
-                val element = context.file.findElementAt(offset)
-                val fieldDeclaration = element?.parentOfType<VlangFieldDeclaration>()
+        val INSERT_HANDLER = InsertHandler<LookupElement> { context, item ->
+            val offset = context.tailOffset
+            val element = context.file.findElementAt(offset)
+            val fieldDeclaration = element?.parentOfType<VlangFieldDeclaration>()
 
-                if (fieldDeclaration != null) {
-                    val fieldName = fieldDeclaration.fieldDefinition?.name ?: ""
-                    VlangCompletionUtil.TemplateStringInsertHandler(
-                        ": '\$name$'", true,
-                        "name" to ConstantNode(fieldName)
-                    )
-                        .handleInsert(context, item)
-                }
+            if (fieldDeclaration != null) {
+                val fieldName = fieldDeclaration.fieldDefinition?.name ?: ""
+                VlangCompletionUtil.TemplateStringInsertHandler(
+                    ": '\$name$'", true,
+                    "name" to ConstantNode(fieldName)
+                ).handleInsert(context, item)
             }
         }
     }

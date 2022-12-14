@@ -7,7 +7,7 @@ import com.intellij.psi.codeStyle.LanguageCodeStyleSettingsProvider
 import org.vlang.lang.VlangLanguage
 
 class VlangLanguageCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvider() {
-    override fun getLanguage() = VlangLanguage.INSTANCE
+    override fun getLanguage() = VlangLanguage
 
     override fun customizeSettings(consumer: CodeStyleSettingsCustomizable, settingsType: SettingsType) {
         // TODO:

@@ -9,7 +9,7 @@ import org.vlang.lang.stubs.VlangFileStub
 import org.vlang.lang.stubs.index.VlangModulesFingerprintIndex
 import org.vlang.lang.stubs.index.VlangModulesIndex
 
-class VlangFileElementType : IStubFileElementType<VlangFileStub>("VLANG_FILE", VlangLanguage.INSTANCE) {
+class VlangFileElementType : IStubFileElementType<VlangFileStub>("VLANG_FILE", VlangLanguage) {
     override fun getStubVersion() = VERSION
 
     override fun getBuilder(): StubBuilder {

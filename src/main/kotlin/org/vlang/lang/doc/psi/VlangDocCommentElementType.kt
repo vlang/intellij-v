@@ -20,7 +20,7 @@ import org.vlang.lang.psi.VlangDocElementTypes.DOC_GAP
 import kotlin.math.max
 import kotlin.math.min
 
-class VlangDocCommentElementType : ILazyParseableElementType("VLANG_DOC_COMMENT", VlangLanguage.INSTANCE) {
+class VlangDocCommentElementType : ILazyParseableElementType("VLANG_DOC_COMMENT", VlangLanguage) {
     override fun doParseContents(chameleon: ASTNode, psi: PsiElement): ASTNode {
         val charTable = SharedImplUtil.findCharTableByTree(chameleon)
         val textMap = VlangDocTextMap.new(chameleon.chars, VlangDocKind.of(this))

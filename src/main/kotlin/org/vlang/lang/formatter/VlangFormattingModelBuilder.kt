@@ -7,9 +7,9 @@ import org.vlang.lang.VlangTypes
 
 class VlangFormattingModelBuilder : FormattingModelBuilder {
     private fun createSpaceBuilder(settings: CodeStyleSettings): SpacingBuilder {
-        return SpacingBuilder(settings, VlangLanguage.INSTANCE)
+        return SpacingBuilder(settings, VlangLanguage)
             .around(VlangTypes.ASSIGN)
-            .spaceIf(settings.getCommonSettings(VlangLanguage.INSTANCE.id).SPACE_AROUND_ASSIGNMENT_OPERATORS)
+            .spaceIf(settings.getCommonSettings(VlangLanguage.id).SPACE_AROUND_ASSIGNMENT_OPERATORS)
             .around(VlangTypes.FUNCTION_DECLARATION).blankLines(settings.BLANK_LINES_AROUND_METHOD)
     }
 

@@ -4,5 +4,5 @@ import com.jetbrains.cidr.execution.debugger.breakpoints.CidrLineBreakpointFileT
 import org.vlang.lang.VlangFileType
 
 class VlangLineBreakpointFileTypesProvider : CidrLineBreakpointFileTypesProvider {
-    override fun getFileTypes() = setOf(VlangFileType.INSTANCE)
+    override fun getFileTypes() = setOf(VlangFileType)
 }

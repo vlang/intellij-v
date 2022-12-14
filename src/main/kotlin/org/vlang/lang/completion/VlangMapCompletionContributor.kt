@@ -13,13 +13,12 @@ class VlangMapCompletionContributor : CompletionContributor() {
     init {
         extend(
             CompletionType.BASIC,
-            psiElement(VlangTypes.IDENTIFIER)
-                .withParent(VlangReferenceExpression::class.java),
-            MapInitCompletionProvider()
+            psiElement(VlangTypes.IDENTIFIER).withParent(VlangReferenceExpression::class.java),
+            MapInitCompletionProvider
         )
     }
 
-    private class MapInitCompletionProvider : CompletionProvider<CompletionParameters>() {
+    private object MapInitCompletionProvider : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
             val pos = parameters.position
             if (VlangPsiImplUtil.prevDot(pos)) {

@@ -11,7 +11,7 @@ import org.vlang.lang.psi.VlangCompositeElement
 
 class VlangReferenceImporter : ReferenceImporter {
     override fun autoImportReferenceAtCursor(editor: Editor, file: PsiFile): Boolean {
-        if (!file.viewProvider.languages.contains(VlangLanguage.INSTANCE) || !DaemonListeners.canChangeFileSilently(file, true)) {
+        if (!file.viewProvider.languages.contains(VlangLanguage) || !DaemonListeners.canChangeFileSilently(file, true)) {
             return false
         }
 

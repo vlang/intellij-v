@@ -6,9 +6,7 @@ import com.intellij.psi.PsiFile
 import org.vlang.lang.psi.VlangFile
 
 class VlangBackspaceHandlerDelegate : BackspaceHandlerDelegate() {
-    override fun beforeCharDeleted(c: Char, file: PsiFile, editor: Editor) {
-
-    }
+    override fun beforeCharDeleted(c: Char, file: PsiFile, editor: Editor) {}
 
     override fun charDeleted(c: Char, file: PsiFile, editor: Editor): Boolean {
         val offset = editor.caretModel.currentCaret.offset

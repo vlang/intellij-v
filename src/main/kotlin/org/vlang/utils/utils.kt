@@ -11,7 +11,6 @@ import com.intellij.openapi.project.ProjectLocator
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parentOfType
 import com.intellij.psi.util.parentOfTypes
@@ -32,7 +31,7 @@ val Document.virtualFile: VirtualFile?
 fun Document.psiFile(project: Project) = PsiDocumentManager.getInstance(project).getPsiFile(this)
 
 val VirtualFile.isNotVlangFile: Boolean get() = !isVlangFile
-val VirtualFile.isVlangFile: Boolean get() = fileType == VlangFileType.INSTANCE
+val VirtualFile.isVlangFile: Boolean get() = fileType == VlangFileType
 val VirtualFile.isTestFile: Boolean get() = name.endsWith("_test.v")
 val VirtualFile.isStubFile: Boolean get() = path.replace("\\", "/").contains("jar!/stubs/")
 

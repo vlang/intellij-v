@@ -27,14 +27,10 @@ import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 
 class VlangClosureCompletionContributor : CompletionContributor() {
     init {
-        extend(
-            CompletionType.BASIC,
-            psiElement().withElementType(VlangTypes.IDENTIFIER),
-            ClosureNameCompletionProvider()
-        )
+        extend(CompletionType.BASIC, psiElement(VlangTypes.IDENTIFIER), ClosureNameCompletionProvider)
     }
 
-    private class ClosureNameCompletionProvider : CompletionProvider<CompletionParameters>() {
+    private object ClosureNameCompletionProvider : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(
             parameters: CompletionParameters,
             context: ProcessingContext,

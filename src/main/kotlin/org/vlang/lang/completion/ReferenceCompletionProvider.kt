@@ -16,7 +16,7 @@ import org.vlang.lang.psi.impl.VlangReferenceBase.Companion.LOCAL_RESOLVE
 import org.vlang.lang.psi.impl.VlangScopeProcessor
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 
-class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
+object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
     override fun addCompletions(
         parameters: CompletionParameters,
         context: ProcessingContext,
@@ -140,7 +140,7 @@ class ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
 //        )
     }
 
-    private open inner class MyScopeProcessor(
+    private open class MyScopeProcessor(
         private val result: CompletionResultSet,
         private val file: VlangFile,
         private val forTypes: Boolean,

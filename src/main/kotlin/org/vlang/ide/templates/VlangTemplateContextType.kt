@@ -25,7 +25,7 @@ abstract class VlangTemplateContextType(
         val file = templateActionContext.file
         val offset = templateActionContext.startOffset
 
-        if (!PsiUtilCore.getLanguageAtOffset(file, offset).isKindOf(VlangLanguage.INSTANCE)) {
+        if (!PsiUtilCore.getLanguageAtOffset(file, offset).isKindOf(VlangLanguage)) {
             return false
         }
 
@@ -56,7 +56,7 @@ abstract class VlangTemplateContextType(
 
     protected open fun isCommentInContext() = false
 
-    class Generic : VlangTemplateContextType("VLANG_GENERIC", "V", EverywhereContextType::class.java) {
+    class Generic : VlangTemplateContextType("VLANG_GENERIC", "vlang", EverywhereContextType::class.java) {
         override fun isInContext(element: PsiElement) = element.parent is VlangFile || element.parent.parent is VlangFile
     }
 

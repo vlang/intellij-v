@@ -3,21 +3,29 @@ package org.vlang.lang.completion
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.codeInsight.template.impl.ConstantNode
-import com.intellij.patterns.*
-import com.intellij.patterns.PlatformPatterns.psiElement
-import com.intellij.psi.PsiElement
-import com.intellij.psi.tree.IElementType
-import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
 import org.vlang.lang.VlangTypes
+import org.vlang.lang.completion.VlangCompletionPatterns.identifier
+import org.vlang.lang.completion.VlangCompletionPatterns.insideForStatement
+import org.vlang.lang.completion.VlangCompletionPatterns.insideSqlStatement
+import org.vlang.lang.completion.VlangCompletionPatterns.insideStruct
+import org.vlang.lang.completion.VlangCompletionPatterns.topLevelPattern
 import org.vlang.lang.completion.VlangCompletionUtil.KEYWORD_PRIORITY
-import org.vlang.lang.psi.*
+import org.vlang.lang.psi.VlangLiteralValueExpression
 import org.vlang.lang.psi.impl.VlangPsiImplUtil
 import org.vlang.lang.sql.VlangSqlUtil
 
 class VlangKeywordsCompletionContributor : CompletionContributor() {
     init {
+        extend(CompletionType.BASIC, topLevelPattern(), TypeAliasCompletionProvider)
+        extend(CompletionType.BASIC, topLevelPattern(), ConstCompletionProvider)
+        extend(CompletionType.BASIC, topLevelPattern(), ImportKeywordCompletionProvider)
+        extend(CompletionType.BASIC, identifier(), SelectCompletionProvider)
+        extend(CompletionType.BASIC, identifier(), MatchCompletionProvider)
+        extend(CompletionType.BASIC, identifier(), OrKeywordCompletionProvider)
+        extend(CompletionType.BASIC, identifier(), AssertKeywordCompletionProvider)
+
         extend(
             CompletionType.BASIC,
             topLevelPattern(),
@@ -42,43 +50,8 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         )
         extend(
             CompletionType.BASIC,
-            topLevelPattern(),
-            TypeAliasCompletionProvider()
-        )
-        extend(
-            CompletionType.BASIC,
-            topLevelPattern(),
-            ConstCompletionProvider()
-        )
-        extend(
-            CompletionType.BASIC,
-            topLevelPattern(),
-            ImportKeywordCompletionProvider()
-        )
-        extend(
-            CompletionType.BASIC,
             identifier(),
             PureBlockKeywordCompletionProvider("defer", "unsafe")
-        )
-        extend(
-            CompletionType.BASIC,
-            identifier(),
-            SelectCompletionProvider()
-        )
-        extend(
-            CompletionType.BASIC,
-            identifier(),
-            MatchCompletionProvider()
-        )
-        extend(
-            CompletionType.BASIC,
-            identifier(),
-            OrKeywordCompletionProvider()
-        )
-        extend(
-            CompletionType.BASIC,
-            identifier(),
-            AssertKeywordCompletionProvider()
         )
         extend(
             CompletionType.BASIC,
@@ -145,11 +118,11 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         extend(
             CompletionType.BASIC,
             insideSqlStatement(VlangTypes.IDENTIFIER),
-            SqlKeywordsCompletionProvider()
+            SqlKeywordsCompletionProvider
         )
     }
 
-    private inner class OrKeywordCompletionProvider : CompletionProvider<CompletionParameters>() {
+    private object OrKeywordCompletionProvider : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
             if (shouldSuppress(parameters, result)) return
 
@@ -179,7 +152,7 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         }
     }
 
-    private inner class AssertKeywordCompletionProvider : CompletionProvider<CompletionParameters>() {
+    private object AssertKeywordCompletionProvider : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
             if (shouldSuppress(parameters, result)) return
 
@@ -247,7 +220,7 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         }
     }
 
-    private inner class SelectCompletionProvider : CompletionProvider<CompletionParameters>() {
+    private object SelectCompletionProvider : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
             if (shouldSuppress(parameters, result)) return
 
@@ -267,7 +240,7 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         }
     }
 
-    private inner class MatchCompletionProvider : CompletionProvider<CompletionParameters>() {
+    private object MatchCompletionProvider : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
             if (shouldSuppress(parameters, result)) return
 
@@ -334,7 +307,7 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         }
     }
 
-    private inner class TypeAliasCompletionProvider : CompletionProvider<CompletionParameters>() {
+    private object TypeAliasCompletionProvider : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
             if (shouldSuppress(parameters, result)) return
 
@@ -355,7 +328,7 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         }
     }
 
-    private inner class ConstCompletionProvider : CompletionProvider<CompletionParameters>() {
+    private object ConstCompletionProvider : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
             if (shouldSuppress(parameters, result)) return
 
@@ -376,7 +349,7 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         }
     }
 
-    private class ImportKeywordCompletionProvider : CompletionProvider<CompletionParameters>() {
+    private object ImportKeywordCompletionProvider : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
             if (shouldSuppress(parameters, result)) return
 
@@ -422,7 +395,7 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         }
     }
 
-    private inner class SqlKeywordsCompletionProvider : CompletionProvider<CompletionParameters>() {
+    private object SqlKeywordsCompletionProvider : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(
             parameters: CompletionParameters,
             context: ProcessingContext,
@@ -486,81 +459,6 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
                 )
             }
         }
-    }
-
-    private fun insideForStatement(tokenType: IElementType): ElementPattern<out PsiElement?> {
-        return insideBlockPattern(tokenType)
-            .inside(
-                false, psiElement(VlangForStatement::class.java),
-                psiElement(VlangFunctionDeclaration::class.java)
-            ).andNot(
-                insideWithLabelStatement(tokenType)
-            )
-    }
-
-    private fun insideSqlStatement(tokenType: IElementType): ElementPattern<out PsiElement?> {
-        return onStatementBeginning(tokenType)
-            .inside(
-                false, psiElement(VlangSqlExpression::class.java),
-                psiElement(VlangFunctionDeclaration::class.java)
-            )
-    }
-
-    private fun insideWithLabelStatement(tokenType: IElementType): ElementPattern<out PsiElement?> {
-        return onStatementBeginning(tokenType)
-            .inside(
-                false,
-                StandardPatterns.or(
-                    psiElement(VlangTypes.CONTINUE_STATEMENT),
-                    psiElement(VlangTypes.BREAK_STATEMENT),
-                    psiElement(VlangTypes.GOTO_STATEMENT)
-                ),
-                psiElement(VlangFunctionDeclaration::class.java)
-            )
-    }
-
-    private fun insideAttribute(tokenType: IElementType): ElementPattern<out PsiElement?> {
-        return onStatementBeginning(tokenType)
-            .inside(false, psiElement(VlangAttribute::class.java))
-    }
-
-    fun identifier() = insideBlockPattern(VlangTypes.IDENTIFIER)
-        .andNot(
-            insideWithLabelStatement(VlangTypes.IDENTIFIER)
-        )
-        .andNot(
-            insideAttribute(VlangTypes.IDENTIFIER)
-        )
-
-    private fun insideStruct() = onStatementBeginning(VlangTypes.IDENTIFIER)
-        .withSuperParent(6, VlangStructType::class.java)
-
-    private fun insideBlockPattern(tokenType: IElementType): PsiElementPattern.Capture<PsiElement?> {
-        return onStatementBeginning(tokenType)
-    }
-
-    private fun topLevelPattern(): PsiElementPattern.Capture<PsiElement?> {
-        return onStatementBeginning(VlangTypes.IDENTIFIER).withParent(
-            StandardPatterns.or(
-                psiElement().withSuperParent(3, vlangFileWithModule()),
-                psiElement().withSuperParent(3, VlangFile::class.java),
-            )
-        )
-    }
-
-    private fun vlangFileWithModule(): PsiFilePattern.Capture<VlangFile?> {
-        val collection = StandardPatterns.collection(PsiElement::class.java)
-        val packageIsFirst = collection.first(psiElement(VlangTypes.MODULE_CLAUSE))
-        return PlatformPatterns.psiFile(VlangFile::class.java).withChildren(
-            collection.filter(
-                StandardPatterns.not(psiElement().whitespaceCommentEmptyOrError()),
-                packageIsFirst
-            )
-        )
-    }
-
-    private fun onStatementBeginning(vararg tokenTypes: IElementType): PsiElementPattern.Capture<PsiElement?> {
-        return psiElement().withElementType(TokenSet.create(*tokenTypes))
     }
 
     companion object {
