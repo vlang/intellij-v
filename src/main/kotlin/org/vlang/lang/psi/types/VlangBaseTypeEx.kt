@@ -112,6 +112,10 @@ abstract class VlangBaseTypeEx(protected val anchor: PsiElement? = null) : UserD
                 is VlangAnonymousStructType -> VlangAnonStructTypeEx(type)
                 is VlangFunctionType        -> VlangFunctionTypeEx.from(type) ?: VlangUnknownTypeEx.INSTANCE
                 is VlangAliasType           -> {
+                    if (type.typeUnionList != null && type.typeUnionList!!.typeList.size > 1) {
+                        return VlangUnknownTypeEx.INSTANCE
+                    }
+
                     val typeName = parentName(type)
 
                     if (typeName == "any") {
@@ -131,6 +135,12 @@ abstract class VlangBaseTypeEx(protected val anchor: PsiElement? = null) : UserD
                         // stubs case:
                         //   type i32 = i32
                         return VlangAliasTypeEx(typeName, VlangUnknownTypeEx.INSTANCE, type)
+                    }
+
+                    // hack for now for
+                    // type Some = []Some
+                    if (firstType != null && firstType.text.contains(typeName)) {
+                        return VlangUnknownTypeEx.INSTANCE
                     }
 
                     // TODO: Sum types.
