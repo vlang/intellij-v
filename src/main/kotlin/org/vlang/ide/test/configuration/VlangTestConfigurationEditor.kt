@@ -6,13 +6,17 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.ui.dsl.builder.*
 import com.intellij.ui.dsl.gridLayout.HorizontalAlign
-import org.vlang.ide.run.VlangRunConfiguration
+import com.intellij.ui.layout.or
 import javax.swing.JComponent
 import javax.swing.JPanel
+import javax.swing.JRadioButton
 
 open class VlangTestConfigurationEditor(private val project: Project) : SettingsEditor<VlangTestConfiguration>() {
     data class Model(
-        var testFile: String = "",
+        var scope: VlangTestScope = VlangTestScope.Directory,
+        var directory: String = "",
+        var filename: String = "",
+        var pattern: String = "",
         var additionalParameters: String = "",
     )
 
@@ -20,8 +24,13 @@ open class VlangTestConfigurationEditor(private val project: Project) : Settings
     private val model = Model()
 
     override fun resetEditorFrom(demoRunConfiguration: VlangTestConfiguration) {
-        model.testFile = demoRunConfiguration.testFile
-        model.additionalParameters = demoRunConfiguration.additionalParameters
+        with(model) {
+            scope = demoRunConfiguration.scope
+            directory = demoRunConfiguration.directory
+            filename = demoRunConfiguration.filename
+            pattern = demoRunConfiguration.pattern
+            additionalParameters = demoRunConfiguration.additionalParameters
+        }
 
         mainPanel.reset()
     }
@@ -29,29 +38,82 @@ open class VlangTestConfigurationEditor(private val project: Project) : Settings
     override fun applyEditorTo(demoRunConfiguration: VlangTestConfiguration) {
         mainPanel.apply()
 
-        demoRunConfiguration.testFile = model.testFile
-        demoRunConfiguration.additionalParameters = model.additionalParameters
+        with(demoRunConfiguration) {
+            scope = model.scope
+            directory = model.directory
+            filename = model.filename
+            pattern = model.pattern
+            additionalParameters = model.additionalParameters
+        }
     }
 
     override fun createEditor(): JComponent = component()
 
     private fun component(): JPanel {
-        mainPanel = panel {
-            row("Test file:") {
-                textFieldWithBrowseButton(
-                    "Select V test name",
-                    project,
-                    FileChooserDescriptorFactory.createSingleFileDescriptor()
-                )
-                    .horizontalAlign(HorizontalAlign.FILL)
-                    .bindText(model::testFile)
-            }.bottomGap(BottomGap.SMALL)
+        lateinit var directoryRadioButton: Cell<JRadioButton>
+        lateinit var fileRadioButton: Cell<JRadioButton>
+        lateinit var functionRadioButton: Cell<JRadioButton>
 
-            row("Additional parameters:") {
-                textField()
-                    .horizontalAlign(HorizontalAlign.FILL)
-                    .bindText(model::additionalParameters)
-            }.bottomGap(BottomGap.SMALL)
+        mainPanel = panel {
+            group("Test Runner") {
+                buttonsGroup {
+                    row("Scope:") {
+                        directoryRadioButton = radioButton("Directory", VlangTestScope.Directory)
+                            .horizontalAlign(HorizontalAlign.LEFT)
+                            .apply {
+                                component.isSelected = true
+                            }
+
+                        fileRadioButton = radioButton("File", VlangTestScope.File)
+                            .horizontalAlign(HorizontalAlign.LEFT)
+                        functionRadioButton = radioButton("Function", VlangTestScope.Function)
+                            .horizontalAlign(HorizontalAlign.LEFT)
+                    }.bottomGap(BottomGap.SMALL)
+                }.bind(model::scope)
+
+                row("Directory:") {
+                    textFieldWithBrowseButton(
+                        "Select V Tests Folder",
+                        project,
+                        FileChooserDescriptorFactory.createSingleFolderDescriptor()
+                    )
+                        .horizontalAlign(HorizontalAlign.FILL)
+                        .bindText(model::directory)
+                }.visibleIf(directoryRadioButton.selected)
+                    .bottomGap(BottomGap.NONE)
+
+                row("Test file:") {
+                    textFieldWithBrowseButton(
+                        "Select V Test File",
+                        project,
+                        FileChooserDescriptorFactory.createSingleFileDescriptor()
+                    )
+                        .horizontalAlign(HorizontalAlign.FILL)
+                        .bindText(model::filename)
+                }.visibleIf(fileRadioButton.selected.or(functionRadioButton.selected))
+                    .bottomGap(BottomGap.NONE)
+
+                row("Pattern:") {
+                    expandableTextField()
+                        .horizontalAlign(HorizontalAlign.FILL)
+                        .bindText(model::pattern)
+                        .comment("""
+                            Glob pattern to filter tests.<br>
+                            You can separate multiple glob patterns with `,`.<br> 
+                            Glob patterns support `*` which matches anything, and `?`, that matches any single character.<br>
+                            They are *NOT* regular expressions however.
+                        """.trimIndent())
+                }.visibleIf(functionRadioButton.selected)
+                    .bottomGap(BottomGap.NONE)
+            }
+
+            group("Command Line") {
+                row("Additional parameters:") {
+                    textField()
+                        .horizontalAlign(HorizontalAlign.FILL)
+                        .bindText(model::additionalParameters)
+                }.bottomGap(BottomGap.NONE)
+            }.topGap(TopGap.NONE)
         }
 
         return mainPanel

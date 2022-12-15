@@ -10,6 +10,7 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.ui.awt.RelativePoint
 import com.intellij.util.Processor
+import org.vlang.ide.test.VlangTestUtil
 import org.vlang.lang.psi.*
 import java.awt.event.MouseEvent
 import java.util.concurrent.atomic.AtomicInteger
@@ -27,7 +28,8 @@ class VlangUsagesCodeVisionProvider : ReferencesCodeVisionProvider() {
     override fun acceptsFile(file: PsiFile): Boolean = file is VlangFile
 
     override fun acceptsElement(element: PsiElement): Boolean {
-        return (element is VlangFunctionOrMethodDeclaration && element.name != "main") ||
+        return (element is VlangFunctionDeclaration && element.name != "main" && !VlangTestUtil.isTestFunction(element)) ||
+                element is VlangMethodDeclaration ||
                 element is VlangStructDeclaration ||
                 element is VlangEnumDeclaration ||
                 element is VlangInterfaceDeclaration ||

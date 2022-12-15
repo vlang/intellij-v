@@ -1,22 +1,36 @@
 package org.vlang.ide.test.configuration
 
-import com.intellij.execution.configurations.RunConfigurationOptions
+import com.intellij.execution.configurations.LocatableRunConfigurationOptions
 
-class VlangTestConfigurationOptions : RunConfigurationOptions() {
-    private val myTestName = string("").provideDelegate(this, "vlangTestName")
-    private val myTestModule = string("").provideDelegate(this, "vlangTestModule")
-    private val myAdditionalParameters = string("").provideDelegate(this, "vlangAdditionalParameters")
+class VlangTestConfigurationOptions : LocatableRunConfigurationOptions() {
+    private val myScope = string("").provideDelegate(this, "vlangTestScope")
+    private val myFilename = string("").provideDelegate(this, "vlangTestFilename")
+    private val myDirectory = string("").provideDelegate(this, "vlangTestDirectory")
+    private val myPattern = string("").provideDelegate(this, "vlangTestPattern")
+    private val myAdditionalParameters = string("").provideDelegate(this, "vlangTestAdditionalParameters")
 
-    var testName: String
-        get() = myTestName.getValue(this) ?: ""
+    var scope: VlangTestScope
+        get() = VlangTestScope.from(myScope.getValue(this) ?: "")
         set(value) {
-            myTestName.setValue(this, value)
+            myScope.setValue(this, value.name)
         }
 
-    var testModule: String
-        get() = myTestModule.getValue(this) ?: ""
+    var directory: String
+        get() = myDirectory.getValue(this) ?: ""
         set(value) {
-            myTestModule.setValue(this, value)
+            myDirectory.setValue(this, value)
+        }
+
+    var filename: String
+        get() = myFilename.getValue(this) ?: ""
+        set(value) {
+            myFilename.setValue(this, value)
+        }
+
+    var pattern: String
+        get() = myPattern.getValue(this) ?: ""
+        set(value) {
+            myPattern.setValue(this, value)
         }
 
     var additionalParameters: String

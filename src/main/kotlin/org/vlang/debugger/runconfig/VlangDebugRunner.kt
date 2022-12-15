@@ -11,12 +11,17 @@ import com.intellij.util.execution.ParametersListUtil
 import com.jetbrains.cidr.execution.debugger.backend.lldb.LLDBBinUrlProvider
 import org.jetbrains.concurrency.resolvedPromise
 import org.vlang.ide.run.VlangBuildTaskRunner
+import org.vlang.ide.test.configuration.VlangTestConfiguration
 import java.io.File
 
 class VlangDebugRunner : ProgramRunner<RunnerSettings> {
     override fun getRunnerId() = RUNNER_ID
 
     override fun canRun(executorId: String, profile: RunProfile): Boolean {
+        if (profile is VlangTestConfiguration) {
+            return false
+        }
+
         return executorId == DefaultDebugExecutor.EXECUTOR_ID
     }
 

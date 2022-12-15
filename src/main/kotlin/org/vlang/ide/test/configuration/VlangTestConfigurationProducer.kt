@@ -7,9 +7,12 @@ import com.intellij.execution.configurations.ConfigurationFactory
 import com.intellij.execution.configurations.ConfigurationTypeUtil
 import com.intellij.openapi.roots.TestSourcesFilter
 import com.intellij.openapi.util.Ref
+import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiElement
 import org.vlang.lang.psi.VlangFile
+import org.vlang.lang.psi.VlangFunctionDeclaration
 import org.vlang.lang.psi.VlangModuleClause
+import org.vlang.utils.isTestFile
 
 class VlangTestConfigurationProducer : LazyRunConfigurationProducer<VlangTestConfiguration>() {
     override fun getConfigurationFactory(): ConfigurationFactory =
@@ -18,10 +21,15 @@ class VlangTestConfigurationProducer : LazyRunConfigurationProducer<VlangTestCon
 
     override fun isConfigurationFromContext(
         configuration: VlangTestConfiguration,
-        context: ConfigurationContext
+        context: ConfigurationContext,
     ): Boolean {
-        val element = context.location?.psiElement ?: return false
-        val parent = element.parent ?: return false
+        val element = getSourceElement(context.location?.psiElement) ?: return false
+        if (element is PsiDirectory) {
+            return configuration.scope == VlangTestScope.Directory &&
+                    configuration.directory == element.virtualFile.path
+        }
+
+        val parent = element.parent ?: element.containingFile
         val containingFile = element.containingFile ?: return false
         if (containingFile !is VlangFile) {
             return false
@@ -32,19 +40,39 @@ class VlangTestConfigurationProducer : LazyRunConfigurationProducer<VlangTestCon
         }
 
         if (parent is VlangModuleClause) {
-            val moduleName = parent.name
-            return configuration.testModule == moduleName
+            val containingDir = containingFile.parent ?: return false
+            return configuration.scope == VlangTestScope.Directory &&
+                    configuration.directory == containingDir.virtualFile.path
         }
 
-        return configuration.testFile == containingFile.virtualFile.path && configuration.testModule.isEmpty()
+        if (parent is VlangFunctionDeclaration) {
+            val functionName = parent.name
+            return configuration.scope == VlangTestScope.Function &&
+                    configuration.filename == containingFile.virtualFile.path &&
+                    configuration.pattern == "*.$functionName"
+        }
+
+        return configuration.scope == VlangTestScope.File &&
+                configuration.directory == containingFile.virtualFile.parent.path &&
+                configuration.filename == containingFile.virtualFile.path
     }
 
     override fun setupConfigurationFromContext(
         configuration: VlangTestConfiguration,
         context: ConfigurationContext,
-        sourceElement: Ref<PsiElement>
+        sourceElement: Ref<PsiElement>,
     ): Boolean {
-        val element = sourceElement.get()
+        val element = getSourceElement(sourceElement.get()) ?: return false
+
+        if (element is PsiDirectory) {
+            configuration.scope = VlangTestScope.Directory
+            configuration.name = "V Test ${element.name}"
+            configuration.directory = element.virtualFile.path
+            configuration.filename = element.virtualFile.children.find { it.isTestFile }?.path ?: ""
+
+            return true
+        }
+
         val parent = element.parent ?: return false
         val containingFile = element.containingFile ?: return false
         if (containingFile !is VlangFile) {
@@ -56,18 +84,39 @@ class VlangTestConfigurationProducer : LazyRunConfigurationProducer<VlangTestCon
         }
 
         if (parent is VlangModuleClause) {
-            val moduleName = parent.name
-            configuration.name = "V Test $moduleName"
-            configuration.testModule = moduleName
-            configuration.testFile = containingFile.virtualFile.path
+            val directory = containingFile.virtualFile.parent
+            configuration.scope = VlangTestScope.Directory
+            configuration.name = "V Test ${directory.name}"
+            configuration.directory = directory.path
 
             return true
         }
 
-        configuration.name = "V Test ${containingFile.name}"
-        configuration.testFile = containingFile.virtualFile.path
+        if (parent is VlangFunctionDeclaration) {
+            val functionName = parent.name
+            configuration.scope = VlangTestScope.Function
+            configuration.name = "V Test $functionName"
+            configuration.directory = containingFile.virtualFile.parent.path
+            configuration.filename = containingFile.virtualFile.path
+            configuration.pattern = "*.$functionName"
+
+            return true
+        }
+
+        val file = containingFile.virtualFile.name
+        configuration.scope = VlangTestScope.File
+        configuration.name = "V Test $file"
+        configuration.directory = containingFile.virtualFile.parent.path
+        configuration.filename = containingFile.virtualFile.path
 
         return true
+    }
+
+    private fun getSourceElement(sourceElement: PsiElement?): PsiElement? {
+        if (sourceElement is VlangFunctionDeclaration) {
+            return sourceElement.nameIdentifier
+        }
+        return sourceElement
     }
 
     override fun shouldReplace(self: ConfigurationFromContext, other: ConfigurationFromContext) =

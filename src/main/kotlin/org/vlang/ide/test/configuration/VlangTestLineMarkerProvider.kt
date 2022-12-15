@@ -32,7 +32,7 @@ class VlangTestLineMarkerProvider : RunLineMarkerContributor() {
                     return null
                 }
 
-                return Info(AllIcons.RunConfigurations.TestState.Run_run, { "Run all module tests" }, contextAction)
+                return Info(AllIcons.RunConfigurations.TestState.Run_run, { "Run module tests" }, contextAction)
             }
 
             return null

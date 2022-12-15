@@ -6,7 +6,7 @@ import com.intellij.openapi.project.Project
 import org.vlang.ide.ui.VIcons
 
 class VlangTestConfigurationType : ConfigurationTypeBase(
-    ID, "Test",
+    ID, "V Test",
     "Run V test",
     VIcons.V
 ) {
@@ -22,6 +22,10 @@ class VlangTestConfigurationType : ConfigurationTypeBase(
                 VlangTestConfiguration(project, this, "Run V test")
 
             override fun getOptionsClass() = VlangTestConfigurationOptions::class.java
+
+            override fun getName(): String = "Run V test"
+
+            override fun isEditableInDumbMode(): Boolean = true
         })
     }
 }

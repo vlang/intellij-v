@@ -9,8 +9,11 @@ import com.intellij.execution.process.KillableColoredProcessHandler
 import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.execution.runners.ProgramRunner
 import com.intellij.execution.testframework.sm.SMTestRunnerConnectionUtil
+import com.intellij.execution.testframework.sm.runner.SMTRunnerEventsAdapter
+import com.intellij.execution.testframework.sm.runner.SMTRunnerEventsListener
 import com.intellij.execution.testframework.sm.runner.SMTestProxy
 import com.intellij.execution.testframework.sm.runner.ui.SMTRunnerConsoleView
+import com.intellij.openapi.project.guessProjectDir
 import com.intellij.util.execution.ParametersListUtil
 import org.vlang.configurations.VlangConfigurationUtil
 import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
@@ -30,20 +33,36 @@ class VlangTestConfigurationRunState(
             return null
         }
 
-        val file = File(conf.testFile)
+        val file = File(conf.filename)
 
         val exe = conf.project.projectSettings.compilerLocation
             ?: throw RuntimeException(VlangConfigurationUtil.TOOLCHAIN_NOT_SETUP)
-        val workingDir = file.parentFile.parentFile
+        val workingDir = conf.project.guessProjectDir()?.toNioPath()?.toFile() ?: file.parentFile.parentFile
 
         val commandLine = GeneralCommandLine()
             .withExePath(exe)
             .withWorkDirectory(workingDir)
+            .withEnvironment(mapOf("VJOBS" to "1"))
+            .withParameters("-test-runner")
+            .withParameters("teamcity")
+            .withParameters("-stats")
             .withParameters("test")
 
-        val testUnit = if (conf.testModule.isEmpty() || conf.testModule == "main") conf.testFile else conf.testModule
+        if (conf.scope == VlangTestScope.Directory) {
+            commandLine.withParameters(conf.directory)
+        }
 
-        commandLine.withParameters(testUnit)
+        if (conf.scope == VlangTestScope.File) {
+            commandLine.withParameters(conf.filename)
+        }
+
+        if (conf.scope == VlangTestScope.Function) {
+            if (conf.pattern.isNotEmpty()) {
+                commandLine.withParameters("-run-only")
+                commandLine.withParameters(conf.pattern)
+            }
+            commandLine.withParameters(conf.filename)
+        }
 
         val additionalArguments = ParametersListUtil.parse(conf.additionalParameters)
         commandLine.addParameters(additionalArguments)
@@ -58,10 +77,15 @@ class VlangTestConfigurationRunState(
         val handler = KillableColoredProcessHandler(commandLine)
         console.attachToProcess(handler)
 
+        val connection = conf.project.messageBus.connect()
+        connection.subscribe(SMTRunnerEventsListener.TEST_STATUS, object : SMTRunnerEventsAdapter() {
+            override fun onBeforeTestingFinished(testsRoot: SMTestProxy.SMRootTestProxy) {
+                testsRoot.setFinished()
+            }
+        })
+
         val smTestProxy = console.resultsViewer.root as SMTestProxy.SMRootTestProxy
         smTestProxy.setTestsReporterAttached()
-        smTestProxy.setSuiteStarted()
-        smTestProxy.setStarted()
 
         return DefaultExecutionResult(console, handler)
     }
