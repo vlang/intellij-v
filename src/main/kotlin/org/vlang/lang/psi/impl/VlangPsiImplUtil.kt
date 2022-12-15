@@ -990,6 +990,11 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun takeReference(o: VlangReceiver): Boolean {
+        return o.type is VlangPointerType
+    }
+
+    @JvmStatic
     fun getTypeInner(o: VlangReceiver, context: ResolveState?): VlangTypeEx {
         return o.type.toEx()
     }

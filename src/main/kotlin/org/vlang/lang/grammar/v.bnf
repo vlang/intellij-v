@@ -587,7 +587,7 @@ MethodName ::= identifier | AddOp | MulOp | RelOp
 // [<modifiers>] <ident> <type>
 Receiver ::= VarModifiers? identifier Type ','? {
   pin=2
-  methods=[getTypeInner getName isPublic isMutable makeMutable makeImmutable]
+  methods=[getTypeInner getName isPublic isMutable makeMutable makeImmutable takeReference]
   implements="org.vlang.lang.psi.VlangMutabilityOwner"
   stubClass="org.vlang.lang.stubs.VlangReceiverStub"
 }
