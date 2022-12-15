@@ -452,8 +452,8 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
                 result.addElement(
                     PrioritizedLookupElement.withPriority(
                         LookupElementBuilder.create(keyword)
-                            .withTailText("(expr)")
-                            .withInsertHandler(VlangCompletionUtil.TemplateStringInsertHandler("(\$expr$)", true, "expr" to ConstantNode("expr")))
+                            .withTailText("()")
+                            .withInsertHandler(VlangCompletionUtil.TemplateStringInsertHandler("(\$END$)"))
                             .bold(), KEYWORD_PRIORITY.toDouble()
                     )
                 )

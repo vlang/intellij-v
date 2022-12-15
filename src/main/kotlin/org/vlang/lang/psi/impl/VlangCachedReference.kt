@@ -6,8 +6,8 @@ import com.intellij.psi.PsiReferenceBase
 import com.intellij.psi.impl.source.resolve.ResolveCache
 import com.intellij.util.ArrayUtil
 
-abstract class VlangCachedReference<T : PsiElement>(element: T) :
-    PsiReferenceBase<T>(element, TextRange.from(0, element.textLength)) {
+abstract class VlangCachedReference<T : PsiElement>(element: T, range: TextRange = TextRange.from(0, element.textLength)) :
+    PsiReferenceBase<T>(element, range) {
 
     protected val project = element.project
 

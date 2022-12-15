@@ -272,11 +272,8 @@ V Language file
                     SIZE_OF_CALL_EXPR
                       PsiElement(VlangTokenType.sizeof)('sizeof')
                       PsiElement(VlangTokenType.()('(')
-                      TYPE
-                        TYPE_MODIFIERS
-                          <empty list>
-                        TYPE_REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('f64')
+                      REFERENCE_EXPRESSION
+                        PsiElement(VlangTokenType.identifier)('f64')
                       PsiElement(VlangTokenType.))(')')
                     PsiElement(VlangTokenType.+)('+')
                     CALL_EXPR

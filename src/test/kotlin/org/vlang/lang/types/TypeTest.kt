@@ -32,4 +32,5 @@ class TypeTest : TypeTestBase() {
     fun `test fixed size arrays`() = doTestFile("fixed_size_arrays.v")
     fun `test anon struct`() = doTestFile("anon_struct.v")
     fun `test slice`() = doTestFile("slice.v")
+//    fun `test compile time`() = doTestFile("compile_time.v")
 }

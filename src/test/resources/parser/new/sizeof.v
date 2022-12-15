@@ -16,10 +16,10 @@ fn test_math_sizeof() {
 
 fn test_sizeof() {
 	assert sizeof(rune) == 4
-	assert sizeof([44]u8) == 44
+	assert sizeof[[44]u8]() == 44
 	assert sizeof(`€`) == 4
 	// depends on -m32/64
-	assert sizeof(S1) in [u32(4), 8]
+	assert sizeof[S1]() in [u32(4), 8]
 	s := S2{}
 	assert sizeof(s.i) == 4
 	assert sizeof(flag.Flag) > 4

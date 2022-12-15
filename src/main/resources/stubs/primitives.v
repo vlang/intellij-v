@@ -25,7 +25,7 @@ pub type u32 = u32
 pub type u64 = u64
 
 // usize is platform-dependent unsigned integer type.
-pub type usize = u32
+pub type usize = u64
 
 // i8 is the set of all signed 8-bit integers.
 // Range: -128 through 127.
@@ -48,7 +48,7 @@ pub type int = int
 pub type i64 = i64
 
 // isize is platform-dependent integer type.
-pub type isize = i32
+pub type isize = i64
 
 // f32 is the set of all IEEE-754 32-bit floating-point numbers.
 pub type f32 = f32

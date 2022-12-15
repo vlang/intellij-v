@@ -156,7 +156,7 @@ object VlangGenericInferer {
      */
     fun inferGenericFetch(
         resolved: PsiElement,
-        expr: VlangReferenceExpression,
+        expr: VlangReferenceExpression?,
         genericType: VlangTypeEx,
     ): VlangTypeEx? {
         if (resolved !is VlangFieldDefinition) {
@@ -165,7 +165,7 @@ object VlangGenericInferer {
 
         // foo.a
         // ^^^ type of foo
-        val qualifierType = (expr.getQualifier() as? VlangTypeOwner)?.getType(null) ?: return null
+        val qualifierType = (expr?.getQualifier() as? VlangTypeOwner)?.getType(null) ?: return null
         val instantiation = extractInstantiation(qualifierType)
         if (instantiation !is VlangGenericInstantiationEx) {
             return genericType

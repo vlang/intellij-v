@@ -123,4 +123,5 @@ pub fn $compile_error(msg string)
 // $if windows {
 //   $compile_warn('Windows is not fully supported')
 // }
+// ```
 pub fn $compile_warn(msg string)

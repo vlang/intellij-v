@@ -124,11 +124,8 @@ V Language file
           IS_REF_TYPE_CALL_EXPR
             PsiElement(VlangTokenType.isreftype)('isreftype')
             PsiElement(VlangTokenType.()('(')
-            TYPE
-              TYPE_MODIFIERS
-                <empty list>
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(VlangTokenType.identifier)('S1')
+            REFERENCE_EXPRESSION
+              PsiElement(VlangTokenType.identifier)('S1')
             PsiElement(VlangTokenType.))(')')
           PsiElement(VlangTokenType.==)('==')
           LITERAL
@@ -139,11 +136,8 @@ V Language file
           IS_REF_TYPE_CALL_EXPR
             PsiElement(VlangTokenType.isreftype)('isreftype')
             PsiElement(VlangTokenType.()('(')
-            TYPE
-              TYPE_MODIFIERS
-                <empty list>
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(VlangTokenType.identifier)('S2')
+            REFERENCE_EXPRESSION
+              PsiElement(VlangTokenType.identifier)('S2')
             PsiElement(VlangTokenType.))(')')
           PsiElement(VlangTokenType.==)('==')
           LITERAL
@@ -154,11 +148,8 @@ V Language file
           IS_REF_TYPE_CALL_EXPR
             PsiElement(VlangTokenType.isreftype)('isreftype')
             PsiElement(VlangTokenType.()('(')
-            TYPE
-              TYPE_MODIFIERS
-                <empty list>
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(VlangTokenType.identifier)('S3')
+            REFERENCE_EXPRESSION
+              PsiElement(VlangTokenType.identifier)('S3')
             PsiElement(VlangTokenType.))(')')
           PsiElement(VlangTokenType.==)('==')
           LITERAL
@@ -169,11 +160,8 @@ V Language file
           IS_REF_TYPE_CALL_EXPR
             PsiElement(VlangTokenType.isreftype)('isreftype')
             PsiElement(VlangTokenType.()('(')
-            TYPE
-              TYPE_MODIFIERS
-                <empty list>
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(VlangTokenType.identifier)('S4')
+            REFERENCE_EXPRESSION
+              PsiElement(VlangTokenType.identifier)('S4')
             PsiElement(VlangTokenType.))(')')
           PsiElement(VlangTokenType.==)('==')
           LITERAL
@@ -184,11 +172,8 @@ V Language file
           IS_REF_TYPE_CALL_EXPR
             PsiElement(VlangTokenType.isreftype)('isreftype')
             PsiElement(VlangTokenType.()('(')
-            TYPE
-              TYPE_MODIFIERS
-                <empty list>
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(VlangTokenType.identifier)('S5')
+            REFERENCE_EXPRESSION
+              PsiElement(VlangTokenType.identifier)('S5')
             PsiElement(VlangTokenType.))(')')
           PsiElement(VlangTokenType.==)('==')
           LITERAL
@@ -198,32 +183,40 @@ V Language file
         CONDITIONAL_EXPR
           IS_REF_TYPE_CALL_EXPR
             PsiElement(VlangTokenType.isreftype)('isreftype')
-            PsiElement(VlangTokenType.()('(')
-            TYPE
-              TYPE_MODIFIERS
-                <empty list>
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(VlangTokenType.identifier)('f64')
-            PsiElement(VlangTokenType.))(')')
-          PsiElement(VlangTokenType.==)('==')
-          LITERAL
-            PsiElement(VlangTokenType.false)('false')
-      ASSERT_STATEMENT
-        PsiElement(VlangTokenType.assert)('assert')
-        CONDITIONAL_EXPR
-          IS_REF_TYPE_CALL_EXPR
-            PsiElement(VlangTokenType.isreftype)('isreftype')
-            PsiElement(VlangTokenType.()('(')
-            ARRAY_TYPE
-              TYPE_MODIFIERS
-                <empty list>
+            GENERIC_ARGUMENTS
               PsiElement(VlangTokenType.[)('[')
+              TYPE_LIST_NO_PIN
+                TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
+                  TYPE_REFERENCE_EXPRESSION
+                    PsiElement(VlangTokenType.identifier)('f64')
               PsiElement(VlangTokenType.])(']')
-              TYPE
-                TYPE_MODIFIERS
-                  <empty list>
-                TYPE_REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('f64')
+            PsiElement(VlangTokenType.()('(')
+            PsiElement(VlangTokenType.))(')')
+          PsiElement(VlangTokenType.==)('==')
+          LITERAL
+            PsiElement(VlangTokenType.false)('false')
+      ASSERT_STATEMENT
+        PsiElement(VlangTokenType.assert)('assert')
+        CONDITIONAL_EXPR
+          IS_REF_TYPE_CALL_EXPR
+            PsiElement(VlangTokenType.isreftype)('isreftype')
+            GENERIC_ARGUMENTS
+              PsiElement(VlangTokenType.[)('[')
+              TYPE_LIST_NO_PIN
+                ARRAY_TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
+                  PsiElement(VlangTokenType.[)('[')
+                  PsiElement(VlangTokenType.])(']')
+                  TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
+                    TYPE_REFERENCE_EXPRESSION
+                      PsiElement(VlangTokenType.identifier)('f64')
+              PsiElement(VlangTokenType.])(']')
+            PsiElement(VlangTokenType.()('(')
             PsiElement(VlangTokenType.))(')')
           PsiElement(VlangTokenType.==)('==')
           LITERAL
@@ -233,19 +226,23 @@ V Language file
         CONDITIONAL_EXPR
           IS_REF_TYPE_CALL_EXPR
             PsiElement(VlangTokenType.isreftype)('isreftype')
-            PsiElement(VlangTokenType.()('(')
-            FIXED_SIZE_ARRAY_TYPE
-              TYPE_MODIFIERS
-                <empty list>
+            GENERIC_ARGUMENTS
               PsiElement(VlangTokenType.[)('[')
-              LITERAL
-                PsiElement(VlangTokenType.int)('3')
+              TYPE_LIST_NO_PIN
+                FIXED_SIZE_ARRAY_TYPE
+                  TYPE_MODIFIERS
+                    <empty list>
+                  PsiElement(VlangTokenType.[)('[')
+                  LITERAL
+                    PsiElement(VlangTokenType.int)('3')
+                  PsiElement(VlangTokenType.])(']')
+                  TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
+                    TYPE_REFERENCE_EXPRESSION
+                      PsiElement(VlangTokenType.identifier)('int')
               PsiElement(VlangTokenType.])(']')
-              TYPE
-                TYPE_MODIFIERS
-                  <empty list>
-                TYPE_REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('int')
+            PsiElement(VlangTokenType.()('(')
             PsiElement(VlangTokenType.))(')')
           PsiElement(VlangTokenType.==)('==')
           LITERAL
@@ -279,11 +276,8 @@ V Language file
             IS_REF_TYPE_CALL_EXPR
               PsiElement(VlangTokenType.isreftype)('isreftype')
               PsiElement(VlangTokenType.()('(')
-              TYPE
-                TYPE_MODIFIERS
-                  <empty list>
-                TYPE_REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('T')
+              REFERENCE_EXPRESSION
+                PsiElement(VlangTokenType.identifier)('T')
               PsiElement(VlangTokenType.))(')')
             BLOCK
               PsiElement(VlangTokenType.{)('{')
@@ -442,11 +436,8 @@ V Language file
           IS_REF_TYPE_CALL_EXPR
             PsiElement(VlangTokenType.isreftype)('isreftype')
             PsiElement(VlangTokenType.()('(')
-            TYPE
-              TYPE_MODIFIERS
-                <empty list>
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(VlangTokenType.identifier)('a')
+            REFERENCE_EXPRESSION
+              PsiElement(VlangTokenType.identifier)('a')
             PsiElement(VlangTokenType.))(')')
           PsiElement(VlangTokenType.==)('==')
           LITERAL
@@ -457,11 +448,8 @@ V Language file
           IS_REF_TYPE_CALL_EXPR
             PsiElement(VlangTokenType.isreftype)('isreftype')
             PsiElement(VlangTokenType.()('(')
-            TYPE
-              TYPE_MODIFIERS
-                <empty list>
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(VlangTokenType.identifier)('b')
+            REFERENCE_EXPRESSION
+              PsiElement(VlangTokenType.identifier)('b')
             PsiElement(VlangTokenType.))(')')
           PsiElement(VlangTokenType.==)('==')
           LITERAL
@@ -472,11 +460,8 @@ V Language file
           IS_REF_TYPE_CALL_EXPR
             PsiElement(VlangTokenType.isreftype)('isreftype')
             PsiElement(VlangTokenType.()('(')
-            TYPE
-              TYPE_MODIFIERS
-                <empty list>
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(VlangTokenType.identifier)('c')
+            REFERENCE_EXPRESSION
+              PsiElement(VlangTokenType.identifier)('c')
             PsiElement(VlangTokenType.))(')')
           PsiElement(VlangTokenType.==)('==')
           LITERAL

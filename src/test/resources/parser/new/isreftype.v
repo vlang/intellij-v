@@ -30,9 +30,9 @@ fn test_isreftype() {
 	assert isreftype(S3) == true
 	assert isreftype(S4) == false
 	assert isreftype(S5) == true
-	assert isreftype(f64) == false
-	assert isreftype([]f64) == true
-	assert isreftype([3]int) == false
+	assert isreftype[f64]() == false
+	assert isreftype[[]f64]() == true
+	assert isreftype[[3]int]() == false
 }
 
 fn check_ref<T>() string {

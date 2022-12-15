@@ -49,7 +49,7 @@ class KeywordsCompletionTest : CompletionTestBase() {
         module main
         
         fn main() {
-            dump(expr)<caret>
+            dump(<caret>)
         }
         """.trimIndent()
     )
@@ -66,7 +66,7 @@ class KeywordsCompletionTest : CompletionTestBase() {
         module main
         
         fn main() {
-            isreftype(expr)<caret>
+            isreftype(<caret>)
         }
         """.trimIndent()
     )

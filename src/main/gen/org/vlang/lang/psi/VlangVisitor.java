@@ -1,9 +1,8 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi;
 
-import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiLanguageInjectionHost;
+import org.jetbrains.annotations.NotNull;
 
 public class VlangVisitor extends PsiElementVisitor {
 
@@ -186,6 +185,7 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitDumpCallExpr(@NotNull VlangDumpCallExpr o) {
     visitExpression(o);
+    // visitBuiltinCallOwner(o);
   }
 
   public void visitElement(@NotNull VlangElement o) {
@@ -438,6 +438,7 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitIsRefTypeCallExpr(@NotNull VlangIsRefTypeCallExpr o) {
     visitExpression(o);
+    // visitBuiltinCallOwner(o);
   }
 
   public void visitJsonArgumentList(@NotNull VlangJsonArgumentList o) {
@@ -574,6 +575,7 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitOffsetOfCallExpr(@NotNull VlangOffsetOfCallExpr o) {
     visitExpression(o);
+    // visitBuiltinCallOwner(o);
   }
 
   public void visitOptionType(@NotNull VlangOptionType o) {
@@ -701,6 +703,7 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitSizeOfCallExpr(@NotNull VlangSizeOfCallExpr o) {
     visitExpression(o);
+    // visitBuiltinCallOwner(o);
   }
 
   public void visitSpawnExpression(@NotNull VlangSpawnExpression o) {
@@ -858,6 +861,7 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitTypeOfCallExpr(@NotNull VlangTypeOfCallExpr o) {
     visitExpression(o);
+    // visitBuiltinCallOwner(o);
   }
 
   public void visitTypeReferenceExpression(@NotNull VlangTypeReferenceExpression o) {

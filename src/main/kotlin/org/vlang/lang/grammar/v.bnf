@@ -840,11 +840,11 @@ private DotPrimaryExpr ::=
 
 private BuiltinCall ::= OffsetOfCallExpr | TypeOfCallExpr | SizeOfCallExpr | IsRefTypeCallExpr | DumpCallExpr
 
-IsRefTypeCallExpr ::= isreftype '(' <<typeOrExpressionForSizeOf>> ')' {pin=1}
-SizeOfCallExpr ::= sizeof '(' <<typeOrExpressionForSizeOf>> ')' {pin=1}
-TypeOfCallExpr ::= typeof '(' Expression ')' {pin=1}
-OffsetOfCallExpr ::= offsetof '(' Type ',' ReferenceExpression ')' {pin=1}
-DumpCallExpr ::= dump '(' Expression ')' {pin=1}
+IsRefTypeCallExpr ::= isreftype GenericArguments? '('  Expression? ')' {pin=1 methods=[getReference] implements="org.vlang.lang.psi.VlangBuiltinCallOwner"}
+SizeOfCallExpr ::= sizeof GenericArguments? '('  Expression? ')' {pin=1 methods=[getReference] implements="org.vlang.lang.psi.VlangBuiltinCallOwner"}
+TypeOfCallExpr ::= typeof GenericArguments? '(' Expression? ')' {pin=1 methods=[getReference] implements="org.vlang.lang.psi.VlangBuiltinCallOwner"}
+OffsetOfCallExpr ::= offsetof '(' Type ',' ReferenceExpression ')' {pin=1 methods=[getReference] implements="org.vlang.lang.psi.VlangBuiltinCallOwner"}
+DumpCallExpr ::= dump '(' Expression ')' {pin=1 methods=[getReference] implements="org.vlang.lang.psi.VlangBuiltinCallOwner"}
 
 // just <ident> with reference
 ReferenceExpression ::= identifier { methods=[getReference getQualifier resolve getReadWriteAccess safeAccess] extends=Expression}

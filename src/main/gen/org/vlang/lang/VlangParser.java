@@ -1,15 +1,16 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang;
 
+import com.intellij.lang.ASTNode;
+import com.intellij.lang.LightPsiParser;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
-import static org.vlang.lang.VlangTypes.*;
-import static org.vlang.lang.VlangParserUtil.*;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.tree.TokenSet;
 import com.intellij.lang.PsiParser;
-import com.intellij.lang.LightPsiParser;
+import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.tree.TokenSet;
+
+import static org.vlang.lang.VlangParserUtil.*;
+import static org.vlang.lang.VlangTypes.*;
 
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
 public class VlangParser implements PsiParser, LightPsiParser {
@@ -3295,18 +3296,34 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // isreftype '(' <<typeOrExpressionForSizeOf>> ')'
+  // isreftype GenericArguments? '('  Expression? ')'
   public static boolean IsRefTypeCallExpr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IsRefTypeCallExpr")) return false;
     if (!nextTokenIs(b, ISREFTYPE)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, IS_REF_TYPE_CALL_EXPR, null);
-    r = consumeTokens(b, 1, ISREFTYPE, LPAREN);
+    r = consumeToken(b, ISREFTYPE);
     p = r; // pin = 1
-    r = r && report_error_(b, typeOrExpressionForSizeOf(b, l + 1));
+    r = r && report_error_(b, IsRefTypeCallExpr_1(b, l + 1));
+    r = p && report_error_(b, consumeToken(b, LPAREN)) && r;
+    r = p && report_error_(b, IsRefTypeCallExpr_3(b, l + 1)) && r;
     r = p && consumeToken(b, RPAREN) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
+  }
+
+  // GenericArguments?
+  private static boolean IsRefTypeCallExpr_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IsRefTypeCallExpr_1")) return false;
+    GenericArguments(b, l + 1);
+    return true;
+  }
+
+  // Expression?
+  private static boolean IsRefTypeCallExpr_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IsRefTypeCallExpr_3")) return false;
+    Expression(b, l + 1, -1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -4862,18 +4879,34 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // sizeof '(' <<typeOrExpressionForSizeOf>> ')'
+  // sizeof GenericArguments? '('  Expression? ')'
   public static boolean SizeOfCallExpr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SizeOfCallExpr")) return false;
     if (!nextTokenIs(b, SIZEOF)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, SIZE_OF_CALL_EXPR, null);
-    r = consumeTokens(b, 1, SIZEOF, LPAREN);
+    r = consumeToken(b, SIZEOF);
     p = r; // pin = 1
-    r = r && report_error_(b, typeOrExpressionForSizeOf(b, l + 1));
+    r = r && report_error_(b, SizeOfCallExpr_1(b, l + 1));
+    r = p && report_error_(b, consumeToken(b, LPAREN)) && r;
+    r = p && report_error_(b, SizeOfCallExpr_3(b, l + 1)) && r;
     r = p && consumeToken(b, RPAREN) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
+  }
+
+  // GenericArguments?
+  private static boolean SizeOfCallExpr_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SizeOfCallExpr_1")) return false;
+    GenericArguments(b, l + 1);
+    return true;
+  }
+
+  // Expression?
+  private static boolean SizeOfCallExpr_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SizeOfCallExpr_3")) return false;
+    Expression(b, l + 1, -1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -6221,18 +6254,34 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // typeof '(' Expression ')'
+  // typeof GenericArguments? '(' Expression? ')'
   public static boolean TypeOfCallExpr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeOfCallExpr")) return false;
     if (!nextTokenIs(b, TYPEOF)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, TYPE_OF_CALL_EXPR, null);
-    r = consumeTokens(b, 1, TYPEOF, LPAREN);
+    r = consumeToken(b, TYPEOF);
     p = r; // pin = 1
-    r = r && report_error_(b, Expression(b, l + 1, -1));
+    r = r && report_error_(b, TypeOfCallExpr_1(b, l + 1));
+    r = p && report_error_(b, consumeToken(b, LPAREN)) && r;
+    r = p && report_error_(b, TypeOfCallExpr_3(b, l + 1)) && r;
     r = p && consumeToken(b, RPAREN) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
+  }
+
+  // GenericArguments?
+  private static boolean TypeOfCallExpr_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeOfCallExpr_1")) return false;
+    GenericArguments(b, l + 1);
+    return true;
+  }
+
+  // Expression?
+  private static boolean TypeOfCallExpr_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeOfCallExpr_3")) return false;
+    Expression(b, l + 1, -1);
+    return true;
   }
 
   /* ********************************************************** */

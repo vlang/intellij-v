@@ -5,16 +5,19 @@ import com.intellij.psi.InjectedLanguagePlaces
 import com.intellij.psi.LanguageInjector
 import com.intellij.psi.PsiLanguageInjectionHost
 import com.intellij.psi.search.searches.ReferencesSearch
+import com.intellij.psi.util.PsiTreeUtil
 import org.intellij.lang.regexp.RegExpLanguage
-import org.vlang.lang.psi.VlangCallExpr
-import org.vlang.lang.psi.VlangNamedElement
-import org.vlang.lang.psi.VlangStringLiteral
-import org.vlang.lang.psi.VlangVarDeclaration
+import org.vlang.lang.psi.*
 import org.vlang.utils.parentNth
 
 class VlangRegexLanguageInjector : LanguageInjector {
     override fun getLanguagesToInject(host: PsiLanguageInjectionHost, injectionPlacesRegistrar: InjectedLanguagePlaces) {
         if (host !is VlangStringLiteral) return
+
+        // string with interpolation
+        if (PsiTreeUtil.findChildOfType(host, VlangLongStringTemplateEntry::class.java) != null) {
+            return
+        }
 
         var callExpr = host.parentNth<VlangCallExpr>(4)
 

@@ -289,6 +289,12 @@ object VlangPsiImplUtil {
         return o.referenceExpression.resolve()
     }
 
+    @JvmStatic fun getReference(o: VlangIsRefTypeCallExpr) = VlangBuiltinReference(o)
+    @JvmStatic fun getReference(o: VlangSizeOfCallExpr) = VlangBuiltinReference(o)
+    @JvmStatic fun getReference(o: VlangTypeOfCallExpr) = VlangBuiltinReference(o)
+    @JvmStatic fun getReference(o: VlangOffsetOfCallExpr) = VlangBuiltinReference(o)
+    @JvmStatic fun getReference(o: VlangDumpCallExpr) = VlangBuiltinReference(o)
+
     @JvmStatic
     fun getReference(o: VlangReferenceExpression): VlangReference {
         return VlangReference(o)
@@ -1111,6 +1117,15 @@ object VlangPsiImplUtil {
             return expr.expression?.getType(null)
         }
 
+        if (expr is VlangBuiltinCallOwner) {
+            val reference = expr.getReference()
+            val resolved = reference.resolve()
+            if (resolved is VlangFunctionDeclaration) {
+                val signature = resolved.getSignature() ?: return null
+                return processSignatureReturnType(signature, expr, resolved, false)
+            }
+        }
+
         // ?type or {} -> type
         // !type or {} -> type
         if (expr is VlangOrBlockExpr) {
@@ -1236,16 +1251,7 @@ object VlangPsiImplUtil {
                 if (type != null) return unwrapOptionOrResultTypeIf(type, needUnwrapOptional)
             }
 
-            val result = signature.result ?: return VlangVoidTypeEx.INSTANCE
-            val resultType = result.type.toEx()
-            if (resultType.isGeneric()) {
-                return unwrapOptionOrResultTypeIf(
-                    VlangGenericInferer.inferGenericCall(expr, owner, resultType),
-                    needUnwrapOptional
-                )
-            }
-
-            return unwrapOptionOrResultTypeIf(resultType, needUnwrapOptional)
+            return processSignatureReturnType(signature, expr, owner, needUnwrapOptional)
         }
 
         if (expr is VlangDotExpression) {
@@ -1323,6 +1329,24 @@ object VlangPsiImplUtil {
         }
 
         return null
+    }
+
+    private fun processSignatureReturnType(
+        signature: VlangSignature,
+        expr: VlangExpression,
+        owner: VlangSignatureOwner,
+        needUnwrapOptional: Boolean,
+    ): VlangTypeEx? {
+        val result = signature.result ?: return VlangVoidTypeEx.INSTANCE
+        val resultType = result.type.toEx()
+        if (resultType.isGeneric() && expr is VlangGenericArgumentsOwner) {
+            return unwrapOptionOrResultTypeIf(
+                VlangGenericInferer.inferGenericCall(expr, owner, resultType),
+                needUnwrapOptional
+            )
+        }
+
+        return unwrapOptionOrResultTypeIf(resultType, needUnwrapOptional)
     }
 
     private fun processMapArrayMethodCall(

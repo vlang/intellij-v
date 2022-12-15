@@ -18,7 +18,7 @@ module attributes
 //     foo() // ok
 //   }
 // }
-//```
+// ```
 [attribute]
 pub struct Unsafe {
 	name            string   = 'unsafe'
