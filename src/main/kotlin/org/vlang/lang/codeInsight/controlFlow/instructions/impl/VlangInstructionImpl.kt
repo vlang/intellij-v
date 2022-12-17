@@ -5,7 +5,7 @@ import com.intellij.psi.PsiElement
 import org.vlang.lang.codeInsight.controlFlow.instructions.VlangInstruction
 import org.vlang.lang.codeInsight.controlFlow.instructions.VlangInstructionProcessor
 
-abstract class VlangInstructionImpl(val anchor: PsiElement?) : VlangInstruction {
+abstract class VlangInstructionImpl(override val anchor: PsiElement?) : VlangInstruction {
     override var id: Int = 0
 
     private val predecessors = mutableListOf<VlangInstruction>()

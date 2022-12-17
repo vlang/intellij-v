@@ -133,10 +133,12 @@ open class VlangControlFlowBuilder(private val scopeHolder: PsiElement) {
         private fun visitQualifier(qualifier: VlangCompositeElement?, onResolved: (PsiElement) -> Unit) {
             if (qualifier == null) return
             val refExpr = qualifier as? VlangReferenceExpression
-            val resolved = refExpr?.resolve() ?: return
-            onResolved(resolved)
+            val resolved = refExpr?.resolve()
+            if (resolved != null) {
+                onResolved(resolved)
+            }
 
-            val next = refExpr.getQualifier() ?: return
+            val next = refExpr?.getQualifier() ?: return
             visitQualifier(next, onResolved)
         }
 
@@ -147,6 +149,10 @@ open class VlangControlFlowBuilder(private val scopeHolder: PsiElement) {
                 addInstruction(VlangAccessVariableInstructionImpl(expr, resolved, expr.readWriteAccess))
             }
 
+            if (resolved is VlangParamDefinition) {
+                addInstruction(VlangAccessParameterInstructionImpl(expr, resolved, expr.readWriteAccess))
+            }
+
             if (resolved is VlangFieldDefinition) {
                 addInstruction(VlangAccessFieldInstructionImpl(expr, resolved, expr.readWriteAccess))
             }
@@ -154,11 +160,15 @@ open class VlangControlFlowBuilder(private val scopeHolder: PsiElement) {
             val qualifier = expr.getQualifier()
             visitQualifier(qualifier) { next ->
                 if (next is VlangVarDefinition) {
-                    addInstruction(VlangAccessVariableInstructionImpl(expr, next, expr.readWriteAccess))
+                    addInstruction(VlangAccessVariableInstructionImpl(qualifier!!, next, expr.readWriteAccess))
+                }
+
+                if (next is VlangParamDefinition) {
+                    addInstruction(VlangAccessParameterInstructionImpl(qualifier!!, next, expr.readWriteAccess))
                 }
 
                 if (next is VlangFieldDefinition) {
-                    addInstruction(VlangAccessFieldInstructionImpl(expr, next, expr.readWriteAccess))
+                    addInstruction(VlangAccessFieldInstructionImpl(qualifier!!, next, expr.readWriteAccess))
                 }
             }
         }

@@ -49,6 +49,10 @@ abstract class VlangInstructionProcessor {
         return processInstruction(instruction)
     }
 
+    open fun processAccessParameterInstruction(instruction: VlangAccessParameterInstruction): Boolean {
+        return processInstruction(instruction)
+    }
+
     open fun processAccessFieldInstruction(instruction: VlangAccessFieldInstruction): Boolean {
         return processInstruction(instruction)
     }
