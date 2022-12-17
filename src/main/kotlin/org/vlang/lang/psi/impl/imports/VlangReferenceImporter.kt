@@ -35,7 +35,5 @@ class VlangReferenceImporter : ReferenceImporter {
         return false
     }
 
-    override fun isAddUnambiguousImportsOnTheFlyEnabled(file: PsiFile): Boolean {
-        return true
-    }
+    override fun isAddUnambiguousImportsOnTheFlyEnabled(file: PsiFile): Boolean = true
 }

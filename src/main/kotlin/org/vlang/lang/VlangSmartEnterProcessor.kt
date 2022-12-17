@@ -8,6 +8,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangElementFactory
 
+// TODO: refactor this and enable
 class VlangSmartEnterProcessor : SmartEnterProcessorWithFixers() {
     init {
         addFixers(

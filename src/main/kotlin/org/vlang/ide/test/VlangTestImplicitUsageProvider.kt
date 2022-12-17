@@ -3,6 +3,7 @@ package org.vlang.ide.test
 import com.intellij.codeInsight.daemon.ImplicitUsageProvider
 import com.intellij.openapi.roots.TestSourcesFilter
 import com.intellij.psi.PsiElement
+import org.vlang.lang.psi.VlangFile
 import org.vlang.lang.psi.VlangFunctionDeclaration
 
 /**
@@ -14,13 +15,13 @@ class VlangTestImplicitUsageProvider : ImplicitUsageProvider {
             return false
         }
 
-        val containingFile = element.containingFile ?: return false
+        val containingFile = element.containingFile as? VlangFile ?: return false
 
         if (!TestSourcesFilter.isTestSources(containingFile.virtualFile, element.project)) {
             return false
         }
 
-        return true
+        return VlangTestUtil.isTestFunction(element)
     }
 
     override fun isImplicitRead(element: PsiElement) = false

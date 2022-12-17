@@ -22,6 +22,10 @@ class VlangEnterHandlerDelegate : EnterHandlerDelegate {
         dataContext: DataContext,
         originalHandler: EditorActionHandler?,
     ): EnterHandlerDelegate.Result {
+        if (file !is VlangFile) {
+            return EnterHandlerDelegate.Result.Continue
+        }
+
         val offset = editor.caretModel.currentCaret.offset
         val document = editor.document
         val prevElement = file.findElementAt(offset - 1)?.parentOfType<PsiComment>()
@@ -36,6 +40,10 @@ class VlangEnterHandlerDelegate : EnterHandlerDelegate {
     }
 
     override fun postProcessEnter(file: PsiFile, editor: Editor, dataContext: DataContext): EnterHandlerDelegate.Result {
+        if (file !is VlangFile) {
+            return EnterHandlerDelegate.Result.Continue
+        }
+
         val offset = editor.caretModel.currentCaret.offset
 
         if (wasAddedComment) {

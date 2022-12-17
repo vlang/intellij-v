@@ -1,4 +1,4 @@
-<idea-plugin>
+<idea-plugin xmlns:xi="http://www.w3.org/2001/XInclude">
     <id>org.vlang</id>
     <name>Vlang</name>
     <vendor>Petr Makhnev</vendor>
@@ -12,61 +12,74 @@ The plugin provides support for V language
     <depends optional="true" config-file="idea-plugin.xml">com.intellij.java</depends>
     <depends optional="true" config-file="native-debug-support.xml">com.intellij.nativeDebug</depends>
 
+    <xi:include href="/META-INF/inspections.xml" xpointer="xpointer(/idea-plugin/*)"/>
+    <xi:include href="/META-INF/intentions.xml" xpointer="xpointer(/idea-plugin/*)"/>
+
     <extensions defaultExtensionNs="com.intellij">
-        <!-- V File -->
+        <!-- V Language -->
         <fileType name="V"
                   implementationClass="org.vlang.lang.VlangFileType"
                   fieldName="INSTANCE"
                   language="vlang"
                   extensions="v; vsh"/>
 
-        <lang.parserDefinition language="vlang"
-                               implementationClass="org.vlang.lang.VlangParserDefinition"/>
-
-        <lang.syntaxHighlighterFactory language="vlang"
-                                       implementationClass="org.vlang.lang.VlangSyntaxHighlighterFactory"/>
-
+        <!-- region Language general -->
+        <lang.parserDefinition language="vlang" implementationClass="org.vlang.lang.VlangParserDefinition"/>
         <lang.commenter language="vlang" implementationClass="org.vlang.lang.VlangCommenter"/>
+        <lang.braceMatcher language="vlang" implementationClass="org.vlang.lang.VlangBraceMatcher"/>
+        <lang.quoteHandler language="vlang" implementationClass="org.vlang.lang.VlangQuoteHandler"/>
+        <lang.foldingBuilder language="vlang" implementationClass="org.vlang.lang.folding.VlangFoldingBuilder"/>
+        <lang.findUsagesProvider language="vlang" implementationClass="org.vlang.lang.usages.VlangFindUsagesProvider"/>
+        <lang.syntaxHighlighterFactory language="vlang" implementationClass="org.vlang.lang.VlangSyntaxHighlighterFactory"/>
+        <lang.psiStructureViewFactory language="vlang" implementationClass="org.vlang.lang.structure.VlangStructureViewFactory"/>
+        <lang.elementManipulator forClass="org.vlang.lang.psi.VlangStringLiteral"
+                                 implementationClass="org.vlang.lang.psi.impl.manipulator.VlangStringLiteralManipulator"/>
 
-        <lang.braceMatcher language="vlang"
-                           implementationClass="org.vlang.lang.VlangBraceMatcher"/>
+        <spellchecker.support language="vlang" implementationClass="org.vlang.lang.VlangSpellcheckingStrategy"/>
+        <readWriteAccessDetector implementation="org.vlang.lang.usages.VlangReadWriteAccessDetector"/>
+        <!-- endregion Language general -->
 
-        <lang.quoteHandler language="vlang"
-                           implementationClass="org.vlang.lang.VlangQuoteHandler"/>
+        <!-- region Annotator -->
+        <annotator language="vlang" order="first" id="org.vlang.lang.annotator.VlangAnnotator"
+                   implementationClass="org.vlang.lang.annotator.VlangAnnotator"/>
+        <annotator language="vlang" order="first" id="org.vlang.lang.annotator.VlangDocAnnotator"
+                   implementationClass="org.vlang.lang.annotator.VlangDocAnnotator"/>
+        <!-- endregion Annotator -->
 
-        <lang.foldingBuilder language="vlang"
-                             implementationClass="org.vlang.lang.folding.VlangFoldingBuilder"/>
-
-        <lang.findUsagesProvider language="vlang"
-                                 implementationClass="org.vlang.lang.usages.VlangFindUsagesProvider"/>
-        <lang.psiStructureViewFactory language="vlang"
-                                      implementationClass="org.vlang.lang.structure.VlangStructureViewFactory"/>
-<!--        <lang.smartEnterProcessor language="vlang"-->
-<!--                                  order="first"-->
-<!--                                  implementationClass="org.vlang.lang.VlangSmartEnterProcessor"/>-->
-
-        <spellchecker.support language="vlang"
-                              implementationClass="org.vlang.ide.inspections.VlangSpellcheckingStrategy"/>
-
+        <!-- region Formatter -->
         <lang.formatter language="vlang" implementationClass="org.vlang.lang.formatter.VlangFormattingModelBuilder"/>
         <codeStyleSettingsProvider implementation="org.vlang.lang.formatter.VlangCodeStyleSettingsProvider"/>
         <langCodeStyleSettingsProvider implementation="org.vlang.lang.formatter.VlangLanguageCodeStyleSettingsProvider"/>
+        <formattingService implementation="org.vlang.lang.formatter.VlangFormattingService"/>
+        <!-- endregion Formatter -->
 
+        <!-- region GoTo -->
         <gotoClassContributor implementation="org.vlang.ide.go.VlangGotoClassLikeContributor"/>
         <gotoSymbolContributor implementation="org.vlang.ide.go.VlangGotoSymbolContributor"/>
+        <!-- endregion GoTo -->
 
-        <lang.importOptimizer language="vlang"
-                              implementationClass="org.vlang.ide.codeInsight.imports.VlangImportOptimizer"/>
+        <!-- region Imports -->
+        <lang.importOptimizer language="vlang" implementationClass="org.vlang.lang.psi.impl.imports.VlangImportOptimizer"/>
         <referenceImporter implementation="org.vlang.lang.psi.impl.imports.VlangReferenceImporter"/>
         <applicationService serviceImplementation="org.vlang.ide.codeInsight.imports.VlangCodeInsightSettings"/>
+        <!-- endregion Imports -->
 
-        <readWriteAccessDetector implementation="org.vlang.lang.usages.VlangReadWriteAccessDetector"/>
-
+        <!-- region CodeVision & Hints -->
         <vcs.codeVisionLanguageContext language="vlang"
                                        implementationClass="org.vlang.ide.hints.VlangCodeVisionLanguageContext"/>
+        <codeInsight.inlayProvider language="vlang"
+                                   implementationClass="org.vlang.ide.hints.VlangInlayHintsProvider"/>
+        <codeInsight.parameterNameHints language="vlang" id="VlangParameterNameHintsProvider"
+                                        implementationClass="org.vlang.ide.hints.VlangParameterNameHintsProvider"/>
+        <codeInsight.daemonBoundCodeVisionProvider implementation="org.vlang.ide.hints.VlangUsagesCodeVisionProvider"/>
+        <codeInsight.daemonBoundCodeVisionProvider implementation="org.vlang.ide.hints.VlangInheritorsCodeVisionProvider"/>
+        <!-- endregion CodeVision & Hints -->
 
+        <!-- region Project View -->
         <projectViewNodeDecorator implementation="org.vlang.ide.projectview.ProjectViewDecorator"/>
+        <!-- endregion Project View -->
 
+        <!-- region Indexes -->
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangModulesIndex"/>
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangModulesFingerprintIndex"/>
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangMethodIndex"/>
@@ -78,14 +91,15 @@ The plugin provides support for V language
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangClassLikeIndex"/>
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangInterfaceInheritorsIndex"/>
         <stubElementTypeHolder class="org.vlang.lang.VlangTypes"/>
+        <!-- endregion Indexes -->
 
-        <lang.elementManipulator forClass="org.vlang.lang.psi.VlangStringLiteral"
-                                 implementationClass="org.vlang.lang.psi.impl.manipulator.VlangStringLiteralManipulator"/>
-
+        <!-- region Injection -->
         <languageInjectionPerformer language="vlang"
                                     implementationClass="org.vlang.ide.injection.VlangLanguageInjectionPerformer"/>
+        <languageInjector implementation="org.vlang.ide.injection.VlangRegexLanguageInjector"/>
+        <!-- endregion Injection -->
 
-        <!-- Searches -->
+        <!-- region Searches -->
         <referencesSearch implementation="org.vlang.lang.usages.VlangModuleClauseUsagesSearcher"/>
 
         <definitionsScopedSearch implementation="org.vlang.lang.search.VlangInheritorsSearch"/>
@@ -101,362 +115,137 @@ The plugin provides support for V language
                                         implementationClass="org.vlang.lang.search.VlangSuperMarkerProvider"/>
         <codeInsight.gotoSuper language="vlang"
                                implementationClass="org.vlang.lang.search.VlangGotoSuperHandler"/>
-        <!-- Searches End -->
+        <!--  endregion Searches -->
 
-        <postStartupActivity implementation="org.vlang.ide.VlangPostStartupActivity"/>
-
-        <codeInsight.lineMarkerProvider language="vlang"
-                                        implementationClass="org.vlang.ide.highlight.VlangRecursiveCallMarkerProvider"/>
-        <codeInsight.inlayProvider language="vlang"
-                                   implementationClass="org.vlang.ide.hints.VlangInlayHintsProvider"/>
+        <!-- region Code Insight -->
         <highlightUsagesHandlerFactory
-          implementation="org.vlang.ide.highlight.exitpoint.VlangHighlightExitPointsHandlerFactory"/>
+            implementation="org.vlang.ide.highlight.exitpoint.VlangHighlightExitPointsHandlerFactory"/>
+        <codeInsight.typeInfo language="vlang" implementationClass="org.vlang.ide.codeInsight.VlangTypeInfoProvider"/>
         <codeInsight.parameterInfo language="vlang"
                                    implementationClass="org.vlang.ide.codeInsight.VlangParameterInfoHandler"/>
-        <codeInsight.parameterNameHints language="vlang" id="VlangParameterNameHintsProvider"
-                                        implementationClass="org.vlang.ide.hints.VlangParameterNameHintsProvider"/>
-        <codeInsight.typeInfo language="vlang" implementationClass="org.vlang.ide.codeInsight.VlangTypeInfoProvider"/>
-        <codeInsight.daemonBoundCodeVisionProvider implementation="org.vlang.ide.hints.VlangUsagesCodeVisionProvider"/>
-        <codeInsight.daemonBoundCodeVisionProvider implementation="org.vlang.ide.hints.VlangInheritorsCodeVisionProvider"/>
-<!--        <typeDeclarationProvider implementation="com.goide.editor.GoTypeDeclarationProvider"/>-->
+        <codeInsight.lineMarkerProvider language="vlang"
+                                        implementationClass="org.vlang.ide.highlight.VlangRecursiveCallMarkerProvider"/>
+        <!-- endregion Code Insight -->
 
-        <annotator language="vlang" order="first" id="org.vlang.lang.annotator.VlangAnnotator"
-                   implementationClass="org.vlang.lang.annotator.VlangAnnotator"/>
-        <annotator language="vlang" order="first" id="org.vlang.lang.annotator.VlangDocAnnotator"
-                   implementationClass="org.vlang.lang.annotator.VlangDocAnnotator"/>
+        <!-- region Documentation -->
         <documentationProvider implementation="org.vlang.ide.documentation.VlangDocumentationProvider"/>
+        <!-- endregion Documentation -->
 
-        <lang.inspectionSuppressor language="vlang"
-                                   implementationClass="org.vlang.ide.inspections.suppression.VlangInspectionSuppressor"/>
-
-        <!-- Probable bugs inspections -->
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Probable bugs" shortName="VlangControlFlowWithEmptyBodiesInspection"
-                         displayName="Control flow with empty body"
-                         enabledByDefault="true" level="WARNING"
-                         implementationClass="org.vlang.ide.inspections.probableBugs.VlangControlFlowWithEmptyBodiesInspection"/>
-
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Probable bugs" shortName="VlangVariableNotCapturedInspection"
-                         displayName="Usage of non captured variable"
-                         enabledByDefault="true" level="ERROR"
-                         implementationClass="org.vlang.ide.inspections.probableBugs.VlangVariableNotCapturedInspection"/>
-        <!-- Probable bugs inspections End -->
-
-        <!-- General inspections -->
-        <localInspection language="vlang" groupPath="V"
-                        groupName="General" shortName="VlangUnresolvedReferenceInspection"
-                        displayName="Unresolved reference"
-                        enabledByDefault="true" level="ERROR"
-                        implementationClass="org.vlang.ide.inspections.general.VlangUnresolvedReferenceInspection"/>
-
-        <localInspection language="vlang" groupPath="V"
-                        groupName="General" shortName="VlangUnresolvedImportInspection"
-                        displayName="Unresolved import"
-                        enabledByDefault="false" level="ERROR"
-                        implementationClass="org.vlang.ide.inspections.general.VlangUnresolvedImportInspection"/>
-
-        <localInspection language="vlang" groupPath="V"
-                         groupName="General" shortName="VlangUnresolvedLabelInspection"
-                         displayName="Unresolved label"
-                         enabledByDefault="true" level="ERROR"
-                         implementationClass="org.vlang.ide.inspections.general.VlangUnresolvedLabelInspection"/>
-
-        <localInspection language="vlang" groupPath="V"
-                         groupName="General" shortName="VlangVariableRedeclarationInspection"
-                         displayName="Variable redeclaration"
-                         enabledByDefault="true" level="ERROR"
-                         implementationClass="org.vlang.ide.inspections.general.VlangVariableRedeclarationInspection"/>
-
-        <localInspection language="vlang" groupPath="V"
-                         groupName="General" shortName="VlangDuplicateFieldInspection"
-                         displayName="Duplicate field in struct/interface/enum/union"
-                         enabledByDefault="true" level="ERROR"
-                         implementationClass="org.vlang.ide.inspections.general.VlangDuplicateFieldInspection"/>
-
-        <localInspection language="vlang" groupPath="V"
-                         groupName="General" shortName="VlangAmbiguousImportInspection"
-                         displayName="Ambiguous import"
-                         enabledByDefault="true" level="ERROR"
-                         implementationClass="org.vlang.ide.inspections.general.VlangAmbiguousImportInspection"/>
-
-        <localInspection language="vlang" groupPath="V"
-                         groupName="General" shortName="VlangAccessingPrivateSymbolInspection"
-                         displayName="Accessing private symbol or member"
-                         enabledByDefault="false" level="ERROR"
-                         implementationClass="org.vlang.ide.inspections.general.VlangAccessingPrivateSymbolInspection"/>
-
-        <localInspection language="vlang" groupPath="V"
-                         groupName="General" shortName="VlangRawOptionOrResultTypeUsedInspection"
-                         displayName="Raw option or result type used"
-                         enabledByDefault="true" level="ERROR"
-                         implementationClass="org.vlang.ide.inspections.general.VlangRawOptionOrResultTypeUsedInspection"/>
-
-        <localInspection language="vlang" groupPath="V"
-                         groupName="General" shortName="VlangMissingFunctionNameInDocInspection"
-                         displayName="Missing function name in doc"
-                         enabledByDefault="false" level="WEAK WARNING"
-                         implementationClass="org.vlang.ide.inspections.general.VlangMissingFunctionNameInDocInspection"/>
-
-        <localInspection language="vlang" groupPath="V"
-                         groupName="General" shortName="VlangCannotInferTypeInspection"
-                         displayName="Cannot infer type"
-                         enabledByDefault="false" level="ERROR"
-                         implementationClass="org.vlang.ide.inspections.general.VlangCannotInferTypeInspection"/>
-        <!-- General inspections End -->
-
-        <!-- Validity issues inspections -->
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Validity issues" shortName="VlangReassignImmutableSymbolInspection"
-                         displayName="Attempt to assign to immutable variable/receiver or constant"
-                         enabledByDefault="true" level="ERROR"
-                         implementationClass="org.vlang.ide.inspections.validityIssues.VlangReassignImmutableSymbolInspection"/>
-
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Validity issues" shortName="VlangModuleNameDoesntMatchDirectoryNameInspection"
-                         displayName="Module name doesn't match directory name"
-                         enabledByDefault="true" level="ERROR"
-                         implementationClass="org.vlang.ide.inspections.validityIssues.VlangModuleNameDoesntMatchDirectoryNameInspection"/>
-        <!-- Validity issues inspections End -->
-
-        <!-- Unsafe inspections -->
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Unsafe" shortName="VlangLabelOutsideUnsafeInspection"
-                         displayName="'go to' statement outside unsafe block"
-                         enabledByDefault="true" level="WARNING"
-                         implementationClass="org.vlang.ide.inspections.unsafe.VlangLabelOutsideUnsafeInspection"/>
-
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Unsafe" shortName="VlangNilOutsideUnsafeInspection"
-                         displayName="'nil' usage outside unsafe block"
-                         enabledByDefault="true" level="WARNING"
-                         implementationClass="org.vlang.ide.inspections.unsafe.VlangNilOutsideUnsafeInspection"/>
-        <!-- Unsafe inspections End -->
-
-        <!-- Style issue -->
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Style issues" shortName="VlangRedundantParenthesesInspection"
-                         displayName="Redundant parentheses"
-                         enabledByDefault="true" level="WARNING"
-                         implementationClass="org.vlang.ide.inspections.style.VlangRedundantParenthesesInspection"/>
-        <!-- Style issue End -->
-
-        <!-- Naming conventions -->
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Naming conventions" shortName="VlangClassLikeNamingConventionInspection"
-                         displayName="Struct/interface/enum/union naming convention"
-                         enabledByDefault="true" level="ERROR"
-                         implementationClass="org.vlang.ide.inspections.namingConventions.VlangClassLikeNamingConventionInspection"/>
-
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Naming conventions" shortName="VlangTypeAliasNamingConventionInspection"
-                         displayName="Type alias naming convention"
-                         enabledByDefault="true" level="ERROR"
-                         implementationClass="org.vlang.ide.inspections.namingConventions.VlangTypeAliasNamingConventionInspection"/>
-
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Naming conventions" shortName="VlangFunctionNamingConventionInspection"
-                         displayName="Function and method naming convention"
-                         enabledByDefault="true" level="ERROR"
-                         implementationClass="org.vlang.ide.inspections.namingConventions.VlangFunctionNamingConventionInspection"/>
-
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Naming conventions" shortName="VlangModuleNamingConventionInspection"
-                         displayName="Module naming convention"
-                         enabledByDefault="true" level="ERROR"
-                         implementationClass="org.vlang.ide.inspections.namingConventions.VlangModuleNamingConventionInspection"/>
-
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Naming conventions" shortName="VlangFieldNamingConventionInspection"
-                         displayName="Field naming convention"
-                         enabledByDefault="true" level="ERROR"
-                         implementationClass="org.vlang.ide.inspections.namingConventions.VlangFieldNamingConventionInspection"/>
-
-       <localInspection language="vlang" groupPath="V"
-                        groupName="Naming conventions" shortName="VlangConstantNamingConventionInspection"
-                        displayName="Constant naming convention"
-                        enabledByDefault="true" level="ERROR"
-                        implementationClass="org.vlang.ide.inspections.namingConventions.VlangConstantNamingConventionInspection"/>
-        <!-- Naming conventions End -->
-
-        <!-- Types Mismatch -->
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Types mismatch" shortName="VlangAssignTypeMismatchInspection"
-                         displayName="Type mismatch in assignment"
-                         enabledByDefault="false" level="ERROR"
-                         implementationClass="org.vlang.ide.inspections.typeMismatch.VlangAssignTypeMismatchInspection"/>
-        <!-- Types Mismatch End -->
-
-        <!-- Unused inspections -->
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Unused" shortName="VlangUnusedParameterInspection"
-                         displayName="Unused parameter inspection"
-                         enabledByDefault="true" level="WARNING"
-                         implementationClass="org.vlang.ide.inspections.unused.VlangUnusedParameterInspection"/>
-
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Unused" shortName="VlangUnusedLabelInspection"
-                         displayName="Unused label inspection"
-                         enabledByDefault="true" level="WARNING"
-                         implementationClass="org.vlang.ide.inspections.unused.VlangUnusedLabelInspection"/>
-
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Unused" shortName="VlangUnusedImportInspection"
-                         displayName="Unused import inspection"
-                         enabledByDefault="true" level="WARNING"
-                         implementationClass="org.vlang.ide.inspections.unused.VlangUnusedImportInspection"/>
-        <!-- Unused inspections End -->
-
-        <!-- Control flow inspections EXPERIMENTAL -->
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Control flow" shortName="VlangUnreachableStatementInspection"
-                         displayName="Unreachable statement"
-                         enabledByDefault="false" level="WARNING"
-                         implementationClass="org.vlang.ide.inspections.controlFlow.VlangUnreachableStatementInspection"/>
-
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Control flow" shortName="VlangVariableCanBeImmutableInspection"
-                         displayName="Variable can be immutable"
-                         enabledByDefault="false" level="WARNING"
-                         implementationClass="org.vlang.ide.inspections.controlFlow.VlangVariableCanBeImmutableInspection"/>
-        <!-- Control flow inspections End -->
-
-        <!-- Intentions -->
-        <intentionAction>
-            <language>vlang</language>
-            <className>org.vlang.ide.intentions.VlangMakePublicIntention</className>
-            <category>V</category>
-        </intentionAction>
-
-        <intentionAction>
-            <language>vlang</language>
-            <className>org.vlang.ide.intentions.VlangMakePrivateIntention</className>
-            <category>V</category>
-        </intentionAction>
-
-        <intentionAction>
-            <language>vlang</language>
-            <className>org.vlang.ide.intentions.VlangMethodToFunctionIntention</className>
-            <category>V</category>
-        </intentionAction>
-
-        <intentionAction>
-            <language>vlang</language>
-            <className>org.vlang.ide.intentions.VlangFunctionToMethodIntention</className>
-            <category>V</category>
-        </intentionAction>
-        <!-- End of Intentions -->
-
-        <!-- Postfix Templates -->
+        <!-- region Postfix Templates -->
         <codeInsight.template.postfixTemplateProvider
-          language="vlang"
-          implementationClass="org.vlang.ide.templates.postfix.VlangPostfixTemplateProvider"/>
-        <!-- Postfix Templates End -->
+            language="vlang"
+            implementationClass="org.vlang.ide.templates.postfix.VlangPostfixTemplateProvider"/>
+        <!-- endregion Postfix Templates -->
 
-        <runLineMarkerContributor id="VlangRunLineMarkerProvider" language="vlang"
-                                  implementationClass="org.vlang.ide.run.VlangRunLineMarkerProvider"/>
+        <!-- region Completion -->
+        <completion.contributor
+            language="vlang"
+            id="VlangCommonAttributesCompletionContributor"
+            order="first"
+            implementationClass="org.vlang.lang.completion.VlangAttributesCompletionContributor"/>
 
         <completion.contributor
-          language="vlang"
-          id="VlangCommonAttributesCompletionContributor"
-          order="first"
-          implementationClass="org.vlang.lang.completion.VlangAttributesCompletionContributor"/>
+            language="vlang"
+            id="VlangMapCompletionContributor"
+            order="after VlangCommonAttributesCompletionContributor"
+            implementationClass="org.vlang.lang.completion.VlangMapCompletionContributor"/>
 
         <completion.contributor
-          language="vlang"
-          id="VlangMapCompletionContributor"
-          order="after VlangCommonAttributesCompletionContributor"
-          implementationClass="org.vlang.lang.completion.VlangMapCompletionContributor"/>
+            language="vlang"
+            id="VlangKeywordsCompletionContributor"
+            order="after VlangCommonAttributesCompletionContributor"
+            implementationClass="org.vlang.lang.completion.VlangKeywordsCompletionContributor"/>
 
         <completion.contributor
-          language="vlang"
-          id="VlangKeywordsCompletionContributor"
-          order="after VlangCommonAttributesCompletionContributor"
-          implementationClass="org.vlang.lang.completion.VlangKeywordsCompletionContributor"/>
+            language="vlang"
+            id="VlangReturnCompletionContributor"
+            order="after VlangCommonAttributesCompletionContributor"
+            implementationClass="org.vlang.lang.completion.VlangReturnCompletionContributor"/>
 
         <completion.contributor
-          language="vlang"
-          id="VlangReturnCompletionContributor"
-          order="after VlangCommonAttributesCompletionContributor"
-          implementationClass="org.vlang.lang.completion.VlangReturnCompletionContributor"/>
+            language="vlang"
+            id="VlangClosureCompletionContributor"
+            order="after VlangKeywordsCompletionContributor"
+            implementationClass="org.vlang.lang.completion.VlangClosureCompletionContributor"/>
 
         <completion.contributor
-          language="vlang"
-          id="VlangClosureCompletionContributor"
-          order="after VlangKeywordsCompletionContributor"
-          implementationClass="org.vlang.lang.completion.VlangClosureCompletionContributor"/>
+            language="vlang"
+            id="VlangMethodCompletionContributor"
+            order="after VlangKeywordsCompletionContributor"
+            implementationClass="org.vlang.lang.completion.VlangMethodCompletionContributor"/>
 
         <completion.contributor
-          language="vlang"
-          id="VlangMethodCompletionContributor"
-          order="after VlangKeywordsCompletionContributor"
-          implementationClass="org.vlang.lang.completion.VlangMethodCompletionContributor"/>
+            language="vlang"
+            id="VlangModuleNameCompletionContributor"
+            order="after VlangClosureCompletionContributor"
+            implementationClass="org.vlang.lang.completion.VlangModuleNameCompletionContributor"/>
 
         <completion.contributor
-          language="vlang"
-          id="VlangModuleNameCompletionContributor"
-          order="after VlangClosureCompletionContributor"
-          implementationClass="org.vlang.lang.completion.VlangModuleNameCompletionContributor"/>
+            language="vlang"
+            id="VlangPrimitiveTypesContributor"
+            order="after VlangModuleNameCompletionContributor"
+            implementationClass="org.vlang.lang.completion.VlangTypesContributor"/>
 
         <completion.contributor
-          language="vlang"
-          id="VlangPrimitiveTypesContributor"
-          order="after VlangModuleNameCompletionContributor"
-          implementationClass="org.vlang.lang.completion.VlangTypesContributor"/>
-
-        <completion.contributor
-          language="vlang"
-          id="VlangContextCompletionContributor"
-          order="after VlangPrimitiveTypesContributor"
-          implementationClass="org.vlang.lang.completion.VlangContextCompletionContributor"/>
+            language="vlang"
+            id="VlangContextCompletionContributor"
+            order="after VlangPrimitiveTypesContributor"
+            implementationClass="org.vlang.lang.completion.VlangContextCompletionContributor"/>
 
         <typedHandler implementation="org.vlang.lang.completion.VlangTypedHandler"/>
         <enterHandlerDelegate implementation="org.vlang.lang.completion.VlangEnterHandlerDelegate"/>
         <backspaceHandlerDelegate order="first" implementation="org.vlang.lang.completion.VlangBackspaceHandlerDelegate"/>
-        <formattingService implementation="org.vlang.lang.formatter.VlangFormattingService"/>
+        <!-- endregion Completion -->
 
+        <!-- region Editor -->
+        <postStartupActivity implementation="org.vlang.ide.VlangPostStartupActivity"/>
         <stripTrailingSpacesFilterFactory implementation="org.vlang.ide.editor.VlangStripTrailingSpacesFilterFactory"/>
-        <colorSettingsPage implementation="org.vlang.ide.colors.VlangColorsSettingsPage"/>
-        <languageInjector implementation="org.vlang.ide.injection.VlangRegexLanguageInjector"/>
+        <!-- endregion Editor -->
 
-        <!--  Refactorings -->
+        <!-- region Refactorings -->
         <statementUpDownMover implementation="org.vlang.ide.refactoring.VlangStatementUpDownMover"/>
         <lang.refactoringSupport language="vlang"
                                  implementationClass="org.vlang.ide.refactoring.VlangRefactoringSupportProvider"/>
-        <!--  End of Refactorings -->
-        <!-- End of V File -->
+        <!-- endregion Refactorings -->
 
-        <!-- Project -->
+        <!-- endregion V File -->
+
+        <!-- region Project -->
         <projectConfigurable groupId="language" instance="org.vlang.configurations.VlangProjectSettingsConfigurable"
                              id="MainVlangSettings"
                              dynamic="true" displayName="V"/>
-        <projectConfigurable parentId="MainVlangSettings" instance="org.vlang.configurations.VlangFmtSettingsConfigurable"
+        <projectConfigurable parentId="MainVlangSettings"
+                             instance="org.vlang.configurations.VlangFmtSettingsConfigurable"
                              id="org.vlang.configurations.VlangProjectSettingsConfigurable"
                              dynamic="true" displayName="Vfmt"/>
-        <applicationConfigurable parentId="MainVlangSettings" instance="org.vlang.configurations.VlangDebuggerSettingsConfigurable"
+        <applicationConfigurable parentId="MainVlangSettings"
+                                 instance="org.vlang.configurations.VlangDebuggerSettingsConfigurable"
                                  id="org.vlang.configurations.VlangDebuggerSettingsConfigurable"
                                  dynamic="true" displayName="Debugger"/>
+
         <projectService serviceImplementation="org.vlang.configurations.VlangConfiguration"/>
         <projectService serviceImplementation="org.vlang.configurations.VlangProjectSettingsState"/>
         <projectService serviceImplementation="org.vlang.configurations.VlangFmtSettingsState"/>
         <additionalLibraryRootsProvider implementation="org.vlang.project.VlangAdditionalLibraryRootsProvider"/>
 
         <fileDocumentManagerListener implementation="org.vlang.project.VlangFmtWatcher$VlangFmtListener"/>
-        <!-- End of Project -->
+        <!-- endregion Project -->
 
+        <!-- region Notifications -->
         <notificationGroup id="V Plugin" displayType="BALLOON"/>
         <notificationGroup id="V Debugger" displayType="BALLOON"/>
+        <!-- endregion Notifications -->
 
-        <!-- Toolchains -->
+        <!-- region Toolchains -->
         <editorNotificationProvider implementation="org.vlang.project.MissingToolchainNotificationProvider"/>
         <applicationService serviceImplementation="org.vlang.configurations.VlangToolchainsState"/>
-        <!-- End of Toolchains -->
+        <!-- endregion Toolchains -->
 
-        <!-- Stubs -->
+        <!-- region V Stubs -->
         <editorNotificationProvider implementation="org.vlang.project.StubFileNotificationProvider"/>
-        <!-- End of Stubs -->
+        <!-- endregion V Stubs -->
 
-        <!-- Run V script Configuration -->
+        <!-- region Run V Configuration -->
         <configurationType implementation="org.vlang.ide.run.VlangRunConfigurationType"/>
         <runConfigurationProducer implementation="org.vlang.ide.run.VlangRunConfigurationProducer"/>
 
@@ -465,9 +254,43 @@ The plugin provides support for V language
         <programRunner implementation="org.vlang.debugger.runconfig.VlangDebugRunner"/>
         <console.folding implementation="org.vlang.ide.run.VlangConsoleFolding"/>
         <applicationService serviceImplementation="org.vlang.debugger.lang.VlangDebuggerState"/>
-        <!-- Run V script Configuration End -->
+        <runLineMarkerContributor id="VlangRunLineMarkerProvider" language="vlang"
+                                  implementationClass="org.vlang.ide.run.VlangRunLineMarkerProvider"/>
+        <!-- endregion Run V Configuration -->
 
-        <!-- V Mod File -->
+        <!-- region Tests Configuration -->
+        <testSourcesFilter implementation="org.vlang.ide.test.VlangTestSourcesFilter"/>
+        <runLineMarkerContributor id="VlangTestRunLineMarkerProvider" language="vlang"
+                                  implementationClass="org.vlang.ide.test.configuration.VlangTestLineMarkerProvider"/>
+        <configurationType implementation="org.vlang.ide.test.configuration.VlangTestConfigurationType"/>
+        <runConfigurationProducer
+            implementation="org.vlang.ide.test.configuration.VlangTestConfigurationProducer"/>
+        <implicitUsageProvider implementation="org.vlang.ide.test.VlangTestImplicitUsageProvider"/>
+        <!-- endregion Tests Configuration -->
+
+        <!-- region Color Settings & Schemes -->
+        <colorSettingsPage implementation="org.vlang.ide.colors.VlangColorsSettingsPage"/>
+
+        <additionalTextAttributes scheme="Default" file="colorSchemes/VlangAddonsDefault.xml"/>
+        <additionalTextAttributes scheme="Darcula" file="colorSchemes/VlangAddonsDarcula.xml"/>
+        <!-- endregion Color Schemes -->
+
+        <!-- region Live Templates -->
+        <defaultLiveTemplates file="/liveTemplates/V.xml"/>
+        <liveTemplateContext implementation="org.vlang.ide.templates.VlangTemplateContextType$Comment" contextId="VLANG_COMMENT"/>
+        <liveTemplateContext implementation="org.vlang.ide.templates.VlangTemplateContextType$Generic" contextId="VLANG_GENERIC"/>
+
+        <liveTemplateContext implementation="org.vlang.ide.templates.VlangTemplateContextType$TopLevel"
+                             contextId="VLANG_TOPLEVEL"/>
+
+        <liveTemplateContext implementation="org.vlang.ide.templates.VlangTemplateContextType$Statement"
+                             contextId="VLANG_STATEMENT"/>
+
+        <defaultTemplatePropertiesProvider
+            implementation="org.vlang.ide.templates.VlangDefaultTemplatePropertiesProvider"/>
+        <!-- endregion Live Templates -->
+
+        <!-- region V Mod File -->
         <fileType name="V Module"
                   implementationClass="org.vlang.vmod.VmodFileType"
                   fieldName="INSTANCE"
@@ -496,64 +319,40 @@ The plugin provides support for V language
 
         <vcs.codeVisionLanguageContext language="vmod"
                                        implementationClass="org.vlang.vmod.hints.VmodCodeVisionLanguageContext"/>
-        <!-- End of V Mod File -->
-
-        <!-- Tests -->
-        <testSourcesFilter implementation="org.vlang.ide.test.VlangTestSourcesFilter"/>
-        <runLineMarkerContributor id="VlangTestRunLineMarkerProvider" language="vlang"
-                                  implementationClass="org.vlang.ide.test.configuration.VlangTestLineMarkerProvider"/>
-        <configurationType implementation="org.vlang.ide.test.configuration.VlangTestConfigurationType"/>
-        <runConfigurationProducer
-          implementation="org.vlang.ide.test.configuration.VlangTestConfigurationProducer"/>
-        <implicitUsageProvider implementation="org.vlang.ide.test.VlangTestImplicitUsageProvider"/>
-        <!-- End of Tests -->
-
-        <!-- Others -->
-        <notificationGroup id="VlangNotifications" displayType="BALLOON"/>
-
-        <additionalTextAttributes scheme="Default" file="colorSchemes/VlangAddonsDefault.xml"/>
-        <additionalTextAttributes scheme="Darcula" file="colorSchemes/VlangAddonsDarcula.xml"/>
-
-        <defaultLiveTemplates file="/liveTemplates/V.xml"/>
-        <liveTemplateContext implementation="org.vlang.ide.templates.VlangTemplateContextType$Generic"/>
-        <liveTemplateContext implementation="org.vlang.ide.templates.VlangTemplateContextType$TopLevel"/>
-        <liveTemplateContext implementation="org.vlang.ide.templates.VlangTemplateContextType$Statement"/>
-        <liveTemplateContext implementation="org.vlang.ide.templates.VlangTemplateContextType$Comment"/>
-
-        <defaultTemplatePropertiesProvider implementation="org.vlang.ide.templates.VlangDefaultTemplatePropertiesProvider"/>
+        <!-- endregion V Mod File -->
     </extensions>
 
     <extensions defaultExtensionNs="org.vlang">
-      <!-- Toolchain flavors -->
-      <toolchainFlavor id="vlang.symlinkToolchainFlavor"
-                       implementation="org.vlang.projectWizard.flavors.VlangSymlinkToolchainFlavor"/>
-      <toolchainFlavor id="vlang.sysPathHomeToolchainFlavor"
-                       implementation="org.vlang.projectWizard.flavors.VlangSysPathToolchainFlavor"/>
-      <toolchainFlavor id="vlang.macToolchainFlavor"
-                       implementation="org.vlang.projectWizard.flavors.VlangMacToolchainFlavor"/>
-      <toolchainFlavor id="vlang.winToolchainFlavor"
-                       implementation="org.vlang.projectWizard.flavors.VlangWinToolchainFlavor"/>
-      <toolchainFlavor id="vlang.unixToolchainFlavor"
-                       implementation="org.vlang.projectWizard.flavors.VlangUnixToolchainFlavor"/>
-      <toolchainFlavor id="vlang.userHomeToolchainFlavor"
-                       implementation="org.vlang.projectWizard.flavors.VlangUserHomeToolchainFlavor"/>
-      <!-- Toolchain flavors End -->
+        <!-- Toolchain flavors -->
+        <toolchainFlavor id="vlang.symlinkToolchainFlavor"
+                         implementation="org.vlang.projectWizard.flavors.VlangSymlinkToolchainFlavor"/>
+        <toolchainFlavor id="vlang.sysPathHomeToolchainFlavor"
+                         implementation="org.vlang.projectWizard.flavors.VlangSysPathToolchainFlavor"/>
+        <toolchainFlavor id="vlang.macToolchainFlavor"
+                         implementation="org.vlang.projectWizard.flavors.VlangMacToolchainFlavor"/>
+        <toolchainFlavor id="vlang.winToolchainFlavor"
+                         implementation="org.vlang.projectWizard.flavors.VlangWinToolchainFlavor"/>
+        <toolchainFlavor id="vlang.unixToolchainFlavor"
+                         implementation="org.vlang.projectWizard.flavors.VlangUnixToolchainFlavor"/>
+        <toolchainFlavor id="vlang.userHomeToolchainFlavor"
+                         implementation="org.vlang.projectWizard.flavors.VlangUserHomeToolchainFlavor"/>
+        <!-- Toolchain flavors End -->
 
-      <!-- Debugger Renderers -->
-      <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangStringRenderer"/>
-      <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangArrayRenderer"/>
-      <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangMapRenderer"/>
-      <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangChannelRenderer"/>
-      <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangBoolRenderer"/>
-      <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangEnumRenderer"/>
-      <!-- Debugger Renderers End -->
+        <!-- Debugger Renderers -->
+        <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangStringRenderer"/>
+        <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangArrayRenderer"/>
+        <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangMapRenderer"/>
+        <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangChannelRenderer"/>
+        <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangBoolRenderer"/>
+        <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangEnumRenderer"/>
+        <!-- Debugger Renderers End -->
     </extensions>
 
     <extensionPoints>
-      <extensionPoint interface="org.vlang.projectWizard.VlangToolchainFlavor"
-                      dynamic="true" name="toolchainFlavor"/>
-      <extensionPoint interface="org.vlang.debugger.renderers.VlangValueRenderer"
-                      dynamic="true" name="debuggerValueRenderer"/>
+        <extensionPoint interface="org.vlang.projectWizard.VlangToolchainFlavor"
+                        dynamic="true" name="toolchainFlavor"/>
+        <extensionPoint interface="org.vlang.debugger.renderers.VlangValueRenderer"
+                        dynamic="true" name="debuggerValueRenderer"/>
     </extensionPoints>
 
     <actions>

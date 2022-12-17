@@ -39,12 +39,11 @@ class VlangInspectionSuppressor : InspectionSuppressor {
         )
     }
 
-    private class SuppressInspectionFix(
-        ID: String,
-    ) : AbstractBatchSuppressByNoInspectionCommentFix(ID, ID == SuppressionUtil.ALL) {
+    private class SuppressInspectionFix(id: String) :
+        AbstractBatchSuppressByNoInspectionCommentFix(id, id == SuppressionUtil.ALL) {
 
         init {
-            text = if (ID == SuppressionUtil.ALL) "Suppress all inspections for statement" else "Suppress for statement"
+            text = if (id == SuppressionUtil.ALL) "Suppress all inspections for statement" else "Suppress for statement"
         }
 
         override fun createSuppression(project: Project, element: PsiElement, container: PsiElement) {

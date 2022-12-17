@@ -4,15 +4,13 @@ import com.intellij.codeInspection.LocalQuickFix
 import com.intellij.codeInspection.ProblemDescriptor
 import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.codeInspection.ProblemsHolder
-import com.intellij.openapi.application.invokeLater
-import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElementVisitor
-import org.vlang.ide.codeInsight.imports.VlangImportOptimizer
 import org.vlang.ide.inspections.VlangBaseInspection
 import org.vlang.lang.psi.VlangFile
 import org.vlang.lang.psi.VlangImportList
 import org.vlang.lang.psi.VlangVisitor
+import org.vlang.lang.psi.impl.imports.VlangImportOptimizer
 
 class VlangUnusedImportInspection : VlangBaseInspection() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {

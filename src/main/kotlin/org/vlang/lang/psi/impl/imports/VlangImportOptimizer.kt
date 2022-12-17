@@ -1,4 +1,4 @@
-package org.vlang.ide.codeInsight.imports
+package org.vlang.lang.psi.impl.imports
 
 import com.intellij.lang.ImportOptimizer
 import com.intellij.openapi.util.EmptyRunnable
