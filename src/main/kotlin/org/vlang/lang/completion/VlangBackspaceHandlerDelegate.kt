@@ -13,6 +13,8 @@ class VlangBackspaceHandlerDelegate : BackspaceHandlerDelegate() {
         val element = file.findElementAt(offset - 1) ?: return false
         val chars = editor.document.charsSequence
 
+        if (offset == 0) return false
+
         if (element.parent is VlangFile) {
             val prev = chars.subSequence(offset - 1, offset)
             if (prev == "\t") {
@@ -21,13 +23,11 @@ class VlangBackspaceHandlerDelegate : BackspaceHandlerDelegate() {
             return true
         }
 
-        if (offset != 0) {
-            val prevSymbol = chars.subSequence(offset - 1, offset).first()
-            val nextSymbol = if (offset + 1 >= chars.length) ' ' else chars.subSequence(offset, offset + 1).first()
-            if (c == '{' && prevSymbol == '$' && nextSymbol == '}') {
-                editor.document.deleteString(offset, offset + 1)
-                return true
-            }
+        val prevSymbol = chars.subSequence(offset - 1, offset).first()
+        val nextSymbol = if (offset + 1 >= chars.length) ' ' else chars.subSequence(offset, offset + 1).first()
+        if (c == '{' && prevSymbol == '$' && nextSymbol == '}') {
+            editor.document.deleteString(offset, offset + 1)
+            return true
         }
 
         return false

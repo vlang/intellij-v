@@ -6,14 +6,14 @@ import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.VlangTypeAliasDeclaration
 import org.vlang.lang.stubs.index.VlangNamesIndex
 
-class VlangAliasTypeEx(val name: String, val inner: VlangTypeEx, anchor: PsiElement) :
+open class VlangAliasTypeEx(val name: String, val inner: VlangTypeEx, anchor: PsiElement) :
     VlangBaseTypeEx(anchor), VlangImportableTypeEx, VlangResolvableTypeEx<VlangTypeAliasDeclaration> {
 
     override fun toString() = name
 
     override fun qualifiedName(): String {
         if (moduleName.isEmpty()) {
-            return "main.$name"
+            return "unnamed.$name"
         }
         return "$moduleName.$name"
     }
@@ -47,5 +47,12 @@ class VlangAliasTypeEx(val name: String, val inner: VlangTypeEx, anchor: PsiElem
             return null
         }
         return variants.first { it is VlangTypeAliasDeclaration } as? VlangTypeAliasDeclaration
+    }
+
+    companion object {
+        fun anyType(anchor: PsiElement) = object : VlangAliasTypeEx("Any", VlangAnyTypeEx.INSTANCE, anchor) {
+            override val moduleName: String
+                get() = VlangCodeInsightUtil.STUBS_MODULE
+        }
     }
 }

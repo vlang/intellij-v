@@ -1,24 +1,26 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.vlang.lang.psi.VlangEnumBackedTypeAs;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
-import static org.vlang.lang.VlangTypes.*;
-import org.vlang.lang.psi.*;
+import org.vlang.lang.psi.VlangType;
+import org.vlang.lang.psi.VlangVisitor;
 
-public class VlangEnumBackedTypeExprImpl extends VlangExpressionImpl implements VlangEnumBackedTypeExpr {
+import static org.vlang.lang.VlangTypes.AS;
 
-  public VlangEnumBackedTypeExprImpl(@NotNull ASTNode node) {
+public class VlangEnumBackedTypeAsImpl extends VlangCompositeElementImpl implements VlangEnumBackedTypeAs {
+
+  public VlangEnumBackedTypeAsImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitEnumBackedTypeExpr(this);
+    visitor.visitEnumBackedTypeAs(this);
   }
 
   @Override

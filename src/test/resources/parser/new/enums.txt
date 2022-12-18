@@ -6,7 +6,7 @@ V Language file
     ENUM_TYPE
       PsiElement(VlangTokenType.enum)('enum')
       PsiElement(VlangTokenType.identifier)('SmallEnum')
-      ENUM_BACKED_TYPE_EXPR
+      ENUM_BACKED_TYPE_AS
         PsiElement(VlangTokenType.as)('as')
         TYPE
           TYPE_MODIFIERS
@@ -47,7 +47,7 @@ V Language file
     ENUM_TYPE
       PsiElement(VlangTokenType.enum)('enum')
       PsiElement(VlangTokenType.identifier)('BigEnum')
-      ENUM_BACKED_TYPE_EXPR
+      ENUM_BACKED_TYPE_AS
         PsiElement(VlangTokenType.as)('as')
         TYPE
           TYPE_MODIFIERS
@@ -84,7 +84,7 @@ V Language file
     ENUM_TYPE
       PsiElement(VlangTokenType.enum)('enum')
       PsiElement(VlangTokenType.identifier)('BigIEnum')
-      ENUM_BACKED_TYPE_EXPR
+      ENUM_BACKED_TYPE_AS
         PsiElement(VlangTokenType.as)('as')
         TYPE
           TYPE_MODIFIERS

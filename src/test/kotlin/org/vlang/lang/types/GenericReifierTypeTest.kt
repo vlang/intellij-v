@@ -98,19 +98,18 @@ class GenericReifierTypeTest : TypeTestBase() {
         expr_type(foo(get_int), 'int')
         """.trimIndent()
     )
-// TODO:  fn foo<T>(a fn (T)) T  not resolved
-//
-//    fun `test reify function 2-1`() = doTest(
-//        """
-//        fn foo<T>(a fn (T)) T {
-//            return a
-//        }
-//
-//        fn take_int(a int) {}
-//
-//        expr_type(foo(take_int), 'int')
-//        """.trimIndent()
-//    )
+
+    fun `test reify function 2-1`() = doTest(
+        """
+        fn foo<T>(a fn (T)) T {
+            return a
+        }
+
+        fn take_int(a int) {}
+
+        expr_type(foo(take_int), 'int')
+        """.trimIndent()
+    )
 
     fun `test reify function 2`() = doTest(
         """

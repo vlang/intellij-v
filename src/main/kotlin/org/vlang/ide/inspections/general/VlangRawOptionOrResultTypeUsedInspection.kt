@@ -69,6 +69,11 @@ class VlangRawOptionOrResultTypeUsedInspection : VlangBaseInspection() {
                     return
                 }
 
+                val insideSpawn = expr.inside<VlangSpawnExpression>()
+                if (insideSpawn) {
+                    return
+                }
+
                 val parentIf = expr.parentOfType<VlangIfExpression>()
                 if (parentIf != null && parentIf.isGuard) {
                     return

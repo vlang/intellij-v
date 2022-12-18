@@ -14,6 +14,7 @@ import com.intellij.psi.util.CachedValuesManager
 import com.intellij.psi.util.PsiModificationTracker
 import com.intellij.util.ArrayFactory
 import org.vlang.configurations.VlangConfiguration
+import org.vlang.configurations.VlangProjectStructureState.Companion.projectStructure
 import org.vlang.ide.codeInsight.VlangAttributesUtil
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.ide.ui.VIcons
@@ -113,6 +114,10 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
 
     private fun moduleQualifiedNameInner(): String {
         var moduleName = getModuleName()
+        // when no `module name` in file
+        if (moduleName.isNullOrEmpty() && !isTestFile()) {
+            return "unnamed"
+        }
 
         val projectDir = project.guessProjectDir() ?: return ""
         val stdlib = VlangConfiguration.getInstance(project).stdlibLocation
@@ -140,6 +145,15 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
 
         if (moduleNames.firstOrNull() == dirName) {
             moduleNames.removeAt(0)
+        }
+
+        // See vsl project, it contains file with `module vsl` in project root.
+        val needAddProjectDir = project.projectStructure.libraryWithTopModule
+        val inProjectSource = virtualFile != null && virtualFile.path.normalizeSlashes()
+            .contains(projectDir.path.normalizeSlashes() + "/")
+        
+        if (needAddProjectDir && virtualFile != null && inProjectSource) {
+            moduleNames.add(projectDir.name)
         }
 
         val qualifierNames = moduleNames.reversed().toMutableList()
@@ -277,5 +291,9 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
         f: ArrayFactory<E>,
     ): List<E> {
         return listOf(*stub.getChildrenByType(elementType, f))
+    }
+
+    private fun String.normalizeSlashes(): String {
+        return this.replace("\\", "/")
     }
 }

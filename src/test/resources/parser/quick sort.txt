@@ -340,20 +340,20 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('i')
           PsiElement(VlangTokenType.in)('in')
-          ADD_EXPR
+          RANGE_EXPR
             ADD_EXPR
               REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('l')
               PsiElement(VlangTokenType.+)('+')
-              RANGE_EXPR
-                LITERAL
-                  PsiElement(VlangTokenType.int)('1')
-                PsiElement(VlangTokenType...)('..')
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('r')
-            PsiElement(VlangTokenType.+)('+')
-            LITERAL
-              PsiElement(VlangTokenType.int)('1')
+              LITERAL
+                PsiElement(VlangTokenType.int)('1')
+            PsiElement(VlangTokenType...)('..')
+            ADD_EXPR
+              REFERENCE_EXPRESSION
+                PsiElement(VlangTokenType.identifier)('r')
+              PsiElement(VlangTokenType.+)('+')
+              LITERAL
+                PsiElement(VlangTokenType.int)('1')
         BLOCK
           PsiElement(VlangTokenType.{)('{')
           SIMPLE_STATEMENT
@@ -572,19 +572,19 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('i')
           PsiElement(VlangTokenType.in)('in')
-          ADD_EXPR
-            RANGE_EXPR
-              LITERAL
-                PsiElement(VlangTokenType.int)('0')
-              PsiElement(VlangTokenType...)('..')
+          RANGE_EXPR
+            LITERAL
+              PsiElement(VlangTokenType.int)('0')
+            PsiElement(VlangTokenType...)('..')
+            ADD_EXPR
               REFERENCE_EXPRESSION
                 REFERENCE_EXPRESSION
                   PsiElement(VlangTokenType.identifier)('arr')
                 PsiElement(VlangTokenType..)('.')
                 PsiElement(VlangTokenType.identifier)('len')
-            PsiElement(VlangTokenType.-)('-')
-            LITERAL
-              PsiElement(VlangTokenType.int)('1')
+              PsiElement(VlangTokenType.-)('-')
+              LITERAL
+                PsiElement(VlangTokenType.int)('1')
         BLOCK
           PsiElement(VlangTokenType.{)('{')
           SIMPLE_STATEMENT

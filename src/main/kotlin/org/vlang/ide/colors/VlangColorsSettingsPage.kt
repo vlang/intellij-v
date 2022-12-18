@@ -27,6 +27,11 @@ module main
 
 import sqlite
 
+${'$'}if windows {
+	<COMPILE_DIRECTIVE>#flag -lgdi32</COMPILE_DIRECTIVE>
+	<COMPILE_DIRECTIVE>#include "windows.h"</COMPILE_DIRECTIVE>
+}
+
 type <TYPE_ALIAS>Callback</TYPE_ALIAS> = fn ()
 pub type <PUBLIC_TYPE_ALIAS>PublicCallback</PUBLIC_TYPE_ALIAS> = fn ()
 

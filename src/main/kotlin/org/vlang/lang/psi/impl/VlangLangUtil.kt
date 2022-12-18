@@ -5,6 +5,7 @@ import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.CachedValuesManager
 import com.intellij.psi.util.PsiModificationTracker
 import org.vlang.lang.psi.VlangMethodDeclaration
+import org.vlang.lang.psi.types.VlangSumTypeEx
 import org.vlang.lang.psi.types.VlangTypeEx
 import org.vlang.lang.stubs.index.VlangMethodIndex
 
@@ -31,6 +32,10 @@ object VlangLangUtil {
     }
 
     private fun getTypeName(o: VlangTypeEx): String {
+        if (o is VlangSumTypeEx) {
+            return o.name
+        }
+
         return o.toString()
     }
 }

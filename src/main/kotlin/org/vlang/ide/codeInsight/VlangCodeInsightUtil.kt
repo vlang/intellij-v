@@ -15,10 +15,36 @@ import org.vlang.utils.parentOfTypeWithStop
 object VlangCodeInsightUtil {
     const val BUILTIN_MODULE = "builtin"
     const val STUBS_MODULE = "stubs"
+    private const val IT_VARIABLE = "it"
     private const val ERR_VARIABLE = "err"
 
     fun isErrVariable(element: PsiElement): Boolean {
-        return element.elementType == VlangTypes.IDENTIFIER && element.text == ERR_VARIABLE
+        return element.elementType == VlangTypes.IDENTIFIER && element.textMatches(ERR_VARIABLE)
+    }
+
+    fun isItVariable(element: PsiElement): Boolean {
+        return element.elementType == VlangTypes.IDENTIFIER && element.textMatches(IT_VARIABLE)
+    }
+
+    fun isSortABVariable(element: PsiElement): Boolean {
+        return element.elementType == VlangTypes.IDENTIFIER && (element.textMatches("a") || element.textMatches("b"))
+    }
+
+    fun insideArrayCreation(element: PsiElement): Boolean {
+        val parentStructInit = element.parentOfType<VlangLiteralValueExpression>() ?: return false
+        val type = parentStructInit.type
+        if (type !is VlangArrayType && type !is VlangFixedSizeArrayType) return false
+        return parentStructInit.elementList.any {
+            PsiTreeUtil.isAncestor(it, element, false)
+        }
+    }
+
+    fun insideArrayCreationKeyOrValueWithoutKey(element: PsiElement): Boolean {
+        val key = element.parentOfTypeWithStop<VlangKey>(VlangLiteralValueExpression::class)
+        if (key != null) return true
+
+        val literalValue = element.parentOfType<VlangLiteralValueExpression>() ?: return false
+        return literalValue.elementList.any { it.key == null && PsiTreeUtil.isAncestor(it, element, false) }
     }
 
     fun ownerPresentableName(element: VlangNamedElement): String? {
@@ -80,7 +106,8 @@ object VlangCodeInsightUtil {
     }
 
     fun insideOrGuard(element: PsiElement): Boolean {
-        return element.parentOfTypeWithStop<VlangOrBlockExpr>() != null
+        val orBlock = element.parentOfTypeWithStop<VlangOrBlockExpr>() ?: return false
+        return PsiTreeUtil.isAncestor(orBlock.block, element, false)
     }
 
     fun takeZeroArguments(owner: VlangSignatureOwner): Boolean {

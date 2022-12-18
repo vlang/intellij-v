@@ -12,4 +12,7 @@ fn main() {
 
 	first := arr3.first()
 	expr_type(first, '[3]int')
+
+	slice := arr[0..2]
+	expr_type(slice, '[]int')
 }

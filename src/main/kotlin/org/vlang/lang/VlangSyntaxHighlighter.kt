@@ -8,6 +8,7 @@ import org.vlang.lang.VlangTypes.*
 import org.vlang.lang.psi.VlangDocElementTypes.DOC_COMMENT
 import org.vlang.lang.psi.VlangTokenTypes.BOOL_LITERALS
 import org.vlang.lang.psi.VlangTokenTypes.COMMENTS
+import org.vlang.lang.psi.VlangTokenTypes.COMPILE_DIRECTIVE
 import org.vlang.lang.psi.VlangTokenTypes.KEYWORDS
 import org.vlang.lang.psi.VlangTokenTypes.NUMBERS
 import org.vlang.lang.psi.VlangTokenTypes.OPERATORS
@@ -23,6 +24,7 @@ class VlangSyntaxHighlighter : SyntaxHighlighterBase() {
         fun map(tokenType: IElementType): VlangColor? = when (tokenType) {
             LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY -> VlangColor.VALID_STRING_ESCAPE
             DOC_COMMENT                          -> VlangColor.LINE_COMMENT
+            COMPILE_DIRECTIVE                    -> VlangColor.COMPILE_DIRECTIVE
 
             LPAREN, RPAREN                       -> VlangColor.PARENTHESES
             LBRACE, RBRACE                       -> VlangColor.BRACES

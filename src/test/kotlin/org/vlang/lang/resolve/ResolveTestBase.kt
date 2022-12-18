@@ -25,7 +25,7 @@ abstract class ResolveTestBase : BasePlatformTestCase() {
         check(resolved != null) { "Cannot resolve reference" }
 
         val kind = resolved.toString()
-        val resolvedName = if (!qualifier) resolved.name else resolved.getQualifiedName()
+        val resolvedName = if (!qualifier) resolved.name else resolved.getQualifiedName() ?: resolved.name
         val expected = "$kind $resolvedName"
         check(expected == name) { "Expected to resolve to $name, but got $expected" }
     }

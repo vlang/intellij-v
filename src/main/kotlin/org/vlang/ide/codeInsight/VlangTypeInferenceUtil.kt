@@ -37,12 +37,24 @@ object VlangTypeInferenceUtil {
     }
 
     fun getContextType(element: PsiElement): VlangTypeEx? {
-//        if (element is VlangArrayCreation) {
-//            val type = element.arrayCreationList?.expressionList?.firstOrNull()?.getType(null)
-//            if (type != null) {
-//                return type
-//            }
-//        }
+        if (element is VlangArrayCreation) {
+            val firstElement = element.arrayCreationList?.expressionList?.firstOrNull()
+            if (firstElement != null && firstElement !is VlangEnumFetch) {
+                return firstElement.getType(null)
+            }
+        }
+
+        val parentStructInit = element.parentNth<VlangLiteralValueExpression>(3)
+        if (parentStructInit != null) {
+            val withoutKeys = parentStructInit.elementList.any { it.key == null }
+            if (withoutKeys) {
+                val index = parentStructInit.elementList.indexOfFirst { PsiTreeUtil.isAncestor(it.value, element, false) }
+                val struct = parentStructInit.getType(null) as? VlangStructTypeEx ?: return null
+                val structDecl = struct.resolve(element.project) as? VlangStructDeclaration ?: return null
+                val structType = structDecl.structType
+                return structType.getFieldList().getOrNull(index)?.getType(null)
+            }
+        }
 
         if (element.parent is VlangValue) {
             val parentElement = element.parentNth<VlangElement>(2)

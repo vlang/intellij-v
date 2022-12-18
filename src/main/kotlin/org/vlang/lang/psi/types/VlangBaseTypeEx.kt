@@ -66,29 +66,37 @@ abstract class VlangBaseTypeEx(protected val anchor: PsiElement? = null) : UserD
             return genericTs
         }
 
-        fun VlangType?.toEx(): VlangTypeEx {
+        fun VlangType?.toEx(visited: MutableMap<VlangType, VlangTypeEx> = mutableMapOf()): VlangTypeEx {
             if (this == null) {
                 return VlangUnknownTypeEx.INSTANCE
             }
 
-            val type = toExInner()
+            if (this in visited) {
+                return visited[this]!!
+            }
+
+            val type = toExInner(visited)
 
             if (genericArguments != null) {
                 val genericArguments = genericArguments!!.typeArguments.map { it.toEx() }
-                return VlangGenericInstantiationEx(type, genericArguments, this)
+                val instantiationType = VlangGenericInstantiationEx(type, genericArguments, this)
+                visited[this] = instantiationType
+                return instantiationType
             }
 
+            visited[this] = type
             return type
         }
 
-        private fun VlangType.toExInner(): VlangTypeEx {
+        private fun VlangType.toExInner(visited: MutableMap<VlangType, VlangTypeEx>): VlangTypeEx {
             val type = resolveType()
             if (type is VlangStructType && type.parent is VlangStructDeclaration) {
                 return when ((type.parent as VlangStructDeclaration).getQualifiedName()) {
-                    "builtin.array"  -> VlangBuiltinArrayTypeEx.INSTANCE
-                    "builtin.map"    -> VlangBuiltinMapTypeEx.INSTANCE
-                    "builtin.string" -> VlangStringTypeEx.INSTANCE
-                    else             -> {
+                    "builtin.array"            -> VlangBuiltinArrayTypeEx.INSTANCE
+                    "builtin.map"              -> VlangBuiltinMapTypeEx.INSTANCE
+                    "builtin.string"           -> VlangStringTypeEx.INSTANCE
+                    "stub.UnknownCDeclaration" -> VlangStructTypeEx.UnknownCDeclarationStruct
+                    else                       -> {
                         if (type.isUnion) VlangUnionTypeEx(parentName(type), type)
                         else VlangStructTypeEx(parentName(type), type)
                     }
@@ -98,25 +106,33 @@ abstract class VlangBaseTypeEx(protected val anchor: PsiElement? = null) : UserD
             return when (type) {
                 is VlangEnumType            -> VlangEnumTypeEx(parentName(type), type)
                 is VlangInterfaceType       -> VlangInterfaceTypeEx(parentName(type), type)
-                is VlangOptionType          -> VlangOptionTypeEx(type.type?.toEx(), type)
-                is VlangResultType          -> VlangResultTypeEx(type.type?.toEx(), type)
-                is VlangThreadType          -> VlangThreadTypeEx(type.type?.toEx() ?: VlangVoidTypeEx.INSTANCE, type)
-                is VlangSharedType          -> VlangSharedTypeEx(type.type.toEx(), type)
-                is VlangPointerType         -> VlangPointerTypeEx(type.type.toEx(), type)
-                is VlangArrayType           -> VlangArrayTypeEx(type.type.toEx(), type)
-                is VlangFixedSizeArrayType  -> VlangFixedSizeArrayTypeEx(type.type.toEx(), type.size, type)
-                is VlangChannelType         -> VlangChannelTypeEx(type.type.toEx(), type)
-                is VlangMapType             -> VlangMapTypeEx(type.keyType.toEx(), type.valueType.toEx(), type)
-                is VlangTupleType           -> VlangTupleTypeEx(type.typeListNoPin.typeList.map { it.toEx() }, type)
+                is VlangOptionType          -> VlangOptionTypeEx(type.type?.toEx(visited), type)
+                is VlangResultType          -> VlangResultTypeEx(type.type?.toEx(visited), type)
+                is VlangThreadType          -> VlangThreadTypeEx(type.type?.toEx(visited) ?: VlangVoidTypeEx.INSTANCE, type)
+                is VlangSharedType          -> VlangSharedTypeEx(type.type.toEx(visited), type)
+                is VlangPointerType         -> VlangPointerTypeEx(type.type.toEx(visited), type)
+                is VlangArrayType           -> VlangArrayTypeEx(type.type.toEx(visited), type)
+                is VlangFixedSizeArrayType  -> VlangFixedSizeArrayTypeEx(type.type.toEx(visited), type.size, type)
+                is VlangChannelType         -> VlangChannelTypeEx(type.type.toEx(visited), type)
+                is VlangMapType             -> VlangMapTypeEx(type.keyType.toEx(visited), type.valueType.toEx(visited), type)
+                is VlangTupleType           -> VlangTupleTypeEx(type.typeListNoPin.typeList.map { it.toEx(visited) }, type)
                 is VlangGenericType         -> VlangGenericTypeEx(type.name, type)
                 is VlangAnonymousStructType -> VlangAnonStructTypeEx(type)
                 is VlangFunctionType        -> VlangFunctionTypeEx.from(type) ?: VlangUnknownTypeEx.INSTANCE
                 is VlangAliasType           -> {
-                    if (type.typeUnionList != null && type.typeUnionList!!.typeList.size > 1) {
-                        return VlangUnknownTypeEx.INSTANCE
+                    val typeName = parentName(type)
+
+                    val declaration = type.parent as VlangNamedElement
+                    // special type from stubs
+                    if (declaration.getQualifiedName() == "stubs.Any") {
+                        return VlangAliasTypeEx.anyType(type)
                     }
 
-                    val typeName = parentName(type)
+                    if (type.typeUnionList != null && type.typeUnionList!!.typeList.size > 1) {
+                        visited[this] = VlangSumTypeEx("<temp>", emptyList(), type)
+                        val types = type.typeUnionList!!.typeList.map { it.toEx(visited) }
+                        return VlangSumTypeEx(typeName, types, type)
+                    }
 
                     if (typeName == "any") {
                         return VlangAnyTypeEx.INSTANCE
@@ -137,14 +153,7 @@ abstract class VlangBaseTypeEx(protected val anchor: PsiElement? = null) : UserD
                         return VlangAliasTypeEx(typeName, VlangUnknownTypeEx.INSTANCE, type)
                     }
 
-                    // hack for now for
-                    // type Some = []Some
-                    if (firstType != null && firstType.text.contains(typeName)) {
-                        return VlangUnknownTypeEx.INSTANCE
-                    }
-
-                    // TODO: Sum types.
-                    VlangAliasTypeEx(typeName, firstType.toEx(), type)
+                    VlangAliasTypeEx(typeName, firstType.toEx(visited), type)
                 }
 
                 else                        -> {

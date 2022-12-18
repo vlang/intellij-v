@@ -225,6 +225,7 @@ The plugin provides support for V language
 
         <projectService serviceImplementation="org.vlang.configurations.VlangConfiguration"/>
         <projectService serviceImplementation="org.vlang.configurations.VlangProjectSettingsState"/>
+        <projectService serviceImplementation="org.vlang.configurations.VlangProjectStructureState"/>
         <projectService serviceImplementation="org.vlang.configurations.VlangFmtSettingsState"/>
         <additionalLibraryRootsProvider implementation="org.vlang.project.VlangAdditionalLibraryRootsProvider"/>
 
@@ -273,6 +274,7 @@ The plugin provides support for V language
 
         <additionalTextAttributes scheme="Default" file="colorSchemes/VlangAddonsDefault.xml"/>
         <additionalTextAttributes scheme="Darcula" file="colorSchemes/VlangAddonsDarcula.xml"/>
+        <additionalTextAttributes scheme="New Dark" file="colorSchemes/VlangAddonsNewDark.xml"/>
         <!-- endregion Color Schemes -->
 
         <!-- region Live Templates -->

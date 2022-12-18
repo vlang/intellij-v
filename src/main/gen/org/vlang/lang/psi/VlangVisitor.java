@@ -208,8 +208,8 @@ public class VlangVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitEnumBackedTypeExpr(@NotNull VlangEnumBackedTypeExpr o) {
-    visitExpression(o);
+  public void visitEnumBackedTypeAs(@NotNull VlangEnumBackedTypeAs o) {
+    visitCompositeElement(o);
   }
 
   public void visitEnumDeclaration(@NotNull VlangEnumDeclaration o) {

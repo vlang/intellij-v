@@ -122,6 +122,13 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
         if (resolved is VlangPomTargetPsiElement) {
             val target = resolved.target
+
+            val containingFile = qualifier.containingFile as VlangFile
+            val containingModule = containingFile.getModuleName()
+            if (containingModule != null && qualifier.textMatches(containingModule)) {
+                if (!processFileEntities(containingFile, processor, state, true)) return false
+            }
+
             if (!processModule(target.name, processor, state)) return false
         }
 
@@ -148,7 +155,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             val newState = state
                 .put(MODULE_NAME, moduleFile.getModuleQualifiedName())
                 .put(NEED_QUALIFIER_NAME, false)
-            if (!processDirectory(moduleDir, null, null, processor, newState, false)) {
+            if (!processDirectory(moduleDir, null, processor, newState, false)) {
                 return true
             }
         }
@@ -177,6 +184,14 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         if (typ is VlangAliasTypeEx) {
             if (!processMethods(typ, processor, newState, localResolve)) return false
             if (!processType(typ.inner, processor, newState)) return false
+            if (!processAnyType(contextFile, processor, newState, localResolve)) return false
+            return true
+        }
+
+        if (typ is VlangSumTypeEx) {
+            if (!processMethods(typ, processor, newState, localResolve)) return false
+            if (!processAnyType(contextFile, processor, newState, localResolve)) return false
+            return true
         }
 
         if (typ is VlangPointerTypeEx) {
@@ -188,6 +203,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             if (baseType != null) {
                 return processType(baseType, processor, newState)
             }
+            return true
         }
 
         if (typ is VlangResultTypeEx) {
@@ -195,11 +211,12 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             if (baseType != null) {
                 return processType(baseType, processor, newState)
             }
+            return true
         }
 
         if (typ is VlangAnonStructTypeEx) {
             val anonStruct = typ.resolve() ?: return true
-            if (!processNamedElements(processor, newState, anonStruct.getFieldList(), true)) return false
+            return processNamedElements(processor, newState, anonStruct.getFieldList(), true)
         }
 
         if (typ is VlangStructTypeEx) {
@@ -207,6 +224,20 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
             val declaration = typ.resolve(project) ?: return true
             val structType = declaration.structType
+
+            // if it some struct from C code, we can't resolve it
+            // so we just resolve it to UnknownCDeclaration struct
+            if (typ.qualifiedName() == VlangStructTypeEx.UnknownCDeclarationStruct.qualifiedName()) {
+                if (isMethodRef && !processMethods(typ, processor, state.put(SEARCH_NAME, "unknown_method"), localResolve)) return false
+                if (!processNamedElements(
+                        processor,
+                        state.put(SEARCH_NAME, "unknown_field"),
+                        structType.getFieldList(),
+                        localResolve
+                    )
+                ) return false
+                return true
+            }
 
             // If it is a call, then most likely it is a method call, but it
             // could be a function call that is stored in a structure field.
@@ -224,7 +255,9 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
             val embedded = structType.embeddedStructList.mapNotNull { it.type.typeReferenceExpression?.resolve() as? VlangNamedElement }
             if (!processNamedElements(processor, newState, embedded, localResolve)) return false
-            if (!processMethods(VlangStructTypeEx.AnyStruct, processor, newState, localResolve)) return false
+
+            if (!processAnyType(contextFile, processor, newState, localResolve)) return false
+            return true
         }
 
         if (typ is VlangInterfaceTypeEx) {
@@ -240,6 +273,9 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             interfaceType.embeddedInterfacesList.forEach {
                 if (!processType(it.type.toEx(), processor, newState)) return false
             }
+
+            if (!processAnyType(contextFile, processor, newState, localResolve)) return false
+            return true
         }
 
         if (typ is VlangEnumTypeEx) {
@@ -247,6 +283,9 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             val enumType = declaration.enumType
 
             if (!processNamedElements(processor, newState, enumType.fieldList, localResolve)) return false
+            if (!processMethods(typ, processor, newState, localResolve)) return false
+            if (!processAnyType(contextFile, processor, newState, localResolve)) return false
+            return true
         }
 
         if (typ is VlangArrayTypeEx) {
@@ -255,26 +294,37 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             }
 
             if (!processMethods(typ, processor, newState, localResolve)) return false
+            if (!processAnyType(contextFile, processor, newState, localResolve)) return false
             return processBuiltinTypeMethods(project, "array", processor, newState)
         }
 
         if (typ is VlangMapTypeEx) {
             if (!processMethods(typ, processor, newState, localResolve)) return false
+            if (!processAnyType(contextFile, processor, newState, localResolve)) return false
             return processBuiltinTypeMethods(project, "map", processor, newState)
         }
 
         if (typ is VlangChannelTypeEx) {
             if (!processMethods(typ, processor, newState, localResolve)) return false
+            if (!processAnyType(contextFile, processor, newState, localResolve)) return false
             return processBuiltinChannelTypeMethods(project, processor, newState)
         }
 
         if (typ is VlangThreadTypeEx) {
             if (!processMethods(typ, processor, newState, localResolve)) return false
+            if (!processAnyType(contextFile, processor, newState, localResolve)) return false
             return processBuiltinThreadTypeMethods(project, processor, newState)
         }
 
         if (typ is VlangGenericInstantiationEx) {
             if (!processType(typ.inner, processor, newState)) return false
+            if (!processAnyType(contextFile, processor, newState, localResolve)) return false
+            return true
+        }
+
+        if (typ is VlangGenericTypeEx) {
+            if (!processTypeInfoFields(project, processor, newState)) return false
+            return true
         }
 
         if (typ == VlangPrimitiveTypeEx.BYTE) {
@@ -285,14 +335,23 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             if (!processMethods(VlangPrimitiveTypeEx.INT, processor, newState, localResolve)) return false
         }
 
+        if (!processAnyType(contextFile, processor, newState, localResolve)) return false
         if (!processMethods(typ, processor, newState, localResolve)) return false
+
         return true
     }
+
+    private fun processAnyType(
+        contextFile: PsiFile,
+        processor: VlangScopeProcessor,
+        newState: ResolveState,
+        localResolve: Boolean,
+    ) = processMethods(VlangAliasTypeEx.anyType(contextFile), processor, newState, localResolve)
 
     private fun processBuiltinWaitGroupTypeMethods(
         project: Project,
         processor: VlangScopeProcessor,
-        newState: ResolveState,
+        state: ResolveState,
     ): Boolean {
         val vlib = VlangConfiguration.getInstance(project).builtinLocation?.parent
         val syncDir = vlib?.findChild("sync") ?: return false
@@ -300,13 +359,13 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         val psiFile = PsiManager.getInstance(project).findFile(virtualFile) as? VlangFile ?: return false
         val struct = psiFile.getStructs()
             .firstOrNull { it.name == "WaitGroup" } ?: return false
-        return processExistingType(struct.structType.toEx(), processor, newState)
+        return processExistingType(struct.structType.toEx(), processor, state)
     }
 
     private fun processBuiltinThreadTypeMethods(
         project: Project,
         processor: VlangScopeProcessor,
-        newState: ResolveState,
+        state: ResolveState,
     ): Boolean {
         val vlib = VlangConfiguration.getInstance(project).builtinLocation?.parent
         val syncDir = vlib?.findChild("os") ?: return false
@@ -314,27 +373,27 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         val psiFile = PsiManager.getInstance(project).findFile(virtualFile) as? VlangFile ?: return false
         val struct = psiFile.getStructs()
             .firstOrNull { it.name == "Process" } ?: return false
-        return processExistingType(struct.structType.toEx(), processor, newState)
+        return processExistingType(struct.structType.toEx(), processor, state)
     }
 
     private fun processBuiltinTypeMethods(
         project: Project,
         name: String,
         processor: VlangScopeProcessor,
-        newState: ResolveState,
+        state: ResolveState,
     ): Boolean {
         val builtin = VlangConfiguration.getInstance(project).builtinLocation
         val virtualFile = builtin?.findChild("$name.v") ?: return false
         val psiFile = PsiManager.getInstance(project).findFile(virtualFile) as? VlangFile ?: return false
         val struct = psiFile.getStructs()
             .firstOrNull { it.name == name } ?: return false
-        return processExistingType(struct.structType.toEx(), processor, newState)
+        return processExistingType(struct.structType.toEx(), processor, state)
     }
 
     private fun processBuiltinChannelTypeMethods(
         project: Project,
         processor: VlangScopeProcessor,
-        newState: ResolveState,
+        state: ResolveState,
     ): Boolean {
         val vlib = VlangConfiguration.getInstance(project).builtinLocation?.parent
         val syncDir = vlib?.findChild("sync") ?: return false
@@ -342,7 +401,20 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         val psiFile = PsiManager.getInstance(project).findFile(virtualFile) as? VlangFile ?: return false
         val struct = psiFile.getStructs()
             .firstOrNull { it.name == "Channel" } ?: return false
-        return processExistingType(struct.structType.toEx(), processor, newState)
+        return processExistingType(struct.structType.toEx(), processor, state)
+    }
+
+    private fun processTypeInfoFields(
+        project: Project,
+        processor: VlangScopeProcessor,
+        state: ResolveState,
+    ): Boolean {
+        val stubDir = VlangConfiguration.getInstance(project).stubsLocation
+        val virtualFile = stubDir?.findChild("builtin_compile_time.v") ?: return false
+        val psiFile = PsiManager.getInstance(project).findFile(virtualFile) as? VlangFile ?: return false
+        val struct = psiFile.getStructs()
+            .firstOrNull { it.name == "TypeInfo" } ?: return false
+        return processExistingType(struct.structType.toEx(), processor, state)
     }
 
     private fun processMethods(type: VlangTypeEx, processor: VlangScopeProcessor, state: ResolveState, localResolve: Boolean): Boolean {
@@ -358,13 +430,34 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             return processor.execute(myElement, state)
         }
 
-        // expr or { err }
-        if (VlangCodeInsightUtil.isErrVariable(identifier!!) &&
-            (VlangCodeInsightUtil.insideOrGuard(identifier!!) || VlangCodeInsightUtil.insideElseBlockIfGuard(identifier!!))
-        ) {
-            return !processBuiltin(processor, state.put(SEARCH_NAME, "IError"))
+        if (VlangCodeInsightUtil.insideArrayCreation(identifier!!)) {
+            // []int{init: it}
+            //       ^^^^
+            if (VlangCodeInsightUtil.insideArrayCreationKeyOrValueWithoutKey(identifier!!)) {
+                val struct = getArrayInitStruct() ?: return false
+                return processNamedElements(processor, state, struct.structType.getFieldList(), false)
+            }
+
+            // []int{init: it}
+            //             ^^
+            if (VlangCodeInsightUtil.isItVariable(identifier!!)) {
+                val struct = getArrayInitStruct() ?: return false
+                val fields = struct.structType.getFieldList()
+                val field = fields.find { it.name == "current_index" } ?: return true
+                return processor.execute(field, state.put(SEARCH_NAME, "current_index").put(ACTUAL_NAME, "current_index"))
+            }
         }
 
+        // expr or { err }
+        if (VlangCodeInsightUtil.insideOrGuard(identifier!!) || VlangCodeInsightUtil.insideElseBlockIfGuard(identifier!!)) {
+            val errVariable = getErrVariable() ?: return false
+            if (!processor.execute(errVariable, state)) return false
+        }
+
+        // sql {
+        //    select from Users where id = id
+        //                            ^^
+        // }
         if (VlangSqlUtil.insideSql(identifier!!) && VlangSqlUtil.fieldReference(identifier!!)) {
             val resolved = VlangSqlUtil.getTable(identifier!!)?.typeReferenceExpression?.resolve() as? VlangStructDeclaration
             if (resolved != null) {
@@ -372,6 +465,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             }
         }
 
+        // .red
         if (myElement is VlangEnumFetch) {
             return processEnumFetch(myElement as VlangEnumFetch, processor, state)
         }
@@ -409,9 +503,36 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         if (!processImportedModulesForCompletion(file, processor, state)) return false
         if (!processImportedModules(file, processor, state, myElement)) return false
         if (!processFileEntities(file, processor, state, true)) return false
-        if (!processDirectory(file.originalFile.parent, file, file.getModuleQualifiedName(), processor, state, true)) return false
+        if (!processDirectory(file.originalFile.parent, file, processor, state, true)) return false
+        if (!processModulesEntities(file, processor, state)) return false
+        if (!processIfUnknownCDeclaration(processor, state)) return false
 
-        return processModulesEntities(file, processor, state)
+        return true
+    }
+
+    private fun getArrayInitStruct(): VlangStructDeclaration? {
+        val stubDir = VlangConfiguration.getInstance(myElement.project).stubsLocation ?: return null
+        val psiManager = PsiManager.getInstance(myElement.project)
+        val stubFile = getStubFile("arrays.v", stubDir, psiManager) ?: return null
+        return stubFile.getStructs().firstOrNull { it.name == "ArrayInit" }
+    }
+
+    private fun getErrVariable(): VlangConstDefinition? {
+        val stubDir = VlangConfiguration.getInstance(myElement.project).stubsLocation ?: return null
+        val psiManager = PsiManager.getInstance(myElement.project)
+        val stubFile = getStubFile("errors.v", stubDir, psiManager) ?: return null
+        return stubFile.getConstants().firstOrNull { it.name == "err" }
+    }
+
+    private fun processIfUnknownCDeclaration(processor: VlangScopeProcessor, state: ResolveState): Boolean {
+        if (identifier == null || !identifier!!.text.startsWith("C.")) {
+            return true
+        }
+        val stubDir = VlangConfiguration.getInstance(myElement.project).stubsLocation ?: return true
+        val psiManager = PsiManager.getInstance(myElement.project)
+        if (!processStubFile("c_decl.v", stubDir, psiManager, processor, state.put(SEARCH_NAME, "UnknownCDeclaration"))) return false
+
+        return true
     }
 
     private fun needResolveGenericParameterForMethod(parentMethod: VlangMethodDeclaration?): Boolean {
@@ -458,7 +579,6 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
     private fun processDirectory(
         dir: PsiDirectory?,
         file: VlangFile?,
-        moduleName: String?,
         processor: VlangScopeProcessor,
         state: ResolveState,
         localProcessing: Boolean,
@@ -467,6 +587,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             return true
         }
 
+        val moduleName = file?.getModuleQualifiedName()
         val filePath = getPath(file)
 
         for (f in dir.files) {
@@ -518,27 +639,31 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
     }
 
     private fun processStubs(processor: VlangScopeProcessor, state: ResolveState): Boolean {
-        val stdlib = VlangConfiguration.getInstance(myElement.project).stubsLocation ?: return true
+        val stubDir = VlangConfiguration.getInstance(myElement.project).stubsLocation ?: return true
         val psiManager = PsiManager.getInstance(myElement.project)
-        if (!processStubFile("primitives.v", stdlib, psiManager, processor, state)) return false
-        if (!processStubFile("compile_time.v", stdlib, psiManager, processor, state)) return false
-        if (!processStubFile("vweb.v", stdlib, psiManager, processor, state)) return false
+        if (!processStubFile("primitives.v", stubDir, psiManager, processor, state)) return false
+        if (!processStubFile("compile_time.v", stubDir, psiManager, processor, state)) return false
+        if (!processStubFile("vweb.v", stubDir, psiManager, processor, state)) return false
 
         return true
     }
 
     private fun processStubFile(
         name: String,
-        stdlib: VirtualFile,
+        stubDir: VirtualFile,
         psiManager: PsiManager,
         processor: VlangScopeProcessor,
         state: ResolveState,
     ): Boolean {
-        val compileTimeFile = stdlib.findChild(name) ?: return true
-        val compileTimePsiFile = psiManager.findFile(compileTimeFile) as? VlangFile ?: return true
-        if (!processFileEntities(compileTimePsiFile, processor, state, false))
+        val file = getStubFile(name, stubDir, psiManager) ?: return true
+        if (!processFileEntities(file, processor, state, false))
             return false
         return true
+    }
+
+    private fun getStubFile(name: String, stubDir: VirtualFile, psiManager: PsiManager): VlangFile? {
+        val stubFile = stubDir.findChild(name) ?: return null
+        return psiManager.findFile(stubFile) as? VlangFile ?: return null
     }
 
     // TODO: redone
@@ -555,12 +680,20 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         val searchName = identifier!!.text
         val spec = file.resolveImportSpec(searchName)
         if (spec == null) {
-            // when use `cat.new()` in `car` module.
-            val currentModule = file.getModuleName()
-            if (currentModule != null && searchName == currentModule && file.containingDirectory != null) {
-                val module = VlangModule.fromDirectory(file.containingDirectory!!)
-                if (!processor.execute(module.toPsi(), state.put(ACTUAL_NAME, searchName))) return false
+            val parentReferenceExpression = element.parent as? VlangReferenceExpressionBase
+            val qualifier = parentReferenceExpression?.getQualifier()
+
+            // element: cat
+            // parentReferenceExpression: cat.foo
+            if (qualifier != null && PsiTreeUtil.isAncestor(qualifier, element, false)) {
+                // when use `cat.new()` in `cat` module.
+                val currentModule = file.getModuleName()
+                if (currentModule != null && searchName == currentModule && file.containingDirectory != null) {
+                    val module = VlangModule.fromDirectory(file.containingDirectory!!)
+                    if (!processor.execute(module.toPsi(), state.put(ACTUAL_NAME, searchName))) return false
+                }
             }
+
             return true
         }
 
@@ -752,7 +885,14 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
     }
 
     private fun processPseudoParams(processor: VlangScopeProcessor, state: ResolveState): Boolean {
-        if (identifier == null || !identifier!!.textMatches("it")) {
+        if (identifier == null) {
+            return true
+        }
+
+        val isItVariable = VlangCodeInsightUtil.isItVariable(identifier!!)
+        val isSortABVariable = VlangCodeInsightUtil.isSortABVariable(identifier!!)
+
+        if (!isItVariable && !isSortABVariable) {
             return true
         }
 
@@ -761,7 +901,8 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             callExpr = VlangCodeInsightUtil.getCallExpr(callExpr) ?: return true
         }
 
-        while (!VlangCodeInsightUtil.isArrayMethodCall(callExpr, "filter", "map", "any", "all")) {
+        val methodsName = if (isItVariable) arrayOf("filter", "map", "any", "all") else arrayOf("sort")
+        while (!VlangCodeInsightUtil.isArrayMethodCall(callExpr, *methodsName)) {
             callExpr = VlangCodeInsightUtil.getCallExpr(callExpr) ?: return true
         }
 
@@ -775,7 +916,8 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
         val functionType = paramType as? VlangFunctionTypeEx ?: return true
         val lambdaParams = functionType.signature.parameters.paramDefinitionList
-        if (lambdaParams.size == 1) {
+
+        if (lambdaParams.size == 1 && isItVariable || lambdaParams.size == 2 && isSortABVariable) {
             val param = params.first { it.type.toEx() is VlangFunctionTypeEx }
             val functionTypeParam =
                 (param.type.toEx() as VlangFunctionTypeEx).signature.parameters.paramDefinitionList.firstOrNull()

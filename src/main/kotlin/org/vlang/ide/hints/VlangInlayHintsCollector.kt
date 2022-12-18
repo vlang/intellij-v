@@ -3,7 +3,6 @@ package org.vlang.ide.hints
 import com.intellij.codeInsight.hints.*
 import com.intellij.codeInsight.hints.presentation.*
 import com.intellij.openapi.components.service
-import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.colors.TextAttributesKey
@@ -11,8 +10,10 @@ import com.intellij.openapi.editor.impl.EditorImpl
 import com.intellij.openapi.project.DumbService
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
+import com.intellij.psi.util.childrenOfType
 import com.intellij.refactoring.suggested.endOffset
 import com.intellij.refactoring.suggested.startOffset
+import org.vlang.lang.psi.VlangIndexOrSliceExpr
 import org.vlang.lang.psi.VlangRangeExpr
 
 @Suppress("UnstableApiUsage")
@@ -37,11 +38,46 @@ class VlangInlayHintsCollector(
             showAnnotation(element)
         }
 
+        if (element is VlangIndexOrSliceExpr && settings.ranges) {
+            showAnnotation(element)
+        }
+
         return true
+    }
+
+    private fun showAnnotation(element: VlangIndexOrSliceExpr) {
+        // arr[0..1]
+        if (element.childrenOfType<VlangRangeExpr>().isNotEmpty()) {
+            // processed bellow
+            return
+        }
+
+        // arr[..]
+        if (element.emptySlice != null) {
+            return
+        }
+
+        val lbrack = element.lbrack ?: element.hashLbrack ?: return
+        val rbrack = element.rbrack
+
+        // arr[..10]
+        val rangeVariant1 = lbrack.nextSibling
+        // arr[10..]
+        val rangeVariant2 = rbrack.prevSibling
+
+        if (rangeVariant1.textMatches("..")) {
+            // arr[..<10]
+            addRangeHint(rangeVariant1.endOffset, false)
+        }
+        else if (rangeVariant2.textMatches("..")) {
+            // arr[10≤..]
+            addRangeHint(rangeVariant2.startOffset, true)
+        }
     }
 
     private fun showAnnotation(element: VlangRangeExpr) {
         val op = element.range ?: element.tripleDot ?: return
+        // `a`...`z`
         val inclusive = element.tripleDot != null
 
         addRangeHint(op.startOffset, true)
@@ -82,8 +118,4 @@ class VlangInlayHintsCollector(
             base, attributes, editor,
             WithAttributesPresentation.AttributesFlags().withIsDefault(true)
         )
-
-    companion object {
-        val LOG = logger<VlangInlayHintsCollector>()
-    }
 }

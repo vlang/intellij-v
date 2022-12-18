@@ -48,6 +48,7 @@ object DocumentationGenerator {
             is VlangGenericInstantiationEx -> return this.generateDoc(anchor)
             is VlangTupleTypeEx            -> return this.generateDoc(anchor)
             is VlangPrimitiveTypeEx        -> return this.generateDoc(anchor)
+            is VlangSumTypeEx              -> return this.generateDoc(anchor)
         }
         return colorize(this.readableName(anchor).escapeHTML(), asType)
     }
@@ -152,6 +153,12 @@ object DocumentationGenerator {
         }
     }
 
+    fun VlangSumTypeEx.generateDoc(anchor: PsiElement): String {
+        return buildString {
+            append(generateFqnTypeDoc(readableName(anchor)))
+        }
+    }
+
     fun VlangGenericTypeEx.generateDoc(anchor: PsiElement): String {
         return colorize(qualifiedName(), asGeneric)
     }
@@ -159,14 +166,14 @@ object DocumentationGenerator {
     fun VlangGenericInstantiationEx.generateDoc(anchor: PsiElement): String {
         return buildString {
             appendNotNull(inner.generateDoc(anchor))
-            append("&lt;")
+            append("[")
             specialization.forEachIndexed { index, param ->
                 if (index > 0) {
                     append(", ")
                 }
                 appendNotNull(param.generateDoc(anchor))
             }
-            append(">")
+            append("]")
         }
     }
 
@@ -249,18 +256,6 @@ object DocumentationGenerator {
 
     fun VlangResult.generateDoc(): String {
         val type = type.toEx()
-        if (type is VlangTupleTypeEx) {
-            return buildString {
-                append("(")
-                append(
-                    type.types.joinToString(", ") {
-                        it.generateDoc(this@generateDoc)
-                    }
-                )
-                append(")")
-            }
-        }
-
         return type.generateDoc(this)
     }
 
@@ -284,7 +279,7 @@ object DocumentationGenerator {
             parts.add(colorize("static", asKeyword, noHtml))
         }
         if (isMutable) {
-            parts.add(colorize("mutable", asKeyword, noHtml))
+            parts.add(colorize("mut", asKeyword, noHtml))
         }
         if (isShared) {
             parts.add(colorize("shared", asKeyword, noHtml))
@@ -300,12 +295,12 @@ object DocumentationGenerator {
 
         return buildString {
             if (element.isPublic()) {
-                part("public", asKeyword)
+                part("pub", asKeyword)
             } else {
                 part("module private", asKeyword)
             }
             if (isMutable) {
-                part("mutable", asKeyword)
+                part("mut", asKeyword)
             }
             if (isShared) {
                 part("shared", asKeyword)
@@ -561,6 +556,20 @@ object DocumentationGenerator {
                 return@buildString
             }
 
+            // special case for 'a' or 'b' in array sort method
+            if (name == null && (originalElement?.text == "a" || originalElement?.text == "b")) {
+                part("variable", asKeyword)
+                part(originalElement.text, asDeclaration)
+
+                val original = originalElement.parent as? VlangTypeOwner
+                val originalType = original?.getType(null)
+                append(
+                    originalType?.generateDoc(this@generateDoc) ?: DocumentationUtils.colorize("unknown", asDeclaration)
+                )
+                append(DocumentationMarkup.DEFINITION_END)
+                return@buildString
+            }
+
             val type = getType(null)
 
             part(varModifiers.generateDoc())
@@ -656,16 +665,46 @@ object DocumentationGenerator {
 
     fun VlangTypeAliasDeclaration.generateDoc(): String {
         val genericParameters = aliasType?.genericParameters
+        val typeList = aliasType?.typeUnionList?.typeList?.map { it.toEx() } ?: emptyList()
+
+        if (typeList.size > 1) {
+            return buildString {
+                generateModuleName(containingFile)
+                append(DocumentationMarkup.DEFINITION_START)
+
+                line(attributes?.generateDoc())
+                generateVisibilityPart(this@generateDoc)
+
+                part("sum type", asKeyword)
+                colorize(name, asDeclaration)
+                appendNotNull(genericParameters.generateDoc())
+                append(" ")
+
+                part("=")
+
+                val types = typeList.joinToString(" | ") {
+                    it.generateDoc(this@generateDoc)
+                }
+                append(types)
+
+                append(DocumentationMarkup.DEFINITION_END)
+                generateCommentsPart(this@generateDoc)
+            }
+        }
+
         return buildString {
             generateModuleName(containingFile)
             append(DocumentationMarkup.DEFINITION_START)
+
+            line(attributes?.generateDoc())
+            generateVisibilityPart(this@generateDoc)
 
             part("type alias", asKeyword)
             colorize(name, asDeclaration)
             appendNotNull(genericParameters.generateDoc())
             append(" ")
 
-            val rightType = aliasType?.typeUnionList?.typeList?.firstOrNull()?.toEx()
+            val rightType = typeList.firstOrNull()
             if (rightType != null) {
                 part("=")
                 append(rightType.generateDoc(this@generateDoc))
@@ -758,7 +797,7 @@ object DocumentationGenerator {
 
     private fun StringBuilder.generateVisibilityPart(element: VlangNamedElement) {
         if (element.isPublic()) {
-            part("public", asKeyword)
+            part("pub", asKeyword)
         } else {
             part("private", asKeyword)
         }

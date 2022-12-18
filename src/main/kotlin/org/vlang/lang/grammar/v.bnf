@@ -475,12 +475,12 @@ EnumDeclaration ::= Attributes? SymbolVisibility? EnumType {
   methods=[getName getIdentifier getTypeInner]
 }
 
-EnumType ::= enum identifier EnumBackedTypeExpr? '{' EnumFields? '}' {
+EnumType ::= enum identifier EnumBackedTypeAs? '{' EnumFields? '}' {
   pin=1
   methods=[getFieldList]
 }
 
-EnumBackedTypeExpr ::= as Type {pin=1}
+EnumBackedTypeAs ::= as Type {pin=1}
 
 private EnumFields ::= EnumFieldDeclaration (EnumFieldDeclaration)*
 EnumFieldDeclaration ::= EnumFieldDefinition ('=' Expression)? semi? {pin=1}
@@ -561,6 +561,7 @@ GenericParametersNew ::= '[' GenericParameterList? ']' {pin=3 elementType=Generi
 GenericParameterList ::= GenericParameter (',' GenericParameter)* ','?
 GenericParameter ::= identifier {
   stubClass="org.vlang.lang.stubs.VlangGenericParameterStub"
+  methods=[getTypeInner]
 }
 
 GenericArguments ::= GenericArgumentsOld | GenericArgumentsNew {
@@ -579,7 +580,7 @@ FunctionDeclaration ::= Attributes? SymbolVisibility? fn identifier GenericParam
 MethodDeclaration ::= Attributes? SymbolVisibility? fn '(' Receiver ')' MethodName GenericParameters? Signature BlockWithConsume? {
   pin=7
   stubClass="org.vlang.lang.stubs.VlangMethodDeclarationStub"
-  methods=[getReceiverType getTypeInner getIdentifier]
+  methods=[getReceiverType getTypeInner getIdentifier getQualifiedName getOwner]
 }
 // <ident> or <ops> for overload
 MethodName ::= identifier | AddOp | MulOp | RelOp
@@ -604,11 +605,11 @@ Expression ::=
     OrExpr
   | AndExpr
   | ConditionalExpr
+  | RangeExpr
   | AddExpr
   | MulExpr
   | UnaryExpr
   | SendExpr
-  | RangeExpr
   | MatchExpression
   | SelectExpression
   | CompileTimeIfExpression
@@ -901,7 +902,7 @@ left IndexOrSliceExpr ::= ('[' | '#[') IndexOrSliceInner ']' !identifier {
 private IndexOrSliceInner ::= EmptySlice | ((SliceExprBody | IndexExprBody) '..'?)
 EmptySlice ::= '..' &']'
 private IndexExprBody ::= Expression SliceExprBody?
-private SliceExprBody ::= &'..' '..' Expression
+private SliceExprBody ::= '..' Expression
 
 // <expr> or { ... }
 left OrBlockExpr ::= or Block

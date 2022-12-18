@@ -171,4 +171,10 @@
       <option name="FONT_TYPE" value="1" />
     </value>
   </option>
+  <option name="org.vlang.COMPILE_DIRECTIVE">
+    <value>
+      <option name="FOREGROUND" value="bbb529" />
+      <option name="FONT_TYPE" value="1" />
+    </value>
+  </option>
 </list>

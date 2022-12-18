@@ -184,12 +184,15 @@ object VlangGenericInferer {
 
     // Not real "generic", some kind of pseudo generic for builtin cases
     fun inferGenericIt(expr: VlangReferenceExpression): VlangTypeEx? {
+        val isItVariable = VlangCodeInsightUtil.isItVariable(expr.getIdentifier())
+
         var callExpr = VlangCodeInsightUtil.getCallExpr(expr) ?: return null
         while (PsiTreeUtil.isAncestor(callExpr.expression, expr, false)) {
             callExpr = VlangCodeInsightUtil.getCallExpr(callExpr) ?: return null
         }
 
-        while (!VlangCodeInsightUtil.isArrayMethodCall(callExpr, "filter", "map", "any", "all")) {
+        val methodsName = if (isItVariable) arrayOf("filter", "map", "any", "all") else arrayOf("sort")
+        while (!VlangCodeInsightUtil.isArrayMethodCall(callExpr, *methodsName)) {
             callExpr = VlangCodeInsightUtil.getCallExpr(callExpr) ?: return null
         }
 
@@ -197,7 +200,7 @@ object VlangGenericInferer {
         val elementType = if (type is VlangArrayTypeEx) {
             type.inner
         } else {
-            VlangAnyTypeEx.INSTANCE
+            null
         }
 
         return elementType

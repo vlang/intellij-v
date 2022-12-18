@@ -89,6 +89,10 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
     }
 
     override fun getQualifiedName(): String? {
+        return getQualifiedNameBase()
+    }
+
+    fun getQualifiedNameBase(): String? {
         val stub = stub
         if (stub != null) {
             val name = stub.name ?: "anon"

@@ -75,6 +75,7 @@ EOL_DOC_COMMENT = ({WS}*"//".*{NL})*({WS}*"//".*)
 LINE_COMMENT = "//" [^\r\n]*
 HASH_COMMENT = "#" [^\[] [^\r\n]*
 SHEBANG = "#!" [^\[] [^\r\n]*
+COMPILE_DIRECTIVE = ("#define" | "#flag" | "#include" | "#insert" | "#pkgconfig") [^\r\n]*
 
 MULTI_LINE_DEGENERATE_COMMENT = "/*" "*"+ "/"
 
@@ -222,6 +223,8 @@ REGULAR_SINGLE_STRING_PART=[^\\\'\$]+
 {SHEBANG}                                 { return SHEBANG; }
 {EOL_DOC_COMMENT}                         { return DOC_COMMENT; }
 {LINE_COMMENT}                            { return LINE_COMMENT; }
+
+{COMPILE_DIRECTIVE}                       { return COMPILE_DIRECTIVE; }
 {HASH_COMMENT}                            { return HASH_COMMENT; }
 
 // without this rule /*****/ is parsed as doc comment and /**/ is parsed as not closed doc comment, thanks Dart plugin

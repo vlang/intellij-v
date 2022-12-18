@@ -5102,11 +5102,11 @@ V Language file
               <empty list>
             PsiElement(VlangTokenType.identifier)('index')
           PsiElement(VlangTokenType.in)('in')
-          ADD_EXPR
-            RANGE_EXPR
-              LITERAL
-                PsiElement(VlangTokenType.int)('0')
-              PsiElement(VlangTokenType...)('..')
+          RANGE_EXPR
+            LITERAL
+              PsiElement(VlangTokenType.int)('0')
+            PsiElement(VlangTokenType...)('..')
+            ADD_EXPR
               REFERENCE_EXPRESSION
                 REFERENCE_EXPRESSION
                   REFERENCE_EXPRESSION
@@ -5115,9 +5115,9 @@ V Language file
                   PsiElement(VlangTokenType.identifier)('digits')
                 PsiElement(VlangTokenType..)('.')
                 PsiElement(VlangTokenType.identifier)('len')
-            PsiElement(VlangTokenType.-)('-')
-            LITERAL
-              PsiElement(VlangTokenType.int)('1')
+              PsiElement(VlangTokenType.-)('-')
+              LITERAL
+                PsiElement(VlangTokenType.int)('1')
         BLOCK
           PsiElement(VlangTokenType.{)('{')
           ASSIGNMENT_STATEMENT

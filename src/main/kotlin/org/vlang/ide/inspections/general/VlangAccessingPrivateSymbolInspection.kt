@@ -24,11 +24,16 @@ class VlangAccessingPrivateSymbolInspection : VlangBaseInspection() {
                     return
                 }
 
-                val fromC = (resolved.containingFile as? VlangFile)?.isCFile() ?: false
+                val resolvedPsiFile = resolved.containingFile as? VlangFile
+                val fromBuiltin = resolvedPsiFile?.getModuleQualifiedName() == VlangCodeInsightUtil.BUILTIN_MODULE
+                val fromStubs = resolvedPsiFile?.getModuleQualifiedName() == VlangCodeInsightUtil.STUBS_MODULE
+                val fromC = resolvedPsiFile?.isCFile() ?: false
                 val fromStructForC = resolved.parentOfType<VlangStructDeclaration>()?.name?.startsWith("C.") ?: false
 
                 if (resolved is VlangNamedElement &&
                     !fromStructForC &&
+                    !fromBuiltin &&
+                    !fromStubs &&
                     !fromC &&
                     !resolved.isPublic() &&
                     !VlangCodeInsightUtil.sameModule(o, resolved)

@@ -36,11 +36,8 @@ class VlangRunConfigurationProducer : LazyRunConfigurationProducer<VlangRunConfi
             return false
         }
 
-        val moduleName = containingFile.getModuleName()
-        val withModule = moduleName != null
-        val runAsDirectory = withModule && element !is VlangFile
-
-        val expectedKind = if (runAsDirectory) RunKind.Directory else RunKind.File
+        val runAsModule = needRunFileAsModule(containingFile)
+        val expectedKind = if (runAsModule) RunKind.Directory else RunKind.File
 
         return configuration.runKind == expectedKind &&
                 configuration.fileName == containingFile.virtualFile.path
@@ -66,7 +63,7 @@ class VlangRunConfigurationProducer : LazyRunConfigurationProducer<VlangRunConfi
 
         val runAsModule = needRunFileAsModule(containingFile)
         if (runAsModule) {
-            val configurationName = getModuleConfigurationName(project, moduleName, containingFile) ?: moduleName
+            val configurationName = getModuleConfigurationName(project, moduleName, containingFile) ?: moduleName ?: "main"
             configuration.name = "V Build $configurationName"
         } else {
             configuration.name = "V Run ${containingFile.name}"

@@ -2,8 +2,10 @@ package org.vlang.lang.psi.types
 
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
+import com.intellij.psi.search.GlobalSearchScope
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.VlangFile
+import org.vlang.lang.psi.VlangNamedElement
 import org.vlang.lang.psi.VlangStructDeclaration
 import org.vlang.lang.stubs.index.VlangClassLikeIndex
 
@@ -14,7 +16,7 @@ open class VlangStructTypeEx(private val name: String, anchor: PsiElement?) :
 
     override fun qualifiedName(): String {
         if (moduleName.isEmpty()) {
-            return "main.$name"
+            return "unnamed.$name"
         }
         return "$moduleName.$name"
     }
@@ -55,17 +57,57 @@ open class VlangStructTypeEx(private val name: String, anchor: PsiElement?) :
 
     override fun substituteGenerics(nameMap: Map<String, VlangTypeEx>): VlangTypeEx = this
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as VlangStructTypeEx
+
+        if (name != other.name) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int = name.hashCode()
+
     override fun resolve(project: Project): VlangStructDeclaration? {
-        val variants = VlangClassLikeIndex.find(qualifiedName(), project, null, null)
+        // When file doesn't have a module name, we search all symbols only inside this file.
+        val localFileResolve = containingFile != null && containingFile.getModule() == null
+        val scope = if (localFileResolve) GlobalSearchScope.fileScope(containingFile!!) else null
+
+        val variants = VlangClassLikeIndex.find(qualifiedName(), project, scope, null)
         if (variants.size == 1) {
             return variants.first() as? VlangStructDeclaration
         }
 
-        return variants.firstOrNull { !(it.containingFile as VlangFile).isTestFile() } as? VlangStructDeclaration
+        val containsVariantFromModules = variants.any { fromModules(it) }
+
+        if (containsVariantFromModules) {
+            val variantsWithoutModules = variants.filter { fromModules(it) }
+            if (variantsWithoutModules.isEmpty()) {
+                return preferNonTestsFirst(variants) as? VlangStructDeclaration
+            }
+            return preferNonTestsFirst(variantsWithoutModules) as? VlangStructDeclaration
+        }
+
+        return preferNonTestsFirst(variants) as? VlangStructDeclaration
     }
 
+    private fun preferNonTestsFirst(variants: Collection<VlangNamedElement>): VlangNamedElement? {
+        if (variants.size == 1) {
+            return variants.first()
+        }
+
+        return variants
+            .firstOrNull {
+                !(it.containingFile as VlangFile).isTestFile()
+            }
+    }
+
+    private fun fromModules(it: VlangNamedElement) = it.containingFile.virtualFile.path.contains(".vmodules")
+
     companion object {
-        val AnyStruct = object : VlangStructTypeEx("AnyStruct", null) {
+        val UnknownCDeclarationStruct = object : VlangStructTypeEx("UnknownCDeclaration", null) {
             override val moduleName: String
                 get() = VlangCodeInsightUtil.STUBS_MODULE
         }

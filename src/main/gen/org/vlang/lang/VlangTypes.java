@@ -1,13 +1,13 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang;
 
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.PsiElement;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.tree.IElementType;
 import org.vlang.lang.psi.VlangCompositeElementType;
-import org.vlang.lang.stubs.VlangElementTypeFactory;
 import org.vlang.lang.psi.VlangTokenType;
 import org.vlang.lang.psi.impl.*;
+import org.vlang.lang.stubs.VlangElementTypeFactory;
 
 public interface VlangTypes {
 
@@ -59,7 +59,7 @@ public interface VlangTypes {
   IElementType EMBEDDED_DEFINITION = new VlangCompositeElementType("EMBEDDED_DEFINITION");
   IElementType EMBEDDED_INTERFACE_DEFINITION = VlangElementTypeFactory.stubFactory("EMBEDDED_INTERFACE_DEFINITION");
   IElementType EMPTY_SLICE = new VlangCompositeElementType("EMPTY_SLICE");
-  IElementType ENUM_BACKED_TYPE_EXPR = new VlangCompositeElementType("ENUM_BACKED_TYPE_EXPR");
+  IElementType ENUM_BACKED_TYPE_AS = new VlangCompositeElementType("ENUM_BACKED_TYPE_AS");
   IElementType ENUM_DECLARATION = VlangElementTypeFactory.stubFactory("ENUM_DECLARATION");
   IElementType ENUM_FETCH = new VlangCompositeElementType("ENUM_FETCH");
   IElementType ENUM_FIELD_DECLARATION = new VlangCompositeElementType("ENUM_FIELD_DECLARATION");
@@ -508,8 +508,8 @@ public interface VlangTypes {
       else if (type == EMPTY_SLICE) {
         return new VlangEmptySliceImpl(node);
       }
-      else if (type == ENUM_BACKED_TYPE_EXPR) {
-        return new VlangEnumBackedTypeExprImpl(node);
+      else if (type == ENUM_BACKED_TYPE_AS) {
+        return new VlangEnumBackedTypeAsImpl(node);
       }
       else if (type == ENUM_DECLARATION) {
         return new VlangEnumDeclarationImpl(node);

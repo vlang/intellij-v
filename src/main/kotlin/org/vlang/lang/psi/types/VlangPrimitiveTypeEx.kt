@@ -21,6 +21,7 @@ class VlangPrimitiveTypeEx(private val name: VlangPrimitiveTypes) : VlangBaseTyp
             is VlangAnyTypeEx       -> true
             is VlangUnknownTypeEx   -> true
             is VlangVoidPtrTypeEx   -> true
+            is VlangGenericTypeEx   -> true
             is VlangPrimitiveTypeEx -> {
                 if (name == rhs.name) {
                     return true

@@ -5,6 +5,7 @@ import com.intellij.openapi.startup.StartupActivity
 import com.intellij.openapi.util.registry.Registry
 import com.jetbrains.cidr.execution.debugger.evaluation.CidrValue
 import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
+import org.vlang.configurations.VlangProjectStructureState.Companion.projectStructure
 import org.vlang.configurations.VlangToolchainsState
 import org.vlang.projectWizard.VlangToolchainFlavor
 
@@ -34,6 +35,8 @@ class VlangPostStartupActivity : StartupActivity {
         } catch (e: NoClassDefFoundError) {
             // ignore
         }
+
+        project.projectStructure.determineProjectStructure(project)
     }
 
     companion object {

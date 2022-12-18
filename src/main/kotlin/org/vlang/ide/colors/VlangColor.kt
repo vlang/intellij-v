@@ -106,6 +106,9 @@ enum class VlangColor(readableName: @NlsContexts.AttributeDescriptor String, def
     DOC_EMPHASIS("Doc//Italic"),
     DOC_STRONG("Doc//Bold"),
     DOC_CODE("Doc//Code", Default.DOC_COMMENT_MARKUP),
+
+    // C Interop
+    COMPILE_DIRECTIVE("C Interop//Compile directive", Default.METADATA),
     ;
 
     val textAttributesKey = TextAttributesKey.createTextAttributesKey("org.vlang.$name", default)

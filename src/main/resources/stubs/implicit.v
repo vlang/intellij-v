@@ -3,24 +3,24 @@
 // license that can be found in the LICENSE file.
 module stubs
 
-// AnyStruct is any structure in code.
+// Any is any type in code.
 //
-// It is needed to define all implicit methods of structures.
-struct AnyStruct {}
+// It is needed to define all implicit methods of all types.
+type Any = any
 
-// str returns a string representation of the structure.
+// str returns a string representation of the type.
 //
 // **Note**
 //
-// This method is implicitly implemented by any struct,
-// you can override it for your struct:
+// This method is implicitly implemented by any type,
+// you can override it for your type:
 // ```
 // struct MyStruct {
-//     name string
+//   name string
 // }
 //
 // pub fn (s MyStruct) str() string {
-//     return s.name
+//   return s.name
 // }
 // ```
 //
@@ -30,8 +30,11 @@ struct AnyStruct {}
 // struct Foo {}
 //
 // fn main() {
-//     s := Foo{}
-//     println(s.str()) // Foo{}
+//   s := Foo{}
+//   println(s.str()) // Foo{}
+//
+//   mp := map[string]int{}
+//   println(mp.str()) // map[string]int{}
 // }
 // ```
-pub fn (a AnyStruct) str() string
+pub fn (a Any) str() string

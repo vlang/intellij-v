@@ -54,17 +54,16 @@ public class VlangParser implements PsiParser, LightPsiParser {
       SIMPLE_STATEMENT, SPAWN_STATEMENT, STATEMENT, UNSAFE_STATEMENT),
     create_token_set_(ADD_EXPR, AND_EXPR, ARRAY_CREATION, AS_EXPRESSION,
       CALL_EXPR, CALL_EXPR_WITH_PROPAGATE, COMPILE_TIME_IF_EXPRESSION, CONDITIONAL_EXPR,
-      DOT_EXPRESSION, DUMP_CALL_EXPR, ENUM_BACKED_TYPE_EXPR, ENUM_FETCH,
-      EXPRESSION, FUNCTION_LIT, GO_EXPRESSION, IF_EXPRESSION,
-      INC_DEC_EXPRESSION, INDEX_OR_SLICE_EXPR, IN_EXPRESSION, IS_EXPRESSION,
-      IS_REF_TYPE_CALL_EXPR, JSON_CALL_EXPR, LITERAL, LITERAL_VALUE_EXPRESSION,
-      LOCK_EXPRESSION, MAP_INIT_EXPR, MATCH_EXPRESSION, MUL_EXPR,
-      MUT_EXPRESSION, NOT_IN_EXPRESSION, NOT_IS_EXPRESSION, OFFSET_OF_CALL_EXPR,
-      OR_BLOCK_EXPR, OR_EXPR, PARENTHESES_EXPR, RANGE_EXPR,
-      REFERENCE_EXPRESSION, SELECT_EXPRESSION, SEND_EXPR, SHARED_EXPRESSION,
-      SIZE_OF_CALL_EXPR, SPAWN_EXPRESSION, SQL_EXPRESSION, STRING_LITERAL,
-      TYPE_CAST_EXPRESSION, TYPE_OF_CALL_EXPR, UNARY_EXPR, UNPACKING_EXPRESSION,
-      UNSAFE_EXPRESSION),
+      DOT_EXPRESSION, DUMP_CALL_EXPR, ENUM_FETCH, EXPRESSION,
+      FUNCTION_LIT, GO_EXPRESSION, IF_EXPRESSION, INC_DEC_EXPRESSION,
+      INDEX_OR_SLICE_EXPR, IN_EXPRESSION, IS_EXPRESSION, IS_REF_TYPE_CALL_EXPR,
+      JSON_CALL_EXPR, LITERAL, LITERAL_VALUE_EXPRESSION, LOCK_EXPRESSION,
+      MAP_INIT_EXPR, MATCH_EXPRESSION, MUL_EXPR, MUT_EXPRESSION,
+      NOT_IN_EXPRESSION, NOT_IS_EXPRESSION, OFFSET_OF_CALL_EXPR, OR_BLOCK_EXPR,
+      OR_EXPR, PARENTHESES_EXPR, RANGE_EXPR, REFERENCE_EXPRESSION,
+      SELECT_EXPRESSION, SEND_EXPR, SHARED_EXPRESSION, SIZE_OF_CALL_EXPR,
+      SPAWN_EXPRESSION, SQL_EXPRESSION, STRING_LITERAL, TYPE_CAST_EXPRESSION,
+      TYPE_OF_CALL_EXPR, UNARY_EXPR, UNPACKING_EXPRESSION, UNSAFE_EXPRESSION),
   };
 
   /* ********************************************************** */
@@ -1660,11 +1659,11 @@ public class VlangParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // as Type
-  public static boolean EnumBackedTypeExpr(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "EnumBackedTypeExpr")) return false;
+  public static boolean EnumBackedTypeAs(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "EnumBackedTypeAs")) return false;
     if (!nextTokenIs(b, AS)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, ENUM_BACKED_TYPE_EXPR, null);
+    Marker m = enter_section_(b, l, _NONE_, ENUM_BACKED_TYPE_AS, null);
     r = consumeToken(b, AS);
     p = r; // pin = 1
     r = r && Type(b, l + 1);
@@ -1786,7 +1785,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // enum identifier EnumBackedTypeExpr? '{' EnumFields? '}'
+  // enum identifier EnumBackedTypeAs? '{' EnumFields? '}'
   public static boolean EnumType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "EnumType")) return false;
     if (!nextTokenIs(b, ENUM)) return false;
@@ -1802,10 +1801,10 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // EnumBackedTypeExpr?
+  // EnumBackedTypeAs?
   private static boolean EnumType_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "EnumType_2")) return false;
-    EnumBackedTypeExpr(b, l + 1);
+    EnumBackedTypeAs(b, l + 1);
     return true;
   }
 
@@ -4910,26 +4909,15 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // &'..' '..' Expression
+  // '..' Expression
   static boolean SliceExprBody(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SliceExprBody")) return false;
     if (!nextTokenIs(b, RANGE)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = SliceExprBody_0(b, l + 1);
-    r = r && consumeToken(b, RANGE);
+    r = consumeToken(b, RANGE);
     r = r && Expression(b, l + 1, -1);
     exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // &'..'
-  private static boolean SliceExprBody_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SliceExprBody_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _AND_);
-    r = consumeToken(b, RANGE);
-    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -6605,11 +6593,11 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // 0: BINARY(OrExpr)
   // 1: BINARY(AndExpr)
   // 2: BINARY(ConditionalExpr)
-  // 3: BINARY(AddExpr)
-  // 4: BINARY(MulExpr)
-  // 5: PREFIX(UnaryExpr)
-  // 6: BINARY(SendExpr)
-  // 7: BINARY(RangeExpr)
+  // 3: BINARY(RangeExpr)
+  // 4: BINARY(AddExpr)
+  // 5: BINARY(MulExpr)
+  // 6: PREFIX(UnaryExpr)
+  // 7: BINARY(SendExpr)
   // 8: ATOM(MatchExpression)
   // 9: ATOM(SelectExpression)
   // 10: ATOM(CompileTimeIfExpression)
@@ -6673,21 +6661,21 @@ public class VlangParser implements PsiParser, LightPsiParser {
         r = Expression(b, l, 2);
         exit_section_(b, l, m, CONDITIONAL_EXPR, r, true, null);
       }
-      else if (g < 3 && AddOp(b, l + 1)) {
+      else if (g < 3 && RangeExpr_0(b, l + 1)) {
         r = Expression(b, l, 3);
+        exit_section_(b, l, m, RANGE_EXPR, r, true, null);
+      }
+      else if (g < 4 && AddOp(b, l + 1)) {
+        r = Expression(b, l, 4);
         exit_section_(b, l, m, ADD_EXPR, r, true, null);
       }
-      else if (g < 4 && MulOp(b, l + 1)) {
-        r = Expression(b, l, 4);
+      else if (g < 5 && MulOp(b, l + 1)) {
+        r = Expression(b, l, 5);
         exit_section_(b, l, m, MUL_EXPR, r, true, null);
       }
-      else if (g < 6 && consumeTokenSmart(b, SEND_CHANNEL)) {
-        r = Expression(b, l, 6);
-        exit_section_(b, l, m, SEND_EXPR, r, true, null);
-      }
-      else if (g < 7 && RangeExpr_0(b, l + 1)) {
+      else if (g < 7 && consumeTokenSmart(b, SEND_CHANNEL)) {
         r = Expression(b, l, 7);
-        exit_section_(b, l, m, RANGE_EXPR, r, true, null);
+        exit_section_(b, l, m, SEND_EXPR, r, true, null);
       }
       else if (g < 11 && consumeTokenSmart(b, IN)) {
         r = Expression(b, l, 11);
@@ -6757,17 +6745,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  public static boolean UnaryExpr(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "UnaryExpr")) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, null);
-    r = UnaryOp(b, l + 1);
-    p = r;
-    r = p && Expression(b, l, 5);
-    exit_section_(b, l, m, UNARY_EXPR, r, p, null);
-    return r || p;
-  }
-
   // ('..' | '...') !']'
   private static boolean RangeExpr_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RangeExpr_0")) return false;
@@ -6796,6 +6773,17 @@ public class VlangParser implements PsiParser, LightPsiParser {
     r = !consumeTokenSmart(b, RBRACK);
     exit_section_(b, l, m, r, false, null);
     return r;
+  }
+
+  public static boolean UnaryExpr(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UnaryExpr")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = UnaryOp(b, l + 1);
+    p = r;
+    r = p && Expression(b, l, 6);
+    exit_section_(b, l, m, UNARY_EXPR, r, p, null);
+    return r || p;
   }
 
   // match BeforeBlockExpression '{' MatchArms '}'

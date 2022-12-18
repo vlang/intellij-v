@@ -7,13 +7,14 @@ import org.vlang.lang.VlangTypes.*
 object VlangTokenTypes {
     @JvmField val LINE_COMMENT = VlangTokenType("VLANG_LINE_COMMENT")
     @JvmField val HASH_COMMENT = VlangTokenType("VLANG_HASH_COMMENT")
+    @JvmField val COMPILE_DIRECTIVE = VlangTokenType("VLANG_COMPILE_DIRECTIVE")
     @JvmField val MULTI_LINE_COMMENT = VlangTokenType("VLANG_MULTI_LINE_COMMENT")
 
     @JvmField val WS = VlangTokenType("VLANG_WHITESPACE")
     @JvmField val NLS = VlangTokenType("VLANG_WS_NEW_LINES")
 
     val IDENTIFIERS = TokenSet.create(IDENTIFIER)
-    val COMMENTS = TokenSet.create(LINE_COMMENT, MULTI_LINE_COMMENT, HASH_COMMENT, VlangDocElementTypes.DOC_COMMENT)
+    val COMMENTS = TokenSet.create(LINE_COMMENT, MULTI_LINE_COMMENT, HASH_COMMENT, COMPILE_DIRECTIVE, VlangDocElementTypes.DOC_COMMENT)
     val STRING_LITERALS = TokenSet.create(
         RAW_STRING,
         CHAR,

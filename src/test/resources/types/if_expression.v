@@ -39,4 +39,7 @@ fn main() {
 	a3, a4 := if true { unsafe { 'a', 10 } } else { 'b', 10 }
 	expr_type(a3, 'string')
 	expr_type(a4, 'int')
+
+	a5 := $if true { 'a' } $else { 'b' }
+	expr_type(a5, 'string')
 }

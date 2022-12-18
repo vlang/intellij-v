@@ -10,7 +10,7 @@ fn main() {
 	expr_type(mp['a'], 'int')
 
 	str := 'hello world'
-	expr_type(str[1], 'rune')
+	expr_type(str[1], 'u8')
 
 	mm := MyMap{'a': 1, 'b': 2, 'c': 3}
 	expr_type(mm['a'], 'int')

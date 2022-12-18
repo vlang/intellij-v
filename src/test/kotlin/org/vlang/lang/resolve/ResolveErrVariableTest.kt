@@ -11,24 +11,23 @@ open class ResolveErrVariableTest : ResolveTestBase() {
             
             fn main() {
                 get() or { 
-                    println(er<caret>r)
+                    println(/*caret*/err)
                 }
                 
                 if _ := get() {
                     // ...
                 } else {
-                    println(er<caret>r)
+                    println(/*caret*/err)
                     
-                    if er<caret>r == "" {
+                    if /*caret*/err == "" {
                         // ...
                     }
                 }
             }
         """.trimIndent())
 
-        setupBuiltin()
-        assertReferencedTo("INTERFACE_DECLARATION IError")
-        assertReferencedTo("INTERFACE_DECLARATION IError")
-        assertReferencedTo("INTERFACE_DECLARATION IError")
+        assertReferencedTo("CONST_DEFINITION err")
+        assertReferencedTo("CONST_DEFINITION err")
+        assertReferencedTo("CONST_DEFINITION err")
     }
 }

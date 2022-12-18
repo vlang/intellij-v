@@ -52,6 +52,8 @@ class CompletionTest : CompletionTestBase() {
 
     fun `test struct method and field with same name completion`() = checkEquals(
         """
+        module main
+
         struct Foo {
             name string
         }
@@ -178,7 +180,7 @@ class CompletionTest : CompletionTestBase() {
             a := Colors.red
             a = ./*caret*/
         }
-        """.trimIndent(), 1, "red", "green"
+        """.trimIndent(), 1, "red", "green", "str",
     )
 
     fun `test map init`() = doTestCompletion(

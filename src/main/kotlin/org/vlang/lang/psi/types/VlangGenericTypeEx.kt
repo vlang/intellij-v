@@ -11,13 +11,7 @@ class VlangGenericTypeEx(private val name: String, anchor: PsiElement) : VlangBa
     override fun readableName(context: PsiElement) = name
 
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
-        return when (rhs) {
-            is VlangAnyTypeEx     -> true
-            is VlangUnknownTypeEx -> true
-            is VlangVoidPtrTypeEx -> true
-            is VlangGenericTypeEx -> true
-            else                  -> false
-        }
+        return true // until generic constraints
     }
 
     override fun isEqual(rhs: VlangTypeEx): Boolean {

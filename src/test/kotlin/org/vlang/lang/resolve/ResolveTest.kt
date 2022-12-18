@@ -87,4 +87,19 @@ class ResolveTest : ResolveTestBase() {
         assertReferencedTo("VAR_DEFINITION foo")
         assertUnresolved()
     }
+
+    fun `test resolve enum methods`() {
+        mainFile("a.v", """
+            enum Color { red }
+            
+            fn (c Color) foo() {}
+            
+            fn main() {
+                c := Color.red
+                c.f<caret>oo()
+            }
+        """.trimIndent())
+
+        assertQualifiedReferencedTo("METHOD_DECLARATION unnamed.Color.foo")
+    }
 }
