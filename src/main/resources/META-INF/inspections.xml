@@ -163,6 +163,48 @@
 
         <!-- region Unused inspections -->
         <localInspection language="vlang" groupPath="V"
+                         groupName="Unused" shortName="VlangUnusedFunctionInspection"
+                         displayName="Unused function/method inspection"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="org.vlang.ide.inspections.unused.VlangUnusedFunctionInspection"/>
+
+        <localInspection language="vlang" groupPath="V"
+                         groupName="Unused" shortName="VlangUnusedStructInspection"
+                         displayName="Unused struct inspection"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="org.vlang.ide.inspections.unused.VlangUnusedStructInspection"/>
+
+        <localInspection language="vlang" groupPath="V"
+                         groupName="Unused" shortName="VlangUnusedInterfaceInspection"
+                         displayName="Unused interface inspection"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="org.vlang.ide.inspections.unused.VlangUnusedInterfaceInspection"/>
+
+        <localInspection language="vlang" groupPath="V"
+                         groupName="Unused" shortName="VlangUnusedEnumInspection"
+                         displayName="Unused enum inspection"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="org.vlang.ide.inspections.unused.VlangUnusedEnumInspection"/>
+
+        <localInspection language="vlang" groupPath="V"
+                         groupName="Unused" shortName="VlangUnusedTypeAliasInspection"
+                         displayName="Unused type alias inspection"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="org.vlang.ide.inspections.unused.VlangUnusedTypeAliasInspection"/>
+
+        <localInspection language="vlang" groupPath="V"
+                         groupName="Unused" shortName="VlangUnusedSumTypeInspection"
+                         displayName="Unused sum type inspection"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="org.vlang.ide.inspections.unused.VlangUnusedSumTypeInspection"/>
+
+        <localInspection language="vlang" groupPath="V"
+                         groupName="Unused" shortName="VlangUnusedConstantInspection"
+                         displayName="Unused constant inspection"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="org.vlang.ide.inspections.unused.VlangUnusedConstantInspection"/>
+
+        <localInspection language="vlang" groupPath="V"
                          groupName="Unused" shortName="VlangUnusedParameterInspection"
                          displayName="Unused parameter inspection"
                          enabledByDefault="true" level="WARNING"

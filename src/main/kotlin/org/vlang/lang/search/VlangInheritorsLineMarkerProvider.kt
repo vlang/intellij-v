@@ -61,15 +61,6 @@ class VlangInheritorsLineMarkerProvider : LineMarkerProviderDescriptor() {
         }
     }
 
-    private fun <T : PsiElement> hasImplementations(
-        element: T,
-        search: QueryExecutorBase<T, DefinitionsScopedSearch.SearchParameters>,
-    ): Boolean {
-        val processor = CommonProcessors.FindFirstProcessor<T>()
-        search.processQuery(VlangGotoUtil.param(element), processor)
-        return processor.isFound
-    }
-
     private fun createTypeSpecInfo(anchor: PsiElement, spec: VlangNamedElement): LineMarkerInfo<PsiElement> {
         val name = spec.name ?: "anon"
         return VlangGotoUtil.createInfo(anchor, { event, element ->
@@ -112,6 +103,15 @@ class VlangInheritorsLineMarkerProvider : LineMarkerProviderDescriptor() {
     }
 
     companion object {
+        fun <T : PsiElement> hasImplementations(
+            element: T,
+            search: QueryExecutorBase<T, DefinitionsScopedSearch.SearchParameters>,
+        ): Boolean {
+            val processor = CommonProcessors.FindFirstProcessor<T>()
+            search.processQuery(VlangGotoUtil.param(element), processor)
+            return processor.isFound
+        }
+
         fun showImplementationPopup(
             name: String,
             event: MouseEvent?,

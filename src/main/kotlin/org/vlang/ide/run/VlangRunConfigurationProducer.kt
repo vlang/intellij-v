@@ -171,7 +171,7 @@ class VlangRunConfigurationProducer : LazyRunConfigurationProducer<VlangRunConfi
 
     companion object {
         val KNOWN_PLATFORMS = listOf(
-            "windows", "linux", "macos", "mac", "darwin", "ios", "android", "mach", "dragonfly", "gnu", "hpux", "haiku", "qnx", "solaris"
+            "default", "windows", "linux", "macos", "mac", "darwin", "ios", "android", "mach", "dragonfly", "gnu", "hpux", "haiku", "qnx", "solaris"
         )
     }
 }

@@ -17,6 +17,7 @@ import org.vlang.configurations.VlangConfiguration
 import org.vlang.configurations.VlangProjectStructureState.Companion.projectStructure
 import org.vlang.ide.codeInsight.VlangAttributesUtil
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
+import org.vlang.ide.run.VlangRunConfigurationProducer
 import org.vlang.ide.ui.VIcons
 import org.vlang.lang.VlangFileType
 import org.vlang.lang.VlangLanguage
@@ -57,6 +58,12 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
         return getFileAttributes().any {
             VlangAttributesUtil.isTranslated(it)
         }
+    }
+
+    fun isPlatformSpecificFile(): Boolean {
+        val name = name.substringBefore(".", name)
+        val platform = name.substringAfterLast("_", name)
+        return platform in VlangRunConfigurationProducer.KNOWN_PLATFORMS
     }
 
     private fun getFileAttributes(): List<VlangAttribute> {
@@ -151,7 +158,7 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
         val needAddProjectDir = project.projectStructure.libraryWithTopModule
         val inProjectSource = virtualFile != null && virtualFile.path.normalizeSlashes()
             .contains(projectDir.path.normalizeSlashes() + "/")
-        
+
         if (needAddProjectDir && virtualFile != null && inProjectSource) {
             moduleNames.add(projectDir.name)
         }
