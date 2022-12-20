@@ -4,6 +4,8 @@ import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.psi.PsiElementVisitor
 import com.intellij.psi.util.PsiTreeUtil
+import org.vlang.ide.inspections.unused.VlangDeleteQuickFix.Companion.DELETE_FUNCTION_FIX
+import org.vlang.ide.inspections.unused.VlangDeleteQuickFix.Companion.DELETE_METHOD_FIX
 import org.vlang.ide.test.VlangTestUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.search.VlangSuperMarkerProvider
@@ -23,11 +25,16 @@ class VlangUnusedFunctionInspection : VlangUnusedBaseInspection() {
     }
 
     override fun registerProblem(holder: ProblemsHolder, element: VlangNamedElement) {
-        val identifier = element.getIdentifier() ?: return
         val kind = if (element is VlangFunctionDeclaration) "function" else "method"
+        val range = when (element) {
+            is VlangFunctionDeclaration -> element.getIdentifier().textRangeInParent
+            is VlangMethodDeclaration   -> element.methodName.textRangeInParent
+            else                        -> return
+        }
         holder.registerProblem(
-            identifier, "Unused $kind '${element.name}'",
-            ProblemHighlightType.LIKE_UNUSED_SYMBOL
+            element, "Unused $kind '${element.name}'",
+            ProblemHighlightType.LIKE_UNUSED_SYMBOL, range,
+            if (element is VlangFunctionDeclaration) DELETE_FUNCTION_FIX else DELETE_METHOD_FIX,
         )
     }
 

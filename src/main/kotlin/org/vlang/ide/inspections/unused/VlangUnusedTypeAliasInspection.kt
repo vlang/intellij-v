@@ -3,6 +3,7 @@ package org.vlang.ide.inspections.unused
 import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.psi.PsiElementVisitor
+import org.vlang.ide.inspections.unused.VlangDeleteQuickFix.Companion.DELETE_TYPE_ALIAS_FIX
 import org.vlang.lang.psi.VlangNamedElement
 import org.vlang.lang.psi.VlangTypeAliasDeclaration
 import org.vlang.lang.psi.VlangVisitor
@@ -18,7 +19,16 @@ class VlangUnusedTypeAliasInspection : VlangUnusedBaseInspection() {
         element is VlangTypeAliasDeclaration && element.aliasType != null && element.aliasType!!.isAlias
 
     override fun registerProblem(holder: ProblemsHolder, element: VlangNamedElement) {
+        element as VlangTypeAliasDeclaration
+
         val identifier = element.getIdentifier() ?: return
-        holder.registerProblem(identifier, "Unused type alias '${element.name}'", ProblemHighlightType.LIKE_UNUSED_SYMBOL)
+        val aliasType = element.aliasType ?: return
+        val range = identifier.textRangeInParent.shiftRight(aliasType.textRangeInParent.startOffset)
+        holder.registerProblem(
+            element,
+            "Unused type alias '${element.name}'",
+            ProblemHighlightType.LIKE_UNUSED_SYMBOL, range,
+            DELETE_TYPE_ALIAS_FIX,
+        )
     }
 }

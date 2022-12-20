@@ -3,6 +3,7 @@ package org.vlang.ide.inspections.unused
 import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.psi.PsiElementVisitor
+import org.vlang.ide.inspections.unused.VlangDeleteQuickFix.Companion.DELETE_INTERFACE_FIX
 import org.vlang.lang.psi.VlangInterfaceDeclaration
 import org.vlang.lang.psi.VlangNamedElement
 import org.vlang.lang.psi.VlangVisitor
@@ -21,7 +22,15 @@ class VlangUnusedInterfaceInspection : VlangUnusedBaseInspection() {
     }
 
     override fun registerProblem(holder: ProblemsHolder, element: VlangNamedElement) {
+        element as VlangInterfaceDeclaration
+
         val identifier = element.getIdentifier() ?: return
-        holder.registerProblem(identifier, "Unused interface '${element.name}'", ProblemHighlightType.LIKE_UNUSED_SYMBOL)
+        val range = identifier.textRangeInParent.shiftRight(element.interfaceType.textRangeInParent.startOffset)
+        holder.registerProblem(
+            element,
+            "Unused interface '${element.name}'",
+            ProblemHighlightType.LIKE_UNUSED_SYMBOL, range,
+            DELETE_INTERFACE_FIX,
+        )
     }
 }
