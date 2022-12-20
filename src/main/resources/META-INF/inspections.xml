@@ -68,8 +68,8 @@
 
         <localInspection language="vlang" groupPath="V"
                          groupName="General" shortName="VlangMissingFunctionNameInDocInspection"
-                         displayName="Missing function name in doc"
-                         enabledByDefault="false" level="WEAK WARNING"
+                         displayName="Missing function name at beginning of comment"
+                         enabledByDefault="true" level="WEAK WARNING"
                          implementationClass="org.vlang.ide.inspections.general.VlangMissingFunctionNameInDocInspection"/>
 
         <localInspection language="vlang" groupPath="V"

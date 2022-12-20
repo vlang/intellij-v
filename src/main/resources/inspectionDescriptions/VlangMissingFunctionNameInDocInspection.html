@@ -1,0 +1,26 @@
+<html>
+<body>
+<p>
+    Report a doc comment for a function that does not contain the function name at the beginning.
+</p>
+
+<h2>Bad</h2>
+
+<code>
+    // returns the sum of two numbers<br>
+    fn add(a int, b int) int { ... }
+</code>
+
+<h2>Good</h2>
+
+<code>
+    // <b>add</b> returns the sum of two numbers<br>
+    fn add(a int, b int) int { ... }
+</code>
+
+<p>
+    See <a href="https://github.com/vlang/v/blob/master/doc/docs.md#writing-documentation">Documentation</a> for more
+    information.
+</p>
+</body>
+</html>
