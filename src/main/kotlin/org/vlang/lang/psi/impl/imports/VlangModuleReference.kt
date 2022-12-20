@@ -4,9 +4,11 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveState
 import com.intellij.psi.SmartPointerManager
 import com.intellij.psi.util.parentOfType
-import org.vlang.lang.psi.*
+import org.vlang.lang.psi.VlangFile
+import org.vlang.lang.psi.VlangImportAliasName
+import org.vlang.lang.psi.VlangImportName
+import org.vlang.lang.psi.VlangImportSpec
 import org.vlang.lang.psi.impl.*
-import org.vlang.lang.psi.impl.VlangElementFactory
 import org.vlang.lang.stubs.index.VlangModulesIndex
 
 class VlangModuleReference<T : PsiElement>(element: T) : VlangCachedReference<T>(element) {
@@ -95,7 +97,8 @@ class VlangModuleReference<T : PsiElement>(element: T) : VlangCachedReference<T>
         }
 
         if (parent != null) {
-            return !processor.execute(parent, state.put(VlangReferenceBase.ACTUAL_NAME, name))
+            val module = VlangModule.fromDirectory(parent)
+            return !processor.execute(module.toPsi(), state.put(VlangReferenceBase.ACTUAL_NAME, name))
         }
 
         return true

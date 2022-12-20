@@ -1,18 +1,15 @@
 package org.vlang.lang.psi.impl
 
-import com.intellij.lang.Language
 import com.intellij.openapi.fileEditor.impl.NonProjectFileWritingAccessProvider
 import com.intellij.openapi.progress.ProgressIndicatorProvider
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.roots.FileIndexFacade
 import com.intellij.pom.PomRenameableTarget
 import com.intellij.psi.PsiDirectory
-import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiNameIdentifierOwner
 import com.intellij.psi.impl.PomTargetPsiElementImpl
 import com.intellij.psi.search.GlobalSearchScope
-import com.intellij.psi.search.SearchScope
 import com.intellij.util.CommonProcessors
 import com.intellij.util.Processor
 import org.vlang.lang.VlangLanguage
@@ -139,26 +136,10 @@ class VlangModule(
     }
 }
 
-class VlangPomTargetPsiElement(project: Project, target: VlangModule) : PomTargetPsiElementImpl(project, target),
-    PsiNameIdentifierOwner {
-
-    override fun getLanguage(): Language {
-        return VlangLanguage
-    }
-
-    override fun getNameIdentifier(): PsiElement? {
-        return null
-    }
-
-    override fun getTarget(): VlangModule {
-        return super.getTarget() as VlangModule
-    }
-
-    override fun getUseScope(): SearchScope {
-        return GlobalSearchScope.allScope(project)
-    }
-
-    override fun toString(): String {
-        return "Psi Wrapper[$target]"
-    }
+class VlangPomTargetPsiElement(project: Project, target: VlangModule) : PomTargetPsiElementImpl(project, target), PsiNameIdentifierOwner {
+    override fun getLanguage() = VlangLanguage
+    override fun getNameIdentifier() = null
+    override fun getTarget() = super.getTarget() as VlangModule
+    override fun getUseScope() = GlobalSearchScope.allScope(project)
+    override fun toString() = "Psi Wrapper[$target]"
 }

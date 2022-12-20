@@ -12,14 +12,14 @@ class VlangUnresolvedImportInspection : VlangBaseInspection() {
         return object : VlangVisitor() {
             override fun visitImportName(importName: VlangImportName) {
                 val resolved = importName.resolve()
-                if (resolved != null) {
+                if (resolved.isNotEmpty()) {
                     return
                 }
 
                 val name = importName.text
                 holder.registerProblem(
                     importName,
-                    "Unresolved import: $name",
+                    "Unresolved import '$name'",
                     ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
                 )
             }

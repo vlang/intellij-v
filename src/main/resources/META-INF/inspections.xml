@@ -27,7 +27,7 @@
         <localInspection language="vlang" groupPath="V"
                          groupName="General" shortName="VlangUnresolvedImportInspection"
                          displayName="Unresolved import"
-                         enabledByDefault="false" level="ERROR"
+                         enabledByDefault="true" level="ERROR"
                          implementationClass="org.vlang.ide.inspections.general.VlangUnresolvedImportInspection"/>
 
         <localInspection language="vlang" groupPath="V"
