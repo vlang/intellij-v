@@ -13,6 +13,7 @@ import org.vlang.ide.colors.VlangColor
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.impl.VlangPomTargetPsiElement
 import org.vlang.lang.psi.impl.VlangReference
 import org.vlang.lang.psi.types.VlangPrimitiveTypes
 import org.vlang.lang.sql.VlangSqlUtil
@@ -125,7 +126,8 @@ class VlangAnnotator : Annotator {
             }
 
             is VlangGenericParameter          -> VlangColor.GENERIC_PARAMETER
-
+            is VlangPomTargetPsiElement       -> VlangColor.MODULE
+            is VlangImportAlias               -> VlangColor.MODULE
             else                              -> null
         }
     }
@@ -169,8 +171,8 @@ class VlangAnnotator : Annotator {
         is VlangEnumFieldDefinition         -> public(element, VlangColor.ENUM_FIELD, VlangColor.ENUM_FIELD)
 
         is VlangVarDefinition               -> mutable(element, VlangColor.MUTABLE_VARIABLE, VlangColor.VARIABLE)
-        is VlangReceiver                    -> mutable(element, VlangColor.MUTABLE_VARIABLE, VlangColor.VARIABLE)
-        is VlangParamDefinition             -> mutable(element, VlangColor.MUTABLE_VARIABLE, VlangColor.VARIABLE)
+        is VlangReceiver                    -> mutable(element, VlangColor.MUTABLE_RECEIVER, VlangColor.RECEIVER)
+        is VlangParamDefinition             -> mutable(element, VlangColor.MUTABLE_PARAMETER, VlangColor.PARAMETER)
         is VlangGlobalVariableDefinition    -> VlangColor.GLOBAL_VARIABLE
 
         is VlangLabelDefinition             -> label(element)

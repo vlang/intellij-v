@@ -40,10 +40,9 @@ The plugin provides support for V language
         <!-- endregion Language general -->
 
         <!-- region Annotator -->
-        <annotator language="vlang" order="first" id="org.vlang.lang.annotator.VlangAnnotator"
-                   implementationClass="org.vlang.lang.annotator.VlangAnnotator"/>
-        <annotator language="vlang" order="first" id="org.vlang.lang.annotator.VlangDocAnnotator"
-                   implementationClass="org.vlang.lang.annotator.VlangDocAnnotator"/>
+        <annotator language="vlang" implementationClass="org.vlang.lang.annotator.VlangHighlightingDumbAwareAnnotator"/>
+        <annotator language="vlang" implementationClass="org.vlang.lang.annotator.VlangAnnotator"/>
+        <annotator language="vlang" implementationClass="org.vlang.lang.annotator.VlangDocAnnotator"/>
         <!-- endregion Annotator -->
 
         <!-- region Formatter -->

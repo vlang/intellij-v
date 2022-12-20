@@ -21,6 +21,7 @@ enum class VlangColor(readableName: @NlsContexts.AttributeDescriptor String, def
     PUBLIC_ENUM("Types//Public enum", Default.CLASS_NAME),
     INTERFACE("Types//Module local interface", Default.INTERFACE_NAME),
     PUBLIC_INTERFACE("Types//Public interface", Default.INTERFACE_NAME),
+    MODULE("Declarations//Module", Default.IDENTIFIER),
 
     // Interface/Struct/Enum fields
     FIELD("Fields//Module local field", Default.INSTANCE_FIELD),

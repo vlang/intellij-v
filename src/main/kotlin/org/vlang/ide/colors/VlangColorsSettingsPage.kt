@@ -23,9 +23,9 @@ class VlangColorsSettingsPage : ColorSettingsPage, DisplayPrioritySortable {
     override fun getDisplayName() = "V"
 
     override fun getDemoText() = """// Simple example module main
-module main
+module <MODULE>main</MODULE>
 
-import sqlite
+import <MODULE>sqlite</MODULE>
 
 ${'$'}if windows {
 	<COMPILE_DIRECTIVE>#flag -lgdi32</COMPILE_DIRECTIVE>
@@ -133,7 +133,7 @@ fn <FUNCTION>main</FUNCTION>() {
 
 <USED_LABEL>label</USED_LABEL>:
 	<VARIABLE>database_name</VARIABLE> := 'database'
-	<VARIABLE>db</VARIABLE> := sqlite.<PUBLIC_FUNCTION>connect</PUBLIC_FUNCTION>('<STRING_INTERPOLATION>${"\${"}</STRING_INTERPOLATION>database_name<STRING_INTERPOLATION>}</STRING_INTERPOLATION>.sql') or { <PUBLIC_FUNCTION>panic</PUBLIC_FUNCTION>(err) }
+	<VARIABLE>db</VARIABLE> := <MODULE>sqlite</MODULE>.<PUBLIC_FUNCTION>connect</PUBLIC_FUNCTION>('<STRING_INTERPOLATION>${"\${"}</STRING_INTERPOLATION>database_name<STRING_INTERPOLATION>}</STRING_INTERPOLATION>.sql') or { <PUBLIC_FUNCTION>panic</PUBLIC_FUNCTION>(err) }
 	<KEYWORD>sql</KEYWORD> <VARIABLE>db</VARIABLE> {
 		<SQL_KEYWORD>create</SQL_KEYWORD> <SQL_KEYWORD>table</SQL_KEYWORD> <PUBLIC_STRUCT>PublicCodeStorage</PUBLIC_STRUCT>
 	}

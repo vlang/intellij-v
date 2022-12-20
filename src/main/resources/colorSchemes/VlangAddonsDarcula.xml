@@ -1,180 +1,197 @@
 <?xml version='1.0'?>
 <list>
-  <option name="org.vlang.CAPTURED_VARIABLE">
-    <value>
-      <option name="FOREGROUND" value="7dbda2"/>
-      <option name="FONT_TYPE" value="2"/>
-    </value>
-  </option>
-  <option name="org.vlang.CONSTANT">
-    <value>
-      <option name="FOREGROUND" value="9876aa"/>
-    </value>
-  </option>
-  <option name="org.vlang.CT_CONSTANT">
-    <value>
-      <option name="FOREGROUND" value="9876aa"/>
-    </value>
-  </option>
-  <option name="org.vlang.CT_FIELD">
-    <value>
-      <option name="FOREGROUND" value="9876aa"/>
-    </value>
-  </option>
-  <option name="org.vlang.CT_METHOD_CALL">
-    <value>
-      <option name="FOREGROUND" value="9876aa"/>
-    </value>
-  </option>
-  <option name="org.vlang.ENUM">
-    <value>
-      <option name="FOREGROUND" value="507874"/>
-    </value>
-  </option>
-  <option name="org.vlang.ENUM_FIELD">
-    <value>
-      <option name="FOREGROUND" value="9876aa"/>
-    </value>
-  </option>
-  <option name="org.vlang.GLOBAL_VARIABLE">
-    <value>
-      <option name="FOREGROUND" value="a9b7c6"/>
-      <option name="FONT_TYPE" value="1"/>
-    </value>
-  </option>
-  <option name="org.vlang.INTERFACE">
-    <value>
-      <option name="FOREGROUND" value="507874"/>
-    </value>
-  </option>
-  <option name="org.vlang.MUTABLE_CAPTURED_VARIABLE">
-    <value>
-      <option name="FOREGROUND" value="7dbda2"/>
-      <option name="FONT_TYPE" value="2"/>
-      <option name="EFFECT_COLOR" value="bca5c4"/>
-      <option name="EFFECT_TYPE" value="1"/>
-    </value>
-  </option>
-  <option name="org.vlang.MUTABLE_PARAMETER">
-    <value>
-      <option name="FOREGROUND" value="a9b7c6"/>
-      <option name="EFFECT_COLOR" value="bca5c4"/>
-      <option name="EFFECT_TYPE" value="1"/>
-    </value>
-  </option>
-  <option name="org.vlang.MUTABLE_RECEIVER">
-    <value>
-      <option name="FOREGROUND" value="a9b7c6"/>
-      <option name="EFFECT_COLOR" value="bca5c4"/>
-      <option name="EFFECT_TYPE" value="1"/>
-    </value>
-  </option>
-  <option name="org.vlang.MUTABLE_VARIABLE">
-    <value>
-      <option name="FOREGROUND" value="a9b7c6"/>
-      <option name="EFFECT_COLOR" value="bca5c4"/>
-      <option name="EFFECT_TYPE" value="1"/>
-    </value>
-  </option>
-  <option name="org.vlang.PUBLIC_ENUM">
-    <value>
-      <option name="FOREGROUND" value="507874"/>
-      <option name="FONT_TYPE" value="2"/>
-    </value>
-  </option>
-  <option name="org.vlang.PUBLIC_FIELD">
-    <value>
-      <option name="FOREGROUND" value="9876aa"/>
-      <option name="FONT_TYPE" value="2"/>
-    </value>
-  </option>
-  <option name="org.vlang.PUBLIC_FUNCTION">
-    <value>
-      <option name="FOREGROUND" value="ffc66d"/>
-      <option name="FONT_TYPE" value="2"/>
-    </value>
-  </option>
-  <option name="org.vlang.PUBLIC_INTERFACE">
-    <value>
-      <option name="FOREGROUND" value="507874"/>
-      <option name="FONT_TYPE" value="2"/>
-    </value>
-  </option>
-  <option name="org.vlang.PUBLIC_INTERFACE_METHOD">
-    <value>
-      <option name="FOREGROUND" value="ffc66d"/>
-      <option name="FONT_TYPE" value="2"/>
-    </value>
-  </option>
-  <option name="org.vlang.PUBLIC_MUTABLE_FIELD">
-    <value>
-      <option name="FOREGROUND" value="9876aa"/>
-      <option name="FONT_TYPE" value="2"/>
-    </value>
-  </option>
-  <option name="org.vlang.PUBLIC_STRUCT">
-    <value>
-      <option name="FOREGROUND" value="507874"/>
-      <option name="FONT_TYPE" value="2"/>
-    </value>
-  </option>
-  <option name="org.vlang.PUBLIC_TYPE_ALIAS">
-    <value>
-      <option name="FOREGROUND" value="507874"/>
-    </value>
-  </option>
-  <option name="org.vlang.PUBLIC_UNION">
-    <value>
-      <option name="FOREGROUND" value="507874"/>
-      <option name="FONT_TYPE" value="2"/>
-    </value>
-  </option>
-  <option name="org.vlang.SQL_CODE">
-    <value/>
-  </option>
-  <option name="org.vlang.STRUCT">
-    <value>
-      <option name="FOREGROUND" value="507874"/>
-    </value>
-  </option>
-  <option name="org.vlang.TYPE_ALIAS">
-    <value>
-      <option name="FOREGROUND" value="507874"/>
-    </value>
-  </option>
-  <option name="org.vlang.UNION">
-    <value>
-      <option name="FOREGROUND" value="507874"/>
-    </value>
-  </option>
-  <option name="org.vlang.UNSAFE_CODE">
-    <value/>
-  </option>
-  <option name="org.vlang.USED_LABEL">
-    <value>
-      <option name="FOREGROUND" value="a9b7c6"/>
-      <option name="FONT_TYPE" value="1"/>
-    </value>
-  </option>
-  <option name="org.vlang.GENERIC_PARAMETER">
-    <value>
-      <option name="FOREGROUND" value="20999D"/>
-    </value>
-  </option>
-  <option name="org.vlang.DOC_EMPHASIS">
-    <value>
-      <option name="FONT_TYPE" value="2"/>
-    </value>
-  </option>
-  <option name="org.vlang.DOC_STRONG">
-    <value>
-      <option name="FONT_TYPE" value="1" />
-    </value>
-  </option>
-  <option name="org.vlang.COMPILE_DIRECTIVE">
-    <value>
-      <option name="FOREGROUND" value="bbb529" />
-      <option name="FONT_TYPE" value="1" />
-    </value>
-  </option>
+    <option name="org.vlang.CAPTURED_VARIABLE">
+        <value>
+            <option name="FOREGROUND" value="7dbda2"/>
+            <option name="FONT_TYPE" value="2"/>
+        </value>
+    </option>
+    <option name="org.vlang.CONSTANT">
+        <value>
+            <option name="FOREGROUND" value="9876aa"/>
+        </value>
+    </option>
+    <option name="org.vlang.CT_CONSTANT">
+        <value>
+            <option name="FOREGROUND" value="9876aa"/>
+        </value>
+    </option>
+    <option name="org.vlang.CT_FIELD">
+        <value>
+            <option name="FOREGROUND" value="9876aa"/>
+        </value>
+    </option>
+    <option name="org.vlang.CT_METHOD_CALL">
+        <value>
+            <option name="FOREGROUND" value="9876aa"/>
+        </value>
+    </option>
+    <option name="org.vlang.ENUM">
+        <value>
+            <option name="FOREGROUND" value="507874"/>
+        </value>
+    </option>
+    <option name="org.vlang.ENUM_FIELD">
+        <value>
+            <option name="FOREGROUND" value="9876aa"/>
+        </value>
+    </option>
+    <option name="org.vlang.GLOBAL_VARIABLE">
+        <value>
+            <option name="FOREGROUND" value="a9b7c6"/>
+            <option name="FONT_TYPE" value="1"/>
+        </value>
+    </option>
+    <option name="org.vlang.INTERFACE">
+        <value>
+            <option name="FOREGROUND" value="507874"/>
+        </value>
+    </option>
+    <option name="org.vlang.MUTABLE_CAPTURED_VARIABLE">
+        <value>
+            <option name="FOREGROUND" value="7dbda2"/>
+            <option name="FONT_TYPE" value="2"/>
+            <option name="EFFECT_COLOR" value="bca5c4"/>
+            <option name="EFFECT_TYPE" value="1"/>
+        </value>
+    </option>
+    <option name="org.vlang.MUTABLE_PARAMETER">
+        <value>
+            <option name="FOREGROUND" value="a9b7c6"/>
+            <option name="EFFECT_COLOR" value="bca5c4"/>
+            <option name="EFFECT_TYPE" value="1"/>
+        </value>
+    </option>
+    <option name="org.vlang.MUTABLE_RECEIVER">
+        <value>
+            <option name="FOREGROUND" value="a9b7c6"/>
+            <option name="EFFECT_COLOR" value="bca5c4"/>
+            <option name="EFFECT_TYPE" value="1"/>
+        </value>
+    </option>
+    <option name="org.vlang.MUTABLE_VARIABLE">
+        <value>
+            <option name="FOREGROUND" value="a9b7c6"/>
+            <option name="EFFECT_COLOR" value="bca5c4"/>
+            <option name="EFFECT_TYPE" value="1"/>
+        </value>
+    </option>
+    <option name="org.vlang.PUBLIC_ENUM">
+        <value>
+            <option name="FOREGROUND" value="507874"/>
+            <option name="FONT_TYPE" value="2"/>
+        </value>
+    </option>
+    <option name="org.vlang.PUBLIC_FIELD">
+        <value>
+            <option name="FOREGROUND" value="9876aa"/>
+            <option name="FONT_TYPE" value="2"/>
+        </value>
+    </option>
+    <option name="org.vlang.PUBLIC_FUNCTION">
+        <value>
+            <option name="FOREGROUND" value="ffc66d"/>
+            <option name="FONT_TYPE" value="2"/>
+        </value>
+    </option>
+    <option name="org.vlang.PUBLIC_INTERFACE">
+        <value>
+            <option name="FOREGROUND" value="507874"/>
+            <option name="FONT_TYPE" value="2"/>
+        </value>
+    </option>
+    <option name="org.vlang.PUBLIC_INTERFACE_METHOD">
+        <value>
+            <option name="FOREGROUND" value="ffc66d"/>
+            <option name="FONT_TYPE" value="2"/>
+        </value>
+    </option>
+    <option name="org.vlang.PUBLIC_MUTABLE_FIELD">
+        <value>
+            <option name="FOREGROUND" value="9876aa"/>
+            <option name="FONT_TYPE" value="2"/>
+        </value>
+    </option>
+    <option name="org.vlang.PUBLIC_STRUCT">
+        <value>
+            <option name="FOREGROUND" value="507874"/>
+            <option name="FONT_TYPE" value="2"/>
+        </value>
+    </option>
+    <option name="org.vlang.PUBLIC_TYPE_ALIAS">
+        <value>
+            <option name="FOREGROUND" value="507874"/>
+        </value>
+    </option>
+    <option name="org.vlang.PUBLIC_UNION">
+        <value>
+            <option name="FOREGROUND" value="507874"/>
+            <option name="FONT_TYPE" value="2"/>
+        </value>
+    </option>
+    <option name="org.vlang.SQL_CODE">
+        <value/>
+    </option>
+    <option name="org.vlang.STRUCT">
+        <value>
+            <option name="FOREGROUND" value="507874"/>
+        </value>
+    </option>
+    <option name="org.vlang.TYPE_ALIAS">
+        <value>
+            <option name="FOREGROUND" value="507874"/>
+        </value>
+    </option>
+    <option name="org.vlang.UNION">
+        <value>
+            <option name="FOREGROUND" value="507874"/>
+        </value>
+    </option>
+    <option name="org.vlang.UNSAFE_CODE">
+        <value/>
+    </option>
+    <option name="org.vlang.USED_LABEL">
+        <value>
+            <option name="FOREGROUND" value="a9b7c6"/>
+            <option name="FONT_TYPE" value="1"/>
+        </value>
+    </option>
+    <option name="org.vlang.GENERIC_PARAMETER">
+        <value>
+            <option name="FOREGROUND" value="20999D"/>
+        </value>
+    </option>
+    <option name="org.vlang.DOC_EMPHASIS">
+        <value>
+            <option name="FONT_TYPE" value="2"/>
+        </value>
+    </option>
+    <option name="org.vlang.DOC_STRONG">
+        <value>
+            <option name="FONT_TYPE" value="1"/>
+        </value>
+    </option>
+    <option name="org.vlang.COMPILE_DIRECTIVE">
+        <value>
+            <option name="FOREGROUND" value="bbb529"/>
+            <option name="FONT_TYPE" value="1"/>
+        </value>
+    </option>
+    <option name="org.vlang.MUTABLE_RECEIVER">
+        <value>
+            <option name="FOREGROUND" value="4eade5"/>
+            <option name="EFFECT_COLOR" value="bca5c4"/>
+            <option name="EFFECT_TYPE" value="1"/>
+        </value>
+    </option>
+    <option name="org.vlang.RECEIVER">
+        <value>
+            <option name="FOREGROUND" value="4eade5"/>
+        </value>
+    </option>
+    <option name="org.vlang.MODULE">
+        <value>
+            <option name="FOREGROUND" value="afbf7e"/>
+        </value>
+    </option>
 </list>
