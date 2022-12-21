@@ -1,5 +1,6 @@
 package org.vlang.ide.inspections.namingConventions
 
+import com.intellij.codeInsight.intention.preview.IntentionPreviewInfo
 import com.intellij.codeInspection.LocalQuickFix
 import com.intellij.codeInspection.ProblemDescriptor
 import com.intellij.codeInspection.ProblemHighlightType
@@ -77,6 +78,10 @@ abstract class VlangNamingConventionInspectionBase : VlangBaseInspection() {
                 RefactoringFactory.getInstance(project).createRename(named, newName).run()
             }
         }
+
+        override fun generatePreview(project: Project, previewDescriptor: ProblemDescriptor): IntentionPreviewInfo {
+            return IntentionPreviewInfo.EMPTY;
+        }
     }
 
     class ToSnakeCaseQuickFix : LocalQuickFix {
@@ -91,6 +96,10 @@ abstract class VlangNamingConventionInspectionBase : VlangBaseInspection() {
             invokeLater {
                 RefactoringFactory.getInstance(project).createRename(named, newName).run()
             }
+        }
+
+        override fun generatePreview(project: Project, previewDescriptor: ProblemDescriptor): IntentionPreviewInfo {
+            return IntentionPreviewInfo.EMPTY;
         }
     }
 
