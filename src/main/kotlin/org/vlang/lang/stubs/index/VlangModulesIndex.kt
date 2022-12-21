@@ -17,7 +17,7 @@ class VlangModulesIndex : StringStubIndexExtension<VlangFile>() {
             name: String,
             project: Project,
             scope: GlobalSearchScope?,
-            idFilter: IdFilter?,
+            idFilter: IdFilter? = null,
         ): Collection<VlangFile> {
             val result = mutableListOf<VlangFile>()
             val keys = StubIndex.getInstance().getAllKeys(KEY, project).toSet().filter { it == name }

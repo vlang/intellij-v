@@ -1,5 +1,6 @@
 package org.vlang.ide.documentation
 
+import com.intellij.codeInsight.documentation.DocumentationManagerUtil
 import com.intellij.lang.documentation.DocumentationMarkup
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
@@ -24,6 +25,8 @@ import org.vlang.lang.VlangTypes
 import org.vlang.lang.doc.psi.VlangDocComment
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangAttributeReference
+import org.vlang.lang.psi.impl.VlangModule
+import org.vlang.lang.psi.impl.VlangPomTargetPsiElement
 import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 
@@ -44,7 +47,7 @@ object DocumentationGenerator {
             is VlangEnumTypeEx             -> return this.generateDoc(anchor)
             is VlangInterfaceTypeEx        -> return this.generateDoc(anchor)
             is VlangFunctionTypeEx         -> return this.generateDoc(anchor)
-            is VlangGenericTypeEx          -> return this.generateDoc(anchor)
+            is VlangGenericTypeEx          -> return this.generateDoc()
             is VlangGenericInstantiationEx -> return this.generateDoc(anchor)
             is VlangTupleTypeEx            -> return this.generateDoc(anchor)
             is VlangPrimitiveTypeEx        -> return this.generateDoc(anchor)
@@ -159,7 +162,7 @@ object DocumentationGenerator {
         }
     }
 
-    fun VlangGenericTypeEx.generateDoc(anchor: PsiElement): String {
+    fun VlangGenericTypeEx.generateDoc(): String {
         return colorize(qualifiedName(), asGeneric)
     }
 
@@ -229,6 +232,26 @@ object DocumentationGenerator {
             colorize(name, asDeclaration)
             append(DocumentationMarkup.DEFINITION_END)
             generateModuleCommentsPart(this@generateDoc)
+        }
+    }
+
+    fun VlangPomTargetPsiElement.generateDoc(): String {
+        val name = target.name
+        val parts = name.split(".")
+        val coloredName = if (parts.size == 1) {
+            colorize(parts.first(), asDeclaration)
+        } else {
+            parts.subList(0, parts.lastIndex).joinToString(".") {
+                colorize(it, asIdentifier, false)
+            } + "." + colorize(parts.last(), asDeclaration)
+        }
+
+        return buildString {
+            append(DocumentationMarkup.DEFINITION_START)
+            part("module", asKeyword)
+
+            append(coloredName)
+            append(DocumentationMarkup.DEFINITION_END)
         }
     }
 
@@ -377,7 +400,7 @@ object DocumentationGenerator {
             part(varModifiers.generateDoc())
             val name = name
             if (name != null) {
-                colorize(name, asParameter)
+                colorize(name, asIdentifier)
                 append(" ")
             }
             append(type.toEx().generateDoc(this@generateDocForMethod))
@@ -505,7 +528,7 @@ object DocumentationGenerator {
             }
 
             part("const", asKeyword)
-            part(name, asDeclaration)
+            part(name, asIdentifier)
             part(getType(null)?.generateDoc(this@generateDoc) ?: DocumentationUtils.colorize("unknown", asDeclaration))
             part("=")
             append(expression?.generateDoc() ?: "unknown")
@@ -529,7 +552,7 @@ object DocumentationGenerator {
             }
 
             part("var", asKeyword)
-            part(name, asDeclaration)
+            part(name, asIdentifier)
             append(type?.generateDoc(this@generateDoc) ?: DocumentationUtils.colorize("unknown", asDeclaration))
             append(DocumentationMarkup.DEFINITION_END)
 
@@ -545,7 +568,7 @@ object DocumentationGenerator {
             // special case for 'it' in array methods
             if (name == null && originalElement?.text == "it") {
                 part("variable", asKeyword)
-                part("it", asDeclaration)
+                part("it", asIdentifier)
 
                 val original = originalElement.parent as? VlangTypeOwner
                 val originalType = original?.getType(null)
@@ -559,7 +582,7 @@ object DocumentationGenerator {
             // special case for 'a' or 'b' in array sort method
             if (name == null && (originalElement?.text == "a" || originalElement?.text == "b")) {
                 part("variable", asKeyword)
-                part(originalElement.text, asDeclaration)
+                part(originalElement.text, asIdentifier)
 
                 val original = originalElement.parent as? VlangTypeOwner
                 val originalType = original?.getType(null)
@@ -575,7 +598,7 @@ object DocumentationGenerator {
             part(varModifiers.generateDoc())
 
             part("parameter", asKeyword)
-            part(name ?: "it", asDeclaration)
+            part(name ?: "it", asIdentifier)
             if (isVariadic) {
                 append("...")
             }
@@ -595,7 +618,7 @@ object DocumentationGenerator {
             part(varModifiers?.generateDoc())
 
             part("global var", asKeyword)
-            part(name, asDeclaration)
+            part(name, asIdentifier)
             append(type?.generateDoc(this@generateDoc) ?: DocumentationUtils.colorize("unknown", asDeclaration))
             append(DocumentationMarkup.DEFINITION_END)
 
@@ -676,7 +699,7 @@ object DocumentationGenerator {
                 generateVisibilityPart(this@generateDoc)
 
                 part("sum type", asKeyword)
-                colorize(name, asDeclaration)
+                colorize(name, asIdentifier)
                 appendNotNull(genericParameters.generateDoc())
                 append(" ")
 
@@ -700,7 +723,7 @@ object DocumentationGenerator {
             generateVisibilityPart(this@generateDoc)
 
             part("type alias", asKeyword)
-            colorize(name, asDeclaration)
+            colorize(name, asIdentifier)
             appendNotNull(genericParameters.generateDoc())
             append(" ")
 
@@ -745,7 +768,7 @@ object DocumentationGenerator {
 
             part(varModifiers?.generateDoc())
             part("receiver", asKeyword)
-            part(name, asDeclaration)
+            part(name, asIdentifier)
             append(type.toEx().generateDoc(this@generateDoc))
             append(DocumentationMarkup.DEFINITION_END)
 
@@ -836,9 +859,21 @@ object DocumentationGenerator {
             append(DocumentationMarkup.GRAYED_START)
             append("Module: ")
             append(DocumentationMarkup.GRAYED_END)
-            append("<a href='#'>")
-            append(moduleName)
-            append("</a>")
+
+            val dir = containingFile.containingDirectory!!
+            val module = VlangModule.fromDirectory(dir)
+            val moduleNameParts = module.name.split(".")
+
+            var moduleNameAtIndex = ""
+            for (moduleNamePart in moduleNameParts) {
+                if (moduleNameAtIndex.isNotEmpty()) {
+                    moduleNameAtIndex += "."
+                    append(".")
+                }
+                moduleNameAtIndex += moduleNamePart
+                DocumentationManagerUtil.createHyperlink(this, module.toPsi(), "#$moduleNameAtIndex", moduleNamePart, true)
+            }
+
             append(DocumentationMarkup.CONTENT_END)
         }
     }

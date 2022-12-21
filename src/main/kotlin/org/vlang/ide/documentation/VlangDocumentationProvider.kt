@@ -8,6 +8,7 @@ import com.intellij.psi.SyntaxTraverser
 import org.vlang.ide.documentation.DocumentationGenerator.generateDoc
 import org.vlang.lang.doc.psi.VlangDocComment
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.impl.VlangPomTargetPsiElement
 import java.util.function.Consumer
 
 class VlangDocumentationProvider : AbstractDocumentationProvider() {
@@ -27,6 +28,7 @@ class VlangDocumentationProvider : AbstractDocumentationProvider() {
         is VlangGenericParameter            -> element.generateDoc()
         is VlangTypeAliasDeclaration        -> element.generateDoc()
         is VlangModuleClause                -> element.generateDoc()
+        is VlangPomTargetPsiElement         -> element.generateDoc()
         else                                -> null
     }
 

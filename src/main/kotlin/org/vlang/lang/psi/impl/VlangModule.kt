@@ -28,21 +28,15 @@ class VlangModule(
         directory.navigate(requestFocus)
     }
 
-    override fun canNavigate(): Boolean {
-        return directory.canNavigate()
-    }
+    override fun canNavigate(): Boolean = directory.canNavigate()
 
-    override fun canNavigateToSource(): Boolean {
-        return false
-    }
+    override fun canNavigateToSource(): Boolean = false
 
     fun toPsi(): VlangPomTargetPsiElement {
         return VlangPomTargetPsiElement(project, this)
     }
 
-    override fun getName(): String {
-        return name
-    }
+    override fun getName(): String = name
 
     override fun isWritable(): Boolean {
         val processor: CommonProcessors.FindFirstProcessor<PsiFile> =
