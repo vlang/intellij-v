@@ -21,7 +21,7 @@ open class VlangStructTypeEx(private val name: String, anchor: PsiElement?) :
         return "$moduleName.$name"
     }
 
-    override fun readableName(context: PsiElement) = VlangCodeInsightUtil.getQualifiedName(context, anchor!!, name)
+    override fun readableName(context: PsiElement) = VlangCodeInsightUtil.getQualifiedName(context, anchor!!, qualifiedName())
 
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
         return when (rhs) {

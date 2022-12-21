@@ -22,7 +22,7 @@ open class VlangSumTypeEx(val name: String, val types: List<VlangTypeEx>, anchor
         return "$moduleName.$name"
     }
 
-    override fun readableName(context: PsiElement) = VlangCodeInsightUtil.getQualifiedName(context, anchor!!, name)
+    override fun readableName(context: PsiElement) = VlangCodeInsightUtil.getQualifiedName(context, anchor!!, qualifiedName())
 
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
         return true // TODO: implement this

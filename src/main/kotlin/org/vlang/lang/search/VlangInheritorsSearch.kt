@@ -12,7 +12,9 @@ import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangLangUtil
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapPointer
 import org.vlang.lang.psi.types.VlangFunctionTypeEx
+import org.vlang.lang.psi.types.VlangStructTypeEx
 import org.vlang.lang.stubs.index.VlangFieldFingerprintIndex
 import org.vlang.lang.stubs.index.VlangMethodFingerprintIndex
 
@@ -130,8 +132,9 @@ class VlangInheritorsSearch : QueryExecutorBase<VlangNamedElement, DefinitionsSc
         return VlangMethodFingerprintIndex.process(fingerprint, project, null) { methodSpec ->
             ProgressManager.checkCanceled()
 
-            val structType = methodSpec.receiverType?.resolveType() as? VlangStructType ?: return@process true
-            val structDecl = structType.parent as? VlangStructDeclaration
+            val receiverType = methodSpec.receiverType.toEx().unwrapPointer()
+            if (receiverType !is VlangStructTypeEx) return@process true
+            val structDecl =  receiverType.resolve(project)
             structDecl == null || (!visitedStructs.add(structDecl)) || processor.process(structDecl)
         }
     }

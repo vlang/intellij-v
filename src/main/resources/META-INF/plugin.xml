@@ -205,6 +205,8 @@ The plugin provides support for V language
         <statementUpDownMover implementation="org.vlang.ide.refactoring.VlangStatementUpDownMover"/>
         <lang.refactoringSupport language="vlang"
                                  implementationClass="org.vlang.ide.refactoring.VlangRefactoringSupportProvider"/>
+        <codeInsight.implementMethod language="vlang"
+                                     implementationClass="org.vlang.ide.refactoring.VlangImplementMethodsHandler"/>
         <!-- endregion Refactorings -->
 
         <!-- endregion V File -->

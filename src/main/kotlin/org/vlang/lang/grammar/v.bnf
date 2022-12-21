@@ -391,7 +391,7 @@ AsmBlock ::= '{' ('}' | (ASM_LINE)* '}') {pin(".*")=1}
 // struct or union
 StructDeclaration ::= Attributes? SymbolVisibility? StructType {
   stubClass="org.vlang.lang.stubs.VlangStructDeclarationStub"
-  methods=[getIdentifier getName getTypeInner isUnion isAttribute]
+  methods=[getIdentifier getName getTypeInner isUnion isAttribute addField]
 }
 
 AnonymousStructType ::= struct '{' FieldsGroup* '}' {
@@ -460,7 +460,7 @@ InterfaceMethodDeclaration ::= InterfaceMethodDefinition Attribute? DefaultField
 InterfaceMethodDefinition ::= identifier GenericParameters? Signature {
   implements="org.vlang.lang.psi.VlangSignatureOwner"
   stubClass="org.vlang.lang.stubs.VlangInterfaceMethodDefinitionStub"
-  methods=[getTypeInner isPublic getOwner]
+  methods=[getTypeInner isPublic isMutable getOwner]
 }
 
 EmbeddedInterfaceDefinition ::= Type {

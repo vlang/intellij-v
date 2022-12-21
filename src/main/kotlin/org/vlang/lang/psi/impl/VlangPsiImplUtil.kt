@@ -122,6 +122,46 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun addField(o: VlangStructDeclaration, name: String, type: String, mutable: Boolean): PsiElement? {
+        val fieldDeclaration = VlangElementFactory.createFieldDeclaration(o.project, name, type)
+        val groups = o.structType.fieldsGroupList
+
+        if (groups.isEmpty()) {
+            val lbrace = o.structType.lbrace
+            var toDelete = lbrace?.nextSibling
+            while (toDelete != null && toDelete != o.structType.rbrace) {
+                toDelete.delete()
+                toDelete = toDelete.nextSibling
+            }
+
+            val nl = o.structType.addAfter(VlangElementFactory.createNewLine(o.project), lbrace)
+            val newGroup = VlangElementFactory.createFieldsGroup(o.project, mutable, name, type)
+            val addedGroup = o.structType.addAfter(newGroup, nl)
+            o.structType.addBefore(VlangElementFactory.createNewLine(o.project), addedGroup)
+            return newGroup.fieldDeclarationList.firstOrNull()
+        }
+
+        val group = if (mutable) {
+            groups.find {
+                it.memberModifiers != null && it.memberModifiers!!.text.contains("mut")
+            }
+        } else {
+            groups.find { it.memberModifiers == null || !it.memberModifiers!!.text.contains("mut") }
+        }
+
+        return if (group != null) {
+            group.add(VlangElementFactory.createNewLine(o.project))
+            val decl = group.add(fieldDeclaration)
+            group.addBefore(VlangElementFactory.createSpace(o.project), decl)
+        } else {
+            val newGroup = VlangElementFactory.createFieldsGroup(o.project, mutable, name, type)
+            val addedGroup = o.structType.addBefore(newGroup, o.structType.rbrace)
+            o.structType.addAfter(VlangElementFactory.createNewLine(o.project), addedGroup)
+            newGroup.fieldDeclarationList.firstOrNull()
+        }
+    }
+
+    @JvmStatic
     fun isPrimary(o: VlangFieldDefinition): Boolean {
         val decl = o.parent as? VlangFieldDeclaration ?: return false
         return decl.attribute?.let { VlangAttributesUtil.isPrimaryField(it) } ?: false
@@ -482,11 +522,23 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun isMutable(o: VlangFieldDefinition): Boolean {
-        val group = o.parentOfType<VlangMemberModifiersOwner>()
+    fun isMutable(o: VlangInterfaceMethodDefinition): Boolean {
+        return isMutableMember(o)
+    }
+
+    private fun isMutableMember(member: VlangNamedElement): Boolean {
+        val group = member.parentOfType<VlangMemberModifiersOwner>()
         val modifiers = group?.memberModifierList
         val withMutModifier = modifiers?.any { it.text == "mut" } ?: false
         if (withMutModifier) {
+            return true
+        }
+        return false
+    }
+
+    @JvmStatic
+    fun isMutable(o: VlangFieldDefinition): Boolean {
+        if (isMutableMember(o)) {
             return true
         }
 

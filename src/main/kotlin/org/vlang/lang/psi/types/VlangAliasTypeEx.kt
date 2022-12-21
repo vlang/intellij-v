@@ -18,7 +18,7 @@ open class VlangAliasTypeEx(val name: String, val inner: VlangTypeEx, anchor: Ps
         return "$moduleName.$name"
     }
 
-    override fun readableName(context: PsiElement) = VlangCodeInsightUtil.getQualifiedName(context, anchor!!, name)
+    override fun readableName(context: PsiElement) = VlangCodeInsightUtil.getQualifiedName(context, anchor!!, qualifiedName())
 
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
         return true // TODO: implement this

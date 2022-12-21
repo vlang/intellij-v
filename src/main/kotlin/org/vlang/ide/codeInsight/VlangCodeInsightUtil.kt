@@ -13,6 +13,7 @@ import org.vlang.utils.parentNth
 import org.vlang.utils.parentOfTypeWithStop
 
 object VlangCodeInsightUtil {
+    const val MAIN_MODULE = "main"
     const val BUILTIN_MODULE = "builtin"
     const val STUBS_MODULE = "stubs"
     private const val IT_VARIABLE = "it"
@@ -210,7 +211,7 @@ object VlangCodeInsightUtil {
         val elementModule = elementFile.getModuleQualifiedName()
 
         if (contextModule == elementModule) {
-            return name
+            return name.removePrefix("$contextModule.")
         }
 
         if (name.startsWith("$contextModule.")) {
@@ -221,10 +222,20 @@ object VlangCodeInsightUtil {
             return name.removePrefix("$BUILTIN_MODULE.")
         }
 
+        if (name.startsWith("$MAIN_MODULE.")) {
+            return name.removePrefix("$MAIN_MODULE.")
+        }
+
         return name
     }
 
+    fun isDirectlyAccessible(containingFile: PsiFile, file: PsiFile): Boolean {
+        return sameModule(containingFile, file)
+    }
+
     fun sameModule(firstFile: PsiFile, secondFile: PsiFile): Boolean {
+        if (firstFile == secondFile) return true
+
         val containingDirectory = firstFile.containingDirectory
         if (containingDirectory == null || containingDirectory != secondFile.containingDirectory) {
             return false

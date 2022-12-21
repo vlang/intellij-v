@@ -1,0 +1,20 @@
+<spot>struct A {
+	field1 int
+	field2 int
+}</spot>
+
+<spot>fn (a &A) a1() int {
+	panic('not implemented')
+}</spot>
+
+<spot>fn (a &A) a2() int {
+	panic('not implemented')
+}</spot>
+
+interface B {
+	field1 int
+	field2 int
+
+	a1() int
+	a2() int
+}

@@ -1,0 +1,9 @@
+<spot>struct A {}</spot>
+
+interface B {
+	field1 int
+	field2 int
+
+	a1() int
+	a2() int
+}

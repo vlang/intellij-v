@@ -38,7 +38,7 @@ class VlangMethodCompletionContributor : CompletionContributor() {
             val isGeneric = struct.structType.genericParameters != null
             val structName = struct.name
             val methods = VlangLangUtil.getMethodList(pos.project, struct.structType.toEx())
-            val receiverName = methods.firstOrNull()?.receiver?.name ?: structName[0].lowercaseChar()
+            val receiverName = VlangLangUtil.getUsedReceiverNameOrDefault(methods, structName[0].lowercaseChar().toString())
             val receiverType = structName + if (isGeneric) struct.structType.genericParameters!!.text else ""
 
             val containMethodMethod = methods.any { it.name == "method" }

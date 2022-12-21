@@ -66,6 +66,13 @@ abstract class VlangBaseTypeEx(protected val anchor: PsiElement? = null) : UserD
             return genericTs
         }
 
+        fun VlangTypeEx.unwrapPointer(): VlangTypeEx {
+            if (this is VlangPointerTypeEx) {
+                return this.inner
+            }
+            return this
+        }
+
         fun VlangType?.toEx(visited: MutableMap<VlangType, VlangTypeEx> = mutableMapOf()): VlangTypeEx {
             if (this == null) {
                 return VlangUnknownTypeEx.INSTANCE

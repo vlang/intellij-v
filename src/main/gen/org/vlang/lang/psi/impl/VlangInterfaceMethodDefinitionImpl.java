@@ -1,18 +1,18 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import org.vlang.lang.psi.VlangPsiTreeUtil;
-import static org.vlang.lang.VlangTypes.*;
-import org.vlang.lang.stubs.VlangInterfaceMethodDefinitionStub;
-import org.vlang.lang.psi.*;
 import com.intellij.psi.ResolveState;
-import org.vlang.lang.psi.types.VlangTypeEx;
 import com.intellij.psi.stubs.IStubElementType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.vlang.lang.psi.*;
+import org.vlang.lang.psi.types.VlangTypeEx;
+import org.vlang.lang.stubs.VlangInterfaceMethodDefinitionStub;
+
+import static org.vlang.lang.VlangTypes.IDENTIFIER;
 
 public class VlangInterfaceMethodDefinitionImpl extends VlangNamedElementImpl<VlangInterfaceMethodDefinitionStub> implements VlangInterfaceMethodDefinition {
 
@@ -61,6 +61,11 @@ public class VlangInterfaceMethodDefinitionImpl extends VlangNamedElementImpl<Vl
   @Override
   public boolean isPublic() {
     return VlangPsiImplUtil.isPublic(this);
+  }
+
+  @Override
+  public boolean isMutable() {
+    return VlangPsiImplUtil.isMutable(this);
   }
 
   @Override

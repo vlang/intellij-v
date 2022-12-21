@@ -122,6 +122,10 @@ object VlangElementFactory {
         return PsiParserFacade.getInstance(project).createWhiteSpaceFromText(" ")
     }
 
+    fun createTab(project: Project): PsiElement {
+        return PsiParserFacade.getInstance(project).createWhiteSpaceFromText("\t")
+    }
+
     fun createDoubleNewLine(project: Project): PsiElement {
         return PsiParserFacade.getInstance(project).createWhiteSpaceFromText("\n\n")
     }
@@ -133,8 +137,23 @@ object VlangElementFactory {
     }
 
     fun createBlock(project: Project): VlangBlock {
-        val function = createFileFromText(project, "module a; fn t() {\n}").getFunctions().firstOrNull()
+        val function = createFileFromText(project, "fn t() {\n}").getFunctions().firstOrNull()
             ?: error("Impossible situation! Parser is broken.")
         return function.getBlock()!!
+    }
+
+    fun createFieldDeclaration(project: Project, name: String, type: String): PsiElement {
+        val file = createFileFromText(project, "struct S {\n\t$name $type\n}")
+        return file.getStructs().firstOrNull()?.structType?.getFieldList()?.firstOrNull()?.parent
+            ?: error("Impossible situation! Parser is broken.")
+    }
+
+    fun createFieldsGroup(project: Project, mutable: Boolean, name: String, type: String): VlangFieldsGroup {
+        val file = createFileFromText(
+            project,
+            "struct S {\n\t${if (mutable) "mut:\n\t" else ""}$name $type\n\n}"
+        )
+        return file.getStructs().firstOrNull()?.structType?.fieldsGroupList?.firstOrNull()
+            ?: error("Impossible situation! Parser is broken.")
     }
 }

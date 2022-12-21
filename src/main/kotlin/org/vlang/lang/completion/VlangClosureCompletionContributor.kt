@@ -7,10 +7,8 @@ import com.intellij.codeInsight.template.TemplateManager
 import com.intellij.codeInsight.template.impl.ConstantNode
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.editor.Document
 import com.intellij.openapi.project.Project
 import com.intellij.patterns.PlatformPatterns.psiElement
-import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.ProcessingContext
@@ -19,6 +17,7 @@ import org.vlang.ide.codeInsight.VlangGenericInferer
 import org.vlang.ide.codeInsight.VlangTypeInferenceUtil
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.impl.VlangLangUtil
 import org.vlang.lang.psi.impl.VlangPsiImplUtil.prevDot
 import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.getGenericTs
@@ -70,12 +69,11 @@ class VlangClosureCompletionContributor : CompletionContributor() {
 
             override fun handleInsert(context: InsertionContext, item: LookupElement) {
                 val file = context.file as VlangFile
-                val currentModule = file.getModuleQualifiedName()
 
                 val project = signature.project
                 val result = signature.result
 
-                processImportTypes(signature, currentModule, file, context.document)
+                VlangLangUtil.importTypesFromSignature(signature, file)
 
                 val (call, argumentsOwner, parametersOwner) = calculateOwners(project)
 
@@ -273,46 +271,6 @@ class VlangClosureCompletionContributor : CompletionContributor() {
                     val suffix = if (index == 0) "" else index.toString()
                     name ?: "it$suffix"
                 }
-            }
-
-            private fun processImportTypes(
-                signature: VlangSignature,
-                currentModule: String,
-                file: VlangFile,
-                document: Document,
-            ) {
-                val typesToImport = findTypesForImport(signature, currentModule)
-                if (typesToImport.isEmpty()) {
-                    return
-                }
-
-                typesToImport.forEach { file.addImport(it.module(), null) }
-
-                PsiDocumentManager.getInstance(file.project).doPostponedOperationsAndUnblockDocument(document)
-            }
-
-            private fun findTypesForImport(signature: VlangSignature, currentModule: String): MutableSet<VlangTypeEx> {
-                val typesToImport = mutableSetOf<VlangTypeEx>()
-
-                val types = signature.parameters.paramDefinitionList.mapNotNull { it.type }
-                types.forEach { type ->
-                    type.toEx().accept(object : VlangTypeVisitor {
-                        override fun enter(type: VlangTypeEx): Boolean {
-                            if (type is VlangImportableTypeEx) {
-                                // type from current module no need to import
-                                if (currentModule == type.module() || type.isBuiltin()) {
-                                    return true
-                                }
-
-                                typesToImport.add(type)
-                            }
-
-                            return true
-                        }
-                    })
-                }
-
-                return typesToImport
             }
         }
     }

@@ -7,7 +7,9 @@ import org.vlang.lang.psi.VlangInterfaceDeclaration
 import org.vlang.lang.psi.VlangInterfaceMethodDeclaration
 import org.vlang.lang.psi.VlangMethodDeclaration
 import org.vlang.lang.psi.VlangNamedElement
-import org.vlang.lang.psi.VlangStructDeclaration
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapPointer
+import org.vlang.lang.psi.types.VlangStructTypeEx
 
 class VlangSuperMethodSearch : QueryExecutorBase<VlangInterfaceMethodDeclaration, DefinitionsScopedSearch.SearchParameters>(true) {
     override fun processQuery(
@@ -18,7 +20,10 @@ class VlangSuperMethodSearch : QueryExecutorBase<VlangInterfaceMethodDeclaration
 
         val method = parameters.element as? VlangMethodDeclaration ?: return
         val methodName = method.name ?: return
-        val owner = method.receiverType?.typeReferenceExpression?.resolve() as? VlangStructDeclaration ?: return
+
+        val receiverType = method.receiverType.toEx().unwrapPointer()
+        if (receiverType !is VlangStructTypeEx) return
+        val structDecl =  receiverType.resolve(parameters.project) ?: return
 
         val processor = Processor<VlangNamedElement> { interfaceDeclaration ->
             interfaceDeclaration as VlangInterfaceDeclaration
@@ -30,7 +35,7 @@ class VlangSuperMethodSearch : QueryExecutorBase<VlangInterfaceMethodDeclaration
 
             interfaceMethod == null || method == interfaceMethod || consumer.process(interfaceMethod)
         }
-        VlangSuperSearch.processMethodOwners(processor, owner, listOf(method))
+        VlangSuperSearch.processMethodOwners(processor, structDecl, listOf(method))
     }
 
     companion object {

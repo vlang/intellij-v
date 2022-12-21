@@ -23,5 +23,11 @@
             <className>org.vlang.ide.intentions.VlangFunctionToMethodIntention</className>
             <category>V</category>
         </intentionAction>
+
+        <intentionAction>
+            <language>vlang</language>
+            <className>org.vlang.ide.intentions.VlangImplementInterfaceIntention</className>
+            <category>V</category>
+        </intentionAction>
     </extensions>
 </idea-plugin>

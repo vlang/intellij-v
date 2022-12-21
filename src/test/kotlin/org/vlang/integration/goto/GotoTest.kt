@@ -17,6 +17,20 @@ class GotoTest : IntegrationTestBase() {
         assertGotoSuper(0, "Reader")
     }
 
+    fun `test single interface and struct with reference receiver`() = doTest {
+        file("a.v", """
+            interface Reader {
+            	read()
+            }
+
+            struct /*caret 0*/Name {}
+
+            fn (n &Name) read() {}
+        """.trimIndent())
+
+        assertGotoSuper(0, "Reader")
+    }
+
     fun `test several interfaces`() = doTest {
         file("a.v", """
             interface Reader {
