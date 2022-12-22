@@ -40,6 +40,8 @@ open class VlangRunConfigurationEditor(private val project: Project) : SettingsE
         var envs: MutableMap<String, String> = mutableMapOf(),
         var buildArguments: String = "",
         var programArguments: String = "",
+        var production: Boolean = false,
+        var emulateTerminal: Boolean = false,
     )
 
     private val environmentVariables = EnvironmentVariablesComponent()
@@ -61,6 +63,8 @@ open class VlangRunConfigurationEditor(private val project: Project) : SettingsE
             envs = demoRunConfiguration.envs
             buildArguments = demoRunConfiguration.buildArguments
             programArguments = demoRunConfiguration.programArguments
+            production = demoRunConfiguration.production
+            emulateTerminal = demoRunConfiguration.emulateTerminal
         }
 
         mainPanel.reset()
@@ -79,6 +83,8 @@ open class VlangRunConfigurationEditor(private val project: Project) : SettingsE
             envs = model.envs
             buildArguments = model.buildArguments
             programArguments = model.programArguments
+            production = model.production
+            emulateTerminal = model.emulateTerminal
         }
     }
 
@@ -88,7 +94,7 @@ open class VlangRunConfigurationEditor(private val project: Project) : SettingsE
         lateinit var kindComboBox: Cell<ComboBox<RunKind>>
 
         mainPanel = panel {
-            row("Run kind") {
+            row("Run kind:") {
                 kindComboBox = comboBox(listOf(RunKind.File, RunKind.Directory))
                     .bindItemNullable(model::runKind)
             }.bottomGap(BottomGap.NONE)
@@ -148,6 +154,17 @@ open class VlangRunConfigurationEditor(private val project: Project) : SettingsE
                         componentSet = { component, value -> component.envs = value },
                         prop = model::envs.toMutableProperty()
                     )
+            }.bottomGap(BottomGap.NONE)
+
+            row(" ") {
+                checkBox("Production build")
+                    .bindSelected(model::production)
+                    .comment("Builds an optimized version with the <code>-prod</code> flag, increasing compilation time.")
+            }.bottomGap(BottomGap.NONE)
+
+            row(" ") {
+                checkBox("Emulate terminal in output console")
+                    .bindSelected(model::emulateTerminal)
             }.bottomGap(BottomGap.NONE)
 
             row("Build arguments:") {

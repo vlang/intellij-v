@@ -78,6 +78,18 @@ open class VlangRunConfiguration(project: Project, factory: ConfigurationFactory
             options.programArguments = value
         }
 
+    var production: Boolean
+        get() = options.production
+        set(value) {
+            options.production = value
+        }
+
+    var emulateTerminal: Boolean
+        get() = options.emulateTerminal
+        set(value) {
+            options.emulateTerminal = value
+        }
+
     override fun writeExternal(element: Element) {
         super<RunConfigurationBase>.writeExternal(element)
 
@@ -91,6 +103,8 @@ open class VlangRunConfiguration(project: Project, factory: ConfigurationFactory
             writeString("envs", options.envs)
             writeString("buildArguments", buildArguments)
             writeString("programArguments", programArguments)
+            writeBool("production", production)
+            writeBool("emulateTerminal", emulateTerminal)
         }
     }
 
@@ -111,6 +125,8 @@ open class VlangRunConfiguration(project: Project, factory: ConfigurationFactory
             readString("envs")?.let { options.envs = it }
             readString("buildArguments")?.let { buildArguments = it }
             readString("programArguments")?.let { programArguments = it }
+            readBool("production")?.let { production = it }
+            readBool("emulateTerminal")?.let { emulateTerminal = it }
         }
     }
 

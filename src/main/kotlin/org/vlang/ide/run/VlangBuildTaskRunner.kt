@@ -95,6 +95,10 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
             .withParameters("-color")
             .withWorkDirectory(workingDir)
 
+        if (conf.production) {
+            commandLine.withParameters("-prod")
+        }
+
         val isDebug = ctx.environment.runner is VlangDebugRunner
         if (isDebug) {
             commandLine.withParameters("-g")

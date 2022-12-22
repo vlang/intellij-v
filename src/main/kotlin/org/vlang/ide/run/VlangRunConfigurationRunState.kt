@@ -4,12 +4,15 @@ import com.intellij.execution.ExecutionResult
 import com.intellij.execution.Executor
 import com.intellij.execution.configurations.CommandLineState
 import com.intellij.execution.configurations.GeneralCommandLine
+import com.intellij.execution.configurations.PtyCommandLine
 import com.intellij.execution.configurations.RunProfileState
 import com.intellij.execution.process.ProcessEvent
 import com.intellij.execution.process.ProcessHandler
 import com.intellij.execution.process.ProcessListener
 import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.execution.runners.ProgramRunner
+import com.intellij.execution.ui.ConsoleView
+import com.intellij.terminal.TerminalExecutionConsole
 import com.intellij.util.execution.ParametersListUtil
 import java.io.File
 
@@ -22,6 +25,14 @@ class VlangRunConfigurationRunState(
         if (!conf.runAfterBuild) return null
 
         val state = object : CommandLineState(env) {
+            override fun createConsole(executor: Executor): ConsoleView? {
+                if (conf.emulateTerminal) {
+                    return TerminalExecutionConsole(conf.project, null)
+                }
+
+                return super.createConsole(executor)
+            }
+
             override fun startProcess(): ProcessHandler {
                 val workingDir = conf.workingDir
                 val outputDir = if (conf.outputDir.isEmpty()) File(conf.workingDir) else File(conf.outputDir)
@@ -32,7 +43,15 @@ class VlangRunConfigurationRunState(
                     throw IllegalStateException("Can't run ${exe.absolutePath}, file not found")
                 }
 
-                val commandLine = GeneralCommandLine()
+                val cmd = if (conf.emulateTerminal) {
+                    PtyCommandLine()
+                        .withInitialColumns(PtyCommandLine.MAX_COLUMNS)
+                        .withConsoleMode(true)
+                } else {
+                    GeneralCommandLine()
+                }
+
+                val commandLine = cmd
                     .withExePath(exe.absolutePath)
                     .withWorkDirectory(workingDir)
                     .withCharset(Charsets.UTF_8)

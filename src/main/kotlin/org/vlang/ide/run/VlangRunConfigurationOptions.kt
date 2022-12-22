@@ -12,6 +12,8 @@ class VlangRunConfigurationOptions : RunConfigurationOptions() {
     private var _envs = string("").provideDelegate(this, "envsRunConfiguration")
     private var _buildArguments = string("").provideDelegate(this, "buildArgumentsRunConfiguration")
     private var _programArguments = string("").provideDelegate(this, "programArgumentsRunConfiguration")
+    private var _production = property(false).provideDelegate(this, "productionRunConfiguration")
+    private var _emulateTerminal = property(true).provideDelegate(this, "emulateTerminalRunConfiguration")
 
     var runKind: VlangRunConfigurationEditor.RunKind
         get() = VlangRunConfigurationEditor.RunKind.fromString(_runKind.getValue(this))
@@ -65,5 +67,17 @@ class VlangRunConfigurationOptions : RunConfigurationOptions() {
         get() = _programArguments.getValue(this) ?: ""
         set(value) {
             _programArguments.setValue(this, value)
+        }
+
+    var production: Boolean
+        get() = _production.getValue(this)
+        set(value) {
+            _production.setValue(this, value)
+        }
+
+    var emulateTerminal: Boolean
+        get() = _emulateTerminal.getValue(this)
+        set(value) {
+            _emulateTerminal.setValue(this, value)
         }
 }
