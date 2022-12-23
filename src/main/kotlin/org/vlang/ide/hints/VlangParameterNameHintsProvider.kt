@@ -104,6 +104,7 @@ class VlangParameterNameHintsProvider : InlayParameterHintsProvider {
 
         for (i in 0 until min(params.size, args.size)) {
             val parameter = params[i] ?: continue
+            val name = parameter.name ?: continue
             val arg = args[i]
 
             val argInner = when (arg) {
@@ -117,7 +118,6 @@ class VlangParameterNameHintsProvider : InlayParameterHintsProvider {
                 if (argResolved.name == parameter.name) continue
             }
 
-            val name = parameter.name
             val offset = arg.startOffset
             val inlayInfo = InlayInfo("$name p", offset)
             hints.add(inlayInfo)
