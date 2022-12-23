@@ -45,63 +45,66 @@ class VlangModuleBuilder : ModuleBuilder(), ModuleBuilderListener {
         val contentEntry = doAddContentEntry(modifiableRootModel)
         val baseDir = contentEntry?.file ?: return
 
-        setupProject(modifiableRootModel, baseDir)
+        setupProject(modifiableRootModel.module, baseDir, model.toolchainLocation)
     }
 
     override fun moduleCreated(module: Module) {}
 
-    private fun setupProject(
-        modifiableRootModel: ModifiableRootModel,
-        baseDir: VirtualFile,
-    ) {
-        invokeLater {
-            runWriteAction {
-                try {
-                    val filesToOpen = VlangProjectTemplate()
-                        .generateProject(modifiableRootModel.module, baseDir)
+    companion object {
+        fun setupProject(
+            module: Module,
+            baseDir: VirtualFile,
+            toolchainLocation: String,
+        ) {
+            invokeLater {
+                runWriteAction {
+                    try {
+                        val filesToOpen = VlangProjectTemplate()
+                            .generateProject(module, baseDir)
 
-                    if (!filesToOpen.isEmpty()) {
-                        scheduleFilesOpening(modifiableRootModel.module, filesToOpen)
+                        if (!filesToOpen.isEmpty()) {
+                            scheduleFilesOpening(module, filesToOpen)
+                        }
+
+                        setToolchainInfo(module, toolchainLocation)
+                    } catch (ignore: IOException) {
                     }
-
-                    setToolchainInfo(modifiableRootModel)
-                } catch (ignore: IOException) {
                 }
             }
         }
-    }
 
-    private fun setToolchainInfo(modifiableRootModel: ModifiableRootModel) {
-        val project = modifiableRootModel.module.project
-        val settings = project.projectSettings
-        settings.setToolchain(project, model.toolchainLocation)
-    }
+        private fun setToolchainInfo(module: Module, toolchainLocation: String) {
+            val project = module.project
+            val settings = project.projectSettings
+            settings.setToolchain(project, toolchainLocation)
+        }
 
-    private fun scheduleFilesOpening(module: Module, files: Collection<VirtualFile>) {
-        runWhenNonModalIfModuleNotDisposed(module) {
-            val manager = FileEditorManager.getInstance(module.project)
-            files.forEach { file ->
-                manager.openFile(file, true)
+        private fun scheduleFilesOpening(module: Module, files: Collection<VirtualFile>) {
+            runWhenNonModalIfModuleNotDisposed(module) {
+                val manager = FileEditorManager.getInstance(module.project)
+                files.forEach { file ->
+                    manager.openFile(file, true)
+                }
             }
         }
-    }
 
-    private fun runWhenNonModalIfModuleNotDisposed(module: Module, runnable: Runnable) {
-        // runnable must not be executed immediately because the new project model might be not yet committed, so V Toolchain won't be found
-        // In WebStorm we get already initialized project at this point, but in IntelliJ IDEA - not yet initialized.
-        if (module.project.isInitialized) {
-            ApplicationManager.getApplication().invokeLater(runnable, ModalityState.NON_MODAL, module.disposed)
-            return
-        }
+        private fun runWhenNonModalIfModuleNotDisposed(module: Module, runnable: Runnable) {
+            // runnable must not be executed immediately because the new project model might be not yet committed, so V Toolchain won't be found
+            // In WebStorm we get already initialized project at this point, but in IntelliJ IDEA - not yet initialized.
+            if (module.project.isInitialized) {
+                ApplicationManager.getApplication().invokeLater(runnable, ModalityState.NON_MODAL, module.disposed)
+                return
+            }
 
-        StartupManager.getInstance(module.project).runWhenProjectIsInitialized {
-            if (ApplicationManager.getApplication().currentModalityState === ModalityState.NON_MODAL) {
-                runnable.run()
-            } else {
-                ApplicationManager.getApplication()
-                    .invokeLater(runnable, ModalityState.NON_MODAL) {
-                        module.isDisposed
-                    }
+            StartupManager.getInstance(module.project).runAfterOpened {
+                if (ApplicationManager.getApplication().currentModalityState === ModalityState.NON_MODAL) {
+                    runnable.run()
+                } else {
+                    ApplicationManager.getApplication()
+                        .invokeLater(runnable, ModalityState.NON_MODAL) {
+                            module.isDisposed
+                        }
+                }
             }
         }
     }

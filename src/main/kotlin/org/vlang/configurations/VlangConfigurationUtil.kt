@@ -12,6 +12,7 @@ import org.vlang.utils.toPath
 import java.nio.charset.StandardCharsets
 import java.nio.file.Path
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 import kotlin.io.path.exists
 
 object VlangConfigurationUtil {
@@ -69,6 +70,8 @@ object VlangConfigurationUtil {
             }
             future.get(300, TimeUnit.MILLISECONDS)
         } catch (e: ExecutionException) {
+            LOG.warn("Can't execute command for getting V toolchain version", e)
+        } catch (e: TimeoutException) {
             LOG.warn("Can't execute command for getting V toolchain version", e)
         }
         val result = processOutput.toString()

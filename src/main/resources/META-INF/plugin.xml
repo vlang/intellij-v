@@ -212,6 +212,8 @@ The plugin provides support for V language
         <!-- endregion V File -->
 
         <!-- region Project -->
+        <directoryProjectGenerator implementation="org.vlang.projectWizard.nonidea.VlangProjectGenerator"/>
+
         <projectConfigurable groupId="language" instance="org.vlang.configurations.VlangProjectSettingsConfigurable"
                              id="MainVlangSettings"
                              dynamic="true" displayName="V"/>

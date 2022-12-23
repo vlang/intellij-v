@@ -14,7 +14,9 @@ class ToolchainChooserComponent(browseActionListener: ActionListener, onSelectAc
 
     private val comboBox = childComponent
     private val knownToolchains get() = VlangToolchainsState.getInstance().knownToolchains
-    private var knownToolchainInfos = knownToolchains.map { ToolchainInfo(it, VlangConfigurationUtil.guessToolchainVersion(it)) }
+    private var knownToolchainInfos = knownToolchains
+        .map { ToolchainInfo(it, VlangConfigurationUtil.guessToolchainVersion(it)) }
+        .filter { it.version != VlangConfigurationUtil.UNDEFINED_VERSION }
 
     class NoToolchain : ToolchainInfo("", "") {
         companion object {
@@ -59,7 +61,10 @@ class ToolchainChooserComponent(browseActionListener: ActionListener, onSelectAc
 
     fun refresh() {
         comboBox.removeAllItems()
-        knownToolchainInfos = knownToolchains.map { ToolchainInfo(it, VlangConfigurationUtil.guessToolchainVersion(it)) }
+        knownToolchainInfos = knownToolchains
+            .map { ToolchainInfo(it, VlangConfigurationUtil.guessToolchainVersion(it)) }
+            .filter { it.version != VlangConfigurationUtil.UNDEFINED_VERSION }
+
         knownToolchainInfos.forEach { info ->
             comboBox.addItem(info)
         }
