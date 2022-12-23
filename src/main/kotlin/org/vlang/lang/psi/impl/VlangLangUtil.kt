@@ -1,9 +1,13 @@
 package org.vlang.lang.psi.impl
 
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.psi.PsiManager
 import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.CachedValuesManager
 import com.intellij.psi.util.PsiModificationTracker
+import org.vlang.configurations.VlangConfiguration
+import org.vlang.lang.psi.VlangConstDefinition
 import org.vlang.lang.psi.VlangFile
 import org.vlang.lang.psi.VlangMethodDeclaration
 import org.vlang.lang.psi.VlangSignature
@@ -17,6 +21,18 @@ import org.vlang.lang.stubs.index.VlangMethodIndex
 object VlangLangUtil {
     fun findMethod(project: Project, type: VlangTypeEx, name: String): VlangMethodDeclaration? {
         return getMethodList(project, type).firstOrNull { it.name == name }
+    }
+
+    fun getErrVariableDefinition(project: Project): VlangConstDefinition? {
+        val stubDir = VlangConfiguration.getInstance(project).stubsLocation ?: return null
+        val psiManager = PsiManager.getInstance(project)
+        val stubFile = getStubFile("errors.v", stubDir, psiManager) ?: return null
+        return stubFile.getConstants().firstOrNull { it.name == "err" }
+    }
+
+    private fun getStubFile(name: String, stubDir: VirtualFile, psiManager: PsiManager): VlangFile? {
+        val stubFile = stubDir.findChild(name) ?: return null
+        return psiManager.findFile(stubFile) as? VlangFile ?: return null
     }
 
     fun getUsedReceiverNameOrDefault(

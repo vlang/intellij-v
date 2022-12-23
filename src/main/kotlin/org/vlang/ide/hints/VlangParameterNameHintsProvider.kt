@@ -1,100 +1,42 @@
 package org.vlang.ide.hints
 
+import com.intellij.codeInsight.hints.HintInfo
 import com.intellij.codeInsight.hints.InlayInfo
 import com.intellij.codeInsight.hints.InlayParameterHintsProvider
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import com.intellij.refactoring.suggested.endOffset
 import com.intellij.refactoring.suggested.startOffset
-import org.vlang.ide.codeInsight.VlangCodeInsightUtil
+import org.vlang.lang.VlangLanguage
 import org.vlang.lang.psi.*
-import org.vlang.lang.psi.types.VlangUnknownTypeEx
-import org.vlang.utils.line
 import kotlin.math.min
 
 @Suppress("UnstableApiUsage")
 class VlangParameterNameHintsProvider : InlayParameterHintsProvider {
+    override fun getHintInfo(element: PsiElement): HintInfo? {
+        if (element !is VlangCallExpr) return null
+        val resolved = element.resolve() ?: return null
+        if (resolved !is VlangFunctionOrMethodDeclaration) return null
+        val signature = resolved.getSignature() ?: return null
+        val parameters = signature.parameters.paramDefinitionList.map { it.name ?: "_" }
+        return createMethodInfo(resolved, parameters)
+    }
+
+    private fun createMethodInfo(function: VlangFunctionOrMethodDeclaration, parameters: List<String>): HintInfo.MethodInfo? {
+        val qualifiedName = function.getQualifiedName() ?: return null
+        return HintInfo.MethodInfo(qualifiedName, parameters, VlangLanguage)
+    }
+
     override fun getParameterHints(element: PsiElement, file: PsiFile): MutableList<InlayInfo> {
+        if (element !is VlangCallExpr) return mutableListOf()
+        return handleCallExpr(element)
+    }
+
+    private fun handleCallExpr(element: VlangCallExpr): MutableList<InlayInfo> {
         val hints = mutableListOf<InlayInfo>()
+        val resolved = element.resolve() ?: return hints
+        if (resolved !is VlangFunctionOrMethodDeclaration) return hints
 
-        when (element) {
-            is VlangCallExpr        -> handleCallExpr(element, hints)
-            is VlangVarDefinition   -> handleVarDefinition(element, hints)
-            is VlangConstDefinition -> handleConstDefinition(element, hints)
-            is VlangOrBlockExpr     -> handleOrBlockExpr(element, hints)
-            is VlangElseStatement   -> handleElseStatement(element, hints)
-        }
-
-        return hints
-    }
-
-    override fun getInlayPresentation(inlayText: String): String {
-        if (inlayText.endsWith(" p")) {
-            return inlayText.substring(0, inlayText.length - 2) + ":"
-        }
-        if (inlayText.endsWith(" →")) {
-            return inlayText
-        }
-        return ": $inlayText"
-    }
-
-    private fun handleOrBlockExpr(element: VlangOrBlockExpr, hints: MutableList<InlayInfo>) {
-        val right = element.block
-        val openBracket = right.lbrace
-        val closeBracket = right.rbrace
-        if (openBracket.line() == closeBracket?.line()) {
-            // don't show hint if 'or { ... }'
-            return
-        }
-        val inlayInfo = InlayInfo("err →", openBracket.endOffset)
-        hints.add(inlayInfo)
-    }
-
-    private fun handleElseStatement(element: VlangElseStatement, hints: MutableList<InlayInfo>) {
-        if (!VlangCodeInsightUtil.insideElseBlockIfGuard(element)) {
-            return
-        }
-
-        val right = element.block ?: return
-        val openBracket = right.lbrace
-        val closeBracket = right.rbrace
-        if (openBracket.line() == closeBracket?.line()) {
-            // don't show hint if 'else { ... }'
-            return
-        }
-        val inlayInfo = InlayInfo("err →", openBracket.endOffset)
-        hints.add(inlayInfo)
-    }
-
-    private fun handleVarDefinition(element: VlangVarDefinition, hints: MutableList<InlayInfo>) {
-        val type = element.getTypeInner(null) ?: return
-        if (type is VlangUnknownTypeEx) {
-            // no need show hint if type is unknown
-            return
-        }
-        val readableName = type.readableName(element)
-        val inlayInfo = InlayInfo(readableName, element.endOffset)
-        hints.add(inlayInfo)
-    }
-
-    private fun handleConstDefinition(element: VlangConstDefinition, hints: MutableList<InlayInfo>) {
-        val type = element.getTypeInner(null) ?: return
-        if (type is VlangUnknownTypeEx) {
-            // no need show hint if type is unknown
-            return
-        }
-        val readableName = type.readableName(element)
-        val inlayInfo = InlayInfo(readableName, element.getIdentifier().endOffset)
-        hints.add(inlayInfo)
-    }
-
-    private fun handleCallExpr(element: VlangCallExpr, hints: MutableList<InlayInfo>) {
-        val expression = element.expression as? VlangReferenceExpression ?: return
-        val reference = expression.reference
-        val resolved = reference.resolve() ?: return
-        if (resolved !is VlangFunctionOrMethodDeclaration) return
-
-        val parameters = resolved.getSignature()?.parameters ?: return
+        val parameters = resolved.getSignature()?.parameters ?: return hints
         val params = parameters.paramDefinitionList
 
         val argsList = element.argumentList.elementList
@@ -119,12 +61,24 @@ class VlangParameterNameHintsProvider : InlayParameterHintsProvider {
             }
 
             val offset = arg.startOffset
-            val inlayInfo = InlayInfo("$name p", offset)
+            val inlayInfo = InlayInfo(name, offset)
             hints.add(inlayInfo)
         }
+
+        return hints
     }
 
-    override fun getDefaultBlackList(): MutableSet<String> {
-        return mutableSetOf()
+    override fun getDefaultBlackList() = mutableSetOf("builtin.array.*(*)")
+
+    override fun getBlacklistExplanationHTML(): String {
+        return """
+            To disable hints for a function use the appropriate pattern:<br />
+            <b>builtin.*</b> - functions from the standard library<br />
+            <b>builtin.array.*(*)</b> - methods of builtin array with any arguments<br />
+            <b>datatypes.*</b> - functions from the datatypes module<br />
+            <b>(*_)</b> - single parameter function where the parameter name ends with <i>_</i><br />
+            <b>(key, value)</b> - functions with parameters <i>key</i> and <i>value</i><br />
+            <b>*.put(key, value)</b> - <i>put</i> methods with <i>key</i> and <i>value</i> parameters
+        """.trimIndent()
     }
 }

@@ -64,14 +64,15 @@ The plugin provides support for V language
         <!-- endregion Imports -->
 
         <!-- region CodeVision & Hints -->
-        <vcs.codeVisionLanguageContext language="vlang"
-                                       implementationClass="org.vlang.ide.hints.VlangCodeVisionLanguageContext"/>
-        <codeInsight.inlayProvider language="vlang"
-                                   implementationClass="org.vlang.ide.hints.VlangInlayHintsProvider"/>
+        <!-- Hints -->
+        <codeInsight.inlayProvider language="vlang" implementationClass="org.vlang.ide.hints.VlangInlayHintsProvider"/>
+        <codeInsight.inlayProvider language="vlang" implementationClass="org.vlang.ide.hints.VlangChainMethodInlayHintsProvider"/>
         <codeInsight.parameterNameHints language="vlang" id="VlangParameterNameHintsProvider"
                                         implementationClass="org.vlang.ide.hints.VlangParameterNameHintsProvider"/>
+        <!-- Code vision -->
         <codeInsight.daemonBoundCodeVisionProvider implementation="org.vlang.ide.hints.VlangUsagesCodeVisionProvider"/>
         <codeInsight.daemonBoundCodeVisionProvider implementation="org.vlang.ide.hints.VlangInheritorsCodeVisionProvider"/>
+        <vcs.codeVisionLanguageContext language="vlang" implementationClass="org.vlang.ide.hints.VlangCodeVisionLanguageContext"/>
         <!-- endregion CodeVision & Hints -->
 
         <!-- region Project View -->

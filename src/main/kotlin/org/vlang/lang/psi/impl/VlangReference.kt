@@ -457,7 +457,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
         // expr or { err }
         if (VlangCodeInsightUtil.insideOrGuard(identifier!!) || VlangCodeInsightUtil.insideElseBlockIfGuard(identifier!!)) {
-            val errVariable = getErrVariable() ?: return false
+            val errVariable = VlangLangUtil.getErrVariableDefinition(project) ?: return false
             if (!processor.execute(errVariable, state)) return false
         }
 
@@ -522,13 +522,6 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         val psiManager = PsiManager.getInstance(myElement.project)
         val stubFile = getStubFile("arrays.v", stubDir, psiManager) ?: return null
         return stubFile.getStructs().firstOrNull { it.name == "ArrayInit" }
-    }
-
-    private fun getErrVariable(): VlangConstDefinition? {
-        val stubDir = VlangConfiguration.getInstance(myElement.project).stubsLocation ?: return null
-        val psiManager = PsiManager.getInstance(myElement.project)
-        val stubFile = getStubFile("errors.v", stubDir, psiManager) ?: return null
-        return stubFile.getConstants().firstOrNull { it.name == "err" }
     }
 
     private fun processIfUnknownCDeclaration(processor: VlangScopeProcessor, state: ResolveState): Boolean {

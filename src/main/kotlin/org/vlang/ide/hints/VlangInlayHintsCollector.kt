@@ -2,50 +2,131 @@ package org.vlang.ide.hints
 
 import com.intellij.codeInsight.hints.*
 import com.intellij.codeInsight.hints.presentation.*
+import com.intellij.codeInsight.hints.settings.InlayHintsConfigurable
+import com.intellij.openapi.actionSystem.AnAction
+import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.components.service
-import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.editor.colors.TextAttributesKey
-import com.intellij.openapi.editor.impl.EditorImpl
 import com.intellij.openapi.project.DumbService
+import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.childrenOfType
 import com.intellij.refactoring.suggested.endOffset
 import com.intellij.refactoring.suggested.startOffset
-import org.vlang.lang.psi.VlangIndexOrSliceExpr
-import org.vlang.lang.psi.VlangRangeExpr
+import org.vlang.ide.codeInsight.VlangCodeInsightUtil
+import org.vlang.lang.VlangLanguage
+import org.vlang.lang.psi.*
+import org.vlang.lang.psi.types.VlangUnknownTypeEx
+import org.vlang.utils.line
 
 @Suppress("UnstableApiUsage")
 class VlangInlayHintsCollector(
-    private val editor: Editor,
+    editor: Editor,
     private val file: PsiFile,
     private val settings: VlangInlayHintsProvider.Settings,
     private val sink: InlayHintsSink,
+    private val key: SettingsKey<VlangInlayHintsProvider.Settings>,
 ) : FactoryInlayHintsCollector(editor) {
-
-    private val textMetricsStorage = InlayTextMetricsStorage(editor as EditorImpl)
-    private val offsetFromTopProvider = object : InsetValueProvider {
-        override val top: Int =
-            (textMetricsStorage.getFontMetrics(false).offsetFromTop()).toInt()
-    }
+    private val typeHintsFactory = VlangInlayHintsFactory(editor, factory)
 
     override fun collect(element: PsiElement, editor: Editor, sink: InlayHintsSink): Boolean {
         // If the indexing process is in progress.
         if (file.project.service<DumbService>().isDumb) return true
 
-        if (element is VlangRangeExpr && settings.ranges) {
-            showAnnotation(element)
-        }
-
-        if (element is VlangIndexOrSliceExpr && settings.ranges) {
-            showAnnotation(element)
+        when {
+            element is VlangRangeExpr && settings.showForRanges          -> handleRange(element)
+            element is VlangIndexOrSliceExpr && settings.showForRanges   -> handleSlice(element)
+            element is VlangVarDefinition && settings.showForVariables   -> handleVarDefinition(element)
+            element is VlangOrBlockExpr && settings.showForErrVariable   -> handleOrBlockExpr(element)
+            element is VlangElseStatement && settings.showForErrVariable -> handleElseStatement(element)
+            element is VlangConstDefinition && settings.showForConstants -> handleConstDefinition(element)
         }
 
         return true
     }
 
-    private fun showAnnotation(element: VlangIndexOrSliceExpr) {
+    private fun handleConstDefinition(element: VlangConstDefinition) {
+        val type = element.getTypeInner(null) ?: return
+        if (type is VlangUnknownTypeEx) {
+            // no need show hint if type is unknown
+            return
+        }
+
+        val presentation = typeHintsFactory.typeHint(type, element)
+        val finalPresentation = presentation.withDisableAction(element.project, "Constants") {
+            showForConstants = false
+        }
+
+        sink.addInlineElement(
+            element.getIdentifier().endOffset,
+            relatesToPrecedingText = true,
+            presentation = finalPresentation,
+            placeAtTheEndOfLine = false
+        )
+    }
+
+    private fun handleOrBlockExpr(element: VlangOrBlockExpr) {
+        val right = element.block
+        val openBracket = right.lbrace
+        val closeBracket = right.rbrace
+        handleImplicitErrorVariable(element.project, openBracket, closeBracket)
+    }
+
+    private fun handleElseStatement(element: VlangElseStatement) {
+        if (!VlangCodeInsightUtil.insideElseBlockIfGuard(element)) {
+            return
+        }
+
+        val right = element.block ?: return
+        val openBracket = right.lbrace
+        val closeBracket = right.rbrace
+        handleImplicitErrorVariable(element.project, openBracket, closeBracket)
+    }
+
+    private fun handleImplicitErrorVariable(
+        project: Project,
+        openBracket: PsiElement,
+        closeBracket: PsiElement?,
+    ) {
+        if (openBracket.line() == closeBracket?.line()) {
+            // don't show hint if 'else { ... }'
+            return
+        }
+        val presentation = typeHintsFactory.implicitErrorVariable(project)
+        val finalPresentation = presentation.withDisableAction(project, "Implicit err variables") {
+            showForErrVariable = false
+        }
+
+        sink.addInlineElement(
+            openBracket.endOffset,
+            relatesToPrecedingText = true,
+            presentation = finalPresentation,
+            placeAtTheEndOfLine = false
+        )
+    }
+
+    private fun handleVarDefinition(element: VlangVarDefinition) {
+        val type = element.getTypeInner(null) ?: return
+        if (type is VlangUnknownTypeEx) {
+            // no need show hint if type is unknown
+            return
+        }
+
+        val presentation = typeHintsFactory.typeHint(type, element)
+        val finalPresentation = presentation.withDisableAction(element.project, "Variables") {
+            showForVariables = false
+        }
+
+        sink.addInlineElement(
+            element.endOffset,
+            relatesToPrecedingText = true,
+            presentation = finalPresentation,
+            placeAtTheEndOfLine = false
+        )
+    }
+
+    private fun handleSlice(element: VlangIndexOrSliceExpr) {
         // arr[0..1]
         if (element.childrenOfType<VlangRangeExpr>().isNotEmpty()) {
             // processed bellow
@@ -67,55 +148,59 @@ class VlangInlayHintsCollector(
 
         if (rangeVariant1.textMatches("..")) {
             // arr[..<10]
-            addRangeHint(rangeVariant1.endOffset, false)
-        }
-        else if (rangeVariant2.textMatches("..")) {
+            addRangeHint(element.project, rangeVariant1.endOffset, false)
+        } else if (rangeVariant2.textMatches("..")) {
             // arr[10≤..]
-            addRangeHint(rangeVariant2.startOffset, true)
+            addRangeHint(element.project, rangeVariant2.startOffset, true)
         }
     }
 
-    private fun showAnnotation(element: VlangRangeExpr) {
+    private fun handleRange(element: VlangRangeExpr) {
         val op = element.range ?: element.tripleDot ?: return
         // `a`...`z`
         val inclusive = element.tripleDot != null
 
-        addRangeHint(op.startOffset, true)
-        addRangeHint(op.endOffset, inclusive)
+        addRangeHint(element.project, op.startOffset, true)
+        addRangeHint(element.project, op.endOffset, inclusive)
     }
 
-    private fun addRangeHint(offset: Int, inclusive: Boolean) {
-        val visibilityPresentation = withInlayAttributes(
-            container(factory.smallText(if (inclusive) "≤" else "<")),
-            DefaultLanguageHighlighterColors.INLINE_PARAMETER_HINT
-        )
+    private fun addRangeHint(project: Project, offset: Int, inclusive: Boolean) {
+        val presentation = typeHintsFactory.rangeHint(inclusive)
+        val finalPresentation = presentation.withDisableAction(project, "Ranges") {
+            showForRanges = false
+        }
 
         sink.addInlineElement(
             offset,
             relatesToPrecedingText = true,
-            presentation = visibilityPresentation,
+            presentation = finalPresentation,
             placeAtTheEndOfLine = false
         )
     }
 
-    private fun container(base: InlayPresentation): InlayPresentation {
-        val rounding = withInlayAttributes(RoundWithBackgroundPresentation(
-            InsetPresentation(
-                base,
-                left = 4,
-                right = 4,
-                top = 0,
-                down = 0,
-            ),
-            8,
-            8
-        ), DefaultLanguageHighlighterColors.INLAY_DEFAULT)
-        return DynamicInsetPresentation(rounding, offsetFromTopProvider)
-    }
-
-    private fun withInlayAttributes(base: InlayPresentation, attributes: TextAttributesKey) =
-        WithAttributesPresentation(
-            base, attributes, editor,
-            WithAttributesPresentation.AttributesFlags().withIsDefault(true)
-        )
+    private fun InlayPresentation.withDisableAction(
+        project: Project,
+        name: String,
+        action: VlangInlayHintsProvider.Settings.() -> Unit,
+    ): InsetPresentation = InsetPresentation(
+        MenuOnClickPresentation(this, project) {
+            listOf(
+                object : AnAction("Disable '$name' hints type") {
+                    override fun actionPerformed(e: AnActionEvent) {
+                        val inlayHintsSettings = InlayHintsSettings.instance()
+                        val settings = inlayHintsSettings.findSettings(key, VlangLanguage) { VlangInlayHintsProvider.Settings() }
+                        settings.action()
+                        inlayHintsSettings.storeSettings(key, VlangLanguage, settings)
+                        InlayHintsPassFactory.forceHintsUpdateOnNextPass()
+                        InlayHintsConfigurable.updateInlayHintsUI()
+                    }
+                },
+                object : AnAction("Hints Settings...") {
+                    override fun actionPerformed(e: AnActionEvent) {
+                        InlayHintsConfigurable.showSettingsDialogForLanguage(file.project, VlangLanguage)
+                    }
+                }
+            )
+        }, left = 1
+    )
 }

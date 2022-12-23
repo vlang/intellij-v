@@ -24,7 +24,8 @@ abstract class VlangBaseTypeEx(protected val anchor: PsiElement? = null) : UserD
     override fun isBuiltin() = moduleName == VlangCodeInsightUtil.BUILTIN_MODULE || moduleName == VlangCodeInsightUtil.STUBS_MODULE
 
     protected fun String?.safeAppend(str: String?): String {
-        return if (this == null) str ?: "" else this + str
+        if (str == null) return this ?: ""
+        return if (this == null) str else this + str
     }
 
     protected fun String?.safeAppend(type: VlangTypeEx?): String {

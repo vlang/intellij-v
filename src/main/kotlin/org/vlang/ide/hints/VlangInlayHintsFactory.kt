@@ -1,0 +1,186 @@
+package org.vlang.ide.hints
+
+import com.intellij.codeInsight.hints.*
+import com.intellij.codeInsight.hints.presentation.*
+import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
+import com.intellij.openapi.editor.Editor
+import com.intellij.openapi.editor.colors.TextAttributesKey
+import com.intellij.openapi.editor.impl.EditorImpl
+import com.intellij.openapi.project.Project
+import com.intellij.psi.PsiElement
+import org.vlang.lang.psi.impl.VlangLangUtil
+import org.vlang.lang.psi.types.*
+
+@Suppress("UnstableApiUsage")
+class VlangInlayHintsFactory(
+    private val editor: Editor,
+    private val factory: PresentationFactory,
+) {
+    private val textMetricsStorage = InlayTextMetricsStorage(editor as EditorImpl)
+    private val offsetFromTopProvider = object : InsetValueProvider {
+        override val top = textMetricsStorage.getFontMetrics(false).offsetFromTop() - 1
+    }
+
+    fun implicitErrorVariable(project: Project): InlayPresentation {
+        val text = factory.psiSingleReference(text("err")) {
+            VlangLangUtil.getErrVariableDefinition(project)
+        }
+
+        return container(factory.seq(text, text(" →")))
+    }
+
+    fun typeHint(type: VlangTypeEx, anchor: PsiElement): InlayPresentation = container(
+        listOf(text(": "), hint(type, 1, anchor)).join()
+    )
+
+    private fun hint(type: VlangTypeEx, level: Int, anchor: PsiElement) = when (type) {
+        is VlangFunctionTypeEx         -> functionType(type, level, anchor)
+        is VlangAnonStructTypeEx       -> anonStructType(type, level, anchor)
+        is VlangGenericInstantiationEx -> genericInstantiation(type, level, anchor)
+        is VlangResolvableTypeEx<*>    -> resolvableType(type, level, anchor)
+        else                           -> text(type.readableName(anchor))
+    }
+
+    private fun anonStructType(type: VlangAnonStructTypeEx, level: Int, anchor: PsiElement): InlayPresentation {
+        val fields = factory.collapsible(
+            prefix = text("{ "),
+            collapsed = text(PLACEHOLDER),
+            expanded = {
+                parametersHint(
+                    type.resolve()
+                        ?.getFieldList()
+                        ?.mapNotNull { it.getType(null) }
+                        ?: emptyList(), level + 1, anchor)
+            },
+            suffix = text(" }"),
+            startWithPlaceholder = true
+        )
+        return factory.seq(text("struct "), fields)
+    }
+
+    private fun resolvableType(type: VlangResolvableTypeEx<*>, level: Int, anchor: PsiElement): InlayPresentation {
+        return factory.psiSingleReference(text((type as VlangTypeEx).readableName(anchor))) {
+            type.resolve(anchor.project)
+        }
+    }
+
+    private fun genericInstantiation(type: VlangGenericInstantiationEx, level: Int, anchor: PsiElement): InlayPresentation {
+        val name = hint(type.inner, level, anchor)
+        val parameters = factory.collapsible(
+            prefix = text("["),
+            collapsed = text(PLACEHOLDER),
+            expanded = { parametersHint(type.specialization, level + 1, anchor) },
+            suffix = text("]"),
+            startWithPlaceholder = checkSize(level, type.specialization.size)
+        )
+
+        return factory.seq(name, parameters)
+    }
+
+    private fun functionType(type: VlangFunctionTypeEx, level: Int, anchor: PsiElement): InlayPresentation {
+        val parameters = type.signature.parameters.paramDefinitionList
+        val returnType = type.result
+
+        val fn = if (parameters.isEmpty()) {
+            text("fn ()")
+        } else {
+            factory.collapsible(
+                prefix = text("fn ("),
+                collapsed = text(PLACEHOLDER),
+                expanded = { parametersHint(type.params, level + 1, anchor) },
+                suffix = text(")"),
+                startWithPlaceholder = true
+            )
+        }
+
+        if (returnType != null) {
+            val startWithPlaceholder = returnType.readableName(anchor).length > 7
+            val ret = factory.collapsible(
+                prefix = text(" "),
+                collapsed = text(PLACEHOLDER),
+                expanded = { hint(returnType, level + 1, anchor) },
+                suffix = text(""),
+                startWithPlaceholder = startWithPlaceholder
+            )
+            return factory.seq(fn, ret)
+        }
+
+        return fn
+    }
+
+    private fun parametersHint(kinds: List<VlangTypeEx>, level: Int, anchor: PsiElement): InlayPresentation =
+        kinds.map { hint(it, level, anchor) }.join(", ")
+
+    fun rangeHint(inclusive: Boolean): InlayPresentation {
+        return withInlayAttributes(
+            smallContainer(factory.smallText(if (inclusive) "≤" else "<")),
+            DefaultLanguageHighlighterColors.INLINE_PARAMETER_HINT
+        )
+    }
+
+    private fun smallContainer(base: InlayPresentation): InlayPresentation {
+        val rounding = withInlayAttributes(
+            RoundWithBackgroundPresentation(
+                InsetPresentation(
+                    base,
+                    left = 4,
+                    right = 4,
+                    top = 0,
+                    down = 0,
+                ),
+                8,
+                8
+            ), DefaultLanguageHighlighterColors.INLAY_DEFAULT
+        )
+        return DynamicInsetPresentation(rounding, offsetFromTopProvider)
+    }
+
+    private fun container(base: InlayPresentation): InlayPresentation {
+        val rounding = withInlayAttributes(
+            RoundWithBackgroundPresentation(
+                InsetPresentation(
+                    base,
+                    left = 7,
+                    right = 7,
+                    top = 2,
+                    down = 1,
+                ),
+                8,
+                8
+            ), DefaultLanguageHighlighterColors.INLAY_DEFAULT
+        )
+        return DynamicInsetPresentation(rounding, offsetFromTopProvider)
+    }
+
+    private fun List<InlayPresentation>.join(separator: String = ""): InlayPresentation {
+        if (separator.isEmpty()) {
+            return factory.seq(*toTypedArray())
+        }
+        val presentations = mutableListOf<InlayPresentation>()
+        var first = true
+        for (presentation in this) {
+            if (!first) {
+                presentations.add(text(separator))
+            }
+            presentations.add(presentation)
+            first = false
+        }
+        return factory.seq(*presentations.toTypedArray())
+    }
+
+    private fun text(text: String): InlayPresentation = factory.smallText(text)
+
+    private fun withInlayAttributes(base: InlayPresentation, attributes: TextAttributesKey) =
+        WithAttributesPresentation(
+            base, attributes, editor,
+            WithAttributesPresentation.AttributesFlags().withIsDefault(true)
+        )
+
+    private fun checkSize(level: Int, elementsCount: Int): Boolean =
+        level + elementsCount > FOLDING_THRESHOLD
+
+    companion object {
+        private const val PLACEHOLDER: String = "…"
+        private const val FOLDING_THRESHOLD: Int = 3
+    }
+}
