@@ -180,7 +180,7 @@ class CompletionTest : CompletionTestBase() {
             a := Colors.red
             a = ./*caret*/
         }
-        """.trimIndent(), 1, "red", "green", "str",
+        """.trimIndent(), 1, "red", "green",
     )
 
     fun `test map init`() = doTestCompletion(

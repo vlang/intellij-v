@@ -31,6 +31,11 @@ object VlangAttributesUtil {
         return expr.text == "attribute"
     }
 
+    fun isFlagEnum(attribute: VlangAttribute): Boolean {
+        val expr = attribute.attributeExpressionList.firstOrNull() ?: return false
+        return expr.text == "flag"
+    }
+
     fun isPrimaryField(attribute: VlangAttribute): Boolean {
         val expr = attribute.attributeExpressionList.firstOrNull() ?: return false
         return expr.text == "primary"

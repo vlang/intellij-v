@@ -38,3 +38,106 @@ type Any = any
 // }
 // ```
 pub fn (a Any) str() string
+
+// FlagEnum describes a enum with `[flag]` attribute.
+//
+// See [Flag](#flag) attribute for detail.
+pub enum FlagEnum {}
+
+// has checks if the enum value has the passed flag.
+//
+// Example:
+// ```
+// [flag]
+// enum Permissions {
+//   read  // = 0b0001
+//   write // = 0b0010
+//   other // = 0b0100
+// }
+//
+// fn main() {
+//   p := Permissions.read
+//   assert p.has(.read) // test if p has read flag
+//   assert p.has(.read | .other) // test if *at least one* of the flags is set
+// }
+// ```
+pub fn (f FlagEnum) has(flag FlagEnum) bool
+
+// all checks if the enum value has all passed flags.
+//
+// Example:
+// ```
+// [flag]
+// enum Permissions {
+//   read  // = 0b0001
+//   write // = 0b0010
+//   other // = 0b0100
+// }
+//
+// fn main() {
+//   p := Permissions.read | .write
+//   assert p.all(.read | .write) // test if *all* of the flags is set
+// }
+// ```
+pub fn (f FlagEnum) all(flag FlagEnum) bool
+
+// set sets the passed flags.
+// If the flag is already set, it will be ignored.
+//
+// Example:
+// ```
+// [flag]
+// enum Permissions {
+//   read  // = 0b0001
+//   write // = 0b0010
+//   other // = 0b0100
+// }
+//
+// fn main() {
+//   mut p := Permissions.read
+//   p.set(.write)
+//   assert p.has(.write)
+// }
+// ```
+pub fn (f FlagEnum) set(flag FlagEnum)
+
+// toggle toggles the passed flags.
+// If the flag is already set, it will be unset.
+// If the flag is not set, it will be set.
+//
+// Example:
+// ```
+// [flag]
+// enum Permissions {
+//   read  // = 0b0001
+//   write // = 0b0010
+//   other // = 0b0100
+// }
+//
+// fn main() {
+//   mut p := Permissions.read
+//   p.toggle(.read)
+//   assert !p.has(.read)
+// }
+// ```
+pub fn (f FlagEnum) toggle(flag FlagEnum)
+
+// clear clears the passed flags.
+// If the flag is not set, it will be ignored.
+//
+// Example:
+// ```
+// [flag]
+// enum Permissions {
+//   read  // = 0b0001
+//   write // = 0b0010
+//   other // = 0b0100
+// }
+//
+// fn main() {
+//   mut p := Permissions.read
+//   p.clear(.read)
+//   assert !p.has(.read)
+// }
+// ```
+pub fn (f FlagEnum) clear(flag FlagEnum)

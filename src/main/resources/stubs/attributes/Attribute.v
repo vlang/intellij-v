@@ -12,6 +12,7 @@ enum Target {
 	function
 	field
 	struct_
+	enum_
 	constant
 	type_alias
 }

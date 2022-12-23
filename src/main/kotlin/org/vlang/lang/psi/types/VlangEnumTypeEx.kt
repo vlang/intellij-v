@@ -6,7 +6,7 @@ import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.VlangEnumDeclaration
 import org.vlang.lang.stubs.index.VlangClassLikeIndex
 
-class VlangEnumTypeEx(val name: String, anchor: PsiElement) :
+open class VlangEnumTypeEx(val name: String, anchor: PsiElement?) :
     VlangBaseTypeEx(anchor), VlangImportableTypeEx, VlangResolvableTypeEx<VlangEnumDeclaration> {
 
     override fun toString() = name
@@ -44,8 +44,27 @@ class VlangEnumTypeEx(val name: String, anchor: PsiElement) :
 
     override fun substituteGenerics(nameMap: Map<String, VlangTypeEx>): VlangTypeEx = this
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+
+        other as VlangEnumTypeEx
+
+        if (name != other.name) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int = name.hashCode()
+
     override fun resolve(project: Project): VlangEnumDeclaration? {
         val variants = VlangClassLikeIndex.find(qualifiedName(), project, null, null)
         return variants.firstOrNull() as? VlangEnumDeclaration
+    }
+
+    companion object {
+        val FLAG_ENUM = object : VlangEnumTypeEx("FlagEnum", null) {
+            override val moduleName: String
+                get() = VlangCodeInsightUtil.STUBS_MODULE
+        }
     }
 }

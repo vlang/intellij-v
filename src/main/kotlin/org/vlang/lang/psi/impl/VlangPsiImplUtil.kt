@@ -1111,6 +1111,13 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun isFlag(o: VlangEnumDeclaration): Boolean {
+        return o.attributes?.attributeList?.any {
+            VlangAttributesUtil.isFlagEnum(it)
+        } == true
+    }
+
+    @JvmStatic
     fun getUnderlyingType(o: VlangType): VlangType? {
         return null // TODO
     }

@@ -285,6 +285,12 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             if (!processNamedElements(processor, newState, enumType.fieldList, localResolve)) return false
             if (!processMethods(typ, processor, newState, localResolve)) return false
             if (!processAnyType(contextFile, processor, newState, localResolve)) return false
+
+            // don't add this methods if enum without flag attribute
+            // TODO: add inspection
+            if (!processor.isCompletion() || declaration.isFlag) {
+                if (!processType(VlangEnumTypeEx.FLAG_ENUM, processor, newState)) return false
+            }
             return true
         }
 
@@ -418,6 +424,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
     }
 
     private fun processMethods(type: VlangTypeEx, processor: VlangScopeProcessor, state: ResolveState, localResolve: Boolean): Boolean {
+        if (state.get(NOT_PROCESS_METHODS) == true) return true
         return processNamedElements(processor, state, VlangLangUtil.getMethodList(project, type), localResolve)
     }
 
@@ -573,7 +580,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         state: ResolveState,
     ): Boolean {
         val contextType = VlangTypeInferenceUtil.getContextType(fetch) ?: return true
-        return processType(contextType, processor, state)
+        return processType(contextType, processor, state.put(NOT_PROCESS_METHODS, true))
     }
 
     private fun processDirectory(

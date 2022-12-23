@@ -190,4 +190,29 @@ open class ResolveEnumFetchTest : ResolveTestBase() {
 
         assertReferencedTo("ENUM_FIELD_DEFINITION green")
     }
+
+    fun `test inside has and all methods`() {
+        mainFile("a.v", """
+            module main
+            
+            [flag]
+            enum Permissions {
+                read  // = 0b0001
+                write // = 0b0010
+                other // = 0b0100
+            }
+            
+            fn main() {
+                p := Permissions.read
+                assert p.has(./*caret*/read | ./*caret*/other)
+            
+                p1 := Permissions.read | .write
+                assert p1.has(./*caret*/write)
+            }
+        """.trimIndent())
+
+        assertReferencedTo("ENUM_FIELD_DEFINITION read")
+        assertReferencedTo("ENUM_FIELD_DEFINITION other")
+        assertReferencedTo("ENUM_FIELD_DEFINITION write")
+    }
 }

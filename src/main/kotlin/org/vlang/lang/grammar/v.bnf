@@ -472,7 +472,7 @@ EmbeddedInterfaceDefinition ::= Type {
 // enum
 EnumDeclaration ::= Attributes? SymbolVisibility? EnumType {
   stubClass="org.vlang.lang.stubs.VlangEnumDeclarationStub"
-  methods=[getName getIdentifier getTypeInner]
+  methods=[getName getIdentifier getTypeInner isFlag]
 }
 
 EnumType ::= enum identifier EnumBackedTypeAs? '{' EnumFields? '}' {

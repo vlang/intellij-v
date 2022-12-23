@@ -118,6 +118,13 @@ object VlangTypeInferenceUtil {
             val function = callExpr.resolve() as? VlangFunctionOrMethodDeclaration ?: return null
             val params = function.getSignature()?.parameters?.paramDefinitionList ?: return null
 
+            if (function is VlangMethodDeclaration) {
+                val receiverType = function.receiverType.toEx()
+                if (receiverType == VlangEnumTypeEx.FLAG_ENUM) {
+                    return callerType(callExpr)
+                }
+            }
+
             val param = params.getOrNull(index) ?: return null
             val type = param.type.toEx()
 
