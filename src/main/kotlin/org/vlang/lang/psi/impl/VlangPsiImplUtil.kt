@@ -20,7 +20,6 @@ import org.vlang.ide.codeInsight.VlangTypeInferenceUtil
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.VlangTypes.SAFE_DOT
 import org.vlang.lang.codeInsight.controlFlow.VlangControlFlow
-import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangReferenceBase.Companion.LOCAL_RESOLVE
 import org.vlang.lang.psi.impl.imports.VlangModuleReference
@@ -1259,11 +1258,6 @@ object VlangPsiImplUtil {
         }
 
         if (expr is VlangReferenceExpression) {
-            // @VEXE or @FILE -> string
-            if (VlangCompletionUtil.isCompileTimeIdentifier(expr.getIdentifier())) {
-                return VlangStringTypeEx.INSTANCE
-            }
-
             // 'it' variable in map/filter/any/all methods of array
             // 'a', 'b' variables in sort method of array
             if (VlangCodeInsightUtil.isItVariable(expr.getIdentifier()) || VlangCodeInsightUtil.isSortABVariable(expr.getIdentifier())) {

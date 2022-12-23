@@ -52,10 +52,6 @@ class VlangAnnotator : Annotator {
     private fun highlightLeaf(element: PsiElement, holder: AnnotationHolder): VlangColor? {
         val parent = element.parent as? VlangCompositeElement ?: return null
 
-        if (VlangCompletionUtil.isCompileTimeIdentifier(element)) {
-            return VlangColor.CT_CONSTANT
-        }
-
         if (VlangCompletionUtil.isCompileTimeMethodIdentifier(element) && parent.parentOfType<VlangCallExpr>() != null) {
             return VlangColor.CT_METHOD_CALL
         }
@@ -112,7 +108,6 @@ class VlangAnnotator : Annotator {
 
             is VlangEnumDeclaration           -> public(resolved, VlangColor.PUBLIC_ENUM, VlangColor.ENUM)
             is VlangInterfaceDeclaration      -> public(resolved, VlangColor.PUBLIC_INTERFACE, VlangColor.INTERFACE)
-            is VlangConstDefinition           -> public(resolved, VlangColor.PUBLIC_CONSTANT, VlangColor.CONSTANT)
             is VlangFieldDefinition           -> public(resolved, VlangColor.PUBLIC_FIELD, VlangColor.FIELD)
             is VlangEnumFieldDefinition       -> public(resolved, VlangColor.ENUM_FIELD, VlangColor.ENUM_FIELD)
             is VlangTypeAliasDeclaration      -> public(resolved, VlangColor.PUBLIC_TYPE_ALIAS, VlangColor.TYPE_ALIAS)
@@ -128,6 +123,14 @@ class VlangAnnotator : Annotator {
             is VlangGenericParameter          -> VlangColor.GENERIC_PARAMETER
             is VlangPomTargetPsiElement       -> VlangColor.MODULE
             is VlangImportAlias               -> VlangColor.MODULE
+            is VlangConstDefinition           -> {
+                val identifier = element.getIdentifier()
+                if (identifier != null && VlangCompletionUtil.isCompileTimeIdentifier(identifier)) {
+                    return VlangColor.CT_CONSTANT
+                }
+
+                public(resolved, VlangColor.PUBLIC_CONSTANT, VlangColor.CONSTANT)
+            }
             else                              -> null
         }
     }
