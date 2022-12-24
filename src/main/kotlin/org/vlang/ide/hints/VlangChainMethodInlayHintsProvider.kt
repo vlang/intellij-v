@@ -16,11 +16,11 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.psi.util.parentOfType
 import com.intellij.refactoring.suggested.endOffset
 import org.vlang.lang.VlangLanguage
 import org.vlang.lang.psi.VlangCallExpr
 import org.vlang.utils.childOfType
+import org.vlang.utils.parentNth
 import javax.swing.JPanel
 
 @Suppress("UnstableApiUsage")
@@ -78,7 +78,7 @@ class VlangChainMethodInlayHintsProvider : InlayHintsProvider<VlangChainMethodIn
                 while (true) {
                     chain.add(current)
                     val prevCurrent = current
-                    current = current.parentOfType() ?: break
+                    current = current.parentNth(2) ?: break
                     if (!PsiTreeUtil.isAncestor(current.expression, prevCurrent, false)) break
                 }
                 return chain

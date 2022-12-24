@@ -12,6 +12,8 @@ fn (n &Name) with_age() Name {
 fn (n &Name) with_kind() Name {
 }
 
+fn read_file() !string {}
+
 fn main() {
 	n := Name{}
 
@@ -28,4 +30,11 @@ fn main() {
 		.with_kind(n
 			.with_data()<# [:  Name] #>
 			.with_age())
+
+	read_file('./main.v') or { panic(err) }
+		.split_into_lines()<# [:  []string] #>
+		.filter(it.contains('fn main'))<# [:  []string] #>
+		.map(it.trim_space())<# [:  []string] #>
+		.map(it.len)<# [:  []int] #>
+		.all(it > 0)
 }
