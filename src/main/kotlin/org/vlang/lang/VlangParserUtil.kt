@@ -341,7 +341,7 @@ object VlangParserUtil : GeneratedParserUtilBase() {
     @JvmStatic
     fun checkNoColonIfMap(builder: PsiBuilder, level: Int): Boolean {
         if (!isLastIs(builder, level, "MAP_KEY_VALUE") || builder.latestDoneMarker?.tokenType == IDENTIFIER) {
-           return true
+            return true
         }
 
         val text = builder.originalText.substring(builder.latestDoneMarker?.startOffset ?: 0, builder.latestDoneMarker?.endOffset ?: 1)
@@ -444,6 +444,15 @@ object VlangParserUtil : GeneratedParserUtilBase() {
     @JvmStatic
     fun exitAllModeSafe(builder: PsiBuilder, level: Int, mode: String): Boolean {
         return exitMode(builder, level, mode, safe = true, all = true)
+    }
+
+    @JvmStatic
+    fun endOfLimit(builder: PsiBuilder, level: Int): Boolean {
+        val tokenText = builder.tokenText
+        if (tokenText == "limit" || tokenText == "asc" || tokenText == "desc") {
+            return false
+        }
+        return true
     }
 
 //    fun isBuiltin(builder: PsiBuilder, level: Int): Boolean {

@@ -1,14 +1,18 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
-import static org.vlang.lang.VlangTypes.*;
-import org.vlang.lang.psi.*;
+import org.vlang.lang.psi.VlangReferenceExpression;
+import org.vlang.lang.psi.VlangSqlReferenceListItem;
+import org.vlang.lang.psi.VlangVisitor;
+
+import static org.vlang.lang.VlangTypes.SEMICOLON;
+import static org.vlang.lang.VlangTypes.SEMICOLON_SYNTHETIC;
 
 public class VlangSqlReferenceListItemImpl extends VlangCompositeElementImpl implements VlangSqlReferenceListItem {
 
@@ -27,21 +31,9 @@ public class VlangSqlReferenceListItemImpl extends VlangCompositeElementImpl imp
   }
 
   @Override
-  @Nullable
+  @NotNull
   public VlangReferenceExpression getReferenceExpression() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangReferenceExpression.class);
-  }
-
-  @Override
-  @Nullable
-  public VlangSqlLimitClause getSqlLimitClause() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangSqlLimitClause.class);
-  }
-
-  @Override
-  @Nullable
-  public VlangSqlOffsetClause getSqlOffsetClause() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangSqlOffsetClause.class);
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangReferenceExpression.class));
   }
 
   @Override

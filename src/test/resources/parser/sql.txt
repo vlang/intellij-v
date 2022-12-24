@@ -1075,10 +1075,11 @@ V Language file
                     STRING_TEMPLATE
                       PsiElement(VlangTokenType.OPEN_QUOTE)(''')
                       PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('nr_all_users=')
-                      SHORT_STRING_TEMPLATE_ENTRY
-                        PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
+                      LONG_STRING_TEMPLATE_ENTRY
+                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_START)('${')
                         REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('nr_all_users')
+                        PsiElement(VlangTokenType.TEMPLATE_ENTRY_END)('}')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
       PsiComment(VLANG_DOC_COMMENT)
@@ -1135,10 +1136,11 @@ V Language file
                     STRING_TEMPLATE
                       PsiElement(VlangTokenType.OPEN_QUOTE)(''')
                       PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('nr_users1=')
-                      SHORT_STRING_TEMPLATE_ENTRY
-                        PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
+                      LONG_STRING_TEMPLATE_ENTRY
+                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_START)('${')
                         REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('nr_users1')
+                        PsiElement(VlangTokenType.TEMPLATE_ENTRY_END)('}')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
       PsiComment(VLANG_DOC_COMMENT)
@@ -1206,10 +1208,11 @@ V Language file
                     STRING_TEMPLATE
                       PsiElement(VlangTokenType.OPEN_QUOTE)(''')
                       PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('nr_peters=')
-                      SHORT_STRING_TEMPLATE_ENTRY
-                        PsiElement(VlangTokenType.SHORT_TEMPLATE_ENTRY_START)('$')
+                      LONG_STRING_TEMPLATE_ENTRY
+                        PsiElement(VlangTokenType.LONG_TEMPLATE_ENTRY_START)('${')
                         REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('nr_peters')
+                        PsiElement(VlangTokenType.TEMPLATE_ENTRY_END)('}')
                       PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.))(')')
       PsiComment(VLANG_DOC_COMMENT)
@@ -2665,15 +2668,14 @@ V Language file
                     SQL_REFERENCE_LIST_ITEM
                       REFERENCE_EXPRESSION
                         PsiElement(VlangTokenType.identifier)('id')
-                    SQL_REFERENCE_LIST_ITEM
-                      SQL_LIMIT_CLAUSE
-                        PsiElement(VlangTokenType.identifier)('limit')
-                        LITERAL
-                          PsiElement(VlangTokenType.int)('2')
-                      SQL_OFFSET_CLAUSE
-                        PsiElement(VlangTokenType.identifier)('offset')
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('offset_const')
+                SQL_LIMIT_CLAUSE
+                  PsiElement(VlangTokenType.identifier)('limit')
+                  LITERAL
+                    PsiElement(VlangTokenType.int)('2')
+                SQL_OFFSET_CLAUSE
+                  PsiElement(VlangTokenType.identifier)('offset')
+                  REFERENCE_EXPRESSION
+                    PsiElement(VlangTokenType.identifier)('offset_const')
               PsiElement(VlangTokenType.})('}')
       ASSERT_STATEMENT
         PsiElement(VlangTokenType.assert)('assert')
@@ -2729,14 +2731,11 @@ V Language file
                     SQL_REFERENCE_LIST_ITEM
                       REFERENCE_EXPRESSION
                         PsiElement(VlangTokenType.identifier)('age')
-                    SQL_REFERENCE_LIST_ITEM
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('desc')
-                    SQL_REFERENCE_LIST_ITEM
-                      SQL_LIMIT_CLAUSE
-                        PsiElement(VlangTokenType.identifier)('limit')
-                        LITERAL
-                          PsiElement(VlangTokenType.int)('1')
+                  PsiElement(VlangTokenType.identifier)('desc')
+                SQL_LIMIT_CLAUSE
+                  PsiElement(VlangTokenType.identifier)('limit')
+                  LITERAL
+                    PsiElement(VlangTokenType.int)('1')
               PsiElement(VlangTokenType.})('}')
       ASSERT_STATEMENT
         PsiElement(VlangTokenType.assert)('assert')
@@ -2785,18 +2784,15 @@ V Language file
                     SQL_REFERENCE_LIST_ITEM
                       REFERENCE_EXPRESSION
                         PsiElement(VlangTokenType.identifier)('age')
-                    SQL_REFERENCE_LIST_ITEM
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('desc')
-                    SQL_REFERENCE_LIST_ITEM
-                      SQL_LIMIT_CLAUSE
-                        PsiElement(VlangTokenType.identifier)('limit')
-                        LITERAL
-                          PsiElement(VlangTokenType.int)('1')
-                      SQL_OFFSET_CLAUSE
-                        PsiElement(VlangTokenType.identifier)('offset')
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('offs')
+                  PsiElement(VlangTokenType.identifier)('desc')
+                SQL_LIMIT_CLAUSE
+                  PsiElement(VlangTokenType.identifier)('limit')
+                  LITERAL
+                    PsiElement(VlangTokenType.int)('1')
+                SQL_OFFSET_CLAUSE
+                  PsiElement(VlangTokenType.identifier)('offset')
+                  REFERENCE_EXPRESSION
+                    PsiElement(VlangTokenType.identifier)('offs')
               PsiElement(VlangTokenType.})('}')
       ASSERT_STATEMENT
         PsiElement(VlangTokenType.assert)('assert')
@@ -2860,14 +2856,11 @@ V Language file
                     SQL_REFERENCE_LIST_ITEM
                       REFERENCE_EXPRESSION
                         PsiElement(VlangTokenType.identifier)('age')
-                    SQL_REFERENCE_LIST_ITEM
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('desc')
-                    SQL_REFERENCE_LIST_ITEM
-                      SQL_LIMIT_CLAUSE
-                        PsiElement(VlangTokenType.identifier)('limit')
-                        LITERAL
-                          PsiElement(VlangTokenType.int)('1')
+                  PsiElement(VlangTokenType.identifier)('desc')
+                SQL_LIMIT_CLAUSE
+                  PsiElement(VlangTokenType.identifier)('limit')
+                  LITERAL
+                    PsiElement(VlangTokenType.int)('1')
               PsiElement(VlangTokenType.})('}')
       ASSERT_STATEMENT
         PsiElement(VlangTokenType.assert)('assert')

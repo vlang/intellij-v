@@ -5201,7 +5201,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // semi?  'order' 'by' 'desc'? SqlReferenceList
+  // semi?  'order' 'by' SqlReferenceList? SqlOrderByTypes?
   public static boolean SqlOrderByClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SqlOrderByClause")) return false;
     boolean r, p;
@@ -5211,7 +5211,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     p = r; // pin = 2
     r = r && report_error_(b, consumeToken(b, "by"));
     r = p && report_error_(b, SqlOrderByClause_3(b, l + 1)) && r;
-    r = p && SqlReferenceList(b, l + 1) && r;
+    r = p && SqlOrderByClause_4(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -5223,11 +5223,28 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // 'desc'?
+  // SqlReferenceList?
   private static boolean SqlOrderByClause_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SqlOrderByClause_3")) return false;
-    consumeToken(b, "desc");
+    SqlReferenceList(b, l + 1);
     return true;
+  }
+
+  // SqlOrderByTypes?
+  private static boolean SqlOrderByClause_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlOrderByClause_4")) return false;
+    SqlOrderByTypes(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // 'asc' | 'desc'
+  static boolean SqlOrderByTypes(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SqlOrderByTypes")) return false;
+    boolean r;
+    r = consumeToken(b, "asc");
+    if (!r) r = consumeToken(b, "desc");
+    return r;
   }
 
   /* ********************************************************** */
@@ -5281,50 +5298,22 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // semi? (SqlLimitClause SqlOffsetClause?) | ReferenceExpression
+  // semi? <<endOfLimit>> ReferenceExpression
   public static boolean SqlReferenceListItem(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SqlReferenceListItem")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, SQL_REFERENCE_LIST_ITEM, "<sql reference list item>");
     r = SqlReferenceListItem_0(b, l + 1);
-    if (!r) r = ReferenceExpression(b, l + 1);
+    r = r && endOfLimit(b, l + 1);
+    r = r && ReferenceExpression(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // semi? (SqlLimitClause SqlOffsetClause?)
+  // semi?
   private static boolean SqlReferenceListItem_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SqlReferenceListItem_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = SqlReferenceListItem_0_0(b, l + 1);
-    r = r && SqlReferenceListItem_0_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // semi?
-  private static boolean SqlReferenceListItem_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SqlReferenceListItem_0_0")) return false;
     semi(b, l + 1);
-    return true;
-  }
-
-  // SqlLimitClause SqlOffsetClause?
-  private static boolean SqlReferenceListItem_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SqlReferenceListItem_0_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = SqlLimitClause(b, l + 1);
-    r = r && SqlReferenceListItem_0_1_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // SqlOffsetClause?
-  private static boolean SqlReferenceListItem_0_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SqlReferenceListItem_0_1_1")) return false;
-    SqlOffsetClause(b, l + 1);
     return true;
   }
 

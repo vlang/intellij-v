@@ -10,7 +10,7 @@ object VlangSqlUtil {
     val sqlKeywords = setOf(
         "select", "count", "from", "where", "order",
         "by", "limit", "create", "drop", "table",
-        "update", "set", "insert", "into", "delete", "offset",
+        "update", "set", "insert", "into", "delete", "offset", "desc", "asc",
     )
 
     fun isSqlKeyword(keyword: String): Boolean {

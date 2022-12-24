@@ -1047,9 +1047,10 @@ SqlFromClause ::= semi? 'from' SqlTableName {pin=2}
 SqlWhereClause ::= semi? 'where' Expression {pin=2}
 SqlLimitClause ::= 'limit' Expression {pin=2}
 SqlOffsetClause ::= 'offset' Expression {pin=2}
-SqlOrderByClause ::= semi?  'order' 'by' 'desc'? SqlReferenceList {pin=2}
+SqlOrderByClause ::= semi?  'order' 'by' SqlReferenceList? SqlOrderByTypes? {pin=2}
+private SqlOrderByTypes ::= 'asc' | 'desc'
 SqlReferenceList ::= semi? SqlReferenceListItem (','? SqlReferenceListItem)* {pin=2}
-SqlReferenceListItem ::= semi? (SqlLimitClause SqlOffsetClause?) | ReferenceExpression {pin=2}
+SqlReferenceListItem ::= semi? <<endOfLimit>> ReferenceExpression {pin=3}
 
 SqlTableName ::= TypeReferenceExpression {pin=1}
 
