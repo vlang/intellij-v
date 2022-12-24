@@ -1330,8 +1330,9 @@ object VlangPsiImplUtil {
         if (expr is VlangCallExpr) {
             val needUnwrapOptional = expr is VlangCallExprWithPropagate
 
-            val exprType = expr.expression?.getType(context)?.unwrapAlias() ?: return null
-            if (exprType !is VlangFunctionTypeEx) {
+            val exprType = expr.expression?.getType(context) ?: return null
+            val unwrapped = exprType.unwrapAlias()
+            if (unwrapped !is VlangFunctionTypeEx) {
                 // most probably `Foo[int](100)` cast
                 if (expr.genericArguments != null && expr.argumentList.elementList.size == 1) {
                     val specialization = expr.genericArguments!!.typeArguments.map { it.toEx() }
@@ -1341,7 +1342,7 @@ object VlangPsiImplUtil {
                 return unwrapOptionOrResultTypeIf(exprType, needUnwrapOptional)
             }
 
-            val signature = exprType.signature
+            val signature = unwrapped.signature
             val owner = signature.parent as VlangSignatureOwner
 
             if (owner is VlangMethodDeclaration) {
