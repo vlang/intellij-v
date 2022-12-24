@@ -156,23 +156,23 @@ open class ResolveEnumFetchTest : ResolveTestBase() {
         assertReferencedTo("ENUM_FIELD_DEFINITION green")
     }
 
-//    fun `test in array`() {
-//        mainFile("a.v", """
-//            module main
-//
-//            enum Colors {
-//                red
-//                green
-//            }
-//
-//            fn main() {
-//                mut colors := [Colors./*caret*/red, ./*caret*/green]
-//            }
-//        """.trimIndent())
-//
-//        assertReferencedTo("ENUM_FIELD_DEFINITION red")
-//        assertReferencedTo("ENUM_FIELD_DEFINITION green")
-//    }
+    fun `test in array`() {
+        mainFile("a.v", """
+            module main
+
+            enum Colors {
+                red
+                green
+            }
+
+            fn main() {
+                mut colors := [Colors./*caret*/red, ./*caret*/green]
+            }
+        """.trimIndent())
+
+        assertReferencedTo("ENUM_FIELD_DEFINITION red")
+        assertReferencedTo("ENUM_FIELD_DEFINITION green")
+    }
 
     fun `test return`() {
         mainFile("a.v", """
@@ -214,5 +214,25 @@ open class ResolveEnumFetchTest : ResolveTestBase() {
         assertReferencedTo("ENUM_FIELD_DEFINITION read")
         assertReferencedTo("ENUM_FIELD_DEFINITION other")
         assertReferencedTo("ENUM_FIELD_DEFINITION write")
+    }
+
+    fun `test bit op`() {
+        mainFile("a.v", """
+            module main
+
+            enum Colors {
+                red
+                green
+            }
+
+            fn main() {
+                mut colors := Colors.red
+                
+                colors = ./*caret*/red | ./*caret*/green
+            }
+        """.trimIndent())
+
+        assertReferencedTo("ENUM_FIELD_DEFINITION red")
+        assertReferencedTo("ENUM_FIELD_DEFINITION green")
     }
 }

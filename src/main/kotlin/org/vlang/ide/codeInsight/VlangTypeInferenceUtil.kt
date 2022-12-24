@@ -95,6 +95,13 @@ object VlangTypeInferenceUtil {
             return getContextType(element.parent.parent)
         }
 
+        if (element.parent is VlangAddExpr) {
+            val addExpr = element.parent as VlangAddExpr
+            if (addExpr.bitOr != null) {
+                return getContextType(addExpr)
+            }
+        }
+
         if (element.parent is VlangBinaryExpr) {
             val binaryExpr = element.parent as VlangBinaryExpr
             val right = binaryExpr.right!!
