@@ -26,6 +26,7 @@ import org.vlang.lang.psi.impl.imports.VlangModuleReference
 import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.isGeneric
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapAlias
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapArray
 import org.vlang.lang.sql.VlangSqlUtil
 import org.vlang.utils.inside
@@ -1329,7 +1330,7 @@ object VlangPsiImplUtil {
         if (expr is VlangCallExpr) {
             val needUnwrapOptional = expr is VlangCallExprWithPropagate
 
-            val exprType = expr.expression?.getType(context) ?: return null
+            val exprType = expr.expression?.getType(context)?.unwrapAlias() ?: return null
             if (exprType !is VlangFunctionTypeEx) {
                 // most probably `Foo[int](100)` cast
                 if (expr.genericArguments != null && expr.argumentList.elementList.size == 1) {
