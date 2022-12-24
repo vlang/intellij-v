@@ -102,4 +102,19 @@ class ResolveTest : ResolveTestBase() {
 
         assertQualifiedReferencedTo("METHOD_DECLARATION unnamed.Color.foo")
     }
+
+    fun `test offset of fields`() {
+        mainFile("a.v", """
+            struct User {
+                age int
+            }
+            
+            fn main() {
+                __offsetof(User, /*caret*/age)
+            }
+
+        """.trimIndent())
+
+        assertQualifiedReferencedTo("FIELD_DEFINITION unnamed.User.age")
+    }
 }

@@ -494,6 +494,10 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             if (!processPseudoParams(processor, state)) return false
         }
 
+        if (element.inside<VlangOffsetOfCallExpr>()) {
+            if (!processOffsetOfCall(processor, state)) return false
+        }
+
         if (!processBlock(processor, state, true)) return false
         if (!processBuiltin(processor, state)) return false
         if (!processOsModule(file, processor, state)) return false
@@ -506,6 +510,14 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         if (!processModulesEntities(file, processor, state)) return false
         if (!processIfUnknownCDeclaration(processor, state)) return false
 
+        return true
+    }
+
+    private fun processOffsetOfCall(processor: VlangScopeProcessor, state: ResolveState): Boolean {
+        val call = element.parentOfType<VlangOffsetOfCallExpr>() ?: return false
+        if (PsiTreeUtil.isAncestor(call.referenceExpression, element, false)) {
+            return processType(call.type.toEx(), processor, state.put(NOT_PROCESS_METHODS, true))
+        }
         return true
     }
 

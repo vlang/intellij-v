@@ -210,4 +210,20 @@ class CompletionTest : CompletionTestBase() {
         """.trimIndent(), 0,
         "return true", "return false"
     )
+
+    fun `test offset of fields`() = checkIncludes(
+        """
+        module main
+        
+        struct User {
+            name string
+            age  int
+        }
+        
+        fn main() {
+            __offsetof(User, /*caret*/)
+        }
+        """.trimIndent(), 0,
+        "age", "name"
+    )
 }
