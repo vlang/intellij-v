@@ -1331,6 +1331,12 @@ object VlangPsiImplUtil {
 
             val exprType = expr.expression?.getType(context) ?: return null
             if (exprType !is VlangFunctionTypeEx) {
+                // most probably `Foo[int](100)` cast
+                if (expr.genericArguments != null && expr.argumentList.elementList.size == 1) {
+                    val specialization = expr.genericArguments!!.typeArguments.map { it.toEx() }
+                    return VlangGenericInstantiationEx(exprType, specialization, expr)
+                }
+
                 return unwrapOptionOrResultTypeIf(exprType, needUnwrapOptional)
             }
 

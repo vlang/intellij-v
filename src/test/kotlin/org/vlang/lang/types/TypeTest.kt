@@ -34,4 +34,5 @@ class TypeTest : TypeTestBase() {
     fun `test slice`() = doTestFile("slice.v")
     fun `test compile time`() = doTestFile("compile_time.v")
     fun `test threads`() = doTestFile("threads.v")
+    fun `test cast`() = doTestFile("cast.v")
 }
