@@ -7,13 +7,13 @@ class RenameTest : RenameBaseTest() {
         fn main() {
             foo();
         }
-        """,
+        """.trimIndent(),
         """
         fn bar() {}
         fn main() {
             bar();
         }
-        """,
+        """.trimIndent(),
         "bar"
     )
 
@@ -23,13 +23,13 @@ class RenameTest : RenameBaseTest() {
         fn main() {
             foo := Foo{}
         }
-        """,
+        """.trimIndent(),
         """
         struct Bar {}
         fn main() {
             foo := Bar{}
         }
-        """,
+        """.trimIndent(),
         "Bar"
     )
 
@@ -42,7 +42,7 @@ class RenameTest : RenameBaseTest() {
             foo := Foo{foo: 1}
             foo.foo = 2
         }
-        """,
+        """.trimIndent(),
         """
         struct Foo {
             bar int
@@ -51,7 +51,7 @@ class RenameTest : RenameBaseTest() {
             foo := Foo{bar: 1}
             foo.bar = 2
         }
-        """,
+        """.trimIndent(),
         "bar"
     )
 
@@ -67,7 +67,7 @@ class RenameTest : RenameBaseTest() {
             foo := Foo{foo: 1}
             foo.foo()
         }
-        """,
+        """.trimIndent(),
         """
         struct Foo {
             foo int
@@ -79,7 +79,7 @@ class RenameTest : RenameBaseTest() {
             foo := Foo{foo: 1}
             foo.bar()
         }
-        """,
+        """.trimIndent(),
         "bar"
     )
 
@@ -91,7 +91,7 @@ class RenameTest : RenameBaseTest() {
         fn main() {
             foo := Foo.a
         }
-        """,
+        """.trimIndent(),
         """
         enum Bar {
             a
@@ -99,27 +99,31 @@ class RenameTest : RenameBaseTest() {
         fn main() {
             foo := Bar.a
         }
-        """,
+        """.trimIndent(),
         "Bar"
     )
 
     fun `test enum field`() = doTest(
         """
+        module main
+        
         enum Foo {
-			/*caret*/a
+            /*caret*/a
         }
         fn main() {
             foo := Foo.a
         }
-        """,
+        """.trimIndent(),
         """
+        module main
+        
         enum Foo {
-			b
+        	b
         }
         fn main() {
             foo := Foo.b
         }
-        """,
+        """.trimIndent(),
         "b"
     )
 
@@ -129,13 +133,13 @@ class RenameTest : RenameBaseTest() {
         fn main() {
             foo = 2
         }
-        """,
+        """.trimIndent(),
         """
         const bar = 1
         fn main() {
             bar = 2
         }
-        """,
+        """.trimIndent(),
         "bar"
     )
 
@@ -144,12 +148,12 @@ class RenameTest : RenameBaseTest() {
         type /*caret*/Foo = int
         fn main() Foo {
         }
-        """,
+        """.trimIndent(),
         """
         type Bar = int
         fn main() Bar {
         }
-        """,
+        """.trimIndent(),
         "Bar"
     )
 
@@ -158,12 +162,12 @@ class RenameTest : RenameBaseTest() {
         type /*caret*/Foo<T> = T
         fn main() Foo<int> {
         }
-        """,
+        """.trimIndent(),
         """
         type Bar<T> = T
         fn main() Bar<int> {
         }
-        """,
+        """.trimIndent(),
         "Bar"
     )
 
@@ -173,13 +177,13 @@ class RenameTest : RenameBaseTest() {
             /*caret*/foo := 1
             foo = 2
         }
-        """,
+        """.trimIndent(),
         """
         fn main() {
             bar := 1
             bar = 2
         }
-        """,
+        """.trimIndent(),
         "bar"
     )
 
@@ -191,7 +195,7 @@ class RenameTest : RenameBaseTest() {
         fn main() {
             foo(2)
         }
-        """,
+        """.trimIndent(),
         """
         fn foo(y int) {
             y = 1
@@ -199,12 +203,14 @@ class RenameTest : RenameBaseTest() {
         fn main() {
             foo(2)
         }
-        """,
+        """.trimIndent(),
         "y"
     )
 
     fun `test interface`() = doTest(
         """
+        module main
+        
         interface Foo {
             foo int
             /*caret*/foo()
@@ -214,8 +220,10 @@ class RenameTest : RenameBaseTest() {
             foo.foo()
             foo.foo
         }
-        """,
+        """.trimIndent(),
         """
+        module main
+        
         interface Foo {
             foo int
             bar()
@@ -225,23 +233,25 @@ class RenameTest : RenameBaseTest() {
             foo.bar()
             foo.foo
         }
-        """,
+        """.trimIndent(),
         "bar"
     )
 
     fun `test import alias`() = doTest(
         """
         import foo as /*caret*/bar
+        
         fn main() {
             bar.foo()
         }
-        """,
+        """.trimIndent(),
         """
         import foo as baz
+        
         fn main() {
             baz.foo()
         }
-        """,
+        """.trimIndent(),
         "baz"
     )
 }

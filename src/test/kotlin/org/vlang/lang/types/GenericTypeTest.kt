@@ -162,6 +162,8 @@ class GenericTypeTest : TypeTestBase() {
 
     fun `test single generic interface with method without generic`() = doTest(
         """
+        module main
+        
         interface Test<T> {
             foo() T
         }
