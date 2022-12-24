@@ -107,6 +107,11 @@ class VlangInlayHintsCollector(
     }
 
     private fun handleVarDefinition(element: VlangVarDefinition) {
+        if (element.isBlank()) {
+            // don't show hint for "_" variables
+            return
+        }
+
         val type = element.getTypeInner(null) ?: return
         if (type is VlangUnknownTypeEx) {
             // no need show hint if type is unknown

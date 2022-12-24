@@ -1,0 +1,31 @@
+module main
+
+struct Name {
+}
+
+fn (n &Name) with_data() Name {
+}
+
+fn (n &Name) with_age() Name {
+}
+
+fn (n &Name) with_kind() Name {
+}
+
+fn main() {
+	n := Name{}
+
+	n
+		.with_data()<# [:  Name] #>
+		.with_age()<# [:  Name] #>
+		.with_kind()
+
+	n.with_data()<# [:  Name] #>
+		.with_age(n.with_data())<# [:  Name] #>
+		.with_kind()
+
+	n.with_data().with_age()<# [:  Name] #>
+		.with_kind(n
+			.with_data()<# [:  Name] #>
+			.with_age())
+}
