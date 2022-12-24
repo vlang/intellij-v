@@ -2,7 +2,6 @@ package org.vlang.toolchain
 
 import com.intellij.openapi.components.*
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.util.SimpleModificationTracker
 import com.intellij.util.xmlb.XmlSerializerUtil
 import com.intellij.util.xmlb.annotations.Attribute
 import org.vlang.configurations.VlangLibrariesUtil
@@ -12,7 +11,7 @@ import org.vlang.configurations.VlangLibrariesUtil
     storages = [Storage(StoragePathMacros.WORKSPACE_FILE)]
 )
 @Service
-class VlangToolchainService(private val project: Project) : SimpleModificationTracker(), PersistentStateComponent<VlangToolchainService.ToolchainState?> {
+class VlangToolchainService(private val project: Project) : PersistentStateComponent<VlangToolchainService.ToolchainState?> {
     private var state = ToolchainState()
     val toolchainLocation: String
         get() = state.toolchainLocation
