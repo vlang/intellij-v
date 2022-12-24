@@ -120,7 +120,7 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
 
     override fun setName(name: String): PsiElement? {
         val identifier = getIdentifier()
-        val newIdentifier = VlangElementFactory.createIdentifierFromText(project, name)
+        val newIdentifier = VlangElementFactory.createIdentifier(project, name)
         identifier?.replace(newIdentifier)
         return this
     }

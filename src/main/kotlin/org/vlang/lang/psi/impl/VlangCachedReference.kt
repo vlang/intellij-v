@@ -25,7 +25,7 @@ abstract class VlangCachedReference<T : PsiElement>(element: T, range: TextRange
     abstract fun processResolveVariants(processor: VlangScopeProcessor): Boolean
 
     override fun handleElementRename(newElementName: String): PsiElement {
-        return myElement!!.replace(VlangElementFactory.createIdentifierFromText(myElement!!.project, newElementName))
+        return myElement!!.replace(VlangElementFactory.createIdentifier(myElement!!.project, newElementName))
     }
 
     override fun getVariants(): Array<Any> = ArrayUtil.EMPTY_OBJECT_ARRAY

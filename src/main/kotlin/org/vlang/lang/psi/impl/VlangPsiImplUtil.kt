@@ -363,7 +363,7 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun setName(o: VlangImportName, newName: String): PsiElement {
         val identifier = o.getIdentifier()
-        identifier.replace(VlangElementFactory.createIdentifierFromText(o.project, newName))
+        identifier.replace(VlangElementFactory.createIdentifier(o.project, newName))
         return o
     }
 

@@ -1027,7 +1027,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
     override fun getVariants(): Array<Any> = ArrayUtil.EMPTY_OBJECT_ARRAY
 
     override fun handleElementRename(newElementName: String): PsiElement? {
-        identifier?.replace(VlangElementFactory.createIdentifierFromText(myElement.project, newElementName))
+        identifier?.replace(VlangElementFactory.createIdentifier(myElement.project, newElementName))
         return myElement
     }
 

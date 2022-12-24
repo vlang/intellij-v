@@ -221,6 +221,12 @@
                          displayName="Unused import inspection"
                          enabledByDefault="true" level="WARNING"
                          implementationClass="org.vlang.ide.inspections.unused.VlangUnusedImportInspection"/>
+
+        <localInspection language="vlang" groupPath="V"
+                         groupName="Unused" shortName="VlangUnusedVariableInspection"
+                         displayName="Unused variable inspection"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="org.vlang.ide.inspections.unused.VlangUnusedVariableInspection"/>
         <!-- endregion Unused inspections -->
 
         <!-- region Control flow inspections EXPERIMENTAL -->

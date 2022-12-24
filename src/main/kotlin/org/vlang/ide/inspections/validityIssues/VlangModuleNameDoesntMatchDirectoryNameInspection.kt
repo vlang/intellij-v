@@ -6,7 +6,8 @@ import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElementVisitor
 import org.vlang.ide.inspections.VlangBaseInspection
-import org.vlang.lang.psi.*
+import org.vlang.lang.psi.VlangModuleClause
+import org.vlang.lang.psi.VlangVisitor
 import org.vlang.lang.psi.impl.VlangElementFactory
 
 class VlangModuleNameDoesntMatchDirectoryNameInspection : VlangBaseInspection() {
@@ -38,7 +39,7 @@ class VlangModuleNameDoesntMatchDirectoryNameInspection : VlangBaseInspection() 
             override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
                 val module = descriptor.psiElement as? VlangModuleClause ?: return
                 val directoryName = module.containingFile?.containingDirectory?.name ?: return
-                module.nameIdentifier?.replace(VlangElementFactory.createIdentifierFromText(project, directoryName))
+                module.nameIdentifier?.replace(VlangElementFactory.createIdentifier(project, directoryName))
             }
         }
 

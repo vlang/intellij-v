@@ -24,7 +24,7 @@ object VlangElementFactory {
         return PsiTreeUtil.findChildOfType(file, VlangReferenceExpression::class.java)!!
     }
 
-    fun createIdentifierFromText(project: Project, text: String): PsiElement {
+    fun createIdentifier(project: Project, text: String): PsiElement {
         val file = createFileFromText(project, "module $text")
         return file.getModule()?.getIdentifier()!!
     }
