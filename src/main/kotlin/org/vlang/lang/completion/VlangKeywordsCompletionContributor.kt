@@ -85,6 +85,7 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
                 "in",
                 "is",
                 "goto",
+                "spawn",
             )
         )
         extend(
@@ -418,6 +419,7 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
 
     private inner class CompletionAfterKeywordsCompletionProvider(private vararg val keywords: String) :
         CompletionProvider<CompletionParameters>() {
+
         override fun addCompletions(
             parameters: CompletionParameters,
             context: ProcessingContext,

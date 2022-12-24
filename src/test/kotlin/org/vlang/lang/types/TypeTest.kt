@@ -33,4 +33,5 @@ class TypeTest : TypeTestBase() {
     fun `test anon struct`() = doTestFile("anon_struct.v")
     fun `test slice`() = doTestFile("slice.v")
     fun `test compile time`() = doTestFile("compile_time.v")
+    fun `test threads`() = doTestFile("threads.v")
 }

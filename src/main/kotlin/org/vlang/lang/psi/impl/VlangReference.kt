@@ -296,7 +296,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
         if (typ is VlangArrayTypeEx) {
             if (typ.inner is VlangThreadTypeEx) {
-                return processBuiltinWaitGroupTypeMethods(project, processor, newState)
+                return processThreadPoolMethods(processor, newState)
             }
 
             if (!processMethods(typ, processor, newState, localResolve)) return false
@@ -319,7 +319,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         if (typ is VlangThreadTypeEx) {
             if (!processMethods(typ, processor, newState, localResolve)) return false
             if (!processAnyType(contextFile, processor, newState, localResolve)) return false
-            return processBuiltinThreadTypeMethods(project, processor, newState)
+            return processThreadTypeMethods(processor, newState)
         }
 
         if (typ is VlangGenericInstantiationEx) {
@@ -354,31 +354,23 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         localResolve: Boolean,
     ) = processMethods(VlangAliasTypeEx.anyType(contextFile), processor, newState, localResolve)
 
-    private fun processBuiltinWaitGroupTypeMethods(
-        project: Project,
-        processor: VlangScopeProcessor,
-        state: ResolveState,
-    ): Boolean {
-        val vlib = VlangConfiguration.getInstance(project).builtinLocation?.parent
-        val syncDir = vlib?.findChild("sync") ?: return false
-        val virtualFile = syncDir.findChild("waitgroup.c.v") ?: return false
-        val psiFile = PsiManager.getInstance(project).findFile(virtualFile) as? VlangFile ?: return false
-        val struct = psiFile.getStructs()
-            .firstOrNull { it.name == "WaitGroup" } ?: return false
+    private fun processThreadPoolMethods(processor: VlangScopeProcessor, state: ResolveState): Boolean {
+        val stubDir = VlangConfiguration.getInstance(myElement.project).stubsLocation ?: return true
+        val psiManager = PsiManager.getInstance(myElement.project)
+        val file = getStubFile("threads.v", stubDir, psiManager) ?: return true
+
+        val struct = file.getStructs()
+            .firstOrNull { it.name == "ThreadPool" } ?: return false
         return processExistingType(struct.structType.toEx(), processor, state)
     }
 
-    private fun processBuiltinThreadTypeMethods(
-        project: Project,
-        processor: VlangScopeProcessor,
-        state: ResolveState,
-    ): Boolean {
-        val vlib = VlangConfiguration.getInstance(project).builtinLocation?.parent
-        val syncDir = vlib?.findChild("os") ?: return false
-        val virtualFile = syncDir.findChild("process.v") ?: return false
-        val psiFile = PsiManager.getInstance(project).findFile(virtualFile) as? VlangFile ?: return false
-        val struct = psiFile.getStructs()
-            .firstOrNull { it.name == "Process" } ?: return false
+    private fun processThreadTypeMethods(processor: VlangScopeProcessor, state: ResolveState): Boolean {
+        val stubDir = VlangConfiguration.getInstance(myElement.project).stubsLocation ?: return true
+        val psiManager = PsiManager.getInstance(myElement.project)
+        val file = getStubFile("threads.v", stubDir, psiManager) ?: return true
+
+        val struct = file.getStructs()
+            .firstOrNull { it.name == "Thread" } ?: return false
         return processExistingType(struct.structType.toEx(), processor, state)
     }
 

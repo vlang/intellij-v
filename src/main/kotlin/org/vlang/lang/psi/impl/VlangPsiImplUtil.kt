@@ -26,6 +26,7 @@ import org.vlang.lang.psi.impl.imports.VlangModuleReference
 import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.isGeneric
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapArray
 import org.vlang.lang.sql.VlangSqlUtil
 import org.vlang.utils.inside
 import org.vlang.utils.parentNth
@@ -1339,6 +1340,12 @@ object VlangPsiImplUtil {
             if (owner is VlangMethodDeclaration) {
                 val type = processMapArrayMethodCall(owner, signature, expr)
                 if (type != null) return unwrapOptionOrResultTypeIf(type, needUnwrapOptional)
+
+                val type2 = processThreadPoolMethodCall(owner, signature, expr)
+                if (type2 != null) return unwrapOptionOrResultTypeIf(type2, needUnwrapOptional)
+
+                val type3 = processThreadMethodCall(owner, signature, expr)
+                if (type3 != null) return unwrapOptionOrResultTypeIf(type3, needUnwrapOptional)
             }
 
             return processSignatureReturnType(signature, expr, owner, needUnwrapOptional)
@@ -1598,6 +1605,38 @@ object VlangPsiImplUtil {
             }
 
             return VlangTypeInferenceUtil.callerType(expr)
+        }
+
+        return null
+    }
+
+    private fun processThreadPoolMethodCall(resolved: VlangMethodDeclaration, signature: VlangSignature?, expr: VlangCallExpr): VlangTypeEx? {
+        val receiverType = resolved.receiverType.toEx()
+        if (!VlangTypeInferenceUtil.stubThreadPool(receiverType)) return null
+
+        val returnType = signature?.result?.type.toEx()
+
+        if (returnType is VlangArrayTypeEx) {
+            val callerType = VlangTypeInferenceUtil.callerType(expr)?.unwrapArray()
+            if (callerType is VlangThreadTypeEx && callerType.inner != null) {
+                return VlangArrayTypeEx(callerType.inner, expr)
+            }
+        }
+
+        return null
+    }
+
+    private fun processThreadMethodCall(resolved: VlangMethodDeclaration, signature: VlangSignature?, expr: VlangCallExpr): VlangTypeEx? {
+        val receiverType = resolved.receiverType.toEx()
+        if (!VlangTypeInferenceUtil.stubThread(receiverType)) return null
+
+        val returnType = signature?.result?.type.toEx()
+
+        if (returnType is VlangGenericTypeEx) {
+            val callerType = VlangTypeInferenceUtil.callerType(expr)
+            if (callerType is VlangThreadTypeEx && callerType.inner != null) {
+                return callerType.inner
+            }
         }
 
         return null

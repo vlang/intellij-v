@@ -9,6 +9,7 @@ import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangPsiImplUtil
 import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapGenericInstantiation
 import org.vlang.utils.inside
 import org.vlang.utils.parentNth
 
@@ -24,6 +25,18 @@ object VlangTypeInferenceUtil {
         val needUnwrap = nextLeaf.elementType == VlangTypes.SAFE_DOT
 
         return VlangPsiImplUtil.unwrapOptionOrResultTypeIf(type, needUnwrap)
+    }
+
+    fun stubThread(type: VlangTypeEx): Boolean {
+        val inner = type.unwrapGenericInstantiation()
+        if (inner is VlangStructTypeEx && inner.qualifiedName() == "stubs.Thread") return true
+        return false
+    }
+
+    fun stubThreadPool(type: VlangTypeEx): Boolean {
+        val inner = type.unwrapGenericInstantiation()
+        if (inner is VlangStructTypeEx && inner.qualifiedName() == "stubs.ThreadPool") return true
+        return false
     }
 
     fun builtinArrayOrPointerTo(type: VlangTypeEx): Boolean {
