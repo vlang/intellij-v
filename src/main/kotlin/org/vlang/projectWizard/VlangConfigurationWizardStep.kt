@@ -6,14 +6,14 @@ import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.dsl.gridLayout.HorizontalAlign
 import com.intellij.util.ui.JBUI
 import org.vlang.configurations.VlangProjectSettingsForm
-import org.vlang.configurations.VlangToolchainsState
 import org.vlang.ide.VlangPostStartupActivity
+import org.vlang.toolchain.VlangKnownToolchainsState
 import javax.naming.ConfigurationException
 import javax.swing.JComponent
 
 class VlangConfigurationWizardStep(context: WizardContext, model: VlangProjectSettingsForm.Model) : ModuleWizardStep() {
     init {
-        val knownToolchains = VlangToolchainsState.getInstance().knownToolchains
+        val knownToolchains = VlangKnownToolchainsState.getInstance().knownToolchains
         val needFindToolchains = knownToolchains.isEmpty()
         if (needFindToolchains) {
             VlangPostStartupActivity.setupToolchainCandidates()

@@ -11,12 +11,12 @@ import com.intellij.ui.EditorNotifications
 import org.vlang.configurations.VlangProjectSettingsConfigurable
 import java.util.function.Function
 
-abstract class VlangEditorNotificationProvider(private val project: Project) : EditorNotificationProvider, DumbAware {
-    val disablingKey: String get() = NOTIFICATION_STATUS_KEY
+abstract class VlangEditorNotificationProviderBase(private val project: Project) : EditorNotificationProvider, DumbAware {
+    private val disablingKey: String get() = NOTIFICATION_STATUS_KEY
 
     final override fun collectNotificationData(
         project: Project,
-        file: VirtualFile
+        file: VirtualFile,
     ): Function<in FileEditor, out EditorNotificationPanel?> {
         return Function { editor -> createNotificationPanel(file, editor, project) }
     }
@@ -24,7 +24,7 @@ abstract class VlangEditorNotificationProvider(private val project: Project) : E
     protected abstract fun createNotificationPanel(
         file: VirtualFile,
         editor: FileEditor,
-        project: Project
+        project: Project,
     ): EditorNotificationPanel?
 
     protected fun createToolchainNotification(
@@ -39,33 +39,27 @@ abstract class VlangEditorNotificationProvider(private val project: Project) : E
                 update(project, file)
             }
             createActionLabel("Don't show again") {
-                disableNotification(file)
+                disableNotification()
                 updateAllNotifications()
             }
         }
 
-    protected fun createSimpleNotification(
-        message: String,
-        project: Project,
-        file: VirtualFile,
-    ): EditorNotificationPanel =
-        EditorNotificationPanel().apply {
-            text = message
-        }
+    protected fun createSimpleNotification(message: String): EditorNotificationPanel =
+        EditorNotificationPanel().apply { text = message }
 
     private fun update(project: Project, file: VirtualFile) {
         EditorNotifications.getInstance(project).updateNotifications(file)
     }
 
-    protected fun updateAllNotifications() {
+    private fun updateAllNotifications() {
         EditorNotifications.getInstance(project).updateAllNotifications()
     }
 
-    protected fun disableNotification(file: VirtualFile) {
+    private fun disableNotification() {
         PropertiesComponent.getInstance(project).setValue(disablingKey, true)
     }
 
-    protected fun isNotificationDisabled(file: VirtualFile): Boolean =
+    protected fun isNotificationDisabled(): Boolean =
         PropertiesComponent.getInstance(project).getBoolean(disablingKey)
 
     companion object {

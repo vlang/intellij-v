@@ -6,6 +6,7 @@ import com.intellij.openapi.ui.ComponentWithBrowseButton
 import com.intellij.ui.ColoredListCellRenderer
 import com.intellij.ui.SimpleTextAttributes
 import org.vlang.ide.ui.VIcons
+import org.vlang.toolchain.VlangKnownToolchainsState
 import java.awt.event.ActionListener
 import javax.swing.JList
 
@@ -13,7 +14,7 @@ class ToolchainChooserComponent(browseActionListener: ActionListener, onSelectAc
     ComponentWithBrowseButton<ComboBox<ToolchainInfo>>(ComboBox<ToolchainInfo>(), browseActionListener) {
 
     private val comboBox = childComponent
-    private val knownToolchains get() = VlangToolchainsState.getInstance().knownToolchains
+    private val knownToolchains get() = VlangKnownToolchainsState.getInstance().knownToolchains
     private var knownToolchainInfos = knownToolchains
         .map { ToolchainInfo(it, VlangConfigurationUtil.guessToolchainVersion(it)) }
         .filter { it.version != VlangConfigurationUtil.UNDEFINED_VERSION }

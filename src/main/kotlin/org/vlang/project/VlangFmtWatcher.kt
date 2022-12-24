@@ -9,7 +9,7 @@ import com.intellij.openapi.project.DumbService
 import com.intellij.openapi.project.Project
 import com.intellij.util.containers.ContainerUtil
 import org.vlang.configurations.VlangFmtSettingsState.Companion.vfmtSettings
-import org.vlang.toolchain.VlangToolchain.Companion.toolchain
+import org.vlang.toolchain.Vfmt
 import org.vlang.utils.guessProjectForFile
 import org.vlang.utils.isNotVlangFile
 import org.vlang.utils.virtualFile
@@ -68,8 +68,7 @@ class VlangFmtWatcher {
 
         private fun reformatDocuments(project: Project, documents: List<Document>) {
             if (!project.vfmtSettings.runVfmtOnSave) return
-            val vfmt = project.toolchain.vfmt()
-            documents.forEach { vfmt.reformatDocument(project, it) }
+            documents.forEach { Vfmt.reformatDocument(project, it) }
         }
     }
 }

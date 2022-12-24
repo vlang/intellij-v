@@ -14,17 +14,8 @@ class VlangProjectSettingsState : PersistentStateComponent<VlangProjectSettingsS
             get() = service<VlangProjectSettingsState>()
     }
 
-    var toolchainLocation: String = ""
     var customStdlibLocation: String? = null
     var customModulesLocation: String? = null
-
-    val compilerLocation: String?
-        get() = VlangConfigurationUtil.getCompilerExeLocation(toolchainLocation)
-
-    fun setToolchain(project: Project, location: String) {
-        toolchainLocation = location
-        VlangLibrariesUtil.updateLibraries(project)
-    }
 
     override fun getState() = this
 

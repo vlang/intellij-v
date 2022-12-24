@@ -16,10 +16,10 @@ import org.jetbrains.concurrency.rejectedPromise
 import org.jetbrains.concurrency.resolvedPromise
 import org.vlang.configurations.VlangConfigurationUtil
 import org.vlang.configurations.VlangProjectSettingsConfigurable
-import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
 import org.vlang.debugger.runconfig.VlangDebugRunner
 import org.vlang.notifications.VlangErrorNotification
 import org.vlang.notifications.VlangNotification
+import org.vlang.toolchain.VlangToolchainService.Companion.toolchainSettings
 import java.io.File
 
 @Suppress("UnstableApiUsage")
@@ -75,7 +75,7 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
         val project = conf.project
         val buildProgressListener = project.service<BuildViewManager>()
 
-        val exe = project.projectSettings.compilerLocation
+        val exe = project.toolchainSettings.toolchain().compiler()
         if (exe == null) {
             VlangErrorNotification(VlangConfigurationUtil.TOOLCHAIN_NOT_SETUP)
                 .withTitle("Can't build V project")
@@ -89,7 +89,7 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
         }
 
         val commandLine = GeneralCommandLine()
-            .withExePath(exe)
+            .withExePath(exe.path)
             .withEnvironment(conf.envs)
             .withParameters(pathToBuild)
             .withParameters("-color")

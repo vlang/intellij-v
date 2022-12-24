@@ -16,7 +16,7 @@ import com.intellij.execution.testframework.sm.runner.ui.SMTRunnerConsoleView
 import com.intellij.openapi.project.guessProjectDir
 import com.intellij.util.execution.ParametersListUtil
 import org.vlang.configurations.VlangConfigurationUtil
-import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
+import org.vlang.toolchain.VlangToolchainService.Companion.toolchainSettings
 import java.io.File
 
 class VlangTestConfigurationRunState(
@@ -35,12 +35,12 @@ class VlangTestConfigurationRunState(
 
         val file = File(conf.filename)
 
-        val exe = conf.project.projectSettings.compilerLocation
+        val exe = conf.project.toolchainSettings.toolchain().compiler()
             ?: throw RuntimeException(VlangConfigurationUtil.TOOLCHAIN_NOT_SETUP)
         val workingDir = conf.project.guessProjectDir()?.toNioPath()?.toFile() ?: file.parentFile.parentFile
 
         val commandLine = GeneralCommandLine()
-            .withExePath(exe)
+            .withExePath(exe.path)
             .withWorkDirectory(workingDir)
             .withEnvironment(mapOf("VJOBS" to "1"))
             .withParameters("-test-runner")

@@ -21,14 +21,7 @@ object VlangConfigurationUtil {
     const val TOOLCHAIN_NOT_SETUP = "V executable not found, toolchain not setup correctly?"
     const val UNDEFINED_VERSION = "N/A"
     const val STANDARD_LIB_PATH = "vlib"
-    private val STANDARD_V_COMPILER = if (SystemInfo.isWindows) "v.exe" else "v"
-
-    fun getCompilerExeLocation(path: String): String? {
-        if (path.isBlank()) {
-            return null
-        }
-        return Path.of(path, STANDARD_V_COMPILER).toString()
-    }
+    val STANDARD_V_COMPILER = if (SystemInfo.isWindows) "v.exe" else "v"
 
     fun getStdlibLocation(path: String): String? {
         if (path.isBlank()) {

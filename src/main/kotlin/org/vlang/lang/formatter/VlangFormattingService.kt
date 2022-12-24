@@ -15,8 +15,8 @@ import org.intellij.markdown.flavours.gfm.GFMFlavourDescriptor
 import org.intellij.markdown.html.HtmlGenerator
 import org.intellij.markdown.parser.MarkdownParser
 import org.vlang.configurations.VlangConfigurationUtil
-import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
 import org.vlang.lang.psi.VlangFile
+import org.vlang.toolchain.VlangToolchainService.Companion.toolchainSettings
 import java.nio.charset.StandardCharsets
 import java.util.*
 import java.util.concurrent.ExecutionException
@@ -41,7 +41,7 @@ class VlangFormattingService : AsyncDocumentFormattingService() {
         params.add(ioFile.path)
 
         return try {
-            val exe = request.context.project.projectSettings.compilerLocation
+            val exe = request.context.project.toolchainSettings.toolchain().compiler()
             if (exe == null) {
                 request.onError("Can't format", VlangConfigurationUtil.TOOLCHAIN_NOT_SETUP)
                 return null
@@ -49,7 +49,7 @@ class VlangFormattingService : AsyncDocumentFormattingService() {
 
             val commandLine = GeneralCommandLine()
                 .withParentEnvironmentType(GeneralCommandLine.ParentEnvironmentType.CONSOLE)
-                .withExePath(exe)
+                .withExePath(exe.path)
                 .withParameters(params)
             val handler = OSProcessHandler(commandLine.withCharset(StandardCharsets.UTF_8))
 

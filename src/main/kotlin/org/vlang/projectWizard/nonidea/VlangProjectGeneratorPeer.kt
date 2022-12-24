@@ -5,13 +5,13 @@ import com.intellij.ui.dsl.builder.TopGap
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.dsl.gridLayout.HorizontalAlign
 import org.vlang.configurations.VlangProjectSettingsForm
-import org.vlang.configurations.VlangToolchainsState
 import org.vlang.ide.VlangPostStartupActivity
+import org.vlang.toolchain.VlangKnownToolchainsState
 import javax.swing.JComponent
 
 class VlangProjectGeneratorPeer(model: VlangProjectSettingsForm.Model) : GeneratorPeerImpl<Unit>() {
     init {
-        val knownToolchains = VlangToolchainsState.getInstance().knownToolchains
+        val knownToolchains = VlangKnownToolchainsState.getInstance().knownToolchains
         val needFindToolchains = knownToolchains.isEmpty()
         if (needFindToolchains) {
             VlangPostStartupActivity.setupToolchainCandidates()

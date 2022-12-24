@@ -243,7 +243,7 @@ The plugin provides support for V language
 
         <!-- region Toolchains -->
         <editorNotificationProvider implementation="org.vlang.project.MissingToolchainNotificationProvider"/>
-        <applicationService serviceImplementation="org.vlang.configurations.VlangToolchainsState"/>
+        <applicationService serviceImplementation="org.vlang.toolchain.VlangKnownToolchainsState"/>
         <!-- endregion Toolchains -->
 
         <!-- region V Stubs -->

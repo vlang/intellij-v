@@ -1,4 +1,4 @@
-package org.vlang.configurations
+package org.vlang.toolchain
 
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.State
@@ -10,24 +10,24 @@ import com.intellij.util.xmlb.XmlSerializerUtil
     name = "V Toolchains",
     storages = [Storage("VlangToolchains.xml")]
 )
-class VlangToolchainsState : PersistentStateComponent<VlangToolchainsState?> {
+class VlangKnownToolchainsState : PersistentStateComponent<VlangKnownToolchainsState?> {
     companion object {
-        fun getInstance() = service<VlangToolchainsState>()
+        fun getInstance() = service<VlangKnownToolchainsState>()
     }
 
     var knownToolchains: Set<String> = emptySet()
 
-    fun isKnown(toolchain: String): Boolean {
-        return knownToolchains.contains(toolchain)
+    fun isKnown(homePath: String): Boolean {
+        return knownToolchains.contains(homePath)
     }
 
-    fun add(toolchain: String) {
-        knownToolchains = knownToolchains + toolchain
+    fun add(toolchain: VlangToolchain) {
+        knownToolchains = knownToolchains + toolchain.homePath()
     }
 
     override fun getState() = this
 
-    override fun loadState(state: VlangToolchainsState) {
+    override fun loadState(state: VlangKnownToolchainsState) {
         XmlSerializerUtil.copyBean(state, this)
     }
 }

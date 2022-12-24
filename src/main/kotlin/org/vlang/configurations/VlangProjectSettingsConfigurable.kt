@@ -7,7 +7,8 @@ import com.intellij.openapi.options.ShowSettingsUtil
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.openapi.util.Disposer
-import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
+import org.vlang.toolchain.VlangToolchain
+import org.vlang.toolchain.VlangToolchainService.Companion.toolchainSettings
 
 class VlangProjectSettingsConfigurable(private val project: Project) : Configurable {
     private val mainPanel: DialogPanel
@@ -30,7 +31,7 @@ class VlangProjectSettingsConfigurable(private val project: Project) : Configura
     override fun isModified(): Boolean {
         mainPanel.apply()
 
-        val settings = project.projectSettings
+        val settings = project.toolchainSettings
         return model.toolchainLocation != settings.toolchainLocation
     }
 
@@ -39,8 +40,8 @@ class VlangProjectSettingsConfigurable(private val project: Project) : Configura
 
         validateSettings()
 
-        val settings = project.projectSettings
-        settings.setToolchain(project, model.toolchainLocation)
+        val settings = project.toolchainSettings
+        settings.setToolchain(project, VlangToolchain.fromPath(model.toolchainLocation))
     }
 
     private fun validateSettings() {
@@ -51,7 +52,7 @@ class VlangProjectSettingsConfigurable(private val project: Project) : Configura
     }
 
     override fun reset() {
-        val settings = project.projectSettings
+        val settings = project.toolchainSettings
 
         with(model) {
             toolchainLocation = settings.toolchainLocation

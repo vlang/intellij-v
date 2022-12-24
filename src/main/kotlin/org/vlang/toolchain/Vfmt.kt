@@ -9,15 +9,15 @@ import com.intellij.util.DocumentUtil
 import com.intellij.util.execution.ParametersListUtil
 import org.vlang.configurations.VlangConfigurationUtil
 import org.vlang.configurations.VlangFmtSettingsState.Companion.vfmtSettings
-import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
 import org.vlang.notifications.VlangErrorNotification
+import org.vlang.toolchain.VlangToolchainService.Companion.toolchainSettings
 import org.vlang.utils.isNotVlangFile
 import org.vlang.utils.runProcessWithGlobalProgress
 import org.vlang.utils.virtualFile
 import java.util.concurrent.Callable
 import java.util.concurrent.TimeUnit
 
-class Vfmt {
+object Vfmt {
     fun reformatDocument(project: Project, document: Document) {
         ApplicationManager.getApplication().assertIsDispatchThread()
         if (!document.isWritable) return
@@ -80,7 +80,7 @@ class Vfmt {
         arguments.add("fmt")
         arguments.addAll(additionalArguments)
 
-        val exe = project.projectSettings.compilerLocation
+        val exe = project.toolchainSettings.toolchain().compiler()
         if (exe == null) {
             VlangErrorNotification(VlangConfigurationUtil.TOOLCHAIN_NOT_SETUP)
                 .withTitle("Can't reformat")
@@ -89,7 +89,7 @@ class Vfmt {
         }
 
         return GeneralCommandLine()
-            .withExePath(exe)
+            .withExePath(exe.path)
             .withParameters(arguments)
             .withEnvironment(settingsState.envs)
             .withCharset(Charsets.UTF_8)

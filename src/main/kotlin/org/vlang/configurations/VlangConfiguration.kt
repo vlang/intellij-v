@@ -11,6 +11,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VirtualFileManager
 import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
+import org.vlang.toolchain.VlangToolchainService.Companion.toolchainSettings
 import java.io.File
 
 @Service
@@ -22,11 +23,17 @@ class VlangConfiguration(private val project: Project) {
     private val settings
         get() = project.projectSettings
 
+    private val toolchain
+        get() = project.toolchainSettings.toolchain()
+
     val toolchainLocation: VirtualFile?
-        get() = findFile(settings.toolchainLocation)
+        get() = toolchain.rootDir()
 
     val stdlibLocation: VirtualFile?
-        get() = findFile(settings.customStdlibLocation ?: (settings.toolchainLocation + "/vlib"))
+        get() = if (settings.customStdlibLocation != null)
+            findFile(settings.customStdlibLocation!!)
+        else
+            toolchain.stdlibDir()
 
     val modulesLocation: VirtualFile?
         get() = findFile(settings.customModulesLocation ?: modulesLocation())

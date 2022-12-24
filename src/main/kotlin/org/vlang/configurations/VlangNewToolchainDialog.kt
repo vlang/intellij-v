@@ -16,6 +16,8 @@ import com.intellij.ui.dsl.gridLayout.HorizontalAlign
 import com.intellij.ui.layout.ValidationInfoBuilder
 import com.intellij.util.ui.JBDimension
 import org.vlang.projectWizard.VlangToolchainFlavor
+import org.vlang.toolchain.VlangKnownToolchainsState
+import org.vlang.toolchain.VlangToolchain
 import org.vlang.utils.toPath
 import java.io.File
 import java.nio.file.Path
@@ -85,12 +87,12 @@ class VlangNewToolchainDialog(private val toolchainFilter: Condition<Path>, proj
     }
 
     override fun doOKAction() {
-        if (VlangToolchainsState.getInstance().isKnown(model.toolchainLocation)) {
+        if (VlangKnownToolchainsState.getInstance().isKnown(model.toolchainLocation)) {
             setErrorText("This toolchain is already added")
             return
         }
 
-        VlangToolchainsState.getInstance().add(model.toolchainLocation)
+        VlangKnownToolchainsState.getInstance().add(VlangToolchain.fromPath(model.toolchainLocation))
 
         super.doOKAction()
     }

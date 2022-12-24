@@ -4,14 +4,16 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.startup.StartupActivity
 import com.intellij.openapi.util.registry.Registry
 import com.jetbrains.cidr.execution.debugger.evaluation.CidrValue
-import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
 import org.vlang.configurations.VlangProjectStructureState.Companion.projectStructure
-import org.vlang.configurations.VlangToolchainsState
 import org.vlang.projectWizard.VlangToolchainFlavor
+import org.vlang.toolchain.VlangKnownToolchainsState
+import org.vlang.toolchain.VlangToolchain
+import org.vlang.toolchain.VlangToolchainService.Companion.toolchainSettings
 
 class VlangPostStartupActivity : StartupActivity {
     override fun runActivity(project: Project) {
-        val knownToolchains = VlangToolchainsState.getInstance().knownToolchains
+        val knownToolchains = VlangKnownToolchainsState.getInstance().knownToolchains
+        val toolchainSettings = project.toolchainSettings
 
         val needFindToolchains = knownToolchains.isEmpty()
         if (needFindToolchains) {
@@ -19,12 +21,13 @@ class VlangPostStartupActivity : StartupActivity {
             if (toolchainCandidates.isEmpty()) {
                 return
             }
-            project.projectSettings.setToolchain(project, toolchainCandidates.first())
+
+            toolchainSettings.setToolchain(project, VlangToolchain.fromPath(toolchainCandidates.first()))
             return
         }
 
-        if (project.projectSettings.toolchainLocation.isEmpty() && knownToolchains.isNotEmpty()) {
-            project.projectSettings.setToolchain(project, knownToolchains.first())
+        if (toolchainSettings.isNotSet() && knownToolchains.isNotEmpty()) {
+            toolchainSettings.setToolchain(project, VlangToolchain.fromPath(knownToolchains.first()))
         }
 
         Registry.get("cidr.debugger.value.stringEvaluator").setValue(false)
@@ -50,7 +53,7 @@ class VlangPostStartupActivity : StartupActivity {
                 return emptyList()
             }
 
-            VlangToolchainsState.getInstance().knownToolchains = toolchainCandidates.toSet()
+            VlangKnownToolchainsState.getInstance().knownToolchains = toolchainCandidates.toSet()
             return toolchainCandidates
         }
     }

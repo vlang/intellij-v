@@ -16,8 +16,9 @@ import com.intellij.openapi.roots.ModifiableRootModel
 import com.intellij.openapi.startup.StartupManager
 import com.intellij.openapi.vfs.VirtualFile
 import org.vlang.configurations.VlangProjectSettingsForm
-import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
 import org.vlang.ide.ui.VIcons
+import org.vlang.toolchain.VlangToolchain
+import org.vlang.toolchain.VlangToolchainService.Companion.toolchainSettings
 import java.io.IOException
 
 class VlangModuleBuilder : ModuleBuilder(), ModuleBuilderListener {
@@ -75,8 +76,8 @@ class VlangModuleBuilder : ModuleBuilder(), ModuleBuilderListener {
 
         private fun setToolchainInfo(module: Module, toolchainLocation: String) {
             val project = module.project
-            val settings = project.projectSettings
-            settings.setToolchain(project, toolchainLocation)
+            val settings = project.toolchainSettings
+            settings.setToolchain(project, VlangToolchain.fromPath(toolchainLocation))
         }
 
         private fun scheduleFilesOpening(module: Module, files: Collection<VirtualFile>) {
