@@ -1191,6 +1191,10 @@ object VlangPsiImplUtil {
             return exprType
         }
 
+        if (expr is VlangIncDecExpression) {
+            return expr.expression.getType(context)
+        }
+
         // 0..10 -> int[]
         if (expr is VlangRangeExpr && expr.tripleDot == null) {
             return VlangArrayTypeEx(VlangPrimitiveTypeEx.INT, expr)
@@ -1992,7 +1996,8 @@ object VlangPsiImplUtil {
     ): Boolean {
         val contextFile = if (checkContainingFile) VlangReference.getContextFile(state) else null
         for (definition in elements) {
-            if (!condition.value(definition)) continue
+            if (!condition.value(definition))
+                continue
             if (!definition.isValid || checkContainingFile)
                 continue
             if (!processor.execute(definition, state.put(LOCAL_RESOLVE, localResolve)))

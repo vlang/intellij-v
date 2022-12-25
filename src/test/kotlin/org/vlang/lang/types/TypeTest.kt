@@ -35,4 +35,5 @@ class TypeTest : TypeTestBase() {
     fun `test compile time`() = doTestFile("compile_time.v")
     fun `test threads`() = doTestFile("threads.v")
     fun `test cast`() = doTestFile("cast.v")
+    fun `test arithmetic`() = doTestFile("arithmetic.v")
 }
