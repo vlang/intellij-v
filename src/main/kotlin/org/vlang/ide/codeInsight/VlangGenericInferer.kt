@@ -3,6 +3,7 @@ package org.vlang.ide.codeInsight
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.util.parentOfType
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
@@ -165,7 +166,15 @@ object VlangGenericInferer {
 
         // foo.a
         // ^^^ type of foo
-        val qualifierType = (expr?.getQualifier() as? VlangTypeOwner)?.getType(null) ?: return null
+        var qualifierType = (expr?.getQualifier() as? VlangTypeOwner)?.getType(null)
+        if (qualifierType == null) {
+            // possibly generic struct initialization
+            // Foo[int]{ x: 100 }
+            //           ^ type for this is int
+            val literalValue = expr?.parentOfType<VlangLiteralValueExpression>() ?:  return genericType
+            qualifierType = literalValue.getType(null)
+        }
+
         val instantiation = extractInstantiation(qualifierType)
         if (instantiation !is VlangGenericInstantiationEx) {
             return genericType
@@ -174,7 +183,7 @@ object VlangGenericInferer {
         // foo<int, string> ->
         //   T: int
         //   U: string
-        val specializationMap = instantiation.specializationMap(expr.project)
+        val specializationMap = instantiation.specializationMap(resolved.project)
         if (specializationMap.isEmpty()) {
             return genericType
         }

@@ -248,4 +248,20 @@ class GenericTypeTest : TypeTestBase() {
         }
         """.trimIndent()
     )
+
+    fun `test generic struct init`() = doTest(
+        """
+        struct Foo[T] {
+            field T
+        }
+        
+        fn main() {
+            foo := Foo[int]{
+                field: 1
+            }
+            
+            expr_type(foo.field, 'int')
+        }
+        """.trimIndent()
+    )
 }
