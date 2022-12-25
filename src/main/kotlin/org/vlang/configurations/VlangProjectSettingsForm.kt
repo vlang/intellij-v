@@ -31,7 +31,7 @@ class VlangProjectSettingsForm(private val project: Project?, private val model:
 //            .showUnderneathOf(sourceComponent)
 //    }
 
-    fun showNewToolchainDialog() {
+    private fun showNewToolchainDialog() {
         val dialog = VlangNewToolchainDialog(createFilterKnownToolchains(), project)
         if (!dialog.showAndGet()) {
             return
@@ -63,6 +63,9 @@ class VlangProjectSettingsForm(private val project: Project?, private val model:
                     .horizontalAlign(HorizontalAlign.FILL)
             }
         }
+
+        // setup initial location
+        model.toolchainLocation = toolchainChooser.selectedToolchain()?.location ?: ""
     }
 
     fun createComponent() = mainPanel

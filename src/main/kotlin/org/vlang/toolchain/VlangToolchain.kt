@@ -16,6 +16,10 @@ interface VlangToolchain {
 
     companion object {
         fun fromPath(homePath: String): VlangToolchain {
+            if (homePath == "") {
+                return NULL
+            }
+
             val virtualFileManager = VirtualFileManager.getInstance()
             val rootDir = virtualFileManager.findFileByNioPath(Path.of(homePath)) ?: return NULL
             return fromDirectory(rootDir)

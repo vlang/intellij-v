@@ -60,6 +60,10 @@ class ToolchainChooserComponent(browseActionListener: ActionListener, onSelectAc
         setButtonIcon(AllIcons.General.Add)
     }
 
+    fun selectedToolchain(): ToolchainInfo? {
+        return comboBox.selectedItem as? ToolchainInfo
+    }
+
     fun refresh() {
         comboBox.removeAllItems()
         knownToolchainInfos = knownToolchains
