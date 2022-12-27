@@ -226,4 +226,21 @@ class CompletionTest : CompletionTestBase() {
         """.trimIndent(), 0,
         "age", "name"
     )
+
+    fun `test chan init`() = doTestCompletion(
+        """
+        module main
+        
+        fn main() {
+            chan/*caret*/
+        }
+        """.trimIndent(),
+        """
+        module main
+        
+        fn main() {
+            chan int{}
+        }
+        """.trimIndent()
+    )
 }

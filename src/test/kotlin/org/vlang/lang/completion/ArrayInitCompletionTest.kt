@@ -10,6 +10,6 @@ class ArrayInitCompletionTest : CompletionTestBase() {
         }
 
         """.trimIndent(), 0,
-        "cap", "init", "len", "map",
+        "cap", "init", "len", "map", "chan", // TODO: remove "map", "chan"
     )
 }

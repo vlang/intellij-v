@@ -47,6 +47,20 @@ object VlangCTypeParser {
         return parts[1] to parts[2]
     }
 
+    /**
+     * Example:
+     *
+     *    "chan_int" -> "int"
+     *    "chan_chan_int" -> "chan_int"
+     */
+    fun parseChannelType(type: String): String {
+        if (!type.startsWith("chan_")) {
+            return type
+        }
+
+        return type.substring(5)
+    }
+
     fun convertCNameToVName(name: String): String {
         return name.replace("__", ".")
     }

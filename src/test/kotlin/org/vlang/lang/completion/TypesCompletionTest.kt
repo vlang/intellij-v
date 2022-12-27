@@ -13,4 +13,17 @@ class TypesCompletionTest : CompletionTestBase() {
         fn main() map[string]int {}
         """.trimIndent()
     )
+
+    fun `test chan type`() = doTestCompletion(
+        """
+        module main
+        
+        fn main() chan/*caret*/ {}
+        """.trimIndent(),
+        """
+        module main
+        
+        fn main() chan int {}
+        """.trimIndent()
+    )
 }

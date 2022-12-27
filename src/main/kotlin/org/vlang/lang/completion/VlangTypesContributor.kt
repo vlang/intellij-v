@@ -16,6 +16,12 @@ class VlangTypesContributor : CompletionContributor() {
             psiElement(VlangTypes.IDENTIFIER).withParent(VlangTypeReferenceExpression::class.java),
             MapTypeCompletionProvider
         )
+
+        extend(
+            CompletionType.BASIC,
+            psiElement(VlangTypes.IDENTIFIER).withParent(VlangTypeReferenceExpression::class.java),
+            ChanTypeCompletionProvider
+        )
     }
 
     private object MapTypeCompletionProvider : CompletionProvider<CompletionParameters>() {
@@ -30,6 +36,23 @@ class VlangTypesContributor : CompletionContributor() {
                             true,
                             "key" to ConstantNode("string"),
                             "value" to ConstantNode("int")
+                        )
+                    )
+            )
+        }
+    }
+
+    private object ChanTypeCompletionProvider : CompletionProvider<CompletionParameters>() {
+        override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
+            result.addElement(
+                LookupElementBuilder.create("chan")
+                    .withIcon(VIcons.Alias)
+                    .withTailText(" type")
+                    .withInsertHandler(
+                        VlangCompletionUtil.TemplateStringInsertHandler(
+                            " \$type$",
+                            true,
+                            "type" to ConstantNode("int"),
                         )
                     )
             )
