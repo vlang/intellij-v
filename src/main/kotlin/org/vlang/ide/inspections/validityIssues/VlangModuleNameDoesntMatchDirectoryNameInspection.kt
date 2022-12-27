@@ -1,5 +1,6 @@
 package org.vlang.ide.inspections.validityIssues
 
+import com.intellij.codeInsight.intention.LowPriorityAction
 import com.intellij.codeInspection.LocalQuickFix
 import com.intellij.codeInspection.ProblemDescriptor
 import com.intellij.codeInspection.ProblemsHolder
@@ -43,7 +44,7 @@ class VlangModuleNameDoesntMatchDirectoryNameInspection : VlangBaseInspection() 
             }
         }
 
-        private val RENAME_DIRECTORY_NAME_QUICK_FIX = object : LocalQuickFix {
+        private val RENAME_DIRECTORY_NAME_QUICK_FIX = object : LocalQuickFix, LowPriorityAction {
             override fun getFamilyName() = "Change directory name to match module name"
 
             override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
