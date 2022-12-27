@@ -11,9 +11,10 @@ import com.intellij.psi.util.parentOfType
 import org.vlang.lang.VlangLanguage
 import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.VlangFile
-import org.vlang.lang.psi.VlangFunctionDeclaration
 import org.vlang.lang.psi.VlangImportSpec
 import org.vlang.lang.psi.VlangModuleClause
+import org.vlang.lang.psi.VlangSimpleStatement
+import org.vlang.utils.inside
 
 abstract class VlangTemplateContextType(
     id: String,
@@ -56,19 +57,22 @@ abstract class VlangTemplateContextType(
 
     protected open fun isCommentInContext() = false
 
-    class Generic : VlangTemplateContextType("VLANG_GENERIC", "vlang", EverywhereContextType::class.java) {
+    class Generic : VlangTemplateContextType("VLANG_GENERIC", "V", EverywhereContextType::class.java) {
         override fun isInContext(element: PsiElement) = element.parent is VlangFile || element.parent.parent is VlangFile
     }
 
-    class TopLevel : VlangTemplateContextType("VLANG_TOPLEVEL", "top-level", Generic::class.java) {
-        override fun isInContext(element: PsiElement) = element.parent is VlangFile || element.parent.parent is VlangFile
+    class TopLevel : VlangTemplateContextType("VLANG_TOPLEVEL", "Top-level", Generic::class.java) {
+        override fun isInContext(element: PsiElement): Boolean {
+            val parentSimpleStatement = element.parentOfType<VlangSimpleStatement>() ?: return false
+            return parentSimpleStatement.parent is VlangFile
+        }
     }
 
-    class Statement : VlangTemplateContextType("VLANG_STATEMENT", "statement", Generic::class.java) {
-        override fun isInContext(element: PsiElement) = element.parentOfType<VlangFunctionDeclaration>() != null
+    class Statement : VlangTemplateContextType("VLANG_STATEMENT", "Statement", Generic::class.java) {
+        override fun isInContext(element: PsiElement) = element.inside<VlangSimpleStatement>()
     }
 
-    class Comment : VlangTemplateContextType("VLANG_COMMENT", "comment", Generic::class.java) {
+    class Comment : VlangTemplateContextType("VLANG_COMMENT", "Comment", Generic::class.java) {
         override fun isInContext(element: PsiElement) = false
         override fun isCommentInContext() = true
     }

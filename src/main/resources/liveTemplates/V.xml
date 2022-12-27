@@ -1,19 +1,19 @@
 <templateSet group="V">
-  <template name="consts" value="const (&#10;    $expression$ = $value$$END$&#10;)" description="Code snippet for multiply constant" toReformat="true" toShortenFQNames="true">
-    <variable name="expression" expression="" defaultValue="" alwaysStopAt="true" />
-    <variable name="value" expression="" defaultValue="" alwaysStopAt="true" />
+  <template name="consts" value="const (&#10;    $expression$ = $value$$END$&#10;)" description="Code snippet for multiply constants" toReformat="true" toShortenFQNames="true">
+    <variable name="expression" expression="snakeCase(&quot;name&quot;)" defaultValue="" alwaysStopAt="true" />
+    <variable name="value" expression="snakeCase(&quot;100&quot;)" defaultValue="" alwaysStopAt="true" />
     <context>
       <option name="VLANG" value="false" />
       <option name="VLANG_STATEMENT" value="false" />
     </context>
   </template>
-  <template name="for" value="for {&#10;    $END$&#10;}" description="Code snippet for pure infinity for loop" toReformat="false" toShortenFQNames="true">
+  <template name="for" value="for {&#10;    $END$&#10;}" description="Code snippet for pure infinity for loop" toReformat="true" toShortenFQNames="true">
     <context>
       <option name="VLANG" value="false" />
       <option name="VLANG_STATEMENT" value="true" />
     </context>
   </template>
-  <template name="fori" value="for $i$ := 0; $i$ &lt; $count$; $i$++ {&#10;    $END$&#10;}" description="Code snippet for index for loop" toReformat="false" toShortenFQNames="true">
+  <template name="fori" value="for $i$ := 0; $i$ &lt; $count$; $i$++ {&#10;    $END$&#10;}" description="Code snippet for index for loop" toReformat="true" toShortenFQNames="true">
     <variable name="i" expression="camelCase(&quot;i&quot;)" defaultValue="i" alwaysStopAt="true" />
     <variable name="count" expression="" defaultValue="" alwaysStopAt="true" />
     <context>
@@ -21,7 +21,7 @@
       <option name="VLANG_STATEMENT" value="true" />
     </context>
   </template>
-  <template name="forin" value="for $key$ in $value$ {&#10;    $END$&#10;}" description="Code snippet for foreach" toReformat="false" toShortenFQNames="true">
+  <template name="forin" value="for $key$ in $value$ {&#10;    $END$&#10;}" description="Code snippet for foreach" toReformat="true" toShortenFQNames="true">
     <variable name="key" expression="camelCase(&quot;key&quot;)" defaultValue="" alwaysStopAt="true" />
     <variable name="value" expression="camelCase(&quot;value&quot;)" defaultValue="" alwaysStopAt="true" />
     <context>
@@ -29,7 +29,7 @@
       <option name="VLANG_STATEMENT" value="true" />
     </context>
   </template>
-  <template name="forini" value="for $i$, $key$ in $value$ {&#10;    $END$&#10;}" description="Code snippet for index based for loop" toReformat="false" toShortenFQNames="true">
+  <template name="forini" value="for $i$, $key$ in $value$ {&#10;    $END$&#10;}" description="Code snippet for index based for loop" toReformat="true" toShortenFQNames="true">
     <variable name="i" expression="camelCase(&quot;i&quot;)" defaultValue="" alwaysStopAt="true" />
     <variable name="key" expression="camelCase(&quot;key&quot;)" defaultValue="" alwaysStopAt="true" />
     <variable name="value" expression="camelCase(&quot;value&quot;)" defaultValue="" alwaysStopAt="true" />
@@ -38,19 +38,11 @@
       <option name="VLANG_STATEMENT" value="true" />
     </context>
   </template>
-  <template name="go" value="go $name$()" description="Code snippet for concurrency go" toReformat="true" toShortenFQNames="true">
-    <variable name="name" expression="" defaultValue="" alwaysStopAt="true" />
+  <template name="ifl" value="if $variable$ := $expr$ {&#10;    $END$&#10;}" toReformat="true" toShortenFQNames="true">
+    <variable name="variable" expression="snakeCase(&quot;name&quot;)" defaultValue="" alwaysStopAt="true" />
+    <variable name="expr" expression="snakeCase(&quot;expr&quot;)" defaultValue="" alwaysStopAt="true" />
     <context>
-      <option name="VLANG" value="false" />
       <option name="VLANG_STATEMENT" value="true" />
-    </context>
-  </template>
-  <template name="ty" value="type $name$ = $type$" description="Code snippet for type" toReformat="true" toShortenFQNames="true">
-    <variable name="name" expression="" defaultValue="" alwaysStopAt="true" />
-    <variable name="type" expression="" defaultValue="" alwaysStopAt="true" />
-    <context>
-      <option name="VLANG" value="false" />
-      <option name="VLANG_TOPLEVEL" value="true" />
     </context>
   </template>
 </templateSet>
