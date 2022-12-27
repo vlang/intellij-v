@@ -8,7 +8,7 @@ import org.vlang.lang.psi.VlangInterfaceDeclaration
 import org.vlang.lang.psi.VlangNamedElement
 import org.vlang.lang.psi.VlangStructDeclaration
 
-class VlangSuperFieldSearch : QueryExecutorBase<VlangFieldDefinition, DefinitionsScopedSearch.SearchParameters>(true) {
+object VlangSuperFieldSearch : QueryExecutorBase<VlangFieldDefinition, DefinitionsScopedSearch.SearchParameters>(true) {
     override fun processQuery(
         parameters: DefinitionsScopedSearch.SearchParameters,
         consumer: Processor<in VlangFieldDefinition>
@@ -26,9 +26,5 @@ class VlangSuperFieldSearch : QueryExecutorBase<VlangFieldDefinition, Definition
             interfaceField == null || interfaceField == field || consumer.process(interfaceField)
         }
         VlangSuperSearch.processFieldOwners(processor, owner, listOf(field))
-    }
-
-    companion object {
-        val GO_SUPER_FIELD_SEARCH = VlangSuperFieldSearch()
     }
 }

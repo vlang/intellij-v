@@ -18,7 +18,7 @@ class VlangUnusedInterfaceInspection : VlangUnusedBaseInspection() {
     }
 
     override fun shouldBeCheck(element: VlangNamedElement): Boolean {
-        return !VlangInheritorsLineMarkerProvider.hasImplementations(element, VlangInheritorsSearch())
+        return !VlangInheritorsLineMarkerProvider.hasImplementations(element, VlangInheritorsSearch)
     }
 
     override fun registerProblem(holder: ProblemsHolder, element: VlangNamedElement) {

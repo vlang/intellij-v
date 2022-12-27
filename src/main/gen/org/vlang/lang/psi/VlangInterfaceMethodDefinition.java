@@ -30,4 +30,7 @@ public interface VlangInterfaceMethodDefinition extends VlangSignatureOwner, Vla
   @NotNull
   VlangInterfaceDeclaration getOwner();
 
+  @Nullable
+  String getQualifiedName();
+
 }

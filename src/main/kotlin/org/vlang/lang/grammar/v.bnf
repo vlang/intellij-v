@@ -460,7 +460,7 @@ InterfaceMethodDeclaration ::= InterfaceMethodDefinition Attribute? DefaultField
 InterfaceMethodDefinition ::= identifier GenericParameters? Signature {
   implements="org.vlang.lang.psi.VlangSignatureOwner"
   stubClass="org.vlang.lang.stubs.VlangInterfaceMethodDefinitionStub"
-  methods=[getTypeInner isPublic isMutable getOwner]
+  methods=[getTypeInner isPublic isMutable getOwner getQualifiedName]
 }
 
 EmbeddedInterfaceDefinition ::= Type {

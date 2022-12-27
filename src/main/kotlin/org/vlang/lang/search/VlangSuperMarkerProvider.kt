@@ -97,19 +97,19 @@ class VlangSuperMarkerProvider : LineMarkerProviderDescriptor() {
 
         private fun hasSuperType(spec: VlangNamedElement): Boolean {
             val processor = CommonProcessors.FindFirstProcessor<VlangNamedElement>()
-            VlangGotoSuperHandler.SUPER_SEARCH.processQuery(VlangGotoUtil.param(spec), processor)
+            VlangSuperSearch.processQuery(VlangGotoUtil.param(spec), processor)
             return processor.isFound
         }
 
         fun hasSuperMethod(method: VlangMethodDeclaration): Boolean {
-            val processor = CommonProcessors.FindFirstProcessor<VlangInterfaceMethodDeclaration>()
-            VlangSuperMethodSearch.GO_SUPER_METHOD_SEARCH.processQuery(VlangGotoUtil.param(method), processor)
+            val processor = CommonProcessors.FindFirstProcessor<VlangInterfaceMethodDefinition>()
+            VlangSuperMethodSearch.processQuery(VlangGotoUtil.param(method), processor)
             return processor.isFound
         }
 
         fun hasSuperField(field: VlangFieldDefinition): Boolean {
             val processor = CommonProcessors.FindFirstProcessor<VlangFieldDefinition>()
-            VlangSuperFieldSearch.GO_SUPER_FIELD_SEARCH.processQuery(VlangGotoUtil.param(field), processor)
+            VlangSuperFieldSearch.processQuery(VlangGotoUtil.param(field), processor)
             return processor.isFound
         }
     }

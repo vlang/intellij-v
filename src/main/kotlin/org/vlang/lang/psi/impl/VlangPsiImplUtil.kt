@@ -31,6 +31,7 @@ import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapArray
 import org.vlang.lang.sql.VlangSqlUtil
 import org.vlang.utils.inside
 import org.vlang.utils.parentNth
+import org.vlang.utils.stubOrPsiParentOfType
 
 object VlangPsiImplUtil {
     @JvmStatic
@@ -574,13 +575,13 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getOwner(o: VlangFieldDefinition): VlangNamedElement {
-        return o.parentOfType()
+        return o.stubOrPsiParentOfType()
             ?: error("Can't find owner for field ${o.name}, field definition must be inside a struct, union or interface")
     }
 
     @JvmStatic
     fun getOwner(o: VlangInterfaceMethodDefinition): VlangInterfaceDeclaration {
-        return o.parentOfType() ?: error("Can't find owner for method ${o.name}, interface method definition must be inside interface")
+        return o.stubOrPsiParentOfType() ?: error("Can't find owner for method ${o.name}, interface method definition must be inside interface")
     }
 
     @JvmStatic
@@ -710,6 +711,12 @@ object VlangPsiImplUtil {
         }
 
         return (o as? VlangNamedElementImpl<*>)?.getQualifiedNameBase()
+    }
+
+    @JvmStatic
+    fun getQualifiedName(o: VlangInterfaceMethodDefinition): String? {
+        val owner = o.getOwner()
+        return owner.getQualifiedName() + "." + o.name
     }
 
     @JvmStatic

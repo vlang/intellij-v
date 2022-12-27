@@ -34,8 +34,8 @@ import org.vlang.lang.psi.impl.VlangLangUtil
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangFunctionTypeEx
 import org.vlang.lang.psi.types.VlangTypeEx
-import org.vlang.lang.search.VlangGotoSuperHandler
 import org.vlang.lang.search.VlangGotoUtil
+import org.vlang.lang.search.VlangSuperSearch
 
 class VlangImplementMethodsHandler : LanguageCodeInsightActionHandler {
     override fun isValidFor(editor: Editor, file: PsiFile) = file is VlangFile
@@ -233,7 +233,7 @@ class VlangImplementMethodsHandler : LanguageCodeInsightActionHandler {
         private fun getAlreadyImplementedTypes(): Set<VlangInterfaceDeclaration> {
             if (alreadyImplementedTypes == null) {
                 val set = mutableSetOf<VlangInterfaceDeclaration>()
-                VlangGotoSuperHandler.SUPER_SEARCH.execute(
+                VlangSuperSearch.execute(
                     VlangGotoUtil.param(struct),
                     Processors.cancelableCollectProcessor(set as Collection<VlangNamedElement>)
                 )

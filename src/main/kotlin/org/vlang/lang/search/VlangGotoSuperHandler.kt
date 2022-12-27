@@ -23,8 +23,6 @@ class VlangGotoSuperHandler : LanguageCodeInsightActionHandler {
     }
 
     companion object {
-        val SUPER_SEARCH = VlangSuperSearch()
-
         private fun showPopup(element: PsiElement) {
             val namedElement = element.parentOfType<VlangNamedElement>() ?: return
             showPopup(null, namedElement)
@@ -40,7 +38,7 @@ class VlangGotoSuperHandler : LanguageCodeInsightActionHandler {
                 event,
                 VlangGotoUtil.param(typeSpec),
                 VlangGotoUtil.getDefaultRenderer(typeSpec),
-                SUPER_SEARCH,
+                VlangSuperSearch,
             )
         }
 
@@ -54,7 +52,7 @@ class VlangGotoSuperHandler : LanguageCodeInsightActionHandler {
                 event,
                 VlangGotoUtil.param(method),
                 VlangGotoUtil.getMethodRenderer(method),
-                VlangSuperMethodSearch.GO_SUPER_METHOD_SEARCH,
+                VlangSuperMethodSearch,
             )
         }
 
@@ -68,7 +66,7 @@ class VlangGotoSuperHandler : LanguageCodeInsightActionHandler {
                 event,
                 VlangGotoUtil.param(field),
                 VlangGotoUtil.getFieldRenderer(field),
-                VlangSuperFieldSearch.GO_SUPER_FIELD_SEARCH,
+                VlangSuperFieldSearch,
             )
         }
     }

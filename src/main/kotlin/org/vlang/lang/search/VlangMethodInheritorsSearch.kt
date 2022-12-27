@@ -2,26 +2,26 @@ package org.vlang.lang.search
 
 import com.intellij.openapi.application.QueryExecutorBase
 import com.intellij.psi.search.searches.DefinitionsScopedSearch
-import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.psi.util.parentOfType
 import com.intellij.util.Processor
-import org.vlang.lang.psi.*
+import org.vlang.lang.psi.VlangInterfaceMethodDefinition
+import org.vlang.lang.psi.VlangNamedElement
+import org.vlang.lang.psi.VlangStructDeclaration
 import org.vlang.lang.psi.impl.VlangLangUtil
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 
-class VlangMethodInheritorsSearch : QueryExecutorBase<VlangSignatureOwner, DefinitionsScopedSearch.SearchParameters>(true) {
+object VlangMethodInheritorsSearch : QueryExecutorBase<VlangNamedElement, DefinitionsScopedSearch.SearchParameters>(true) {
     override fun processQuery(
         parameter: DefinitionsScopedSearch.SearchParameters,
-        processor: Processor<in VlangSignatureOwner>,
+        processor: Processor<in VlangNamedElement>,
     ) {
         if (!parameter.isCheckDeep) return
 
         val method = parameter.element as? VlangInterfaceMethodDefinition ?: return
-        val interfaceType = PsiTreeUtil.getStubOrPsiParentOfType(method, VlangInterfaceType::class.java)
-        val decl = interfaceType?.parentOfType<VlangInterfaceDeclaration>() ?: return
+        val decl = method.getOwner()
+        val interfaceType = decl.interfaceType
         if (!interfaceType.isValid) return
 
-        VlangInheritorsSearch().processMethodOwners({ owner: VlangNamedElement ->
+        VlangInheritorsSearch.processMethodOwners({ owner: VlangNamedElement ->
             val struct = owner as VlangStructDeclaration
             val name = method.name ?: return@processMethodOwners true
             val structMethod = VlangLangUtil.findMethod(owner.project, struct.structType.toEx(), name)

@@ -34,7 +34,7 @@ class VlangInheritorsLineMarkerProvider : LineMarkerProviderDescriptor() {
 
             if (parent is VlangInterfaceType) {
                 val iface = parent.parent as VlangInterfaceDeclaration
-                if (hasImplementations(iface, VlangInheritorsSearch())) {
+                if (hasImplementations(iface, VlangInheritorsSearch)) {
                     specsWithImplementations.add(iface)
                     result.add(createTypeSpecInfo(element, iface))
                 }
@@ -42,8 +42,8 @@ class VlangInheritorsLineMarkerProvider : LineMarkerProviderDescriptor() {
             }
 
             if (parent is VlangInterfaceMethodDefinition) {
-                val iface = parent.getOwner() as VlangInterfaceDeclaration
-                if (specsWithImplementations.contains(iface) && hasImplementations(parent, VlangMethodInheritorsSearch())) {
+                val iface = parent.getOwner()
+                if (specsWithImplementations.contains(iface) && hasImplementations(parent, VlangMethodInheritorsSearch)) {
                     specsWithImplementations.add(iface)
                     result.add(createMethodSpecInfo(element, parent))
                 }
@@ -52,7 +52,7 @@ class VlangInheritorsLineMarkerProvider : LineMarkerProviderDescriptor() {
 
             if (parent is VlangFieldDefinition) {
                 val iface = parent.getOwner() as? VlangInterfaceDeclaration ?: continue
-                if (specsWithImplementations.contains(iface) && hasImplementations(parent, VlangFieldInheritorsSearch())) {
+                if (specsWithImplementations.contains(iface) && hasImplementations(parent, VlangFieldInheritorsSearch)) {
                     specsWithImplementations.add(iface)
                     result.add(createFieldSpecInfo(element, parent))
                 }
@@ -81,7 +81,7 @@ class VlangInheritorsLineMarkerProvider : LineMarkerProviderDescriptor() {
                 event,
                 VlangGotoUtil.param(named),
                 VlangGotoUtil.getMethodRenderer(named),
-                VlangMethodInheritorsSearch(),
+                VlangMethodInheritorsSearch,
             )
         }, "Go to Implementations", AllIcons.Gutter.ImplementedMethod, IdeActions.ACTION_GOTO_IMPLEMENTATION)
     }
@@ -97,7 +97,7 @@ class VlangInheritorsLineMarkerProvider : LineMarkerProviderDescriptor() {
                 event,
                 VlangGotoUtil.param(named),
                 VlangGotoUtil.getFieldRenderer(named),
-                VlangFieldInheritorsSearch(),
+                VlangFieldInheritorsSearch,
             )
         }, "Go to Implementations", AllIcons.Gutter.ImplementedMethod, IdeActions.ACTION_GOTO_IMPLEMENTATION)
     }
@@ -123,7 +123,7 @@ class VlangInheritorsLineMarkerProvider : LineMarkerProviderDescriptor() {
                 event,
                 VlangGotoUtil.param(named),
                 VlangGotoUtil.getDefaultRenderer(named),
-                VlangInheritorsSearch(),
+                VlangInheritorsSearch,
             )
         }
     }

@@ -35,7 +35,7 @@ class VlangInheritorsCodeVisionProvider : InheritorsCodeVisionProvider() {
 
         val param = VlangGotoUtil.param(element)
         if (element is VlangInterfaceDeclaration) {
-            VlangInheritorsSearch().execute(param) {
+            VlangInheritorsSearch.execute(param) {
                 usagesCount.incrementAndGet() <= 500
             }
 
@@ -46,7 +46,7 @@ class VlangInheritorsCodeVisionProvider : InheritorsCodeVisionProvider() {
             }
         }
 
-        VlangSuperSearch().execute(param) {
+        VlangSuperSearch.execute(param) {
             usagesCount.incrementAndGet() <= 500
         }
 

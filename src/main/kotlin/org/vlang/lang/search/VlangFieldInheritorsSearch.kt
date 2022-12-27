@@ -2,14 +2,13 @@ package org.vlang.lang.search
 
 import com.intellij.openapi.application.QueryExecutorBase
 import com.intellij.psi.search.searches.DefinitionsScopedSearch
-import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.Processor
 import org.vlang.lang.psi.VlangFieldDefinition
-import org.vlang.lang.psi.VlangInterfaceType
+import org.vlang.lang.psi.VlangInterfaceDeclaration
 import org.vlang.lang.psi.VlangNamedElement
 import org.vlang.lang.psi.VlangStructDeclaration
 
-class VlangFieldInheritorsSearch : QueryExecutorBase<VlangFieldDefinition, DefinitionsScopedSearch.SearchParameters>(true) {
+object VlangFieldInheritorsSearch : QueryExecutorBase<VlangFieldDefinition, DefinitionsScopedSearch.SearchParameters>(true) {
     override fun processQuery(
         parameter: DefinitionsScopedSearch.SearchParameters,
         processor: Processor<in VlangFieldDefinition>
@@ -17,13 +16,12 @@ class VlangFieldInheritorsSearch : QueryExecutorBase<VlangFieldDefinition, Defin
         if (!parameter.isCheckDeep) return
 
         val field = parameter.element as? VlangFieldDefinition ?: return
-        val interfaceType = PsiTreeUtil.getStubOrPsiParentOfType(field, VlangInterfaceType::class.java) ?: return
-        val decl = field.getOwner()
+        val decl = field.getOwner() as? VlangInterfaceDeclaration ?: return
+        val interfaceType = decl.interfaceType
 
-        VlangInheritorsSearch().processMethodOwners({ spec: VlangNamedElement ->
-            spec as VlangStructDeclaration
-
-            val structFields = spec.structType.getFieldList()
+        VlangInheritorsSearch.processMethodOwners({ spec: VlangNamedElement ->
+            val struct = spec as VlangStructDeclaration
+            val structFields = struct.structType.getFieldList()
 
             val structField = structFields.find {
                 val lhsType = it.getType(null)

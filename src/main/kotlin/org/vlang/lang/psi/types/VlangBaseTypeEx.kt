@@ -39,6 +39,12 @@ abstract class VlangBaseTypeEx(protected val anchor: PsiElement? = null) : UserD
     companion object {
         protected val primitivesMap = VlangPrimitiveTypes.values().associateBy { it.value }
 
+        fun VlangTypeEx?.isNullableEqual(other: VlangTypeEx?): Boolean {
+            if (this == null && other == null) return true
+            if (this == null || other == null) return false
+            return this.isEqual(other)
+        }
+
         fun VlangTypeEx.isGeneric(): Boolean {
             var isGeneric = false
             accept(object : VlangTypeVisitor {

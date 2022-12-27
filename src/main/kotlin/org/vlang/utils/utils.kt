@@ -70,6 +70,10 @@ inline fun <reified T : PsiElement> PsiElement.parentOfTypeWithStop(vararg stopA
     return PsiTreeUtil.getParentOfType(this, T::class.java, true, *stopAt.map { it.java }.toTypedArray())
 }
 
+inline fun <reified T : PsiElement> PsiElement.stubOrPsiParentOfType(): T? {
+    return PsiTreeUtil.getStubOrPsiParentOfType(this, T::class.java)
+}
+
 inline fun <reified T : PsiElement> PsiElement.ancestorStrict(): T? =
     PsiTreeUtil.getParentOfType(this, T::class.java, /* strict */ true)
 
