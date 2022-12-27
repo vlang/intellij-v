@@ -845,18 +845,21 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun addImport(file: VlangFile, list: VlangImportList?, name: String, alias: String?): VlangImportSpec {
-        val decl = VlangElementFactory.createImportDeclaration(file.project, name, alias)!!
+        val project = file.project
+
+        val decl = VlangElementFactory.createImportDeclaration(project, name, alias)!!
         if (list == null) {
-            var importList = VlangElementFactory.createImportList(file.project, name, alias)!!
+            var importList = VlangElementFactory.createImportList(project, name, alias)!!
             val modulePsi = file.getModule()
             val shebangPsi = file.getShebang()
             val anchor = modulePsi ?: shebangPsi
 
             importList = if (anchor == null) {
+                file.addBefore(VlangElementFactory.createDoubleNewLine(project), file.firstChild)
                 file.addBefore(importList, file.firstChild) as VlangImportList
             } else {
                 val listPsi = file.addAfter(importList, anchor) as VlangImportList
-                file.addBefore(VlangElementFactory.createDoubleNewLine(file.project), listPsi)
+                file.addBefore(VlangElementFactory.createDoubleNewLine(project), listPsi)
 
                 listPsi
             }
