@@ -169,7 +169,7 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
                 }
 
                 // forbid raw map completion
-                if (e.name == "map") {
+                if (e is VlangStructDeclaration && e.name == "map") {
                     return false
                 }
 
@@ -197,7 +197,7 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
                 }
 
                 // forbid raw map completion
-                if (e.name == "map") {
+                if (e is VlangStructDeclaration && e.name == "map") {
                     return false
                 }
 
