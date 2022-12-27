@@ -625,7 +625,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
     }
 
     private fun processOsModule(file: VlangFile, processor: VlangScopeProcessor, state: ResolveState): Boolean {
-        if (!file.isScriptScript()) return true
+        if (!file.isShellScript()) return true
 
         val stdlib = VlangConfiguration.getInstance(myElement.project).stdlibLocation ?: return true
         val osModule = stdlib.findChild("os") ?: return true
@@ -727,7 +727,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             return true
         }
 
-        val isShellScript = file.isScriptScript()
+        val isShellScript = file.isShellScript()
         val currentModule = file.getModuleName()
         val modules = VlangModulesIndex.getAll(element.project)
         for (moduleFile in modules) {

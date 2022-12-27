@@ -29,5 +29,6 @@ class CreateVlangFileAction : CreateFileFromTemplateAction(
             .setTitle("New V File")
             .addKind("V file", VIcons.V, "V File")
             .addKind("V simple application", VIcons.V, "V Simple Application")
+            .addKind("V shell script", VIcons.Vsh, "V Shell Script")
     }
 }

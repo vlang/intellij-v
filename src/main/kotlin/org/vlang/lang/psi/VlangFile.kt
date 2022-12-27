@@ -35,7 +35,7 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
 
     override fun toString() = "V Language file"
 
-    override fun getIcon(flags: Int) = VIcons.V
+    override fun getIcon(flags: Int) = if (isShellScript()) VIcons.Vsh else VIcons.V
 
     override fun processDeclarations(
         processor: PsiScopeProcessor,
@@ -46,7 +46,7 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
         return ResolveUtil.processChildren(this, processor, state, lastParent, place)
     }
 
-    fun isScriptScript(): Boolean = name.endsWith(".vsh")
+    fun isShellScript(): Boolean = name.endsWith(".vsh")
 
     fun isTestFile(): Boolean = name.split(".").first().endsWith("_test")
 
