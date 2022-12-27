@@ -10,7 +10,6 @@ import com.intellij.psi.PsiElementVisitor
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parentOfType
-import org.jetbrains.annotations.VisibleForTesting
 import org.vlang.ide.inspections.VlangBaseInspection
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangElementFactory
@@ -26,7 +25,7 @@ class VlangUnusedVariableInspection : VlangBaseInspection() {
                 val search = ReferencesSearch.search(variable, variable.useScope)
                 if (search.findFirst() != null) return
 
-                val fixes = mutableListOf(RENAME_TO_UNDERSCORE_FIX)
+                val fixes = mutableListOf<LocalQuickFix>(RENAME_TO_UNDERSCORE_FIX)
                 if (canBeDeleted(variable)) {
                     fixes.add(DELETE_VARIABLE_FIX)
                 }
@@ -72,8 +71,7 @@ class VlangUnusedVariableInspection : VlangBaseInspection() {
     }
 
     companion object {
-        @VisibleForTesting
-        val RENAME_TO_UNDERSCORE_FIX = object : LocalQuickFix {
+        private val RENAME_TO_UNDERSCORE_FIX = object : LocalQuickFix {
             override fun getFamilyName() = "Rename to _"
 
             override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
@@ -90,7 +88,10 @@ class VlangUnusedVariableInspection : VlangBaseInspection() {
             override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
                 val element = descriptor.psiElement
                 val variable = element.parentOfType<VlangVarDeclaration>() ?: return
-                variable.delete()
+                val expr = variable.expressionList.firstOrNull() ?: return
+                val statement = variable.parent
+                val newStatement = VlangElementFactory.createStatement(project, expr.text)
+                statement.replace(newStatement)
             }
         }
     }

@@ -34,6 +34,11 @@ object VlangElementFactory {
         return file.getModule()!!
     }
 
+    fun createStatement(project: Project, text: String): VlangSimpleStatement {
+        val file = createFileFromText(project, text)
+        return PsiTreeUtil.findChildOfType(file, VlangSimpleStatement::class.java)!!
+    }
+
     fun createCaptureList(project: Project, text: String): VlangCaptureList {
         val file = createFileFromText(project, "fn main() { fn [$text]() {} }")
         return PsiTreeUtil.findChildOfType(file, VlangFunctionLit::class.java)!!.captureList!!
