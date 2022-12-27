@@ -59,11 +59,7 @@ abstract class CompletionTestBase : BasePlatformTestCase() {
 
     open fun doTestVariantsInner(type: CompletionType, count: Int, checkType: CheckType, vararg variants: String) {
         myFixture.complete(type, count)
-        val stringList = myFixture.lookupElementStrings
-        if (stringList == null) {
-            fail("no lookup elements")
-            return
-        }
+        val stringList = myFixture.lookupElementStrings ?: emptyList()
         assertNotNull(
             """
             

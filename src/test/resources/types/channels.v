@@ -1,5 +1,7 @@
 module types
 
 fn main() {
-	expr_type(chan int{}, 'chan int')
+	ch := chan int{}
+	expr_type(ch, 'chan int')
+	expr_type(<-ch, 'int')
 }

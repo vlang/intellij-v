@@ -234,7 +234,6 @@ The plugin provides support for V language
                                  dynamic="true" displayName="Debugger"/>
 
         <projectService serviceImplementation="org.vlang.configurations.VlangConfiguration"/>
-        <projectService serviceImplementation="org.vlang.configurations.VlangProjectSettingsState"/>
         <projectService serviceImplementation="org.vlang.configurations.VlangProjectStructureState"/>
         <projectService serviceImplementation="org.vlang.configurations.VlangFmtSettingsState"/>
         <additionalLibraryRootsProvider implementation="org.vlang.project.VlangAdditionalLibraryRootsProvider"/>

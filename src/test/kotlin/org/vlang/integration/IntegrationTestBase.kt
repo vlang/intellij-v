@@ -7,13 +7,11 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 import com.intellij.util.CommonProcessors
 import org.intellij.lang.annotations.Language
-import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
 import org.vlang.lang.psi.VlangNamedElement
 import org.vlang.lang.psi.VlangStructDeclaration
 import org.vlang.lang.psi.impl.VlangPomTargetPsiElement
 import org.vlang.lang.search.VlangGotoSuperHandler
 import org.vlang.lang.search.VlangGotoUtil
-import org.vlang.lang.search.VlangSuperSearch
 
 abstract class IntegrationTestBase : BasePlatformTestCase() {
     override fun getTestDataPath() = "src/test/resources/integration"
@@ -90,14 +88,7 @@ abstract class IntegrationTestBase : BasePlatformTestCase() {
     }
 
     fun doTest(cb: IntegrationTestBaseContext.() -> Unit) {
-        copyStdlibToProject()
-
         val context = IntegrationTestBaseContext(myFixture)
         context.cb()
-    }
-
-    private fun copyStdlibToProject() {
-        myFixture.project.projectSettings.customStdlibLocation = myFixture.testDataPath + "/vlib"
-        myFixture.project.projectSettings.customModulesLocation = myFixture.testDataPath + "/modules"
     }
 }

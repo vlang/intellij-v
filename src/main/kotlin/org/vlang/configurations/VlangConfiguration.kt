@@ -1,5 +1,6 @@
 package org.vlang.configurations
 
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
@@ -9,9 +10,9 @@ import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.openapi.vfs.VfsUtilCore
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VirtualFileManager
-import org.vlang.configurations.VlangProjectSettingsState.Companion.projectSettings
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.toolchain.VlangToolchainService.Companion.toolchainSettings
+import org.vlang.utils.toPath
 import java.io.File
 
 @Service
@@ -20,9 +21,6 @@ class VlangConfiguration(private val project: Project) {
         fun getInstance(project: Project) = project.service<VlangConfiguration>()
     }
 
-    private val settings
-        get() = project.projectSettings
-
     private val toolchain
         get() = project.toolchainSettings.toolchain()
 
@@ -30,13 +28,16 @@ class VlangConfiguration(private val project: Project) {
         get() = toolchain.rootDir()
 
     val stdlibLocation: VirtualFile?
-        get() = if (settings.customStdlibLocation != null)
-            findFile(settings.customStdlibLocation!!)
+        get() = if (ApplicationManager.getApplication().isUnitTestMode)
+            findFileByUrl(testStdlibPath())
         else
             toolchain.stdlibDir()
 
     val modulesLocation: VirtualFile?
-        get() = findFile(settings.customModulesLocation ?: modulesLocation())
+        get() = if (ApplicationManager.getApplication().isUnitTestMode)
+            findFileByUrl(testModulesPath())
+        else
+            findFile(modulesLocation())
 
     val builtinLocation: VirtualFile?
         get() = stdlibLocation?.findChild(VlangCodeInsightUtil.BUILTIN_MODULE)
@@ -49,6 +50,11 @@ class VlangConfiguration(private val project: Project) {
 
     val stubsLocation: VirtualFile?
         get() = getStubs()
+
+    private fun findFileByUrl(url: String): VirtualFile? {
+        if (url.isEmpty()) return null
+        return VirtualFileManager.getInstance().findFileByUrl(url)
+    }
 
     private fun findFile(path: String): VirtualFile? {
         if (path.isEmpty()) return null
@@ -81,4 +87,7 @@ class VlangConfiguration(private val project: Project) {
 
         return null
     }
+
+    private fun testStdlibPath() = "src/test/resources/_vlib/vlib/".toPath().toAbsolutePath().toUri().toString()
+    private fun testModulesPath() = "src/test/resources/_vmodules/".toPath().toAbsolutePath().toUri().toString()
 }

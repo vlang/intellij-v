@@ -36,7 +36,7 @@ class VlangAdditionalLibraryRootsProvider : AdditionalLibraryRootsProvider() {
         override fun hashCode() = sourceRoot.hashCode()
     }
 
-    class StandardLibrary(toolchain: VlangToolchain) : LibraryBase(toolchain.name(), toolchain.stdlibDir())
+    class StandardLibrary(project: Project, toolchain: VlangToolchain) : LibraryBase(toolchain.name(), VlangConfiguration.getInstance(project).stdlibLocation)
     class StandardModules(sourceRoot: VirtualFile) : LibraryBase("V Modules", sourceRoot, AllIcons.Nodes.PpLib)
     class Stubs(sourceRoot: VirtualFile) : LibraryBase("V Stubs", sourceRoot, AllIcons.Nodes.PpLibFolder)
 
@@ -44,8 +44,7 @@ class VlangAdditionalLibraryRootsProvider : AdditionalLibraryRootsProvider() {
         val result = mutableListOf<SyntheticLibrary>()
 
         val toolchain = project.toolchainSettings.toolchain()
-        result.add(StandardLibrary(toolchain))
-
+        result.add(StandardLibrary(project, toolchain))
         val modulesRoot = VlangConfiguration.getInstance(project).modulesLocation
         if (modulesRoot != null) {
             result.add(StandardModules(modulesRoot))

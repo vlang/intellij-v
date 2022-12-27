@@ -20,139 +20,6 @@ pub mut:
 	flags  ArrayFlags
 }
 
-[flag]
-pub enum ArrayFlags {
-	noslices // when <<, `.noslices` will free the old data block immediately (you have to be sure, that there are *no slices* to that specific array). TODO: integrate with reference counting/compiler support for the static cases.
-	noshrink // when `.noslices` and `.noshrink` are *both set*, .delete(x) will NOT allocate new memory and free the old. It will just move the elements in place, and adjust .len.
-}
-
-// Internal function, used by V (`nums := []int`)
-fn __new_array(mylen int, cap int, elm_size int) array {
-	cap_ := if cap < mylen { mylen } else { cap }
-	arr := array{
-		element_size: elm_size
-		data: vcalloc(u64(cap_) * u64(elm_size))
-		len: mylen
-		cap: cap_
-	}
-	return arr
-}
-
-fn __new_array_with_default(mylen int, cap int, elm_size int, val voidptr) array {
-	cap_ := if cap < mylen { mylen } else { cap }
-	mut arr := array{
-		element_size: elm_size
-		len: mylen
-		cap: cap_
-	}
-	total_size := u64(cap_) * u64(elm_size)
-	if cap_ > 0 && mylen == 0 {
-		arr.data = unsafe { malloc(total_size) }
-	} else {
-		arr.data = vcalloc(total_size)
-	}
-	if val != 0 {
-		mut eptr := &u8(arr.data)
-		unsafe {
-			for _ in 0 .. arr.len {
-				vmemcpy(eptr, val, arr.element_size)
-				eptr += arr.element_size
-			}
-		}
-	}
-	return arr
-}
-
-fn __new_array_with_array_default(mylen int, cap int, elm_size int, val array) array {
-	cap_ := if cap < mylen { mylen } else { cap }
-	mut arr := array{
-		element_size: elm_size
-		data: unsafe { malloc(u64(cap_) * u64(elm_size)) }
-		len: mylen
-		cap: cap_
-	}
-	mut eptr := &u8(arr.data)
-	unsafe {
-		for _ in 0 .. arr.len {
-			val_clone := val.clone_to_depth(1)
-			vmemcpy(eptr, &val_clone, arr.element_size)
-			eptr += arr.element_size
-		}
-	}
-	return arr
-}
-
-fn __new_array_with_map_default(mylen int, cap int, elm_size int, val map) array {
-	cap_ := if cap < mylen { mylen } else { cap }
-	mut arr := array{
-		element_size: elm_size
-		data: unsafe { malloc(u64(cap_) * u64(elm_size)) }
-		len: mylen
-		cap: cap_
-	}
-	mut eptr := &u8(arr.data)
-	unsafe {
-		for _ in 0 .. arr.len {
-			val_clone := val.clone()
-			vmemcpy(eptr, &val_clone, arr.element_size)
-			eptr += arr.element_size
-		}
-	}
-	return arr
-}
-
-// Private function, used by V (`nums := [1, 2, 3]`)
-fn new_array_from_c_array(len int, cap int, elm_size int, c_array voidptr) array {
-	cap_ := if cap < len { len } else { cap }
-	arr := array{
-		element_size: elm_size
-		data: vcalloc(u64(cap_) * u64(elm_size))
-		len: len
-		cap: cap_
-	}
-	// TODO Write all memory functions (like memcpy) in V
-	unsafe { vmemcpy(arr.data, c_array, u64(len) * u64(elm_size)) }
-	return arr
-}
-
-// Private function, used by V (`nums := [1, 2, 3] !`)
-fn new_array_from_c_array_no_alloc(len int, cap int, elm_size int, c_array voidptr) array {
-	arr := array{
-		element_size: elm_size
-		data: c_array
-		len: len
-		cap: cap
-	}
-	return arr
-}
-
-// Private function. Increases the `cap` of an array to the
-// required value by copying the data to a new memory location
-// (creating a clone) unless `a.cap` is already large enough.
-fn (mut a array) ensure_cap(required int) {
-	if required <= a.cap {
-		return
-	}
-	mut cap := if a.cap > 0 { a.cap } else { 2 }
-	for required > cap {
-		cap *= 2
-	}
-	new_size := u64(cap) * u64(a.element_size)
-	new_data := unsafe { malloc(new_size) }
-	if a.data != unsafe { nil } {
-		unsafe { vmemcpy(new_data, a.data, u64(a.len) * u64(a.element_size)) }
-		// TODO: the old data may be leaked when no GC is used (ref-counting?)
-		if a.flags.has(.noslices) {
-			unsafe {
-				free(a.data)
-			}
-		}
-	}
-	a.data = new_data
-	a.offset = 0
-	a.cap = cap
-}
-
 // repeat returns a new array with the given array elements repeated given times.
 // `cgen` will replace this with an apropriate call to `repeat_to_depth()`
 //
@@ -234,37 +101,10 @@ pub fn (mut a array) insert(i int, val voidptr) {
 	a.len++
 }
 
-// insert_many is used internally to implement inserting many values
-// into an the array beginning at `i`.
-[unsafe]
-fn (mut a array) insert_many(i int, val voidptr, size int) {
-	$if !no_bounds_checking ? {
-		if i < 0 || i > a.len {
-			panic('array.insert_many: index out of range (i == $i, a.len == $a.len)')
-		}
-	}
-	a.ensure_cap(a.len + size)
-	elem_size := a.element_size
-	unsafe {
-		iptr := a.get_unsafe(i)
-		vmemmove(a.get_unsafe(i + size), iptr, u64(a.len - i) * u64(elem_size))
-		vmemcpy(iptr, val, u64(size) * u64(elem_size))
-	}
-	a.len += size
-}
-
 // prepend prepends one or more elements to an array.
 // It is shorthand for `.insert(0, val)`
 pub fn (mut a array) prepend(val voidptr) {
 	a.insert(0, val)
-}
-
-// prepend_many prepends another array to this array.
-// NOTE: `.prepend` is probably all you need.
-// NOTE: This code is never called in all of vlib
-[unsafe]
-fn (mut a array) prepend_many(val voidptr, size int) {
-	unsafe { a.insert_many(0, val, size) }
 }
 
 // delete deletes array element at index `i`.
@@ -369,36 +209,6 @@ pub fn (mut a array) drop(num int) {
 	a.cap -= n
 }
 
-// we manually inline this for single operations for performance without -prod
-[inline; unsafe]
-fn (a array) get_unsafe(i int) voidptr {
-	unsafe {
-		return &u8(a.data) + u64(i) * u64(a.element_size)
-	}
-}
-
-// Private function. Used to implement array[] operator.
-fn (a array) get(i int) voidptr {
-	$if !no_bounds_checking ? {
-		if i < 0 || i >= a.len {
-			panic('array.get: index out of range (i == $i, a.len == $a.len)')
-		}
-	}
-	unsafe {
-		return &u8(a.data) + u64(i) * u64(a.element_size)
-	}
-}
-
-// Private function. Used to implement x = a[i] or { ... }
-fn (a array) get_with_check(i int) voidptr {
-	if i < 0 || i >= a.len {
-		return 0
-	}
-	unsafe {
-		return &u8(a.data) + u64(i) * u64(a.element_size)
-	}
-}
-
 // first returns the first element of the `array`.
 // If the `array` is empty, this will panic.
 // However, `a[0]` returns an error object
@@ -469,108 +279,6 @@ pub fn (mut a array) delete_last() {
 	a.len--
 }
 
-// slice returns an array using the same buffer as original array
-// but starting from the `start` element and ending with the element before
-// the `end` element of the original array with the length and capacity
-// set to the number of the elements in the slice.
-// It will remain tied to the same memory location until the length increases
-// (copy on grow) or `.clone()` is called on it.
-// If `start` and `end` are invalid this function will panic.
-// Alternative: Slices can also be made with [start..end] notation
-// Alternative: `.slice_ni()` will always return an array.
-fn (a array) slice(start int, _end int) array {
-	mut end := _end
-	$if !no_bounds_checking ? {
-		if start > end {
-			panic('array.slice: invalid slice index ($start > $end)')
-		}
-		if end > a.len {
-			panic('array.slice: slice bounds out of range ($end >= $a.len)')
-		}
-		if start < 0 {
-			panic('array.slice: slice bounds out of range ($start < 0)')
-		}
-	}
-	// TODO: integrate reference counting
-	// a.flags.clear(.noslices)
-	offset := u64(start) * u64(a.element_size)
-	data := unsafe { &u8(a.data) + offset }
-	l := end - start
-	res := array{
-		element_size: a.element_size
-		data: data
-		offset: a.offset + int(offset) // TODO: offset should become 64bit
-		len: l
-		cap: l
-	}
-	return res
-}
-
-// slice_ni returns an array using the same buffer as original array
-// but starting from the `start` element and ending with the element before
-// the `end` element of the original array.
-// This function can use negative indexes `a.slice_ni(-3, a.len)`
-// that get the last 3 elements of the array otherwise it return an empty array.
-// This function always return a valid array.
-fn (a array) slice_ni(_start int, _end int) array {
-	// a.flags.clear(.noslices)
-	mut end := _end
-	mut start := _start
-
-	if start < 0 {
-		start = a.len + start
-		if start < 0 {
-			start = 0
-		}
-	}
-
-	if end < 0 {
-		end = a.len + end
-		if end < 0 {
-			end = 0
-		}
-	}
-	if end >= a.len {
-		end = a.len
-	}
-
-	if start >= a.len || start > end {
-		res := array{
-			element_size: a.element_size
-			data: a.data
-			offset: 0
-			len: 0
-			cap: 0
-		}
-		return res
-	}
-
-	offset := u64(start) * u64(a.element_size)
-	data := unsafe { &u8(a.data) + offset }
-	l := end - start
-	res := array{
-		element_size: a.element_size
-		data: data
-		offset: a.offset + int(offset) // TODO: offset should be 64bit
-		len: l
-		cap: l
-	}
-	return res
-}
-
-// used internally for [2..4]
-fn (a array) slice2(start int, _end int, end_max bool) array {
-	end := if end_max { a.len } else { _end }
-	return a.slice(start, end)
-}
-
-// clone_static_to_depth() returns an independent copy of a given array.
-// Unlike `clone_to_depth()` it has a value receiver and is used internally
-// for slice-clone expressions like `a[2..4].clone()` and in -autofree generated code.
-fn (a array) clone_static_to_depth(depth int) array {
-	return unsafe { a.clone_to_depth(depth) }
-}
-
 // clone returns an independent copy of a given array.
 // this will be overwritten by `cgen` with an apropriate call to `.clone_to_depth()`
 // However the `checker` needs it here.
@@ -606,30 +314,6 @@ pub fn (a &array) clone_to_depth(depth int) array {
 		}
 		return arr
 	}
-}
-
-// we manually inline this for single operations for performance without -prod
-[inline; unsafe]
-fn (mut a array) set_unsafe(i int, val voidptr) {
-	unsafe { vmemcpy(&u8(a.data) + u64(a.element_size) * u64(i), val, a.element_size) }
-}
-
-// Private function. Used to implement assignment to the array element.
-fn (mut a array) set(i int, val voidptr) {
-	$if !no_bounds_checking ? {
-		if i < 0 || i >= a.len {
-			panic('array.set: index out of range (i == $i, a.len == $a.len)')
-		}
-	}
-	unsafe { vmemcpy(&u8(a.data) + u64(a.element_size) * u64(i), val, a.element_size) }
-}
-
-fn (mut a array) push(val voidptr) {
-	if a.len >= a.cap {
-		a.ensure_cap(a.len + 1)
-	}
-	unsafe { vmemcpy(&u8(a.data) + u64(a.element_size) * u64(a.len), val, a.element_size) }
-	a.len++
 }
 
 // push_many implements the functionality for pushing another array.

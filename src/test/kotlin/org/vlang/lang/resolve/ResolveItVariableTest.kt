@@ -12,7 +12,6 @@ open class ResolveItVariableTest : ResolveTestBase() {
             }
         """.trimIndent())
 
-        setupBuiltin()
         assertReferencedTo("PARAM_DEFINITION null")
         assertReferencedTo("PARAM_DEFINITION null")
         assertReferencedTo("PARAM_DEFINITION null")
@@ -33,8 +32,6 @@ open class ResolveItVariableTest : ResolveTestBase() {
                 arr.any(/*caret*/it./*caret*/age > 100)
             }
         """.trimIndent())
-
-        setupBuiltin()
 
         assertReferencedTo("PARAM_DEFINITION null")
         assertReferencedTo("FIELD_DEFINITION age")
@@ -63,8 +60,6 @@ open class ResolveItVariableTest : ResolveTestBase() {
                 return result
             }
         """.trimIndent())
-
-        setupBuiltin()
 
         assertReferencedTo("FUNCTION_DECLARATION split")
         assertReferencedTo("PARAM_DEFINITION null")

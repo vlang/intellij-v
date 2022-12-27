@@ -8,12 +8,9 @@ import com.intellij.codeInsight.intention.HighPriorityAction
 import com.intellij.codeInspection.HintAction
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.application.impl.LaterInvocator
 import com.intellij.openapi.application.runWriteAction
 import com.intellij.openapi.command.CommandProcessor
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.module.Module
-import com.intellij.openapi.module.ModuleUtilCore
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.popup.JBPopupFactory
 import com.intellij.psi.PsiElement
@@ -32,7 +29,6 @@ import org.vlang.lang.psi.VlangTypeReferenceExpression
 import org.vlang.lang.psi.impl.VlangPsiImplUtil
 import org.vlang.lang.psi.impl.VlangReference
 import org.vlang.lang.stubs.index.VlangModulesFingerprintIndex
-import org.vlang.lang.stubs.index.VlangModulesIndex
 
 class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, HintAction, HighPriorityAction {
     private val moduleName: String
@@ -160,6 +156,10 @@ class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, H
             editor != null || modulesToImport.size == 1,
             "Cannot invoke fix with ambiguous imports on null editor"
         )
+
+        if (ApplicationManager.getApplication().isUnitTestMode) {
+            perform(file, modulesToImport.minBy { it.length })
+        }
 
         if (modulesToImport.size == 1) {
             perform(file, modulesToImport.first())

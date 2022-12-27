@@ -60,4 +60,23 @@ class ReferenceImporterTest : ReferenceImporterTestBase() {
             }
         """.trimIndent()
     )
+
+    fun `test without module name`() = doTest(
+        """
+            struct Foo {}
+            
+            fn main() {
+                os.read_file('')
+            }
+        """.trimIndent(),
+        """
+            import os
+            
+            struct Foo {}
+            
+            fn main() {
+                os.read_file('')
+            }
+        """.trimIndent()
+    )
 }

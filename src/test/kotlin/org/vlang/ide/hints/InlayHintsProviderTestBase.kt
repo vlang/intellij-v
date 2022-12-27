@@ -5,7 +5,7 @@ import com.intellij.testFramework.utils.inlays.InlayHintsProviderTestCase
 
 @Suppress("UnstableApiUsage")
 abstract class InlayHintsProviderTestBase : InlayHintsProviderTestCase() {
-    protected fun run(testFile: String, provider: InlayHintsProvider<*> = VlangInlayHintsProvider()) {
+    protected fun run(testFile: String, provider: InlayHintsProvider<*>) {
         val expectedFile = myFixture.configureByFile("$testFile.expected")
         val expectedText = expectedFile.text
 

@@ -9,5 +9,5 @@ const foo2 = &Foo{}
 fn main() {
 	expr_type(foo, 'int')
 	expr_type(foo1, 'Foo')
-	// expr_type(foo2, '&Foo') TODO:
+	expr_type(foo2, '&Foo')
 }
