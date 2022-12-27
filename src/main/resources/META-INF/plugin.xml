@@ -214,6 +214,7 @@ The plugin provides support for V language
                                  implementationClass="org.vlang.ide.refactoring.VlangRefactoringSupportProvider"/>
         <codeInsight.implementMethod language="vlang"
                                      implementationClass="org.vlang.ide.refactoring.VlangImplementMethodsHandler"/>
+        <renamePsiElementProcessor implementation="org.vlang.ide.refactoring.VlangRenameProcessor"/>
         <!-- endregion Refactorings -->
 
         <!-- endregion V File -->

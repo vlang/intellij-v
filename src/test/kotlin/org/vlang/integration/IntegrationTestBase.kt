@@ -5,6 +5,7 @@ import com.intellij.openapi.ui.naturalSorted
 import com.intellij.psi.PsiDirectory
 import com.intellij.psi.search.searches.DefinitionsScopedSearch
 import com.intellij.psi.util.parentOfType
+import com.intellij.refactoring.BaseRefactoringProcessor
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 import com.intellij.util.CommonProcessors
@@ -93,6 +94,34 @@ abstract class IntegrationTestBase : BasePlatformTestCase() {
             search.processQuery(VlangGotoUtil.param(structDeclaration), processor)
 
             check(processor.results.isEmpty()) { "Expected to find no elements, but got [${processor.results.joinToString(", ")}]" }
+        }
+
+        fun renameElement(caretIndex: Int, newName: String) {
+            moveCaretToPos(caretIndex)
+
+            val offset = myFixture.editor.caretModel.offset
+            val element = myFixture.file.findElementAt(offset)?.parentOfType<VlangNamedElement>()
+            check(element != null) { "No named element at caret $caretIndex" }
+
+            myFixture.renameElement(element, newName)
+        }
+
+        fun renameWithConflicts(
+            caretIndex: Int,
+            newName: String,
+            conflicts: Set<String>
+        ) {
+            try {
+                renameElement(caretIndex, newName)
+                error("Conflicts $conflicts missing")
+            }
+            catch (e: BaseRefactoringProcessor.ConflictsInTestsException) {
+                assertEquals(e.messages.toSet(), conflicts)
+            }
+        }
+
+        fun checkFile(name: String, @Language("vlang") content: String) {
+            myFixture.checkResult(name, content, true)
         }
 
         companion object {
