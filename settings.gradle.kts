@@ -1,1 +1,1 @@
-rootProject.name = "V IDEA plugin"
+rootProject.name = "IntelliJ V"
