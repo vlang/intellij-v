@@ -10,6 +10,7 @@ class DocumentationTest : DocumentationTestBase() {
     fun `test it variable doc`() = doTest("it_variable", "main.v")
     fun `test anon structs doc`() = doTest("anon_structs", "main.v")
     fun `test sum type doc`() = doTest("sum", "main.v")
+    fun `test attribute doc`() = doTest("attribute", "main.v")
 
     fun `test rendered doc`() = doTest("rendered", "main.v")
 }

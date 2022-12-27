@@ -405,7 +405,41 @@ object DocumentationGenerator {
     }
 
     private fun VlangAttribute.generateDoc(): String {
-        return colorize(text, asAttribute)
+        val res = attributeExpressionList.joinToString("; ", colorize("[", asAttribute), colorize("]", asAttribute)) { expression ->
+            val firstChild = expression.firstChild
+            var textValue: String
+            when (firstChild) {
+                is VlangPlainAttribute -> {
+                    textValue = if (firstChild.attributeKey.attributeIdentifier != null) {
+                        colorize(firstChild.attributeKey.text, asAttribute)
+                    } else {
+                        firstChild.attributeKey.expression?.generateDoc() ?: ""
+                    }
+
+                    if (firstChild.attributeValue == null) {
+                        // [unsafe]
+                    } else {
+                        // [sql: '']
+                        textValue += ": "
+                        val value = firstChild.attributeValue!!.expression?.generateDoc()
+                        textValue += value ?: firstChild.attributeValue!!.text
+                    }
+                    textValue
+                }
+
+                is VlangIfAttribute    -> {
+                    // [if debug]
+                    textValue = colorize("if", asKeyword)
+                    textValue += " "
+                    textValue += colorize(firstChild.expression?.text ?: "", asIdentifier)
+                    textValue
+                }
+
+                else                   -> colorize(firstChild.text, asAttribute)
+            }
+        }
+
+        return res
     }
 
     private fun VlangAttributes.generateDoc(): String {
