@@ -28,6 +28,13 @@ enum class VlangDocRenderMode {
     INLINE_DOC_COMMENT
 }
 
+fun documentationAsHtml(text: String, context: PsiElement): String {
+    val flavour = VDocMarkdownFlavourDescriptor(context, null, VlangDocRenderMode.QUICK_DOC_POPUP)
+    val root = MarkdownParser(flavour).buildMarkdownTreeFromString(text)
+    return HtmlGenerator(text, root, flavour).generateHtml()
+        .replace("psi://element/", DocumentationManagerProtocol.PSI_ELEMENT_PROTOCOL)
+}
+
 fun VlangDocComment.documentationAsHtml(renderMode: VlangDocRenderMode = VlangDocRenderMode.QUICK_DOC_POPUP): String? {
     val documentationText = VlangDocKind.of(tokenType)
         .removeDecoration(text)

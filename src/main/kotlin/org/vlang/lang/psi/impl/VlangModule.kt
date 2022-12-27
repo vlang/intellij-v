@@ -19,7 +19,7 @@ import org.vlang.utils.isNotVlangFile
 class VlangModule(
     private val project: Project,
     private val name: String,
-    private val directory: PsiDirectory,
+    val directory: PsiDirectory,
 ) : PomRenameableTarget<VlangModule> {
 
     private var isValid = true

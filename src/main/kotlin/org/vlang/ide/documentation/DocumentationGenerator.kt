@@ -2,6 +2,7 @@ package org.vlang.ide.documentation
 
 import com.intellij.codeInsight.documentation.DocumentationManagerUtil
 import com.intellij.lang.documentation.DocumentationMarkup
+import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.elementType
@@ -231,7 +232,7 @@ object DocumentationGenerator {
             part("module", asKeyword)
             colorize(name, asDeclaration)
             append(DocumentationMarkup.DEFINITION_END)
-            generateModuleCommentsPart(this@generateDoc)
+            generateModuleDocumentation(containingFile.containingDirectory, this@generateDoc)
         }
     }
 
@@ -249,30 +250,26 @@ object DocumentationGenerator {
         return buildString {
             append(DocumentationMarkup.DEFINITION_START)
             part("module", asKeyword)
-
             append(coloredName)
             append(DocumentationMarkup.DEFINITION_END)
+
+            val context = target.directory.children.find { it is VlangFile }
+            if (context != null) {
+                generateModuleDocumentation(target.directory, context.firstChild)
+            }
         }
     }
 
-    private fun StringBuilder.generateModuleCommentsPart(element: VlangModuleClause) {
-        val commentsList = CommentsConverter.getCommentsForModule(element)
-        if (commentsList.any { it is VlangDocComment }) {
-            append(DocumentationMarkup.CONTENT_START)
-            for (comment in commentsList) {
-                if (comment is VlangDocComment) {
-                    append(comment.documentationAsHtml())
-                    append("\n")
-                }
+    private fun StringBuilder.generateModuleDocumentation(directory: PsiDirectory, context: PsiElement) {
+        val readme = directory.findFile("README.md")
+        if (readme != null) {
+            var text = readme.text
+            if (text.startsWith("#")) {
+                text = text.substring(text.indexOf('\n') + 1)
             }
-            append(DocumentationMarkup.CONTENT_END)
-            return
-        }
 
-        val comments = CommentsConverter.toHtml(commentsList)
-        if (comments.isNotEmpty()) {
             append(DocumentationMarkup.CONTENT_START)
-            append(comments)
+            append(documentationAsHtml(text, context))
             append(DocumentationMarkup.CONTENT_END)
         }
     }

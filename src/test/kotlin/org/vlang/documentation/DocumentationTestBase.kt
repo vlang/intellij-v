@@ -1,10 +1,15 @@
 package org.vlang.documentation
 
 import com.intellij.codeInsight.documentation.DocumentationManager
+import com.intellij.psi.PsiElement
 import com.intellij.psi.util.parentOfTypes
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import com.intellij.util.io.exists
+import com.intellij.util.io.readText
+import org.vlang.lang.psi.VlangImportName
 import org.vlang.lang.psi.VlangNamedElement
 import org.vlang.lang.psi.VlangReferenceExpression
+import org.vlang.utils.toPath
 import java.io.File
 
 @Suppress("DEPRECATION")
@@ -12,8 +17,17 @@ abstract class DocumentationTestBase : BasePlatformTestCase() {
     override fun getTestDataPath() = "src/test/resources/documentation"
 
     fun doTest(dir: String, filename: String) {
-        val file = myFixture.configureByFile("$dir/$filename")
-        val newText = file.text.replace(CARET, CARET_ORIGINAL)
+        val modDir = "$testDataPath/$dir/mod"
+        if (modDir.toPath().exists()) {
+            myFixture.copyDirectoryToProject("$dir/mod", "mod")
+        }
+        val readmeFile = "$testDataPath/$dir/README.md"
+        if (readmeFile.toPath().exists()) {
+            myFixture.copyFileToProject("$dir/README.md", "README.md")
+        }
+
+        val text = "$testDataPath/$dir/$filename".toPath().readText()
+        val newText = text.replace(CARET, CARET_ORIGINAL)
         myFixture.configureByText(filename, newText)
 
         val documentations = mutableListOf<String>()
@@ -24,13 +38,15 @@ abstract class DocumentationTestBase : BasePlatformTestCase() {
             val originalElement = myFixture.file.findElementAt(offset)
             check(originalElement != null) { "No element at caret" }
 
-            var element = originalElement.parentOfTypes(VlangNamedElement::class, VlangReferenceExpression::class)
+            var element: PsiElement? = originalElement.parentOfTypes(VlangNamedElement::class, VlangReferenceExpression::class)
             check(element != null) { "No named element at caret" }
 
             if (element is VlangReferenceExpression) {
                 element = element.resolve() as? VlangNamedElement
-                check(element != null) { "Can't resolve element" }
+            } else if (element is VlangImportName) {
+                element = element.resolve().firstOrNull()?.toPsi()
             }
+            check(element != null) { "Can't resolve element" }
 
             val documentationProvider = DocumentationManager.getProviderFromElement(element)
             val generateDoc = documentationProvider.generateDoc(element, originalElement)
