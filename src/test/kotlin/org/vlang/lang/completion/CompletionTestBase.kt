@@ -4,7 +4,6 @@ import com.intellij.codeInsight.completion.CompletionType
 import com.intellij.codeInsight.lookup.Lookup.NORMAL_SELECT_CHAR
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.intellij.lang.annotations.Language
-import org.vlang.documentation.DocumentationTestBase
 
 abstract class CompletionTestBase : BasePlatformTestCase() {
     override fun getTestDataPath() = "src/test/resources/completion"
@@ -52,13 +51,19 @@ abstract class CompletionTestBase : BasePlatformTestCase() {
         vararg variants: String,
     ) {
         val newText = txt.replace(CARET, CARET_ORIGINAL)
-        myFixture.configureByText("a.v", newText)
+        val isTest = newText.startsWith("// test")
+        val fileName = if (isTest) "a_test.v" else "a.v"
+        myFixture.configureByText(fileName, newText)
         doTestVariantsInner(type, count, checkType, *variants)
     }
 
     open fun doTestVariantsInner(type: CompletionType, count: Int, checkType: CheckType, vararg variants: String) {
         myFixture.complete(type, count)
-        val stringList = myFixture.lookupElementStrings ?: return
+        val stringList = myFixture.lookupElementStrings
+        if (stringList == null) {
+            fail("no lookup elements")
+            return
+        }
         assertNotNull(
             """
             
@@ -68,6 +73,7 @@ abstract class CompletionTestBase : BasePlatformTestCase() {
             """.trimIndent(), stringList
         )
         val varList = mutableListOf<String>()
+        varList.addAll(variants)
 
         when (checkType) {
             CheckType.ORDERED_EQUALS -> {
