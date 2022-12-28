@@ -46,7 +46,15 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
             element = declaration
             declaration.symbolVisibility to declaration.firstChild
         } else {
-            getSymbolVisibility() to firstChild
+            val anchor = when (this) {
+                is VlangFunctionOrMethodDeclaration -> this.getFn()
+                is VlangStructDeclaration           -> this.structType
+                is VlangInterfaceDeclaration        -> this.interfaceType
+                is VlangEnumDeclaration             -> this.enumType
+                is VlangTypeAliasDeclaration        -> this.type_
+                else                                -> return
+            }
+            getSymbolVisibility() to anchor
         }
 
         if (visibility != null) {
