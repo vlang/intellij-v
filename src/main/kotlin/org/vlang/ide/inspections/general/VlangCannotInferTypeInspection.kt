@@ -7,7 +7,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parentOfType
 import org.vlang.ide.inspections.VlangBaseInspection
 import org.vlang.lang.psi.*
-import org.vlang.lang.psi.impl.VlangPomTargetPsiElement
+import org.vlang.lang.psi.impl.VlangModule
 import org.vlang.lang.psi.types.VlangAnyTypeEx
 import org.vlang.lang.psi.types.VlangUnknownTypeEx
 import org.vlang.utils.inside
@@ -54,7 +54,7 @@ class VlangCannotInferTypeInspection : VlangBaseInspection() {
 
                 if (o is VlangReferenceExpression) {
                     val resolved = o.resolve()
-                    if (resolved is VlangImportAlias || resolved is VlangPomTargetPsiElement) {
+                    if (resolved is VlangImportAlias || resolved is VlangModule.VlangPomTargetPsiElement) {
                         return
                     }
                 }

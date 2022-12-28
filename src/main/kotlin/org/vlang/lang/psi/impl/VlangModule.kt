@@ -32,10 +32,6 @@ class VlangModule(
 
     override fun canNavigateToSource(): Boolean = false
 
-    fun toPsi(): VlangPomTargetPsiElement {
-        return VlangPomTargetPsiElement(project, this)
-    }
-
     override fun getName(): String = name
 
     override fun isWritable(): Boolean {
@@ -49,7 +45,9 @@ class VlangModule(
         return !processor.isFound
     }
 
-    fun processFiles(processor: Processor<in PsiFile>) {
+    fun toPsi(): VlangPomTargetPsiElement = VlangPomTargetPsiElement(project, this)
+
+    private fun processFiles(processor: Processor<in PsiFile>) {
         if (!isValid()) {
             return
         }
@@ -59,13 +57,12 @@ class VlangModule(
             if (psiFile !is PsiFile) continue
             val virtualFile = psiFile.virtualFile ?: continue
             ProgressIndicatorProvider.checkCanceled()
+
             if (virtualFile.isDirectory || !virtualFile.isValid) continue
             if (virtualFile.isNotVlangFile) continue
             if (fileIndexFacade.isExcludedFile(virtualFile)) continue
 
-            if (!processor.process(psiFile)) {
-                return
-            }
+            if (!processor.process(psiFile)) return
         }
     }
 
@@ -128,12 +125,12 @@ class VlangModule(
             return VlangModule(directory.project, name, directory)
         }
     }
-}
 
-class VlangPomTargetPsiElement(project: Project, target: VlangModule) : PomTargetPsiElementImpl(project, target), PsiNameIdentifierOwner {
-    override fun getLanguage() = VlangLanguage
-    override fun getNameIdentifier() = null
-    override fun getTarget() = super.getTarget() as VlangModule
-    override fun getUseScope() = GlobalSearchScope.allScope(project)
-    override fun toString() = "Psi Wrapper[$target]"
+    class VlangPomTargetPsiElement(project: Project, target: VlangModule) : PomTargetPsiElementImpl(project, target), PsiNameIdentifierOwner {
+        override fun getLanguage() = VlangLanguage
+        override fun getNameIdentifier() = null
+        override fun getTarget() = super.getTarget() as VlangModule
+        override fun getUseScope() = GlobalSearchScope.allScope(project)
+        override fun toString() = "Psi Wrapper[$target]"
+    }
 }

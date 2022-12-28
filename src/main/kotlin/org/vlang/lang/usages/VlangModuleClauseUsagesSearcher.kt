@@ -2,8 +2,8 @@ package org.vlang.lang.usages
 
 import com.intellij.openapi.application.QueryExecutorBase
 import com.intellij.psi.PsiReference
-import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.search.LocalSearchScope
+import com.intellij.psi.search.UsageSearchContext
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.util.Processor
 import org.vlang.lang.psi.VlangModuleClause
@@ -15,21 +15,24 @@ class VlangModuleClauseUsagesSearcher : QueryExecutorBase<PsiReference?, Referen
         consumer: Processor<in PsiReference?>,
     ) {
         val moduleClause = queryParameters.elementToSearch as? VlangModuleClause ?: return
-        val directory = moduleClause.containingFile.containingDirectory
+        val directory = moduleClause.containingFile.containingDirectory ?: return
         val packageName = moduleClause.name
-        if (directory != null) {
-            val module = VlangModule.fromDirectory(directory)
-            val searchTarget = module.toPsi()
-            val scopeDeterminedByUser = queryParameters.scopeDeterminedByUser
-            val scope =
-                if (scopeDeterminedByUser is LocalSearchScope || queryParameters.isIgnoreAccessScope) scopeDeterminedByUser else moduleClause.useScope
 
-            queryParameters.optimizer.searchWord(
-                packageName,
-                GlobalSearchScope.allScope(moduleClause.project),
-                true,
-                searchTarget,
-            )
-        }
+        val module = VlangModule.fromDirectory(directory)
+        val searchTarget = module.toPsi()
+
+        val scopeDeterminedByUser = queryParameters.scopeDeterminedByUser
+        val scope = if (scopeDeterminedByUser is LocalSearchScope || queryParameters.isIgnoreAccessScope)
+            scopeDeterminedByUser
+        else
+            searchTarget.useScope
+
+        queryParameters.optimizer.searchWord(
+            packageName,
+            scope,
+            UsageSearchContext.IN_CODE,
+            true,
+            searchTarget,
+        )
     }
 }

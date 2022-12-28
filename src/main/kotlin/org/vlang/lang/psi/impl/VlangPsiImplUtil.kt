@@ -349,7 +349,7 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun resolve(o: VlangImportName): List<VlangModule> {
-        val target = o.reference.resolve() as? VlangPomTargetPsiElement ?: return emptyList()
+        val target = o.reference.resolve() as? VlangModule.VlangPomTargetPsiElement ?: return emptyList()
         return listOf(target.target)
     }
 

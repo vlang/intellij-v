@@ -11,7 +11,7 @@ import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 import com.intellij.util.CommonProcessors
 import org.intellij.lang.annotations.Language
 import org.vlang.lang.psi.VlangNamedElement
-import org.vlang.lang.psi.impl.VlangPomTargetPsiElement
+import org.vlang.lang.psi.impl.VlangModule
 import org.vlang.lang.search.VlangGotoUtil
 
 abstract class IntegrationTestBase : BasePlatformTestCase() {
@@ -48,7 +48,7 @@ abstract class IntegrationTestBase : BasePlatformTestCase() {
                 return
             }
 
-            if (resolved is VlangPomTargetPsiElement) {
+            if (resolved is VlangModule.VlangPomTargetPsiElement) {
                 val expected = "MODULE ${resolved.target.name}"
                 check(expected == name) { "Expected to resolve to $name, but got $expected" }
                 return

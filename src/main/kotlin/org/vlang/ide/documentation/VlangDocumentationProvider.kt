@@ -8,7 +8,7 @@ import com.intellij.psi.SyntaxTraverser
 import org.vlang.ide.documentation.DocumentationGenerator.generateDoc
 import org.vlang.lang.doc.psi.VlangDocComment
 import org.vlang.lang.psi.*
-import org.vlang.lang.psi.impl.VlangPomTargetPsiElement
+import org.vlang.lang.psi.impl.VlangModule.VlangPomTargetPsiElement
 import java.util.function.Consumer
 
 class VlangDocumentationProvider : AbstractDocumentationProvider() {
@@ -40,7 +40,7 @@ class VlangDocumentationProvider : AbstractDocumentationProvider() {
             }
         }
     }
-    
+
     override fun generateRenderedDoc(comment: PsiDocCommentBase): String? {
         return (comment as? VlangDocComment)?.documentationAsHtml(renderMode = VlangDocRenderMode.INLINE_DOC_COMMENT)
     }

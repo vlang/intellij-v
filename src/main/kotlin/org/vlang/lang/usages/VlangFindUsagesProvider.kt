@@ -10,6 +10,7 @@ import com.intellij.usageView.UsageViewLongNameLocation
 import com.intellij.usageView.UsageViewShortNameLocation
 import org.vlang.lang.lexer.VlangLexer
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.impl.VlangModule
 
 class VlangFindUsagesProvider : FindUsagesProvider {
     override fun getWordsScanner(): WordsScanner {
@@ -46,6 +47,7 @@ class VlangFindUsagesProvider : FindUsagesProvider {
         is VlangLabelDefinition                           -> "label"
         is VlangModuleClause                              -> "module"
         is VlangGenericParameter                          -> "generic parameter"
+        is VlangModule.VlangPomTargetPsiElement           -> "module"
         else                                              -> ""
     }
 

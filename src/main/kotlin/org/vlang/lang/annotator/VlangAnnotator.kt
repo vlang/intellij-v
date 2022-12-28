@@ -13,7 +13,7 @@ import org.vlang.ide.colors.VlangColor
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.*
-import org.vlang.lang.psi.impl.VlangPomTargetPsiElement
+import org.vlang.lang.psi.impl.VlangModule
 import org.vlang.lang.psi.impl.VlangReference
 import org.vlang.lang.psi.types.VlangPrimitiveTypes
 import org.vlang.lang.sql.VlangSqlUtil
@@ -120,9 +120,9 @@ class VlangAnnotator : Annotator {
                 mutable(resolved, VlangColor.MUTABLE_VARIABLE, VlangColor.VARIABLE)
             }
 
-            is VlangGenericParameter          -> VlangColor.GENERIC_PARAMETER
-            is VlangPomTargetPsiElement       -> VlangColor.MODULE
-            is VlangImportAlias               -> VlangColor.MODULE
+            is VlangGenericParameter                -> VlangColor.GENERIC_PARAMETER
+            is VlangModule.VlangPomTargetPsiElement -> VlangColor.MODULE
+            is VlangImportAlias                     -> VlangColor.MODULE
             is VlangConstDefinition           -> {
                 val identifier = element.getIdentifier()
                 if (identifier != null && VlangCompletionUtil.isCompileTimeIdentifier(identifier)) {

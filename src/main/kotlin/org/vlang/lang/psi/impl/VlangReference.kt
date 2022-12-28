@@ -120,7 +120,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             }
         }
 
-        if (resolved is VlangPomTargetPsiElement) {
+        if (resolved is VlangModule.VlangPomTargetPsiElement) {
             val target = resolved.target
 
             val containingFile = qualifier.containingFile as VlangFile

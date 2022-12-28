@@ -27,7 +27,6 @@ import org.vlang.lang.doc.psi.VlangDocComment
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangAttributeReference
 import org.vlang.lang.psi.impl.VlangModule
-import org.vlang.lang.psi.impl.VlangPomTargetPsiElement
 import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 
@@ -236,7 +235,7 @@ object DocumentationGenerator {
         }
     }
 
-    fun VlangPomTargetPsiElement.generateDoc(): String {
+    fun VlangModule.VlangPomTargetPsiElement.generateDoc(): String {
         val name = target.name
         val parts = name.split(".")
         val coloredName = if (parts.size == 1) {

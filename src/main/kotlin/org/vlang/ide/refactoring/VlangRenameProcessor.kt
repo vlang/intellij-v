@@ -77,5 +77,10 @@ class VlangRenameProcessor : RenamePsiElementProcessor() {
                 }
             }
         }
+
+        if (element is VlangModuleClause) {
+            val directory = element.containingFile?.containingDirectory ?: return
+            allRenames[directory] = newName
+        }
     }
 }
