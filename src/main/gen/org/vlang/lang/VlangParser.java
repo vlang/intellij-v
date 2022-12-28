@@ -461,12 +461,13 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // 'atomic' Type?
+  // atomic Type?
   public static boolean AtomicType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AtomicType")) return false;
+    if (!nextTokenIs(b, ATOMIC)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, ATOMIC_TYPE, "<atomic type>");
-    r = consumeToken(b, "atomic");
+    Marker m = enter_section_(b, l, _NONE_, ATOMIC_TYPE, null);
+    r = consumeToken(b, ATOMIC);
     p = r; // pin = 1
     r = r && AtomicType_1(b, l + 1);
     exit_section_(b, l, m, r, p, null);

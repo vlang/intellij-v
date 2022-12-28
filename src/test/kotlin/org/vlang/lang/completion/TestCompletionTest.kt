@@ -8,6 +8,16 @@ class TestCompletionTest : CompletionTestBase() {
         "fn testsuite_begin", "fn testsuite_end"
     )
 
+    fun `test suite special functions inside test function`() = checkExcludes(
+        """
+        // test
+        fn main() {
+          fn/*caret*/
+        }
+        """.trimIndent(), 1,
+        "fn testsuite_begin", "fn testsuite_end"
+    )
+
     fun `test suite special functions`() = checkIncludes(
         """
         // test

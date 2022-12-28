@@ -460,7 +460,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         if (VlangSqlUtil.insideSql(identifier!!) && VlangSqlUtil.fieldReference(identifier!!)) {
             val resolved = VlangSqlUtil.getTable(identifier!!)?.typeReferenceExpression?.resolve() as? VlangStructDeclaration
             if (resolved != null) {
-                return processType(resolved.structType.toEx(), processor, state)
+                return processType(resolved.structType.toEx(), processor, state.put(NOT_PROCESS_METHODS, true))
             }
         }
 

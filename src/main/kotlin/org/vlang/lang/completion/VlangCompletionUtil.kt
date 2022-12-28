@@ -70,6 +70,10 @@ object VlangCompletionUtil {
         "VMODROOT" to "The absolute path to the nearest v.mod file's directory",
     )
 
+    fun LookupElementBuilder.withPriority(priority: Int): LookupElement {
+        return PrioritizedLookupElement.withPriority(this, priority.toDouble())
+    }
+
     fun isCompileTimeIdentifier(element: PsiElement): Boolean {
         return element.elementType == VlangTypes.IDENTIFIER && element.text.startsWith("@")
     }
@@ -80,7 +84,8 @@ object VlangCompletionUtil {
 
     fun shouldSuppressCompletion(element: PsiElement): Boolean {
         val parent = element.parent
-        if (parent.parent is VlangVarDeclaration) {
+        val grand = parent.parent
+        if (grand is VlangVarDeclaration && grand.varDefinitionList.any { PsiTreeUtil.isAncestor(it, element, false) }) {
             return true
         }
 

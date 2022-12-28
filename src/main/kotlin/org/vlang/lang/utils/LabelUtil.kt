@@ -18,10 +18,10 @@ object LabelUtil {
     }
 
     fun collectContextLabels(context: PsiElement): List<VlangLabelDefinition> {
-        val containingFunction = context.parentOfType<VlangFunctionOrMethodDeclaration>() ?: return emptyList()
+        val containingElement = context.parentOfType<VlangFunctionOrMethodDeclaration>() ?: context.containingFile ?: return emptyList()
         val labels = mutableListOf<VlangLabelDefinition>()
 
-        PsiTreeUtil.processElements(containingFunction) { element ->
+        PsiTreeUtil.processElements(containingElement) { element ->
             if (element is VlangLabelDefinition) {
                 labels.add(element)
             }

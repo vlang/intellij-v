@@ -1,85 +1,150 @@
 package org.vlang.lang.completion
 
-import com.intellij.patterns.*
+import com.intellij.patterns.ElementPattern
+import com.intellij.patterns.PatternCondition
+import com.intellij.patterns.PlatformPatterns.or
+import com.intellij.patterns.PlatformPatterns.psiElement
+import com.intellij.patterns.PsiElementPattern
 import com.intellij.psi.PsiElement
-import com.intellij.psi.tree.IElementType
-import com.intellij.psi.tree.TokenSet
-import org.vlang.lang.VlangTypes
+import com.intellij.util.ProcessingContext
+import org.vlang.lang.VlangTypes.*
 import org.vlang.lang.psi.*
+import org.vlang.utils.parentNth
 
 object VlangCompletionPatterns {
-    fun identifier() = insideBlockPattern(VlangTypes.IDENTIFIER)
-        .andNot(
-            insideWithLabelStatement(VlangTypes.IDENTIFIER)
-        )
-        .andNot(
-            insideAttribute(VlangTypes.IDENTIFIER)
-        )
+    private val whitespace: PsiElementPattern.Capture<PsiElement> = psiElement().whitespace()
 
-    fun insideAttribute(tokenType: IElementType): ElementPattern<out PsiElement?> {
-        return onStatementBeginning(tokenType)
-            .inside(false, PlatformPatterns.psiElement(VlangAttribute::class.java))
+    /**
+     * Expressions like:
+     *
+     *     a = unsafe { ... }
+     */
+    fun onExpression(): PsiElementPattern.Capture<PsiElement> =
+        psiElement()
+            .withParent(VlangReferenceExpression::class.java)
+            .notAfterDot()
+            .notInsideArrayInit()
+
+    /**
+     * Statements like:
+     *
+     *     defer {}
+     */
+    fun onStatement(): PsiElementPattern.Capture<PsiElement> =
+        psiElement()
+            .withSuperParent(2, VlangLeftHandExprList::class.java)
+            .withSuperParent(3, VlangSimpleStatement::class.java)
+            .notAfterDot()
+            .notInsideArrayInit()
+
+    /**
+     * Any top-level statements like:
+     *
+     *     import mod
+     */
+    fun onTopLevel(): PsiElementPattern.Capture<PsiElement?> =
+        onStatement().withSuperParent(4, VlangFile::class.java)
+
+    /**
+     * Any place where type expected like:
+     *
+     *    fn foo() <caret>
+     */
+    fun onType(): PsiElementPattern.Capture<PsiElement> =
+        psiElement().withParent(VlangTypeReferenceExpression::class.java)
+
+    /**
+     * Element after if/else expression like:
+     *
+     *    if true { ... } <caret>
+     */
+    fun onIfElse(): PsiElementPattern.Capture<PsiElement> {
+        val braceAfterIf = psiElement(RBRACE).withSuperParent(2, psiElement(IF_EXPRESSION))
+        return psiElement().afterLeafSkipping(whitespace, braceAfterIf)
     }
 
-    fun insideStruct() = onStatementBeginning(VlangTypes.IDENTIFIER)
-        .withSuperParent(6, VlangStructType::class.java)
-
-    fun insideBlockPattern(tokenType: IElementType): PsiElementPattern.Capture<PsiElement?> {
-        return onStatementBeginning(tokenType)
+    /**
+     * Element after match arm like:
+     *
+     *    match {
+     *      100 { ... }
+     *      <caret>
+     *    }
+     */
+    fun onMatchElse(): PsiElementPattern.Capture<PsiElement> {
+        val braceAfterMatch = psiElement(RBRACE).withSuperParent(4, psiElement(MATCH_EXPRESSION))
+        return psiElement().afterLeafSkipping(whitespace, braceAfterMatch)
     }
 
-    fun topLevelPattern(): PsiElementPattern.Capture<PsiElement?> {
-        return onStatementBeginning(VlangTypes.IDENTIFIER).withParent(
-            StandardPatterns.or(
-                PlatformPatterns.psiElement().withSuperParent(3, vlangFileWithModule()),
-                PlatformPatterns.psiElement().withSuperParent(3, VlangFile::class.java),
-            )
-        )
+    /**
+     * Element after import keyword like:
+     *
+     *    import <caret>
+     */
+    fun onModuleImportName(): PsiElementPattern.Capture<PsiElement> {
+        return psiElement().withParent(VlangImportName::class.java)
     }
 
-    fun vlangFileWithModule(): PsiFilePattern.Capture<VlangFile?> {
-        val collection = StandardPatterns.collection(PsiElement::class.java)
-        val packageIsFirst = collection.first(PlatformPatterns.psiElement(VlangTypes.MODULE_CLAUSE))
-        return PlatformPatterns.psiFile(VlangFile::class.java).withChildren(
-            collection.filter(
-                StandardPatterns.not(PlatformPatterns.psiElement().whitespaceCommentEmptyOrError()),
-                packageIsFirst
-            )
-        )
+    /**
+     * Element inside attribute like:
+     *
+     *    [<caret>]
+     */
+    fun onAttributeIdentifier(): PsiElementPattern.Capture<PsiElement> {
+        return psiElement().withParent(VlangAttributeIdentifier::class.java)
     }
 
-    fun onStatementBeginning(vararg tokenTypes: IElementType): PsiElementPattern.Capture<PsiElement?> {
-        return PlatformPatterns.psiElement().withElementType(TokenSet.create(*tokenTypes))
+    /**
+     * Element inside attribute inside struct field like:
+     *
+     *    struct A {
+     *      field string [<caret>]
+     *    }
+     */
+    fun onFieldAttributeIdentifier(): PsiElementPattern.Capture<PsiElement> {
+        return psiElement()
+            .withParent(VlangAttributeIdentifier::class.java)
+            .inside(VlangFieldDeclaration::class.java)
     }
 
-    fun insideForStatement(tokenType: IElementType): ElementPattern<out PsiElement?> {
-        return insideBlockPattern(tokenType)
+    fun insideStruct(): PsiElementPattern.Capture<PsiElement> =
+        psiElement()
+            .withSuperParent(6, VlangStructType::class.java)
+
+    fun insideForStatement(): ElementPattern<out PsiElement?> {
+        return onStatement()
+            .inside(VlangForStatement::class.java)
+    }
+
+    fun insideSqlStatement(): ElementPattern<out PsiElement?> {
+        return psiElement(IDENTIFIER)
+            .inside(VlangSqlExpression::class.java)
+    }
+
+    fun insideStatementWithLabel(): ElementPattern<out PsiElement?> {
+        return psiElement()
             .inside(
-                false, PlatformPatterns.psiElement(VlangForStatement::class.java),
-                PlatformPatterns.psiElement(VlangFunctionDeclaration::class.java)
-            ).andNot(
-                insideWithLabelStatement(tokenType)
-            )
-    }
-
-    fun insideSqlStatement(tokenType: IElementType): ElementPattern<out PsiElement?> {
-        return onStatementBeginning(tokenType)
-            .inside(
-                false, PlatformPatterns.psiElement(VlangSqlExpression::class.java),
-                PlatformPatterns.psiElement(VlangFunctionDeclaration::class.java)
-            )
-    }
-
-    fun insideWithLabelStatement(tokenType: IElementType): ElementPattern<out PsiElement?> {
-        return onStatementBeginning(tokenType)
-            .inside(
-                false,
-                StandardPatterns.or(
-                    PlatformPatterns.psiElement(VlangTypes.CONTINUE_STATEMENT),
-                    PlatformPatterns.psiElement(VlangTypes.BREAK_STATEMENT),
-                    PlatformPatterns.psiElement(VlangTypes.GOTO_STATEMENT)
+                or(
+                    psiElement(CONTINUE_STATEMENT),
+                    psiElement(BREAK_STATEMENT),
+                    psiElement(GOTO_STATEMENT)
                 ),
-                PlatformPatterns.psiElement(VlangFunctionDeclaration::class.java)
             )
+    }
+
+    private fun PsiElementPattern.Capture<PsiElement>.notAfterDot(): PsiElementPattern.Capture<PsiElement> {
+        return andNot(psiElement().afterLeafSkipping(whitespace, psiElement(DOT)))
+    }
+
+    private fun PsiElementPattern.Capture<PsiElement>.notInsideArrayInit(): PsiElementPattern.Capture<PsiElement> {
+        return andNot(psiElement().with(object : PatternCondition<PsiElement>("withArrayInit") {
+            override fun accepts(t: PsiElement, context: ProcessingContext?): Boolean {
+                val element = t.parentNth<VlangElement>(3) ?: return false
+                // if 'key: <caret>'
+                if (element.key != null) return false
+                val parent = element.parent as? VlangLiteralValueExpression
+                return parent != null && parent.type is VlangArrayType
+            }
+        }))
     }
 }

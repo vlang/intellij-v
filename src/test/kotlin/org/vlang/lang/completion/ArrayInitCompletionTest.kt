@@ -10,6 +10,30 @@ class ArrayInitCompletionTest : CompletionTestBase() {
         }
 
         """.trimIndent(), 0,
-        "cap", "init", "len", "map", "chan", // TODO: remove "map", "chan"
+        "cap", "init", "len",
+    )
+
+    fun `test second field`() = checkEquals(
+        """
+        module main
+        
+        fn main() {
+            arr := []int{len: 100, /*caret*/}
+        }
+
+        """.trimIndent(), 0,
+        "cap", "init", "len",
+    )
+
+    fun `test field value`() = checkIncludes(
+        """
+        module main
+        
+        fn main() {
+            arr := []int{len: /*caret*/}
+        }
+
+        """.trimIndent(), 0,
+        "unsafe",
     )
 }

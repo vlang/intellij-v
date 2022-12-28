@@ -141,63 +141,19 @@ The plugin provides support for V language
         <!-- region Completion -->
         <completion.contributor
             language="vlang"
-            id="VlangCommonAttributesCompletionContributor"
-            order="first"
-            implementationClass="org.vlang.lang.completion.VlangAttributesCompletionContributor"/>
+            implementationClass="org.vlang.lang.completion.contributors.VlangCompletionContributor"/>
 
         <completion.contributor
             language="vlang"
-            id="VlangMapCompletionContributor"
-            order="after VlangCommonAttributesCompletionContributor"
-            implementationClass="org.vlang.lang.completion.VlangTypeInitCompletionContributor"/>
+            implementationClass="org.vlang.lang.completion.contributors.VlangAttributesCompletionContributor"/>
 
         <completion.contributor
             language="vlang"
-            id="VlangKeywordsCompletionContributor"
-            order="after VlangCommonAttributesCompletionContributor"
-            implementationClass="org.vlang.lang.completion.VlangKeywordsCompletionContributor"/>
+            implementationClass="org.vlang.lang.completion.contributors.VlangKeywordsCompletionContributor"/>
 
         <completion.contributor
             language="vlang"
-            id="VlangReturnCompletionContributor"
-            order="after VlangCommonAttributesCompletionContributor"
-            implementationClass="org.vlang.lang.completion.VlangReturnCompletionContributor"/>
-
-       <completion.contributor
-            language="vlang"
-            id="VlangTestCompletionContributor"
-            order="after VlangCommonAttributesCompletionContributor"
-            implementationClass="org.vlang.lang.completion.VlangTestCompletionContributor"/>
-
-        <completion.contributor
-            language="vlang"
-            id="VlangClosureCompletionContributor"
-            order="after VlangKeywordsCompletionContributor"
-            implementationClass="org.vlang.lang.completion.VlangClosureCompletionContributor"/>
-
-        <completion.contributor
-            language="vlang"
-            id="VlangMethodCompletionContributor"
-            order="after VlangKeywordsCompletionContributor"
-            implementationClass="org.vlang.lang.completion.VlangMethodCompletionContributor"/>
-
-        <completion.contributor
-            language="vlang"
-            id="VlangModuleNameCompletionContributor"
-            order="after VlangClosureCompletionContributor"
-            implementationClass="org.vlang.lang.completion.VlangModuleNameCompletionContributor"/>
-
-        <completion.contributor
-            language="vlang"
-            id="VlangPrimitiveTypesContributor"
-            order="after VlangModuleNameCompletionContributor"
-            implementationClass="org.vlang.lang.completion.VlangTypesContributor"/>
-
-        <completion.contributor
-            language="vlang"
-            id="VlangContextCompletionContributor"
-            order="after VlangPrimitiveTypesContributor"
-            implementationClass="org.vlang.lang.completion.VlangContextCompletionContributor"/>
+            implementationClass="org.vlang.lang.completion.contributors.VlangContextCompletionContributor"/>
 
         <typedHandler implementation="org.vlang.lang.completion.VlangTypedHandler"/>
         <enterHandlerDelegate implementation="org.vlang.lang.completion.VlangEnterHandlerDelegate"/>

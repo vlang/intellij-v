@@ -1,47 +1,32 @@
-package org.vlang.lang.completion
+package org.vlang.lang.completion.contributors
 
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.codeInsight.template.impl.ConstantNode
 import com.intellij.icons.AllIcons
-import com.intellij.patterns.PlatformPatterns.psiElement
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
-import org.vlang.lang.VlangTypes
-import org.vlang.lang.psi.VlangAttributeIdentifier
+import org.vlang.lang.completion.VlangCompletionPatterns.onAttributeIdentifier
+import org.vlang.lang.completion.VlangCompletionPatterns.onFieldAttributeIdentifier
+import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.VlangFieldDeclaration
 
 class VlangAttributesCompletionContributor : CompletionContributor() {
     init {
-        extend(
-            CompletionType.BASIC,
-            psiElement(VlangTypes.IDENTIFIER).withParent(VlangAttributeIdentifier::class.java),
-            CommonAttributeCompletionProvider
-        )
-
-        extend(
-            CompletionType.BASIC,
-            psiElement(VlangTypes.IDENTIFIER)
-                .withParent(VlangAttributeIdentifier::class.java)
-                .inside(VlangFieldDeclaration::class.java),
-            JsonAttributeCompletionProvider
-        )
-
-        extend(
-            CompletionType.BASIC,
-            psiElement(VlangTypes.IDENTIFIER).withParent(VlangAttributeIdentifier::class.java),
-            AttributeWithColonCompletionProvider
-        )
+        extend(CompletionType.BASIC, onAttributeIdentifier(), CommonAttributeCompletionProvider)
+        extend(CompletionType.BASIC, onFieldAttributeIdentifier(), JsonAttributeCompletionProvider)
+        extend(CompletionType.BASIC, onAttributeIdentifier(), AttributeWithColonCompletionProvider)
     }
 
     private object CommonAttributeCompletionProvider : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
-            result.addAllElements(
-                ATTRIBUTES.map {
-                    LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.ObjectTypeAttribute)
-                }
-            )
+            val elements = ATTRIBUTES.map {
+                LookupElementBuilder.create(it)
+                    .withIcon(AllIcons.Nodes.ObjectTypeAttribute)
+            }
+
+            result.addAllElements(elements)
         }
 
         private val ATTRIBUTES = listOf(
@@ -53,14 +38,14 @@ class VlangAttributesCompletionContributor : CompletionContributor() {
 
     private object AttributeWithColonCompletionProvider : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
-            result.addAllElements(
-                ATTRIBUTES.map {
-                    LookupElementBuilder.create(it)
-                        .withIcon(AllIcons.Nodes.ObjectTypeAttribute)
-                        .withTailText(": 'value'", true)
-                        .withInsertHandler(INSERT_HANDLER)
-                }
-            )
+            val elements = ATTRIBUTES.map {
+                LookupElementBuilder.create(it)
+                    .withIcon(AllIcons.Nodes.ObjectTypeAttribute)
+                    .withTailText(": 'value'", true)
+                    .withInsertHandler(INSERT_HANDLER)
+            }
+
+            result.addAllElements(elements)
         }
 
         val ATTRIBUTES = listOf("sql", "table", "deprecated", "deprecated_after", "export", "callconv")

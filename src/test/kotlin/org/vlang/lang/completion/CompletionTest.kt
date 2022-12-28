@@ -243,4 +243,16 @@ class CompletionTest : CompletionTestBase() {
         }
         """.trimIndent()
     )
+
+    fun `test label`() = checkEquals(
+        """
+        module main
+        
+        fn main() {
+        label:
+            goto /*caret*/
+        }
+        """.trimIndent(), 0,
+        "label"
+    )
 }

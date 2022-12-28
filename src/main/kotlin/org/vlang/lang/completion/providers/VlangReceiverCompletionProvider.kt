@@ -1,4 +1,4 @@
-package org.vlang.lang.completion
+package org.vlang.lang.completion.providers
 
 import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.codeInsight.completion.CompletionProvider
@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveState
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
+import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangElementFactory
 import org.vlang.lang.psi.impl.VlangPsiImplUtil.unwrapPointerOrOptionOrResultType

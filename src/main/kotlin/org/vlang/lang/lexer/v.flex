@@ -371,6 +371,7 @@ REGULAR_SINGLE_STRING_PART=[^\\\'\$]+
 "static"                                  { return STATIC; }
 "shared"                                  { return SHARED; }
 "volatile"                                { return VOLATILE; }
+"atomic"                                  { return ATOMIC; }
 "__global"                                { return BUILTIN_GLOBAL; }
 
 // builtin functions

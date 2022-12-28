@@ -804,7 +804,7 @@ ChannelType ::= 'chan' Type? {pin=1}
 ThreadType ::= 'thread' Type? {pin=1}
 
 // atomic <type>
-AtomicType ::= 'atomic' Type? {pin=1}
+AtomicType ::= atomic Type? {pin=1}
 
 ////// TYPES END //////
 

@@ -85,6 +85,7 @@ object VlangTokenTypes {
         ISREFTYPE,
         SPAWN,
         NONE,
+        ATOMIC,
     )
 
     val OPERATORS = TokenSet.create(

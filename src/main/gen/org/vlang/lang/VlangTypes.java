@@ -233,6 +233,7 @@ public interface VlangTypes {
   IElementType ASSERT = new VlangTokenType("assert");
   IElementType ASSIGN = new VlangTokenType("=");
   IElementType AT = new VlangTokenType("@");
+  IElementType ATOMIC = new VlangTokenType("atomic");
   IElementType BACKTICK = new VlangTokenType("`");
   IElementType BIN = new VlangTokenType("bin");
   IElementType BIT_AND = new VlangTokenType("&");
