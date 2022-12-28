@@ -485,7 +485,7 @@ EnumBackedTypeAs ::= as Type {pin=1}
 private EnumFields ::= EnumFieldDeclaration (EnumFieldDeclaration)*
 EnumFieldDeclaration ::= EnumFieldDefinition ('=' Expression)? semi? {pin=1}
 EnumFieldDefinition ::= identifier {
-  methods=[isPublic getTypeInner]
+  methods=[isPublic getTypeInner constantValue]
   stubClass="org.vlang.lang.stubs.VlangEnumFieldDefinitionStub"
 }
 

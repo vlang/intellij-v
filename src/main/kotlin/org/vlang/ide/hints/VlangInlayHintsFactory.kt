@@ -29,6 +29,8 @@ class VlangInlayHintsFactory(
         return container(factory.seq(text, text(" →")))
     }
 
+    fun enumValue(value: String): InlayPresentation = container(text(" = $value"))
+
     fun typeHint(type: VlangTypeEx, anchor: PsiElement): InlayPresentation = container(
         listOf(text(": "), hint(type, 1, anchor)).join()
     )

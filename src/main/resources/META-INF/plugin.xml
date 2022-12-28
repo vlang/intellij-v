@@ -67,6 +67,7 @@ The plugin provides support for V language
         <!-- Hints -->
         <codeInsight.inlayProvider language="vlang" implementationClass="org.vlang.ide.hints.VlangInlayHintsProvider"/>
         <codeInsight.inlayProvider language="vlang" implementationClass="org.vlang.ide.hints.VlangChainMethodInlayHintsProvider"/>
+        <codeInsight.inlayProvider language="vlang" implementationClass="org.vlang.ide.hints.VlangEnumValuesInlayHintsProvider"/>
         <codeInsight.parameterNameHints language="vlang" id="VlangParameterNameHintsProvider"
                                         implementationClass="org.vlang.ide.hints.VlangParameterNameHintsProvider"/>
         <!-- Code vision -->

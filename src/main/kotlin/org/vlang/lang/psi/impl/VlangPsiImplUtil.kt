@@ -331,11 +331,20 @@ object VlangPsiImplUtil {
         return o.referenceExpression.resolve()
     }
 
-    @JvmStatic fun getReference(o: VlangIsRefTypeCallExpr) = VlangBuiltinReference(o)
-    @JvmStatic fun getReference(o: VlangSizeOfCallExpr) = VlangBuiltinReference(o)
-    @JvmStatic fun getReference(o: VlangTypeOfCallExpr) = VlangBuiltinReference(o)
-    @JvmStatic fun getReference(o: VlangOffsetOfCallExpr) = VlangBuiltinReference(o)
-    @JvmStatic fun getReference(o: VlangDumpCallExpr) = VlangBuiltinReference(o)
+    @JvmStatic
+    fun getReference(o: VlangIsRefTypeCallExpr) = VlangBuiltinReference(o)
+
+    @JvmStatic
+    fun getReference(o: VlangSizeOfCallExpr) = VlangBuiltinReference(o)
+
+    @JvmStatic
+    fun getReference(o: VlangTypeOfCallExpr) = VlangBuiltinReference(o)
+
+    @JvmStatic
+    fun getReference(o: VlangOffsetOfCallExpr) = VlangBuiltinReference(o)
+
+    @JvmStatic
+    fun getReference(o: VlangDumpCallExpr) = VlangBuiltinReference(o)
 
     @JvmStatic
     fun getReference(o: VlangReferenceExpression): VlangReference {
@@ -509,6 +518,80 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun constantValue(o: VlangEnumFieldDefinition): Long? {
+        return CachedValuesManager.getCachedValue(o) {
+            val value = constantValueImpl(o)
+            CachedValueProvider.Result.create(value, o)
+        }
+    }
+
+    private fun constantValueImpl(o: VlangEnumFieldDefinition): Long? {
+        val decl = o.parent as? VlangEnumFieldDeclaration ?: return null
+        val enumType = o.parentNth<VlangEnumType>(2) ?: return null
+        val enumDecl = enumType.parent as? VlangEnumDeclaration ?: return null
+        val binary = enumDecl.isFlag
+        val fields = enumType.enumFieldDeclarationList
+
+        if (decl.expression != null) {
+            val value = calculateValue(decl.expression)
+            if (!binary && value != null) {
+                return value
+            }
+            return null
+        }
+
+        val indexOf = fields.indexOf(decl)
+        if (indexOf == 0) {
+            if (fields.first().expression != null) {
+                val value = calculateValue(fields.first().expression)
+                if (value != null) {
+                    return value
+                }
+                return null
+            }
+            return if (binary) 1 else 0
+        }
+
+        val prevField = fields[indexOf - 1].enumFieldDefinition.constantValue()
+        if (prevField != null) {
+            if (binary) {
+                return prevField * 2
+            }
+            return prevField + 1
+        }
+
+        return null
+    }
+
+    private fun calculateValue(value: VlangExpression?): Long? {
+        if (value is VlangLiteral && value.isNumeric) {
+            val radix = when {
+                value.bin != null -> 2
+                value.oct != null -> 8
+                value.hex != null -> 16
+                else -> 10
+            }
+            val text = value.text.removePrefix("0b").removePrefix("0o").removePrefix("0x")
+            return try {
+                text.toLong(radix)
+            } catch (e: NumberFormatException) {
+                null
+            }
+        }
+        if (value is VlangUnaryExpr && value.minus != null) {
+            val calculatedValue = calculateValue(value.expression) ?: return null
+            return -calculatedValue
+        }
+        if (value is VlangMulExpr && value.shiftLeft != null) {
+            val left = calculateValue(value.left) ?: return null
+            val right = calculateValue(value.right) ?: return null
+            return left shl right.toInt()
+        }
+
+        return null
+    }
+
+    @JvmStatic
     fun isPublic(o: VlangEnumFieldDefinition): Boolean {
         return o.parentOfType<VlangEnumDeclaration>()?.isPublic() ?: false
     }
@@ -581,7 +664,8 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getOwner(o: VlangInterfaceMethodDefinition): VlangInterfaceDeclaration {
-        return o.stubOrPsiParentOfType() ?: error("Can't find owner for method ${o.name}, interface method definition must be inside interface")
+        return o.stubOrPsiParentOfType()
+            ?: error("Can't find owner for method ${o.name}, interface method definition must be inside interface")
     }
 
     @JvmStatic
@@ -1632,7 +1716,11 @@ object VlangPsiImplUtil {
         return null
     }
 
-    private fun processThreadPoolMethodCall(resolved: VlangMethodDeclaration, signature: VlangSignature?, expr: VlangCallExpr): VlangTypeEx? {
+    private fun processThreadPoolMethodCall(
+        resolved: VlangMethodDeclaration,
+        signature: VlangSignature?,
+        expr: VlangCallExpr,
+    ): VlangTypeEx? {
         val receiverType = resolved.receiverType.toEx()
         if (!VlangTypeInferenceUtil.stubThreadPool(receiverType)) return null
 

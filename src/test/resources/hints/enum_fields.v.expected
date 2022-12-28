@@ -1,0 +1,100 @@
+module hints
+
+enum Simple {
+	read<#  = 0 #>
+	write<#  = 1 #>
+	unknown<#  = 2 #>
+}
+
+enum WithCustomValue {
+	read<#  = 0 #>
+	write = 100
+	unknown<#  = 101 #>
+}
+
+enum WithCustomValue2 {
+	read = 100
+	write<#  = 101 #>
+	unknown<#  = 102 #>
+}
+
+enum WithCustomValue3 {
+	read = 100
+	write<#  = 101 #>
+	other= 105
+	unknown<#  = 106 #>
+}
+
+enum WithComplexValue {
+	read = 1 << 5
+	write<#  = 33 #>
+	other<#  = 34 #>
+	unknown<#  = 35 #>
+}
+
+enum WithComplexValue {
+	read = 1 << 5
+	write<#  = 33 #>
+	other<#  = 34 #>
+	unknown<#  = 35 #>
+}
+
+enum WithNegativeValue {
+	read = -5
+	write<#  = -4 #>
+	other<#  = -3 #>
+	unknown<#  = -2 #>
+}
+
+enum WithNegativeComplexValue {
+	read = -5 << 3
+	write<#  = -39 #>
+	other<#  = -38 #>
+	unknown<#  = -37 #>
+}
+
+enum WithBinValue {
+	read = 0b0010
+	write<#  = 3 #>
+	other<#  = 4 #>
+	unknown<#  = 5 #>
+}
+
+enum WithOctValue {
+	read = 0o0010
+	write<#  = 9 #>
+	other<#  = 10 #>
+	unknown<#  = 11 #>
+}
+
+enum WithHexValue {
+	read = 0xFFF
+	write<#  = 4096 #>
+	other<#  = 4097 #>
+	unknown<#  = 4098 #>
+}
+
+enum WithSeveralCustomValue {
+	file = 0
+	folder<#  = 1 #>
+	// archive format
+	zip = 16
+	archive_file<#  = 17 #>
+	// graphic format, MUST stay after the other types!!
+	bmp = 32
+	jpg<#  = 33 #>
+	png<#  = 34 #>
+	gif<#  = 35 #>
+	tga<#  = 36 #>
+	ppm<#  = 37 #>
+	pgm<#  = 38 #>
+	pic<#  = 39 #>
+	hdr<#  = 40 #>
+}
+
+[flag]
+enum FlagEnum as u8 {
+	red<#  = 0b1 (1) #>
+	other<#  = 0b10 (2) #>
+	blue<#  = 0b100 (4) #>
+}

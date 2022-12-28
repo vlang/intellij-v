@@ -10,6 +10,7 @@ import com.intellij.psi.util.parentOfType
 import io.ktor.util.*
 import org.vlang.ide.documentation.DocumentationUtils.appendNotNull
 import org.vlang.ide.documentation.DocumentationUtils.asAttribute
+import org.vlang.ide.documentation.DocumentationUtils.asComment
 import org.vlang.ide.documentation.DocumentationUtils.asDeclaration
 import org.vlang.ide.documentation.DocumentationUtils.asField
 import org.vlang.ide.documentation.DocumentationUtils.asGeneric
@@ -29,6 +30,7 @@ import org.vlang.lang.psi.impl.VlangAttributeReference
 import org.vlang.lang.psi.impl.VlangModule
 import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
+import org.vlang.utils.parentNth
 
 object DocumentationGenerator {
     fun VlangTypeEx.generateDoc(anchor: PsiElement): String {
@@ -784,6 +786,26 @@ object DocumentationGenerator {
             if (valueDoc != null) {
                 part("=")
                 append(valueDoc)
+
+                val constantValue = constantValue()
+                if (constantValue != null) {
+                    colorize(" // ", asComment)
+                    part(constantValue.toString(), asComment)
+                }
+            } else {
+                val constantValue = constantValue()
+                if (constantValue != null) {
+                    val isFlag = parent?.parentNth<VlangEnumDeclaration>(2)?.isFlag ?: false
+
+                    part("=")
+                    if (isFlag) {
+                        part("0b" + constantValue.toString(2), asNumber)
+                        colorize("// ", asComment)
+                        part(constantValue.toString(), asComment)
+                    } else {
+                        part(constantValue.toString(), asNumber)
+                    }
+                }
             }
 
             append(DocumentationMarkup.DEFINITION_END)
@@ -839,7 +861,7 @@ object DocumentationGenerator {
                     }
 
                     val firstLine = lines.first()
-                    append(firstLine.take(20))
+                    append(firstLine.take(20).escapeHTML())
                     if (lines.size > 1 || firstLine.length > 20) {
                         append("...")
                     }

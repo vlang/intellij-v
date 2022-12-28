@@ -23,6 +23,7 @@ object DocumentationUtils {
     val asNumber = loadKey(VlangColor.NUMBER.textAttributesKey)
     val asGeneric = loadKey(VlangColor.GENERIC_PARAMETER.textAttributesKey)
     val asField = loadKey(VlangColor.FIELD.textAttributesKey)
+    val asComment = loadKey(VlangColor.LINE_COMMENT.textAttributesKey)
 
     @Suppress("UnstableApiUsage")
     fun StringBuilder.colorize(text: String, attrs: TextAttributes, noHtml: Boolean = false) {
