@@ -1,13 +1,13 @@
 // This is a generated file. Not intended for manual editing.
 package org.vlang.lang;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.PsiElement;
+import com.intellij.lang.ASTNode;
 import org.vlang.lang.psi.VlangCompositeElementType;
+import org.vlang.lang.stubs.VlangElementTypeFactory;
 import org.vlang.lang.psi.VlangTokenType;
 import org.vlang.lang.psi.impl.*;
-import org.vlang.lang.stubs.VlangElementTypeFactory;
 
 public interface VlangTypes {
 

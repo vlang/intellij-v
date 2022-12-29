@@ -57,4 +57,33 @@ public class VlangMatchExpressionImpl extends VlangExpressionImpl implements Vla
     return notNullChild(findChildByType(MATCH));
   }
 
+  @Override
+  @NotNull
+  public List<VlangMatchArm> getArms() {
+    return VlangPsiImplUtil.getArms(this);
+  }
+
+  @Override
+  @NotNull
+  public List<VlangExpression> getExpressionArms() {
+    return VlangPsiImplUtil.getExpressionArms(this);
+  }
+
+  @Override
+  @NotNull
+  public List<VlangType> getTypeArms() {
+    return VlangPsiImplUtil.getTypeArms(this);
+  }
+
+  @Override
+  @Nullable
+  public VlangMatchElseArmClause getElseArm() {
+    return VlangPsiImplUtil.getElseArm(this);
+  }
+
+  @Override
+  public boolean withElse() {
+    return VlangPsiImplUtil.withElse(this);
+  }
+
 }

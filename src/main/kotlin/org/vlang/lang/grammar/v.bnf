@@ -975,7 +975,10 @@ private BeforeBlockExpression ::= BeforeBlockExpressionInner | !() Expression;
 private BeforeBlockExpressionList ::= BeforeBlockExpression (',' (BeforeBlockExpression | &')'))*
 
 // match <expr> { ... }
-MatchExpression ::= match BeforeBlockExpression '{' MatchArms '}' {pin=1}
+MatchExpression ::= match BeforeBlockExpression '{' MatchArms '}' {
+  pin=1
+  methods=[getArms getExpressionArms getTypeArms getElseArm withElse]
+}
 // <expr>[, <expr2>] { ... }
 // else { ... }
 MatchArms ::= (MatchArm | MatchElseArmClause)*

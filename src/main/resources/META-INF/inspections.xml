@@ -77,6 +77,12 @@
                          displayName="Cannot infer type"
                          enabledByDefault="false" level="ERROR"
                          implementationClass="org.vlang.ide.inspections.general.VlangCannotInferTypeInspection"/>
+
+        <localInspection language="vlang" groupPath="V"
+                         groupName="General" shortName="VlangNonExhaustiveMatchInspection"
+                         displayName="Non-exhaustive match"
+                         enabledByDefault="true" level="ERROR"
+                         implementationClass="org.vlang.ide.inspections.general.VlangNonExhaustiveMatchInspection"/>
         <!-- endregion General inspections -->
 
         <!-- region Validity issues inspections -->

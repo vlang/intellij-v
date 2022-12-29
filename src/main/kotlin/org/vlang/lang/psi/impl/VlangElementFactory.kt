@@ -161,4 +161,13 @@ object VlangElementFactory {
         return file.getStructs().firstOrNull()?.structType?.fieldsGroupList?.firstOrNull()
             ?: error("Impossible situation! Parser is broken.")
     }
+
+    fun createMatch(project: Project, expression: String, cases: List<String>): VlangMatchExpression {
+        val casesText = cases.joinToString("\n\t") { "$it {}" }
+        val text = "match $expression {\n\t$casesText\n}"
+
+        val file = createFileFromText(project, text)
+        val children = PsiTreeUtil.findChildrenOfType(file, VlangMatchExpression::class.java)
+        return children.last()
+    }
 }

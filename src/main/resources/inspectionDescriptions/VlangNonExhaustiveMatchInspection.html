@@ -1,0 +1,24 @@
+<html>
+<body>
+Reports a match expression that does not cover all possible cases.
+
+For example, the following code will trigger the inspection:
+
+<pre>
+enum Color {
+    red
+    green
+    blue
+}
+
+fn main() {
+    a := Color.red
+    match a {
+        .red {}
+        .green {}
+        // missing .blue case or else {} branch
+    }
+}
+</pre>
+</body>
+</html>

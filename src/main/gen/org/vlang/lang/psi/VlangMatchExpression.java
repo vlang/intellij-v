@@ -22,4 +22,18 @@ public interface VlangMatchExpression extends VlangExpression {
   @NotNull
   PsiElement getMatch();
 
+  @NotNull
+  List<VlangMatchArm> getArms();
+
+  @NotNull
+  List<VlangExpression> getExpressionArms();
+
+  @NotNull
+  List<VlangType> getTypeArms();
+
+  @Nullable
+  VlangMatchElseArmClause getElseArm();
+
+  boolean withElse();
+
 }

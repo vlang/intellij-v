@@ -1120,6 +1120,37 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getArms(o: VlangMatchExpression): List<VlangMatchArm> {
+        val matchArms = o.matchArms ?: return emptyList()
+        return matchArms.matchArmList
+    }
+
+    @JvmStatic
+    fun getExpressionArms(o: VlangMatchExpression): List<VlangExpression> {
+        val matchArms = o.matchArms ?: return emptyList()
+        return matchArms.matchArmList
+            .flatMap { VlangPsiTreeUtil.getChildrenOfTypeAsList(it, VlangExpression::class.java) }
+    }
+
+    @JvmStatic
+    fun getTypeArms(o: VlangMatchExpression): List<VlangType> {
+        val matchArms = o.matchArms ?: return emptyList()
+        return matchArms.matchArmList
+            .flatMap { VlangPsiTreeUtil.getChildrenOfTypeAsList(it, VlangType::class.java) }
+    }
+
+    @JvmStatic
+    fun getElseArm(o: VlangMatchExpression): VlangMatchElseArmClause? {
+        val matchArms = o.matchArms ?: return null
+        return matchArms.matchElseArmClauseList.firstOrNull()
+    }
+
+    @JvmStatic
+    fun withElse(o: VlangMatchExpression): Boolean {
+        return o.elseArm != null
+    }
+
+    @JvmStatic
     fun getType(o: VlangSqlExpression, context: ResolveState?): VlangTypeEx? {
         val lastStatement = o.sqlBlock.sqlBlockStatementList.lastOrNull() ?: return null
         if (lastStatement is VlangSqlSelectStatement) {
