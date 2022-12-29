@@ -8,7 +8,7 @@ plugins {
     // Kotlin support
     kotlin("jvm") version "1.7.0"
     // Gradle IntelliJ Plugin
-    id("org.jetbrains.intellij") version "1.10.0"
+    id("org.jetbrains.intellij") version "1.11.0"
     // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "1.3.1"
 }
@@ -26,12 +26,26 @@ repositories {
 
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
 intellij {
+    val platformType = properties("platformType")
+    val platformVersion = when (platformType) {
+        "IU", "IC" -> properties("ideaVersion")
+        "CL"       -> properties("clionVersion")
+        else       -> throw IllegalArgumentException("Unknown IDE type: $type, supported types: IU, IC, CL")
+    }
+
     pluginName.set(properties("pluginName"))
-    version.set(properties("platformVersion"))
-    type.set(properties("platformType"))
+    version.set(platformVersion)
+    type.set(platformType)
+
+    val platformPlugins = when (platformType) {
+        "IU" -> properties("ideaPlugins")
+        "IC" -> properties("ideaCommunityPlugins")
+        "CL" -> properties("clionPlugins")
+        else -> throw IllegalArgumentException("Unknown IDE type: $type, supported types: IU, IC, CL")
+    }
 
     // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
-    plugins.set(properties("platformPlugins").split(',').map(String::trim).filter(String::isNotEmpty))
+    plugins.set(platformPlugins.split(',').map(String::trim).filter(String::isNotEmpty))
 }
 
 // Configure Gradle Changelog Plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin

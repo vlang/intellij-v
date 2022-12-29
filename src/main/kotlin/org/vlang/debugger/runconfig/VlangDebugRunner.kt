@@ -7,14 +7,17 @@ import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.execution.runners.ProgramRunner
 import com.intellij.execution.ui.RunContentDescriptor
 import com.intellij.task.*
+import com.intellij.util.PlatformUtils
 import com.intellij.util.execution.ParametersListUtil
-import com.jetbrains.cidr.execution.debugger.backend.lldb.LLDBBinUrlProvider
 import org.jetbrains.concurrency.resolvedPromise
 import org.vlang.ide.run.VlangBuildTaskRunner
+import org.vlang.ide.run.VlangRunConfigurationRunState
 import org.vlang.ide.test.configuration.VlangTestConfiguration
 import java.io.File
+import java.util.concurrent.ExecutionException
 
-class VlangDebugRunner : ProgramRunner<RunnerSettings> {
+@Suppress("UnstableApiUsage")
+open class VlangDebugRunner : ProgramRunner<RunnerSettings> {
     override fun getRunnerId() = RUNNER_ID
 
     override fun canRun(executorId: String, profile: RunProfile): Boolean {
@@ -33,38 +36,59 @@ class VlangDebugRunner : ProgramRunner<RunnerSettings> {
         }
     }
 
-    protected fun doExecute(state: RunProfileState, environment: ExecutionEnvironment): RunContentDescriptor? {
-        if (state !is VlangDebugConfigurationRunState) return null
+    private fun doExecute(state: RunProfileState, environment: ExecutionEnvironment): RunContentDescriptor? {
+        if (state !is VlangRunConfigurationRunState) return null
+        assertAvailability()
 
-        LLDBBinUrlProvider.lldb.macX64
-        LLDBBinUrlProvider.lldbFrontend.macX64
+        val conf = state.conf
+        val workingDir = conf.workingDir
+        val outputDir = if (conf.outputDir.isEmpty()) File(conf.workingDir) else File(conf.outputDir)
 
-        val workingDir = state.conf.workingDir
-        val outputDir = if (state.conf.outputDir.isEmpty()) File(state.conf.workingDir) else File(state.conf.outputDir)
-
-        val binName = VlangBuildTaskRunner.binaryName(state.conf)
+        val binName = VlangBuildTaskRunner.binaryName(conf)
         val exe = File(outputDir, binName)
         if (!exe.exists()) {
             throw IllegalStateException("Can't run ${exe.absolutePath}, file not found")
         }
 
-        val commandLine = GeneralCommandLine()
+        val cmd = if (conf.emulateTerminal) {
+            PtyCommandLine()
+                .withInitialColumns(PtyCommandLine.MAX_COLUMNS)
+                .withConsoleMode(true)
+        } else {
+            GeneralCommandLine()
+        }
+
+        val commandLine = cmd
             .withExePath(exe.absolutePath)
             .withWorkDirectory(workingDir)
             .withCharset(Charsets.UTF_8)
             .withRedirectErrorStream(true)
 
-        val additionalArguments = ParametersListUtil.parse(state.conf.programArguments)
+        val additionalArguments = ParametersListUtil.parse(conf.programArguments)
         commandLine.addParameters(additionalArguments)
 
         return showRunContent(state, environment, commandLine)
     }
 
-    fun showRunContent(
-        state: CommandLineState,
+    private fun showRunContent(
+        state: VlangRunConfigurationRunState,
         environment: ExecutionEnvironment,
-        runExecutable: GeneralCommandLine
+        runExecutable: GeneralCommandLine,
     ): RunContentDescriptor = VlangDebugRunnerUtils.showRunContent(state, environment, runExecutable)
+
+    private fun assertAvailability() {
+        if (!PlatformUtils.isIdeaUltimate() &&
+            !PlatformUtils.isCidr() &&
+            !PlatformUtils.isPyCharmPro() &&
+            !PlatformUtils.isGoIde() &&
+            !PlatformUtils.isRubyMine() &&
+            !PlatformUtils.isRider()
+        ) {
+            throw ExecutionException(
+                "Debugging is currently supported in IntelliJ IDEA Ultimate, PyCharm Professional, CLion, GoLand, RubyMine and Rider.", null
+            )
+        }
+    }
 
     companion object {
         const val RUNNER_ID: String = "VlangDebugRunner"

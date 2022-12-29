@@ -9,10 +9,8 @@ import com.jetbrains.cidr.execution.debugger.CidrDebugProcess
 import com.jetbrains.cidr.execution.debugger.backend.LLValue
 import com.jetbrains.cidr.execution.debugger.evaluation.CidrDebuggerTypesHelper
 import com.jetbrains.cidr.execution.debugger.evaluation.CidrMemberValue
-import org.vlang.lang.psi.VlangCompositeElement
 import org.vlang.lang.psi.VlangFunctionOrMethodDeclaration
 import org.vlang.lang.psi.VlangNamedElement
-import org.vlang.lang.psi.VlangReferenceExpression
 import org.vlang.utils.ancestorOrSelf
 import java.util.concurrent.CompletableFuture
 

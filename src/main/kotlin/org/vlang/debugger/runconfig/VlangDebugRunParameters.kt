@@ -7,6 +7,7 @@ import com.jetbrains.cidr.execution.Installer
 import com.jetbrains.cidr.execution.RunParameters
 import com.jetbrains.cidr.execution.TrivialInstaller
 import com.jetbrains.cidr.execution.debugger.backend.DebuggerDriverConfiguration
+import com.jetbrains.cidr.lang.toolchains.CidrToolEnvironment
 import org.vlang.debugger.lang.VlangDownloadedLldbToolEnvironment
 
 class VlangDebugRunParameters(

@@ -104,8 +104,10 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
             commandLine.withParameters("-g")
 
             // Debugging with TCC not working on Windows and Linux for some reasons
-            if (SystemInfo.isWindows || SystemInfo.isLinux) {
+            if (SystemInfo.isLinux) {
                 commandLine.withParameters("-cc", "gcc")
+            } else if (SystemInfo.isWindows) {
+                commandLine.withParameters("-cc", "msvc")
             }
         }
 

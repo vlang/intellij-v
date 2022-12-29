@@ -8,7 +8,6 @@ import org.vlang.debugger.renderers.VlangFakeLLValue
 import org.vlang.debugger.renderers.VlangRendererEvaluationContext
 import org.vlang.debugger.renderers.VlangValue
 
-
 fun LLValue.withContext(context: VlangRendererEvaluationContext): VlangValue =
     VlangValue(context, this)
 
@@ -38,10 +37,3 @@ fun <T, K> ResultList<T>.mapItems(mapper: (item: T) -> K): ResultList<K> =
         list.map(mapper),
         hasMore
     )
-
-fun <T, K> ResultList<T>.mapItemsIndexed(mapper: (index: Int, item: T) -> K): ResultList<K> =
-    ResultList.create(
-        list.mapIndexed(mapper),
-        hasMore
-    )
-

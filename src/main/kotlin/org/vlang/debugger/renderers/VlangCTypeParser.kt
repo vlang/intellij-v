@@ -61,6 +61,20 @@ object VlangCTypeParser {
         return type.substring(5)
     }
 
+    /**
+     * Example:
+     *
+     *    "int *" -> "int"
+     *    "string *" -> "string"
+     */
+    fun parseCPointerType(type: String): String {
+        if (!type.endsWith("*")) {
+            return type
+        }
+
+        return type.removeSuffix("*").trim()
+    }
+
     fun convertCNameToVName(name: String): String {
         return name.replace("__", ".")
     }

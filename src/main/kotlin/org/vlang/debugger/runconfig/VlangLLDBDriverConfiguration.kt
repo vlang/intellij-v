@@ -1,7 +1,6 @@
 package org.vlang.debugger.runconfig
 
 import com.intellij.execution.configurations.GeneralCommandLine
-import com.intellij.lang.Language
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.guessProjectDir
 import com.intellij.openapi.util.Expirable
@@ -14,6 +13,8 @@ import com.jetbrains.cidr.execution.debugger.backend.LLFrame
 import com.jetbrains.cidr.execution.debugger.backend.LLThread
 import com.jetbrains.cidr.execution.debugger.backend.lldb.LLDBDriver
 import com.jetbrains.cidr.execution.debugger.backend.lldb.LLDBDriverConfiguration
+import com.jetbrains.cidr.lang.toolchains.CidrToolEnvironment
+import com.jetbrains.cidr.system.HostMachine
 import org.vlang.debugger.VlangLldbDriver
 import org.vlang.debugger.lang.VlangDownloadedLldbToolEnvironment
 import org.vlang.debugger.lang.VlangLldbEvaluationContext
@@ -29,13 +30,49 @@ open class VlangLLDBDriverConfiguration(
 
     override fun isElevated(): Boolean = isElevated
 
-    override fun getConsoleLanguage(): Language {
-        return super.getConsoleLanguage()
+    override fun createDriverCommandLine(
+        driver: DebuggerDriver,
+        architectureType: ArchitectureType,
+    ): GeneralCommandLine =
+        super.createDriverCommandLine(driver, architectureType).also {
+            cppEnvironment.prepare(it, CidrToolEnvironment.PrepareFor.RUN)
+            it.setWorkDirectory(lldbWorkingDirectory)
+        }
+
+    override fun createEvaluationContext(
+        driver: DebuggerDriver,
+        expirable: Expirable?,
+        thread: LLThread,
+        frame: LLFrame,
+        cacheHolder: UserDataHolderEx,
+    ): EvaluationContext {
+        return VlangLldbEvaluationContext(project, driver, expirable, thread, frame, cacheHolder)
     }
 
-    override fun isStaticVarsLoadingEnabled(): Boolean {
-        return super.isStaticVarsLoadingEnabled()
+    override fun createDriver(handler: DebuggerDriver.Handler, architectureType: ArchitectureType): LLDBDriver {
+        return VlangLldbDriver(handler, this, architectureType).also {
+            configureDriver(it)
+        }
     }
+
+    override fun getLLDBFrameworkFile(architectureType: ArchitectureType): File =
+        if (cppEnvironment is VlangDownloadedLldbToolEnvironment) {
+            cppEnvironment.lldbFrameworkFile
+        } else {
+            super.getLLDBFrameworkFile(architectureType)
+        }
+
+    override fun getLLDBFrontendFile(architectureType: ArchitectureType): File =
+        if (cppEnvironment is VlangDownloadedLldbToolEnvironment) {
+            cppEnvironment.lldbFrontendFile
+        } else {
+            super.getLLDBFrontendFile(architectureType)
+        }
+
+    override fun useSTLRenderers(): Boolean = false
+    override fun convertToLocalPath(absolutePath: String?): String? = cppEnvironment.toLocalPath(absolutePath)
+    override fun convertToEnvPath(localPath: String?): String? = cppEnvironment.toEnvPath(localPath)
+    override fun getHostMachine(): HostMachine = cppEnvironment.hostMachine
 
     private fun configureDriver(driver: LLDBDriver) {
         try {
@@ -55,49 +92,4 @@ open class VlangLLDBDriverConfiguration(
         driver.setStepOverClassName("jb_lldb_stepping.StepOver")
         driver.setStepOutClassName(null)
     }
-
-    override fun createDriverCommandLine(
-        driver: DebuggerDriver,
-        architectureType: ArchitectureType,
-    ): GeneralCommandLine =
-        super.createDriverCommandLine(driver, architectureType).also {
-//            cppEnvironment.prepare(it, CidrToolEnvironment.PrepareFor.RUN)
-            it.setWorkDirectory(lldbWorkingDirectory)
-        }
-
-    override fun createEvaluationContext(
-        driver: DebuggerDriver,
-        expirable: Expirable?,
-        thread: LLThread,
-        frame: LLFrame,
-        cacheHolder: UserDataHolderEx,
-    ): EvaluationContext {
-        return VlangLldbEvaluationContext(project, driver, expirable, thread, frame, cacheHolder)
-    }
-
-    override fun createDriver(handler: DebuggerDriver.Handler, architectureType: ArchitectureType): LLDBDriver {
-        return VlangLldbDriver(handler, this, architectureType)
-    }
-
-    override fun useSTLRenderers(): Boolean {
-        return false
-    }
-
-    override fun getLLDBFrameworkFile(architectureType: ArchitectureType): File =
-        if (cppEnvironment is VlangDownloadedLldbToolEnvironment) {
-            cppEnvironment.lldbFrameworkFile
-        } else {
-            super.getLLDBFrameworkFile(architectureType)
-        }
-
-    override fun getLLDBFrontendFile(architectureType: ArchitectureType): File =
-        if (cppEnvironment is VlangDownloadedLldbToolEnvironment) {
-            cppEnvironment.lldbFrontendFile
-        } else {
-            super.getLLDBFrontendFile(architectureType)
-        }
-
-    override fun convertToLocalPath(absolutePath: String?): String? = cppEnvironment.toLocalPath(absolutePath)
-    override fun convertToEnvPath(localPath: String?): String? = cppEnvironment.toEnvPath(localPath)
-//    override fun getHostMachine(): HostMachine = cppEnvironment.hostMachine
 }

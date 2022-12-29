@@ -159,7 +159,7 @@ open class VlangRunConfigurationEditor(private val project: Project) : SettingsE
             row(" ") {
                 checkBox("Production build")
                     .bindSelected(model::production)
-                    .comment("Builds an optimized version with the <code>-prod</code> flag, increasing compilation time.")
+                    .comment("Builds an optimized version with the <code>-prod</code> flag, increasing compilation time")
             }.bottomGap(BottomGap.NONE)
 
             row(" ") {

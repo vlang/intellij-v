@@ -314,6 +314,7 @@ The plugin provides support for V language
         <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangChannelRenderer"/>
         <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangBoolRenderer"/>
         <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangEnumRenderer"/>
+        <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangIErrorRenderer"/>
         <!-- Debugger Renderers End -->
     </extensions>
 
