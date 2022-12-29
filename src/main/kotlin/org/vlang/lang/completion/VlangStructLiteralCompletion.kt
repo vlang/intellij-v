@@ -5,7 +5,9 @@ import org.jetbrains.annotations.Contract
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangPsiImplUtil
+import org.vlang.lang.psi.types.VlangArrayTypeEx
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
+import org.vlang.utils.parentNth
 
 internal object VlangStructLiteralCompletion {
     fun allowedVariants(structFieldReference: VlangReferenceExpression?, refElement: PsiElement): Variants {
@@ -21,6 +23,15 @@ internal object VlangStructLiteralCompletion {
         val element = parent<VlangElement>(value)
         if (element?.key != null) {
             return Variants.NONE
+        }
+
+        val possiblyLiteralValueExpression = structFieldReference.parentNth<VlangLiteralValueExpression>(3)
+        if (possiblyLiteralValueExpression != null) {
+            val type = possiblyLiteralValueExpression.getType(null)
+            if (type is VlangArrayTypeEx) {
+                // for []int{<caret>}, allow only fields
+                return Variants.FIELD_NAME_ONLY
+            }
         }
 
         var hasValueInitializers = false
@@ -45,7 +56,7 @@ internal object VlangStructLiteralCompletion {
     }
 
     private fun getFieldInitializers(element: PsiElement): List<VlangElement>? {
-        val literalValue = parent<VlangLiteralValueExpression>(element)
+        val literalValue = element.parentNth<VlangLiteralValueExpression>(3)
         if (literalValue == null) {
             val callExpr = VlangCodeInsightUtil.getCallExpr(element)
             val resolved = callExpr?.resolve() as? VlangSignatureOwner

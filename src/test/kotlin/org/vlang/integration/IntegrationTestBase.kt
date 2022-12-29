@@ -1,7 +1,11 @@
 package org.vlang.integration
 
+import com.intellij.codeInsight.completion.CompletionType
 import com.intellij.openapi.application.QueryExecutorBase
+import com.intellij.openapi.application.WriteAction
+import com.intellij.openapi.project.guessProjectDir
 import com.intellij.openapi.ui.naturalSorted
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiDirectory
 import com.intellij.psi.search.searches.DefinitionsScopedSearch
 import com.intellij.psi.util.parentOfType
@@ -17,18 +21,62 @@ import org.vlang.lang.search.VlangGotoUtil
 abstract class IntegrationTestBase : BasePlatformTestCase() {
     override fun getTestDataPath() = "src/test/resources/integration"
 
+    class CompletionContext(private val myFixture: CodeInsightTestFixture) {
+        fun equalsTo(vararg variants: String) {
+            val elements = myFixture.lookupElementStrings ?: mutableListOf()
+            assertSameElements(elements, *variants)
+        }
+
+        fun includes(vararg variants: String) {
+            val elements = myFixture.lookupElementStrings ?: mutableListOf()
+
+            check(elements.containsAll(variants.toList())) {
+                """
+                    Actual doesn't contain all of the expected variants.
+                    
+                    Expected: ${variants.toList()}
+                    Actual: $elements
+                """.trimIndent()
+            }
+        }
+
+        fun excludes(vararg variants: String) {
+            val elements = myFixture.lookupElementStrings ?: mutableListOf()
+
+            check(!elements.containsAll(variants.toList())) {
+                """
+                    Actual contains all of the excluded variants.
+                    
+                    Excluded: ${variants.toList()}
+                    Actual: $elements
+                """.trimIndent()
+            }
+        }
+    }
+
+    class DirectoryContext(private val myFixture: CodeInsightTestFixture, val directory: VirtualFile) {
+        fun file(name: String, @Language("vlang") text: String) {
+            myFixture.addFileToProject("${directory.path}/$name", text)
+            myFixture.configureFromTempProjectFile("${directory.path}/$name")
+        }
+    }
+
     class IntegrationTestBaseContext(private val myFixture: CodeInsightTestFixture) {
         private fun moveCaretTo(offset: Int) {
             myFixture.editor.caretModel.moveToOffset(offset)
         }
 
-        private fun moveCaretToPos(index: Int) {
+        fun moveCaretToPos(index: Int, before: Boolean = false) {
             myFixture.editor.caretModel.moveToLogicalPosition(myFixture.editor.offsetToLogicalPosition(index))
 
             val positions = POS_MARKER_REGEX.findAll(myFixture.file.text)
             val pos = positions.find { it.destructured.component1() == index.toString() }
             checkNotNull(pos) { "No position marker with $index index" }
             val size = pos.value.length
+            if (before) {
+                moveCaretTo(pos.range.first - 1)
+                return
+            }
             moveCaretTo(pos.range.first + size + 1)
         }
 
@@ -60,6 +108,13 @@ abstract class IntegrationTestBase : BasePlatformTestCase() {
             val resolvedName = if (!qualifier) resolved.name else resolved.getQualifiedName()
             val expected = "$kind $resolvedName"
             check(expected == name) { "Expected to resolve to $name, but got $expected" }
+        }
+
+        fun directory(name: String, action: DirectoryContext.() -> Unit) {
+            val root = myFixture.project.guessProjectDir()!!
+            val dir = WriteAction.compute<VirtualFile, RuntimeException> { root.createChildDirectory(this, name) }
+            val context = DirectoryContext(myFixture, dir)
+            context.action()
         }
 
         fun file(name: String, @Language("vlang") content: String) {
@@ -122,6 +177,13 @@ abstract class IntegrationTestBase : BasePlatformTestCase() {
 
         fun checkFile(name: String, @Language("vlang") content: String) {
             myFixture.checkResult(name, content, true)
+        }
+
+        fun completion(caretIndex: Int, action: CompletionContext.() -> Unit) {
+            moveCaretToPos(caretIndex, before = true)
+
+            myFixture.complete(CompletionType.BASIC, 1)
+            CompletionContext(myFixture).action()
         }
 
         companion object {

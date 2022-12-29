@@ -15,7 +15,7 @@ class TrailingStructLiteralCompletionTest : CompletionTestBase() {
         fn foo(params Params) {}
 
         fn main() {
-        	foo(fo<caret>)
+        	foo(fo/*caret*/)
         }
     """.trimIndent(), """
         module main
@@ -28,7 +28,7 @@ class TrailingStructLiteralCompletionTest : CompletionTestBase() {
         fn foo(params Params) {}
 
         fn main() {
-        	foo(foo: <caret>)
+        	foo(foo: )
         }
     """.trimIndent()
     )
@@ -45,7 +45,7 @@ class TrailingStructLiteralCompletionTest : CompletionTestBase() {
         fn foo(params Params) {}
 
         fn main() {
-        	foo(foo: 100, <caret>)
+        	foo(foo: 100, /*caret*/)
         }
     """.trimIndent(), """
         module main
@@ -58,7 +58,7 @@ class TrailingStructLiteralCompletionTest : CompletionTestBase() {
         fn foo(params Params) {}
 
         fn main() {
-        	foo(foo: 100, boo: <caret>)
+        	foo(foo: 100, boo: )
         }
     """.trimIndent()
     )
@@ -75,7 +75,7 @@ class TrailingStructLiteralCompletionTest : CompletionTestBase() {
         fn foo(params Params) {}
 
         fn main() {
-        	foo(<caret>)
+        	foo(/*caret*/)
         }
     """.trimIndent(),
         CompletionType.BASIC, 1, CheckType.INCLUDES,
@@ -94,7 +94,7 @@ class TrailingStructLiteralCompletionTest : CompletionTestBase() {
         fn boo(id int, params Params) {}
 
         fn main() {
-        	boo(100, fo<caret>)
+        	boo(100, fo/*caret*/)
         }
     """.trimIndent(), """
         module main
@@ -107,7 +107,7 @@ class TrailingStructLiteralCompletionTest : CompletionTestBase() {
         fn boo(id int, params Params) {}
 
         fn main() {
-        	boo(100, foo: <caret>)
+        	boo(100, foo: )
         }
     """.trimIndent()
     )
@@ -124,7 +124,7 @@ class TrailingStructLiteralCompletionTest : CompletionTestBase() {
         fn boo(id int, params Params) {}
 
         fn main() {
-        	boo(100, foo: 100, <caret>)
+        	boo(100, foo: 100, /*caret*/)
         }
     """.trimIndent(), """
         module main
@@ -137,7 +137,7 @@ class TrailingStructLiteralCompletionTest : CompletionTestBase() {
         fn boo(id int, params Params) {}
 
         fn main() {
-        	boo(100, foo: 100, boo: <caret>)
+        	boo(100, foo: 100, boo: )
         }
     """.trimIndent()
     )
@@ -154,7 +154,7 @@ class TrailingStructLiteralCompletionTest : CompletionTestBase() {
         fn boo(params Params, id int) {}
 
         fn main() {
-        	boo(fo<caret>)
+        	boo(fo/*caret*/)
         }
     """.trimIndent(),
         CompletionType.BASIC, 1, CheckType.EXCLUDES,
@@ -177,7 +177,7 @@ class TrailingStructLiteralCompletionTest : CompletionTestBase() {
         fn boo(str string, params Params) {}
 
         fn main() {
-        	boo('', <caret>)
+        	boo('', /*caret*/)
         }
     """.trimIndent(),
         CompletionType.BASIC, 1, CheckType.EXCLUDES,
@@ -200,7 +200,7 @@ class TrailingStructLiteralCompletionTest : CompletionTestBase() {
 
         fn main() {
             person := Person{}
-        	boo(person.a<caret>, foo: 100)
+        	boo(person.a/*caret*/, foo: 100)
         }
         """.trimIndent(),
         """
@@ -260,4 +260,42 @@ class TrailingStructLiteralCompletionTest : CompletionTestBase() {
             foo(name: )
         }
         """.trimIndent())
+
+    fun `test first struct field`() = checkIncludes(
+        """
+        module main
+        
+        struct Params {
+            foo int
+            boo int
+        }
+        
+        fn boo(params Params) {}
+
+        fn main() {
+        	boo(/*caret*/)
+        }
+        """.trimIndent(),
+        0,
+        "foo", "boo", "main", // for first allowed all expressions
+    )
+
+    fun `test second struct field`() = checkEquals(
+        """
+        module main
+        
+        struct Params {
+            foo int
+            boo int
+        }
+        
+        fn boo(params Params) {}
+
+        fn main() {
+        	boo(foo: 100, /*caret*/)
+        }
+        """.trimIndent(),
+        0,
+        "boo"
+    )
 }

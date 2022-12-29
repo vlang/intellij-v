@@ -11,11 +11,8 @@ import org.vlang.lang.psi.VlangConstDefinition
 import org.vlang.lang.psi.VlangFile
 import org.vlang.lang.psi.VlangMethodDeclaration
 import org.vlang.lang.psi.VlangSignature
+import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
-import org.vlang.lang.psi.types.VlangImportableTypeEx
-import org.vlang.lang.psi.types.VlangSumTypeEx
-import org.vlang.lang.psi.types.VlangTypeEx
-import org.vlang.lang.psi.types.VlangTypeVisitor
 import org.vlang.lang.stubs.index.VlangMethodIndex
 
 object VlangLangUtil {
@@ -97,5 +94,59 @@ object VlangLangUtil {
         }
 
         return o.toString()
+    }
+
+    fun getDefaultValue(type: VlangTypeEx?): String = when (type) {
+        is VlangPrimitiveTypeEx        -> {
+            when (type.name) {
+                VlangPrimitiveTypes.BOOL   -> "false"
+                VlangPrimitiveTypes.RUNE   -> "`0`"
+                VlangPrimitiveTypes.CHAR   -> "0"
+                VlangPrimitiveTypes.STRING -> "''"
+                VlangPrimitiveTypes.NIL    -> "unsafe { nil }"
+
+                VlangPrimitiveTypes.BYTE,
+                VlangPrimitiveTypes.INT,
+                VlangPrimitiveTypes.I8,
+                VlangPrimitiveTypes.I16,
+                VlangPrimitiveTypes.I32,
+                VlangPrimitiveTypes.I64,
+                VlangPrimitiveTypes.ISIZE,
+                VlangPrimitiveTypes.USIZE,
+                VlangPrimitiveTypes.U8,
+                VlangPrimitiveTypes.U16,
+                VlangPrimitiveTypes.U32,
+                VlangPrimitiveTypes.U64,
+                                           -> "0"
+
+                VlangPrimitiveTypes.F32,
+                VlangPrimitiveTypes.F64,
+                                           -> "0.0"
+
+                VlangPrimitiveTypes.VOIDPTR,
+                VlangPrimitiveTypes.BYTEPTR,
+                VlangPrimitiveTypes.CHARPTR,
+                                           -> "unsafe { nil }"
+            }
+        }
+
+        is VlangStringTypeEx           -> "''"
+        is VlangFixedSizeArrayTypeEx   -> "[]!"
+        is VlangArrayTypeEx            -> "[]"
+        is VlangMapTypeEx              -> "{}"
+        is VlangChannelTypeEx          -> "chan ${type.inner}{}"
+        is VlangFunctionTypeEx         -> "fn ${type.signature.text} {}"
+        is VlangAliasTypeEx            -> getDefaultValue(type.inner)
+        is VlangSumTypeEx              -> getDefaultValue(type.types.first())
+        is VlangGenericInstantiationEx -> getDefaultValue(type.inner)
+        is VlangInterfaceTypeEx        -> "unsafe { nil }"
+        is VlangUnionTypeEx            -> "unsafe { nil }"
+        is VlangStructTypeEx           -> type.name() + "{}"
+        is VlangPointerTypeEx          -> "unsafe { nil }"
+        is VlangVoidPtrTypeEx          -> "unsafe { nil }"
+        is VlangThreadTypeEx           -> "unsafe { nil }"
+        is VlangNoneTypeEx             -> "none"
+        is VlangAnyTypeEx              -> "0"
+        else                           -> "0"
     }
 }

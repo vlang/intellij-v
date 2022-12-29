@@ -9,8 +9,9 @@ import com.intellij.psi.util.parentOfType
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangReferenceBase.Companion.LOCAL_RESOLVE
+import org.vlang.lang.psi.types.VlangArrayTypeEx
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
-import org.vlang.lang.psi.types.VlangPointerTypeEx
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapPointer
 import org.vlang.lang.psi.types.VlangStructTypeEx
 import org.vlang.lang.psi.types.VlangTypeEx
 
@@ -40,14 +41,18 @@ class VlangFieldNameReference(element: VlangReferenceExpressionBase) :
             type = paramTypes?.lastOrNull { it is VlangStructTypeEx }?: return true
         }
 
+        val typeToProcess = type.unwrapPointer()
+        if (typeToProcess is VlangArrayTypeEx) {
+            return processStructType(fieldProcessor, VlangStructTypeEx.ArrayInit, false)
+        }
+
         val typeFile = type.anchor()?.containingFile as? VlangFile
         val originFile = element.containingFile as VlangFile
         val localResolve = typeFile == null || VlangReference.isLocalResolve(typeFile, originFile)
 
-        return if (!processStructType(fieldProcessor, type, localResolve))
-            false
-        else
-            !(type is VlangPointerTypeEx && !processStructType(fieldProcessor, type.inner, localResolve))
+        if (!processStructType(fieldProcessor, typeToProcess, localResolve)) return false
+
+        return true
     }
 
     private fun processStructType(fieldProcessor: VlangScopeProcessor, type: VlangTypeEx?, localResolve: Boolean): Boolean {

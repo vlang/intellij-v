@@ -111,5 +111,10 @@ open class VlangStructTypeEx(private val name: String, anchor: PsiElement?) :
             override val moduleName: String
                 get() = VlangCodeInsightUtil.STUBS_MODULE
         }
+
+        val ArrayInit = object : VlangStructTypeEx("ArrayInit", null) {
+            override val moduleName: String
+                get() = VlangCodeInsightUtil.STUBS_MODULE
+        }
     }
 }

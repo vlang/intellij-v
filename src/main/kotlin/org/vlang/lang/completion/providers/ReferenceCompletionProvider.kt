@@ -1,21 +1,24 @@
 package org.vlang.lang.completion.providers
 
-import com.intellij.codeInsight.completion.CompletionParameters
-import com.intellij.codeInsight.completion.CompletionProvider
-import com.intellij.codeInsight.completion.CompletionResultSet
+import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElement
+import com.intellij.codeInsight.lookup.LookupElementBuilder
+import com.intellij.codeInsight.template.TemplateManager
+import com.intellij.codeInsight.template.impl.ConstantNode
+import com.intellij.icons.AllIcons
 import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveState
+import com.intellij.psi.util.elementType
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
+import org.vlang.lang.VlangTypes
 import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.completion.VlangStructLiteralCompletion
 import org.vlang.lang.psi.*
-import org.vlang.lang.psi.impl.VlangCachedReference
-import org.vlang.lang.psi.impl.VlangFieldNameReference
-import org.vlang.lang.psi.impl.VlangReference
+import org.vlang.lang.psi.impl.*
+import org.vlang.lang.psi.impl.VlangReference.Companion.isLocalResolve
 import org.vlang.lang.psi.impl.VlangReferenceBase.Companion.LOCAL_RESOLVE
-import org.vlang.lang.psi.impl.VlangScopeProcessor
+import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 
 object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
@@ -68,21 +71,29 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
             return
         }
 
+        val possiblyLiteralValueExpression = refExpression.parentOfType<VlangLiteralValueExpression>()
         val file = refExpression.containingFile as? VlangFile ?: return
-        val fields = mutableSetOf<String>()
+        val fields = mutableSetOf<Pair<String, VlangTypeEx?>>()
         val elementList =
-            refExpression.parentOfType<VlangLiteralValueExpression>()?.elementList
+            possiblyLiteralValueExpression?.elementList
                 ?: refExpression.parentOfType<VlangArgumentList>()?.elementList
                 ?: emptyList()
 
-        VlangFieldNameReference(refExpression).processResolveVariants(object : MyScopeProcessor(result, file, false) {
-            val alreadyAssignedFields: Set<String> = VlangStructLiteralCompletion.alreadyAssignedFields(elementList)
+        val alreadyAssignedFields = VlangStructLiteralCompletion.alreadyAssignedFields(elementList)
 
+        VlangFieldNameReference(refExpression).processResolveVariants(object : MyScopeProcessor(result, file, false) {
             override fun execute(o: PsiElement, state: ResolveState): Boolean {
                 val structFieldName =
                     when (o) {
                         is VlangFieldDefinition    -> o.name
                         is VlangEmbeddedDefinition -> o.type.toEx().name()
+                        else                       -> null
+                    }
+
+                val structFieldType =
+                    when (o) {
+                        is VlangFieldDefinition    -> o.getType(null)
+                        is VlangEmbeddedDefinition -> o.type.toEx()
                         else                       -> null
                     }
 
@@ -92,54 +103,71 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
                     o
                 }
 
+                val containingFile = o.containingFile as? VlangFile ?: return true
+
+                // don't add private fields from other modules
+                if (o is VlangFieldDefinition && !o.isPublic() && !isLocalResolve(file, containingFile)) {
+                    return true
+                }
+
                 if (structFieldName != null) {
-                    fields.add(structFieldName)
+                    fields.add(structFieldName to structFieldType)
                 }
 
                 // При инициализации структуры мы можем использовать приватные поля
                 val newState = state.put(LOCAL_RESOLVE, true)
 
-                return if (structFieldName != null && alreadyAssignedFields.contains(structFieldName)) {
-                    true
-                } else {
-                    super.execute(structFieldElement, newState)
+                if (structFieldName != null && alreadyAssignedFields.contains(structFieldName)) {
+                    return true
                 }
+
+                return super.execute(structFieldElement, newState)
             }
         })
 
-        // TODO
-//        result.addElement(
-//            PrioritizedLookupElement.withPriority(
-//                LookupElementBuilder.create("")
-//                    .withPresentableText("Fill all field...")
-//                    .withInsertHandler { context, item ->
-//                        val offset = context.editor.caretModel.offset
-//                        val element = context.file.findElementAt(offset)?.parent ?: return@withInsertHandler
-//
-//                        val line = context.document.getLineNumber(offset)
-//                        val startLineOffset = context.document.getLineStartOffset(line)
-//                        val shift = offset - startLineOffset
-//
-////                        val data = fields.joinToString("\n") { " ".repeat(shift + 1) + it + ": " }
-////                        context.document.insertString(offset, "\n$data\n" + " ".repeat(shift))
-//
-////                        val editorEx = context.editor as EditorEx
-////                        editorEx.setPlaceholder("name")
-//
-//                        val manager = TemplateManager.getInstance(context.project)
-//                        val template = manager.createTemplate("", "", "\$name\$")
-//
-//                        val builder = TemplateBuilderImpl(element)
-//                        builder.replaceElement(
-//                            element,
-//                            TextRange(0, 2), "var", ConstantNode("name"), true
-//                        )
-//
-//                        builder.initInlineTemplate(template)
-//                    },
-//                10000.0
-//            )
-//        )
+        if (possiblyLiteralValueExpression != null) {
+            val type = possiblyLiteralValueExpression.getType(null)
+            if (type is VlangArrayTypeEx) {
+                // don't add "Fill all field…" for array init
+                return
+            }
+
+            val remainingFields = fields.filter { !alreadyAssignedFields.contains(it.first) }
+            if (remainingFields.size > 1) {
+                val element = LookupElementBuilder.create("")
+                    .withPresentableText("Fill all field…")
+                    .withIcon(AllIcons.Actions.RealIntentionBulb)
+                    .withInsertHandler(StructFieldsInsertHandler(remainingFields))
+
+                result.addElement(element)
+            }
+        }
+    }
+
+    class StructFieldsInsertHandler(val fields: List<Pair<String, VlangTypeEx?>>) : InsertHandler<LookupElement> {
+        override fun handleInsert(context: InsertionContext, item: LookupElement) {
+            val project = context.project
+            val offset = context.editor.caretModel.offset
+            val element = context.file.findElementAt(offset)
+            val prevElement = element?.prevSibling
+
+            val before = if (prevElement.elementType == VlangTypes.LBRACE) "\n" else ""
+            val after = if (element.elementType == VlangTypes.RBRACE) "\n" else ""
+
+            val templateText = fields.joinToString("\n", before, after) {
+                it.first + ": \$field_${it.first}$"
+            }
+
+            val template = TemplateManager.getInstance(project)
+                .createTemplate("closures", "vlang", templateText)
+            template.isToReformat = true
+
+            fields.forEach {
+                template.addVariable("field_${it.first}", ConstantNode(VlangLangUtil.getDefaultValue(it.second)), true)
+            }
+
+            TemplateManager.getInstance(project).startTemplate(context.editor, template)
+        }
     }
 
     private open class MyScopeProcessor(

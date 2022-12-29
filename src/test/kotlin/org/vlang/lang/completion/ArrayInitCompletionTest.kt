@@ -22,7 +22,19 @@ class ArrayInitCompletionTest : CompletionTestBase() {
         }
 
         """.trimIndent(), 0,
-        "cap", "init", "len",
+        "cap", "init",
+    )
+
+    fun `test third field`() = checkEquals(
+        """
+        module main
+        
+        fn main() {
+            arr := []int{len: 100, cap: 200, /*caret*/}
+        }
+
+        """.trimIndent(), 0,
+        "init",
     )
 
     fun `test field value`() = checkIncludes(

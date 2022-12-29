@@ -3,7 +3,7 @@ package org.vlang.lang.psi.types
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 
-class VlangPrimitiveTypeEx(private val name: VlangPrimitiveTypes) : VlangBaseTypeEx(null) {
+class VlangPrimitiveTypeEx(val name: VlangPrimitiveTypes) : VlangBaseTypeEx(null) {
     override fun module(): String = "builtin"
 
     override fun toString(): String = name.value

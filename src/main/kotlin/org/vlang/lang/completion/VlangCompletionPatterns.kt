@@ -6,6 +6,7 @@ import com.intellij.patterns.PlatformPatterns.or
 import com.intellij.patterns.PlatformPatterns.psiElement
 import com.intellij.patterns.PsiElementPattern
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.ProcessingContext
 import org.vlang.lang.VlangTypes.*
 import org.vlang.lang.psi.*
@@ -24,6 +25,8 @@ object VlangCompletionPatterns {
             .withParent(VlangReferenceExpression::class.java)
             .notAfterDot()
             .notInsideArrayInit()
+            .notInsideStructInitWithKeys()
+            .notInsideTrailingStruct()
 
     /**
      * Statements like:
@@ -35,7 +38,6 @@ object VlangCompletionPatterns {
             .withSuperParent(2, VlangLeftHandExprList::class.java)
             .withSuperParent(3, VlangSimpleStatement::class.java)
             .notAfterDot()
-            .notInsideArrayInit()
 
     /**
      * Any top-level statements like:
@@ -144,6 +146,48 @@ object VlangCompletionPatterns {
                 if (element.key != null) return false
                 val parent = element.parent as? VlangLiteralValueExpression
                 return parent != null && parent.type is VlangArrayType
+            }
+        }))
+    }
+
+    private fun PsiElementPattern.Capture<PsiElement>.notInsideStructInitWithKeys(): PsiElementPattern.Capture<PsiElement> {
+        return andNot(psiElement().with(object : PatternCondition<PsiElement>("withStructInit") {
+            override fun accepts(t: PsiElement, context: ProcessingContext?): Boolean {
+                val element = t.parentNth<VlangElement>(3) ?: return false
+                // if 'key: <caret>'
+                if (element.key != null) return false
+
+                // foo(fn<caret>)
+                if (element.parent is VlangArgumentList) {
+                    return false
+                }
+
+                val prevElement = PsiTreeUtil.findSiblingBackward(element, ELEMENT, null) as? VlangElement
+                // if 'value, <caret>'
+                if (prevElement != null && prevElement.key == null) return false
+
+                return true
+            }
+        }))
+    }
+
+    private fun PsiElementPattern.Capture<PsiElement>.notInsideTrailingStruct(): PsiElementPattern.Capture<PsiElement> {
+        return andNot(psiElement().with(object : PatternCondition<PsiElement>("withTrailingStruct") {
+            override fun accepts(t: PsiElement, context: ProcessingContext?): Boolean {
+                val element = t.parentNth<VlangElement>(3) ?: return false
+                // if 'key: <caret>'
+                if (element.key != null) return false
+
+                // foo(fn<caret>)
+                if (element.parent !is VlangArgumentList) {
+                    return false
+                }
+
+                val prevElement = PsiTreeUtil.findSiblingBackward(element, ELEMENT, null) as? VlangElement ?: return false
+                // if 'value, <caret>'
+                if (prevElement.key == null) return false
+
+                return true
             }
         }))
     }

@@ -15,8 +15,8 @@ import org.vlang.lang.psi.VlangFieldDeclaration
 class VlangAttributesCompletionContributor : CompletionContributor() {
     init {
         extend(CompletionType.BASIC, onAttributeIdentifier(), CommonAttributeCompletionProvider)
-        extend(CompletionType.BASIC, onFieldAttributeIdentifier(), JsonAttributeCompletionProvider)
         extend(CompletionType.BASIC, onAttributeIdentifier(), AttributeWithColonCompletionProvider)
+        extend(CompletionType.BASIC, onFieldAttributeIdentifier(), JsonAttributeCompletionProvider)
     }
 
     private object CommonAttributeCompletionProvider : CompletionProvider<CompletionParameters>() {

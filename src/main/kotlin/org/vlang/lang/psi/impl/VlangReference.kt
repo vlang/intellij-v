@@ -431,13 +431,6 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
         if (VlangCodeInsightUtil.insideArrayCreation(identifier!!)) {
             // []int{init: it}
-            //       ^^^^
-            if (VlangCodeInsightUtil.insideArrayCreationKeyOrValueWithoutKey(identifier!!)) {
-                val struct = getArrayInitStruct() ?: return false
-                return processNamedElements(processor, state, struct.structType.getFieldList(), false)
-            }
-
-            // []int{init: it}
             //             ^^
             if (VlangCodeInsightUtil.isItVariable(identifier!!)) {
                 val struct = getArrayInitStruct() ?: return false
@@ -955,8 +948,11 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
     private fun processLiteralValueField(processor: VlangScopeProcessor, state: ResolveState): Boolean {
         val initExpr = element.parentOfType<VlangLiteralValueExpression>()
-        val type = initExpr?.type ?: return true
-        return processType(type.toEx(), processor, state)
+        val type = initExpr?.type?.toEx() ?: return true
+        if (type is VlangArrayTypeEx) {
+            return processType(VlangStructTypeEx.ArrayInit, processor, state)
+        }
+        return processType(type, processor, state)
     }
 
     private fun createDelegate(processor: VlangScopeProcessor): VlangVarProcessor {
