@@ -163,6 +163,7 @@ The plugin provides support for V language
         <!-- region Editor -->
         <postStartupActivity implementation="org.vlang.ide.VlangPostStartupActivity"/>
         <stripTrailingSpacesFilterFactory implementation="org.vlang.ide.editor.VlangStripTrailingSpacesFilterFactory"/>
+        <breadcrumbsInfoProvider implementation="org.vlang.ide.editor.VlangBreadcrumbsInfoProvider"/>
         <!-- endregion Editor -->
 
         <!-- region Refactorings -->

@@ -11,7 +11,7 @@ class VlangClassLikeNamingConventionInspection : VlangNamingConventionInspection
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
         return object : VlangVisitor() {
             override fun visitStructDeclaration(o: VlangStructDeclaration) {
-                holder.checkName(o, if (o.isUnion) "Union" else "Struct")
+                holder.checkName(o, o.kindName.replaceFirstChar { it.uppercaseChar() })
             }
 
             override fun visitInterfaceDeclaration(o: VlangInterfaceDeclaration) {

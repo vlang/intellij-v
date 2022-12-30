@@ -31,6 +31,9 @@ public interface VlangStructDeclaration extends VlangNamedElement, VlangAttribut
 
   boolean isUnion();
 
+  @NotNull
+  String getKindName();
+
   boolean isAttribute();
 
   @Nullable

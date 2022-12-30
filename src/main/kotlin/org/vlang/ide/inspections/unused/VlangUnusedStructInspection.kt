@@ -22,11 +22,10 @@ class VlangUnusedStructInspection : VlangUnusedBaseInspection() {
         element as VlangStructDeclaration
 
         val identifier = element.getIdentifier() ?: return
-        val kind = if (element.isUnion) "union" else "struct"
         val range = identifier.textRangeInParent.shiftRight(element.structType.textRangeInParent.startOffset)
         holder.registerProblem(
             element,
-            "Unused $kind '${element.name}'",
+            "Unused ${element.kindName} '${element.name}'",
             ProblemHighlightType.LIKE_UNUSED_SYMBOL, range,
             if (element.isUnion) DELETE_UNION_FIX else DELETE_STRUCT_FIX,
         )

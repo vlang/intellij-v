@@ -27,7 +27,7 @@ class VlangFindUsagesProvider : FindUsagesProvider {
     override fun getHelpId(psiElement: PsiElement) = HelpID.FIND_OTHER_USAGES
 
     override fun getType(element: PsiElement) = when (element) {
-        is VlangStructDeclaration                         -> if (element.isUnion) "union" else "struct"
+        is VlangStructDeclaration                         -> element.kindName
         is VlangFieldDefinition                           -> "field"
         is VlangInterfaceDeclaration                      -> "interface"
         is VlangInterfaceMethodDefinition                 -> "interface method"

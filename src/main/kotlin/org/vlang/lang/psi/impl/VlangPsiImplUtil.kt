@@ -117,6 +117,11 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getKindName(o: VlangStructDeclaration): String {
+        return if (o.isUnion) "union" else "struct"
+    }
+
+    @JvmStatic
     fun isAttribute(o: VlangStructDeclaration): Boolean {
         return o.attributes?.attributeList?.any {
             VlangAttributesUtil.isAttributeStruct(it)
@@ -1154,6 +1159,11 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun withElse(o: VlangMatchExpression): Boolean {
         return o.elseArm != null
+    }
+
+    @JvmStatic
+    fun getParameterList(o: VlangMatchArm): List<VlangCompositeElement> {
+        return VlangPsiTreeUtil.getChildrenOfTypeAsList(o, VlangCompositeElement::class.java)
     }
 
     @JvmStatic

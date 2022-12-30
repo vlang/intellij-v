@@ -44,4 +44,10 @@ public class VlangMatchArmImpl extends VlangCompositeElementImpl implements Vlan
     return findChildByType(SEMICOLON_SYNTHETIC);
   }
 
+  @Override
+  @NotNull
+  public List<VlangCompositeElement> getParameterList() {
+    return VlangPsiImplUtil.getParameterList(this);
+  }
+
 }

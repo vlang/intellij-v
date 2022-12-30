@@ -76,6 +76,12 @@ public class VlangStructDeclarationImpl extends VlangNamedElementImpl<VlangStruc
   }
 
   @Override
+  @NotNull
+  public String getKindName() {
+    return VlangPsiImplUtil.getKindName(this);
+  }
+
+  @Override
   public boolean isAttribute() {
     return VlangPsiImplUtil.isAttribute(this);
   }

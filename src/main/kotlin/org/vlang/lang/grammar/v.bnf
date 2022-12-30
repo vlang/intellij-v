@@ -391,7 +391,7 @@ AsmBlock ::= '{' ('}' | (ASM_LINE)* '}') {pin(".*")=1}
 // struct or union
 StructDeclaration ::= Attributes? SymbolVisibility? StructType {
   stubClass="org.vlang.lang.stubs.VlangStructDeclarationStub"
-  methods=[getIdentifier getName getTypeInner isUnion isAttribute addField]
+  methods=[getIdentifier getName getTypeInner isUnion getKindName isAttribute addField]
 }
 
 AnonymousStructType ::= struct '{' FieldsGroup* '}' {
@@ -983,7 +983,9 @@ MatchExpression ::= match BeforeBlockExpression '{' MatchArms '}' {
 // else { ... }
 MatchArms ::= (MatchArm | MatchElseArmClause)*
 // <expr>[, <expr2>] { ... }
-MatchArm ::= MatchExpressionList Block semi
+MatchArm ::= MatchExpressionList Block semi {
+  methods=[getParameterList]
+}
 // <expr>[, <expr2>]
 private MatchExpressionList ::= MatchArmExpression (',' MatchArmExpression)*
 // <expr> or <type>
