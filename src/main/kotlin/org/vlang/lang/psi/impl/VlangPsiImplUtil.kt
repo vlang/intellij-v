@@ -833,20 +833,22 @@ object VlangPsiImplUtil {
         if (parent is VlangLeftHandExprList) {
             val grandParent = parent.getParent()
             if (grandParent is VlangAssignmentStatement) {
+                // += or =
                 return if (grandParent.assignOp.assign == null) Access.ReadWrite else Access.Write
-            }
-            if (grandParent is VlangSendStatement) {
-                return Access.Write
             }
 
             return Access.Read
         }
 
-        if (parent is VlangRangeClause) {
-            return if (expression == parent.expression) Access.Read else Access.Write
+        return when (parent) {
+            // a++
+            is VlangIncDecExpression -> Access.ReadWrite
+            // a <- 10
+            is VlangSendExpr         -> Access.Write
+            // for
+            is VlangRangeClause      -> if (expression == parent.expression) Access.Read else Access.Write
+            else                     -> Access.Read
         }
-
-        return Access.Read
     }
 
     private fun getConsiderableExpression(element: VlangExpression): VlangExpression {
