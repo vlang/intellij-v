@@ -28,7 +28,7 @@ import com.intellij.util.Processor
 import com.intellij.util.Processors
 import com.intellij.util.indexing.FindSymbolParameters
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
-import org.vlang.ide.go.VlangGotoClassLikeContributor
+import org.vlang.ide.navigation.goto.VlangGotoClassLikeContributor
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangLangUtil
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx

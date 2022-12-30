@@ -6,7 +6,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
 import com.intellij.psi.PsiElement
 import org.jetbrains.annotations.Nls
-import org.vlang.ide.go.VlangGotoClassLikeContributor
+import org.vlang.ide.navigation.goto.VlangGotoClassLikeContributor
 import org.vlang.lang.psi.VlangNamedElement
 
 class VlangTypeContributorsBasedGotoByModel(

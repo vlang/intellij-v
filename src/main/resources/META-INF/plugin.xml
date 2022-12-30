@@ -52,10 +52,11 @@ The plugin provides support for V language
         <formattingService implementation="org.vlang.lang.formatter.VlangFormattingService"/>
         <!-- endregion Formatter -->
 
-        <!-- region GoTo -->
-        <gotoClassContributor implementation="org.vlang.ide.go.VlangGotoClassLikeContributor"/>
-        <gotoSymbolContributor implementation="org.vlang.ide.go.VlangGotoSymbolContributor"/>
-        <!-- endregion GoTo -->
+        <!-- region Navigation -->
+        <gotoClassContributor implementation="org.vlang.ide.navigation.goto.VlangGotoClassLikeContributor"/>
+        <gotoSymbolContributor implementation="org.vlang.ide.navigation.goto.VlangGotoSymbolContributor"/>
+        <typeDeclarationProvider implementation="org.vlang.ide.navigation.goto.VlangTypeDeclarationProvider"/>
+        <!-- endregion Navigation -->
 
         <!-- region Imports -->
         <lang.importOptimizer language="vlang" implementationClass="org.vlang.lang.psi.impl.imports.VlangImportOptimizer"/>

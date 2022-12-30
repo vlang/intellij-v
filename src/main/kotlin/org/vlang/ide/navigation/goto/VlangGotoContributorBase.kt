@@ -1,4 +1,4 @@
-package org.vlang.ide.go
+package org.vlang.ide.navigation.goto
 
 import com.intellij.navigation.ChooseByNameContributorEx
 import com.intellij.navigation.GotoClassContributor

@@ -1,4 +1,4 @@
-package org.vlang.ide.go
+package org.vlang.ide.navigation.goto
 
 import org.vlang.lang.psi.VlangNamedElement
 import org.vlang.lang.stubs.index.VlangNamesIndex
