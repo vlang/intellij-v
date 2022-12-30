@@ -44,5 +44,16 @@ object VlangTestLocator : SMTestLocator {
         return "$PROTOCOL_ID://${containingFile.virtualFile.path}:$name"
     }
 
+    fun getTestUrlWithoutRootModuleName(element: VlangNamedElement): String {
+        val containingFile = element.containingFile
+        val qualifiedName = element.getQualifiedName() ?: return ""
+        val parts = qualifiedName.split(".")
+        if (parts.size > 2) {
+            val name = parts.drop(1).joinToString(".")
+            return "$PROTOCOL_ID://${containingFile.virtualFile.path}:$name"
+        }
+        return "$PROTOCOL_ID://${containingFile.virtualFile.path}:${parts.firstOrNull()}"
+    }
+
     private const val PROTOCOL_ID = "v_qn"
 }

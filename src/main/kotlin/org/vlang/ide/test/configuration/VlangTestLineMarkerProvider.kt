@@ -29,16 +29,16 @@ class VlangTestLineMarkerProvider : RunLineMarkerContributor() {
             }
 
             val magnitude = getTestState(parent)
-                    ?.let { TestIconMapper.getMagnitude(it.magnitude) }
+                ?.let { TestIconMapper.getMagnitude(it.magnitude) }
 
             val icon = when (magnitude) {
                 TestStateInfo.Magnitude.PASSED_INDEX,
-                TestStateInfo.Magnitude.COMPLETE_INDEX ->
-                    VIcons.TestGreen
+                TestStateInfo.Magnitude.COMPLETE_INDEX,
+                     -> VIcons.TestGreen
 
                 TestStateInfo.Magnitude.ERROR_INDEX,
-                TestStateInfo.Magnitude.FAILED_INDEX   ->
-                    VIcons.TestRed
+                TestStateInfo.Magnitude.FAILED_INDEX,
+                     -> VIcons.TestRed
 
                 else -> VIcons.Test
             }
@@ -61,9 +61,10 @@ class VlangTestLineMarkerProvider : RunLineMarkerContributor() {
     companion object {
         fun getTestState(element: VlangNamedElement): TestStateStorage.Record? {
             val fullUrl = VlangTestLocator.getTestUrl(element)
+            val urlWithoutRootModuleName = VlangTestLocator.getTestUrlWithoutRootModuleName(element)
             val urlWithoutModuleName = VlangTestLocator.getTestUrlWithoutModuleName(element)
-            return TestStateStorage.getInstance(element.project).getState(fullUrl) ?:
-            TestStateStorage.getInstance(element.project).getState(urlWithoutModuleName)
+            val storage = TestStateStorage.getInstance(element.project)
+            return storage.getState(fullUrl) ?: storage.getState(urlWithoutModuleName) ?: storage.getState(urlWithoutRootModuleName)
         }
     }
 }
