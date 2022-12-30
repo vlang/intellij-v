@@ -22,12 +22,10 @@ class VlangTestConsoleProperties(config: VlangTestConfiguration, executor: Execu
         return VlangTestEventsConverter(consoleProperties)
     }
 
-    private val provider = VlangTestLocator()
-
     override fun createRerunFailedTestsAction(consoleView: ConsoleView) =
         VlangRerunFailedTestsAction(consoleView, this)
 
     override fun getTestLocator() = SMTestLocator { protocol, path, project, scope ->
-        provider.getLocation(protocol, path, project, scope)
+        VlangTestLocator.getLocation(protocol, path, project, scope)
     }
 }

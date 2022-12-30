@@ -8,6 +8,10 @@ object VIcons {
     val Vsh = IconLoader.getIcon("/icons/vsh.svg", this::class.java)
     val Module = AllIcons.FileTypes.Config
 
+    val Test = AllIcons.RunConfigurations.TestState.Run
+    val TestGreen = AllIcons.RunConfigurations.TestState.Green2
+    val TestRed = AllIcons.RunConfigurations.TestState.Red2
+
     val Struct = AllIcons.Nodes.Class
     val Interface = AllIcons.Nodes.Interface
     val Enum = AllIcons.Nodes.Enum

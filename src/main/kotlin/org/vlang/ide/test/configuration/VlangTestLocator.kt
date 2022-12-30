@@ -8,9 +8,10 @@ import com.intellij.openapi.vfs.VirtualFileManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.search.GlobalSearchScope
 import org.vlang.lang.psi.VlangFile
+import org.vlang.lang.psi.VlangNamedElement
 import java.nio.file.Path
 
-class VlangTestLocator : SMTestLocator {
+object VlangTestLocator : SMTestLocator {
     override fun getLocation(
         protocol: String,
         path: String,
@@ -31,7 +32,17 @@ class VlangTestLocator : SMTestLocator {
         return mutableListOf(PsiLocation(function))
     }
 
-    companion object {
-        private const val PROTOCOL_ID = "v_qn"
+    fun getTestUrl(element: VlangNamedElement): String {
+        val containingFile = element.containingFile
+        val qualifiedName = element.getQualifiedName()
+        return "$PROTOCOL_ID://${containingFile.virtualFile.path}:$qualifiedName"
     }
+
+    fun getTestUrlWithoutModuleName(element: VlangNamedElement): String {
+        val containingFile = element.containingFile
+        val name = element.name
+        return "$PROTOCOL_ID://${containingFile.virtualFile.path}:$name"
+    }
+
+    private const val PROTOCOL_ID = "v_qn"
 }
