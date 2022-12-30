@@ -3,7 +3,7 @@ package org.vlang.lang.psi.impl
 import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveState
 import org.vlang.lang.psi.*
-import org.vlang.lang.utils.LabelUtil
+import org.vlang.lang.utils.VlangLabelUtil
 
 class VlangLabelReference(label: VlangLabelRef) : VlangCachedReference<VlangLabelRef>(label) {
     private val processor: VlangScopeProcessorBase = object : VlangScopeProcessorBase(myElement) {
@@ -21,7 +21,7 @@ class VlangLabelReference(label: VlangLabelRef) : VlangCachedReference<VlangLabe
     }
 
     private fun processAllDefinitions(processor: VlangScopeProcessor): Boolean {
-        val defs = LabelUtil.collectContextLabels(myElement)
+        val defs = VlangLabelUtil.collectContextLabels(myElement)
         for (def in defs) {
             if (!processor.execute(def, ResolveState.initial())) {
                 return false

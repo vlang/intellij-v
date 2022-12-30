@@ -93,6 +93,12 @@
                          implementationClass="org.vlang.ide.inspections.validityIssues.VlangReassignImmutableSymbolInspection"/>
 
         <localInspection language="vlang" groupPath="V"
+                         groupName="Validity issues" shortName="VlangCallMutableMethodByImmutableValueInspection"
+                         displayName="Attempt to call mutable method by immutable value"
+                         enabledByDefault="true" level="ERROR"
+                         implementationClass="org.vlang.ide.inspections.validityIssues.VlangCallMutableMethodByImmutableValueInspection"/>
+
+        <localInspection language="vlang" groupPath="V"
                          groupName="Validity issues" shortName="VlangModuleNameDoesntMatchDirectoryNameInspection"
                          displayName="Module name doesn't match directory name"
                          enabledByDefault="true" level="ERROR"

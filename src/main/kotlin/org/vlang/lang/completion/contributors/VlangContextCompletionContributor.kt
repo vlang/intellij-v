@@ -11,7 +11,7 @@ import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.completion.providers.ReferenceCompletionProvider
 import org.vlang.lang.psi.VlangReferenceExpressionBase
 import org.vlang.lang.psi.impl.VlangCachedReference
-import org.vlang.lang.utils.LabelUtil
+import org.vlang.lang.utils.VlangLabelUtil
 
 class VlangContextCompletionContributor : CompletionContributor() {
     init {
@@ -31,7 +31,7 @@ class VlangContextCompletionContributor : CompletionContributor() {
             val element = parameters.originalFile.findElementAt(parameters.offset)
                 ?: return
 
-            val labels = LabelUtil.collectContextLabelNames(element)
+            val labels = VlangLabelUtil.collectContextLabelNames(element)
 
             labels.forEach {
                 resultSet.addElement(

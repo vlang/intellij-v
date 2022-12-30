@@ -56,4 +56,6 @@ public interface VlangMethodDeclaration extends VlangSignatureOwner, VlangFuncti
   @Nullable
   VlangNamedElement getOwner();
 
+  boolean isMutable();
+
 }

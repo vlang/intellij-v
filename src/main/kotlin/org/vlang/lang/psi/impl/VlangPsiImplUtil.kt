@@ -569,7 +569,7 @@ object VlangPsiImplUtil {
                 value.bin != null -> 2
                 value.oct != null -> 8
                 value.hex != null -> 16
-                else -> 10
+                else              -> 10
             }
             val text = value.text.removePrefix("0b").removePrefix("0o").removePrefix("0x")
             return try {
@@ -676,6 +676,12 @@ object VlangPsiImplUtil {
             return unwrappedType.resolve(o.project)
         }
         return null
+    }
+
+    @JvmStatic
+    fun isMutable(o: VlangMethodDeclaration): Boolean {
+        val receiver = o.receiver
+        return receiver.isMutable()
     }
 
     @JvmStatic
@@ -1890,6 +1896,16 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun makeMutable(o: VlangReceiver) {
         makeMutable(o.project, o.varModifiers)
+
+        val type = o.type
+        // need remove `&` from type
+        // a &Foo -> mut a Foo
+        if (type is VlangPointerType) {
+            val innerType = type.type
+            if (innerType != null) {
+                type.replace(innerType)
+            }
+        }
     }
 
     @JvmStatic
@@ -1902,8 +1918,8 @@ object VlangPsiImplUtil {
         val mutModifier = VlangElementFactory.createVarModifiers(project, "mut")
         val space = VlangElementFactory.createSpace(project)
         if (modifiers.firstChild == null) {
-            modifiers.add(mutModifier.firstChild)
-            modifiers.add(space)
+            val newModifiers = modifiers.replace(mutModifier)
+            newModifiers.parent.addAfter(space, newModifiers)
         } else {
             modifiers.add(space)
             modifiers.add(mutModifier.firstChild)

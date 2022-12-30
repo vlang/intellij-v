@@ -124,4 +124,9 @@ public class VlangMethodDeclarationImpl extends VlangFunctionOrMethodDeclaration
     return VlangPsiImplUtil.getOwner(this);
   }
 
+  @Override
+  public boolean isMutable() {
+    return VlangPsiImplUtil.isMutable(this);
+  }
+
 }

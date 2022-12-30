@@ -6,7 +6,7 @@ import com.intellij.psi.util.parentOfType
 import org.vlang.lang.psi.VlangFunctionOrMethodDeclaration
 import org.vlang.lang.psi.VlangLabelDefinition
 
-object LabelUtil {
+object VlangLabelUtil {
     fun collectContextLabelNames(context: PsiElement): List<String> {
         val labeledStatements = collectContextLabels(context)
 

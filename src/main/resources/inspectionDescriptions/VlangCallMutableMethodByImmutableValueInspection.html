@@ -1,0 +1,24 @@
+<html>
+<body>
+Report call of mutable method by immutable value.
+
+For example:
+<pre>
+struct Foo {}
+fn (mut f Foo) bar() {}
+//   ^^^ f is mutable
+
+fn main() {
+    a := Foo{}
+//  ^ a is immutable
+    a.bar()
+//    ^^^^^ call of mutable method by immutable value
+
+    mut b := Foo{}
+//      ^ b is mutable
+    b.bar()
+//    ^^^^^ all ok
+}
+</pre>
+</body>
+</html>

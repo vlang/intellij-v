@@ -580,7 +580,7 @@ FunctionDeclaration ::= Attributes? SymbolVisibility? fn identifier GenericParam
 MethodDeclaration ::= Attributes? SymbolVisibility? fn '(' Receiver ')' MethodName GenericParameters? Signature BlockWithConsume? {
   pin=7
   stubClass="org.vlang.lang.stubs.VlangMethodDeclarationStub"
-  methods=[getReceiverType getTypeInner getIdentifier getQualifiedName getOwner]
+  methods=[getReceiverType getTypeInner getIdentifier getQualifiedName getOwner isMutable]
 }
 // <ident> or <ops> for overload
 MethodName ::= identifier | AddOp | MulOp | RelOp
