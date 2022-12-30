@@ -20,41 +20,39 @@ class VlangTestLineMarkerProvider : RunLineMarkerContributor() {
     private val contextActions = ExecutorAction.getActions(0)
 
     override fun getInfo(element: PsiElement): Info? {
-        if (element.elementType == VlangTypes.IDENTIFIER) {
-            val parent = element.parent
-            if (parent is VlangFunctionDeclaration) {
-                if (!VlangTestUtil.isTestFunction(parent)) {
-                    return null
-                }
+        if (element.elementType != VlangTypes.IDENTIFIER) return null
 
-                val magnitude = getTestState(parent)
-                        ?.let { TestIconMapper.getMagnitude(it.magnitude) }
-
-                val icon = when (magnitude) {
-                    TestStateInfo.Magnitude.PASSED_INDEX,
-                    TestStateInfo.Magnitude.COMPLETE_INDEX ->
-                        VIcons.TestGreen
-
-                    TestStateInfo.Magnitude.ERROR_INDEX,
-                    TestStateInfo.Magnitude.FAILED_INDEX   ->
-                        VIcons.TestRed
-
-                    else -> VIcons.Test
-                }
-
-                return Info(icon, { "Run" }, *contextActions)
+        val parent = element.parent
+        if (parent is VlangFunctionDeclaration) {
+            if (!VlangTestUtil.isTestFunction(parent)) {
+                return null
             }
 
-            if (parent is VlangModuleClause) {
-                val containingFile = parent.containingFile
-                if (!TestSourcesFilter.isTestSources(containingFile.virtualFile, element.project)) {
-                    return null
-                }
+            val magnitude = getTestState(parent)
+                    ?.let { TestIconMapper.getMagnitude(it.magnitude) }
 
-                return Info(AllIcons.RunConfigurations.TestState.Run_run, { "Run module tests" }, *contextActions)
+            val icon = when (magnitude) {
+                TestStateInfo.Magnitude.PASSED_INDEX,
+                TestStateInfo.Magnitude.COMPLETE_INDEX ->
+                    VIcons.TestGreen
+
+                TestStateInfo.Magnitude.ERROR_INDEX,
+                TestStateInfo.Magnitude.FAILED_INDEX   ->
+                    VIcons.TestRed
+
+                else -> VIcons.Test
             }
 
-            return null
+            return Info(icon, { "Run" }, *contextActions)
+        }
+
+        if (parent is VlangModuleClause) {
+            val containingFile = parent.containingFile
+            if (!TestSourcesFilter.isTestSources(containingFile.virtualFile, element.project)) {
+                return null
+            }
+
+            return Info(AllIcons.RunConfigurations.TestState.Run_run, { "Run module tests" }, *contextActions)
         }
 
         return null

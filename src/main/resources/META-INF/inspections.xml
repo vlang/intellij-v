@@ -83,6 +83,12 @@
                          displayName="Non-exhaustive match"
                          enabledByDefault="true" level="ERROR"
                          implementationClass="org.vlang.ide.inspections.general.VlangNonExhaustiveMatchInspection"/>
+
+        <localInspection language="vlang" groupPath="V"
+                         groupName="General" shortName="VlangTestFailedLineInspection"
+                         displayName="Show failed assertions"
+                         enabledByDefault="true" level="ERROR"
+                         implementationClass="org.vlang.ide.inspections.general.VlangTestFailedLineInspection"/>
         <!-- endregion General inspections -->
 
         <!-- region Validity issues inspections -->
