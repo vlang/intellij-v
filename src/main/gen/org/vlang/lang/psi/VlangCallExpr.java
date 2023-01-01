@@ -32,6 +32,12 @@ public interface VlangCallExpr extends VlangExpression, VlangGenericArgumentsOwn
   List<VlangExpression> getParameters();
 
   @Nullable
+  PsiElement getIdentifier();
+
+  @Nullable
+  VlangReferenceExpression getQualifier();
+
+  @Nullable
   PsiElement resolve();
 
   int paramIndexOf(@NotNull PsiElement pos);

@@ -215,7 +215,7 @@ public interface VlangTypes {
   IElementType TYPE_MODIFIER = new VlangCompositeElementType("TYPE_MODIFIER");
   IElementType TYPE_MODIFIERS = new VlangCompositeElementType("TYPE_MODIFIERS");
   IElementType TYPE_OF_CALL_EXPR = new VlangCompositeElementType("TYPE_OF_CALL_EXPR");
-  IElementType TYPE_REFERENCE_EXPRESSION = new VlangCompositeElementType("TYPE_REFERENCE_EXPRESSION");
+  IElementType TYPE_REFERENCE_EXPRESSION = VlangElementTypeFactory.stubFactory("TYPE_REFERENCE_EXPRESSION");
   IElementType TYPE_UNION_LIST = VlangElementTypeFactory.stubFactory("TYPE_UNION_LIST");
   IElementType UNARY_EXPR = new VlangCompositeElementType("UNARY_EXPR");
   IElementType UNPACKING_EXPRESSION = new VlangCompositeElementType("UNPACKING_EXPRESSION");

@@ -1095,6 +1095,30 @@ object VlangPsiImplUtil {
         return o.argumentList.elementList.mapNotNull { it?.value?.expression }
     }
 
+    /**
+     * For example, for `foo.bar()` it returns `bar`
+     *
+     * For `foo()` it returns `foo`
+     */
+    @JvmStatic
+    fun getIdentifier(o: VlangCallExpr): PsiElement? {
+        val refExpr = o.expression as? VlangReferenceExpression ?: return null
+        return refExpr.getIdentifier()
+    }
+
+    /**
+     * For example, for `foo.bar()` it returns `foo`
+     *
+     * For `foo()` it returns null
+     *
+     * For `foo.bar.baz()` it returns `foo.bar`
+     */
+    @JvmStatic
+    fun getQualifier(o: VlangCallExpr): VlangReferenceExpression? {
+        val refExpr = o.expression as? VlangReferenceExpression ?: return null
+        return refExpr.getQualifier() as? VlangReferenceExpression
+    }
+
     @JvmStatic
     fun resolve(o: VlangCallExpr): PsiElement? {
         return (o.expression as? VlangReferenceExpression)?.resolve()

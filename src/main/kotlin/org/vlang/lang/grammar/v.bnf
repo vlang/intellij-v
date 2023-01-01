@@ -110,10 +110,10 @@
   implements("(Function)Declaration")="org.vlang.lang.psi.VlangScopeHolder"
 
   extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
-  extends("Type|GenericParameters|Signature|Result|Parameters|TypeUnionList|EmbeddedInterfaceDefinition")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
+  extends("Type|GenericParameters|Signature|Result|Parameters|TypeUnionList|EmbeddedInterfaceDefinition|TypeReferenceExpression")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
   extends("ModuleClause|(Struct|TypeAlias|Union|Enum|Interface)Declaration|(Var|Label|Param|Field|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
 
-  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum|Interface)Declaration|.*Type|(Var|Label|Field|Param|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter|GenericParameters|Parameters|Result|Signature|TypeUnionList|EmbeddedInterfaceDefinition")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
+  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum|Interface)Declaration|.*Type|(Var|Label|Field|Param|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter|GenericParameters|Parameters|Result|Signature|TypeUnionList|EmbeddedInterfaceDefinition|TypeReferenceExpression")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
 
   extends("Sql.*Statement")=SqlBlockStatement
   extends(".*Statement")=Statement
@@ -707,7 +707,10 @@ Type ::= TypeModifiers? (TypeLit | TypeName) GenericArguments? {
 private TypeName ::= TypeReferenceExpression QualifiedTypeReferenceExpression*
 
 left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
-TypeReferenceExpression ::= identifier { methods=[getReference getQualifier resolve getType] }
+TypeReferenceExpression ::= identifier {
+  stubClass="org.vlang.lang.stubs.VlangTypeReferenceExpressionStub"
+  methods=[getReference getQualifier resolve getType]
+}
 
 private TypeLit ::=
     MapType
@@ -867,7 +870,7 @@ private RightHandExpr ::=
 
 // <expr>[<<generics>>](...)
 left CallExpr ::= GenericArguments? ArgumentList {
-  methods=[getParameters resolve paramIndexOf]
+  methods=[getParameters getIdentifier getQualifier resolve paramIndexOf]
 }
 
 // <expr>[<<generics>>](...)

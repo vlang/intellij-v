@@ -8,9 +8,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
+import org.vlang.lang.stubs.VlangTypeReferenceExpressionStub;
 import org.vlang.lang.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class VlangTypeReferenceExpressionImpl extends VlangCompositeElementImpl implements VlangTypeReferenceExpression {
+public class VlangTypeReferenceExpressionImpl extends VlangStubbedElementImpl<VlangTypeReferenceExpressionStub> implements VlangTypeReferenceExpression {
+
+  public VlangTypeReferenceExpressionImpl(@NotNull VlangTypeReferenceExpressionStub stub, @NotNull IStubElementType<?, ?> type) {
+    super(stub, type);
+  }
 
   public VlangTypeReferenceExpressionImpl(@NotNull ASTNode node) {
     super(node);

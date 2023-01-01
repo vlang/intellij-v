@@ -58,6 +58,7 @@ object VlangElementTypeFactory {
         "RESULT"                        -> VlangResultStubElementType(name)
         "TYPE_UNION_LIST"               -> VlangTypeUnionListStubElementType(name)
         "EMBEDDED_INTERFACE_DEFINITION" -> VlangEmbeddedInterfaceDefinitionStubElementType(name)
+        "TYPE_REFERENCE_EXPRESSION"     -> VlangTypeReferenceExpressionStubElementType(name)
 
         else                            -> {
             val c = TYPES[name] ?: throw RuntimeException("Unknown element type: $name")

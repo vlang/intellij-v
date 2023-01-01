@@ -15,8 +15,8 @@ class VlangCallMutableMethodByImmutableValueInspection : VlangBaseInspection() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
         return object : VlangVisitor() {
             override fun visitCallExpr(call: VlangCallExpr) {
-                val refExpr = call.expression as? VlangReferenceExpression ?: return
-                val qualifier = refExpr.getQualifier() as? VlangReferenceExpression ?: return
+                val identifier = call.identifier ?: return
+                val qualifier = call.qualifier ?: return
                 val method = call.resolve() as? VlangMethodDeclaration ?: return
 
                 val mutabilityOwner = qualifier.resolve() as? VlangMutabilityOwner ?: return
@@ -32,7 +32,7 @@ class VlangCallMutableMethodByImmutableValueInspection : VlangBaseInspection() {
                     else arrayOf(MAKE_MUTABLE_QUICK_FIX)
 
                     holder.registerProblem(
-                        refExpr.getIdentifier(),
+                        identifier,
                         "Cannot call mutable method '${method.name}' on immutable value",
                         *fixes
                     )
