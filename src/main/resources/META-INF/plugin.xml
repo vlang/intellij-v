@@ -8,6 +8,7 @@ The plugin provides support for V language
     ]]></description>
 
     <depends>com.intellij.modules.platform</depends>
+    <depends optional="true" config-file="markdown.xml">org.intellij.plugins.markdown</depends>
     <depends optional="true" config-file="cidr-debugger.xml">com.intellij.modules.cidr.debugger</depends>
     <depends optional="true" config-file="idea-plugin.xml">com.intellij.java</depends>
     <depends optional="true" config-file="native-debug-support.xml">com.intellij.nativeDebug</depends>
@@ -193,7 +194,6 @@ The plugin provides support for V language
                                  id="org.vlang.configurations.VlangDebuggerSettingsConfigurable"
                                  dynamic="true" displayName="Debugger"/>
 
-        <projectService serviceImplementation="org.vlang.configurations.VlangConfiguration"/>
         <projectService serviceImplementation="org.vlang.configurations.VlangProjectStructureState"/>
         <projectService serviceImplementation="org.vlang.configurations.VlangFmtSettingsState"/>
         <additionalLibraryRootsProvider implementation="org.vlang.project.VlangAdditionalLibraryRootsProvider"/>
