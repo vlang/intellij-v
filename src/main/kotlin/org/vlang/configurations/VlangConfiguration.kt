@@ -21,6 +21,8 @@ class VlangConfiguration(private val project: Project) {
         fun getInstance(project: Project) = project.service<VlangConfiguration>()
     }
 
+    private var stubs: VirtualFile? = null
+
     private val toolchain
         get() = project.toolchainSettings.toolchain()
 
@@ -49,7 +51,12 @@ class VlangConfiguration(private val project: Project) {
         get() = findFileInProject("modules")
 
     val stubsLocation: VirtualFile?
-        get() = getStubs()
+        get() {
+            if (stubs == null) {
+                stubs = getStubs()
+            }
+            return stubs
+        }
 
     private fun findFileByUrl(url: String): VirtualFile? {
         if (url.isEmpty()) return null
