@@ -2,8 +2,8 @@
 <img src="docs/cover.png">
 </p>
 
-![](https://img.shields.io/badge/Status-Closed%20alpha%20test-orange?logo=IntelliJIDEA)
-![](https://img.shields.io/badge/Beta%20Release-02.01.2023-orange?logo=semantic-release)
+![](https://img.shields.io/badge/Status-Beta%20test-orange?logo=IntelliJIDEA)
+![](https://img.shields.io/badge/Stable%20Release-01.07.2023-orange?logo=semantic-release)
 ![Build](https://github.com/i582/vlang-idea/workflows/Build/badge.svg)
 [![Version](https://img.shields.io/jetbrains/plugin/v/20287-vlang.svg)](https://plugins.jetbrains.com/plugin/20287-vlang)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/20287-vlang.svg)](https://plugins.jetbrains.com/plugin/20287-vlang)
@@ -18,8 +18,8 @@ This plugin adds support of [V](https://vlang.io) language to JetBrains IDEs.
 
 ## Installation & Usage
 
-For installation options, see
-the [Quick Start Guide](https://plugins.jetbrains.com/plugin/20287-vlang/docs/#install-update-the-plugin).
+For installation options, see the 
+[Quick Start Guide](https://plugins.jetbrains.com/plugin/20287-vlang/docs/#install-update-the-plugin).
 If you want to jump straight in, use following instructions:
 
 - Using IDE built-in plugin system:
@@ -54,6 +54,6 @@ LLDB only
 
 ## License
 
-This project is under the **MIT License**. See the [LICENSE](https://github.com/i582/vlang-idea/blob/master/LICENSE)
-file
-for the full license text.
+This project is under the **MIT License**. See the
+[LICENSE](https://github.com/i582/vlang-idea/blob/master/LICENSE)
+file for the full license text.
