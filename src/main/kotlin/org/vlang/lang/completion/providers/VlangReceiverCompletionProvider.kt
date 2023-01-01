@@ -10,12 +10,12 @@ import com.intellij.util.ProcessingContext
 import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangElementFactory
-import org.vlang.lang.psi.impl.VlangPsiImplUtil.unwrapPointerOrOptionOrResultType
 import org.vlang.lang.psi.impl.VlangScopeProcessor
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapPointer
 
 // TODO:
-class VlangReceiverCompletionProvider : CompletionProvider<CompletionParameters>() {
+object VlangReceiverCompletionProvider : CompletionProvider<CompletionParameters>() {
     override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
         val pos = parameters.position
         val referenceExpression = pos.parentOfType<VlangReferenceExpression>() ?: return
@@ -26,10 +26,10 @@ class VlangReceiverCompletionProvider : CompletionProvider<CompletionParameters>
         val methodDeclaration = referenceExpression.parentOfType<VlangMethodDeclaration>() ?: return
         val receiver = methodDeclaration.receiver
         val receiverName = receiver.name ?: return
-        val receiverType = unwrapPointerOrOptionOrResultType(receiver.type.toEx())?.name() ?: return
+        val receiverType = receiver.type.toEx().unwrapPointer().name()
 
         val containingFile = pos.containingFile as VlangFile
-        val moduleQualifiedName = containingFile.getModuleQualifiedName() ?: return
+        val moduleQualifiedName = containingFile.getModuleQualifiedName()
         val moduleName = containingFile.getModuleName() ?: return
 
         val text = """

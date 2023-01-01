@@ -255,4 +255,22 @@ class CompletionTest : CompletionTestBase() {
         """.trimIndent(), 0,
         "label"
     )
+
+    fun `test no completion after literal`() = checkEmpty(
+        """
+        module main
+        
+        1/*caret*/
+        """.trimIndent(), 0,
+        ""
+    )
+
+    fun `test completion after literal with space`() = checkNotEmpty(
+        """
+        module main
+        
+        1 /*caret*/
+        """.trimIndent(), 0,
+        ""
+    )
 }

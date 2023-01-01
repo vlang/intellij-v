@@ -6,10 +6,12 @@ import com.intellij.patterns.PlatformPatterns.or
 import com.intellij.patterns.PlatformPatterns.psiElement
 import com.intellij.patterns.PsiElementPattern
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.ProcessingContext
 import org.vlang.lang.VlangTypes.*
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.impl.VlangCachedReference
 import org.vlang.utils.parentNth
 
 object VlangCompletionPatterns {
@@ -24,6 +26,7 @@ object VlangCompletionPatterns {
         psiElement()
             .withParent(VlangReferenceExpression::class.java)
             .notAfterDot()
+            .notAfterLiteral()
             .notInsideArrayInit()
             .notInsideStructInitWithKeys()
             .notInsideTrailingStruct()
@@ -38,6 +41,7 @@ object VlangCompletionPatterns {
             .withSuperParent(2, VlangLeftHandExprList::class.java)
             .withSuperParent(3, VlangSimpleStatement::class.java)
             .notAfterDot()
+            .notAfterLiteral()
 
     /**
      * Any top-level statements like:
@@ -134,12 +138,40 @@ object VlangCompletionPatterns {
             )
     }
 
+    fun referenceExpression(): PsiElementPattern.Capture<PsiElement> {
+        return psiElement()
+            .withParent(VlangReferenceExpressionBase::class.java)
+            .notAfterLiteral()
+    }
+
+    fun cachedReferenceExpression(): PsiElementPattern.Capture<PsiElement> {
+        return psiElement()
+            .withParent(psiElement().withReference(VlangCachedReference::class.java))
+            .notAfterLiteral()
+    }
+
     private fun PsiElementPattern.Capture<PsiElement>.notAfterDot(): PsiElementPattern.Capture<PsiElement> {
         return andNot(psiElement().afterLeafSkipping(whitespace, psiElement(DOT)))
     }
 
-    private fun PsiElementPattern.Capture<PsiElement>.notInsideArrayInit(): PsiElementPattern.Capture<PsiElement> {
-        return andNot(psiElement().with(object : PatternCondition<PsiElement>("withArrayInit") {
+    private fun PsiElementPattern.Capture<PsiElement>.notAfterLiteral(): PsiElementPattern.Capture<PsiElement> {
+        return andNot(psiElement().with(object : PatternCondition<PsiElement>("notAfterLiteral") {
+            override fun accepts(t: PsiElement, context: ProcessingContext?): Boolean {
+                // when autocomplete in position: `100<caret>`
+                // then `t` is `intellijrulezzz` and prev leaf is error element, because
+                // `100intellijrulezzz` is not a valid expression,
+                // so we need to check that prev leaf is error element
+                // and prev leaf of error element is literal
+                // and return true to disable completion
+                // true because this matcher used in andNot() matcher.
+                val prevLeaf = PsiTreeUtil.prevLeaf(t) as? PsiErrorElement ?: return false
+                return PsiTreeUtil.prevLeaf(prevLeaf)?.parent is VlangLiteral
+            }
+        }))
+    }
+
+     private fun PsiElementPattern.Capture<PsiElement>.notInsideArrayInit(): PsiElementPattern.Capture<PsiElement> {
+        return andNot(psiElement().with(object : PatternCondition<PsiElement>("notInsideArrayInit") {
             override fun accepts(t: PsiElement, context: ProcessingContext?): Boolean {
                 val element = t.parentNth<VlangElement>(3) ?: return false
                 // if 'key: <caret>'
@@ -151,7 +183,7 @@ object VlangCompletionPatterns {
     }
 
     private fun PsiElementPattern.Capture<PsiElement>.notInsideStructInitWithKeys(): PsiElementPattern.Capture<PsiElement> {
-        return andNot(psiElement().with(object : PatternCondition<PsiElement>("withStructInit") {
+        return andNot(psiElement().with(object : PatternCondition<PsiElement>("notInsideStructInitWithKeys") {
             override fun accepts(t: PsiElement, context: ProcessingContext?): Boolean {
                 val element = t.parentNth<VlangElement>(3) ?: return false
                 // if 'key: <caret>'
@@ -172,7 +204,7 @@ object VlangCompletionPatterns {
     }
 
     private fun PsiElementPattern.Capture<PsiElement>.notInsideTrailingStruct(): PsiElementPattern.Capture<PsiElement> {
-        return andNot(psiElement().with(object : PatternCondition<PsiElement>("withTrailingStruct") {
+        return andNot(psiElement().with(object : PatternCondition<PsiElement>("notInsideTrailingStruct") {
             override fun accepts(t: PsiElement, context: ProcessingContext?): Boolean {
                 val element = t.parentNth<VlangElement>(3) ?: return false
                 // if 'key: <caret>'

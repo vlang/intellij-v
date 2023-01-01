@@ -22,8 +22,20 @@ abstract class CompletionTestBase : BasePlatformTestCase() {
     }
 
     enum class CheckType {
-        EQUALS, INCLUDES, EXCLUDES, ORDERED_EQUALS
+        EQUALS, INCLUDES, EXCLUDES, ORDERED_EQUALS, EMPTY, NOT_EMPTY,
     }
+
+    fun checkEmpty(
+        @Language("vlang") txt: String,
+        count: Int,
+        vararg variants: String,
+    ) = doTestVariants(txt, CompletionType.BASIC, count, CheckType.EMPTY, *variants)
+
+    fun checkNotEmpty(
+        @Language("vlang") txt: String,
+        count: Int,
+        vararg variants: String,
+    ) = doTestVariants(txt, CompletionType.BASIC, count, CheckType.NOT_EMPTY, *variants)
 
     fun checkIncludes(
         @Language("vlang") txt: String,
@@ -85,6 +97,12 @@ abstract class CompletionTestBase : BasePlatformTestCase() {
             CheckType.EXCLUDES       -> {
                 varList.retainAll(stringList.toSet())
                 assertTrue("Unexpected variants: $varList", varList.isEmpty())
+            }
+            CheckType.EMPTY          -> {
+                assertTrue("Expected empty completion, but got: $stringList", stringList.isEmpty())
+            }
+            CheckType.NOT_EMPTY      -> {
+                assertTrue("Expected non-empty completion, but got: $stringList", stringList.isNotEmpty())
             }
         }
     }

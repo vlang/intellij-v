@@ -2,15 +2,12 @@ package org.vlang.lang.completion.contributors
 
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElementBuilder
-import com.intellij.patterns.PlatformPatterns.psiElement
-import com.intellij.patterns.PsiElementPattern
-import com.intellij.psi.PsiElement
 import com.intellij.util.ProcessingContext
+import org.vlang.lang.completion.VlangCompletionPatterns.cachedReferenceExpression
 import org.vlang.lang.completion.VlangCompletionPatterns.insideStatementWithLabel
+import org.vlang.lang.completion.VlangCompletionPatterns.referenceExpression
 import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.completion.providers.ReferenceCompletionProvider
-import org.vlang.lang.psi.VlangReferenceExpressionBase
-import org.vlang.lang.psi.impl.VlangCachedReference
 import org.vlang.lang.utils.VlangLabelUtil
 
 class VlangContextCompletionContributor : CompletionContributor() {
@@ -19,11 +16,7 @@ class VlangContextCompletionContributor : CompletionContributor() {
         extend(CompletionType.BASIC, referenceExpression(), ReferenceCompletionProvider)
         extend(CompletionType.BASIC, cachedReferenceExpression(), ReferenceCompletionProvider)
 
-//        extend(
-//            CompletionType.BASIC,
-//            referenceExpression(),
-//            VlangReceiverCompletionProvider()
-//        )
+//        extend(CompletionType.BASIC, referenceExpression(), VlangReceiverCompletionProvider)
     }
 
     private object LabelCompletionProvider : CompletionProvider<CompletionParameters>() {
@@ -41,13 +34,5 @@ class VlangContextCompletionContributor : CompletionContributor() {
                 )
             }
         }
-    }
-
-    private fun referenceExpression(): PsiElementPattern.Capture<PsiElement> {
-        return psiElement().withParent(VlangReferenceExpressionBase::class.java)
-    }
-
-    private fun cachedReferenceExpression(): PsiElementPattern.Capture<PsiElement> {
-        return psiElement().withParent(psiElement().withReference(VlangCachedReference::class.java))
     }
 }
