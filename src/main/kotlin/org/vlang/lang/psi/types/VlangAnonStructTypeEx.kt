@@ -25,13 +25,8 @@ class VlangAnonStructTypeEx(anchor: VlangAnonymousStructType) : VlangStructTypeE
     }
 
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
-        return when (rhs) {
-            is VlangAnyTypeEx        -> true
-            is VlangUnknownTypeEx    -> true
-            is VlangVoidPtrTypeEx    -> true
-            is VlangAnonStructTypeEx -> true
-            else                     -> false
-        }
+        if (rhs.isAny) return true
+        return rhs is VlangAnonStructTypeEx
     }
 
     override fun isEqual(rhs: VlangTypeEx): Boolean = rhs is VlangAnonStructTypeEx

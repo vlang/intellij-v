@@ -126,6 +126,10 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
             return "unnamed"
         }
 
+        if (moduleName == "main") {
+            return moduleName
+        }
+
         val projectDir = project.guessProjectDir() ?: return ""
         val stdlib = VlangConfiguration.getInstance(project).stdlibLocation
         val modules = VlangConfiguration.getInstance(project).modulesLocation

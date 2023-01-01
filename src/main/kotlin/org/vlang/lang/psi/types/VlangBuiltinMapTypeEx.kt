@@ -13,11 +13,11 @@ class VlangBuiltinMapTypeEx private constructor() : VlangStructTypeEx("map", nul
     override fun readableName(context: PsiElement) = "map"
 
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
+        if (rhs.isAny) return true
+
         return when (rhs) {
-            is VlangAnyTypeEx        -> true
-            is VlangUnknownTypeEx    -> true
-            is VlangVoidPtrTypeEx    -> true
             is VlangBuiltinMapTypeEx -> true
+            is VlangMapTypeEx        -> true
             else                     -> false
         }
     }

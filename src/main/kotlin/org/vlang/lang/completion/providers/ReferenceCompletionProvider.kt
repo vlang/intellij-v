@@ -11,15 +11,21 @@ import com.intellij.psi.ResolveState
 import com.intellij.psi.util.elementType
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
+import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.completion.VlangCompletionUtil
+import org.vlang.lang.completion.VlangCompletionUtil.toVlangLookupElement
+import org.vlang.lang.completion.VlangLookupElementProperties
 import org.vlang.lang.completion.VlangStructLiteralCompletion
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.*
 import org.vlang.lang.psi.impl.VlangReference.Companion.isLocalResolve
 import org.vlang.lang.psi.impl.VlangReferenceBase.Companion.LOCAL_RESOLVE
-import org.vlang.lang.psi.types.*
+import org.vlang.lang.psi.types.VlangArrayTypeEx
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.isNullableEqual
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapPointer
+import org.vlang.lang.psi.types.VlangTypeEx
 
 object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() {
     override fun addCompletions(
@@ -41,13 +47,13 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
             val refExpression = ref.element as? VlangReferenceExpression
             val variants = VlangStructLiteralCompletion.allowedVariants(refExpression, element)
 
-            fillStructFieldNameVariants(result, variants, refExpression)
+            fillStructFieldNameVariants(parameters, result, variants, refExpression)
 
             if (variants != VlangStructLiteralCompletion.Variants.FIELD_NAME_ONLY) {
-                ref.processResolveVariants(MyScopeProcessor(result, file, ref.forTypes))
+                ref.processResolveVariants(MyScopeProcessor(parameters, result, file, ref.forTypes))
             }
         } else if (ref is VlangCachedReference<*>) {
-            ref.processResolveVariants(MyScopeProcessor(result, file, false))
+            ref.processResolveVariants(MyScopeProcessor(parameters, result, file, false))
         }
     }
 
@@ -60,6 +66,7 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
     }
 
     private fun fillStructFieldNameVariants(
+        parameters: CompletionParameters,
         result: CompletionResultSet,
         variants: VlangStructLiteralCompletion.Variants,
         refExpression: VlangReferenceExpression?,
@@ -81,7 +88,7 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
 
         val alreadyAssignedFields = VlangStructLiteralCompletion.alreadyAssignedFields(elementList)
 
-        VlangFieldNameReference(refExpression).processResolveVariants(object : MyScopeProcessor(result, file, false) {
+        VlangFieldNameReference(refExpression).processResolveVariants(object : MyScopeProcessor(parameters, result, file, false) {
             override fun execute(o: PsiElement, state: ResolveState): Boolean {
                 val structFieldName =
                     when (o) {
@@ -171,6 +178,7 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
     }
 
     private open class MyScopeProcessor(
+        private val parameters: CompletionParameters,
         private val result: CompletionResultSet,
         private val file: VlangFile,
         private val forTypes: Boolean,
@@ -185,7 +193,8 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
                     state,
                     forTypes,
                     processedNames,
-                    result
+                    result,
+                    parameters,
                 )
             }
             return true
@@ -246,8 +255,9 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
         forTypes: Boolean,
         processedNames: MutableSet<String>,
         set: CompletionResultSet,
+        parameters: CompletionParameters,
     ) {
-        val lookup = createLookupElement(o, state, forTypes)
+        val lookup = createLookupElement(o, state, forTypes, parameters)
         if (lookup != null) {
             val key = lookup.lookupString + o.javaClass
             if (!processedNames.contains(key)) {
@@ -261,12 +271,73 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
         element: PsiElement,
         state: ResolveState,
         forTypes: Boolean,
+        parameters: CompletionParameters,
     ): LookupElement? {
         if (element is VlangFile) {
             return VlangCompletionUtil.createModuleLookupElement(element)
         }
 
-        return when (element) {
+        val elementFile = element.containingFile as? VlangFile ?: return null
+        val context = parameters.position
+        val contextFile = context.containingFile as? VlangFile ?: return null
+        val isSameModule = VlangCodeInsightUtil.sameModule(contextFile, elementFile)
+
+        val contextFunction = context.parentOfType<VlangFunctionOrMethodDeclaration>()
+        val elementFunction = element.parentOfType<VlangFunctionOrMethodDeclaration>()
+        val isLocal = contextFunction == elementFunction
+
+        val kind = when (element) {
+            is VlangFunctionDeclaration       -> VlangLookupElementProperties.ElementKind.FUNCTION
+            is VlangMethodDeclaration         -> VlangLookupElementProperties.ElementKind.METHOD
+            is VlangStructDeclaration         -> VlangLookupElementProperties.ElementKind.STRUCT
+            is VlangEnumDeclaration           -> VlangLookupElementProperties.ElementKind.ENUM
+            is VlangInterfaceDeclaration      -> VlangLookupElementProperties.ElementKind.INTERFACE
+            is VlangConstDefinition           -> VlangLookupElementProperties.ElementKind.CONSTANT
+            is VlangTypeAliasDeclaration      -> VlangLookupElementProperties.ElementKind.TYPE_ALIAS
+            is VlangFieldDefinition           -> VlangLookupElementProperties.ElementKind.FIELD
+            is VlangInterfaceMethodDefinition -> VlangLookupElementProperties.ElementKind.INTERFACE_METHOD
+            is VlangEnumFieldDefinition       -> VlangLookupElementProperties.ElementKind.ENUM_FIELD
+            is VlangImportAlias               -> VlangLookupElementProperties.ElementKind.IMPORT_ALIAS
+            is VlangGlobalVariableDefinition  -> VlangLookupElementProperties.ElementKind.GLOBAL
+            is VlangNamedElement              -> VlangLookupElementProperties.ElementKind.OTHER
+            else                              -> return null
+        }
+
+        val isTypeCompatible = false
+        // TODO: Needs stubs enhancement
+        // if (element is VlangTypeOwner) {
+        //     val type = element.getType(null)?.unwrapFunction()
+        //     val contextType = VlangTypeInferenceUtil.getContextType(context.parent)
+        //     isTypeCompatible =
+        //         type != null && contextType != null && type !is VlangVoidPtrTypeEx && contextType.isAssignableFrom(type, context.project)
+        // }
+
+        var isReceiverTypeCompatible = false
+        if (element is VlangMethodDeclaration) {
+            val parent = context.parent as? VlangReferenceExpression
+            val qualifier = parent?.getQualifier() as? VlangReferenceExpression
+            if (qualifier != null) {
+                val mutabilityOwner = qualifier.resolve() as? VlangMutabilityOwner
+
+                val mutableMethod = element.isMutable
+                val mutableCaller = mutabilityOwner != null && mutabilityOwner.isMutable()
+                val isReceiverTypeNotCompatible = mutableMethod && !mutableCaller
+                isReceiverTypeCompatible = !isReceiverTypeNotCompatible
+            }
+        }
+
+        var isContextMember = false
+        if (contextFunction is VlangMethodDeclaration) {
+            if (element is VlangFieldDefinition || element is VlangMethodDeclaration) {
+                val ownerType = ((element as VlangNamedElement).getOwner() as VlangNamedElement).getType(null)
+                val receiverType = contextFunction.receiverType.toEx().unwrapPointer()
+                if (ownerType.isNullableEqual(receiverType)) {
+                    isContextMember = true
+                }
+            }
+        }
+
+        val lookupElement = when (element) {
             is VlangFunctionDeclaration       -> VlangCompletionUtil.createFunctionLookupElement(element, state)
             is VlangMethodDeclaration         -> VlangCompletionUtil.createMethodLookupElement(element)
             is VlangStructDeclaration         -> VlangCompletionUtil.createStructLookupElement(element, state, !forTypes)
@@ -282,5 +353,22 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
             is VlangNamedElement              -> VlangCompletionUtil.createVariableLikeLookupElement(element)
             else                              -> null
         }
+
+        var isContextElement = false
+        if (lookupElement is PrioritizedLookupElement<*>) {
+            isContextElement = lookupElement.priority.toInt() == VlangCompletionUtil.CONTEXT_COMPLETION_PRIORITY
+        }
+
+        return lookupElement?.toVlangLookupElement(
+            VlangLookupElementProperties(
+                isLocal = isLocal,
+                isSameModule = isSameModule,
+                elementKind = kind,
+                isReceiverTypeCompatible = isReceiverTypeCompatible,
+                isTypeCompatible = isTypeCompatible,
+                isContextElement = isContextElement,
+                isContextMember = isContextMember,
+            )
+        )
     }
 }

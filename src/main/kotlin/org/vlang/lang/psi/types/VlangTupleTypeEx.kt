@@ -25,11 +25,11 @@ class VlangTupleTypeEx(val types: List<VlangTypeEx>, anchor: PsiElement) : Vlang
     override fun module() = types.firstOrNull()?.module() ?: super.module()
 
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
-        return true // TODO: implement this
+        return false
     }
 
     override fun isEqual(rhs: VlangTypeEx): Boolean {
-        return true // TODO: implement this
+        return rhs is VlangTupleTypeEx && types.size == rhs.types.size && types.zip(rhs.types).all { (lhs, rhs) -> lhs.isEqual(rhs) }
     }
 
     override fun accept(visitor: VlangTypeVisitor) {

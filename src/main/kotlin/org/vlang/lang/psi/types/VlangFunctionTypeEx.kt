@@ -40,7 +40,8 @@ class VlangFunctionTypeEx(val params: List<VlangTypeEx>, val result: VlangTypeEx
     }
 
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
-        return true // TODO: implement this
+        if (rhs.isAny) return true
+        return isEqual(rhs)
     }
 
     override fun isEqual(rhs: VlangTypeEx): Boolean {

@@ -25,11 +25,15 @@ class VlangInterfaceTypeEx(val name: String, anchor: PsiElement) :
     override fun readableName(context: PsiElement) = VlangCodeInsightUtil.getQualifiedName(context, anchor!!, qualifiedName())
 
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
-        return true // TODO: Implement this
+        if (rhs.isAny) return true
+        if (rhs is VlangInterfaceTypeEx) {
+            return this.qualifiedName() == rhs.qualifiedName()
+        }
+        return false
     }
 
     override fun isEqual(rhs: VlangTypeEx): Boolean {
-        return rhs is VlangInterfaceTypeEx && name == rhs.name
+        return rhs is VlangInterfaceTypeEx && qualifiedName() == rhs.qualifiedName()
     }
 
     override fun accept(visitor: VlangTypeVisitor) {

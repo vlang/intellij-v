@@ -13,13 +13,11 @@ class VlangChannelTypeEx(val inner: VlangTypeEx, anchor: PsiElement) : VlangBase
     override fun module() = inner.module()
 
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
-        return when (rhs) {
-            is VlangAnyTypeEx     -> true
-            is VlangUnknownTypeEx -> true
-            is VlangVoidPtrTypeEx -> true
-            is VlangChannelTypeEx -> inner.isAssignableFrom(rhs.inner, project)
-            else                  -> inner.isAssignableFrom(rhs, project)
+        if (rhs.isAny) return true
+        if (rhs is VlangChannelTypeEx) {
+            return inner.isAssignableFrom(rhs.inner, project)
         }
+        return false
     }
 
     override fun isEqual(rhs: VlangTypeEx): Boolean {

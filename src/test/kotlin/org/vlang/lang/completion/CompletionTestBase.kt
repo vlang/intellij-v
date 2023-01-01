@@ -22,7 +22,7 @@ abstract class CompletionTestBase : BasePlatformTestCase() {
     }
 
     enum class CheckType {
-        EQUALS, INCLUDES, EXCLUDES, ORDERED_EQUALS, EMPTY, NOT_EMPTY,
+        EQUALS, INCLUDES, EXCLUDES, ORDERED_EQUALS, EMPTY, NOT_EMPTY, FIRST,
     }
 
     fun checkEmpty(
@@ -42,6 +42,12 @@ abstract class CompletionTestBase : BasePlatformTestCase() {
         count: Int,
         vararg variants: String,
     ) = doTestVariants(txt, CompletionType.BASIC, count, CheckType.INCLUDES, *variants)
+
+    fun checkOrderedEquals(
+        @Language("vlang") txt: String,
+        count: Int,
+        vararg variants: String,
+    ) = doTestVariants(txt, CompletionType.BASIC, count, CheckType.ORDERED_EQUALS, *variants)
 
     fun checkEquals(
         @Language("vlang") txt: String,
@@ -103,6 +109,10 @@ abstract class CompletionTestBase : BasePlatformTestCase() {
             }
             CheckType.NOT_EMPTY      -> {
                 assertTrue("Expected non-empty completion, but got: $stringList", stringList.isNotEmpty())
+            }
+
+            CheckType.FIRST          -> {
+                assertEquals("Expected first variant to be ${variants[0]}, but got: $stringList", variants[0], stringList[0])
             }
         }
     }

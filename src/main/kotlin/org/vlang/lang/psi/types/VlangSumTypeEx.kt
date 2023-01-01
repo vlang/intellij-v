@@ -25,11 +25,15 @@ open class VlangSumTypeEx(val name: String, val types: List<VlangTypeEx>, anchor
     override fun readableName(context: PsiElement) = VlangCodeInsightUtil.getQualifiedName(context, anchor!!, qualifiedName())
 
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
-        return true // TODO: implement this
+        if (rhs.isAny) return true
+        if (rhs is VlangSumTypeEx) {
+            return this.qualifiedName() == rhs.qualifiedName()
+        }
+        return this.types.any { it.isAssignableFrom(rhs, project) }
     }
 
     override fun isEqual(rhs: VlangTypeEx): Boolean {
-        return true // TODO: implement this
+        return rhs is VlangSumTypeEx && qualifiedName() == rhs.qualifiedName()
     }
 
     override fun accept(visitor: VlangTypeVisitor) {

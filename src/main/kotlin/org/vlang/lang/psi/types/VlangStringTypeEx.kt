@@ -13,13 +13,8 @@ class VlangStringTypeEx private constructor() : VlangStructTypeEx("string", null
     override fun readableName(context: PsiElement) = "string"
 
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
-        return when (rhs) {
-            is VlangAnyTypeEx     -> true
-            is VlangUnknownTypeEx -> true
-            is VlangVoidPtrTypeEx -> true
-            is VlangStringTypeEx  -> true
-            else                  -> false
-        }
+        if (rhs.isAny) return true
+        return rhs is VlangStringTypeEx
     }
 
     override fun isEqual(rhs: VlangTypeEx): Boolean = rhs is VlangStringTypeEx

@@ -21,7 +21,12 @@ open class VlangAliasTypeEx(val name: String, val inner: VlangTypeEx, anchor: Ps
     override fun readableName(context: PsiElement) = VlangCodeInsightUtil.getQualifiedName(context, anchor!!, qualifiedName())
 
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
-        return true // TODO: implement this
+        if (rhs.isAny) return true
+
+        val unwrapped = this.unwrapAlias()
+        val rhsUnwrapped = rhs.unwrapAlias()
+
+        return unwrapped.isEqual(rhsUnwrapped) || unwrapped.isAssignableFrom(rhsUnwrapped, project)
     }
 
     override fun isEqual(rhs: VlangTypeEx): Boolean {

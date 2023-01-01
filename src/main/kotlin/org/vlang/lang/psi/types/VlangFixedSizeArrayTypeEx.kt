@@ -13,10 +13,9 @@ class VlangFixedSizeArrayTypeEx(inner: VlangTypeEx, val size: Int, anchor: PsiEl
     override fun module() = inner.module()
 
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
+        if (rhs.isAny) return true
+
         return when (rhs) {
-            is VlangAnyTypeEx            -> true
-            is VlangVoidPtrTypeEx        -> true
-            is VlangUnknownTypeEx        -> true
             is VlangBuiltinArrayTypeEx   -> true
             is VlangFixedSizeArrayTypeEx -> size == rhs.size && inner.isAssignableFrom(rhs.inner, project)
             else                         -> false

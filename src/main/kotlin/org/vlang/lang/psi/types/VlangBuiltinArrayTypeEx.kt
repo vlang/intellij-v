@@ -13,10 +13,9 @@ class VlangBuiltinArrayTypeEx private constructor() : VlangStructTypeEx("array",
     override fun readableName(context: PsiElement) = "array"
 
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
+        if (rhs.isAny) return true
+
         return when (rhs) {
-            is VlangAnyTypeEx          -> true
-            is VlangUnknownTypeEx      -> true
-            is VlangVoidPtrTypeEx      -> true
             is VlangBuiltinArrayTypeEx -> true
             is VlangArrayTypeEx        -> true
             else                       -> false

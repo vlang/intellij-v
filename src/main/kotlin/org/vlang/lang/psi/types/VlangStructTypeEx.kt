@@ -24,31 +24,15 @@ open class VlangStructTypeEx(private val name: String, anchor: PsiElement?) :
     override fun readableName(context: PsiElement) = VlangCodeInsightUtil.getQualifiedName(context, anchor!!, qualifiedName())
 
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
-        return when (rhs) {
-            is VlangAnyTypeEx       -> true
-            is VlangUnknownTypeEx   -> true
-            is VlangVoidPtrTypeEx   -> true
-            is VlangOptionTypeEx    -> if (rhs.inner == null) true else isAssignableFrom(rhs.inner, project)
-            is VlangResultTypeEx    -> if (rhs.inner == null) true else isAssignableFrom(rhs.inner, project)
-            is VlangPointerTypeEx   -> isAssignableFrom(rhs.inner, project)
-            is VlangInterfaceTypeEx -> {
-                // TODO: Check for interface implementation
-                true
-            }
-
-            is VlangStructTypeEx    -> {
-                val otherFqn = rhs.name
-
-                // Temp approach
-                return name == otherFqn
-            }
-
-            else                    -> false
+        if (rhs.isAny) return true
+        if (rhs is VlangStructTypeEx) {
+            return this.qualifiedName() == rhs.qualifiedName()
         }
+        return false
     }
 
     override fun isEqual(rhs: VlangTypeEx): Boolean {
-        return rhs is VlangStructTypeEx && name == rhs.name
+        return rhs is VlangStructTypeEx && qualifiedName() == rhs.qualifiedName()
     }
 
     override fun accept(visitor: VlangTypeVisitor) {

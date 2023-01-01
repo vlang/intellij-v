@@ -13,10 +13,9 @@ open class VlangArrayTypeEx(val inner: VlangTypeEx, anchor: PsiElement) : VlangB
     override fun module() = inner.module()
 
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
+        if (rhs.isAny) return true
+
         return when (rhs) {
-            is VlangAnyTypeEx          -> true
-            is VlangVoidPtrTypeEx      -> true
-            is VlangUnknownTypeEx      -> true
             is VlangBuiltinArrayTypeEx -> true
             is VlangArrayTypeEx        -> inner.isAssignableFrom(rhs.inner, project)
             else                       -> false

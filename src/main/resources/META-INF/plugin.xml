@@ -153,10 +153,6 @@ The plugin provides support for V language
             language="vlang"
             implementationClass="org.vlang.lang.completion.contributors.VlangKeywordsCompletionContributor"/>
 
-        <completion.contributor
-            language="vlang"
-            implementationClass="org.vlang.lang.completion.contributors.VlangContextCompletionContributor"/>
-
         <typedHandler implementation="org.vlang.lang.completion.VlangTypedHandler"/>
         <enterHandlerDelegate implementation="org.vlang.lang.completion.VlangEnterHandlerDelegate"/>
         <backspaceHandlerDelegate order="first" implementation="org.vlang.lang.completion.VlangBackspaceHandlerDelegate"/>

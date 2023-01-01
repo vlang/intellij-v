@@ -21,21 +21,15 @@ open class VlangEnumTypeEx(val name: String, anchor: PsiElement?) :
     override fun readableName(context: PsiElement) = VlangCodeInsightUtil.getQualifiedName(context, anchor!!, qualifiedName())
 
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
-        return when (rhs) {
-            is VlangAnyTypeEx     -> true
-            is VlangUnknownTypeEx -> true
-            is VlangVoidPtrTypeEx -> true
-            is VlangEnumTypeEx    -> {
-                // Temp approach?
-                return name == rhs.name
-            }
-
-            else                  -> false
+        if (rhs.isAny) return true
+        if (rhs is VlangEnumTypeEx) {
+            return this.qualifiedName() == rhs.qualifiedName()
         }
+        return false
     }
 
     override fun isEqual(rhs: VlangTypeEx): Boolean {
-        return rhs is VlangEnumTypeEx && name == rhs.name
+        return rhs is VlangEnumTypeEx && qualifiedName() == rhs.qualifiedName()
     }
 
     override fun accept(visitor: VlangTypeVisitor) {

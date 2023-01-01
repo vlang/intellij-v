@@ -10,9 +10,9 @@ class VlangNoneTypeEx private constructor(): VlangBaseTypeEx() {
 
     override fun readableName(context: PsiElement): String = "none"
 
-    override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean = true
+    override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean = rhs is VlangNoneTypeEx
 
-    override fun isEqual(rhs: VlangTypeEx): Boolean = true
+    override fun isEqual(rhs: VlangTypeEx): Boolean = rhs is VlangNoneTypeEx
 
     override fun accept(visitor: VlangTypeVisitor) {
         if (!visitor.enter(this)) {

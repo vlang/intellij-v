@@ -28,11 +28,15 @@ class VlangMapTypeEx(val key: VlangTypeEx, val value: VlangTypeEx, anchor: PsiEl
     override fun module() = value.module()
 
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
-        return true // TODO: implement this
+        if (rhs.isAny) return true
+        if (rhs is VlangMapTypeEx) {
+            return key.isAssignableFrom(rhs.key, project) && value.isAssignableFrom(rhs.value, project)
+        }
+        return false
     }
 
     override fun isEqual(rhs: VlangTypeEx): Boolean {
-        return true // TODO: implement this
+        return rhs is VlangMapTypeEx && key.isEqual(rhs.key) && value.isEqual(rhs.value)
     }
 
     override fun accept(visitor: VlangTypeVisitor) {

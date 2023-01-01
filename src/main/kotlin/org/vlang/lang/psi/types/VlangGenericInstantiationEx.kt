@@ -30,13 +30,18 @@ class VlangGenericInstantiationEx(
     }
 
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
-        return when (rhs) {
-            is VlangAnyTypeEx              -> true
-            is VlangUnknownTypeEx          -> true
-            is VlangVoidPtrTypeEx          -> true
-            is VlangGenericInstantiationEx -> true
-            else                           -> false
+        if (rhs.isAny) return true
+        if (rhs is VlangGenericInstantiationEx) {
+            val isAssignableInner = inner.isAssignableFrom(rhs.inner, project)
+            val isEqualSpecialization = specialization.size == rhs.specialization.size &&
+                    specialization.zip(rhs.specialization).all { (lhs, rhs) ->
+                        lhs.isEqual(rhs)
+                    }
+
+            return isAssignableInner && isEqualSpecialization
         }
+
+        return false
     }
 
     override fun isEqual(rhs: VlangTypeEx): Boolean {

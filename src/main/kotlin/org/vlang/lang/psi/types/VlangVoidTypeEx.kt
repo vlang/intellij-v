@@ -11,12 +11,8 @@ class VlangVoidTypeEx private constructor() : VlangBaseTypeEx() {
     override fun readableName(context: PsiElement): String = "void"
 
     override fun isAssignableFrom(rhs: VlangTypeEx, project: Project): Boolean {
-        return when (rhs) {
-            is VlangAnyTypeEx     -> true
-            is VlangUnknownTypeEx -> true
-            is VlangVoidPtrTypeEx -> true
-            else                  -> false
-        }
+        if (rhs.isAny) return true
+        return false
     }
 
     override fun isEqual(rhs: VlangTypeEx): Boolean {

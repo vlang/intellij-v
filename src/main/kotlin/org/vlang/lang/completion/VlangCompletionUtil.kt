@@ -29,30 +29,30 @@ import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import javax.swing.Icon
 
 object VlangCompletionUtil {
-    const val KEYWORD_PRIORITY = 10
-    const val CONTEXT_COMPLETION_PRIORITY = 35
-    const val CONTEXT_KEYWORD_PRIORITY = 25
-    const val NOT_IMPORTED_METHOD_PRIORITY = 7
-    const val METHOD_PRIORITY = NOT_IMPORTED_METHOD_PRIORITY + 10
-    const val NOT_IMPORTED_FUNCTION_PRIORITY = 3
-    const val FUNCTION_PRIORITY = NOT_IMPORTED_FUNCTION_PRIORITY + 10
-    const val NOT_IMPORTED_STRUCT_PRIORITY = 2
-    const val STRUCT_PRIORITY = NOT_IMPORTED_STRUCT_PRIORITY + 10
-    const val NOT_IMPORTED_TYPE_ALIAS_PRIORITY = 1
-    const val TYPE_ALIAS_PRIORITY = NOT_IMPORTED_TYPE_ALIAS_PRIORITY + 10
-    const val NOT_IMPORTED_CONSTANT_PRIORITY = 1
-    const val CONSTANT_PRIORITY = NOT_IMPORTED_CONSTANT_PRIORITY + 10
-    const val COMPILE_TIME_CONSTANT_PRIORITY = CONSTANT_PRIORITY + 5
-    const val NOT_IMPORTED_TYPE_PRIORITY = 5
-    const val TYPE_PRIORITY = NOT_IMPORTED_TYPE_PRIORITY + 10
-    const val NOT_IMPORTED_TYPE_CONVERSION = 1
-    const val TYPE_CONVERSION = NOT_IMPORTED_TYPE_CONVERSION + 10
-    const val GLOBAL_VAR_PRIORITY = 5
-    const val NOT_IMPORTED_VAR_PRIORITY = 5
-    const val VAR_PRIORITY = NOT_IMPORTED_VAR_PRIORITY + 10
-    const val FIELD_PRIORITY = METHOD_PRIORITY - 1
-    const val LABEL_PRIORITY = 15
-    const val MODULE_PRIORITY = 15
+    const val KEYWORD_PRIORITY = 0
+    const val CONTEXT_COMPLETION_PRIORITY = 20
+    const val CONTEXT_KEYWORD_PRIORITY = 0
+    const val NOT_IMPORTED_METHOD_PRIORITY = 0
+    const val METHOD_PRIORITY = NOT_IMPORTED_METHOD_PRIORITY + 0
+    const val NOT_IMPORTED_FUNCTION_PRIORITY = 0
+    const val FUNCTION_PRIORITY = NOT_IMPORTED_FUNCTION_PRIORITY + 0
+    const val NOT_IMPORTED_STRUCT_PRIORITY = 0
+    const val STRUCT_PRIORITY = NOT_IMPORTED_STRUCT_PRIORITY + 0
+    const val NOT_IMPORTED_TYPE_ALIAS_PRIORITY = 0
+    const val TYPE_ALIAS_PRIORITY = NOT_IMPORTED_TYPE_ALIAS_PRIORITY + 0
+    const val NOT_IMPORTED_CONSTANT_PRIORITY = 0
+    const val CONSTANT_PRIORITY = NOT_IMPORTED_CONSTANT_PRIORITY + 0
+    const val COMPILE_TIME_CONSTANT_PRIORITY = CONSTANT_PRIORITY + 0
+    const val NOT_IMPORTED_TYPE_PRIORITY = 0
+    const val TYPE_PRIORITY = NOT_IMPORTED_TYPE_PRIORITY + 0
+    const val NOT_IMPORTED_TYPE_CONVERSION = 0
+    const val TYPE_CONVERSION = NOT_IMPORTED_TYPE_CONVERSION + 0
+    const val GLOBAL_VAR_PRIORITY = 0
+    const val NOT_IMPORTED_VAR_PRIORITY = 0
+    const val VAR_PRIORITY = NOT_IMPORTED_VAR_PRIORITY + 0
+    const val FIELD_PRIORITY = 16
+    const val LABEL_PRIORITY = 0
+    const val MODULE_PRIORITY = 0
 
     val compileTimeConstants = mapOf(
         "FN" to "The name of the current function",
@@ -74,6 +74,10 @@ object VlangCompletionUtil {
         return PrioritizedLookupElement.withPriority(this, priority.toDouble())
     }
 
+    fun LookupElement.toVlangLookupElement(properties: VlangLookupElementProperties): LookupElement {
+        return VlangLookupElement(this, properties)
+    }
+    
     fun isCompileTimeIdentifier(element: PsiElement): Boolean {
         return element.elementType == VlangTypes.IDENTIFIER && element.text.startsWith("@")
     }
