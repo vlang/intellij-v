@@ -67,85 +67,84 @@ V Language file
                 REFERENCE_EXPRESSION
                   PsiElement(VlangTokenType.identifier)('a')
               PsiElement(VlangTokenType.})('}')
-            ELSE_STATEMENT
+            ELSE_BRANCH
               PsiElement(VlangTokenType.else)('else')
-              IF_STATEMENT
-                IF_EXPRESSION
-                  PsiElement(VlangTokenType.if)('if')
-                  IS_EXPRESSION
-                    REFERENCE_EXPRESSION
-                      PsiElement(VlangTokenType.identifier)('a')
-                    PsiElement(VlangTokenType.is)('is')
-                    MAP_TYPE
+              IF_EXPRESSION
+                PsiElement(VlangTokenType.if)('if')
+                IS_EXPRESSION
+                  REFERENCE_EXPRESSION
+                    PsiElement(VlangTokenType.identifier)('a')
+                  PsiElement(VlangTokenType.is)('is')
+                  MAP_TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
+                    PsiElement(VlangTokenType.identifier)('map')
+                    PsiElement(VlangTokenType.[)('[')
+                    TYPE
                       TYPE_MODIFIERS
                         <empty list>
-                      PsiElement(VlangTokenType.identifier)('map')
-                      PsiElement(VlangTokenType.[)('[')
-                      TYPE
-                        TYPE_MODIFIERS
-                          <empty list>
-                        TYPE_REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('string')
-                      PsiElement(VlangTokenType.])(']')
-                      TYPE
-                        TYPE_MODIFIERS
-                          <empty list>
-                        TYPE_REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('Any')
-                  BLOCK
-                    PsiElement(VlangTokenType.{)('{')
-                    SIMPLE_STATEMENT
-                      VAR_DECLARATION
-                        VAR_DEFINITION
-                          VAR_MODIFIERS
-                            VAR_MODIFIER
-                              PsiElement(VlangTokenType.mut)('mut')
-                          PsiElement(VlangTokenType.identifier)('arr')
-                        PsiElement(VlangTokenType.:=)(':=')
-                        LITERAL_VALUE_EXPRESSION
-                          ARRAY_TYPE
+                      TYPE_REFERENCE_EXPRESSION
+                        PsiElement(VlangTokenType.identifier)('string')
+                    PsiElement(VlangTokenType.])(']')
+                    TYPE
+                      TYPE_MODIFIERS
+                        <empty list>
+                      TYPE_REFERENCE_EXPRESSION
+                        PsiElement(VlangTokenType.identifier)('Any')
+                BLOCK
+                  PsiElement(VlangTokenType.{)('{')
+                  SIMPLE_STATEMENT
+                    VAR_DECLARATION
+                      VAR_DEFINITION
+                        VAR_MODIFIERS
+                          VAR_MODIFIER
+                            PsiElement(VlangTokenType.mut)('mut')
+                        PsiElement(VlangTokenType.identifier)('arr')
+                      PsiElement(VlangTokenType.:=)(':=')
+                      LITERAL_VALUE_EXPRESSION
+                        ARRAY_TYPE
+                          TYPE_MODIFIERS
+                            <empty list>
+                          PsiElement(VlangTokenType.[)('[')
+                          PsiElement(VlangTokenType.])(']')
+                          TYPE
                             TYPE_MODIFIERS
                               <empty list>
-                            PsiElement(VlangTokenType.[)('[')
-                            PsiElement(VlangTokenType.])(']')
-                            TYPE
-                              TYPE_MODIFIERS
-                                <empty list>
-                              TYPE_REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('Any')
-                          PsiElement(VlangTokenType.{)('{')
-                          PsiElement(VlangTokenType.})('}')
-                    FOR_STATEMENT
-                      PsiElement(VlangTokenType.for)('for')
-                      RANGE_CLAUSE
-                        VAR_DEFINITION
-                          VAR_MODIFIERS
-                            <empty list>
-                          PsiElement(VlangTokenType.identifier)('_')
-                        PsiElement(VlangTokenType.,)(',')
-                        VAR_DEFINITION
-                          VAR_MODIFIERS
-                            <empty list>
-                          PsiElement(VlangTokenType.identifier)('v')
-                        PsiElement(VlangTokenType.in)('in')
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('a')
-                      BLOCK
+                            TYPE_REFERENCE_EXPRESSION
+                              PsiElement(VlangTokenType.identifier)('Any')
                         PsiElement(VlangTokenType.{)('{')
-                        SIMPLE_STATEMENT
-                          LEFT_HAND_EXPR_LIST
-                            MUL_EXPR
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('arr')
-                              PsiElement(VlangTokenType.<<)('<<')
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('v')
                         PsiElement(VlangTokenType.})('}')
-                    RETURN_STATEMENT
-                      PsiElement(VlangTokenType.return)('return')
+                  FOR_STATEMENT
+                    PsiElement(VlangTokenType.for)('for')
+                    RANGE_CLAUSE
+                      VAR_DEFINITION
+                        VAR_MODIFIERS
+                          <empty list>
+                        PsiElement(VlangTokenType.identifier)('_')
+                      PsiElement(VlangTokenType.,)(',')
+                      VAR_DEFINITION
+                        VAR_MODIFIERS
+                          <empty list>
+                        PsiElement(VlangTokenType.identifier)('v')
+                      PsiElement(VlangTokenType.in)('in')
                       REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('arr')
-                    PsiElement(VlangTokenType.})('}')
+                        PsiElement(VlangTokenType.identifier)('a')
+                    BLOCK
+                      PsiElement(VlangTokenType.{)('{')
+                      SIMPLE_STATEMENT
+                        LEFT_HAND_EXPR_LIST
+                          MUL_EXPR
+                            REFERENCE_EXPRESSION
+                              PsiElement(VlangTokenType.identifier)('arr')
+                            PsiElement(VlangTokenType.<<)('<<')
+                            REFERENCE_EXPRESSION
+                              PsiElement(VlangTokenType.identifier)('v')
+                      PsiElement(VlangTokenType.})('}')
+                  RETURN_STATEMENT
+                    PsiElement(VlangTokenType.return)('return')
+                    REFERENCE_EXPRESSION
+                      PsiElement(VlangTokenType.identifier)('arr')
+                  PsiElement(VlangTokenType.})('}')
       RETURN_STATEMENT
         PsiElement(VlangTokenType.return)('return')
         ARRAY_CREATION

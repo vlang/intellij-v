@@ -224,7 +224,7 @@ V Language file
                             LITERAL
                               PsiElement(VlangTokenType.int)('1')
                       PsiElement(VlangTokenType.})('}')
-                    ELSE_STATEMENT
+                    ELSE_BRANCH
                       PsiElement(VlangTokenType.else)('else')
                       BLOCK
                         PsiElement(VlangTokenType.{)('{')
@@ -283,7 +283,7 @@ V Language file
                                 REFERENCE_EXPRESSION
                                   PsiElement(VlangTokenType.identifier)('mn')
                             PsiElement(VlangTokenType.})('}')
-                          ELSE_STATEMENT
+                          ELSE_BRANCH
                             PsiElement(VlangTokenType.else)('else')
                             BLOCK
                               PsiElement(VlangTokenType.{)('{')
@@ -297,7 +297,7 @@ V Language file
                                       PsiElement(VlangTokenType.int)('1')
                               PsiElement(VlangTokenType.})('}')
                       PsiElement(VlangTokenType.})('}')
-                    ELSE_STATEMENT
+                    ELSE_BRANCH
                       PsiElement(VlangTokenType.else)('else')
                       BLOCK
                         PsiElement(VlangTokenType.{)('{')
@@ -322,7 +322,7 @@ V Language file
                                   REFERENCE_EXPRESSION
                                     PsiElement(VlangTokenType.identifier)('mn')
                               PsiElement(VlangTokenType.})('}')
-                            ELSE_STATEMENT
+                            ELSE_BRANCH
                               PsiElement(VlangTokenType.else)('else')
                               BLOCK
                                 PsiElement(VlangTokenType.{)('{')
@@ -477,7 +477,7 @@ V Language file
                     PsiElement(VlangTokenType..)('.')
                     PsiElement(VlangTokenType.identifier)('len')
               PsiElement(VlangTokenType.})('}')
-            ELSE_STATEMENT
+            ELSE_BRANCH
               PsiElement(VlangTokenType.else)('else')
               BLOCK
                 PsiElement(VlangTokenType.{)('{')
@@ -675,7 +675,7 @@ V Language file
                   REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('s1')
               PsiElement(VlangTokenType.})('}')
-            ELSE_STATEMENT
+            ELSE_BRANCH
               PsiElement(VlangTokenType.else)('else')
               BLOCK
                 PsiElement(VlangTokenType.{)('{')
@@ -706,7 +706,7 @@ V Language file
                   REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('s2')
               PsiElement(VlangTokenType.})('}')
-            ELSE_STATEMENT
+            ELSE_BRANCH
               PsiElement(VlangTokenType.else)('else')
               BLOCK
                 PsiElement(VlangTokenType.{)('{')
@@ -818,7 +818,7 @@ V Language file
                         LITERAL
                           PsiElement(VlangTokenType.int)('1')
                   PsiElement(VlangTokenType.})('}')
-                ELSE_STATEMENT
+                ELSE_BRANCH
                   PsiElement(VlangTokenType.else)('else')
                   BLOCK
                     PsiElement(VlangTokenType.{)('{')
@@ -923,7 +923,7 @@ V Language file
                           PsiElement(VlangTokenType.identifier)('bigram')
                         PsiElement(VlangTokenType.])(']')
                   PsiElement(VlangTokenType.})('}')
-                ELSE_STATEMENT
+                ELSE_BRANCH
                   PsiElement(VlangTokenType.else)('else')
                   BLOCK
                     PsiElement(VlangTokenType.{)('{')

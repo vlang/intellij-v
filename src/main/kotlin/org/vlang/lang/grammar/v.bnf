@@ -276,6 +276,12 @@ VarDeclaration ::= VarDefinitionList ':=' ExpressionList {pin=2}
 // <label>: <stmt>
 LabeledStatement ::= LabelDefinition Statement? {pin=2}
 
+// <label>:
+LabelDefinition ::= identifier ':' {
+  pin=2
+  stubClass="org.vlang.lang.stubs.VlangLabelDefinitionStub"
+}
+
 // = <list>
 left AssignmentStatement ::= AssignOp (ExpressionList) {pin=1}
 AssignOp ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '>>>=' | '&=' | '&^='
@@ -285,26 +291,25 @@ left SendStatement ::= '<-' BeforeBlockExpression {pin=1}
 // end of simple statements
 
 // For statement
-// [<label>:] for ... { ... }
-ForStatement ::= for (ForOrRangeClause Block | Block | BeforeBlockExpression Block) {pin(".*")="for|ForOrRangeClause"}
-// <label>:
-LabelDefinition ::= identifier ':' {
-  pin=2
-  stubClass="org.vlang.lang.stubs.VlangLabelDefinitionStub"
-}
-// for ;;; or for <*> in <*>
-private ForOrRangeClause ::= (ForClause | RangeClause)
+// for { ... }
+// for <expr> { ... }
+// for [<statement>] ; [<expr>] ; [<statement>] { ... }
+// for [<expr> ,] <expr> in <expr> { ... }
+ForStatement ::= for (ForClause | RangeClause | BeforeBlockExpression)? Block {pin=1}
+
+// С form of for loop
 // [<statement>]; [<expression>]; [<statement>]
-ForClause ::= SimpleStatement? ';' Expression? ';' [<<enterMode "noBraces">> SimpleStatement <<exitModeSafe "noBraces">>] {methods=[processDeclarations]}
-// in <expression> or <var> in <expression>
-RangeClause ::= in BeforeBlockExpression | VarDefinitionList in BeforeBlockExpression {
+ForClause ::= SimpleStatement? ';' Expression? ';' (<<enterMode "noBraces">> SimpleStatement <<exitModeSafe "noBraces">>)? {methods=[processDeclarations]}
+
+// <var>* in <expression>
+RangeClause ::= VarDefinitionList in BeforeBlockExpression {
   pin(".*")=2
   extends=VarDeclaration
   methods=[getRangeExpression getLeftExpressionsList getRightExpressionsList]
 }
 
-// $for (...)  { ... }
-CompileTimeForStatement ::= '$for' <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) <<exitModeSafe "BLOCK?">> {pin=1}
+// See ForStatement
+CompileTimeForStatement ::= '$for' <<enterMode "BLOCK?">> (ForClause | RangeClause | Expression) Block <<exitModeSafe "BLOCK?">> {pin=1}
 
 // return <expr>
 // return <expr>, <expr>

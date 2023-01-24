@@ -1147,7 +1147,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '$for' <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) <<exitModeSafe "BLOCK?">>
+  // '$for' <<enterMode "BLOCK?">> (ForClause | RangeClause | Expression) Block <<exitModeSafe "BLOCK?">>
   public static boolean CompileTimeForStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "CompileTimeForStatement")) return false;
     if (!nextTokenIs(b, FOR_COMPILE_TIME)) return false;
@@ -1157,42 +1157,19 @@ public class VlangParser implements PsiParser, LightPsiParser {
     p = r; // pin = 1
     r = r && report_error_(b, enterMode(b, l + 1, "BLOCK?"));
     r = p && report_error_(b, CompileTimeForStatement_2(b, l + 1)) && r;
+    r = p && report_error_(b, Block(b, l + 1)) && r;
     r = p && exitModeSafe(b, l + 1, "BLOCK?") && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
-  // ForOrRangeClause Block | Block | Expression Block
+  // ForClause | RangeClause | Expression
   private static boolean CompileTimeForStatement_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "CompileTimeForStatement_2")) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = CompileTimeForStatement_2_0(b, l + 1);
-    if (!r) r = Block(b, l + 1);
-    if (!r) r = CompileTimeForStatement_2_2(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // ForOrRangeClause Block
-  private static boolean CompileTimeForStatement_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "CompileTimeForStatement_2_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = ForOrRangeClause(b, l + 1);
-    r = r && Block(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // Expression Block
-  private static boolean CompileTimeForStatement_2_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "CompileTimeForStatement_2_2")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = Expression(b, l + 1, -1);
-    r = r && Block(b, l + 1);
-    exit_section_(b, m, null, r);
+    r = ForClause(b, l + 1);
+    if (!r) r = RangeClause(b, l + 1);
+    if (!r) r = Expression(b, l + 1, -1);
     return r;
   }
 
@@ -2153,7 +2130,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // SimpleStatement? ';' Expression? ';' [<<enterMode "noBraces">> SimpleStatement <<exitModeSafe "noBraces">>]
+  // SimpleStatement? ';' Expression? ';' (<<enterMode "noBraces">> SimpleStatement <<exitModeSafe "noBraces">>)?
   public static boolean ForClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForClause")) return false;
     boolean r;
@@ -2181,7 +2158,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // [<<enterMode "noBraces">> SimpleStatement <<exitModeSafe "noBraces">>]
+  // (<<enterMode "noBraces">> SimpleStatement <<exitModeSafe "noBraces">>)?
   private static boolean ForClause_4(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForClause_4")) return false;
     ForClause_4_0(b, l + 1);
@@ -2201,17 +2178,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ForClause | RangeClause
-  static boolean ForOrRangeClause(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ForOrRangeClause")) return false;
-    boolean r;
-    r = ForClause(b, l + 1);
-    if (!r) r = RangeClause(b, l + 1);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // for (ForOrRangeClause Block | Block | BeforeBlockExpression Block)
+  // for (ForClause | RangeClause | BeforeBlockExpression)? Block
   public static boolean ForStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForStatement")) return false;
     if (!nextTokenIs(b, FOR)) return false;
@@ -2219,43 +2186,26 @@ public class VlangParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, FOR_STATEMENT, null);
     r = consumeToken(b, FOR);
     p = r; // pin = for|ForOrRangeClause
-    r = r && ForStatement_1(b, l + 1);
+    r = r && report_error_(b, ForStatement_1(b, l + 1));
+    r = p && Block(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
-  // ForOrRangeClause Block | Block | BeforeBlockExpression Block
+  // (ForClause | RangeClause | BeforeBlockExpression)?
   private static boolean ForStatement_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForStatement_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = ForStatement_1_0(b, l + 1);
-    if (!r) r = Block(b, l + 1);
-    if (!r) r = ForStatement_1_2(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
+    ForStatement_1_0(b, l + 1);
+    return true;
   }
 
-  // ForOrRangeClause Block
+  // ForClause | RangeClause | BeforeBlockExpression
   private static boolean ForStatement_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForStatement_1_0")) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_);
-    r = ForOrRangeClause(b, l + 1);
-    p = r; // pin = for|ForOrRangeClause
-    r = r && Block(b, l + 1);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  // BeforeBlockExpression Block
-  private static boolean ForStatement_1_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ForStatement_1_2")) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = BeforeBlockExpression(b, l + 1);
-    r = r && Block(b, l + 1);
-    exit_section_(b, m, null, r);
+    r = ForClause(b, l + 1);
+    if (!r) r = RangeClause(b, l + 1);
+    if (!r) r = BeforeBlockExpression(b, l + 1);
     return r;
   }
 
@@ -4265,33 +4215,11 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // in BeforeBlockExpression | VarDefinitionList in BeforeBlockExpression
+  // VarDefinitionList in BeforeBlockExpression
   public static boolean RangeClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RangeClause")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, RANGE_CLAUSE, "<range clause>");
-    r = RangeClause_0(b, l + 1);
-    if (!r) r = RangeClause_1(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // in BeforeBlockExpression
-  private static boolean RangeClause_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "RangeClause_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, IN);
-    r = r && BeforeBlockExpression(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // VarDefinitionList in BeforeBlockExpression
-  private static boolean RangeClause_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "RangeClause_1")) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_);
+    Marker m = enter_section_(b, l, _NONE_, RANGE_CLAUSE, "<range clause>");
     r = VarDefinitionList(b, l + 1);
     r = r && consumeToken(b, IN);
     p = r; // pin = 2

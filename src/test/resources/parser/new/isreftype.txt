@@ -289,7 +289,7 @@ V Language file
                     PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('ref')
                     PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
               PsiElement(VlangTokenType.})('}')
-            ELSE_STATEMENT
+            ELSE_BRANCH
               PsiElement(VlangTokenType.else)('else')
               BLOCK
                 PsiElement(VlangTokenType.{)('{')

@@ -11,9 +11,6 @@ public interface VlangRangeClause extends VlangVarDeclaration {
   VlangExpression getExpression();
 
   @NotNull
-  List<VlangVarDefinition> getVarDefinitionList();
-
-  @NotNull
   PsiElement getIn();
 
   //WARNING: getRangeExpression(...) is skipped

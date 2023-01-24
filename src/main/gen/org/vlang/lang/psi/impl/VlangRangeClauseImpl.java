@@ -35,12 +35,6 @@ public class VlangRangeClauseImpl extends VlangVarDeclarationImpl implements Vla
 
   @Override
   @NotNull
-  public List<VlangVarDefinition> getVarDefinitionList() {
-    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangVarDefinition.class);
-  }
-
-  @Override
-  @NotNull
   public PsiElement getIn() {
     return notNullChild(findChildByType(IN));
   }
