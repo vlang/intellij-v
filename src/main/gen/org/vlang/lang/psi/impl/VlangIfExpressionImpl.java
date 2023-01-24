@@ -35,8 +35,8 @@ public class VlangIfExpressionImpl extends VlangExpressionImpl implements VlangI
 
   @Override
   @Nullable
-  public VlangElseStatement getElseStatement() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangElseStatement.class);
+  public VlangElseBranch getElseBranch() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangElseBranch.class);
   }
 
   @Override

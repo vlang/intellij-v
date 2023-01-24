@@ -10,7 +10,7 @@ import com.intellij.psi.PsiElementVisitor
 import com.intellij.psi.util.childrenOfType
 import com.intellij.psi.util.parentOfType
 import org.vlang.ide.inspections.VlangBaseInspection
-import org.vlang.lang.psi.VlangElseStatement
+import org.vlang.lang.psi.VlangElseBranch
 import org.vlang.lang.psi.VlangForStatement
 import org.vlang.lang.psi.VlangIfExpression
 import org.vlang.lang.psi.VlangVisitor
@@ -21,7 +21,7 @@ class VlangControlFlowWithEmptyBodiesInspection : VlangBaseInspection() {
             override fun visitIfExpression(o: VlangIfExpression) {
                 super.visitIfExpression(o)
 
-                if (o.elseStatement != null) {
+                if (o.elseBranch != null) {
                     return
                 }
 
@@ -35,10 +35,10 @@ class VlangControlFlowWithEmptyBodiesInspection : VlangBaseInspection() {
                 }
             }
 
-            override fun visitElseStatement(o: VlangElseStatement) {
-                super.visitElseStatement(o)
+            override fun visitElseBranch(o: VlangElseBranch) {
+                super.visitElseBranch(o)
 
-                if (o.ifStatement != null) {
+                if (o.ifExpression != null) {
                     return
                 }
 
@@ -71,8 +71,8 @@ class VlangControlFlowWithEmptyBodiesInspection : VlangBaseInspection() {
         override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
             val element = descriptor.psiElement ?: return
             val elementToDelete = when (element.text) {
-                "if" -> element.parentOfType<VlangElseStatement>() ?: element.parentOfType<VlangIfExpression>()
-                "else" -> element.parentOfType<VlangElseStatement>()
+                "if" -> element.parentOfType<VlangElseBranch>() ?: element.parentOfType<VlangIfExpression>()
+                "else" -> element.parentOfType<VlangElseBranch>()
                 "for" -> element.parentOfType<VlangForStatement>()
                 else -> null
             } ?: return

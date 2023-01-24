@@ -11,7 +11,7 @@ public interface VlangCompileTimeIfExpression extends VlangExpression {
   VlangBlock getBlock();
 
   @Nullable
-  VlangCompileElseStatement getCompileElseStatement();
+  VlangCompileTimeElseBranch getCompileTimeElseBranch();
 
   @Nullable
   VlangExpression getExpression();

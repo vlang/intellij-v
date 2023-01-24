@@ -202,10 +202,9 @@ private TopDeclaration ::=
   | EnumDeclaration
   | InterfaceDeclaration
   | GlobalVariableDeclaration
-  | CompileTimeIfStatement
   | CompileTimeForStatement
   | TypeAliasDeclaration
-  | Statement
+  | Statement // for single files without `main()` function
 
 private TopLevelDeclarationRecover ::= !('type' | '__global' | enum | import | '$for' | '$if' | '[' | '!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | '{' | '|' | '|=' | '||' | '&&' | '}' | break | case | const | continue | defer | else | float | for | fn | pub | mut | volatile | shared | go | spawn | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | union | switch | var | unsafe | assert | match | lock | rlock | asm | true | false | none | '$else' | typeof | offsetof | sizeof | isreftype | dump)
 
@@ -225,23 +224,15 @@ private Statements ::= StatementWithSemi*
 
 private StatementWithSemi ::= Statement (semi | &'}') { pin=1 recoverWhile=StatementRecover }
 Statement ::=
-    ConstDeclaration
-  | BlockNoPin
+    BlockNoPin
   | SimpleStatement
-  | LockStatement
-  | GoStatement
-  | SpawnStatement
   | ReturnStatement
   | BreakStatement
   | ContinueStatement
   | GotoStatement
-  | CompileTimeIfStatement
-  | IfStatement
-  | UnsafeStatement
   | ForStatement
   | CompileTimeForStatement
   | AssertStatement
-  | TypeAliasDeclaration
   | AsmBlockStatement
   | LabeledStatement
   | DeferStatement {methods=[processDeclarations]}
@@ -293,23 +284,6 @@ AssignOp ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=
 left SendStatement ::= '<-' BeforeBlockExpression {pin=1}
 // end of simple statements
 
-// If-else
-// if <condition> { ... } as statement
-IfStatement ::= IfExpression
-// else { ... }
-// else if { ... }
-ElseStatement ::= else (IfStatement | Block) {
-  pin=1
-  methods=[getBlock]
-}
-
-// Compile time if-else
-// $if <condition> { ... } as statement
-CompileTimeIfStatement ::= CompileTimeIfExpression
-// $else { ... }
-// $else $if { ... }
-CompileElseStatement ::= '$else' (CompileTimeIfStatement | Block) {pin=1}
-
 // For statement
 // [<label>:] for ... { ... }
 ForStatement ::= for (ForOrRangeClause Block | Block | BeforeBlockExpression Block) {pin(".*")="for|ForOrRangeClause"}
@@ -332,14 +306,6 @@ RangeClause ::= in BeforeBlockExpression | VarDefinitionList in BeforeBlockExpre
 // $for (...)  { ... }
 CompileTimeForStatement ::= '$for' <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) <<exitModeSafe "BLOCK?">> {pin=1}
 
-// (r)lock <var> { ... }
-LockStatement ::= LockExpression
-
-// go <expr>
-GoStatement ::= GoExpression
-// spawn <expr>
-SpawnStatement ::= SpawnExpression
-
 // return <expr>
 // return <expr>, <expr>
 ReturnStatement ::= return ExpressionList?
@@ -355,9 +321,6 @@ GotoStatement ::= goto LabelRef
 
 // assert <expr>
 AssertStatement ::= assert Expression (',' Expression)?
-
-// unsafe { ... } as statement
-UnsafeStatement ::= UnsafeExpression
 
 // defer { ... } rule
 DeferStatement ::= defer Block
@@ -1013,12 +976,21 @@ AsExpression ::= Expression as Type {pin=2}
 UnsafeExpression ::= unsafe Block {pin=1}
 
 // if <condition> { ... }
-IfExpression ::= if Condition semi? Block (semi? ElseStatement)? {
+IfExpression ::= if Condition semi? Block (semi? ElseBranch)? {
   pin=1
   methods=[isGuard]
 }
+
+// else { ... }
+// else if { ... }
+ElseBranch ::= else (IfExpression | Block) {pin=1}
+
 // $if <condition> { ... }
-CompileTimeIfExpression ::= '$if' Condition semi? Block (semi? CompileElseStatement)? {pin=1}
+CompileTimeIfExpression ::= '$if' Condition semi? Block (semi? CompileTimeElseBranch)? {pin=1}
+
+// $else { ... }
+// $else $if { ... }
+CompileTimeElseBranch ::= '$else' (CompileTimeIfExpression | Block) {pin=1}
 
 private Condition ::= GuardVarDeclaration | BeforeBlockExpression
 GuardVarDeclaration ::= VarDefinitionList ':=' BeforeBlockExpression {extends=VarDeclaration}

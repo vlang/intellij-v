@@ -32,16 +32,4 @@ public class VlangStatementImpl extends VlangCompositeElementImpl implements Vla
     return VlangPsiTreeUtil.getChildOfType(this, VlangBlock.class);
   }
 
-  @Override
-  @Nullable
-  public VlangConstDeclaration getConstDeclaration() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangConstDeclaration.class);
-  }
-
-  @Override
-  @Nullable
-  public VlangTypeAliasDeclaration getTypeAliasDeclaration() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeAliasDeclaration.class);
-  }
-
 }

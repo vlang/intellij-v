@@ -191,8 +191,8 @@ open class VlangControlFlowBuilder(private val scopeHolder: PsiElement) {
             lastInstruction = ifConditionHost
             addInstruction(falseConditionInstruction)
 
-            val elseStatement = o.elseStatement
-            val elseBlock = elseStatement?.block
+            val elseBranch = o.elseBranch
+            val elseBlock = elseBranch?.block
             elseBlock?.accept(this)
 
             addInstruction(ifOutInstruction)

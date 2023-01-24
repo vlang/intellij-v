@@ -11,7 +11,7 @@ public interface VlangIfExpression extends VlangExpression {
   VlangBlock getBlock();
 
   @Nullable
-  VlangElseStatement getElseStatement();
+  VlangElseBranch getElseBranch();
 
   @Nullable
   VlangExpression getExpression();

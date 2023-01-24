@@ -889,11 +889,6 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getBlock(o: VlangElseStatement): VlangBlock? {
-        return o.childrenOfType<VlangBlock>().firstOrNull()
-    }
-
-    @JvmStatic
     fun getReference(o: VlangLabelRef): VlangLabelReference {
         return VlangLabelReference(o)
     }
@@ -1572,7 +1567,7 @@ object VlangPsiImplUtil {
 
         if (expr is VlangIfExpression) {
             val ifBody = expr.block
-            val elseBody = expr.elseStatement?.block
+            val elseBody = expr.elseBranch?.block
 
             val ifType = getTypeOfBlock(ifBody, context)
             val elseType = getTypeOfBlock(elseBody, context)
@@ -1587,7 +1582,7 @@ object VlangPsiImplUtil {
 
         if (expr is VlangCompileTimeIfExpression) {
             val ifBody = expr.block
-            val elseBody = expr.compileElseStatement?.block
+            val elseBody = expr.compileTimeElseBranch?.block
 
             val ifType = getTypeOfBlock(ifBody, context)
             val elseType = getTypeOfBlock(elseBody, context)

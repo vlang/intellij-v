@@ -10,15 +10,14 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangUnsafeStatementImpl extends VlangStatementImpl implements VlangUnsafeStatement {
+public class VlangElseBranchImpl extends VlangCompositeElementImpl implements VlangElseBranch {
 
-  public VlangUnsafeStatementImpl(@NotNull ASTNode node) {
+  public VlangElseBranchImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitUnsafeStatement(this);
+    visitor.visitElseBranch(this);
   }
 
   @Override
@@ -28,9 +27,21 @@ public class VlangUnsafeStatementImpl extends VlangStatementImpl implements Vlan
   }
 
   @Override
+  @Nullable
+  public VlangBlock getBlock() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangBlock.class);
+  }
+
+  @Override
+  @Nullable
+  public VlangIfExpression getIfExpression() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangIfExpression.class);
+  }
+
+  @Override
   @NotNull
-  public VlangUnsafeExpression getUnsafeExpression() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangUnsafeExpression.class));
+  public PsiElement getElse() {
+    return notNullChild(findChildByType(ELSE));
   }
 
 }

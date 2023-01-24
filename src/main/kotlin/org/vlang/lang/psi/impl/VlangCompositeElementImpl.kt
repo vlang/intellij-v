@@ -27,7 +27,6 @@ open class VlangCompositeElementImpl(node: ASTNode) : ASTWrapperPsiElement(node)
 
         if (this is VlangBlock ||
             this is VlangIfExpression ||
-            this is VlangIfStatement ||
             this is VlangForStatement ||
             this is VlangFunctionLit
         ) {
@@ -54,7 +53,7 @@ open class VlangCompositeElementImpl(node: ASTNode) : ASTWrapperPsiElement(node)
             if (!processor.execute(o, state)) {
                 return false
             }
-            if ((o is VlangIfStatement || o is VlangIfExpression || o is VlangForStatement || o is VlangBlock)
+            if ((o is VlangIfExpression || o is VlangForStatement || o is VlangBlock)
                 && processor is VlangScopeProcessorBase
             ) {
                 if (!PsiTreeUtil.isAncestor(o, processor.origin, false)) {

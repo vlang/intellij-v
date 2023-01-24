@@ -76,10 +76,10 @@ class VlangBreadcrumbsInfoProvider : BreadcrumbsProvider {
         }
     }
 
-    private object VlangElseHandler : ElementHandler<VlangElseStatement> {
-        override fun accepts(e: PsiElement): Boolean = e is VlangElseStatement
+    private object VlangElseHandler : ElementHandler<VlangElseBranch> {
+        override fun accepts(e: PsiElement): Boolean = e is VlangElseBranch
 
-        override fun elementInfo(e: VlangElseStatement): String = buildString {
+        override fun elementInfo(e: VlangElseBranch): String = buildString {
             append("else")
         }
     }

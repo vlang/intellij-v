@@ -39,7 +39,7 @@ class VlangInlayHintsCollector(
             element is VlangIndexOrSliceExpr && settings.showForRanges   -> handleSlice(element)
             element is VlangVarDefinition && settings.showForVariables   -> handleVarDefinition(element)
             element is VlangOrBlockExpr && settings.showForErrVariable   -> handleOrBlockExpr(element)
-            element is VlangElseStatement && settings.showForErrVariable -> handleElseStatement(element)
+            element is VlangElseBranch && settings.showForErrVariable -> handleElseStatement(element)
             element is VlangConstDefinition && settings.showForConstants -> handleConstDefinition(element)
         }
 
@@ -73,7 +73,7 @@ class VlangInlayHintsCollector(
         handleImplicitErrorVariable(element.project, openBracket, closeBracket)
     }
 
-    private fun handleElseStatement(element: VlangElseStatement) {
+    private fun handleElseStatement(element: VlangElseBranch) {
         if (!VlangCodeInsightUtil.insideElseBlockIfGuard(element)) {
             return
         }

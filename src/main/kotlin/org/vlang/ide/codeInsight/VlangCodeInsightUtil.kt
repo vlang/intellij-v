@@ -116,7 +116,7 @@ object VlangCodeInsightUtil {
     }
 
     fun insideElseBlockIfGuard(element: PsiElement): Boolean {
-        element.parentOfType<VlangElseStatement>(true) ?: return false
+        element.parentOfType<VlangElseBranch>(true) ?: return false
         val parentIf = element.parentOfTypeWithStop<VlangIfExpression>() ?: return false
 
         // if err used in nested if

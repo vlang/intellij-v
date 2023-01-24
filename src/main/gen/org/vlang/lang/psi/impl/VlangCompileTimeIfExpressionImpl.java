@@ -35,8 +35,8 @@ public class VlangCompileTimeIfExpressionImpl extends VlangExpressionImpl implem
 
   @Override
   @Nullable
-  public VlangCompileElseStatement getCompileElseStatement() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangCompileElseStatement.class);
+  public VlangCompileTimeElseBranch getCompileTimeElseBranch() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangCompileTimeElseBranch.class);
   }
 
   @Override

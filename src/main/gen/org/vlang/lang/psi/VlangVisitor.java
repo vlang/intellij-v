@@ -135,8 +135,8 @@ public class VlangVisitor extends PsiElementVisitor {
     visitType(o);
   }
 
-  public void visitCompileElseStatement(@NotNull VlangCompileElseStatement o) {
-    visitStatement(o);
+  public void visitCompileTimeElseBranch(@NotNull VlangCompileTimeElseBranch o) {
+    visitCompositeElement(o);
   }
 
   public void visitCompileTimeFieldReference(@NotNull VlangCompileTimeFieldReference o) {
@@ -149,10 +149,6 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitCompileTimeIfExpression(@NotNull VlangCompileTimeIfExpression o) {
     visitExpression(o);
-  }
-
-  public void visitCompileTimeIfStatement(@NotNull VlangCompileTimeIfStatement o) {
-    visitStatement(o);
   }
 
   public void visitConditionalExpr(@NotNull VlangConditionalExpr o) {
@@ -193,8 +189,8 @@ public class VlangVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitElseStatement(@NotNull VlangElseStatement o) {
-    visitStatement(o);
+  public void visitElseBranch(@NotNull VlangElseBranch o) {
+    visitCompositeElement(o);
   }
 
   public void visitEmbeddedDefinition(@NotNull VlangEmbeddedDefinition o) {
@@ -347,10 +343,6 @@ public class VlangVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
-  public void visitGoStatement(@NotNull VlangGoStatement o) {
-    visitStatement(o);
-  }
-
   public void visitGotoStatement(@NotNull VlangGotoStatement o) {
     visitStatement(o);
     // visitLabelRefOwnerElement(o);
@@ -366,10 +358,6 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitIfExpression(@NotNull VlangIfExpression o) {
     visitExpression(o);
-  }
-
-  public void visitIfStatement(@NotNull VlangIfStatement o) {
-    visitStatement(o);
   }
 
   public void visitImportAlias(@NotNull VlangImportAlias o) {
@@ -492,10 +480,6 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitLockParts(@NotNull VlangLockParts o) {
     visitCompositeElement(o);
-  }
-
-  public void visitLockStatement(@NotNull VlangLockStatement o) {
-    visitStatement(o);
   }
 
   public void visitLongStringTemplateEntry(@NotNull VlangLongStringTemplateEntry o) {
@@ -711,10 +695,6 @@ public class VlangVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
-  public void visitSpawnStatement(@NotNull VlangSpawnStatement o) {
-    visitStatement(o);
-  }
-
   public void visitSqlBlock(@NotNull VlangSqlBlock o) {
     visitCompositeElement(o);
   }
@@ -883,10 +863,6 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitUnsafeExpression(@NotNull VlangUnsafeExpression o) {
     visitExpression(o);
-  }
-
-  public void visitUnsafeStatement(@NotNull VlangUnsafeStatement o) {
-    visitStatement(o);
   }
 
   public void visitValue(@NotNull VlangValue o) {

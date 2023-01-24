@@ -5,10 +5,13 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangCompileElseStatement extends VlangStatement {
+public interface VlangCompileTimeElseBranch extends VlangCompositeElement {
 
   @Nullable
-  VlangCompileTimeIfStatement getCompileTimeIfStatement();
+  VlangBlock getBlock();
+
+  @Nullable
+  VlangCompileTimeIfExpression getCompileTimeIfExpression();
 
   @NotNull
   PsiElement getElseCompileTime();

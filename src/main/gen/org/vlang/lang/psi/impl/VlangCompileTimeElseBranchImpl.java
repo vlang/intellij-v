@@ -10,15 +10,14 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangElseStatementImpl extends VlangStatementImpl implements VlangElseStatement {
+public class VlangCompileTimeElseBranchImpl extends VlangCompositeElementImpl implements VlangCompileTimeElseBranch {
 
-  public VlangElseStatementImpl(@NotNull ASTNode node) {
+  public VlangCompileTimeElseBranchImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitElseStatement(this);
+    visitor.visitCompileTimeElseBranch(this);
   }
 
   @Override
@@ -29,20 +28,20 @@ public class VlangElseStatementImpl extends VlangStatementImpl implements VlangE
 
   @Override
   @Nullable
-  public VlangIfStatement getIfStatement() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangIfStatement.class);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getElse() {
-    return notNullChild(findChildByType(ELSE));
+  public VlangBlock getBlock() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangBlock.class);
   }
 
   @Override
   @Nullable
-  public VlangBlock getBlock() {
-    return VlangPsiImplUtil.getBlock(this);
+  public VlangCompileTimeIfExpression getCompileTimeIfExpression() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangCompileTimeIfExpression.class);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getElseCompileTime() {
+    return notNullChild(findChildByType(ELSE_COMPILE_TIME));
   }
 
 }
