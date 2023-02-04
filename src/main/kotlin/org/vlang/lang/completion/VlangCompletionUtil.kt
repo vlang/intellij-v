@@ -690,7 +690,7 @@ object VlangCompletionUtil {
             val signature = elem.getSignature()
 
             val genericParameters = elem.genericParameters?.text ?: ""
-            val typeText = signature?.result?.text ?: "void"
+            val typeText = signature?.result?.text ?: ""
             val icon = VIcons.Method
 
             val type = elem.receiverType.toEx().readableName(elem)
@@ -709,7 +709,7 @@ object VlangCompletionUtil {
             val signature = elem.getSignature()
 
             val genericParameters = elem.genericParameters?.text ?: ""
-            val typeText = signature.result?.text ?: "void"
+            val typeText = signature.result?.text ?: ""
             val icon = VIcons.Method
 
             val parent = elem.parentOfType<VlangNamedElement>()

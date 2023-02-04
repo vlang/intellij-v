@@ -480,7 +480,7 @@ object DocumentationGenerator {
             colorize(name ?: "anon", asDeclaration)
             appendNotNull(genericParameters.generateDoc())
             part(parameters.generateDoc())
-            append(returnType?.generateDoc() ?: DocumentationUtils.colorize("void", asDeclaration))
+            appendNotNull(returnType?.generateDoc())
             append(DocumentationMarkup.DEFINITION_END)
 
             generateCommentsPart(this@generateDoc)
@@ -677,7 +677,7 @@ object DocumentationGenerator {
             part("interface method", asKeyword)
             colorize(name ?: "anon", asDeclaration)
             part(parameters.generateDoc())
-            append(returnType?.generateDoc() ?: DocumentationUtils.colorize("void", asDeclaration))
+            appendNotNull(returnType?.generateDoc())
 
             colorize(" of ", asIdentifier)
             colorize(owner.name ?: "anon", asDeclaration)
