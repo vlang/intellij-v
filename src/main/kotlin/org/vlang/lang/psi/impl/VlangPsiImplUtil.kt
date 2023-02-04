@@ -658,7 +658,8 @@ object VlangPsiImplUtil {
             return true
         }
 
-        return false
+        val parentStruct = o.getOwner() as? VlangStructDeclaration ?: return false
+        return VlangAttributesUtil.isParamsStruct(parentStruct)
     }
 
     @JvmStatic

@@ -11,6 +11,7 @@ import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangReferenceBase.Companion.LOCAL_RESOLVE
 import org.vlang.lang.psi.types.VlangArrayTypeEx
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapAlias
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapPointer
 import org.vlang.lang.psi.types.VlangStructTypeEx
 import org.vlang.lang.psi.types.VlangTypeEx
@@ -31,17 +32,18 @@ class VlangFieldNameReference(element: VlangReferenceExpressionBase) :
 
         val key = myElement.parentOfType<VlangKey>()
         val value = myElement.parentOfType<VlangValue>()
-        if (key == null && (value == null || PsiTreeUtil.getPrevSiblingOfType(value, VlangKey::class.java) != null))
+        if (key == null && (value == null || PsiTreeUtil.getPrevSiblingOfType(value, VlangKey::class.java) != null)) {
             return true
+        }
 
         var type = myElement.parentOfType<VlangLiteralValueExpression>()?.getType(null)
         if (type == null) {
             val callExpr = VlangCodeInsightUtil.getCallExpr(element)
             val paramTypes = VlangCodeInsightUtil.getCalledParams(callExpr)
-            type = paramTypes?.lastOrNull { it is VlangStructTypeEx }?: return true
+            type = paramTypes?.lastOrNull { it.unwrapAlias() is VlangStructTypeEx }?: return true
         }
 
-        val typeToProcess = type.unwrapPointer()
+        val typeToProcess = type.unwrapPointer().unwrapAlias()
         if (typeToProcess is VlangArrayTypeEx) {
             return processStructType(fieldProcessor, VlangStructTypeEx.ArrayInit, false)
         }

@@ -298,4 +298,25 @@ class TrailingStructLiteralCompletionTest : CompletionTestBase() {
         0,
         "boo"
     )
+
+    fun `test second struct field for type alias`() = checkEquals(
+        """
+        module main
+        
+        struct Params {
+            foo int
+            boo int
+        }
+        
+        type ParamsAlias = Params
+        
+        fn boo(params ParamsAlias) {}
+
+        fn main() {
+        	boo(foo: 100, /*caret*/)
+        }
+        """.trimIndent(),
+        0,
+        "boo"
+    )
 }
