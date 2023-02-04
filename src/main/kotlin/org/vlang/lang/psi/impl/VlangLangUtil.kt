@@ -7,10 +7,7 @@ import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.CachedValuesManager
 import com.intellij.psi.util.PsiModificationTracker
 import org.vlang.configurations.VlangConfiguration
-import org.vlang.lang.psi.VlangConstDefinition
-import org.vlang.lang.psi.VlangFile
-import org.vlang.lang.psi.VlangMethodDeclaration
-import org.vlang.lang.psi.VlangSignature
+import org.vlang.lang.psi.*
 import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.stubs.index.VlangMethodIndex
@@ -85,7 +82,37 @@ object VlangLangUtil {
         if (moduleName.isEmpty() || typeName.isEmpty()) return emptyList()
         val key = "$moduleName.$typeName"
         val declarations = VlangMethodIndex.find(key, project, null, null)
-        return declarations.toList()
+        if (declarations.size == 1 || type !is VlangResolvableTypeEx<*>) {
+            return declarations.toList()
+        }
+
+        val resolved = type.resolve(project) ?: return declarations.toList()
+        val containingFile = resolved.containingFile as? VlangFile ?: return declarations.toList()
+        val isTestFile = containingFile.isTestFile()
+        val fromTests = containingFile.fromTests()
+        val fromModules = containingFile.fromModules()
+
+        var filtered = declarations.toList()
+        if (!isTestFile) {
+            filtered = filtered.filter {
+                val variantContainingFile = it.containingFile
+                variantContainingFile is VlangFile && !variantContainingFile.isTestFile()
+            }
+        }
+        if (!fromTests) {
+            filtered = filtered.filter {
+                val variantContainingFile = it.containingFile
+                variantContainingFile is VlangFile && !variantContainingFile.fromTests()
+            }
+        }
+        if (!fromModules) {
+            filtered = filtered.filter {
+                val variantContainingFile = it.containingFile
+                variantContainingFile is VlangFile && !variantContainingFile.fromModules()
+            }
+        }
+
+        return filtered
     }
 
     private fun getTypeName(o: VlangTypeEx): String {

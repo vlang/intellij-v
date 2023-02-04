@@ -1,11 +1,12 @@
 package org.vlang.lang.psi.types
 
+import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.search.GlobalSearchScope
+import com.intellij.psi.util.CachedValueProvider
+import com.intellij.psi.util.CachedValuesManager
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
-import org.vlang.lang.psi.VlangFile
-import org.vlang.lang.psi.VlangNamedElement
 import org.vlang.lang.psi.VlangStructDeclaration
 import org.vlang.lang.stubs.index.VlangClassLikeIndex
 
@@ -55,6 +56,18 @@ open class VlangStructTypeEx(private val name: String, anchor: PsiElement?) :
     override fun hashCode(): Int = name.hashCode()
 
     override fun resolve(project: Project): VlangStructDeclaration? {
+        if (anchor == null) {
+            LOG.info("Skip caching for ${qualifiedName()} because anchor is null")
+            return resolveImpl(project)
+        }
+
+        return CachedValuesManager.getCachedValue(anchor) {
+            val result = resolveImpl(project)
+            CachedValueProvider.Result(result, containingFile)
+        }
+    }
+
+    private fun resolveImpl(project: Project): VlangStructDeclaration? {
         // When file doesn't have a module name, we search all symbols only inside this file.
         val localFileResolve = containingFile != null && containingFile.getModule() == null
         val scope = if (localFileResolve) GlobalSearchScope.fileScope(containingFile!!) else null
@@ -64,33 +77,12 @@ open class VlangStructTypeEx(private val name: String, anchor: PsiElement?) :
             return variants.first() as? VlangStructDeclaration
         }
 
-        val containsVariantFromModules = variants.any { fromModules(it) }
-
-        if (containsVariantFromModules) {
-            val variantsWithoutModules = variants.filter { fromModules(it) }
-            if (variantsWithoutModules.isEmpty()) {
-                return preferNonTestsFirst(variants) as? VlangStructDeclaration
-            }
-            return preferNonTestsFirst(variantsWithoutModules) as? VlangStructDeclaration
-        }
-
-        return preferNonTestsFirst(variants) as? VlangStructDeclaration
+        return prioritize(containingFile, variants) as? VlangStructDeclaration
     }
-
-    private fun preferNonTestsFirst(variants: Collection<VlangNamedElement>): VlangNamedElement? {
-        if (variants.size == 1) {
-            return variants.first()
-        }
-
-        return variants
-            .firstOrNull {
-                !(it.containingFile as VlangFile).isTestFile()
-            }
-    }
-
-    private fun fromModules(it: VlangNamedElement) = it.containingFile.virtualFile.path.contains(".vmodules")
 
     companion object {
+        private val LOG = logger<VlangStructTypeEx>()
+
         val UnknownCDeclarationStruct = object : VlangStructTypeEx("UnknownCDeclaration", null) {
             override val moduleName: String
                 get() = VlangCodeInsightUtil.STUBS_MODULE

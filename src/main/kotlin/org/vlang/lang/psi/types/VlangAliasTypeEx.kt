@@ -1,7 +1,11 @@
 package org.vlang.lang.psi.types
 
+import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
+import com.intellij.psi.search.GlobalSearchScope
+import com.intellij.psi.util.CachedValueProvider
+import com.intellij.psi.util.CachedValuesManager
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.VlangTypeAliasDeclaration
 import org.vlang.lang.stubs.index.VlangNamesIndex
@@ -46,15 +50,34 @@ open class VlangAliasTypeEx(val name: String, val inner: VlangTypeEx, anchor: Ps
     }
 
     override fun resolve(project: Project): VlangTypeAliasDeclaration? {
-        // TODO: own index?
-        val variants = VlangNamesIndex.find(qualifiedName(), project, null)
-        if (variants.isEmpty()) {
-            return null
+        if (anchor == null) {
+            LOG.info("Skip caching for ${qualifiedName()} because anchor is null")
+            return resolveImpl(project)
         }
-        return variants.first { it is VlangTypeAliasDeclaration } as? VlangTypeAliasDeclaration
+
+        return CachedValuesManager.getCachedValue(anchor) {
+            val result = resolveImpl(project)
+            CachedValueProvider.Result(result, containingFile)
+        }
+    }
+
+    private fun resolveImpl(project: Project): VlangTypeAliasDeclaration? {
+        // When file doesn't have a module name, we search all symbols only inside this file.
+        val localFileResolve = containingFile != null && containingFile.getModule() == null
+        val scope = if (localFileResolve) GlobalSearchScope.fileScope(containingFile!!) else null
+
+        // TODO: own index?
+        val variants = VlangNamesIndex.find(qualifiedName(), project, scope).filterIsInstance<VlangTypeAliasDeclaration>()
+        if (variants.size == 1) {
+            return variants.first()
+        }
+
+        return prioritize(containingFile, variants) as? VlangTypeAliasDeclaration
     }
 
     companion object {
+        private val LOG = logger<VlangAliasTypeEx>()
+
         fun anyType(anchor: PsiElement) = object : VlangAliasTypeEx("Any", VlangAnyTypeEx.INSTANCE, anchor) {
             override val moduleName: String
                 get() = VlangCodeInsightUtil.STUBS_MODULE

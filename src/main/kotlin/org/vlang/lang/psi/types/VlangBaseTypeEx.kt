@@ -36,6 +36,31 @@ abstract class VlangBaseTypeEx(protected val anchor: PsiElement? = null) : UserD
         return this?.toString().safeAppend(str)
     }
 
+    protected fun prioritize(context: PsiElement?, variants: Collection<VlangNamedElement>): VlangNamedElement? {
+        val containingFile = context?.containingFile?.originalFile
+        val containingDir = containingFile?.containingDirectory
+        val priorityMap = mutableMapOf<Int, VlangNamedElement>()
+
+        variants.forEach { variant ->
+            val variantContainingFile = variant.containingFile?.originalFile as? VlangFile ?: return@forEach
+            val variantContainingDir = variantContainingFile.containingDirectory
+
+            val priority = when {
+                variantContainingFile == containingFile                     -> 1000 // local variant has the highest priority
+                variantContainingDir == containingDir                       -> 100 // same directory variant has the second highest priority
+                variantContainingFile.virtualFile.path.contains("examples") -> 10
+                variantContainingFile.isTestFile()                          -> 1 // test variant has the lowest priority
+                else                                                        -> 0 // other variants have the lowest priority
+            }
+
+            priorityMap[priority] = variant
+        }
+
+        // find the highest priority
+        val maxPriority = priorityMap.keys.maxOrNull() ?: 0
+        return priorityMap[maxPriority]
+    }
+
     companion object {
         protected val primitivesMap = VlangPrimitiveTypes.values().associateBy { it.value }
 

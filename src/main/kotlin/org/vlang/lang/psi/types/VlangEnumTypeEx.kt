@@ -1,7 +1,11 @@
 package org.vlang.lang.psi.types
 
+import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
+import com.intellij.psi.search.GlobalSearchScope
+import com.intellij.psi.util.CachedValueProvider
+import com.intellij.psi.util.CachedValuesManager
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.VlangEnumDeclaration
 import org.vlang.lang.stubs.index.VlangClassLikeIndex
@@ -51,11 +55,33 @@ open class VlangEnumTypeEx(val name: String, anchor: PsiElement?) :
     override fun hashCode(): Int = name.hashCode()
 
     override fun resolve(project: Project): VlangEnumDeclaration? {
-        val variants = VlangClassLikeIndex.find(qualifiedName(), project, null, null)
-        return variants.firstOrNull() as? VlangEnumDeclaration
+        if (anchor == null) {
+            LOG.info("Skip caching for ${qualifiedName()} because anchor is null")
+            return resolveImpl(project)
+        }
+
+        return CachedValuesManager.getCachedValue(anchor) {
+            val result = resolveImpl(project)
+            CachedValueProvider.Result(result, containingFile)
+        }
+    }
+
+    private fun resolveImpl(project: Project): VlangEnumDeclaration? {
+        // When file doesn't have a module name, we search all symbols only inside this file.
+        val localFileResolve = containingFile != null && containingFile.getModule() == null
+        val scope = if (localFileResolve) GlobalSearchScope.fileScope(containingFile!!) else null
+
+        val variants = VlangClassLikeIndex.find(qualifiedName(), project, scope, null)
+        if (variants.size == 1) {
+            return variants.first() as? VlangEnumDeclaration
+        }
+
+        return prioritize(containingFile, variants) as? VlangEnumDeclaration
     }
 
     companion object {
+        private val LOG = logger<VlangEnumTypeEx>()
+
         val FLAG_ENUM = object : VlangEnumTypeEx("FlagEnum", null) {
             override val moduleName: String
                 get() = VlangCodeInsightUtil.STUBS_MODULE

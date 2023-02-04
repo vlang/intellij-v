@@ -60,6 +60,17 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
         }
     }
 
+    fun fromModules(): Boolean {
+        val modulesDir = VlangConfiguration.getInstance(project).modulesLocation?.path ?: return false
+        val path = virtualFile?.path ?: return false
+        return path.startsWith(modulesDir)
+    }
+
+    fun fromTests(): Boolean {
+        val path = virtualFile?.path?.normalizeSlashes() ?: return false
+        return path.contains("/tests/")
+    }
+
     fun isPlatformSpecificFile(): Boolean {
         val name = name.substringBefore(".", name)
         val platform = name.substringAfterLast("_", name)
