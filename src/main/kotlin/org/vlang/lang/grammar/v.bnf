@@ -1037,7 +1037,7 @@ private SqlOrderByTypes ::= 'asc' | 'desc'
 SqlReferenceList ::= semi? SqlReferenceListItem (','? SqlReferenceListItem)* {pin=2}
 SqlReferenceListItem ::= semi? <<endOfLimit>> ReferenceExpression {pin=3}
 
-SqlTableName ::= TypeReferenceExpression {pin=1}
+SqlTableName ::= TypeName {pin=1}
 
 ////////// EXPRESSIONS END //////////
 

@@ -2185,7 +2185,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, FOR_STATEMENT, null);
     r = consumeToken(b, FOR);
-    p = r; // pin = for|ForOrRangeClause
+    p = r; // pin = 1
     r = r && report_error_(b, ForStatement_1(b, l + 1));
     r = p && Block(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
@@ -5264,13 +5264,13 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // TypeReferenceExpression
+  // TypeName
   public static boolean SqlTableName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SqlTableName")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = TypeReferenceExpression(b, l + 1);
+    r = TypeName(b, l + 1);
     exit_section_(b, m, SQL_TABLE_NAME, r);
     return r;
   }
