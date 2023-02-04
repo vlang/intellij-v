@@ -18,22 +18,23 @@ import java.util.concurrent.Callable
 import java.util.concurrent.TimeUnit
 
 object Vfmt {
-    fun reformatDocument(project: Project, document: Document) {
+    fun reformatDocument(project: Project, document: Document, onFail: Runnable? = null) {
         ApplicationManager.getApplication().assertIsDispatchThread()
         if (!document.isWritable) return
-        val formattedText = reformatDocumentTextOrNull(project, document) ?: return
+        val formattedText = reformatDocumentTextOrNull(project, document, onFail) ?: return
         DocumentUtil.writeInRunUndoTransparentAction { document.setText(formattedText) }
     }
 
-    private fun reformatDocumentTextOrNull(project: Project, document: Document): String? {
+    private fun reformatDocumentTextOrNull(project: Project, document: Document, onFail: Runnable? = null): String? {
         val cmd = createCommandLine(project, document) ?: return null
-        return runProcess(cmd, document, project)
+        return runProcess(cmd, document, project, onFail)
     }
 
     private fun runProcess(
         cmd: GeneralCommandLine,
         document: Document,
         project: Project,
+        onFail: Runnable?,
     ): String? {
         val processOutput = StringBuilder()
         try {
@@ -55,6 +56,7 @@ object Vfmt {
                 VlangErrorNotification(output.stderr)
                     .withTitle("Can't reformat")
                     .show(project)
+                onFail?.run()
                 return null
             }
 
@@ -63,6 +65,7 @@ object Vfmt {
             VlangErrorNotification(e.message ?: "")
                 .withTitle("Can't reformat")
                 .show(project)
+            onFail?.run()
             return null
         }
 
