@@ -10,6 +10,7 @@ import org.vlang.lang.psi.*
 import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapAlias
+import org.vlang.utils.insideAny
 import org.vlang.utils.parentNth
 import org.vlang.utils.parentOfTypeWithStop
 
@@ -47,6 +48,11 @@ object VlangCodeInsightUtil {
 
         val literalValue = element.parentOfType<VlangLiteralValueExpression>() ?: return false
         return literalValue.elementList.any { it.key == null && PsiTreeUtil.isAncestor(it, element, false) }
+    }
+
+    fun insideCompileTimeIf(element: PsiElement?): Boolean {
+        if (element == null) return false
+        return element.insideAny<VlangCompileTimeForStatement, VlangCompileTimeIfExpression>()
     }
 
     fun ownerPresentableName(element: VlangNamedElement): String? {

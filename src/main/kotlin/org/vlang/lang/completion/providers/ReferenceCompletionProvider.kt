@@ -177,7 +177,7 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
         }
     }
 
-    private open class MyScopeProcessor(
+    open class MyScopeProcessor(
         private val parameters: CompletionParameters,
         private val result: CompletionResultSet,
         private val file: VlangFile,

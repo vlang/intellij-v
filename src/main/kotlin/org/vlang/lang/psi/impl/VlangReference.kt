@@ -16,6 +16,7 @@ import com.intellij.util.ArrayUtil
 import org.vlang.configurations.VlangConfiguration
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.ide.codeInsight.VlangTypeInferenceUtil
+import org.vlang.lang.completion.providers.ReferenceCompletionProvider
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangPsiImplUtil.processNamedElements
 import org.vlang.lang.psi.types.*
@@ -182,6 +183,16 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         val localResolve = isLocalResolve(contextFile, file)
         val newState = state.put(LOCAL_RESOLVE, localResolve)
 
+        val addCompileTimeInfo = if (processor is ReferenceCompletionProvider.MyScopeProcessor) {
+            VlangCodeInsightUtil.insideCompileTimeIf(identifier)
+        } else {
+            true
+        }
+
+        if (addCompileTimeInfo && typ.qualifiedName() != "stubs.CompileTimeTypeInfo") {
+            if (!processCompileTimeTypeInfo(project, processor, newState)) return false
+        }
+
         if (typ is VlangAliasTypeEx) {
             if (!processMethods(typ, processor, newState, localResolve)) return false
             if (!processType(typ.inner, processor, newState)) return false
@@ -331,6 +342,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
         if (typ is VlangGenericTypeEx) {
             if (!processTypeInfoFields(project, processor, newState)) return false
+            if (!processCompileTimeTypeInfo(project, processor, newState)) return false
             return true
         }
 
@@ -421,6 +433,19 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         return processExistingType(struct.structType.toEx(), processor, state)
     }
 
+    private fun processCompileTimeTypeInfo(
+        project: Project,
+        processor: VlangScopeProcessor,
+        state: ResolveState,
+    ): Boolean {
+        val stubDir = VlangConfiguration.getInstance(project).stubsLocation
+        val virtualFile = stubDir?.findChild("compile_time_reflection.v") ?: return false
+        val psiFile = PsiManager.getInstance(project).findFile(virtualFile) as? VlangFile ?: return false
+        val struct = psiFile.getStructs()
+            .firstOrNull { it.name == "CompileTimeTypeInfo" } ?: return false
+        return processExistingType(struct.structType.toEx(), processor, state)
+    }
+
     private fun processMethods(type: VlangTypeEx, processor: VlangScopeProcessor, state: ResolveState, localResolve: Boolean): Boolean {
         if (state.get(NOT_PROCESS_METHODS) == true) return true
         return processNamedElements(processor, state, VlangLangUtil.getMethodList(project, type), localResolve)
@@ -508,6 +533,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         if (!processDirectory(file.originalFile.parent, file, processor, state, true)) return false
         if (!processModulesEntities(file, processor, state)) return false
         if (!processGlobalVariables(file, processor, state)) return false
+        if (!processCompileTimeConstants(processor, state)) return false
         if (!processIfUnknownCDeclaration(processor, state)) return false
 
         return true
@@ -647,6 +673,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         val psiManager = PsiManager.getInstance(myElement.project)
         if (!processStubFile("primitives.v", stubDir, psiManager, processor, state)) return false
         if (!processStubFile("compile_time.v", stubDir, psiManager, processor, state)) return false
+        if (!processStubFile("compile_time_reflection.v", stubDir, psiManager, processor, state)) return false
         if (!processStubFile("vweb.v", stubDir, psiManager, processor, state)) return false
 
         return true
@@ -765,6 +792,15 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             if (!processor.execute(global, state)) return false
         }
 
+        return true
+    }
+
+    private fun processCompileTimeConstants(processor: VlangScopeProcessor, state: ResolveState): Boolean {
+        if (!VlangCodeInsightUtil.insideCompileTimeIf(identifier)) return true
+
+        val stubDir = VlangConfiguration.getInstance(myElement.project).stubsLocation ?: return true
+        val psiManager = PsiManager.getInstance(myElement.project)
+        if (!processStubFile("compile_time_constants.v", stubDir, psiManager, processor, state)) return false
         return true
     }
 

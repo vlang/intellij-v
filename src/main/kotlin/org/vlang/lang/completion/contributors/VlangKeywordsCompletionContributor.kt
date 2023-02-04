@@ -7,6 +7,7 @@ import com.intellij.util.ProcessingContext
 import org.vlang.lang.completion.VlangCompletionPatterns.insideForStatement
 import org.vlang.lang.completion.VlangCompletionPatterns.insideSqlStatement
 import org.vlang.lang.completion.VlangCompletionPatterns.insideStruct
+import org.vlang.lang.completion.VlangCompletionPatterns.onCompileTimeIfElse
 import org.vlang.lang.completion.VlangCompletionPatterns.onExpression
 import org.vlang.lang.completion.VlangCompletionPatterns.onIfElse
 import org.vlang.lang.completion.VlangCompletionPatterns.onMatchElse
@@ -63,7 +64,7 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         extend(
             CompletionType.BASIC,
             onExpression(),
-            ConditionBlockKeywordCompletionProvider("if", "lock", "rlock", "sql")
+            ConditionBlockKeywordCompletionProvider("if", "\$if", "lock", "rlock", "sql")
         )
         extend(
             CompletionType.BASIC,
@@ -148,6 +149,11 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         )
         extend(
             CompletionType.BASIC,
+            onCompileTimeIfElse(),
+            CompileTimeElseIfKeywordCompletionProvider(),
+        )
+        extend(
+            CompletionType.BASIC,
             onMatchElse(),
             MatchElseKeywordCompletionProvider(),
         )
@@ -164,6 +170,12 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
     }
 
     private val elseElement = LookupElementBuilder.create("else")
+        .bold()
+        .withTailText(" {...}")
+        .withInsertHandler(StringInsertHandler(" {  }", 3))
+        .withPriority(KEYWORD_PRIORITY)
+
+    private val compileTimeElseElement = LookupElementBuilder.create("\$else")
         .bold()
         .withTailText(" {...}")
         .withInsertHandler(StringInsertHandler(" {  }", 3))
@@ -306,6 +318,21 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
                 .withPriority(KEYWORD_PRIORITY)
 
             result.addElement(elseElement)
+            result.addElement(elseIfElement)
+        }
+    }
+
+    private inner class CompileTimeElseIfKeywordCompletionProvider : CompletionProvider<CompletionParameters>() {
+        override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
+            val elseIfElement = LookupElementBuilder.create("\$else \$if")
+                .bold()
+                .withTailText(" expr {...}")
+                .withInsertHandler(
+                    TemplateStringInsertHandler(" \$expr$ { \$END$ }", true, "expr" to ConstantNode("expr"))
+                )
+                .withPriority(KEYWORD_PRIORITY)
+
+            result.addElement(compileTimeElseElement)
             result.addElement(elseIfElement)
         }
     }

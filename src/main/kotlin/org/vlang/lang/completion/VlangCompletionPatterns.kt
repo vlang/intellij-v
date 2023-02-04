@@ -70,6 +70,16 @@ object VlangCompletionPatterns {
     }
 
     /**
+     * Element after $if/$else expression like:
+     *
+     *    $if true { ... } <caret>
+     */
+    fun onCompileTimeIfElse(): PsiElementPattern.Capture<PsiElement> {
+        val braceAfterIf = psiElement(RBRACE).withSuperParent(2, psiElement(COMPILE_TIME_IF_EXPRESSION))
+        return psiElement().afterLeafSkipping(whitespace, braceAfterIf)
+    }
+
+    /**
      * Element after match arm like:
      *
      *    match {
