@@ -226,6 +226,11 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
                 return true
             }
 
+            if (e is VlangGlobalVariableDefinition) {
+                // global variables are visible everywhere
+                return true
+            }
+
             if (e is VlangNamedElement) {
                 if (e.name?.startsWith("C.") == true) {
                     return file.isCFile()
@@ -348,7 +353,7 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
             is VlangInterfaceMethodDefinition -> VlangCompletionUtil.createInterfaceMethodLookupElement(element, state)
             is VlangConstDefinition           -> VlangCompletionUtil.createConstantLookupElement(element, state)
             is VlangEnumFieldDefinition       -> VlangCompletionUtil.createEnumFieldLookupElement(element)
-            is VlangGlobalVariableDefinition  -> VlangCompletionUtil.createGlobalVariableLikeLookupElement(element)
+            is VlangGlobalVariableDefinition  -> VlangCompletionUtil.createGlobalVariableLikeLookupElement(element, state)
             is VlangImportAlias               -> VlangCompletionUtil.createImportAliasLookupElement(element)
             is VlangNamedElement              -> VlangCompletionUtil.createVariableLikeLookupElement(element)
             else                              -> null

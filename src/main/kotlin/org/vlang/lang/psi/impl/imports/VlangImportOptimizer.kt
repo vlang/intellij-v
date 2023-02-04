@@ -144,6 +144,23 @@ class VlangImportOptimizer : ImportOptimizer {
                             usedSelectiveImportSymbols[name] = qualifier
                         }
                     }
+
+                    if (qualifier == o) {
+                        val resolved = o.resolve()
+
+                        // globals are implicit imports
+                        if (resolved is VlangGlobalVariableDefinition) {
+                            val moduleName = (resolved.containingFile as? VlangFile)?.getModuleQualifiedName() ?: return
+
+                            val importSpec = imports.firstOrNull {
+                                it.pathName == moduleName
+                            }
+
+                            if (importSpec != null) {
+                                usedImports[moduleName] = importSpec
+                            }
+                        }
+                    }
                 }
             })
 

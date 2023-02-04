@@ -1,6 +1,7 @@
 package org.vlang.integration
 
 import com.intellij.codeInsight.completion.CompletionType
+import com.intellij.codeInsight.lookup.Lookup
 import com.intellij.openapi.application.QueryExecutorBase
 import com.intellij.openapi.application.WriteAction
 import com.intellij.openapi.project.guessProjectDir
@@ -184,6 +185,10 @@ abstract class IntegrationTestBase : BasePlatformTestCase() {
 
             myFixture.complete(CompletionType.BASIC, 1)
             CompletionContext(myFixture).action()
+        }
+
+        fun finishCompletion() {
+            myFixture.finishLookup(Lookup.NORMAL_SELECT_CHAR)
         }
 
         companion object {

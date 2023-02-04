@@ -93,6 +93,7 @@ The plugin provides support for V language
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangNamesIndex"/>
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangClassLikeIndex"/>
         <stubIndex implementation="org.vlang.lang.stubs.index.VlangInterfaceInheritorsIndex"/>
+        <stubIndex implementation="org.vlang.lang.stubs.index.VlangGlobalVariablesIndex"/>
         <stubElementTypeHolder class="org.vlang.lang.VlangTypes"/>
         <!-- endregion Indexes -->
 

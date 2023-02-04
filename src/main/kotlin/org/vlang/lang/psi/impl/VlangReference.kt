@@ -21,6 +21,7 @@ import org.vlang.lang.psi.impl.VlangPsiImplUtil.processNamedElements
 import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.sql.VlangSqlUtil
+import org.vlang.lang.stubs.index.VlangGlobalVariablesIndex
 import org.vlang.lang.stubs.index.VlangModulesFingerprintIndex
 import org.vlang.lang.stubs.index.VlangModulesIndex
 import org.vlang.utils.inside
@@ -501,6 +502,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         if (!processFileEntities(file, processor, state, true)) return false
         if (!processDirectory(file.originalFile.parent, file, processor, state, true)) return false
         if (!processModulesEntities(file, processor, state)) return false
+        if (!processGlobalVariables(file, processor, state)) return false
         if (!processIfUnknownCDeclaration(processor, state)) return false
 
         return true
@@ -742,6 +744,20 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             if (!processFileEntities(moduleFile, processor, state.put(MODULE_NAME, moduleFile.getModuleQualifiedName()), false)) {
                 return false
             }
+        }
+
+        return true
+    }
+
+    private fun processGlobalVariables(file: VlangFile, processor: VlangScopeProcessor, state: ResolveState): Boolean {
+        val imports = file.getImports()
+        val importedModules = imports.map { it.importPath.qualifiedName }
+        val globals = VlangGlobalVariablesIndex.getAll(project) { globalName ->
+            importedModules.any { module -> globalName.startsWith("$module.") }
+        }
+
+        for (global in globals) {
+            if (!processor.execute(global, state)) return false
         }
 
         return true

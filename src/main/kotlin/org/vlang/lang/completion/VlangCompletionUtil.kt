@@ -13,7 +13,6 @@ import com.intellij.codeInsight.template.TemplateManager
 import com.intellij.codeInsight.template.impl.ConstantNode
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.editor.Editor
-import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveState
 import com.intellij.psi.util.PsiTreeUtil
@@ -77,7 +76,7 @@ object VlangCompletionUtil {
     fun LookupElement.toVlangLookupElement(properties: VlangLookupElementProperties): LookupElement {
         return VlangLookupElement(this, properties)
     }
-    
+
     fun isCompileTimeIdentifier(element: PsiElement): Boolean {
         return element.elementType == VlangTypes.IDENTIFIER && element.text.startsWith("@")
     }
@@ -139,15 +138,21 @@ object VlangCompletionUtil {
         )
     }
 
-    fun createGlobalVariableLikeLookupElement(element: VlangNamedElement): LookupElement? {
+    fun createGlobalVariableLikeLookupElement(element: VlangNamedElement, state: ResolveState): LookupElement? {
         val name = element.name
         if (name.isNullOrEmpty()) {
             return null
         }
-        return createVariableLikeLookupElement(
+        val moduleName = state.get(MODULE_NAME)
+        return createGlobalVariableLookupElement(
             element, name,
+            insertHandler = GlobalVariableInsertHandler(moduleName),
             priority = GLOBAL_VAR_PRIORITY
         )
+    }
+
+    class GlobalVariableInsertHandler(moduleName: String?) : ElementInsertHandler(moduleName) {
+        override fun handleInsertion(context: InsertionContext, item: LookupElement) {}
     }
 
     fun createFunctionLookupElement(element: VlangFunctionDeclaration, state: ResolveState): LookupElement? {
@@ -268,10 +273,6 @@ object VlangCompletionUtil {
             priority = TYPE_ALIAS_PRIORITY,
             insertHandler = ClassLikeInsertHandler(moduleName)
         )
-    }
-
-    fun createDirectoryLookupElement(dir: PsiDirectory): LookupElementBuilder {
-        return LookupElementBuilder.createWithSmartPointer(dir.name, dir).withIcon(VIcons.Directory)
     }
 
     private fun createClassLikeLookupElement(element: VlangNamedElement, state: ResolveState, icon: Icon, priority: Int): LookupElement? {
@@ -439,6 +440,18 @@ object VlangCompletionUtil {
     }
 
     fun createVariableLikeLookupElement(
+        element: VlangNamedElement, lookupString: String,
+        insertHandler: InsertHandler<LookupElement>? = null,
+        priority: Int = 0,
+    ): LookupElement {
+        return PrioritizedLookupElement.withPriority(
+            LookupElementBuilder.createWithSmartPointer(lookupString, element)
+                .withRenderer(VARIABLE_RENDERER)
+                .withInsertHandler(insertHandler), priority.toDouble()
+        )
+    }
+
+    fun createGlobalVariableLookupElement(
         element: VlangNamedElement, lookupString: String,
         insertHandler: InsertHandler<LookupElement>? = null,
         priority: Int = 0,
@@ -654,9 +667,19 @@ object VlangCompletionUtil {
                 else -> null
             }
 
+            val additionalText = when (elem) {
+                is VlangGlobalVariableDefinition -> {
+                    val file = elem.containingFile as? VlangFile
+                    val moduleName = file?.getModuleName() ?: "unknown"
+                    " (global defined in $moduleName)"
+                }
+                else -> ""
+            }
+
             p.icon = icon
             p.typeText = type
             p.isTypeGrayed = true
+            p.tailText = additionalText
             p.itemText = element.lookupString
         }
     }

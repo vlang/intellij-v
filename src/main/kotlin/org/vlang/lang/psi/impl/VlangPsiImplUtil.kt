@@ -1991,6 +1991,9 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getTypeInner(o: VlangGlobalVariableDefinition, context: ResolveState?): VlangTypeEx? {
+        if (o.type != null) {
+            return o.type?.toEx()
+        }
         return o.expression?.getType(context)
     }
 
