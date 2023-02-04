@@ -44,10 +44,10 @@ object Vfmt {
             handler.processInput.close()
 
             val future = ApplicationManager.getApplication().executeOnPooledThread(Callable {
-                handler.runProcessWithGlobalProgress(timeoutInMilliseconds = 1000)
+                handler.runProcessWithGlobalProgress(timeoutInMilliseconds = 5000)
             })
 
-            val output = future.get(1, TimeUnit.SECONDS)
+            val output = future.get(5, TimeUnit.SECONDS)
             if (output.isCancelled) {
                 return null
             }
