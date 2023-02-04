@@ -4,7 +4,7 @@ type placeholder = any
 
 // TypeInfo describe type information returned by the [typeof](#$typeof) builtin function.
 pub struct TypeInfo {
-pub:
+pub mut:
 	idx  int    // index of the type in the type table
 	name string // name of the type
 }

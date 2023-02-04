@@ -14,7 +14,7 @@ fn (n &Person) method()
 fn (mut n Person) mutable_method()
 
 fn main(param_person Person, mut param_person_mutable Person) {
-	mut mut person := Person{}
+	mut person := Person{}
 
 	person.other.method() // ok
 	person.other.mutable_method()

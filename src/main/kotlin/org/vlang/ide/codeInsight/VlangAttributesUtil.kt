@@ -1,6 +1,7 @@
 package org.vlang.ide.codeInsight
 
 import org.vlang.lang.psi.VlangAttribute
+import org.vlang.lang.psi.VlangFunctionOrMethodDeclaration
 import org.vlang.lang.psi.VlangStructDeclaration
 
 object VlangAttributesUtil {
@@ -23,6 +24,12 @@ object VlangAttributesUtil {
     fun isParamsStruct(struct: VlangStructDeclaration): Boolean {
         return struct.attributes?.attributeList?.any {
             it.attributeExpressionList.any { expr -> expr.textMatches("params") }
+        } ?: false
+    }
+
+    fun isUnsafeFunction(function: VlangFunctionOrMethodDeclaration): Boolean {
+        return function.attributes?.attributeList?.any {
+            it.attributeExpressionList.any { expr -> expr.textMatches("unsafe") }
         } ?: false
     }
 

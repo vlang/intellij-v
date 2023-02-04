@@ -1871,7 +1871,8 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun isMutable(o: VlangParamDefinition): Boolean {
         val modifiers = o.varModifiers ?: return false
-        return modifiers.text.contains("mut")
+        val text = modifiers.text
+        return text.contains("mut") || text.contains("shared")
     }
 
     @JvmStatic
@@ -1913,15 +1914,16 @@ object VlangPsiImplUtil {
     fun isMutable(o: VlangVarDefinition): Boolean {
         val inFor = o.parentNth<VlangForClause>(3) != null
         if (inFor) {
-            // in for, variable is mutable
+            // in for, variable is implicitly mutable
             return true
         }
         val modifiers = o.varModifiers ?: return false
-        return modifiers.text.contains("mut")
+        val text = modifiers.text
+        return text.contains("mut") || text.contains("shared")
     }
 
     @JvmStatic
-    fun getReference(o: VlangVarDefinition): PsiReference? {
+    fun getReference(o: VlangVarDefinition): PsiReference {
         return VlangVarReference(o)
     }
 
@@ -1952,7 +1954,7 @@ object VlangPsiImplUtil {
         if (modifiers.firstChild == null) {
             val newModifiers = modifiers.replace(mutModifier)
             newModifiers.parent.addAfter(space, newModifiers)
-        } else {
+        } else if (modifiers.firstChild.text != "mut") {
             modifiers.add(space)
             modifiers.add(mutModifier.firstChild)
         }
@@ -1967,7 +1969,8 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun isMutable(o: VlangReceiver): Boolean {
         val modifiers = o.varModifiers ?: return false
-        return modifiers.text.contains("mut")
+        val text = modifiers.text
+        return text.contains("mut") || text.contains("shared")
     }
 
     @JvmStatic

@@ -334,6 +334,11 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             return true
         }
 
+        if (typ is VlangSharedTypeEx) {
+            if (!processType(typ.inner, processor, newState)) return false
+            return true
+        }
+
         if (typ == VlangPrimitiveTypeEx.BYTE) {
             if (!processMethods(VlangPrimitiveTypeEx.U8, processor, newState, localResolve)) return false
         }

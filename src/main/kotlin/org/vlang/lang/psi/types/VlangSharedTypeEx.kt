@@ -2,8 +2,9 @@ package org.vlang.lang.psi.types
 
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
+import org.vlang.lang.psi.VlangNamedElement
 
-class VlangSharedTypeEx(val inner: VlangTypeEx, anchor: PsiElement) : VlangBaseTypeEx(anchor) {
+class VlangSharedTypeEx(val inner: VlangTypeEx, anchor: PsiElement) : VlangResolvableTypeEx<VlangNamedElement>(anchor) {
     override fun toString() = "shared ".safeAppend(inner)
 
     override fun qualifiedName() = "shared ".safeAppend(inner.qualifiedName())
@@ -35,4 +36,25 @@ class VlangSharedTypeEx(val inner: VlangTypeEx, anchor: PsiElement) : VlangBaseT
     override fun substituteGenerics(nameMap: Map<String, VlangTypeEx>): VlangTypeEx {
         return VlangSharedTypeEx(inner.substituteGenerics(nameMap), anchor!!)
     }
+
+    override fun resolveImpl(project: Project): VlangNamedElement? {
+        if (inner is VlangResolvableTypeEx<*>) {
+            return inner.resolve(project)
+        }
+
+        return null
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as VlangSharedTypeEx
+
+        if (inner != other.inner) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int = inner.hashCode() * 31
 }

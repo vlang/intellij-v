@@ -1,7 +1,7 @@
 module stubs
 
 pub struct UnknownCDeclaration {
-pub:
+pub mut:
 	unknown_field &UnknownCDeclaration
 }
 

@@ -9,8 +9,8 @@ mut:
 }
 
 fn (b IFoo) foo() {
-	b.<warning descr="Immutable field 'immutable' cannot be reassigned">immutable</warning> = 100
-	b.mutable = 100
+	<warning descr="Immutable field 'immutable' cannot be reassigned"><warning descr="Immutable receiver 'b' cannot be reassigned">b</warning>.immutable</warning> = 100
+	<warning descr="Immutable receiver 'b' cannot be reassigned">b</warning>.mutable = 100
 }
 
 struct Boo {
@@ -28,14 +28,22 @@ struct MinifiedBoo {
 fn (b Boo) foo(p string) {
 	<warning descr="Immutable receiver 'b' cannot be reassigned">b</warning> = Boo{}
 	<warning descr="Immutable parameter 'p' cannot be reassigned">p</warning> = ''
-	b.<warning descr="Immutable field 'name' cannot be reassigned">name</warning> = ''
-	b.age = 100
+	<warning descr="Immutable field 'name' cannot be reassigned"><warning descr="Immutable receiver 'b' cannot be reassigned">b</warning>.name</warning> = ''
+	<warning descr="Immutable receiver 'b' cannot be reassigned">b</warning>.age = 100
 }
 
 fn (mut b Boo) mut_foo(mut p string) {
 	b = Boo{}
+	<warning descr="Immutable field 'name' cannot be reassigned">b.name</warning> = ''
 	p = ''
 }
+
+fn (b Boo) foo2() {
+	<warning descr="Immutable field 'name' cannot be reassigned"><warning descr="Immutable receiver 'b' cannot be reassigned">b</warning>.name</warning> = ''
+}
+
+const boo = Boo{}
+<warning descr="Immutable field 'name' cannot be reassigned"><warning descr="Constant 'boo' cannot be reassigned">boo</warning>.name</warning> = ''
 
 fn main() {
 	<warning descr="Constant 'constant' cannot be reassigned">constant</warning> = 200
@@ -59,10 +67,10 @@ fn main() {
 	}
 
 	boo := Boo{}
-	boo.<warning descr="Immutable field 'name' cannot be reassigned">name</warning> = ''
-	boo.age = 100
+	<warning descr="Immutable field 'name' cannot be reassigned"><warning descr="Immutable variable 'boo' cannot be reassigned">boo</warning>.name</warning> = ''
+	<warning descr="Immutable variable 'boo' cannot be reassigned">boo</warning>.age = 100
 
 	minified := MinifiedBoo{}
-	minified.name = '' // ok
-	minified.age = 100 // ok
+	<warning descr="Immutable variable 'minified' cannot be reassigned">minified</warning>.name = '' // ok
+	<warning descr="Immutable variable 'minified' cannot be reassigned">minified</warning>.age = 100 // ok
 }
