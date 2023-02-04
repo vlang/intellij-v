@@ -14,6 +14,7 @@ class VlangPostfixTemplateProvider : PostfixTemplateProvider {
         VlangPrintlnPostfixTemplate(),
         VlangEprintPostfixTemplate(),
         VlangEprintlnPostfixTemplate(),
+        VlangDumpPostfixTemplate(),
         VlangParPostfixTemplate(),
         VlangReturnPostfixTemplate(),
         VlangMatchPostfixTemplate(),
