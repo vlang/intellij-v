@@ -24,6 +24,7 @@ class VlangCompletionContributor : CompletionContributor() {
         extend(CompletionType.BASIC, onExpression(),       MapInitCompletionProvider)
         extend(CompletionType.BASIC, onExpression(),       ChanInitCompletionProvider)
         extend(CompletionType.BASIC, onExpression(),       AnonFunctionContextCompletionProvider)
+        extend(CompletionType.BASIC, onExpression(),       EnumFieldContextCompletionProvider)
         extend(CompletionType.BASIC, onType(),             MapTypeCompletionProvider)
         extend(CompletionType.BASIC, onType(),             ChanTypeCompletionProvider)
 

@@ -403,7 +403,7 @@ object VlangCompletionUtil {
         )
     }
 
-    private fun createEnumFieldLookupElement(
+    fun createEnumFieldLookupElement(
         element: VlangNamedElement, lookupString: String,
         insertHandler: InsertHandler<LookupElement>? = null,
         priority: Int = 0,
