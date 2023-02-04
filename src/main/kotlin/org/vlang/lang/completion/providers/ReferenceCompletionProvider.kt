@@ -364,6 +364,8 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
             isContextElement = lookupElement.priority.toInt() == VlangCompletionUtil.CONTEXT_COMPLETION_PRIORITY
         }
 
+        val isNotDeprecated = element !is VlangNamedElement || !element.isDeprecated()
+
         return lookupElement?.toVlangLookupElement(
             VlangLookupElementProperties(
                 isLocal = isLocal,
@@ -372,6 +374,7 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
                 isReceiverTypeCompatible = isReceiverTypeCompatible,
                 isTypeCompatible = isTypeCompatible,
                 isContextElement = isContextElement,
+                isNotDeprecated = isNotDeprecated,
                 isContextMember = isContextMember,
             )
         )

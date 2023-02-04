@@ -17,6 +17,7 @@ val VLANG_COMPLETION_WEIGHERS: List<Any> = listOf(
      */
     "priority",
 
+    preferTrue(VlangLookupElementProperties::isNotDeprecated, id = "vlang-prefer-not-deprecated"),
     preferTrue(VlangLookupElementProperties::isContextElement, id = "vlang-prefer-context-element"),
     preferTrue(VlangLookupElementProperties::isContextMember, id = "vlang-prefer-context-member"),
     preferTrue(VlangLookupElementProperties::isTypeCompatible, id = "vlang-prefer-compatible-type"),

@@ -639,6 +639,7 @@ object VlangCompletionUtil {
             p.tailText = " $qualifier"
             p.isTypeGrayed = true
             p.itemText = moduleName
+            p.isStrikeout = elem.isDeprecated()
         }
     }
 
@@ -651,6 +652,7 @@ object VlangCompletionUtil {
             p.tailText = " alias for ${importSpec.name}"
             p.isTypeGrayed = true
             p.itemText = element.lookupString
+            p.isStrikeout = elem.isDeprecated()
         }
     }
 
@@ -681,6 +683,7 @@ object VlangCompletionUtil {
             p.isTypeGrayed = true
             p.tailText = additionalText
             p.itemText = element.lookupString
+            p.isStrikeout = elem.isDeprecated()
         }
     }
 
@@ -700,6 +703,7 @@ object VlangCompletionUtil {
             p.typeText = typeText
             p.isTypeGrayed = true
             p.itemText = element.lookupString + genericParameters
+            p.isStrikeout = elem.isDeprecated()
         }
     }
 
@@ -719,6 +723,7 @@ object VlangCompletionUtil {
             p.typeText = typeText
             p.isTypeGrayed = true
             p.itemText = element.lookupString + genericParameters
+            p.isStrikeout = elem.isDeprecated()
         }
     }
 
@@ -736,6 +741,7 @@ object VlangCompletionUtil {
             p.typeText = type
             p.isTypeGrayed = true
             p.itemText = element.lookupString
+            p.isStrikeout = elem.isDeprecated()
         }
     }
 
@@ -759,6 +765,7 @@ object VlangCompletionUtil {
             p.icon = VIcons.Alias
             p.itemText = element.lookupString
             p.tailText = tail
+            p.isStrikeout = elem.isDeprecated()
         }
     }
 
@@ -775,6 +782,7 @@ object VlangCompletionUtil {
             p.tailText = parameters
             p.itemText = element.lookupString + genericParameters
             p.typeText = result
+            p.isStrikeout = elem.isDeprecated()
         }
     }
 
@@ -787,6 +795,7 @@ object VlangCompletionUtil {
             val valueText = elem.expression?.text
             p.tailText = " = $valueText"
             p.typeText = elem.expression?.getType(null)?.readableName(elem)
+            p.isStrikeout = elem.isDeprecated()
         }
     }
 
@@ -802,6 +811,7 @@ object VlangCompletionUtil {
                 p.tailText = " = $valueText"
             }
             p.typeText = parent.expression?.getType(null)?.readableName(elem)
+            p.isStrikeout = elem.isDeprecated()
         }
     }
 

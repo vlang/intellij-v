@@ -10,4 +10,5 @@ interface VlangNamedElement : VlangTypeOwner, VlangVisibilityOwner, VlangDocumen
     fun getIdentifier(): PsiElement?
     fun getQualifiedName(): String?
     fun getOwner(): PsiElement?
+    fun isDeprecated(): Boolean
 }

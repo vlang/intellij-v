@@ -1,5 +1,6 @@
 package org.vlang.lang.annotator
 
+import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
@@ -9,6 +10,7 @@ import com.intellij.psi.impl.source.tree.LeafPsiElement
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.elementType
 import com.intellij.psi.util.parentOfType
+import org.vlang.ide.codeInsight.VlangDeprecationsUtil
 import org.vlang.ide.colors.VlangColor
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.completion.VlangCompletionUtil
@@ -77,7 +79,21 @@ class VlangAnnotator : Annotator {
         }
 
         if (element.elementType == VlangTypes.IDENTIFIER && parent is VlangReferenceExpressionBase) {
-            return highlightReference(parent, parent.reference as VlangReference)
+            return highlightReference(parent, parent.reference as VlangReference, holder)
+        }
+
+        if (element.elementType == VlangTypes.IDENTIFIER && parent is VlangImportName) {
+            val resolved = parent.resolve().firstOrNull() ?: return null
+            val fileWithDeprecation = resolved.directory.children.filterIsInstance<VlangFile>().firstOrNull {
+                it.isDeprecated()
+            }
+            if (fileWithDeprecation != null) {
+                val info = VlangDeprecationsUtil.getDeprecationInfo(fileWithDeprecation)
+                holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+                    .highlightType(ProblemHighlightType.LIKE_DEPRECATED)
+                    .tooltip(info!!.generateMessage())
+                    .create()
+            }
         }
 
         if (parent is VlangAttribute || parent is VlangAttributeIdentifier) {
@@ -94,8 +110,16 @@ class VlangAnnotator : Annotator {
         }
     }
 
-    private fun highlightReference(element: VlangReferenceExpressionBase, reference: VlangReference): VlangColor? {
+    private fun highlightReference(element: VlangReferenceExpressionBase, reference: VlangReference, holder: AnnotationHolder): VlangColor? {
         val resolved = reference.multiResolve(false).firstOrNull()?.element ?: return null
+
+        if (resolved is VlangNamedElement && VlangDeprecationsUtil.isDeprecated(resolved)) {
+            val info = VlangDeprecationsUtil.getDeprecationInfo(resolved)
+            holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+                .highlightType(ProblemHighlightType.LIKE_DEPRECATED)
+                .tooltip(info!!.generateMessage())
+                .create()
+        }
 
         return when (resolved) {
             is VlangFunctionDeclaration       -> public(resolved, VlangColor.PUBLIC_FUNCTION, VlangColor.FUNCTION)

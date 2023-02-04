@@ -1,8 +1,7 @@
 package org.vlang.ide.codeInsight
 
-import org.vlang.lang.psi.VlangAttribute
-import org.vlang.lang.psi.VlangFunctionOrMethodDeclaration
-import org.vlang.lang.psi.VlangStructDeclaration
+import com.intellij.psi.util.childrenOfType
+import org.vlang.lang.psi.*
 
 object VlangAttributesUtil {
     fun isTranslated(attribute: VlangAttribute): Boolean {
@@ -46,5 +45,27 @@ object VlangAttributesUtil {
     fun isPrimaryField(attribute: VlangAttribute): Boolean {
         val expr = attribute.attributeExpressionList.firstOrNull() ?: return false
         return expr.text == "primary"
+    }
+
+    fun getAttributeByName(attributes: List<VlangAttribute> , name: String): VlangAttributeExpression? {
+        attributes.forEach {
+            it.attributeExpressionList.forEach exprs@{ expr ->
+                val plain = expr.plainAttribute ?: return@exprs
+                val key = plain.attributeKey
+                if (key.text == name) {
+                    return expr
+                }
+            }
+        }
+
+        return null
+    }
+
+    fun getAttributeValue(expr: VlangAttributeExpression): String? {
+        val plain = expr.plainAttribute ?: return null
+        val value = plain.attributeValue ?: return null
+        val literal = value.childrenOfType<VlangStringLiteral>()
+            .firstOrNull() ?: return null
+        return literal.text.trim('"').trim('\'')
     }
 }

@@ -33,6 +33,7 @@ data class VlangLookupElementProperties(
     val isReceiverTypeCompatible: Boolean = false,
     val isTypeCompatible: Boolean = false,
     val isContextElement: Boolean = false,
+    val isNotDeprecated: Boolean = true,
     val isContextMember: Boolean = false,
     val elementKind: ElementKind = ElementKind.OTHER,
 ) {

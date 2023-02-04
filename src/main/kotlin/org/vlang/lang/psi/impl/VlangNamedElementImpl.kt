@@ -8,6 +8,7 @@ import com.intellij.psi.stubs.IStubElementType
 import com.intellij.psi.util.*
 import com.intellij.ui.IconManager
 import com.intellij.util.PlatformIcons
+import org.vlang.ide.codeInsight.VlangDeprecationsUtil
 import org.vlang.ide.ui.VIcons
 import org.vlang.lang.doc.psi.VlangDocComment
 import org.vlang.lang.psi.*
@@ -28,6 +29,8 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
     constructor(node: ASTNode) : super(node)
 
     override fun isBlank(): Boolean = name == "_"
+
+    override fun isDeprecated(): Boolean = VlangDeprecationsUtil.isDeprecated(this)
 
     override fun isPublic(): Boolean {
         val stub = stub
