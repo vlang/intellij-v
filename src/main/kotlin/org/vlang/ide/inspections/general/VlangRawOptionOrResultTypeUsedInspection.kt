@@ -9,6 +9,7 @@ import com.intellij.openapi.fileEditor.TextEditor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementVisitor
+import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parentOfType
 import com.intellij.refactoring.suggested.endOffset
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
@@ -71,6 +72,11 @@ class VlangRawOptionOrResultTypeUsedInspection : VlangBaseInspection() {
 
                 val insideSpawn = expr.inside<VlangSpawnExpression>()
                 if (insideSpawn) {
+                    return
+                }
+
+                val parentAssignment = expr.parentOfType<VlangAssignmentStatement>()
+                if (parentAssignment != null && PsiTreeUtil.isAncestor(parentAssignment.leftHandExprList, expr, false)) {
                     return
                 }
 
