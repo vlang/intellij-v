@@ -874,7 +874,7 @@ object DocumentationGenerator {
         if (element.isPublic()) {
             part("pub", asKeyword)
         } else {
-            part("private", asKeyword)
+            part("")
         }
     }
 
