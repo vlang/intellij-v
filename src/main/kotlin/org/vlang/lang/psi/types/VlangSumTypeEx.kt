@@ -7,7 +7,7 @@ import org.vlang.lang.psi.VlangTypeAliasDeclaration
 import org.vlang.lang.stubs.index.VlangNamesIndex
 
 open class VlangSumTypeEx(val name: String, val types: List<VlangTypeEx>, anchor: PsiElement?) :
-    VlangBaseTypeEx(anchor), VlangImportableTypeEx, VlangResolvableTypeEx<VlangTypeAliasDeclaration> {
+    VlangResolvableTypeEx<VlangTypeAliasDeclaration>(anchor), VlangImportableTypeEx {
 
     override fun toString() = buildString {
         append(name)
@@ -50,7 +50,7 @@ open class VlangSumTypeEx(val name: String, val types: List<VlangTypeEx>, anchor
         return VlangSumTypeEx(name, types.map { it.substituteGenerics(nameMap) }, anchor!!)
     }
 
-    override fun resolve(project: Project): VlangTypeAliasDeclaration? {
+    override fun resolveImpl(project: Project): VlangTypeAliasDeclaration? {
         // TODO: own index?
         val variants = VlangNamesIndex.find(qualifiedName(), project, null)
         if (variants.isEmpty()) {
@@ -58,4 +58,17 @@ open class VlangSumTypeEx(val name: String, val types: List<VlangTypeEx>, anchor
         }
         return variants.first { it is VlangTypeAliasDeclaration } as? VlangTypeAliasDeclaration
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as VlangSumTypeEx
+
+        if (name != other.name) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int = name.hashCode()
 }

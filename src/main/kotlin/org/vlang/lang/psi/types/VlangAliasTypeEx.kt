@@ -4,14 +4,12 @@ import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.search.GlobalSearchScope
-import com.intellij.psi.util.CachedValueProvider
-import com.intellij.psi.util.CachedValuesManager
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.VlangTypeAliasDeclaration
 import org.vlang.lang.stubs.index.VlangNamesIndex
 
 open class VlangAliasTypeEx(val name: String, val inner: VlangTypeEx, anchor: PsiElement) :
-    VlangBaseTypeEx(anchor), VlangImportableTypeEx, VlangResolvableTypeEx<VlangTypeAliasDeclaration> {
+    VlangResolvableTypeEx<VlangTypeAliasDeclaration>(anchor), VlangImportableTypeEx {
 
     override fun toString() = name
 
@@ -49,19 +47,7 @@ open class VlangAliasTypeEx(val name: String, val inner: VlangTypeEx, anchor: Ps
         return VlangAliasTypeEx(name, inner.substituteGenerics(nameMap), anchor!!)
     }
 
-    override fun resolve(project: Project): VlangTypeAliasDeclaration? {
-        if (anchor == null) {
-            LOG.info("Skip caching for ${qualifiedName()} because anchor is null")
-            return resolveImpl(project)
-        }
-
-        return CachedValuesManager.getCachedValue(anchor) {
-            val result = resolveImpl(project)
-            CachedValueProvider.Result(result, containingFile)
-        }
-    }
-
-    private fun resolveImpl(project: Project): VlangTypeAliasDeclaration? {
+    override fun resolveImpl(project: Project): VlangTypeAliasDeclaration? {
         // When file doesn't have a module name, we search all symbols only inside this file.
         val localFileResolve = containingFile != null && containingFile.getModule() == null
         val scope = if (localFileResolve) GlobalSearchScope.fileScope(containingFile!!) else null
@@ -74,6 +60,19 @@ open class VlangAliasTypeEx(val name: String, val inner: VlangTypeEx, anchor: Ps
 
         return prioritize(containingFile, variants) as? VlangTypeAliasDeclaration
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as VlangAliasTypeEx
+
+        if (name != other.name) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int = name.hashCode()
 
     companion object {
         private val LOG = logger<VlangAliasTypeEx>()

@@ -1,17 +1,14 @@
 package org.vlang.lang.psi.types
 
-import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.search.GlobalSearchScope
-import com.intellij.psi.util.CachedValueProvider
-import com.intellij.psi.util.CachedValuesManager
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.VlangInterfaceDeclaration
 import org.vlang.lang.stubs.index.VlangClassLikeIndex
 
 class VlangInterfaceTypeEx(val name: String, anchor: PsiElement) :
-    VlangBaseTypeEx(anchor), VlangImportableTypeEx, VlangResolvableTypeEx<VlangInterfaceDeclaration> {
+    VlangResolvableTypeEx<VlangInterfaceDeclaration>(anchor), VlangImportableTypeEx {
 
     override fun toString() = name
 
@@ -46,19 +43,7 @@ class VlangInterfaceTypeEx(val name: String, anchor: PsiElement) :
 
     override fun substituteGenerics(nameMap: Map<String, VlangTypeEx>): VlangTypeEx = this
 
-    override fun resolve(project: Project): VlangInterfaceDeclaration? {
-        if (anchor == null) {
-            LOG.info("Skip caching for ${qualifiedName()} because anchor is null")
-            return resolveImpl(project)
-        }
-
-        return CachedValuesManager.getCachedValue(anchor) {
-            val result = resolveImpl(project)
-            CachedValueProvider.Result(result, containingFile)
-        }
-    }
-
-    private fun resolveImpl(project: Project): VlangInterfaceDeclaration? {
+    override fun resolveImpl(project: Project): VlangInterfaceDeclaration? {
         // When file doesn't have a module name, we search all symbols only inside this file.
         val localFileResolve = containingFile != null && containingFile.getModule() == null
         val scope = if (localFileResolve) GlobalSearchScope.fileScope(containingFile!!) else null
@@ -71,9 +56,20 @@ class VlangInterfaceTypeEx(val name: String, anchor: PsiElement) :
         return prioritize(containingFile, variants) as? VlangInterfaceDeclaration
     }
 
-    companion object {
-        private val LOG = logger<VlangInterfaceTypeEx>()
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
 
+        other as VlangInterfaceTypeEx
+
+        if (name != other.name) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int = name.hashCode()
+
+    companion object {
         fun iError(anchor: PsiElement): VlangInterfaceTypeEx {
             return VlangInterfaceTypeEx("IError", anchor)
         }

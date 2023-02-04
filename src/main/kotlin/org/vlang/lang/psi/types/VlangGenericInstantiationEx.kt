@@ -11,7 +11,7 @@ class VlangGenericInstantiationEx(
     val inner: VlangTypeEx,
     val specialization: List<VlangTypeEx>,
     anchor: PsiElement,
-) : VlangBaseTypeEx(anchor), VlangResolvableTypeEx<VlangNamedElement> {
+) : VlangResolvableTypeEx<VlangNamedElement>(anchor) {
 
     override fun toString() = "$inner[${specialization.joinToString(", ")}]"
 
@@ -60,14 +60,6 @@ class VlangGenericInstantiationEx(
         }
     }
 
-    override fun resolve(project: Project): VlangNamedElement? {
-        if (inner is VlangResolvableTypeEx<*>) {
-            return inner.resolve(project)
-        }
-
-        return null
-    }
-
     override fun substituteGenerics(nameMap: Map<String, VlangTypeEx>): VlangTypeEx {
         return VlangGenericInstantiationEx(
             inner.substituteGenerics(nameMap),
@@ -75,6 +67,28 @@ class VlangGenericInstantiationEx(
             anchor!!,
         )
     }
+
+    override fun resolveImpl(project: Project): VlangNamedElement? {
+        if (inner is VlangResolvableTypeEx<*>) {
+            return inner.resolve(project)
+        }
+
+        return null
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as VlangGenericInstantiationEx
+
+        if (inner != other.inner) return false
+        if (specialization != other.specialization) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int = inner.hashCode() * 31 + specialization.hashCode()
 
     fun specializationMap(project: Project): Map<String, VlangTypeEx> {
         val genericTs = extractInstantiationTs(project)
