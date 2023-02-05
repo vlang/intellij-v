@@ -17,15 +17,19 @@ class VlangInlayHintsFactory(
     private val editor: Editor,
     private val factory: PresentationFactory,
 ) {
-    private val offsetFromTopProvider =
+    private val textMetricsStorage =
         PresentationFactory::class.memberProperties
-            .find { it.name == "offsetFromTopProvider" }
+            .find { it.name == "textMetricsStorage" }
             ?.getter
             ?.let {
                 it.isAccessible = true
                 it
             }
-            ?.call(factory) as? InsetValueProvider
+            ?.call(factory) as? InlayTextMetricsStorage
+
+    private val offsetFromTopProvider = object : InsetValueProvider {
+        override val top = (textMetricsStorage?.getFontMetrics(false)?.offsetFromTop() ?: 1) - 1
+    }
 
     fun implicitErrorVariable(project: Project): InlayPresentation {
         val text = factory.psiSingleReference(text("err")) {
