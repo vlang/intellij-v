@@ -220,7 +220,7 @@ The plugin provides support for V language
 
         <stepsBeforeRunProvider implementation="org.vlang.ide.run.VlangBuildTaskProvider"/>
         <projectTaskRunner order="last" implementation="org.vlang.ide.run.VlangBuildTaskRunner"/>
-        <programRunner implementation="org.vlang.debugger.runconfig.VlangDebugRunner"/>
+        <programRunner order="last" implementation="org.vlang.debugger.runconfig.VlangDebugRunner"/>
         <console.folding implementation="org.vlang.ide.run.VlangConsoleFolding"/>
         <applicationService serviceImplementation="org.vlang.debugger.lang.VlangDebuggerState"/>
         <runLineMarkerContributor id="VlangRunLineMarkerProvider" language="vlang"
