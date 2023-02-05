@@ -17,7 +17,9 @@ class VlangVariableNotCapturedInspection : VlangBaseInspection() {
                 super.visitReferenceExpression(o)
 
                 val resolved = o.reference.resolve() ?: return
-                if (resolved !is VlangVarDefinition) return
+                if (resolved !is VlangVarDefinition && resolved !is VlangParamDefinition) return
+                resolved as VlangNamedElement
+
                 val definedInLambda = resolved.parentOfType<VlangFunctionLit>() != null
                 if (definedInLambda) return
 

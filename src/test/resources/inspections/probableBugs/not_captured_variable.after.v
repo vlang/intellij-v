@@ -4,13 +4,14 @@ fn foo() ?int {
 	return 0
 }
 
-fn main() {
+fn main(param int) {
 	age := 100
 	name := ''
 
-	mut f := fn [age, name] () {
+	mut f := fn [age, name, param] () {
 		println(age)
 		println(name)
+		println(param)
 	}
 
 	f = fn [age, name] () {
