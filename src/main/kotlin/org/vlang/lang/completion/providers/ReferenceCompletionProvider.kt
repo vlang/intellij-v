@@ -334,7 +334,8 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
         var isContextMember = false
         if (contextFunction is VlangMethodDeclaration) {
             if (element is VlangFieldDefinition || element is VlangMethodDeclaration) {
-                val ownerType = ((element as VlangNamedElement).getOwner() as VlangNamedElement).getType(null)
+                element as VlangNamedElement
+                val ownerType = (element.getOwner() as? VlangNamedElement)?.getType(null)
                 val receiverType = contextFunction.receiverType.toEx().unwrapPointer()
                 if (ownerType.isNullableEqual(receiverType)) {
                     isContextMember = true
