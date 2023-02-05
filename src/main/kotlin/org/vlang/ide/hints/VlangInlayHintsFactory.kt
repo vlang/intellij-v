@@ -5,21 +5,27 @@ import com.intellij.codeInsight.hints.presentation.*
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.colors.TextAttributesKey
-import com.intellij.openapi.editor.impl.EditorImpl
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import org.vlang.lang.psi.impl.VlangLangUtil
 import org.vlang.lang.psi.types.*
+import kotlin.reflect.full.memberProperties
+import kotlin.reflect.jvm.isAccessible
 
 @Suppress("UnstableApiUsage")
 class VlangInlayHintsFactory(
     private val editor: Editor,
     private val factory: PresentationFactory,
 ) {
-    private val textMetricsStorage = InlayTextMetricsStorage(editor as EditorImpl)
-    private val offsetFromTopProvider = object : InsetValueProvider {
-        override val top = textMetricsStorage.getFontMetrics(false).offsetFromTop() - 1
-    }
+    private val offsetFromTopProvider =
+        PresentationFactory::class.memberProperties
+            .find { it.name == "offsetFromTopProvider" }
+            ?.getter
+            ?.let {
+                it.isAccessible = true
+                it
+            }
+            ?.call(factory) as? InsetValueProvider
 
     fun implicitErrorVariable(project: Project): InlayPresentation {
         val text = factory.psiSingleReference(text("err")) {
@@ -134,7 +140,7 @@ class VlangInlayHintsFactory(
                 8
             ), DefaultLanguageHighlighterColors.INLAY_DEFAULT
         )
-        return DynamicInsetPresentation(rounding, offsetFromTopProvider)
+        return DynamicInsetPresentation(rounding, offsetFromTopProvider!!)
     }
 
     private fun container(base: InlayPresentation): InlayPresentation {
@@ -151,7 +157,7 @@ class VlangInlayHintsFactory(
                 8
             ), DefaultLanguageHighlighterColors.INLAY_DEFAULT
         )
-        return DynamicInsetPresentation(rounding, offsetFromTopProvider)
+        return DynamicInsetPresentation(rounding, offsetFromTopProvider!!)
     }
 
     private fun List<InlayPresentation>.join(separator: String = ""): InlayPresentation {
