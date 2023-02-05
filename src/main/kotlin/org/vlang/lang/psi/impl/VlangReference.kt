@@ -378,7 +378,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         val file = getStubFile("threads.v", stubDir, psiManager) ?: return true
 
         val struct = file.getStructs()
-            .firstOrNull { it.name == "ThreadPool" } ?: return false
+            .firstOrNull { it.name == "ThreadPool" } ?: return true
         return processExistingType(struct.structType.toEx(), processor, state)
     }
 
@@ -388,7 +388,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         val file = getStubFile("threads.v", stubDir, psiManager) ?: return true
 
         val struct = file.getStructs()
-            .firstOrNull { it.name == "Thread" } ?: return false
+            .firstOrNull { it.name == "Thread" } ?: return true
         return processExistingType(struct.structType.toEx(), processor, state)
     }
 
@@ -399,10 +399,10 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         state: ResolveState,
     ): Boolean {
         val builtin = VlangConfiguration.getInstance(project).builtinLocation
-        val virtualFile = builtin?.findChild("$name.v") ?: return false
-        val psiFile = PsiManager.getInstance(project).findFile(virtualFile) as? VlangFile ?: return false
+        val virtualFile = builtin?.findChild("$name.v") ?: return true
+        val psiFile = PsiManager.getInstance(project).findFile(virtualFile) as? VlangFile ?: return true
         val struct = psiFile.getStructs()
-            .firstOrNull { it.name == name } ?: return false
+            .firstOrNull { it.name == name } ?: return true
         return processExistingType(struct.structType.toEx(), processor, state)
     }
 
@@ -412,11 +412,11 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         state: ResolveState,
     ): Boolean {
         val vlib = VlangConfiguration.getInstance(project).builtinLocation?.parent
-        val syncDir = vlib?.findChild("sync") ?: return false
-        val virtualFile = syncDir.findChild("channels.c.v") ?: return false
-        val psiFile = PsiManager.getInstance(project).findFile(virtualFile) as? VlangFile ?: return false
+        val syncDir = vlib?.findChild("sync") ?: return true
+        val virtualFile = syncDir.findChild("channels.c.v") ?: return true
+        val psiFile = PsiManager.getInstance(project).findFile(virtualFile) as? VlangFile ?: return true
         val struct = psiFile.getStructs()
-            .firstOrNull { it.name == "Channel" } ?: return false
+            .firstOrNull { it.name == "Channel" } ?: return true
         return processExistingType(struct.structType.toEx(), processor, state)
     }
 
@@ -426,10 +426,10 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         state: ResolveState,
     ): Boolean {
         val stubDir = VlangConfiguration.getInstance(project).stubsLocation
-        val virtualFile = stubDir?.findChild("builtin_compile_time.v") ?: return false
-        val psiFile = PsiManager.getInstance(project).findFile(virtualFile) as? VlangFile ?: return false
+        val virtualFile = stubDir?.findChild("builtin_compile_time.v") ?: return true
+        val psiFile = PsiManager.getInstance(project).findFile(virtualFile) as? VlangFile ?: return true
         val struct = psiFile.getStructs()
-            .firstOrNull { it.name == "TypeInfo" } ?: return false
+            .firstOrNull { it.name == "TypeInfo" } ?: return true
         return processExistingType(struct.structType.toEx(), processor, state)
     }
 
@@ -439,10 +439,10 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         state: ResolveState,
     ): Boolean {
         val stubDir = VlangConfiguration.getInstance(project).stubsLocation
-        val virtualFile = stubDir?.findChild("compile_time_reflection.v") ?: return false
-        val psiFile = PsiManager.getInstance(project).findFile(virtualFile) as? VlangFile ?: return false
+        val virtualFile = stubDir?.findChild("compile_time_reflection.v") ?: return true
+        val psiFile = PsiManager.getInstance(project).findFile(virtualFile) as? VlangFile ?: return true
         val struct = psiFile.getStructs()
-            .firstOrNull { it.name == "CompileTimeTypeInfo" } ?: return false
+            .firstOrNull { it.name == "CompileTimeTypeInfo" } ?: return true
         return processExistingType(struct.structType.toEx(), processor, state)
     }
 
