@@ -11,6 +11,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.elementType
+import com.intellij.refactoring.suggested.endOffset
 import com.intellij.refactoring.suggested.startOffset
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.*
@@ -125,7 +126,12 @@ class VlangFoldingBuilder : FoldingBuilderEx(), DumbAware {
                     return
                 }
 
-                val range = TextRange(lbrack!!.startOffset, el.textRange.endOffset)
+                val endOffset = when (el) {
+                    is VlangIfExpression -> el.block?.endOffset ?: el.textRange.endOffset
+                    else -> el.textRange.endOffset
+                }
+
+                val range = TextRange(lbrack!!.startOffset, endOffset)
                 val group = FoldingGroup.newGroup("VlangFoldingGroup")
                 descriptors.add(FoldingDescriptor(el.node, range, group))
             }
