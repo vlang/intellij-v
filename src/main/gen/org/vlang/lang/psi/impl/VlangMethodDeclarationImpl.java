@@ -8,13 +8,13 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
-import org.vlang.lang.stubs.VlangMethodDeclarationStub;
 import org.vlang.lang.psi.*;
 import com.intellij.psi.ResolveState;
 import org.vlang.lang.psi.types.VlangTypeEx;
+import org.vlang.lang.stubs.VlangMethodDeclarationStub;
 import com.intellij.psi.stubs.IStubElementType;
 
-public class VlangMethodDeclarationImpl extends VlangFunctionOrMethodDeclarationImpl<VlangMethodDeclarationStub> implements VlangMethodDeclaration {
+public class VlangMethodDeclarationImpl extends VlangMethodDeclarationWithScopeHolder implements VlangMethodDeclaration {
 
   public VlangMethodDeclarationImpl(@NotNull VlangMethodDeclarationStub stub, @NotNull IStubElementType<?, ?> type) {
     super(stub, type);

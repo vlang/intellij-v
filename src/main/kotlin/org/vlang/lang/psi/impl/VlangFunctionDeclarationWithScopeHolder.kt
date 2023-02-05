@@ -7,7 +7,7 @@ import org.vlang.lang.psi.VlangScope
 import org.vlang.lang.psi.VlangScopeHolder
 import org.vlang.lang.stubs.VlangFunctionDeclarationStub
 
-abstract class VlangFunctionOrMethodDeclarationWithScopeHolder : VlangFunctionOrMethodDeclarationImpl<VlangFunctionDeclarationStub>, VlangScopeHolder {
+abstract class VlangFunctionDeclarationWithScopeHolder : VlangFunctionOrMethodDeclarationImpl<VlangFunctionDeclarationStub>, VlangScopeHolder {
     private var scope: VlangScope? = null
 
     constructor(stub: VlangFunctionDeclarationStub, nodeType: IStubElementType<*, *>) : super(stub, nodeType)

@@ -5,12 +5,12 @@ import org.vlang.lang.codeInsight.controlFlow.instructions.VlangInstructionProce
 import org.vlang.lang.psi.VlangCallExpr
 import org.vlang.lang.psi.VlangFunctionDeclaration
 
-class VlangFunctionCallInstructionImpl(call: VlangCallExpr, override val function: VlangFunctionDeclaration) :
+class VlangFunctionCallInstructionImpl(private val call: VlangCallExpr) :
     VlangLinearInstructionImpl(call), VlangFunctionCallInstruction {
 
     override fun process(visitor: VlangInstructionProcessor): Boolean {
         return visitor.processFunctionCallInstruction(this)
     }
 
-    override fun toString() = super.toString() + " FUNCTION_CALL " + function.name
+    override fun toString() = super.toString() + " CALL " + call.identifier?.text
 }

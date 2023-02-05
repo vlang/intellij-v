@@ -1,8 +1,9 @@
 package org.vlang.lang.codeInsight.controlFlow
 
-import com.intellij.codeInsight.highlighting.ReadWriteAccessDetector
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.elementType
 import com.intellij.psi.util.parentOfType
+import org.vlang.lang.VlangTypes
 import org.vlang.lang.codeInsight.controlFlow.instructions.VlangInstruction
 import org.vlang.lang.codeInsight.controlFlow.instructions.impl.*
 import org.vlang.lang.psi.*
@@ -63,6 +64,10 @@ open class VlangControlFlowBuilder(private val scopeHolder: PsiElement) {
     }
 
     inner class VlangControlFlowBuilderVisitor : VlangRecursiveElementVisitor() {
+        override fun visitElement(o: VlangElement) {
+            o.acceptChildren(this)
+        }
+
         override fun visitFunctionDeclaration(o: VlangFunctionDeclaration) {
             addInstruction(VlangFunctionDeclarationInstructionImpl(o))
             o.acceptChildren(this)
@@ -75,6 +80,8 @@ open class VlangControlFlowBuilder(private val scopeHolder: PsiElement) {
             for (variable in vars) {
                 addInstruction(VlangVariableDeclarationInstructionImpl(variable))
             }
+
+            super.visitElement(decl)
         }
 
         override fun visitAssignmentStatement(assign: VlangAssignmentStatement) {
@@ -82,101 +89,58 @@ open class VlangControlFlowBuilder(private val scopeHolder: PsiElement) {
             val exprs = assign.leftHandExprList.expressionList
 
             for (expr in exprs) {
-                val refExpr = expr as? VlangReferenceExpression
-                val resolved = refExpr?.resolve() ?: continue
-
-                if (resolved is VlangVarDefinition) {
-                    addInstruction(
-                        VlangAccessVariableInstructionImpl(
-                            expr,
-                            resolved,
-                            ReadWriteAccessDetector.Access.Write
-                        )
-                    )
-                }
-
-                if (resolved is VlangFieldDefinition) {
-                    addInstruction(
-                        VlangAccessFieldInstructionImpl(
-                            expr,
-                            resolved,
-                            ReadWriteAccessDetector.Access.Write
-                        )
-                    )
-                }
-
-                val qualifier = refExpr.getQualifier()
-                visitQualifier(qualifier) { next ->
-                    if (next is VlangVarDefinition) {
-                        addInstruction(
-                            VlangAccessVariableInstructionImpl(
-                                expr,
-                                next,
-                                ReadWriteAccessDetector.Access.Write
-                            )
-                        )
-                    }
-
-                    if (next is VlangFieldDefinition) {
-                        addInstruction(
-                            VlangAccessFieldInstructionImpl(
-                                expr,
-                                next,
-                                ReadWriteAccessDetector.Access.Write
-                            )
-                        )
-                    }
-                }
-            }
-        }
-
-        private fun visitQualifier(qualifier: VlangCompositeElement?, onResolved: (PsiElement) -> Unit) {
-            if (qualifier == null) return
-            val refExpr = qualifier as? VlangReferenceExpression
-            val resolved = refExpr?.resolve()
-            if (resolved != null) {
-                onResolved(resolved)
+                expr.accept(this)
             }
 
-            val next = refExpr?.getQualifier() ?: return
-            visitQualifier(next, onResolved)
+            val rightExprs = assign.expressionList
+            for (expr in rightExprs) {
+                expr.accept(this)
+            }
         }
 
         override fun visitReferenceExpression(expr: VlangReferenceExpression) {
-            val resolved = expr.resolve()
-
-            if (resolved is VlangVarDefinition) {
-                addInstruction(VlangAccessVariableInstructionImpl(expr, resolved, expr.readWriteAccess))
-            }
-
-            if (resolved is VlangParamDefinition) {
-                addInstruction(VlangAccessParameterInstructionImpl(expr, resolved, expr.readWriteAccess))
-            }
-
-            if (resolved is VlangFieldDefinition) {
-                addInstruction(VlangAccessFieldInstructionImpl(expr, resolved, expr.readWriteAccess))
-            }
+            addInstruction(VlangAccessInstructionImpl(expr, expr.readWriteAccess))
 
             val qualifier = expr.getQualifier()
-            visitQualifier(qualifier) { next ->
-                if (next is VlangVarDefinition) {
-                    addInstruction(VlangAccessVariableInstructionImpl(qualifier!!, next, expr.readWriteAccess))
-                }
+            qualifier?.accept(this)
+        }
 
-                if (next is VlangParamDefinition) {
-                    addInstruction(VlangAccessParameterInstructionImpl(qualifier!!, next, expr.readWriteAccess))
-                }
+        override fun visitMatchExpression(o: VlangMatchExpression) {
+            addStatementInstruction(o)
 
-                if (next is VlangFieldDefinition) {
-                    addInstruction(VlangAccessFieldInstructionImpl(qualifier!!, next, expr.readWriteAccess))
+            val expression = o.expression ?: return
+            val matchConditionHost = VlangHostInstructionImpl(expression)
+            val matchOutInstruction = VlangIfOutMarkerInstruction()
+
+            expression.accept(this)
+            addInstruction(matchConditionHost)
+
+            for (arm in o.arms) {
+                for (param in arm.parameterList) {
+                    addInstruction(VlangConditionInstructionImpl(param, true))
                 }
+                arm.block.accept(this)
+
+                jump(matchOutInstruction)
+                lastInstruction = matchConditionHost
             }
+
+            o.elseArm?.let { arm ->
+                addInstruction(VlangConditionInstructionImpl(null, false))
+                arm.block?.accept(this)
+            }
+
+            addInstruction(matchOutInstruction)
+        }
+
+        override fun visitMatchElseArmClause(o: VlangMatchElseArmClause) {
+            o.block?.accept(this)
         }
 
         override fun visitIfExpression(o: VlangIfExpression) {
             addStatementInstruction(o)
 
-            val condition = o.expression ?: return // TODO
+            val condition = o.expression ?: o.guardVarDeclaration ?: return // TODO
             val ifOutInstruction = VlangIfOutMarkerInstruction()
             val ifConditionHost = VlangHostInstructionImpl(condition)
             val trueConditionInstruction = VlangConditionInstructionImpl(condition, true)
@@ -192,8 +156,8 @@ open class VlangControlFlowBuilder(private val scopeHolder: PsiElement) {
             addInstruction(falseConditionInstruction)
 
             val elseBranch = o.elseBranch
-            val elseBlock = elseBranch?.block
-            elseBlock?.accept(this)
+            elseBranch?.block?.accept(this)
+            elseBranch?.ifExpression?.accept(this)
 
             addInstruction(ifOutInstruction)
         }
@@ -236,18 +200,56 @@ open class VlangControlFlowBuilder(private val scopeHolder: PsiElement) {
 
         override fun visitCallExpr(o: VlangCallExpr) {
             addStatementInstruction(o)
-            val resolved = (o.expression as? VlangReferenceExpression)?.resolve()
 
+            o.expression?.accept(this)
             o.argumentList.accept(this)
 
-            if (resolved is VlangFunctionDeclaration) {
-                addInstruction(VlangFunctionCallInstructionImpl(o, resolved))
+            addInstruction(VlangFunctionCallInstructionImpl(o))
 
-                if (resolved.isNoReturn) {
-                    addInstruction(VlangExitMarkerInstruction())
-                    jump(deferMarkerInstruction)
-                }
+            if (o.identifier != null && o.identifier!!.textMatches("panic")) {
+                addInstruction(VlangExitMarkerInstruction())
+                jump(deferMarkerInstruction)
             }
+        }
+
+        override fun visitIsExpression(o: VlangIsExpression) {
+            o.expression.accept(this)
+            o.type?.accept(this)
+        }
+
+        override fun visitBinaryExpr(o: VlangBinaryExpr) {
+            val op = o.operator
+            if (op.elementType == VlangTypes.COND_AND) {
+                processShortCircuitExpression(o, trueBranchFirst = false)
+                return
+            }
+
+            if (op.elementType == VlangTypes.COND_OR) {
+                processShortCircuitExpression(o, trueBranchFirst = true)
+                return
+            }
+
+            super.visitBinaryExpr(o)
+        }
+
+        private fun processShortCircuitExpression(o: VlangBinaryExpr, trueBranchFirst: Boolean) {
+            val outInstruction = VlangMarkerInstruction()
+            val leftOperand = o.left
+            val conditionHost = VlangHostInstructionImpl(o)
+            val trueConditionInstruction = VlangConditionInstructionImpl(leftOperand, true)
+            val falseConditionInstruction = VlangConditionInstructionImpl(leftOperand, false)
+
+            leftOperand.accept(this)
+
+            addInstruction(conditionHost)
+            addInstruction(if (trueBranchFirst) trueConditionInstruction else falseConditionInstruction)
+
+            val shortCircuitInstruction = if (trueBranchFirst) falseConditionInstruction else trueConditionInstruction
+            addInstruction(shortCircuitInstruction)
+
+            o.right?.accept(this)
+
+            addInstruction(outInstruction)
         }
     }
 

@@ -24,7 +24,7 @@ public interface VlangVarDefinition extends VlangMutabilityOwner, VlangNamedElem
   @NotNull
   String getName();
 
-  @Nullable
+  @NotNull
   PsiReference getReference();
 
   boolean isMutable();

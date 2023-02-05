@@ -527,6 +527,7 @@ public class VlangVisitor extends PsiElementVisitor {
     // visitFunctionOrMethodDeclaration(o);
     // visitAttributeOwner(o);
     // visitGenericParametersOwner(o);
+    // visitScopeHolder(o);
   }
 
   public void visitMethodName(@NotNull VlangMethodName o) {

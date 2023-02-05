@@ -60,7 +60,7 @@ public class VlangVarDefinitionImpl extends VlangNamedElementImpl<VlangVarDefini
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiReference getReference() {
     return VlangPsiImplUtil.getReference(this);
   }

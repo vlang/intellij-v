@@ -9,7 +9,7 @@ import org.vlang.lang.stubs.VlangMethodDeclarationStub;
 import com.intellij.psi.ResolveState;
 import org.vlang.lang.psi.types.VlangTypeEx;
 
-public interface VlangMethodDeclaration extends VlangSignatureOwner, VlangFunctionOrMethodDeclaration, VlangAttributeOwner, VlangGenericParametersOwner, StubBasedPsiElement<VlangMethodDeclarationStub> {
+public interface VlangMethodDeclaration extends VlangSignatureOwner, VlangFunctionOrMethodDeclaration, VlangAttributeOwner, VlangGenericParametersOwner, VlangScopeHolder, StubBasedPsiElement<VlangMethodDeclarationStub> {
 
   @Nullable
   VlangAttributes getAttributes();

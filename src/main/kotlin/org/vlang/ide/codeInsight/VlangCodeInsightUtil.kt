@@ -18,7 +18,7 @@ object VlangCodeInsightUtil {
     const val MAIN_MODULE = "main"
     const val BUILTIN_MODULE = "builtin"
     const val STUBS_MODULE = "stubs"
-    private const val IT_VARIABLE = "it"
+    const val IT_VARIABLE = "it"
     private const val ERR_VARIABLE = "err"
 
     fun isErrVariable(element: PsiElement): Boolean {

@@ -5,9 +5,10 @@ import com.intellij.psi.PsiElement
 import org.vlang.lang.codeInsight.controlFlow.instructions.VlangAccessFieldInstruction
 import org.vlang.lang.codeInsight.controlFlow.instructions.VlangInstructionProcessor
 import org.vlang.lang.psi.VlangFieldDefinition
+import org.vlang.lang.psi.VlangReferenceExpression
 
 class VlangAccessFieldInstructionImpl(
-    anchor: PsiElement,
+    anchor: VlangReferenceExpression,
     override val definition: VlangFieldDefinition,
     override val access: ReadWriteAccessDetector.Access,
 ) : VlangAccessInstructionImpl(anchor, access), VlangAccessFieldInstruction {
@@ -16,5 +17,5 @@ class VlangAccessFieldInstructionImpl(
         return visitor.processAccessFieldInstruction(this)
     }
 
-    override fun toString() = super.toString() + " ACCESS_FIELD (${access.toString().uppercase()}) ${definition.name}"
+    override fun toString() = super.toString() + " ACCESS_FIELD (${access.toString().uppercase()}) ${anchor?.text}"
 }

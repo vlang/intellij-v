@@ -7,6 +7,7 @@ import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElementVisitor
 import com.intellij.psi.util.parentOfType
+import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.ide.inspections.VlangBaseInspection
 import org.vlang.lang.psi.*
 
@@ -19,6 +20,7 @@ class VlangVariableNotCapturedInspection : VlangBaseInspection() {
                 val resolved = o.reference.resolve() ?: return
                 if (resolved !is VlangVarDefinition && resolved !is VlangParamDefinition) return
                 resolved as VlangNamedElement
+                if (resolved.name == null) return
 
                 val definedInLambda = resolved.parentOfType<VlangFunctionLit>() != null
                 if (definedInLambda) return

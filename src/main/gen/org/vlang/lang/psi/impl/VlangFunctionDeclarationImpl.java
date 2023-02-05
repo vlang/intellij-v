@@ -14,7 +14,7 @@ import org.vlang.lang.psi.types.VlangTypeEx;
 import org.vlang.lang.stubs.VlangFunctionDeclarationStub;
 import com.intellij.psi.stubs.IStubElementType;
 
-public class VlangFunctionDeclarationImpl extends VlangFunctionOrMethodDeclarationWithScopeHolder implements VlangFunctionDeclaration {
+public class VlangFunctionDeclarationImpl extends VlangFunctionDeclarationWithScopeHolder implements VlangFunctionDeclaration {
 
   public VlangFunctionDeclarationImpl(@NotNull VlangFunctionDeclarationStub stub, @NotNull IStubElementType<?, ?> type) {
     super(stub, type);

@@ -20,6 +20,10 @@ import org.vlang.ide.codeInsight.VlangTypeInferenceUtil
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.VlangTypes.SAFE_DOT
 import org.vlang.lang.codeInsight.controlFlow.VlangControlFlow
+import org.vlang.lang.codeInsight.controlFlow.VlangControlFlowUtil
+import org.vlang.lang.codeInsight.controlFlow.instructions.VlangConditionInstruction
+import org.vlang.lang.codeInsight.controlFlow.instructions.VlangInstruction
+import org.vlang.lang.codeInsight.controlFlow.instructions.VlangInstructionProcessor
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangReferenceBase.Companion.LOCAL_RESOLVE
 import org.vlang.lang.psi.impl.imports.VlangModuleReference
@@ -1132,6 +1136,31 @@ object VlangPsiImplUtil {
         return o.guardVarDeclaration != null
     }
 
+    private fun getNotNullElement(vararg elements: PsiElement?): PsiElement? {
+        for (e in elements) {
+            if (e != null) return e
+        }
+        return null
+    }
+
+    @JvmStatic
+    fun getOperator(o: VlangBinaryExpr): PsiElement? {
+        if (o is VlangAndExpr) return o.condAnd
+        if (o is VlangOrExpr) return o.condOr
+
+        if (o is VlangMulExpr) {
+            return getNotNullElement(o.mul, o.quotient, o.remainder, o.shiftLeft, o.bitAnd, o.bitClear)
+        }
+        if (o is VlangAddExpr) {
+            return getNotNullElement(o.bitXor, o.bitOr, o.minus, o.plus)
+        }
+        if (o is VlangConditionalExpr) {
+            return getNotNullElement(o.eq, o.notEq, o.greater, o.greaterOrEqual, o.less, o.lessOrEqual)
+        }
+
+        return null
+    }
+
     @JvmStatic
     fun getReference(o: VlangEnumFetch): VlangReference {
         return VlangReference(o, false)
@@ -1186,6 +1215,7 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun getParameterList(o: VlangMatchArm): List<VlangCompositeElement> {
         return VlangPsiTreeUtil.getChildrenOfTypeAsList(o, VlangCompositeElement::class.java)
+            .filter { !PsiTreeUtil.isAncestor(o.block, it, false) }
     }
 
     @JvmStatic
@@ -1449,6 +1479,11 @@ object VlangPsiImplUtil {
 
             val resolved = expr.reference.resolve()
             if (resolved is VlangTypeOwner) {
+                val typeFromCasts = typeFromCasts(expr)
+                if (typeFromCasts != null) {
+                    return typeFromCasts
+                }
+
                 val type = typeOrParameterType(resolved, context)
                 if (type != null && type.isGeneric()) {
                     return VlangGenericInferer.inferGenericFetch(resolved, expr, type)
@@ -1619,6 +1654,59 @@ object VlangPsiImplUtil {
         }
 
         return null
+    }
+
+    private fun typeFromCasts(expr: VlangReferenceExpression): VlangTypeEx? {
+        val scope = expr.parentOfType<VlangScopeHolder>()?.scope()
+        val controlFlow = scope?.controlFlow()
+        val instruction = controlFlow?.getInstruction(expr, VlangInstruction::class.java) ?: return null
+
+        var foundType: VlangTypeEx? = null
+
+        VlangControlFlowUtil.processPredecessors(instruction, object : VlangInstructionProcessor() {
+            override fun processConditionInstruction(instruction: VlangConditionInstruction): Boolean {
+
+                // match cast
+                if (instruction.condition is VlangType) {
+                    var matchExpr = expr.parentOfType<VlangMatchExpression>()
+                    while (matchExpr != null) {
+
+                        // when `match expr.foo { ... }` need find next match expression
+                        if (PsiTreeUtil.isAncestor(matchExpr.expression, expr, false)) {
+                            matchExpr = matchExpr.parentOfType()
+                        }
+
+                        val expression = matchExpr?.expression
+                        val unwrapped = if (expression is VlangMutExpression) expression.expression else expression
+                        if (unwrapped?.text == expr.text) {
+                            foundType = (instruction.condition as VlangType).toEx()
+                            return false
+                        }
+
+                        matchExpr = matchExpr?.parentOfType()
+                    }
+                }
+
+                // if cast
+                if (instruction.condition is VlangIsExpression) {
+                    if (PsiTreeUtil.isAncestor(instruction.condition, expr, false)) {
+                        return true
+                    }
+
+                    val isExpr = instruction.condition as VlangIsExpression
+                    val isLeftExpr = isExpr.expression
+                    val unwrapped = if (isLeftExpr is VlangMutExpression) isLeftExpr.expression else isLeftExpr
+                    if (unwrapped?.text == expr.text) {
+                        foundType = isExpr.type?.toEx()
+                        return false
+                    }
+                }
+
+                return super.processConditionInstruction(instruction)
+            }
+        })
+
+        return foundType
     }
 
     private fun processSignatureReturnType(

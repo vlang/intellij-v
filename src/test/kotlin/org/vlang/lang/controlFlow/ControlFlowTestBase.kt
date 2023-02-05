@@ -1,12 +1,13 @@
 package org.vlang.lang.controlFlow
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.intellij.lang.annotations.Language
 import org.vlang.lang.psi.VlangFile
 
 class ControlFlowTestBase : BasePlatformTestCase() {
     override fun getTestDataPath() = "src/test/resources/controlFlow"
 
-    fun doTest(content: String, expectedControlFlow: String) {
+    fun doTest(@Language("v") content: String, expectedControlFlow: String) {
         val file = myFixture.configureByText("a.v", content) as VlangFile
 
         val function = file.getFunctions().first { it.name == "main" }
@@ -17,11 +18,11 @@ class ControlFlowTestBase : BasePlatformTestCase() {
     fun `test simple`() = doTest(
         """
         fn main() {
-            a := 100
+            mut a := 100
             a = 100
             
             if a == 100 {
-                a = 200
+                a = 200 + a
                 return 100
             }
             
@@ -32,24 +33,25 @@ class ControlFlowTestBase : BasePlatformTestCase() {
         """,
         """
 p:-     s:-      0: ENTRY_POINT
-p:0     s:-      1: STATEMENT a := 100
+p:0     s:-      1: STATEMENT mut a := 100
 p:1     s:-      2: VARIABLE_DECLARATION a
 p:2     s:-      3: STATEMENT a = 100
-p:3     s:-      4: ACCESS_VARIABLE (WRITE) a
+p:3     s:-      4: ACCESS (WRITE) a
 p:4     s:-      5: STATEMENT if a == 100 {
-p:5     s:-      6: ACCESS_VARIABLE (READ) a
+p:5     s:-      6: ACCESS (READ) a
 p:6     s:-      7: HOST
 p:7     s:-      8: CONDITION(true, CONDITIONAL_EXPR) 
-p:8     s:-      9: STATEMENT a = 200
-p:9     s:-     10: ACCESS_VARIABLE (WRITE) a
-p:10    s:-     11: STATEMENT return 100
-p:11    s:-     12: RETURN 100
-p:7     s:-     13: CONDITION(false, CONDITIONAL_EXPR) 
-p:13    s:-     14: STATEMENT return 200
-p:14    s:-     15: RETURN 200
-p:-     s:-     16: STATEMENT a = 300
-p:16    s:-     17: ACCESS_VARIABLE (WRITE) a
-p:12, 15, 17 s:-     18: EXIT_POINT
+p:8     s:-      9: STATEMENT a = 200 + a
+p:9     s:-     10: ACCESS (WRITE) a
+p:10    s:-     11: ACCESS (READ) a
+p:11    s:-     12: STATEMENT return 100
+p:12    s:-     13: RETURN 100
+p:7     s:-     14: CONDITION(false, CONDITIONAL_EXPR) 
+p:14    s:-     15: STATEMENT return 200
+p:15    s:-     16: RETURN 200
+p:-     s:-     17: STATEMENT a = 300
+p:17    s:-     18: ACCESS (WRITE) a
+p:13, 16, 18 s:-     19: EXIT_POINT
         """
     )
 
@@ -68,20 +70,22 @@ p:12, 15, 17 s:-     18: EXIT_POINT
         }
         """,
         """
-        p:-     s:-      0: ENTRY_POINT
-        p:0     s:-      1: STATEMENT mut canBeImmutable := 100
-        p:1     s:-      2: VARIABLE_DECLARATION canBeImmutable
-        p:2     s:-      3: STATEMENT mut canNotBeImmutable := 100
-        p:3     s:-      4: VARIABLE_DECLARATION canNotBeImmutable
-        p:4     s:-      5: STATEMENT canNotBeImmutable = 200
-        p:5     s:-      6: ACCESS_VARIABLE (WRITE) canNotBeImmutable
-        p:6     s:-      7: STATEMENT println(canBeImmutable)
-        p:7     s:-      8: ACCESS_VARIABLE (READ) canBeImmutable
-        p:8     s:-      9: FUNCTION_CALL println
-        p:9     s:-     10: STATEMENT println(canNotBeImmutable)
-        p:10    s:-     11: ACCESS_VARIABLE (READ) canNotBeImmutable
-        p:11    s:-     12: FUNCTION_CALL println
-        p:12    s:-     13: EXIT_POINT
+p:-     s:-      0: ENTRY_POINT
+p:0     s:-      1: STATEMENT mut canBeImmutable := 100
+p:1     s:-      2: VARIABLE_DECLARATION canBeImmutable
+p:2     s:-      3: STATEMENT mut canNotBeImmutable := 100
+p:3     s:-      4: VARIABLE_DECLARATION canNotBeImmutable
+p:4     s:-      5: STATEMENT canNotBeImmutable = 200
+p:5     s:-      6: ACCESS (WRITE) canNotBeImmutable
+p:6     s:-      7: STATEMENT println(canBeImmutable)
+p:7     s:-      8: ACCESS (READ) println
+p:8     s:-      9: ACCESS (READ) canBeImmutable
+p:9     s:-     10: CALL println
+p:10    s:-     11: STATEMENT println(canNotBeImmutable)
+p:11    s:-     12: ACCESS (READ) println
+p:12    s:-     13: ACCESS (READ) canNotBeImmutable
+p:13    s:-     14: CALL println
+p:14    s:-     15: EXIT_POINT
         """
     )
 
@@ -105,14 +109,16 @@ p:12, 15, 17 s:-     18: EXIT_POINT
 p:-     s:-      0: ENTRY_POINT
 p:0     s:-      1: STATEMENT mut foo := Foo{a: 100}
 p:1     s:-      2: VARIABLE_DECLARATION foo
-p:2     s:-      3: STATEMENT foo.a = 200
-p:3     s:-      4: ACCESS_FIELD (WRITE) a
-p:4     s:-      5: ACCESS_VARIABLE (WRITE) foo
-p:5     s:-      6: STATEMENT println(foo.a)
-p:6     s:-      7: ACCESS_FIELD (READ) a
-p:7     s:-      8: ACCESS_VARIABLE (READ) foo
-p:8     s:-      9: FUNCTION_CALL println
-p:9     s:-     10: EXIT_POINT
+p:2     s:-      3: ACCESS (READ) a
+p:3     s:-      4: STATEMENT foo.a = 200
+p:4     s:-      5: ACCESS (WRITE) foo.a
+p:5     s:-      6: ACCESS (READ) foo
+p:6     s:-      7: STATEMENT println(foo.a)
+p:7     s:-      8: ACCESS (READ) println
+p:8     s:-      9: ACCESS (READ) foo.a
+p:9     s:-     10: ACCESS (READ) foo
+p:10    s:-     11: CALL println
+p:11    s:-     12: EXIT_POINT
         """
     )
 
@@ -155,33 +161,30 @@ p:9     s:-     10: EXIT_POINT
         }
         """,
         """
-        p:-     s:-      0: ENTRY_POINT
-        p:0     s:-      1: STATEMENT foo()
-        p:1     s:-      2: FUNCTION_CALL foo
-        p:2     s:-      3: EXIT_POINT
+p:-     s:-      0: ENTRY_POINT
+p:0     s:-      1: STATEMENT foo()
+p:1     s:-      2: ACCESS (READ) foo
+p:2     s:-      3: CALL foo
+p:3     s:-      4: EXIT_POINT
         """.trimIndent()
     )
 
-    fun `test noreturn function call`() = doTest(
+    fun `test panic function call`() = doTest(
         """
-        [noreturn]
-        fn foo() {
-            exit(1)
-        }
-            
         fn main() {
-            foo()
+            panic('oops')
             
             a := 100
         }
         """,
         """
-        p:-     s:-      0: ENTRY_POINT
-        p:0     s:-      1: STATEMENT foo()
-        p:1     s:-      2: FUNCTION_CALL foo
-        p:-     s:-      3: STATEMENT a := 100
-        p:3     s:-      4: VARIABLE_DECLARATION a
-        p:4, 2  s:-      5: EXIT_POINT
+p:-     s:-      0: ENTRY_POINT
+p:0     s:-      1: STATEMENT panic('oops')
+p:1     s:-      2: ACCESS (READ) panic
+p:2     s:-      3: CALL panic
+p:-     s:-      4: STATEMENT a := 100
+p:4     s:-      5: VARIABLE_DECLARATION a
+p:5, 3  s:-      6: EXIT_POINT
         """.trimIndent()
     )
 
@@ -203,22 +206,23 @@ p:0     s:-      1: STATEMENT a := 100
 p:1     s:-      2: VARIABLE_DECLARATION a
 p:2     s:-      3: STATEMENT defer {
 p:3     s:-      4: STATEMENT foo()
-p:4     s:-      5: FUNCTION_CALL foo
-p:5     s:-      6: DEFER
-p:6     s:-      7: EXIT_POINT
+p:4     s:-      5: ACCESS (READ) foo
+p:5     s:-      6: CALL foo
+p:6     s:-      7: DEFER
+p:7     s:-      8: EXIT_POINT
         """.trimIndent()
     )
 
     fun `test defer`() = doTest(
         """
         fn main() {
-            a := 100
+            mut a := 100
             
             defer {
                 a = 200
             }
             
-            b := 100
+            mut b := 100
             if b == 10 {
                 return 100
             }
@@ -232,12 +236,12 @@ p:6     s:-      7: EXIT_POINT
         """,
         """
 p:-     s:-      0: ENTRY_POINT
-p:0     s:-      1: STATEMENT a := 100
+p:0     s:-      1: STATEMENT mut a := 100
 p:1     s:-      2: VARIABLE_DECLARATION a
-p:2     s:-      3: STATEMENT b := 100
+p:2     s:-      3: STATEMENT mut b := 100
 p:3     s:-      4: VARIABLE_DECLARATION b
 p:4     s:-      5: STATEMENT if b == 10 {
-p:5     s:-      6: ACCESS_VARIABLE (READ) b
+p:5     s:-      6: ACCESS (READ) b
 p:6     s:-      7: HOST
 p:7     s:-      8: CONDITION(true, CONDITIONAL_EXPR) 
 p:8     s:-      9: STATEMENT return 100
@@ -247,11 +251,11 @@ p:11    s:-     12: STATEMENT return 100
 p:12    s:-     13: RETURN 100
 p:10, 13 s:-     14: STATEMENT defer {
 p:14    s:-     15: STATEMENT a = 200
-p:15    s:-     16: ACCESS_VARIABLE (WRITE) a
+p:15    s:-     16: ACCESS (WRITE) a
 p:16    s:-     17: DEFER
 p:17    s:-     18: STATEMENT defer {
 p:18    s:-     19: STATEMENT b = 300
-p:19    s:-     20: ACCESS_VARIABLE (WRITE) b
+p:19    s:-     20: ACCESS (WRITE) b
 p:20    s:-     21: DEFER
 p:21    s:-     22: EXIT_POINT
         """.trimIndent()
@@ -271,13 +275,143 @@ p:21    s:-     22: EXIT_POINT
 p:-     s:-      0: ENTRY_POINT
 p:0     s:-      1: STATEMENT foo() or {
 p:1     s:-      2: STATEMENT foo() or {
-p:2     s:-      3: FUNCTION_CALL foo
-p:3     s:-      4: HOST
-p:4     s:-      5: CONDITION(true, CALL_EXPR) 
-p:5     s:-      6: STATEMENT return 100
-p:6     s:-      7: RETURN 100
-p:4     s:-      8: CONDITION(false, CALL_EXPR) 
-p:7, 8  s:-      9: EXIT_POINT
+p:2     s:-      3: ACCESS (READ) foo
+p:3     s:-      4: CALL foo
+p:4     s:-      5: HOST
+p:5     s:-      6: CONDITION(true, CALL_EXPR) 
+p:6     s:-      7: STATEMENT return 100
+p:7     s:-      8: RETURN 100
+p:5     s:-      9: CONDITION(false, CALL_EXPR) 
+p:8, 9  s:-     10: EXIT_POINT
+        """.trimIndent()
+    )
+
+    fun `test if else if`() = doTest(
+        """
+        fn main() {
+            if 1 == 1 {
+                return 100
+            } else if 2 == 2 {
+                return 200
+            }
+        }
+        """,
+        """
+p:-     s:-      0: ENTRY_POINT
+p:0     s:-      1: STATEMENT if 1 == 1 {
+p:1     s:-      2: HOST
+p:2     s:-      3: CONDITION(true, CONDITIONAL_EXPR) 
+p:3     s:-      4: STATEMENT return 100
+p:4     s:-      5: RETURN 100
+p:2     s:-      6: CONDITION(false, CONDITIONAL_EXPR) 
+p:6     s:-      7: STATEMENT if 1 == 1 {
+p:7     s:-      8: HOST
+p:8     s:-      9: CONDITION(true, CONDITIONAL_EXPR) 
+p:9     s:-     10: STATEMENT return 200
+p:10    s:-     11: RETURN 200
+p:8     s:-     12: CONDITION(false, CONDITIONAL_EXPR) 
+p:5, 11, 12 s:-     13: EXIT_POINT
+        """.trimIndent()
+    )
+
+    fun `test match expression`() = doTest(
+        """
+        fn main() {
+            a := 100
+            match a {
+                100 {
+                    return 100
+                }
+                200 {
+                    println('200')
+                }
+                300 {
+                    println('300')
+                }
+                else {
+                    return 300
+                }
+            }
+            
+            println('here')
+        }
+        """,
+        """
+p:-     s:-      0: ENTRY_POINT
+p:0     s:-      1: STATEMENT a := 100
+p:1     s:-      2: VARIABLE_DECLARATION a
+p:2     s:-      3: STATEMENT match a {
+p:3     s:-      4: ACCESS (READ) a
+p:4     s:-      5: HOST
+p:5     s:-      6: CONDITION(true, LITERAL) 
+p:6     s:-      7: STATEMENT return 100
+p:7     s:-      8: RETURN 100
+p:5     s:-      9: CONDITION(true, LITERAL) 
+p:9     s:-     10: STATEMENT println('200')
+p:10    s:-     11: ACCESS (READ) println
+p:11    s:-     12: CALL println
+p:5     s:-     13: CONDITION(true, LITERAL) 
+p:13    s:-     14: STATEMENT println('300')
+p:14    s:-     15: ACCESS (READ) println
+p:15    s:-     16: CALL println
+p:5     s:-     17: CONDITION(false, null) 
+p:17    s:-     18: STATEMENT return 300
+p:18    s:-     19: RETURN 300
+p:12, 16 s:-     20: STATEMENT println('here')
+p:20    s:-     21: ACCESS (READ) println
+p:21    s:-     22: CALL println
+p:8, 19, 22 s:-     23: EXIT_POINT
+        """.trimIndent()
+    )
+
+    fun `test match expression with types`() = doTest(
+        """
+            
+        struct Foo {
+            foo string
+        }
+        
+        struct Boo {
+            boo string
+        }
+            
+        fn main() {
+            mut foo := 100
+            match foo {
+                Foo {
+                    foo.foo
+                }
+                Boo {
+                    foo.boo
+                }
+                else {
+                    return 300
+                }
+            }
+            
+            println('here')
+        }
+        """,
+        """
+p:-     s:-      0: ENTRY_POINT
+p:0     s:-      1: STATEMENT mut foo := 100
+p:1     s:-      2: VARIABLE_DECLARATION foo
+p:2     s:-      3: STATEMENT match foo {
+p:3     s:-      4: ACCESS (READ) foo
+p:4     s:-      5: HOST
+p:5     s:-      6: CONDITION(true, TYPE) 
+p:6     s:-      7: ACCESS (READ) foo.foo
+p:7     s:-      8: ACCESS (READ) foo
+p:5     s:-      9: CONDITION(true, TYPE) 
+p:9     s:-     10: ACCESS (READ) foo.boo
+p:10    s:-     11: ACCESS (READ) foo
+p:5     s:-     12: CONDITION(false, null) 
+p:12    s:-     13: STATEMENT return 300
+p:13    s:-     14: RETURN 300
+p:8, 11 s:-     15: STATEMENT println('here')
+p:15    s:-     16: ACCESS (READ) println
+p:16    s:-     17: CALL println
+p:14, 17 s:-     18: EXIT_POINT
         """.trimIndent()
     )
 }

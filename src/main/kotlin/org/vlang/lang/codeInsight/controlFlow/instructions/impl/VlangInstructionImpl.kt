@@ -15,7 +15,6 @@ abstract class VlangInstructionImpl(override val anchor: PsiElement?) : VlangIns
     abstract fun replaceSuccessor(oldSuccessor: VlangInstructionImpl?, newSuccessor: VlangInstructionImpl?)
 
     override fun predecessors(): MutableCollection<VlangInstruction> {
-        ProgressIndicatorProvider.checkCanceled()
         return predecessors
     }
 

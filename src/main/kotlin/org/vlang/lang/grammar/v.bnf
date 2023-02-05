@@ -107,7 +107,7 @@
   implements("(Function|Method)Declaration|(Struct|Interface|Alias)Type|FunctionLit|InterfaceMethodDefinition")="org.vlang.lang.psi.VlangGenericParametersOwner"
   implements("CallExpr|Type")="org.vlang.lang.psi.VlangGenericArgumentsOwner"
 
-  implements("(Function)Declaration")="org.vlang.lang.psi.VlangScopeHolder"
+  implements("(Function|Method)Declaration")="org.vlang.lang.psi.VlangScopeHolder"
 
   extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
   extends("Type|GenericParameters|Signature|Result|Parameters|TypeUnionList|EmbeddedInterfaceDefinition|TypeReferenceExpression")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
@@ -542,13 +542,14 @@ FunctionDeclaration ::= Attributes? SymbolVisibility? fn identifier GenericParam
   pin=4
   stubClass="org.vlang.lang.stubs.VlangFunctionDeclarationStub"
   methods=[getName getTypeInner isDefinition isNoReturn isGeneric isCompileTime]
-  mixin="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationWithScopeHolder"
+  mixin="org.vlang.lang.psi.impl.VlangFunctionDeclarationWithScopeHolder"
 }
 
 MethodDeclaration ::= Attributes? SymbolVisibility? fn '(' Receiver ')' MethodName GenericParameters? Signature BlockWithConsume? {
   pin=7
   stubClass="org.vlang.lang.stubs.VlangMethodDeclarationStub"
   methods=[getReceiverType getTypeInner getIdentifier getQualifiedName getOwner isMutable]
+  mixin="org.vlang.lang.psi.impl.VlangMethodDeclarationWithScopeHolder"
 }
 // <ident> or <ops> for overload
 MethodName ::= identifier | AddOp | MulOp | RelOp

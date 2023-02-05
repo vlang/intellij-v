@@ -16,8 +16,7 @@ public interface VlangBinaryExpr extends VlangExpression {
   @Nullable
   VlangExpression getRight();
 
-  //WARNING: getOperator(...) is skipped
-  //matching getOperator(VlangBinaryExpr, ...)
-  //methods are not found in VlangPsiImplUtil
+  @Nullable
+  PsiElement getOperator();
 
 }
