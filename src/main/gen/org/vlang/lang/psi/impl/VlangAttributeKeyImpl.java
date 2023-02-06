@@ -8,9 +8,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
+import org.vlang.lang.stubs.VlangAttributeKeyStub;
 import org.vlang.lang.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class VlangAttributeKeyImpl extends VlangCompositeElementImpl implements VlangAttributeKey {
+public class VlangAttributeKeyImpl extends VlangStubbedElementImpl<VlangAttributeKeyStub> implements VlangAttributeKey {
+
+  public VlangAttributeKeyImpl(@NotNull VlangAttributeKeyStub stub, @NotNull IStubElementType<?, ?> type) {
+    super(stub, type);
+  }
 
   public VlangAttributeKeyImpl(@NotNull ASTNode node) {
     super(node);

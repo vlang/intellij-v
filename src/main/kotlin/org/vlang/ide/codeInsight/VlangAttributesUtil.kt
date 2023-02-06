@@ -47,7 +47,7 @@ object VlangAttributesUtil {
         return expr.text == "primary"
     }
 
-    fun getAttributeByName(attributes: List<VlangAttribute> , name: String): VlangAttributeExpression? {
+    fun getAttributeByName(attributes: List<VlangAttribute>, name: String): VlangAttributeExpression? {
         attributes.forEach {
             it.attributeExpressionList.forEach exprs@{ expr ->
                 val plain = expr.plainAttribute ?: return@exprs

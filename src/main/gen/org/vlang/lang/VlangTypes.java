@@ -27,13 +27,13 @@ public interface VlangTypes {
   IElementType ASSIGN_OP = new VlangCompositeElementType("ASSIGN_OP");
   IElementType AS_EXPRESSION = new VlangCompositeElementType("AS_EXPRESSION");
   IElementType ATOMIC_TYPE = VlangElementTypeFactory.stubFactory("ATOMIC_TYPE");
-  IElementType ATTRIBUTE = new VlangCompositeElementType("ATTRIBUTE");
-  IElementType ATTRIBUTES = new VlangCompositeElementType("ATTRIBUTES");
-  IElementType ATTRIBUTE_EXPRESSION = new VlangCompositeElementType("ATTRIBUTE_EXPRESSION");
+  IElementType ATTRIBUTE = VlangElementTypeFactory.stubFactory("ATTRIBUTE");
+  IElementType ATTRIBUTES = VlangElementTypeFactory.stubFactory("ATTRIBUTES");
+  IElementType ATTRIBUTE_EXPRESSION = VlangElementTypeFactory.stubFactory("ATTRIBUTE_EXPRESSION");
   IElementType ATTRIBUTE_IDENTIFIER = new VlangCompositeElementType("ATTRIBUTE_IDENTIFIER");
   IElementType ATTRIBUTE_IDENTIFIER_PREFIX = new VlangCompositeElementType("ATTRIBUTE_IDENTIFIER_PREFIX");
-  IElementType ATTRIBUTE_KEY = new VlangCompositeElementType("ATTRIBUTE_KEY");
-  IElementType ATTRIBUTE_VALUE = new VlangCompositeElementType("ATTRIBUTE_VALUE");
+  IElementType ATTRIBUTE_KEY = VlangElementTypeFactory.stubFactory("ATTRIBUTE_KEY");
+  IElementType ATTRIBUTE_VALUE = VlangElementTypeFactory.stubFactory("ATTRIBUTE_VALUE");
   IElementType BLOCK = new VlangCompositeElementType("BLOCK");
   IElementType BREAK_STATEMENT = new VlangCompositeElementType("BREAK_STATEMENT");
   IElementType CALL_EXPR = new VlangCompositeElementType("CALL_EXPR");
@@ -148,7 +148,7 @@ public interface VlangTypes {
   IElementType PARAMETERS = VlangElementTypeFactory.stubFactory("PARAMETERS");
   IElementType PARAM_DEFINITION = VlangElementTypeFactory.stubFactory("PARAM_DEFINITION");
   IElementType PARENTHESES_EXPR = new VlangCompositeElementType("PARENTHESES_EXPR");
-  IElementType PLAIN_ATTRIBUTE = new VlangCompositeElementType("PLAIN_ATTRIBUTE");
+  IElementType PLAIN_ATTRIBUTE = VlangElementTypeFactory.stubFactory("PLAIN_ATTRIBUTE");
   IElementType POINTER_TYPE = VlangElementTypeFactory.stubFactory("POINTER_TYPE");
   IElementType RANGE_CLAUSE = new VlangCompositeElementType("RANGE_CLAUSE");
   IElementType RANGE_EXPR = new VlangCompositeElementType("RANGE_EXPR");

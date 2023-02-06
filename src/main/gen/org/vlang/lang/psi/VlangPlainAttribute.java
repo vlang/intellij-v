@@ -4,8 +4,10 @@ package org.vlang.lang.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.StubBasedPsiElement;
+import org.vlang.lang.stubs.VlangPlainAttributeStub;
 
-public interface VlangPlainAttribute extends VlangCompositeElement {
+public interface VlangPlainAttribute extends VlangCompositeElement, StubBasedPsiElement<VlangPlainAttributeStub> {
 
   @NotNull
   VlangAttributeKey getAttributeKey();

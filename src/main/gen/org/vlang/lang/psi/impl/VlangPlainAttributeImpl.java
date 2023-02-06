@@ -8,9 +8,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
+import org.vlang.lang.stubs.VlangPlainAttributeStub;
 import org.vlang.lang.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class VlangPlainAttributeImpl extends VlangCompositeElementImpl implements VlangPlainAttribute {
+public class VlangPlainAttributeImpl extends VlangStubbedElementImpl<VlangPlainAttributeStub> implements VlangPlainAttribute {
+
+  public VlangPlainAttributeImpl(@NotNull VlangPlainAttributeStub stub, @NotNull IStubElementType<?, ?> type) {
+    super(stub, type);
+  }
 
   public VlangPlainAttributeImpl(@NotNull ASTNode node) {
     super(node);
@@ -29,13 +35,13 @@ public class VlangPlainAttributeImpl extends VlangCompositeElementImpl implement
   @Override
   @NotNull
   public VlangAttributeKey getAttributeKey() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangAttributeKey.class));
+    return notNullChild(VlangPsiTreeUtil.getStubChildOfType(this, VlangAttributeKey.class));
   }
 
   @Override
   @Nullable
   public VlangAttributeValue getAttributeValue() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangAttributeValue.class);
+    return VlangPsiTreeUtil.getStubChildOfType(this, VlangAttributeValue.class);
   }
 
   @Override

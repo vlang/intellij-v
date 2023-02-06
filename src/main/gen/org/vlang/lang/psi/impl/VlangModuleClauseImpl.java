@@ -35,7 +35,7 @@ public class VlangModuleClauseImpl extends VlangNamedElementImpl<VlangModuleClau
   @Override
   @Nullable
   public VlangAttributes getAttributes() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangAttributes.class);
+    return VlangPsiTreeUtil.getStubChildOfType(this, VlangAttributes.class);
   }
 
   @Override

@@ -37,7 +37,7 @@ public class VlangFunctionDeclarationImpl extends VlangFunctionDeclarationWithSc
   @Override
   @Nullable
   public VlangAttributes getAttributes() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangAttributes.class);
+    return VlangPsiTreeUtil.getStubChildOfType(this, VlangAttributes.class);
   }
 
   @Override

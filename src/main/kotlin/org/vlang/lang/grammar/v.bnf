@@ -110,10 +110,10 @@
   implements("(Function|Method)Declaration")="org.vlang.lang.psi.VlangScopeHolder"
 
   extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
-  extends("Type|GenericParameters|Signature|Result|Parameters|TypeUnionList|EmbeddedInterfaceDefinition|TypeReferenceExpression")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
+  extends("Type|GenericParameters|Signature|Result|Parameters|TypeUnionList|EmbeddedInterfaceDefinition|TypeReferenceExpression|Attributes|Attribute|PlainAttribute|AttributeExpression|AttributeValue|AttributeKey")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
   extends("ModuleClause|(Struct|TypeAlias|Union|Enum|Interface)Declaration|(Var|Label|Param|Field|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
 
-  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum|Interface)Declaration|.*Type|(Var|Label|Field|Param|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter|GenericParameters|Parameters|Result|Signature|TypeUnionList|EmbeddedInterfaceDefinition|TypeReferenceExpression")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
+  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum|Interface)Declaration|.*Type|(Var|Label|Field|Param|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter|GenericParameters|Parameters|Result|Signature|TypeUnionList|EmbeddedInterfaceDefinition|TypeReferenceExpression|Attributes|Attribute|PlainAttribute|AttributeExpression|AttributeValue|AttributeKey")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
 
   extends("Sql.*Statement")=SqlBlockStatement
   extends(".*Statement")=Statement
@@ -242,22 +242,36 @@ private StatementRecover ::= !('!' | '?' | '&' | '[' | '(' | '*' | '+' | '-' | '
 // attributes start
 // [attr1]
 // [attr2]
-Attributes ::= Attribute (semi Attribute)* semi? {pin=1}
+Attributes ::= Attribute (semi Attribute)* semi? {
+  pin=1
+  stubClass="org.vlang.lang.stubs.VlangAttributesStub"
+}
 // [<exprs>]
-Attribute ::= '[' AttributeExpressions ']' {pin=1}
+Attribute ::= '[' AttributeExpressions ']' {
+  pin=1
+  stubClass="org.vlang.lang.stubs.VlangAttributeStub"
+}
 // <expr>[; <expr2>]
 private AttributeExpressions ::= AttributeExpression (';' AttributeExpression)* {pin(".*")=1}
 // 'if <ident>' or <plain>
-AttributeExpression ::= IfAttribute | PlainAttribute
+AttributeExpression ::= IfAttribute | PlainAttribute {
+  stubClass="org.vlang.lang.stubs.VlangAttributeExpressionStub"
+}
 // if <ident>
 IfAttribute ::= if Expression {pin=1}
 // <ident> or 10 or "string" [: <ident> or <literal>]
-PlainAttribute ::= AttributeKey AttributeValueWithColon?
-AttributeKey ::= AttributeIdentifier | Literal
+PlainAttribute ::= AttributeKey AttributeValueWithColon? {
+  stubClass="org.vlang.lang.stubs.VlangPlainAttributeStub"
+}
+AttributeKey ::= AttributeIdentifier | Literal {
+  stubClass="org.vlang.lang.stubs.VlangAttributeKeyStub"
+}
 
 // : <ident> or <literal>
 private AttributeValueWithColon ::= ':' AttributeValue {pin=1}
-AttributeValue ::= identifier | Literal
+AttributeValue ::= identifier | Literal {
+  stubClass="org.vlang.lang.stubs.VlangAttributeValueStub"
+}
 
 AttributeIdentifier ::= AttributeIdentifierPrefix? (identifier | unsafe) {
   methods=[getReference]
