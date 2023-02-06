@@ -4,7 +4,10 @@
     <vendor>Petr Makhnev</vendor>
 
     <description><![CDATA[
-The plugin provides support for V language
+Provides support for <a href="https://vlang.io/">V</a> language
+<br>
+<br>
+<a href="https://plugins.jetbrains.com/plugin/20287-vlang/docs">Documentation</a>
     ]]></description>
 
     <depends>com.intellij.modules.platform</depends>
