@@ -5,6 +5,7 @@ import com.intellij.codeInsight.completion.CompletionProvider
 import com.intellij.codeInsight.completion.CompletionResultSet
 import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveState
+import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
 import org.vlang.lang.completion.VlangCompletionUtil
@@ -24,6 +25,13 @@ object VlangReceiverCompletionProvider : CompletionProvider<CompletionParameters
         }
 
         val methodDeclaration = referenceExpression.parentOfType<VlangMethodDeclaration>() ?: return
+        val element = referenceExpression.parentOfType<VlangElement>()
+        if (element != null) {
+            if (element.key == null || element.key != null && PsiTreeUtil.isAncestor(element.key, referenceExpression, true)) {
+                return
+            }
+        }
+
         val receiver = methodDeclaration.receiver
         val receiverName = receiver.name ?: return
         val receiverType = receiver.type.toEx().unwrapPointer().name()
