@@ -142,7 +142,7 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
             val remainingFields = fields.filter { !alreadyAssignedFields.contains(it.first) }
             if (remainingFields.size > 1) {
                 val element = LookupElementBuilder.create("")
-                    .withPresentableText("Fill all field…")
+                    .withPresentableText("Fill all fields…")
                     .withIcon(AllIcons.Actions.RealIntentionBulb)
                     .withInsertHandler(StructFieldsInsertHandler(remainingFields))
 
@@ -162,7 +162,8 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
             val after = if (element.elementType == VlangTypes.RBRACE) "\n" else ""
 
             val templateText = fields.joinToString("\n", before, after) {
-                it.first + ": \$field_${it.first}$"
+                // we need replace @ to at_ because @ is not allowed in template variable name
+                it.first + ": \$field_${it.first.replace("@", "at_")}$"
             }
 
             val template = TemplateManager.getInstance(project)
@@ -170,7 +171,7 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
             template.isToReformat = true
 
             fields.forEach {
-                template.addVariable("field_${it.first}", ConstantNode(VlangLangUtil.getDefaultValue(it.second)), true)
+                template.addVariable("field_${it.first.replace("@", "at_")}", ConstantNode(VlangLangUtil.getDefaultValue(it.second)), true)
             }
 
             TemplateManager.getInstance(project).startTemplate(context.editor, template)

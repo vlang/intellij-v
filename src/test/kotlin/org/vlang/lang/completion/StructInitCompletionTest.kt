@@ -233,6 +233,43 @@ class StructInitCompletionTest : CompletionTestBase() {
         """.trimIndent(),
     )
 
+    fun `test fill all fields with @`() = doTestCompletion(
+        """
+        module main
+        
+        struct Foo {
+            name  string
+            @age   int
+        pub:
+            @other bool
+        }
+        
+        fn main() {
+        	arr := Foo{/*caret*/}
+        }
+        
+        """.trimIndent(),
+        """
+        module main
+        
+        struct Foo {
+            name  string
+            @age   int
+        pub:
+            @other bool
+        }
+        
+        fn main() {
+        	arr := Foo{
+        		name: ''
+        		@age: 0
+        		@other: false
+        	}
+        }
+        
+        """.trimIndent(),
+    )
+
     fun `test fill all fields in incomplete init`() = doTestCompletion(
         """
         module main
