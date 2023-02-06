@@ -6,7 +6,7 @@
 
 ### Added
 
-- Added caching for resolve() for types, it should speed up resolving for big projects.
+- Added caching for `resolve()` for types, it should speed up resolving for big projects.
 - Added auto import for module when complete global variable name
 - Added context completion for enum fields
 - Added `dump()` postfix template
@@ -16,14 +16,16 @@
 - Added "V fmt" checkbox on commit
 - Added initial deprecation processing
 - Added initial smartcasts support
+- Added new "forc" template for `$for field in T.fields`
 
 ### Improved
 
 - Improved shared type handling
 - Improved unsafe context detection
 - Improved compile time handling
-- Improved live templates and added new "forc" template for `$for field in T.fields`
+- Improved live templates
 - Extended VariableNotCaptured inspection for parameters
+- Highlighting when indexing in progress
 
 ### Fixed 
 

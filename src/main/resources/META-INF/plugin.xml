@@ -41,7 +41,8 @@ The plugin provides support for V language
         <!-- endregion Language general -->
 
         <!-- region Annotator -->
-        <annotator language="vlang" implementationClass="org.vlang.lang.annotator.VlangHighlightingDumbAwareAnnotator"/>
+        <highlightingPassFactory implementation="org.vlang.lang.annotator.VlangHighlightingPassFactory"/>
+        <highlightVisitor implementation="org.vlang.lang.annotator.VlangHighlightInfoCollectingVisitor"/>
         <annotator language="vlang" implementationClass="org.vlang.lang.annotator.VlangAnnotator"/>
         <annotator language="vlang" implementationClass="org.vlang.lang.annotator.VlangDocAnnotator"/>
         <!-- endregion Annotator -->
