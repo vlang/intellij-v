@@ -9,6 +9,7 @@ import org.vlang.projectWizard.VlangToolchainFlavor
 import org.vlang.toolchain.VlangKnownToolchainsState
 import org.vlang.toolchain.VlangToolchain
 import org.vlang.toolchain.VlangToolchainService.Companion.toolchainSettings
+import javax.swing.SwingUtilities.invokeLater
 
 class VlangPostStartupActivity : ProjectPostStartupActivity {
     override suspend fun execute(project: Project) {
@@ -39,7 +40,9 @@ class VlangPostStartupActivity : ProjectPostStartupActivity {
             // ignore
         }
 
-        project.projectStructure.determineProjectStructure(project)
+        invokeLater {
+            project.projectStructure.determineProjectStructure(project)
+        }
     }
 
     companion object {
