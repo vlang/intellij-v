@@ -2,6 +2,7 @@ package org.vlang.lang.psi.impl
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiManager
 import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.CachedValuesManager
@@ -123,7 +124,7 @@ object VlangLangUtil {
         return o.toString()
     }
 
-    fun getDefaultValue(type: VlangTypeEx?): String = when (type) {
+    fun getDefaultValue(element: PsiElement, type: VlangTypeEx?): String = when (type) {
         is VlangPrimitiveTypeEx        -> {
             when (type.name) {
                 VlangPrimitiveTypes.BOOL   -> "false"
@@ -163,12 +164,12 @@ object VlangLangUtil {
         is VlangMapTypeEx              -> "{}"
         is VlangChannelTypeEx          -> "chan ${type.inner}{}"
         is VlangFunctionTypeEx         -> "fn ${type.signature.text} {}"
-        is VlangAliasTypeEx            -> getDefaultValue(type.inner)
-        is VlangSumTypeEx              -> getDefaultValue(type.types.first())
-        is VlangGenericInstantiationEx -> getDefaultValue(type.inner)
+        is VlangAliasTypeEx            -> getDefaultValue(element, type.inner)
+        is VlangSumTypeEx              -> getDefaultValue(element, type.types.first())
+        is VlangGenericInstantiationEx -> getDefaultValue(element, type.inner)
         is VlangInterfaceTypeEx        -> "unsafe { nil }"
         is VlangUnionTypeEx            -> "unsafe { nil }"
-        is VlangStructTypeEx           -> type.name() + "{}"
+        is VlangStructTypeEx           -> type.readableName(element) + "{}"
         is VlangPointerTypeEx          -> "unsafe { nil }"
         is VlangVoidPtrTypeEx          -> "unsafe { nil }"
         is VlangThreadTypeEx           -> "unsafe { nil }"

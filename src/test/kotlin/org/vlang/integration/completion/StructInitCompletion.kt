@@ -87,4 +87,55 @@ class StructInitCompletion : IntegrationTestBase() {
             }
         """.trimIndent())
     }
+
+    fun `test fill all fields in struct with struct from different module`() = doTest {
+        directory("mod") {
+            file("mod.v", """
+                module mod
+                
+                pub struct Foo {
+                    idx int
+                }
+            """.trimIndent())
+        }
+
+        file("a.v", """
+            module foo
+            
+            import mod
+            
+            struct Boo {
+                foo   mod.Foo
+                other int
+            }
+            
+            fn main() {
+            	f := Boo{
+            		/*caret 0*/
+            	}
+            }
+        """.trimIndent())
+
+        completion(caretIndex = 0) {
+            myFixture.finishLookup(Lookup.NORMAL_SELECT_CHAR)
+        }
+
+        checkFile("a.v", """
+            module foo
+            
+            import mod
+            
+            struct Boo {
+                foo   mod.Foo
+                other int
+            }
+            
+            fn main() {
+            	f := Boo{
+            		foo: mod.Foo{}
+            		other: 0	/*caret 0*/
+            	}
+            }
+        """.trimIndent())
+    }
 }

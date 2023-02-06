@@ -155,8 +155,8 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
         override fun handleInsert(context: InsertionContext, item: LookupElement) {
             val project = context.project
             val offset = context.editor.caretModel.offset
-            val element = context.file.findElementAt(offset)
-            val prevElement = element?.prevSibling
+            val element = context.file.findElementAt(offset) ?: return
+            val prevElement = element.prevSibling
 
             val before = if (prevElement.elementType == VlangTypes.LBRACE) "\n" else ""
             val after = if (element.elementType == VlangTypes.RBRACE) "\n" else ""
@@ -171,7 +171,7 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
             template.isToReformat = true
 
             fields.forEach {
-                template.addVariable("field_${it.first.replace("@", "at_")}", ConstantNode(VlangLangUtil.getDefaultValue(it.second)), true)
+                template.addVariable("field_${it.first.replace("@", "at_")}", ConstantNode(VlangLangUtil.getDefaultValue(element, it.second)), true)
             }
 
             TemplateManager.getInstance(project).startTemplate(context.editor, template)
