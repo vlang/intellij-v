@@ -1,11 +1,11 @@
 package org.vlang.lang.psi.impl
 
 import com.intellij.codeInsight.completion.CompletionUtil
+import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Conditions
 import com.intellij.openapi.util.RecursionManager
 import com.intellij.openapi.util.TextRange
-import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.*
 import com.intellij.psi.impl.source.resolve.ResolveCache
 import com.intellij.psi.search.GlobalSearchScope
@@ -57,6 +57,8 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             return originModule == externalModule
         }
     }
+
+    private val stubsManager = project.service<VlangStubsManager>()
 
     private val identifier: PsiElement?
         get() = myElement?.getIdentifier()
@@ -190,7 +192,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         }
 
         if (addCompileTimeInfo && typ.qualifiedName() != "stubs.CompileTimeTypeInfo") {
-            if (!processCompileTimeTypeInfo(project, processor, newState)) return false
+            if (!processCompileTimeTypeInfo(processor, newState)) return false
         }
 
         if (typ is VlangAliasTypeEx) {
@@ -341,8 +343,8 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         }
 
         if (typ is VlangGenericTypeEx) {
-            if (!processTypeInfoFields(project, processor, newState)) return false
-            if (!processCompileTimeTypeInfo(project, processor, newState)) return false
+            if (!processTypeInfoFields(processor, newState)) return false
+            if (!processCompileTimeTypeInfo(processor, newState)) return false
             return true
         }
 
@@ -373,12 +375,12 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
     ) = processMethods(VlangAliasTypeEx.anyType(contextFile), processor, newState, localResolve)
 
     private fun processThreadPoolMethods(processor: VlangScopeProcessor, state: ResolveState): Boolean {
-        val type = VlangStubsManager.getStructType(project, "threads.v", "ThreadPool") ?: return true
+        val type = stubsManager.findStructType("threads.v", "ThreadPool") ?: return true
         return processExistingType(type, processor, state)
     }
 
     private fun processThreadTypeMethods(processor: VlangScopeProcessor, state: ResolveState): Boolean {
-        val type = VlangStubsManager.getStructType(project, "threads.v", "Thread") ?: return true
+        val type = stubsManager.findStructType("threads.v", "Thread") ?: return true
         return processExistingType(type, processor, state)
     }
 
@@ -410,21 +412,13 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         return processExistingType(struct.structType.toEx(), processor, state)
     }
 
-    private fun processTypeInfoFields(
-        project: Project,
-        processor: VlangScopeProcessor,
-        state: ResolveState,
-    ): Boolean {
-        val type = VlangStubsManager.getStructType(project, "builtin_compile_time.v", "TypeInfo") ?: return true
+    private fun processTypeInfoFields(processor: VlangScopeProcessor, state: ResolveState): Boolean {
+        val type = stubsManager.findStructType("builtin_compile_time.v", "TypeInfo") ?: return true
         return processExistingType(type, processor, state)
     }
 
-    private fun processCompileTimeTypeInfo(
-        project: Project,
-        processor: VlangScopeProcessor,
-        state: ResolveState,
-    ): Boolean {
-        val type = VlangStubsManager.getStructType(project, "compile_time_reflection.v", "CompileTimeTypeInfo") ?: return true
+    private fun processCompileTimeTypeInfo(processor: VlangScopeProcessor, state: ResolveState): Boolean {
+        val type = stubsManager.findStructType("compile_time_reflection.v", "CompileTimeTypeInfo") ?: return true
         return processExistingType(type, processor, state)
     }
 
@@ -530,7 +524,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
     }
 
     private fun getArrayInitStruct(): VlangStructDeclaration? {
-        val stubFile = VlangStubsManager.findFile(project, "arrays.v") ?: return null
+        val stubFile = stubsManager.findFile("arrays.v") ?: return null
         return stubFile.getStructs().firstOrNull { it.name == "ArrayInit" }
     }
 
@@ -655,7 +649,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
     }
 
     private fun processStubFile(name: String, processor: VlangScopeProcessor, state: ResolveState): Boolean {
-        val file = VlangStubsManager.findFile(project, name) ?: return true
+        val file = stubsManager.findFile(name) ?: return true
         if (!processFileEntities(file, processor, state, false)) return false
         return true
     }

@@ -8,12 +8,12 @@ import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangStructTypeEx
 import org.vlang.lang.psi.types.VlangTypeEx
 
-object VlangStubsManager {
+class VlangStubsManager(private val project: Project) {
     private val resolvedFiles: MutableMap<String, VlangFile> = LinkedHashMap(20)
     private val resolvedTypes: MutableMap<String, VlangTypeEx> = LinkedHashMap(20)
     private val isUnitTest = ApplicationManager.getApplication().isUnitTestMode
 
-    fun findFile(project: Project, name: String): VlangFile? {
+    fun findFile(name: String): VlangFile? {
         if (resolvedFiles.containsKey(name) && !isUnitTest) {
             return resolvedFiles[name]
         }
@@ -34,11 +34,11 @@ object VlangStubsManager {
         return file
     }
 
-    fun getStructType(project: Project, fileName: String, name: String): VlangStructTypeEx? {
+    fun findStructType(fileName: String, name: String): VlangStructTypeEx? {
         if (resolvedTypes.containsKey(name) && !isUnitTest) {
             return resolvedTypes[name] as? VlangStructTypeEx
         }
-        val psiFile = findFile(project, fileName) ?: return null
+        val psiFile = findFile(fileName) ?: return null
         val struct = psiFile.getStructs()
             .firstOrNull { it.name == name } ?: return null
         val type = struct.structType.toEx() as? VlangStructTypeEx ?: return null

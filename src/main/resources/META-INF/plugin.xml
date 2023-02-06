@@ -194,6 +194,7 @@ The plugin provides support for V language
 
         <projectService serviceImplementation="org.vlang.configurations.VlangProjectStructureState"/>
         <projectService serviceImplementation="org.vlang.configurations.VlangFmtSettingsState"/>
+        <projectService serviceImplementation="org.vlang.lang.psi.VlangStubsManager"/>
         <additionalLibraryRootsProvider implementation="org.vlang.project.VlangAdditionalLibraryRootsProvider"/>
 
         <fileDocumentManagerListener implementation="org.vlang.project.VlangFmtWatcher$VlangFmtListener"/>
