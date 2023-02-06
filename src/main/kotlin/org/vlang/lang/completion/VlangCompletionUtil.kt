@@ -639,7 +639,6 @@ object VlangCompletionUtil {
             p.tailText = " $qualifier"
             p.isTypeGrayed = true
             p.itemText = moduleName
-            p.isStrikeout = elem.isDeprecated()
         }
     }
 

@@ -60,10 +60,6 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
         }
     }
 
-    fun isDeprecated(): Boolean {
-        return VlangAttributesUtil.getAttributeByName(getFileAttributes(), "deprecated") != null
-    }
-
     fun fromModules(): Boolean {
         val modulesDir = VlangConfiguration.getInstance(project).modulesLocation?.path ?: return false
         val path = virtualFile?.path ?: return false

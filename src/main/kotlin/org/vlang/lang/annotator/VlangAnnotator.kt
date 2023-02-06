@@ -30,20 +30,6 @@ class VlangAnnotator : Annotator {
             return highlightReference(parent, parent.reference as VlangReference, holder)
         }
 
-        if (element.elementType == VlangTypes.IDENTIFIER && parent is VlangImportName) {
-            val resolved = parent.resolve().firstOrNull() ?: return null
-            val fileWithDeprecation = resolved.directory.children.filterIsInstance<VlangFile>().firstOrNull {
-                it.isDeprecated()
-            }
-            if (fileWithDeprecation != null) {
-                val info = VlangDeprecationsUtil.getDeprecationInfo(fileWithDeprecation)
-                holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
-                    .highlightType(ProblemHighlightType.LIKE_DEPRECATED)
-                    .tooltip(info!!.generateMessage())
-                    .create()
-            }
-        }
-
         return when (element.elementType) {
             VlangTypes.IDENTIFIER -> highlightIdentifier(element, parent)
             else                  -> null
