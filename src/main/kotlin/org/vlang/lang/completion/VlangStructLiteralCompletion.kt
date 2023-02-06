@@ -19,7 +19,14 @@ internal object VlangStructLiteralCompletion {
             return Variants.NONE
         }
 
-        val value = parent<VlangValue>(structFieldReference)
+        var value = structFieldReference.parent
+        while (value is VlangUnaryExpr) {
+            value = value.parent
+        }
+        if (value !is VlangValue) {
+            return Variants.NONE
+        }
+
         val element = parent<VlangElement>(value)
         if (element?.key != null) {
             return Variants.NONE
