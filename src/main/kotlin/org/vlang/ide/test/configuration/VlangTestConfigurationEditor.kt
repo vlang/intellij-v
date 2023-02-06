@@ -77,7 +77,7 @@ open class VlangTestConfigurationEditor(private val project: Project) : Settings
                         project,
                         FileChooserDescriptorFactory.createSingleFolderDescriptor()
                     )
-                        .horizontalAlign(HorizontalAlign.FILL)
+                        .align(AlignX.FILL)
                         .bindText(model::directory)
                 }.visibleIf(directoryRadioButton.selected)
                     .bottomGap(BottomGap.NONE)
@@ -88,14 +88,14 @@ open class VlangTestConfigurationEditor(private val project: Project) : Settings
                         project,
                         FileChooserDescriptorFactory.createSingleFileDescriptor()
                     )
-                        .horizontalAlign(HorizontalAlign.FILL)
+                        .align(AlignX.FILL)
                         .bindText(model::filename)
                 }.visibleIf(fileRadioButton.selected.or(functionRadioButton.selected))
                     .bottomGap(BottomGap.NONE)
 
                 row("Pattern:") {
                     expandableTextField()
-                        .horizontalAlign(HorizontalAlign.FILL)
+                        .align(AlignX.FILL)
                         .bindText(model::pattern)
                         .comment("""
                             Glob pattern to filter tests.<br>
@@ -110,7 +110,7 @@ open class VlangTestConfigurationEditor(private val project: Project) : Settings
             group("Command Line") {
                 row("Additional parameters:") {
                     textField()
-                        .horizontalAlign(HorizontalAlign.FILL)
+                        .align(AlignX.FILL)
                         .bindText(model::additionalParameters)
                 }.bottomGap(BottomGap.NONE)
             }.topGap(TopGap.NONE)

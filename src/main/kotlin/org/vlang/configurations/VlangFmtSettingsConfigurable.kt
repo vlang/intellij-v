@@ -5,11 +5,7 @@ import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogPanel
-import com.intellij.ui.dsl.builder.bindSelected
-import com.intellij.ui.dsl.builder.bindText
-import com.intellij.ui.dsl.builder.panel
-import com.intellij.ui.dsl.builder.toMutableProperty
-import com.intellij.ui.dsl.gridLayout.HorizontalAlign
+import com.intellij.ui.dsl.builder.*
 import org.vlang.configurations.VlangFmtSettingsState.Companion.vfmtSettings
 
 class VlangFmtSettingsConfigurable(private val project: Project) : Configurable {
@@ -32,13 +28,13 @@ class VlangFmtSettingsConfigurable(private val project: Project) : Configurable 
         mainPanel = panel {
             row("Additional arguments:") {
                 expandableTextField()
-                    .horizontalAlign(HorizontalAlign.FILL)
+                    .align(AlignX.FILL)
                     .bindText(model::additionalArguments)
                     .comment("Additional arguments to pass to <b>v fmt</b> command")
             }
             row(environmentVariables.label) {
                 cell(environmentVariables)
-                    .horizontalAlign(HorizontalAlign.FILL)
+                    .align(AlignX.FILL)
                     .bind(
                         componentGet = { it.envs },
                         componentSet = { component, value -> component.envs = value },

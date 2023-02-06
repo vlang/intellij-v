@@ -3,8 +3,8 @@ package org.vlang.configurations
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.openapi.util.Condition
+import com.intellij.ui.dsl.builder.AlignX
 import com.intellij.ui.dsl.builder.panel
-import com.intellij.ui.dsl.gridLayout.HorizontalAlign
 import org.vlang.toolchain.VlangKnownToolchainsState
 import java.nio.file.Path
 
@@ -60,7 +60,7 @@ class VlangProjectSettingsForm(private val project: Project?, private val model:
         mainPanel = panel {
             row {
                 cell(toolchainChooser)
-                    .horizontalAlign(HorizontalAlign.FILL)
+                    .align(AlignX.FILL)
             }
         }
 

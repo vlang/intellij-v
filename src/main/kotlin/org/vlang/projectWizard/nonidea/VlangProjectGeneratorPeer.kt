@@ -1,9 +1,9 @@
 package org.vlang.projectWizard.nonidea
 
 import com.intellij.platform.GeneratorPeerImpl
+import com.intellij.ui.dsl.builder.AlignX
 import com.intellij.ui.dsl.builder.TopGap
 import com.intellij.ui.dsl.builder.panel
-import com.intellij.ui.dsl.gridLayout.HorizontalAlign
 import org.vlang.configurations.VlangProjectSettingsForm
 import org.vlang.ide.VlangPostStartupActivity
 import org.vlang.toolchain.VlangKnownToolchainsState
@@ -22,7 +22,7 @@ class VlangProjectGeneratorPeer(model: VlangProjectSettingsForm.Model) : Generat
     private val newProjectPanel = panel {
         row("Toolchain:") {
             cell(toolchainSettingsForm)
-                .horizontalAlign(HorizontalAlign.FILL)
+                .align(AlignX.FILL)
         }.topGap(TopGap.NONE)
     }
 

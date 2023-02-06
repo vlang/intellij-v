@@ -105,7 +105,7 @@ open class VlangRunConfigurationEditor(private val project: Project) : SettingsE
                     project,
                     FileChooserDescriptorFactory.createSingleFileDescriptor()
                 )
-                    .horizontalAlign(HorizontalAlign.FILL)
+                    .align(AlignX.FILL)
                     .bindText(model::fileName)
             }.bottomGap(BottomGap.NONE)
                 .visibleIf(kindComboBox.selectedValueMatches { it == RunKind.File })
@@ -116,7 +116,7 @@ open class VlangRunConfigurationEditor(private val project: Project) : SettingsE
                     project,
                     FileChooserDescriptorFactory.createSingleFolderDescriptor()
                 )
-                    .horizontalAlign(HorizontalAlign.FILL)
+                    .align(AlignX.FILL)
                     .bindText(model::directoryName)
             }.bottomGap(BottomGap.NONE)
                 .visibleIf(kindComboBox.selectedValueMatches { it == RunKind.Directory })
@@ -127,7 +127,7 @@ open class VlangRunConfigurationEditor(private val project: Project) : SettingsE
                     project,
                     FileChooserDescriptorFactory.createSingleFolderDescriptor()
                 )
-                    .horizontalAlign(HorizontalAlign.FILL)
+                    .align(AlignX.FILL)
                     .bindText(model::outputDir)
             }.bottomGap(BottomGap.NONE)
 
@@ -142,13 +142,13 @@ open class VlangRunConfigurationEditor(private val project: Project) : SettingsE
                     project,
                     FileChooserDescriptorFactory.createSingleFolderDescriptor()
                 )
-                    .horizontalAlign(HorizontalAlign.FILL)
+                    .align(AlignX.FILL)
                     .bindText(model::workingDir)
             }.bottomGap(BottomGap.NONE)
 
             row(environmentVariables.label) {
                 cell(environmentVariables)
-                    .horizontalAlign(HorizontalAlign.FILL)
+                    .align(AlignX.FILL)
                     .bind(
                         componentGet = { it.envs },
                         componentSet = { component, value -> component.envs = value },
@@ -169,14 +169,14 @@ open class VlangRunConfigurationEditor(private val project: Project) : SettingsE
 
             row("Build arguments:") {
                 expandableTextField()
-                    .horizontalAlign(HorizontalAlign.FILL)
+                    .align(AlignX.FILL)
                     .bindText(model::buildArguments)
                     .comment("Arguments to pass to <b>v build</b> command")
             }.bottomGap(BottomGap.NONE)
 
             row("Program arguments:") {
                 expandableTextField()
-                    .horizontalAlign(HorizontalAlign.FILL)
+                    .align(AlignX.FILL)
                     .bindText(model::programArguments)
                     .comment("Arguments to pass when run executable")
             }.bottomGap(BottomGap.NONE)

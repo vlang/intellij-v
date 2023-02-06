@@ -2,8 +2,8 @@ package org.vlang.projectWizard
 
 import com.intellij.ide.util.projectWizard.ModuleWizardStep
 import com.intellij.ide.util.projectWizard.WizardContext
+import com.intellij.ui.dsl.builder.AlignX
 import com.intellij.ui.dsl.builder.panel
-import com.intellij.ui.dsl.gridLayout.HorizontalAlign
 import com.intellij.util.ui.JBUI
 import org.vlang.configurations.VlangProjectSettingsForm
 import org.vlang.ide.VlangPostStartupActivity
@@ -24,7 +24,7 @@ class VlangConfigurationWizardStep(context: WizardContext, model: VlangProjectSe
     private val newProjectPanel = panel {
        row("Toolchain:") {
            cell(toolchainSettingsForm)
-               .horizontalAlign(HorizontalAlign.FILL)
+               .align(AlignX.FILL)
        }
     }.apply {
         border = JBUI.Borders.empty(14, 20)

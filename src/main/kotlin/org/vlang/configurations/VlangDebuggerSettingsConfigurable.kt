@@ -3,10 +3,10 @@ package org.vlang.configurations
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.ui.DialogPanel
+import com.intellij.ui.dsl.builder.AlignX
 import com.intellij.ui.dsl.builder.bindSelected
 import com.intellij.ui.dsl.builder.bindText
 import com.intellij.ui.dsl.builder.panel
-import com.intellij.ui.dsl.gridLayout.HorizontalAlign
 import org.vlang.debugger.lang.VlangDebuggerState
 
 class VlangDebuggerSettingsConfigurable : Configurable {
@@ -31,7 +31,7 @@ class VlangDebuggerSettingsConfigurable : Configurable {
                     null,
                     FileChooserDescriptorFactory.createSingleFolderDescriptor()
                 )
-                    .horizontalAlign(HorizontalAlign.FILL)
+                    .align(AlignX.FILL)
                     .bindText(model::lldbPath)
                     .comment("Path to the LLDB debugger executable")
             }

@@ -8,11 +8,7 @@ import com.intellij.openapi.ui.ValidationInfo
 import com.intellij.openapi.util.Condition
 import com.intellij.openapi.util.Disposer
 import com.intellij.ui.JBColor
-import com.intellij.ui.dsl.builder.RightGap
-import com.intellij.ui.dsl.builder.bindText
-import com.intellij.ui.dsl.builder.panel
-import com.intellij.ui.dsl.builder.toMutableProperty
-import com.intellij.ui.dsl.gridLayout.HorizontalAlign
+import com.intellij.ui.dsl.builder.*
 import com.intellij.ui.layout.ValidationInfoBuilder
 import com.intellij.util.ui.JBDimension
 import org.vlang.projectWizard.VlangToolchainFlavor
@@ -47,7 +43,7 @@ class VlangNewToolchainDialog(private val toolchainFilter: Condition<Path>, proj
         mainPanel = panel {
             row("Location:") {
                 cell(pathToToolchainComboBox)
-                    .horizontalAlign(HorizontalAlign.FILL)
+                    .align(AlignX.FILL)
                     .validationOnApply { validateToolchainPath(it) }
             }
             row("Version:") {
@@ -61,7 +57,7 @@ class VlangNewToolchainDialog(private val toolchainFilter: Condition<Path>, proj
             }
             row("Standard library:") {
                 textField()
-                    .horizontalAlign(HorizontalAlign.FILL)
+                    .align(AlignX.FILL)
                     .bindText(model::stdlibLocation)
                     .enabled(false)
             }
