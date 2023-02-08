@@ -40,7 +40,21 @@ union UWithInner {
 	name string // ok
 }
 
-// interfaces TODO
+// interfaces
+
+interface ITest {
+	name string
+	<error descr="Duplicate field 'name'">name</error> string
+}
+
+interface IInner {
+	name string
+}
+
+interface IWithInner {
+	IInner
+	name string // ok, for now
+}
 
 // enums
 

@@ -405,29 +405,4 @@ class ImplementTest : ImplementBaseTest() {
         """.trimIndent(),
         "Writer",
     )
-
-//    fun `test single field to struct with single immutable public field`() = doTest(
-//        """
-//        interface Writer {
-//            name string
-//        }
-//
-//        struct /*caret*/Name {
-//        pub:
-//        	age int
-//        }
-//        """.trimIndent(),
-//        """
-//        interface Writer {
-//            name string
-//        }
-//
-//        struct Name {
-//        pub:
-//        	age int
-//        	name string
-//        }
-//        """.trimIndent(),
-//        "Writer",
-//    )
 }

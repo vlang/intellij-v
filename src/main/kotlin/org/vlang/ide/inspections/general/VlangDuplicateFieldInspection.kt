@@ -10,13 +10,12 @@ class VlangDuplicateFieldInspection : VlangBaseInspection() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
         return object : VlangVisitor() {
             override fun visitStructType(o: VlangStructType) {
-                holder.checkFields(o.getFieldList())
+                holder.checkFields(o.ownFieldList)
                 super.visitStructType(o)
             }
 
             override fun visitInterfaceType(o: VlangInterfaceType) {
-                // TODO: after interfaces reimplement
-                // holder.checkFields(o.getFieldList())
+                holder.checkFields(o.ownFieldList)
                 super.visitInterfaceType(o)
             }
 

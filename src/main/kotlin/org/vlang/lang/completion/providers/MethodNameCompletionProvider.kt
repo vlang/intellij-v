@@ -27,7 +27,7 @@ object MethodNameCompletionProvider : CompletionProvider<CompletionParameters>()
         val struct = structs.first()
         val isGeneric = struct.structType.genericParameters != null
         val structName = struct.name
-        val methods = VlangLangUtil.getMethodList(pos.project, struct.structType.toEx())
+        val methods = struct.structType.toEx().methodsList(pos.project)
         val receiverName = VlangLangUtil.getUsedReceiverNameOrDefault(methods, structName[0].lowercaseChar().toString())
         val receiverType = structName + if (isGeneric) struct.structType.genericParameters!!.text else ""
 

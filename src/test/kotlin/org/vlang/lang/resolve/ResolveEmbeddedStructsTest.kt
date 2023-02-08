@@ -138,4 +138,27 @@ open class ResolveEmbeddedStructsTest : ResolveTestBase() {
 
         assertReferencedTo("METHOD_DECLARATION foo")
     }
+
+    fun `test embedded struct method via type alias`() {
+        mainFile("a.v", """
+            module main
+
+            struct ForEmbed {}
+            
+            fn (e ForEmbed) foo() {}
+            
+            struct Test {
+                ForEmbed
+            }
+            
+            type TestAlias = Test
+            
+            fn main() {
+                t := TestAlias{}
+                t.<caret>foo()
+            }
+        """.trimIndent())
+
+        assertReferencedTo("METHOD_DECLARATION foo")
+    }
 }

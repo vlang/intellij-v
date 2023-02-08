@@ -21,7 +21,7 @@ object VlangFieldInheritorsSearch : QueryExecutorBase<VlangFieldDefinition, Defi
 
         VlangInheritorsSearch.processMethodOwners({ spec: VlangNamedElement ->
             val struct = spec as VlangStructDeclaration
-            val structFields = struct.structType.getFieldList()
+            val structFields = struct.structType.fieldList
 
             val structField = structFields.find {
                 val lhsType = it.getType(null)

@@ -230,7 +230,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
         if (typ is VlangAnonStructTypeEx) {
             val anonStruct = typ.resolve() ?: return true
-            return processNamedElements(processor, newState, anonStruct.getFieldList(), true)
+            return processNamedElements(processor, newState, anonStruct.fieldList, true)
         }
 
         if (typ is VlangStructTypeEx) {
@@ -246,7 +246,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
                 if (!processNamedElements(
                         processor,
                         state.put(SEARCH_NAME, "unknown_field"),
-                        structType.getFieldList(),
+                        structType.fieldList,
                         localResolve
                     )
                 ) return false
@@ -257,14 +257,10 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             // could be a function call that is stored in a structure field.
             if (isMethodRef) {
                 if (!processMethods(typ, processor, newState, localResolve)) return false
-                if (!processNamedElements(processor, newState, structType.getFieldList(), localResolve)) return false
+                if (!processNamedElements(processor, newState, structType.fieldList, localResolve)) return false
             } else {
-                if (!processNamedElements(processor, newState, structType.getFieldList(), localResolve)) return false
+                if (!processNamedElements(processor, newState, structType.fieldList, localResolve)) return false
                 if (!processMethods(typ, processor, newState, localResolve)) return false
-            }
-
-            structType.embeddedStructList.forEach {
-                if (!processType(it.type.toEx(), processor, newState)) return false
             }
 
             val embedded = structType.embeddedStructList.mapNotNull { it.type.typeReferenceExpression?.resolve() as? VlangNamedElement }
@@ -280,7 +276,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             val declaration = typ.resolve(project) ?: return false
             val interfaceType = declaration.interfaceType
 
-            if (!isMethodRef && !processNamedElements(processor, newState, interfaceType.getFieldList(), localResolve)) return false
+            if (!isMethodRef && !processNamedElements(processor, newState, interfaceType.fieldList, localResolve)) return false
             if (!processNamedElements(processor, newState, interfaceType.methodList, localResolve)) return false
             if (!processMethods(typ, processor, newState, localResolve)) return false
 
@@ -424,7 +420,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
     private fun processMethods(type: VlangTypeEx, processor: VlangScopeProcessor, state: ResolveState, localResolve: Boolean): Boolean {
         if (state.get(NOT_PROCESS_METHODS) == true) return true
-        return processNamedElements(processor, state, VlangLangUtil.getMethodList(project, type), localResolve)
+        return processNamedElements(processor, state, type.methodsList(project), localResolve)
     }
 
     private fun processUnqualifiedResolve(
@@ -441,7 +437,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             //             ^^
             if (VlangCodeInsightUtil.isItVariable(identifier!!)) {
                 val struct = getArrayInitStruct() ?: return false
-                val fields = struct.structType.getFieldList()
+                val fields = struct.structType.fieldList
                 val field = fields.find { it.name == "current_index" } ?: return true
                 return processor.execute(field, state.put(SEARCH_NAME, "current_index").put(ACTUAL_NAME, "current_index"))
             }

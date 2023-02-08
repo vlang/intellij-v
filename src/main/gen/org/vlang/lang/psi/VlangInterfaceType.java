@@ -29,7 +29,13 @@ public interface VlangInterfaceType extends VlangType, VlangFieldListOwner, Vlan
   List<VlangFieldDefinition> getFieldList();
 
   @NotNull
+  List<VlangFieldDefinition> getOwnFieldList();
+
+  @NotNull
   List<VlangInterfaceMethodDefinition> getMethodList();
+
+  @NotNull
+  List<VlangInterfaceType> getEmbeddedInterfaces();
 
   @NotNull
   List<VlangEmbeddedDefinition> getEmbeddedInterfacesList();

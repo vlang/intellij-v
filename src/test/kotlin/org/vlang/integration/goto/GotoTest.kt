@@ -204,23 +204,96 @@ class GotoTest : IntegrationTestBase() {
         assertNoSearchResults(3, VlangSuperMethodSearch)
     }
 
-// TODO: support this case
-//
-//    fun `test single interface and struct with embedding`() = doTest {
-//        file("a.v", """
-//            interface Reader {
-//            	read()
-//            }
-//
-//            struct /*caret 0*/ReaderImpl {}
-//            struct /*caret 1*/Name {
-//                ReaderImpl
-//            }
-//
-//            fn (n ReaderImpl) read() {}
-//        """.trimIndent())
-//
-//        assertGotoSuper(0, "Reader")
-//        assertGotoSuper(1, "Reader")
-//    }
+    fun `test single interface and struct with embedding fields`() = doTest {
+        file("a.v", """
+            module main
+            
+            interface Component {
+            	id string
+                name string
+            }
+            
+            struct IdOwner {
+                id string
+            }
+
+            struct /*caret 0*/Name {
+                IdOwner
+                name string
+            }
+        """.trimIndent())
+
+        assertSearch(0, VlangSuperSearch, "main.Component")
+    }
+
+    fun `test single interface and struct with embedding methods`() = doTest {
+        file("a.v", """
+            module main
+            
+            interface Reader {
+            	read()
+            }
+
+            struct /*caret 0*/ReaderImpl {}
+            struct /*caret 1*/Name {
+                ReaderImpl
+            }
+
+            fn (n ReaderImpl) read() {}
+        """.trimIndent())
+
+        assertSearch(0, VlangSuperSearch, "main.Reader")
+        assertSearch(1, VlangSuperSearch, "main.Reader")
+    }
+
+    fun `test two interfaces and struct with embedding methods`() = doTest {
+        file("a.v", """
+            module main
+            
+            interface Reader {
+            	read()
+            }
+            
+            interface Writer {
+            	write()
+            }
+
+            struct /*caret 0*/ReaderImpl {}
+            struct /*caret 1*/WriterImpl {}
+            struct /*caret 2*/Name {
+                ReaderImpl
+                WriterImpl
+            }
+
+            fn (n ReaderImpl) read() {}
+            fn (n WriterImpl) write() {}
+        """.trimIndent())
+
+        assertSearch(0, VlangSuperSearch, "main.Reader")
+        assertSearch(1, VlangSuperSearch, "main.Writer")
+        assertSearch(2, VlangSuperSearch, "main.Reader", "main.Writer")
+    }
+
+    fun `test single interface and struct with embedding fields and methods`() = doTest {
+        file("a.v", """
+            module main
+            
+            interface Reader {
+                id string
+            	read()
+            }
+
+            struct /*caret 0*/ReaderImpl {
+                id string
+            }
+            struct /*caret 1*/Name {
+                ReaderImpl
+            }
+
+            fn (n ReaderImpl) read() {}
+        """.trimIndent())
+
+        assertSearch(0, VlangSuperSearch, "main.Reader")
+        assertSearch(1, VlangSuperSearch, "main.Reader")
+    }
 }

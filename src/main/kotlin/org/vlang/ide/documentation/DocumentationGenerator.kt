@@ -196,7 +196,7 @@ object DocumentationGenerator {
     }
 
     fun VlangAnonStructTypeEx.generateDoc(anchor: PsiElement): String {
-        val fields = resolve()?.getFieldList() ?: return colorize("{}", asType)
+        val fields = resolve()?.fieldList ?: return colorize("{}", asType)
         return buildString {
             colorize("struct", asKeyword)
             append(" {")

@@ -3,6 +3,7 @@ package org.vlang.lang.psi.types
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.UserDataHolder
 import com.intellij.psi.PsiElement
+import org.vlang.lang.psi.VlangMethodDeclaration
 
 interface VlangTypeEx : UserDataHolder {
     fun name(): String
@@ -15,4 +16,6 @@ interface VlangTypeEx : UserDataHolder {
     fun isEqual(rhs: VlangTypeEx): Boolean
     fun isBuiltin(): Boolean
     fun substituteGenerics(nameMap: Map<String, VlangTypeEx>): VlangTypeEx
+    fun methodsList(project: Project, visited: MutableSet<VlangTypeEx> = LinkedHashSet(5)): List<VlangMethodDeclaration>
+    fun findMethod(project: Project, name: String): VlangMethodDeclaration?
 }

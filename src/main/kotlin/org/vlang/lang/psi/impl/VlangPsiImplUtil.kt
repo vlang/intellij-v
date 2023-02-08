@@ -460,18 +460,44 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getOwnFieldList(o: VlangAnonymousStructType): List<VlangFieldDefinition> {
+        return o.fieldsGroupList.flatMap { it.fieldDeclarationList }.mapNotNull { it.fieldDefinition }
+    }
+
+    @JvmStatic
     fun getFieldList(o: VlangAnonymousStructType): List<VlangFieldDefinition> {
+        return getOwnFieldList(o)
+    }
+
+    @JvmStatic
+    fun getOwnFieldList(o: VlangStructType): List<VlangFieldDefinition> {
         return o.fieldsGroupList.flatMap { it.fieldDeclarationList }.mapNotNull { it.fieldDefinition }
     }
 
     @JvmStatic
     fun getFieldList(o: VlangStructType): List<VlangFieldDefinition> {
-        return o.fieldsGroupList.flatMap { it.fieldDeclarationList }.mapNotNull { it.fieldDefinition }
+        val ownFields = getOwnFieldList(o)
+
+        val embeddedStructFields = o.embeddedStructs
+            .map { it.toEx().unwrapAlias() }
+            .filterIsInstance<VlangStructTypeEx>()
+            .mapNotNull { it.anchor() as? VlangStructType }
+            .flatMap { it.fieldList }
+
+        return ownFields + embeddedStructFields
     }
 
     @JvmStatic
     fun getEmbeddedStructList(o: VlangStructType): List<VlangEmbeddedDefinition> {
         return o.fieldsGroupList.flatMap { it.fieldDeclarationList }.mapNotNull { it.embeddedDefinition }
+    }
+
+    @JvmStatic
+    fun getEmbeddedStructs(o: VlangStructType): List<VlangStructType> {
+        return o.embeddedStructList
+            .map { it.type.toEx().unwrapAlias() }
+            .filterIsInstance<VlangStructTypeEx>()
+            .mapNotNull { it.anchor() as? VlangStructType }
     }
 
     @JvmStatic
@@ -500,24 +526,35 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getEmbeddedInterfaces(o: VlangInterfaceType): List<VlangInterfaceType> {
+        return o.embeddedInterfacesList
+            .map { it.type.toEx().unwrapAlias() }
+            .filterIsInstance<VlangInterfaceTypeEx>()
+            .mapNotNull { it.anchor() as? VlangInterfaceType }
+    }
+
+    @JvmStatic
+    fun getOwnFieldList(o: VlangInterfaceType): List<VlangFieldDefinition> {
+        return o.membersGroupList.flatMap { it.fieldDeclarationList }.mapNotNull { it.fieldDefinition }
+    }
+
+    @JvmStatic
     fun getFieldList(o: VlangInterfaceType): List<VlangFieldDefinition> {
-        val ownFields = o.membersGroupList.flatMap { it.fieldDeclarationList }.mapNotNull { it.fieldDefinition }
-        val embedded = o.embeddedInterfacesList
-        val embeddedFields = embedded.flatMap {
-            val interfaceType = it.type.resolveType() as? VlangInterfaceType
-            interfaceType?.getFieldList() ?: emptyList()
-        }
+        val ownFields = getOwnFieldList(o)
+
+        val embeddedFields = o.embeddedInterfaces
+            .flatMap { it.fieldList }
+
         return ownFields + embeddedFields
     }
 
     @JvmStatic
     fun getMethodList(o: VlangInterfaceType): List<VlangInterfaceMethodDefinition> {
         val ownMethods = o.membersGroupList.flatMap { it.interfaceMethodDeclarationList }.map { it.interfaceMethodDefinition }
-        val embedded = o.embeddedInterfacesList
-        val embeddedMethods = embedded.flatMap {
-            val interfaceType = it.type.resolveType() as? VlangInterfaceType
-            interfaceType?.methodList ?: emptyList()
-        }
+
+        val embeddedMethods = o.embeddedInterfaces
+            .flatMap { it.methodList }
+
         return ownMethods + embeddedMethods
     }
 
@@ -2187,7 +2224,7 @@ object VlangPsiImplUtil {
         o: VlangVarDefinition,
         rightType: VlangTypeEx,
     ): VlangTypeEx? {
-        val method = VlangLangUtil.findMethod(o.project, rightType, "next") ?: return VlangAnyTypeEx.INSTANCE
+        val method = rightType.findMethod(o.project, "next") ?: return VlangAnyTypeEx.INSTANCE
         val result = method.getSignature()?.result ?: return VlangAnyTypeEx.INSTANCE
         val resultType = result.type.toEx()
         return unwrapOptionOrResultType(resultType)

@@ -3,14 +3,13 @@ package org.vlang.lang.psi.types
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import org.vlang.lang.psi.VlangAnonymousStructType
-import org.vlang.lang.psi.VlangStructDeclaration
 
 class VlangAnonStructTypeEx(anchor: VlangAnonymousStructType) : VlangStructTypeEx("<anonymous>", anchor) {
     override fun toString() = "<anonymous struct>"
 
     override fun readableName(context: PsiElement) = buildString {
         append("struct {\n")
-        val fields = (anchor as VlangAnonymousStructType).getFieldList()
+        val fields = (anchor as VlangAnonymousStructType).fieldList
         append(
             fields.joinToString("\n") { field ->
                 buildString {

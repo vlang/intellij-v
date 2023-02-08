@@ -14,10 +14,6 @@ import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.stubs.index.VlangMethodIndex
 
 object VlangLangUtil {
-    fun findMethod(project: Project, type: VlangTypeEx, name: String): VlangMethodDeclaration? {
-        return getMethodList(project, type).firstOrNull { it.name == name }
-    }
-
     fun getErrVariableDefinition(project: Project): VlangConstDefinition? {
         val stubDir = VlangConfiguration.getInstance(project).stubsLocation ?: return null
         val psiManager = PsiManager.getInstance(project)
@@ -69,6 +65,9 @@ object VlangLangUtil {
         return typesToImport
     }
 
+    /**
+     * Use VlangTypeEx.methodsList(project, visited)
+     */
     fun getMethodList(project: Project, type: VlangTypeEx): List<VlangMethodDeclaration> {
         return CachedValuesManager.getManager(project).getCachedValue(type) {
             CachedValueProvider.Result.create(

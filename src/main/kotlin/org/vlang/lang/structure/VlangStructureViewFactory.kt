@@ -62,7 +62,7 @@ class VlangStructureViewFactory : PsiStructureViewFactory {
                 VlangLangUtil.getMethodList(element!!.project, type).forEach { result.add(Element(it)) }
 
                 if (type is VlangFieldListOwner) {
-                    type.getFieldList().forEach { result.add(Element(it)) }
+                    type.fieldList.forEach { result.add(Element(it)) }
                 }
 
                 if (type is VlangEnumType) {

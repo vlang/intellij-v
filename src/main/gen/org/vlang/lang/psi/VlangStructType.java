@@ -32,6 +32,12 @@ public interface VlangStructType extends VlangType, VlangFieldListOwner, VlangGe
   List<VlangFieldDefinition> getFieldList();
 
   @NotNull
+  List<VlangFieldDefinition> getOwnFieldList();
+
+  @NotNull
+  List<VlangStructType> getEmbeddedStructs();
+
+  @NotNull
   List<VlangEmbeddedDefinition> getEmbeddedStructList();
 
   boolean isUnion();

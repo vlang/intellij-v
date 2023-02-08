@@ -12,6 +12,7 @@ import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangLangUtil
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapAlias
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapPointer
 import org.vlang.lang.psi.types.VlangFunctionTypeEx
 import org.vlang.lang.psi.types.VlangStructTypeEx
@@ -27,7 +28,7 @@ object VlangInheritorsSearch : QueryExecutorBase<VlangNamedElement, DefinitionsS
         val visitedSpecs = ReferenceOpenHashSet<VlangNamedElement>()
         val interfaceType = element.interfaceType
         val ownMethods = interfaceType.methodList
-        val ownFields = interfaceType.getFieldList()
+        val ownFields = interfaceType.fieldList
 
         processMethodOwners(
             processor,
@@ -161,10 +162,8 @@ object VlangInheritorsSearch : QueryExecutorBase<VlangNamedElement, DefinitionsS
         type: VlangStructType,
     ): Boolean {
         val methods = interfaceType.methodList
-        val fields = interfaceType.getFieldList()
-        val structMethods = VlangLangUtil.getMethodList(project, type.toEx())
-
-        val structFields = type.getFieldList()
+        val fields = interfaceType.fieldList
+        val structMethods = type.toEx().methodsList(project)
 
         val structMethodsSet = structMethods.associateBy { it.name }
         methods.forEach {
@@ -173,6 +172,7 @@ object VlangInheritorsSearch : QueryExecutorBase<VlangNamedElement, DefinitionsS
             }
         }
 
+        val structFields = type.fieldList
         val structFieldsSet = structFields.associateBy { it.name }
         fields.forEach {
             if (it.name != null && !structFieldsSet.contains(it.name)) {

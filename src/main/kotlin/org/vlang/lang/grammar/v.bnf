@@ -379,13 +379,13 @@ StructDeclaration ::= Attributes? SymbolVisibility? StructType {
 AnonymousStructType ::= struct '{' FieldsGroup* '}' {
   pin=2
   implements="org.vlang.lang.psi.VlangFieldListOwner"
-  methods=[getFieldList]
+  methods=[getFieldList getOwnFieldList]
 }
 
 StructType ::= (struct | union) identifier GenericParameters? '{' FieldsGroup* '}' {
   pin=1
   implements="org.vlang.lang.psi.VlangFieldListOwner"
-  methods=[getFieldList getEmbeddedStructList isUnion]
+  methods=[getFieldList getOwnFieldList getEmbeddedStructs getEmbeddedStructList isUnion]
 }
 
 FieldsGroup ::= WithModifiersFieldsGroup | WithoutModifiersFieldsGroup {
@@ -424,7 +424,7 @@ InterfaceDeclaration ::= Attributes? SymbolVisibility? InterfaceType {
 InterfaceType ::= interface identifier GenericParameters? '{' MembersGroup* '}' {
   pin=1
   implements="org.vlang.lang.psi.VlangFieldListOwner"
-  methods=[getFieldList getMethodList getEmbeddedInterfacesList]
+  methods=[getFieldList getOwnFieldList getMethodList getEmbeddedInterfaces getEmbeddedInterfacesList]
 }
 
 MembersGroup ::= WithModifiersMembersGroup | WithoutModifiersMemberGroup {

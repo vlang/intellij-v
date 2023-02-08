@@ -21,7 +21,7 @@ object VlangSuperFieldSearch : QueryExecutorBase<VlangFieldDefinition, Definitio
 
         val processor = Processor<VlangNamedElement> { spec ->
             val interfaceDeclaration = spec as VlangInterfaceDeclaration
-            val interfaceField = interfaceDeclaration.interfaceType.getFieldList().find { it.name == fieldName }
+            val interfaceField = interfaceDeclaration.interfaceType.fieldList.find { it.name == fieldName }
 
             interfaceField == null || interfaceField == field || consumer.process(interfaceField)
         }

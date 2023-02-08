@@ -149,7 +149,7 @@ object VlangElementFactory {
 
     fun createFieldDeclaration(project: Project, name: String, type: String): PsiElement {
         val file = createFileFromText(project, "struct S {\n\t$name $type\n}")
-        return file.getStructs().firstOrNull()?.structType?.getFieldList()?.firstOrNull()?.parent
+        return file.getStructs().firstOrNull()?.structType?.fieldList?.firstOrNull()?.parent
             ?: error("Impossible situation! Parser is broken.")
     }
 

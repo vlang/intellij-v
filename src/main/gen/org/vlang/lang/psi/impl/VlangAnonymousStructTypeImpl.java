@@ -63,4 +63,10 @@ public class VlangAnonymousStructTypeImpl extends VlangTypeImpl implements Vlang
     return VlangPsiImplUtil.getFieldList(this);
   }
 
+  @Override
+  @NotNull
+  public List<VlangFieldDefinition> getOwnFieldList() {
+    return VlangPsiImplUtil.getOwnFieldList(this);
+  }
+
 }

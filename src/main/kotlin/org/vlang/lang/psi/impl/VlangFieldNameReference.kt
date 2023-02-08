@@ -64,7 +64,7 @@ class VlangFieldNameReference(element: VlangReferenceExpressionBase) :
         val declaration = type.resolve(project) ?: return true
         val structType = declaration.structType
 
-        val fields = structType.getFieldList()
+        val fields = structType.fieldList
         for (field in fields) {
             if (!fieldProcessor.execute(field, state)) return false
         }

@@ -60,7 +60,7 @@ class VlangInlayHintsFactory(
             expanded = {
                 parametersHint(
                     type.resolve()
-                        ?.getFieldList()
+                        ?.fieldList
                         ?.mapNotNull { it.getType(null) }
                         ?: emptyList(), level + 1, anchor)
             },

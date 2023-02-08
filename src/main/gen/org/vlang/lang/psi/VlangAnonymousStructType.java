@@ -22,4 +22,7 @@ public interface VlangAnonymousStructType extends VlangType, VlangFieldListOwner
   @NotNull
   List<VlangFieldDefinition> getFieldList();
 
+  @NotNull
+  List<VlangFieldDefinition> getOwnFieldList();
+
 }

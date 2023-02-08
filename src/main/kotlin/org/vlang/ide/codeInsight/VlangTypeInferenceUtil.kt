@@ -65,7 +65,7 @@ object VlangTypeInferenceUtil {
                 val struct = parentStructInit.getType(null) as? VlangStructTypeEx ?: return null
                 val structDecl = struct.resolve(element.project) as? VlangStructDeclaration ?: return null
                 val structType = structDecl.structType
-                return structType.getFieldList().getOrNull(index)?.getType(null)
+                return structType.fieldList.getOrNull(index)?.getType(null)
             }
         }
 

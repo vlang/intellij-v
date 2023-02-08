@@ -83,6 +83,18 @@ public class VlangStructTypeImpl extends VlangTypeImpl implements VlangStructTyp
 
   @Override
   @NotNull
+  public List<VlangFieldDefinition> getOwnFieldList() {
+    return VlangPsiImplUtil.getOwnFieldList(this);
+  }
+
+  @Override
+  @NotNull
+  public List<VlangStructType> getEmbeddedStructs() {
+    return VlangPsiImplUtil.getEmbeddedStructs(this);
+  }
+
+  @Override
+  @NotNull
   public List<VlangEmbeddedDefinition> getEmbeddedStructList() {
     return VlangPsiImplUtil.getEmbeddedStructList(this);
   }

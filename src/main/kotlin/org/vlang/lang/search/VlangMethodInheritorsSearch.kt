@@ -24,7 +24,7 @@ object VlangMethodInheritorsSearch : QueryExecutorBase<VlangNamedElement, Defini
         VlangInheritorsSearch.processMethodOwners({ owner: VlangNamedElement ->
             val struct = owner as VlangStructDeclaration
             val name = method.name ?: return@processMethodOwners true
-            val structMethod = VlangLangUtil.findMethod(owner.project, struct.structType.toEx(), name)
+            val structMethod = struct.structType.toEx().findMethod(owner.project, name)
 
             structMethod == null || structMethod == method || processor.process(structMethod)
         }, decl, interfaceType, mutableListOf(method), listOf())

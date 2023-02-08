@@ -1,9 +1,11 @@
 package org.vlang.lang.psi.types
 
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.UserDataHolderBase
 import com.intellij.psi.PsiElement
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.impl.VlangLangUtil
 import org.vlang.lang.psi.impl.VlangLightType.VlangGenericType
 
 @Suppress("PropertyName")
@@ -59,6 +61,28 @@ abstract class VlangBaseTypeEx(protected val anchor: PsiElement? = null) : UserD
         // find the highest priority
         val maxPriority = priorityMap.keys.maxOrNull() ?: 0
         return priorityMap[maxPriority]
+    }
+
+    override fun methodsList(project: Project, visited: MutableSet<VlangTypeEx>): List<VlangMethodDeclaration> {
+        if (this in visited) return emptyList()
+        val ownMethods = VlangLangUtil.getMethodList(project, this)
+        val unwrapped = unwrapPointer().unwrapAlias()
+        val inheritedMethods = if (unwrapped != this) unwrapped.methodsList(project, visited) else emptyList()
+
+        val embeddedMethods = if (unwrapped is VlangStructTypeEx) {
+            val toExVisited = mutableMapOf<VlangType, VlangTypeEx>()
+            val embeddedStructs = (unwrapped.anchor() as? VlangStructType)?.embeddedStructs ?: emptyList()
+            embeddedStructs.mapNotNull { it.toEx(toExVisited).methodsList(project, visited) }.flatten()
+        } else {
+            emptyList()
+        }
+
+        visited.add(this)
+        return ownMethods + inheritedMethods + embeddedMethods
+    }
+
+    override fun findMethod(project: Project, name: String): VlangMethodDeclaration? {
+        return methodsList(project).find { it.name == name }
     }
 
     companion object {

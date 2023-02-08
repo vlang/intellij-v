@@ -24,9 +24,9 @@ object VlangSuperSearch : QueryExecutorBase<VlangNamedElement, DefinitionsScoped
         val element = parameter.element
         if (element !is VlangStructDeclaration || !element.isValid()) return
         val visitedInterfaces = ReferenceOpenHashSet<VlangInterfaceDeclaration>()
-        val ownMethods = VlangLangUtil.getMethodList(element.project, element.structType.toEx())
+        val ownMethods = element.structType.toEx().methodsList(element.project)
         processMethodOwners(processor, element, ownMethods, visitedInterfaces)
-        val ownFields = element.structType.getFieldList()
+        val ownFields = element.structType.fieldList
         processFieldOwners(processor, element, ownFields, visitedInterfaces)
     }
 

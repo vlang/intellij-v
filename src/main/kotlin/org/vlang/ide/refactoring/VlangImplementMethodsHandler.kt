@@ -94,7 +94,7 @@ class VlangImplementMethodsHandler : LanguageCodeInsightActionHandler {
         iface: VlangInterfaceDeclaration,
     ) {
         WriteCommandAction.runWriteCommandAction(project) {
-            val fields = iface.interfaceType.getFieldList()
+            val fields = iface.interfaceType.fieldList
             for (field in fields) {
                 if (field.name == null || isAlreadyImplementedField(struct, field)) continue
 
@@ -187,7 +187,7 @@ class VlangImplementMethodsHandler : LanguageCodeInsightActionHandler {
     }
 
     private fun isAlreadyImplementedMethod(struct: VlangStructDeclaration, method: VlangInterfaceMethodDefinition): Boolean {
-        val structMethods = VlangLangUtil.getMethodList(struct.project, struct.structType.toEx())
+        val structMethods = struct.structType.toEx().methodsList(struct.project)
         return structMethods
             .filter { it.name == method.name }
             .filter { it.receiver.isMutable() == method.isMutable }
@@ -200,7 +200,7 @@ class VlangImplementMethodsHandler : LanguageCodeInsightActionHandler {
     }
 
     private fun isAlreadyImplementedField(struct: VlangStructDeclaration, field: VlangFieldDefinition): Boolean {
-        val structFields = struct.structType.getFieldList()
+        val structFields = struct.structType.fieldList
         return structFields
             .filter { it.name == field.name }
             .filter { it.isMutable() == field.isMutable() }
@@ -215,7 +215,7 @@ class VlangImplementMethodsHandler : LanguageCodeInsightActionHandler {
         val firstLetter = struct.name.first().lowercaseChar().toString()
         val other = listOf(firstLetter, "this")
 
-        val structMethods = VlangLangUtil.getMethodList(struct.project, struct.structType.toEx())
+        val structMethods = struct.structType.toEx().methodsList(struct.project)
         val first = VlangLangUtil.getUsedReceiverNameOrDefault(structMethods, null)
         if (first != null) {
             return listOf(first) + other
