@@ -72,4 +72,14 @@ class TypingTest : TypingTestBase() {
         fn main() {}
         """.trimIndent()
     )
+
+    fun `test type } inside string interpolation`() = type(
+        """
+        "${"\${"}<caret>}"
+        """.trimIndent(),
+        "}",
+        """
+        "${"\${}"}"
+        """.trimIndent()
+    )
 }

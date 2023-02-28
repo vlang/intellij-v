@@ -38,6 +38,14 @@ class VlangTypedHandler : TypedHandlerDelegate() {
             }
         }
 
+        if (c == '}') {
+            val nextChar = chars.subSequence(offset, offset + 1).firstOrNull()
+            if (nextChar == '}') {
+                document.deleteString(offset, offset + 1)
+                return Result.STOP
+            }
+        }
+
         val prevElement = file.findElementAt(offset - 2)
 
         if (c == '.' && prevElement != null && prevElement.inside<VlangReferenceExpression>()) {
