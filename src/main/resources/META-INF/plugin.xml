@@ -136,7 +136,8 @@ Provides support for <a href="https://vlang.io/">V</a> language
         <!-- endregion Code Insight -->
 
         <!-- region Documentation -->
-        <documentationProvider implementation="org.vlang.ide.documentation.VlangDocumentationProvider"/>
+        <lang.documentationProvider language="vlang"
+                                    implementationClass="org.vlang.ide.documentation.VlangDocumentationProvider"/>
         <!-- endregion Documentation -->
 
         <!-- region Postfix Templates -->

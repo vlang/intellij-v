@@ -128,5 +128,12 @@ object VlangTokenTypes {
         TILDA,
     )
 
+    val STRING_INTERPOLATION = TokenSet.create(
+        LONG_TEMPLATE_ENTRY_START,
+        SHORT_STRING_TEMPLATE_ENTRY,
+        TEMPLATE_ENTRY_END,
+        TEMPLATE_ENTRY_START,
+    )
+
     val WHITE_SPACES = TokenSet.create(WS, NLS, TokenType.WHITE_SPACE)
 }

@@ -14,9 +14,9 @@ import java.util.function.Consumer
 class VlangDocumentationProvider : AbstractDocumentationProvider() {
     override fun generateDoc(element: PsiElement?, originalElement: PsiElement?) = when (element) {
         is VlangFunctionOrMethodDeclaration -> element.generateDoc()
-        is VlangStructDeclaration           -> element.generateDoc()
-        is VlangInterfaceDeclaration        -> element.generateDoc()
-        is VlangEnumDeclaration             -> element.generateDoc()
+        is VlangStructDeclaration           -> element.generateDoc(originalElement)
+        is VlangInterfaceDeclaration        -> element.generateDoc(originalElement)
+        is VlangEnumDeclaration             -> element.generateDoc(originalElement)
         is VlangConstDefinition             -> element.generateDoc()
         is VlangVarDefinition               -> element.generateDoc(originalElement)
         is VlangParamDefinition             -> element.generateDoc(originalElement)
@@ -26,7 +26,7 @@ class VlangDocumentationProvider : AbstractDocumentationProvider() {
         is VlangReceiver                    -> element.generateDoc()
         is VlangEnumFieldDefinition         -> element.generateDoc()
         is VlangGenericParameter            -> element.generateDoc()
-        is VlangTypeAliasDeclaration        -> element.generateDoc()
+        is VlangTypeAliasDeclaration        -> element.generateDoc(originalElement)
         is VlangModuleClause                -> element.generateDoc()
         is VlangPomTargetPsiElement         -> element.generateDoc()
         else                                -> null

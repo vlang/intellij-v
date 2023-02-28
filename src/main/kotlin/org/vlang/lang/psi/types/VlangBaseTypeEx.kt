@@ -63,9 +63,13 @@ abstract class VlangBaseTypeEx(protected val anchor: PsiElement? = null) : UserD
         return priorityMap[maxPriority]
     }
 
+    override fun ownMethodsList(project: Project): List<VlangMethodDeclaration> {
+        return VlangLangUtil.getMethodList(project, this)
+    }
+
     override fun methodsList(project: Project, visited: MutableSet<VlangTypeEx>): List<VlangMethodDeclaration> {
         if (this in visited) return emptyList()
-        val ownMethods = VlangLangUtil.getMethodList(project, this)
+        val ownMethods = this.ownMethodsList(project)
         val unwrapped = unwrapPointer().unwrapAlias()
         val inheritedMethods = if (unwrapped != this) unwrapped.methodsList(project, visited) else emptyList()
 

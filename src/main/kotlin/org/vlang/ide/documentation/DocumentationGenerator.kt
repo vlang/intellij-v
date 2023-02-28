@@ -2,10 +2,10 @@ package org.vlang.ide.documentation
 
 import com.intellij.codeInsight.documentation.DocumentationManagerUtil
 import com.intellij.lang.documentation.DocumentationMarkup
+import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import com.intellij.psi.util.elementType
 import com.intellij.psi.util.parentOfType
 import io.ktor.util.*
 import org.vlang.ide.documentation.DocumentationUtils.appendNotNull
@@ -17,15 +17,17 @@ import org.vlang.ide.documentation.DocumentationUtils.asField
 import org.vlang.ide.documentation.DocumentationUtils.asGeneric
 import org.vlang.ide.documentation.DocumentationUtils.asIdentifier
 import org.vlang.ide.documentation.DocumentationUtils.asKeyword
+import org.vlang.ide.documentation.DocumentationUtils.asModule
 import org.vlang.ide.documentation.DocumentationUtils.asNumber
 import org.vlang.ide.documentation.DocumentationUtils.asOperator
 import org.vlang.ide.documentation.DocumentationUtils.asParameter
 import org.vlang.ide.documentation.DocumentationUtils.asString
+import org.vlang.ide.documentation.DocumentationUtils.asStringInterpolation
 import org.vlang.ide.documentation.DocumentationUtils.asType
 import org.vlang.ide.documentation.DocumentationUtils.colorize
 import org.vlang.ide.documentation.DocumentationUtils.line
 import org.vlang.ide.documentation.DocumentationUtils.part
-import org.vlang.lang.VlangTypes
+import org.vlang.lang.VlangSyntaxHighlighter
 import org.vlang.lang.doc.psi.VlangDocComment
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangAttributeReference
@@ -120,21 +122,21 @@ object DocumentationGenerator {
 
     fun VlangPointerTypeEx.generateDoc(anchor: PsiElement): String {
         return buildString {
-            colorize("&", asOperator)
+            append("&")
             appendNotNull(inner.generateDoc(anchor))
         }
     }
 
     fun VlangOptionTypeEx.generateDoc(anchor: PsiElement): String {
         return buildString {
-            colorize("?", asOperator)
+            append("?")
             appendNotNull(inner?.generateDoc(anchor))
         }
     }
 
     fun VlangResultTypeEx.generateDoc(anchor: PsiElement): String {
         return buildString {
-            colorize("!", asOperator)
+            append("!")
             appendNotNull(inner?.generateDoc(anchor))
         }
     }
@@ -231,7 +233,7 @@ object DocumentationGenerator {
         }
 
         return parts.subList(0, parts.size - 1).joinToString(".") {
-            colorize(it, asIdentifier)
+            colorize(it, asModule)
         } + "." + colorize(parts.last(), asDeclaration)
     }
 
@@ -340,7 +342,7 @@ object DocumentationGenerator {
         }
     }
 
-    private fun VlangParameters.generateDoc(): String {
+    private fun VlangParameters.generateDoc(noWraps: Boolean = false): String {
         val params = paramDefinitionList
 
         if (params.isEmpty()) {
@@ -352,6 +354,14 @@ object DocumentationGenerator {
             return buildString {
                 append("(")
                 append(param.generateDocForMethod())
+                append(")")
+            }
+        }
+
+        if (noWraps) {
+            return buildString {
+                append("(")
+                append(params.joinToString(", ") { it.generateDocForMethod() })
                 append(")")
             }
         }
@@ -467,35 +477,50 @@ object DocumentationGenerator {
         }
     }
 
-    fun VlangFunctionOrMethodDeclaration.generateDoc(): String? {
+    fun VlangFunctionOrMethodDeclaration.generateDoc(inline: Boolean = false): String? {
         val genericParameters = genericParameters
         val parameters = getSignature()?.parameters ?: return null
         val returnType = getSignature()?.result
 
         return buildString {
-            generateModuleName(containingFile)
-            append(DocumentationMarkup.DEFINITION_START)
-            line(attributes?.generateDoc())
-            generateVisibilityPart(this@generateDoc)
-
-            if (this@generateDoc is VlangMethodDeclaration) {
-                part(receiver.generateMethodDoc())
-            } else if (this@generateDoc is VlangFunctionDeclaration && this@generateDoc.isCompileTime) {
-                part("compile time", asKeyword)
+            if (!inline) {
+                generateModuleName(containingFile)
+                append(DocumentationMarkup.DEFINITION_START)
+            } else {
+                append("<code style='white-space: nowrap;'>")
             }
 
-            part("fn", asKeyword)
+            if (!inline) {
+                line(attributes?.generateDoc())
+                generateVisibilityPart(this@generateDoc)
+            }
+
+            if (!inline) {
+                part("fn", asKeyword)
+
+                if (this@generateDoc is VlangMethodDeclaration) {
+                    part(receiver.generateMethodDoc())
+                } else if (this@generateDoc is VlangFunctionDeclaration && this@generateDoc.isCompileTime) {
+                    part("compile time", asKeyword)
+                }
+            }
+
             colorize(name ?: "anon", asDeclaration)
             appendNotNull(genericParameters.generateDoc())
-            part(parameters.generateDoc())
+            part(parameters.generateDoc(noWraps = inline))
             appendNotNull(returnType?.generateDoc())
-            append(DocumentationMarkup.DEFINITION_END)
 
-            generateCommentsPart(this@generateDoc)
+            if (!inline) {
+                append(DocumentationMarkup.DEFINITION_END)
+
+                generateCommentsPart(this@generateDoc)
+            } else {
+                append("</code>")
+            }
         }
     }
 
-    fun VlangStructDeclaration.generateDoc(): String {
+    fun VlangStructDeclaration.generateDoc(originalElement: PsiElement?): String {
         return buildString {
             generateModuleName(containingFile)
             append(DocumentationMarkup.DEFINITION_START)
@@ -536,6 +561,31 @@ object DocumentationGenerator {
             append(DocumentationMarkup.DEFINITION_END)
 
             generateCommentsPart(this@generateDoc)
+
+            generateTypeMethodsDoc(project, this@generateDoc.structType, originalElement)
+        }
+    }
+
+    private fun StringBuilder.generateTypeMethodsDoc(project: Project, type: VlangType?, originalElement: PsiElement?) {
+        if (type == null || originalElement?.parent !is VlangType) {
+            return
+        }
+
+        val methods = type.toEx().ownMethodsList(project)
+        if (methods.isNotEmpty()) {
+            append(DocumentationMarkup.SECTIONS_START)
+            append(DocumentationMarkup.SECTION_HEADER_START)
+            append("Methods:")
+            append(DocumentationMarkup.SECTION_END)
+
+            for (method in methods) {
+                append("<tr><td valign='top'><p>")
+                append(method.generateDoc(true))
+                append("</p></td></tr>")
+            }
+
+            append(DocumentationMarkup.SECTIONS_END)
+            append("<br>")
         }
     }
 
@@ -587,7 +637,7 @@ object DocumentationGenerator {
         }
     }
 
-    fun VlangEnumDeclaration.generateDoc(): String {
+    fun VlangEnumDeclaration.generateDoc(originalElement: PsiElement?): String {
         return buildString {
             generateModuleName(containingFile)
             append(DocumentationMarkup.DEFINITION_START)
@@ -599,10 +649,12 @@ object DocumentationGenerator {
             append(DocumentationMarkup.DEFINITION_END)
 
             generateCommentsPart(this@generateDoc)
+
+            generateTypeMethodsDoc(project, this@generateDoc.enumType, originalElement)
         }
     }
 
-    fun VlangInterfaceDeclaration.generateDoc(): String {
+    fun VlangInterfaceDeclaration.generateDoc(originalElement: PsiElement?): String {
         return buildString {
             generateModuleName(containingFile)
             append(DocumentationMarkup.DEFINITION_START)
@@ -615,6 +667,8 @@ object DocumentationGenerator {
             append(DocumentationMarkup.DEFINITION_END)
 
             generateCommentsPart(this@generateDoc)
+
+            generateTypeMethodsDoc(project, this@generateDoc.interfaceType, originalElement)
         }
     }
 
@@ -787,7 +841,7 @@ object DocumentationGenerator {
         }
     }
 
-    fun VlangTypeAliasDeclaration.generateDoc(): String {
+    fun VlangTypeAliasDeclaration.generateDoc(originalElement: PsiElement?): String {
         val genericParameters = aliasType?.genericParameters
         val typeList = aliasType?.typeUnionList?.typeList?.map { it.toEx() } ?: emptyList()
 
@@ -813,6 +867,8 @@ object DocumentationGenerator {
 
                 append(DocumentationMarkup.DEFINITION_END)
                 generateCommentsPart(this@generateDoc)
+
+                generateTypeMethodsDoc(project, this@generateDoc.aliasType, originalElement)
             }
         }
 
@@ -836,6 +892,8 @@ object DocumentationGenerator {
 
             append(DocumentationMarkup.DEFINITION_END)
             generateCommentsPart(this@generateDoc)
+
+            generateTypeMethodsDoc(project, this@generateDoc.aliasType, originalElement)
         }
     }
 
@@ -907,36 +965,39 @@ object DocumentationGenerator {
     }
 
     fun VlangExpression.generateDoc(): String {
-        return buildString {
-            when (this@generateDoc) {
-                is VlangStringLiteral -> {
-                    colorize(text, asString)
-                }
+        val text = text
+        val highlighter = VlangSyntaxHighlighter()
+        val lexer = highlighter.highlightingLexer
+        val builder = StringBuilder()
+        lexer.start(text)
+        while (lexer.tokenType != null) {
+            val type = lexer.tokenType
+            val tokenText = lexer.tokenText
+            val keyword = VlangTokenTypes.KEYWORDS.contains(type)
+            val number = VlangTokenTypes.NUMBERS.contains(type)
+            val string = VlangTokenTypes.STRING_LITERALS.contains(type)
+            val operators = VlangTokenTypes.OPERATORS.contains(type)
+            val stringInterpolation = VlangTokenTypes.STRING_INTERPOLATION.contains(type)
 
-                is VlangLiteral       -> {
-                    when (elementType) {
-                        VlangTypes.TRUE  -> colorize(text, asKeyword)
-                        VlangTypes.FALSE -> colorize(text, asKeyword)
-                        VlangTypes.CHAR  -> colorize(text, asString)
-                        else             -> colorize(text, asNumber)
-                    }
-                }
-
-                else                  -> {
-                    val lines = text.lines()
-                    if (lines.isEmpty()) {
-                        append("no value")
-                        return@buildString
-                    }
-
-                    val firstLine = lines.first()
-                    append(firstLine.take(20).escapeHTML())
-                    if (lines.size > 1 || firstLine.length > 20) {
-                        append("...")
-                    }
-                }
+            if (tokenText.contains("\n")) {
+                builder.append("...")
+                break;
             }
+
+            builder.append(
+                when {
+                    keyword -> colorize(tokenText, asKeyword)
+                    number  -> colorize(tokenText, asNumber)
+                    string  -> colorize(tokenText, asString)
+                    operators -> colorize(tokenText, asOperator)
+                    stringInterpolation  -> colorize(tokenText, asStringInterpolation)
+                    else    -> tokenText
+                }
+            )
+            lexer.advance()
         }
+
+        return builder.toString()
     }
 
     private fun StringBuilder.generateVisibilityPart(element: VlangNamedElement) {

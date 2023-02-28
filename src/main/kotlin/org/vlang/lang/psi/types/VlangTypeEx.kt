@@ -16,6 +16,7 @@ interface VlangTypeEx : UserDataHolder {
     fun isEqual(rhs: VlangTypeEx): Boolean
     fun isBuiltin(): Boolean
     fun substituteGenerics(nameMap: Map<String, VlangTypeEx>): VlangTypeEx
+    fun ownMethodsList(project: Project): List<VlangMethodDeclaration>
     fun methodsList(project: Project, visited: MutableSet<VlangTypeEx> = LinkedHashSet(5)): List<VlangMethodDeclaration>
     fun findMethod(project: Project, name: String): VlangMethodDeclaration?
 }

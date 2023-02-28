@@ -13,6 +13,7 @@ class DocumentationTest : DocumentationTestBase() {
     fun `test attribute doc`() = doTest("attribute", "main.v")
     fun `test enum fields`() = doTest("enum_fields", "main.v")
     fun `test structs`() = doTest("structs", "main.v")
+    fun `test type methods`() = doTest("type_methods", "main.v")
 
     fun `test rendered doc`() = doTest("rendered", "main.v")
 }
