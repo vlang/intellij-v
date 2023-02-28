@@ -13,9 +13,11 @@ object DocumentationUtils {
     private fun loadKey(key: TextAttributesKey): TextAttributes =
         EditorColorsManager.getInstance().globalScheme.getAttributes(key)!!
 
+    val asOperator = loadKey(VlangColor.OPERATOR.textAttributesKey)
     val asKeyword = loadKey(VlangColor.KEYWORD.textAttributesKey)
     val asIdentifier = loadKey(DefaultLanguageHighlighterColors.IDENTIFIER)
     val asDeclaration = loadKey(VlangColor.FUNCTION.textAttributesKey)
+    val asBuiltin = loadKey(VlangColor.BUILTIN_TYPE.textAttributesKey)
     val asType = loadKey(VlangColor.BUILTIN_TYPE.textAttributesKey)
     val asParameter = loadKey(VlangColor.PARAMETER.textAttributesKey)
     val asAttribute = loadKey(VlangColor.ATTRIBUTE.textAttributesKey)

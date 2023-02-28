@@ -10,6 +10,7 @@ import com.intellij.psi.util.parentOfType
 import io.ktor.util.*
 import org.vlang.ide.documentation.DocumentationUtils.appendNotNull
 import org.vlang.ide.documentation.DocumentationUtils.asAttribute
+import org.vlang.ide.documentation.DocumentationUtils.asBuiltin
 import org.vlang.ide.documentation.DocumentationUtils.asComment
 import org.vlang.ide.documentation.DocumentationUtils.asDeclaration
 import org.vlang.ide.documentation.DocumentationUtils.asField
@@ -17,6 +18,7 @@ import org.vlang.ide.documentation.DocumentationUtils.asGeneric
 import org.vlang.ide.documentation.DocumentationUtils.asIdentifier
 import org.vlang.ide.documentation.DocumentationUtils.asKeyword
 import org.vlang.ide.documentation.DocumentationUtils.asNumber
+import org.vlang.ide.documentation.DocumentationUtils.asOperator
 import org.vlang.ide.documentation.DocumentationUtils.asParameter
 import org.vlang.ide.documentation.DocumentationUtils.asString
 import org.vlang.ide.documentation.DocumentationUtils.asType
@@ -65,6 +67,10 @@ object DocumentationGenerator {
     }
 
     fun VlangStructTypeEx.generateDoc(anchor: PsiElement): String {
+        if (this.name() == "string") {
+            return colorize("string", asBuiltin)
+        }
+
         return buildString {
             append(generateFqnTypeDoc(readableName(anchor)))
         }
@@ -114,21 +120,21 @@ object DocumentationGenerator {
 
     fun VlangPointerTypeEx.generateDoc(anchor: PsiElement): String {
         return buildString {
-            append("&")
+            colorize("&", asOperator)
             appendNotNull(inner.generateDoc(anchor))
         }
     }
 
     fun VlangOptionTypeEx.generateDoc(anchor: PsiElement): String {
         return buildString {
-            append("?")
+            colorize("?", asOperator)
             appendNotNull(inner?.generateDoc(anchor))
         }
     }
 
     fun VlangResultTypeEx.generateDoc(anchor: PsiElement): String {
         return buildString {
-            append("!")
+            colorize("!", asOperator)
             appendNotNull(inner?.generateDoc(anchor))
         }
     }
@@ -215,7 +221,7 @@ object DocumentationGenerator {
     }
 
     fun VlangPrimitiveTypeEx.generateDoc(anchor: PsiElement): String {
-        return colorize(readableName(anchor), asDeclaration)
+        return colorize(readableName(anchor), asBuiltin)
     }
 
     private fun generateFqnTypeDoc(fqn: String): String {
@@ -224,7 +230,9 @@ object DocumentationGenerator {
             return colorize(parts[0], asDeclaration)
         }
 
-        return parts.subList(0, parts.size - 1).joinToString(".") + "." + colorize(parts.last(), asDeclaration)
+        return parts.subList(0, parts.size - 1).joinToString(".") {
+            colorize(it, asIdentifier)
+        } + "." + colorize(parts.last(), asDeclaration)
     }
 
     fun VlangModuleClause.generateDoc(): String {
@@ -512,9 +520,70 @@ object DocumentationGenerator {
 
             colorize(name, asDeclaration)
             appendNotNull(structType.genericParameters.generateDoc())
+
+            val fieldGroups = structType.fieldsGroupList
+            val fields = fieldGroups.flatMap { it.fieldDeclarationList }
+
+            append(" {")
+
+            if (fields.isNotEmpty()) {
+                append("\n")
+                generateFieldGroups(fieldGroups, this@generateDoc)
+            }
+
+            append("}")
+
             append(DocumentationMarkup.DEFINITION_END)
 
             generateCommentsPart(this@generateDoc)
+        }
+    }
+
+    private fun StringBuilder.generateFieldGroups(fieldGroups: List<VlangFieldsGroup>, decl: VlangStructDeclaration) {
+        for (group in fieldGroups) {
+            val modifiers = group.memberModifiers?.memberModifierList?.joinToString(" ", postfix = ":\n") {
+                DocumentationUtils.colorize(it.text, asKeyword)
+            }
+
+            appendNotNull(modifiers)
+
+            val fieldNameMaxWidth = group.fieldDeclarationList
+                .mapNotNull { it.fieldDefinition }
+                .maxOfOrNull { it.name?.length ?: 0 } ?: 0
+
+            for (fieldDeclaration in group.fieldDeclarationList) {
+                val definition = fieldDeclaration.fieldDefinition
+                if (definition != null) {
+                    append("   ")
+                    part(definition.name, asField)
+
+                    val pad = " ".repeat(fieldNameMaxWidth - (definition.name?.length ?: 0))
+                    append(pad)
+
+                    append(definition.getType(null)?.generateDoc(decl))
+
+                    val defaultValue = fieldDeclaration.defaultFieldValue?.expression?.generateDoc()
+                    if (defaultValue != null) {
+                        append(" = ")
+                        append(defaultValue)
+                    }
+
+                    val attributes = fieldDeclaration.attribute?.generateDoc()
+                    if (attributes != null) {
+                        append(" ")
+                        append(attributes)
+                    }
+
+                    append("\n")
+                }
+
+                val embedded = fieldDeclaration.embeddedDefinition
+                if (embedded != null) {
+                    append("   ")
+                    append(embedded.getType(null).generateDoc(decl))
+                    append("\n")
+                }
+            }
         }
     }
 
