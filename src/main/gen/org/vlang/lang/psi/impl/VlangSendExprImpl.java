@@ -39,4 +39,18 @@ public class VlangSendExprImpl extends VlangExpressionImpl implements VlangSendE
     return notNullChild(findChildByType(SEND_CHANNEL));
   }
 
+  @Override
+  @NotNull
+  public VlangExpression getLeft() {
+    List<VlangExpression> p1 = getExpressionList();
+    return p1.get(0);
+  }
+
+  @Override
+  @Nullable
+  public VlangExpression getRight() {
+    List<VlangExpression> p1 = getExpressionList();
+    return p1.size() < 2 ? null : p1.get(1);
+  }
+
 }

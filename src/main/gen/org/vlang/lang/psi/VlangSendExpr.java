@@ -13,4 +13,10 @@ public interface VlangSendExpr extends VlangExpression {
   @NotNull
   PsiElement getSendChannel();
 
+  @NotNull
+  VlangExpression getLeft();
+
+  @Nullable
+  VlangExpression getRight();
+
 }

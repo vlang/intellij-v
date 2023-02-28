@@ -848,8 +848,8 @@ private RightHandExpr ::=
   | SafeQualifiedReferenceExpression
   | QualifiedReferenceExpression
   | OrBlockExpr
-  | ErrorPropagationExpression
-  | ForceNoErrorPropagationExpression
+  | OptionPropagationExpression
+  | ResultPropagationExpression
 
 // <expr>[<<generics>>](...)
 left CallExpr ::= GenericArguments? ArgumentList {
@@ -896,7 +896,9 @@ left OrBlockExpr ::= or Block
 // math and logical expressions
 OrExpr ::= Expression semi? '||' Expression
 AndExpr ::= Expression semi? '&&' Expression
-SendExpr ::= Expression '<-' Expression
+SendExpr ::= Expression '<-' Expression {
+    methods=[left="Expression[0]" right="Expression[1]"]
+}
 UnaryExpr ::=  UnaryOp Expression {methods=[getOperator]}
 ConditionalExpr ::= Expression RelOp Expression
 AddExpr ::= Expression AddOp Expression
@@ -918,10 +920,10 @@ ParenthesesExpr ::= '(' <<enterMode "PAR">> Expression <<exitModeSafe "PAR">>')'
 IncDecExpression ::= Expression ('++' | '--') {pin=1}
 
 // <expr>?
-ErrorPropagationExpression ::= '?' {pin=1}
+OptionPropagationExpression ::= '?' {pin=1}
 
 // <expr>!
-ForceNoErrorPropagationExpression ::= '!' {pin=1}
+ResultPropagationExpression ::= '!' {pin=1}
 
 // ...<expr>
 UnpackingExpression ::= '...' Expression {pin=1}

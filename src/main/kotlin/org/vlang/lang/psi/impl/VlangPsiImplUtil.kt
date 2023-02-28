@@ -1599,7 +1599,7 @@ object VlangPsiImplUtil {
         }
 
         if (expr is VlangDotExpression) {
-            if (expr.errorPropagationExpression != null || expr.forceNoErrorPropagationExpression != null) {
+            if (expr.resultPropagationExpression != null || expr.optionPropagationExpression != null) {
                 val type = expr.expression?.getType(context)
                 return unwrapOptionOrResultType(type)
             }

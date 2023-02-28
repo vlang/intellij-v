@@ -6,6 +6,7 @@ import com.intellij.psi.util.parentOfType
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangLangUtil
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
+import org.vlang.lang.psi.types.VlangChannelTypeEx
 import org.vlang.lang.psi.types.VlangStructTypeEx
 
 class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(holder) {
@@ -44,6 +45,19 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
                     .range(defaultValue)
                     .create()
             }
+        }
+    }
+
+    override fun visitSendExpr(expr: VlangSendExpr) {
+        val left = expr.left
+        val leftType = left.getType(null) ?: return
+        if (leftType !is VlangChannelTypeEx) {
+            holder.newAnnotation(
+                HighlightSeverity.ERROR,
+                "Cannot push on non-channel `${leftType.readableName(expr)}`, left expression of 'send' operator must be 'chan T' type"
+            )
+                .range(expr)
+                .create()
         }
     }
 }

@@ -64,14 +64,12 @@ public interface VlangTypes {
   IElementType ENUM_FIELD_DECLARATION = new VlangCompositeElementType("ENUM_FIELD_DECLARATION");
   IElementType ENUM_FIELD_DEFINITION = VlangElementTypeFactory.stubFactory("ENUM_FIELD_DEFINITION");
   IElementType ENUM_TYPE = VlangElementTypeFactory.stubFactory("ENUM_TYPE");
-  IElementType ERROR_PROPAGATION_EXPRESSION = new VlangCompositeElementType("ERROR_PROPAGATION_EXPRESSION");
   IElementType EXPRESSION = new VlangCompositeElementType("EXPRESSION");
   IElementType FIELDS_GROUP = new VlangCompositeElementType("FIELDS_GROUP");
   IElementType FIELD_DECLARATION = new VlangCompositeElementType("FIELD_DECLARATION");
   IElementType FIELD_DEFINITION = VlangElementTypeFactory.stubFactory("FIELD_DEFINITION");
   IElementType FIELD_NAME = new VlangCompositeElementType("FIELD_NAME");
   IElementType FIXED_SIZE_ARRAY_TYPE = VlangElementTypeFactory.stubFactory("FIXED_SIZE_ARRAY_TYPE");
-  IElementType FORCE_NO_ERROR_PROPAGATION_EXPRESSION = new VlangCompositeElementType("FORCE_NO_ERROR_PROPAGATION_EXPRESSION");
   IElementType FORMAT_SPECIFIER = new VlangCompositeElementType("FORMAT_SPECIFIER");
   IElementType FORMAT_SPECIFIER_EXPRESSION = new VlangCompositeElementType("FORMAT_SPECIFIER_EXPRESSION");
   IElementType FORMAT_SPECIFIER_LEFT_ALIGN_FLAG = new VlangCompositeElementType("FORMAT_SPECIFIER_LEFT_ALIGN_FLAG");
@@ -142,6 +140,7 @@ public interface VlangTypes {
   IElementType NOT_IN_EXPRESSION = new VlangCompositeElementType("NOT_IN_EXPRESSION");
   IElementType NOT_IS_EXPRESSION = new VlangCompositeElementType("NOT_IS_EXPRESSION");
   IElementType OFFSET_OF_CALL_EXPR = new VlangCompositeElementType("OFFSET_OF_CALL_EXPR");
+  IElementType OPTION_PROPAGATION_EXPRESSION = new VlangCompositeElementType("OPTION_PROPAGATION_EXPRESSION");
   IElementType OPTION_TYPE = VlangElementTypeFactory.stubFactory("OPTION_TYPE");
   IElementType OR_BLOCK_EXPR = new VlangCompositeElementType("OR_BLOCK_EXPR");
   IElementType OR_EXPR = new VlangCompositeElementType("OR_EXPR");
@@ -155,6 +154,7 @@ public interface VlangTypes {
   IElementType RECEIVER = VlangElementTypeFactory.stubFactory("RECEIVER");
   IElementType REFERENCE_EXPRESSION = new VlangCompositeElementType("REFERENCE_EXPRESSION");
   IElementType RESULT = VlangElementTypeFactory.stubFactory("RESULT");
+  IElementType RESULT_PROPAGATION_EXPRESSION = new VlangCompositeElementType("RESULT_PROPAGATION_EXPRESSION");
   IElementType RESULT_TYPE = VlangElementTypeFactory.stubFactory("RESULT_TYPE");
   IElementType RETURN_STATEMENT = new VlangCompositeElementType("RETURN_STATEMENT");
   IElementType SELECTIVE_IMPORT_LIST = new VlangCompositeElementType("SELECTIVE_IMPORT_LIST");
@@ -517,9 +517,6 @@ public interface VlangTypes {
       else if (type == ENUM_TYPE) {
         return new VlangEnumTypeImpl(node);
       }
-      else if (type == ERROR_PROPAGATION_EXPRESSION) {
-        return new VlangErrorPropagationExpressionImpl(node);
-      }
       else if (type == FIELDS_GROUP) {
         return new VlangFieldsGroupImpl(node);
       }
@@ -534,9 +531,6 @@ public interface VlangTypes {
       }
       else if (type == FIXED_SIZE_ARRAY_TYPE) {
         return new VlangFixedSizeArrayTypeImpl(node);
-      }
-      else if (type == FORCE_NO_ERROR_PROPAGATION_EXPRESSION) {
-        return new VlangForceNoErrorPropagationExpressionImpl(node);
       }
       else if (type == FORMAT_SPECIFIER) {
         return new VlangFormatSpecifierImpl(node);
@@ -748,6 +742,9 @@ public interface VlangTypes {
       else if (type == OFFSET_OF_CALL_EXPR) {
         return new VlangOffsetOfCallExprImpl(node);
       }
+      else if (type == OPTION_PROPAGATION_EXPRESSION) {
+        return new VlangOptionPropagationExpressionImpl(node);
+      }
       else if (type == OPTION_TYPE) {
         return new VlangOptionTypeImpl(node);
       }
@@ -786,6 +783,9 @@ public interface VlangTypes {
       }
       else if (type == RESULT) {
         return new VlangResultImpl(node);
+      }
+      else if (type == RESULT_PROPAGATION_EXPRESSION) {
+        return new VlangResultPropagationExpressionImpl(node);
       }
       else if (type == RESULT_TYPE) {
         return new VlangResultTypeImpl(node);

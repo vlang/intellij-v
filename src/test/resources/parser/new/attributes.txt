@@ -251,7 +251,7 @@ V Language file
             DOT_EXPRESSION
               REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('debug')
-              ERROR_PROPAGATION_EXPRESSION
+              OPTION_PROPAGATION_EXPRESSION
                 PsiElement(VlangTokenType.?)('?')
         PsiElement(VlangTokenType.])(']')
     PsiElement(VlangTokenType.fn)('fn')

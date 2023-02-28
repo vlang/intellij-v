@@ -1779,18 +1779,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '?'
-  public static boolean ErrorPropagationExpression(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ErrorPropagationExpression")) return false;
-    if (!nextTokenIs(b, QUESTION)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, QUESTION);
-    exit_section_(b, m, ERROR_PROPAGATION_EXPRESSION, r);
-    return r;
-  }
-
-  /* ********************************************************** */
   // ExpressionWithRecover (',' (ExpressionWithRecover | &')'))*
   static boolean ExpressionList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExpressionList")) return false;
@@ -2206,18 +2194,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
     r = ForClause(b, l + 1);
     if (!r) r = RangeClause(b, l + 1);
     if (!r) r = BeforeBlockExpression(b, l + 1);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // '!'
-  public static boolean ForceNoErrorPropagationExpression(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ForceNoErrorPropagationExpression")) return false;
-    if (!nextTokenIs(b, NOT)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, NOT);
-    exit_section_(b, m, FORCE_NO_ERROR_PROPAGATION_EXPRESSION, r);
     return r;
   }
 
@@ -3901,6 +3877,18 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // '?'
+  public static boolean OptionPropagationExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "OptionPropagationExpression")) return false;
+    if (!nextTokenIs(b, QUESTION)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, QUESTION);
+    exit_section_(b, m, OPTION_PROPAGATION_EXPRESSION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // '?' Type?
   public static boolean OptionType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "OptionType")) return false;
@@ -4318,6 +4306,18 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // '!'
+  public static boolean ResultPropagationExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ResultPropagationExpression")) return false;
+    if (!nextTokenIs(b, NOT)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, NOT);
+    exit_section_(b, m, RESULT_PROPAGATION_EXPRESSION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // '!' Type?
   public static boolean ResultType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ResultType")) return false;
@@ -4366,8 +4366,8 @@ public class VlangParser implements PsiParser, LightPsiParser {
   //   | SafeQualifiedReferenceExpression
   //   | QualifiedReferenceExpression
   //   | OrBlockExpr
-  //   | ErrorPropagationExpression
-  //   | ForceNoErrorPropagationExpression
+  //   | OptionPropagationExpression
+  //   | ResultPropagationExpression
   static boolean RightHandExpr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RightHandExpr")) return false;
     boolean r;
@@ -4379,8 +4379,8 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = SafeQualifiedReferenceExpression(b, l + 1);
     if (!r) r = QualifiedReferenceExpression(b, l + 1);
     if (!r) r = OrBlockExpr(b, l + 1);
-    if (!r) r = ErrorPropagationExpression(b, l + 1);
-    if (!r) r = ForceNoErrorPropagationExpression(b, l + 1);
+    if (!r) r = OptionPropagationExpression(b, l + 1);
+    if (!r) r = ResultPropagationExpression(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }

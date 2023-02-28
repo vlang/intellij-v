@@ -44,7 +44,7 @@ class VlangRawOptionOrResultTypeUsedInspection : VlangBaseInspection() {
                 val parent = expr.parent
                 if (parent is VlangOrBlockExpr ||
                     parent is VlangDotExpression &&
-                    (parent.errorPropagationExpression != null || parent.forceNoErrorPropagationExpression != null)
+                    (parent.optionPropagationExpression != null || parent.resultPropagationExpression != null)
                 ) {
                     return
                 }

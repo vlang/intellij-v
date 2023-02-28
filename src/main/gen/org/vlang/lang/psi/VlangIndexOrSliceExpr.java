@@ -16,14 +16,14 @@ public interface VlangIndexOrSliceExpr extends VlangExpression {
   @Nullable
   VlangEmptySlice getEmptySlice();
 
-  @Nullable
-  VlangErrorPropagationExpression getErrorPropagationExpression();
-
   @NotNull
   List<VlangExpression> getExpressionList();
 
   @Nullable
-  VlangForceNoErrorPropagationExpression getForceNoErrorPropagationExpression();
+  VlangOptionPropagationExpression getOptionPropagationExpression();
+
+  @Nullable
+  VlangResultPropagationExpression getResultPropagationExpression();
 
   @Nullable
   PsiElement getHashLbrack();

@@ -17,16 +17,16 @@ public interface VlangCallExpr extends VlangExpression, VlangGenericArgumentsOwn
   VlangCompileTimeFieldReference getCompileTimeFieldReference();
 
   @Nullable
-  VlangErrorPropagationExpression getErrorPropagationExpression();
-
-  @Nullable
   VlangExpression getExpression();
 
   @Nullable
-  VlangForceNoErrorPropagationExpression getForceNoErrorPropagationExpression();
+  VlangGenericArguments getGenericArguments();
 
   @Nullable
-  VlangGenericArguments getGenericArguments();
+  VlangOptionPropagationExpression getOptionPropagationExpression();
+
+  @Nullable
+  VlangResultPropagationExpression getResultPropagationExpression();
 
   @NotNull
   List<VlangExpression> getParameters();

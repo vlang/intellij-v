@@ -10,14 +10,14 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangForceNoErrorPropagationExpressionImpl extends VlangCompositeElementImpl implements VlangForceNoErrorPropagationExpression {
+public class VlangOptionPropagationExpressionImpl extends VlangCompositeElementImpl implements VlangOptionPropagationExpression {
 
-  public VlangForceNoErrorPropagationExpressionImpl(@NotNull ASTNode node) {
+  public VlangOptionPropagationExpressionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitForceNoErrorPropagationExpression(this);
+    visitor.visitOptionPropagationExpression(this);
   }
 
   @Override
@@ -28,8 +28,8 @@ public class VlangForceNoErrorPropagationExpressionImpl extends VlangCompositeEl
 
   @Override
   @NotNull
-  public PsiElement getNot() {
-    return notNullChild(findChildByType(NOT));
+  public PsiElement getQuestion() {
+    return notNullChild(findChildByType(QUESTION));
   }
 
 }

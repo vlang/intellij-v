@@ -13,14 +13,14 @@ public interface VlangCompileTimeFieldReference extends VlangCompositeElement {
   @Nullable
   VlangCompileTimeFieldReference getCompileTimeFieldReference();
 
-  @Nullable
-  VlangErrorPropagationExpression getErrorPropagationExpression();
-
   @NotNull
   List<VlangExpression> getExpressionList();
 
   @Nullable
-  VlangForceNoErrorPropagationExpression getForceNoErrorPropagationExpression();
+  VlangOptionPropagationExpression getOptionPropagationExpression();
+
+  @Nullable
+  VlangResultPropagationExpression getResultPropagationExpression();
 
   @NotNull
   PsiElement getDollar();

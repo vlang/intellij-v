@@ -1666,7 +1666,7 @@ V Language file
                                               PsiElement(VlangTokenType..)('.')
                                               PsiElement(VlangTokenType.identifier)('params')
                                         PsiElement(VlangTokenType.))(')')
-                                    ERROR_PROPAGATION_EXPRESSION
+                                    OPTION_PROPAGATION_EXPRESSION
                                       PsiElement(VlangTokenType.?)('?')
                               SIMPLE_STATEMENT
                                 LEFT_HAND_EXPR_LIST
@@ -1732,7 +1732,7 @@ V Language file
                                               PsiElement(VlangTokenType..)('.')
                                               PsiElement(VlangTokenType.identifier)('params')
                                         PsiElement(VlangTokenType.))(')')
-                                    ERROR_PROPAGATION_EXPRESSION
+                                    OPTION_PROPAGATION_EXPRESSION
                                       PsiElement(VlangTokenType.?)('?')
                               SIMPLE_STATEMENT
                                 LEFT_HAND_EXPR_LIST
@@ -1798,7 +1798,7 @@ V Language file
                                               PsiElement(VlangTokenType..)('.')
                                               PsiElement(VlangTokenType.identifier)('params')
                                         PsiElement(VlangTokenType.))(')')
-                                    ERROR_PROPAGATION_EXPRESSION
+                                    OPTION_PROPAGATION_EXPRESSION
                                       PsiElement(VlangTokenType.?)('?')
                               SIMPLE_STATEMENT
                                 LEFT_HAND_EXPR_LIST
@@ -1875,7 +1875,7 @@ V Language file
                                               PsiElement(VlangTokenType..)('.')
                                               PsiElement(VlangTokenType.identifier)('params')
                                         PsiElement(VlangTokenType.))(')')
-                                    ERROR_PROPAGATION_EXPRESSION
+                                    OPTION_PROPAGATION_EXPRESSION
                                       PsiElement(VlangTokenType.?)('?')
                               SIMPLE_STATEMENT
                                 LEFT_HAND_EXPR_LIST
@@ -1941,7 +1941,7 @@ V Language file
                                               PsiElement(VlangTokenType..)('.')
                                               PsiElement(VlangTokenType.identifier)('params')
                                         PsiElement(VlangTokenType.))(')')
-                                    ERROR_PROPAGATION_EXPRESSION
+                                    OPTION_PROPAGATION_EXPRESSION
                                       PsiElement(VlangTokenType.?)('?')
                               SIMPLE_STATEMENT
                                 LEFT_HAND_EXPR_LIST
@@ -2966,7 +2966,7 @@ V Language file
                                               PsiElement(VlangTokenType..)('.')
                                               PsiElement(VlangTokenType.identifier)('params')
                                         PsiElement(VlangTokenType.))(')')
-                                    ERROR_PROPAGATION_EXPRESSION
+                                    OPTION_PROPAGATION_EXPRESSION
                                       PsiElement(VlangTokenType.?)('?')
                               SIMPLE_STATEMENT
                                 LEFT_HAND_EXPR_LIST
@@ -3279,7 +3279,7 @@ V Language file
                                                 PsiElement(VlangTokenType..)('.')
                                                 PsiElement(VlangTokenType.identifier)('params')
                                           PsiElement(VlangTokenType.))(')')
-                                      ERROR_PROPAGATION_EXPRESSION
+                                      OPTION_PROPAGATION_EXPRESSION
                                         PsiElement(VlangTokenType.?)('?')
                                 SIMPLE_STATEMENT
                                   LEFT_HAND_EXPR_LIST
@@ -4719,7 +4719,7 @@ V Language file
             DOT_EXPRESSION
               REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('connection_test')
-              ERROR_PROPAGATION_EXPRESSION
+              OPTION_PROPAGATION_EXPRESSION
                 PsiElement(VlangTokenType.?)('?')
             BLOCK
               PsiElement(VlangTokenType.{)('{')

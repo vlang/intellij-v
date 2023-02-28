@@ -14,12 +14,12 @@ public interface VlangDotExpression extends VlangExpression {
   VlangCompileTimeFieldReference getCompileTimeFieldReference();
 
   @Nullable
-  VlangErrorPropagationExpression getErrorPropagationExpression();
-
-  @Nullable
   VlangExpression getExpression();
 
   @Nullable
-  VlangForceNoErrorPropagationExpression getForceNoErrorPropagationExpression();
+  VlangOptionPropagationExpression getOptionPropagationExpression();
+
+  @Nullable
+  VlangResultPropagationExpression getResultPropagationExpression();
 
 }

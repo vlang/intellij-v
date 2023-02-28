@@ -47,20 +47,20 @@ public class VlangOrBlockExprImpl extends VlangBinaryExprImpl implements VlangOr
 
   @Override
   @Nullable
-  public VlangErrorPropagationExpression getErrorPropagationExpression() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangErrorPropagationExpression.class);
-  }
-
-  @Override
-  @Nullable
   public VlangExpression getExpression() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class);
   }
 
   @Override
   @Nullable
-  public VlangForceNoErrorPropagationExpression getForceNoErrorPropagationExpression() {
-    return VlangPsiTreeUtil.getChildOfType(this, VlangForceNoErrorPropagationExpression.class);
+  public VlangOptionPropagationExpression getOptionPropagationExpression() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangOptionPropagationExpression.class);
+  }
+
+  @Override
+  @Nullable
+  public VlangResultPropagationExpression getResultPropagationExpression() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangResultPropagationExpression.class);
   }
 
   @Override

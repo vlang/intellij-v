@@ -5,9 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface VlangErrorPropagationExpression extends VlangCompositeElement {
+public interface VlangResultPropagationExpression extends VlangCompositeElement {
 
   @NotNull
-  PsiElement getQuestion();
+  PsiElement getNot();
 
 }
