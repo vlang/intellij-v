@@ -29,19 +29,3 @@ body:
         Any alternative solutions or features you considered, a more detailed explanation, stack traces, related issues, links for context, etc.
     validations:
       required: false
-
-  - type: input
-    id: version
-    attributes:
-      label: Version used
-      description: |
-        Please provide the version of the repository or tool you are using.
-    validations:
-      required: true
-
-  - type: textarea
-    id: environment
-    attributes:
-      label: Environment details (`v doctor` output)
-    validations:
-        required: true
