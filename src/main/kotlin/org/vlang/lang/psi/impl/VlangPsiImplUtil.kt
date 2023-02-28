@@ -2328,7 +2328,7 @@ object VlangPsiImplUtil {
             o,
             VlangForStatement::class.java,
             VlangFunctionLit::class.java
-        ) as VlangForStatement
+        ) as? VlangForStatement
     }
 
     fun getBreakStatementOwner(o: PsiElement): PsiElement? {

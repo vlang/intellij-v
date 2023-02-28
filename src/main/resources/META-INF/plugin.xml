@@ -48,6 +48,7 @@ Provides support for <a href="https://vlang.io/">V</a> language
         <highlightVisitor implementation="org.vlang.lang.annotator.VlangHighlightInfoCollectingVisitor"/>
         <annotator language="vlang" implementationClass="org.vlang.lang.annotator.VlangAnnotator"/>
         <annotator language="vlang" implementationClass="org.vlang.lang.annotator.VlangDocAnnotator"/>
+        <annotator language="vlang" implementationClass="org.vlang.lang.annotator.VlangCheckerAnnotator"/>
         <!-- endregion Annotator -->
 
         <!-- region Formatter -->
