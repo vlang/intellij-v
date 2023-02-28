@@ -45,7 +45,7 @@ Provides support for <a href="https://vlang.io/">V</a> language
 
         <!-- region Annotator -->
         <highlightingPassFactory implementation="org.vlang.lang.annotator.VlangHighlightingPassFactory"/>
-        <highlightVisitor implementation="org.vlang.lang.annotator.VlangHighlightInfoCollectingVisitor"/>
+        <highlightVisitor order="first" implementation="org.vlang.lang.annotator.VlangHighlightInfoCollectingVisitor"/>
         <annotator language="vlang" implementationClass="org.vlang.lang.annotator.VlangAnnotator"/>
         <annotator language="vlang" implementationClass="org.vlang.lang.annotator.VlangDocAnnotator"/>
         <annotator language="vlang" implementationClass="org.vlang.lang.annotator.VlangCheckerAnnotator"/>

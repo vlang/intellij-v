@@ -14,6 +14,7 @@ import org.vlang.lang.completion.VlangCompletionUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangModule
 import org.vlang.lang.psi.impl.VlangReference
+import org.vlang.lang.psi.types.VlangPrimitiveTypes
 
 class VlangAnnotator : Annotator {
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
@@ -41,6 +42,10 @@ class VlangAnnotator : Annotator {
         reference: VlangReference,
         holder: AnnotationHolder,
     ): VlangColor? {
+        if (VlangPrimitiveTypes.isPrimitiveType(element.text)) {
+            return null
+        }
+
         val resolved = reference.multiResolve(false).firstOrNull()?.element ?: return null
 
         if (resolved is VlangNamedElement && VlangDeprecationsUtil.isDeprecated(resolved)) {
