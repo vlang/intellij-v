@@ -36,7 +36,11 @@ class VlangAnnotator : Annotator {
         }
     }
 
-    private fun highlightReference(element: VlangReferenceExpressionBase, reference: VlangReference, holder: AnnotationHolder): VlangColor? {
+    private fun highlightReference(
+        element: VlangReferenceExpressionBase,
+        reference: VlangReference,
+        holder: AnnotationHolder,
+    ): VlangColor? {
         val resolved = reference.multiResolve(false).firstOrNull()?.element ?: return null
 
         if (resolved is VlangNamedElement && VlangDeprecationsUtil.isDeprecated(resolved)) {
@@ -48,23 +52,23 @@ class VlangAnnotator : Annotator {
         }
 
         return when (resolved) {
-            is VlangFunctionDeclaration       -> public(resolved, VlangColor.PUBLIC_FUNCTION, VlangColor.FUNCTION)
-            is VlangMethodDeclaration         -> public(resolved, VlangColor.PUBLIC_FUNCTION, VlangColor.FUNCTION)
-            is VlangInterfaceMethodDefinition -> public(resolved, VlangColor.INTERFACE_METHOD, VlangColor.INTERFACE_METHOD)
-            is VlangStructDeclaration         -> if (!resolved.isUnion)
+            is VlangFunctionDeclaration             -> public(resolved, VlangColor.PUBLIC_FUNCTION, VlangColor.FUNCTION)
+            is VlangMethodDeclaration               -> public(resolved, VlangColor.PUBLIC_FUNCTION, VlangColor.FUNCTION)
+            is VlangInterfaceMethodDefinition       -> public(resolved, VlangColor.INTERFACE_METHOD, VlangColor.INTERFACE_METHOD)
+            is VlangStructDeclaration               -> if (!resolved.isUnion)
                 public(resolved, VlangColor.PUBLIC_STRUCT, VlangColor.STRUCT)
             else
                 public(resolved, VlangColor.PUBLIC_UNION, VlangColor.UNION)
 
-            is VlangEnumDeclaration           -> public(resolved, VlangColor.PUBLIC_ENUM, VlangColor.ENUM)
-            is VlangInterfaceDeclaration      -> public(resolved, VlangColor.PUBLIC_INTERFACE, VlangColor.INTERFACE)
-            is VlangFieldDefinition           -> public(resolved, VlangColor.PUBLIC_FIELD, VlangColor.FIELD)
-            is VlangEnumFieldDefinition       -> public(resolved, VlangColor.ENUM_FIELD, VlangColor.ENUM_FIELD)
-            is VlangTypeAliasDeclaration      -> public(resolved, VlangColor.PUBLIC_TYPE_ALIAS, VlangColor.TYPE_ALIAS)
-            is VlangParamDefinition           -> mutable(resolved, VlangColor.MUTABLE_PARAMETER, VlangColor.PARAMETER)
-            is VlangReceiver                  -> mutable(resolved, VlangColor.MUTABLE_RECEIVER, VlangColor.RECEIVER)
-            is VlangGlobalVariableDefinition  -> VlangColor.GLOBAL_VARIABLE
-            is VlangVarDefinition             -> if (resolved.isCaptured(element)) {
+            is VlangEnumDeclaration                 -> public(resolved, VlangColor.PUBLIC_ENUM, VlangColor.ENUM)
+            is VlangInterfaceDeclaration            -> public(resolved, VlangColor.PUBLIC_INTERFACE, VlangColor.INTERFACE)
+            is VlangFieldDefinition                 -> public(resolved, VlangColor.PUBLIC_FIELD, VlangColor.FIELD)
+            is VlangEnumFieldDefinition             -> public(resolved, VlangColor.ENUM_FIELD, VlangColor.ENUM_FIELD)
+            is VlangTypeAliasDeclaration            -> public(resolved, VlangColor.PUBLIC_TYPE_ALIAS, VlangColor.TYPE_ALIAS)
+            is VlangParamDefinition                 -> mutable(resolved, VlangColor.MUTABLE_PARAMETER, VlangColor.PARAMETER)
+            is VlangReceiver                        -> mutable(resolved, VlangColor.MUTABLE_RECEIVER, VlangColor.RECEIVER)
+            is VlangGlobalVariableDefinition        -> VlangColor.GLOBAL_VARIABLE
+            is VlangVarDefinition                   -> if (resolved.isCaptured(element)) {
                 mutable(resolved, VlangColor.MUTABLE_CAPTURED_VARIABLE, VlangColor.CAPTURED_VARIABLE)
             } else {
                 mutable(resolved, VlangColor.MUTABLE_VARIABLE, VlangColor.VARIABLE)
@@ -73,7 +77,7 @@ class VlangAnnotator : Annotator {
             is VlangGenericParameter                -> VlangColor.GENERIC_PARAMETER
             is VlangModule.VlangPomTargetPsiElement -> VlangColor.MODULE
             is VlangImportAlias                     -> VlangColor.MODULE
-            is VlangConstDefinition           -> {
+            is VlangConstDefinition                 -> {
                 val identifier = element.getIdentifier()
                 if (identifier != null && VlangCompletionUtil.isCompileTimeIdentifier(identifier)) {
                     return VlangColor.CT_CONSTANT
@@ -81,7 +85,8 @@ class VlangAnnotator : Annotator {
 
                 public(resolved, VlangColor.PUBLIC_CONSTANT, VlangColor.CONSTANT)
             }
-            else                              -> null
+
+            else                                    -> null
         }
     }
 

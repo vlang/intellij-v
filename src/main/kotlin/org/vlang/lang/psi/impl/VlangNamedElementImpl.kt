@@ -129,6 +129,16 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
         )
     }
 
+    override fun getModuleName(): String? {
+        val stub = stub
+        if (stub != null) {
+            val fileStub = stub.parentStubOfType<VlangFileStub>()
+            return fileStub?.getModuleQualifiedName()
+        }
+
+        return containingFile.getModuleQualifiedName()
+    }
+
     override fun setName(name: String): PsiElement? {
         val identifier = getIdentifier()
         val newIdentifier = VlangElementFactory.createIdentifier(project, name)

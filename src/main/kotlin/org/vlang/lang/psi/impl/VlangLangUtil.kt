@@ -7,6 +7,7 @@ import com.intellij.psi.PsiManager
 import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.CachedValuesManager
 import com.intellij.psi.util.PsiModificationTracker
+import com.intellij.psi.util.PsiTreeUtil
 import org.vlang.configurations.VlangConfiguration
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.types.*
@@ -19,6 +20,48 @@ object VlangLangUtil {
         val psiManager = PsiManager.getInstance(project)
         val stubFile = getStubFile("errors.v", stubDir, psiManager) ?: return null
         return stubFile.getConstants().firstOrNull { it.name == "err" }
+    }
+
+    fun getErrVariableOwner(errVariable: PsiElement): PsiElement? {
+        var parent = errVariable.parent
+        while (parent != null) {
+            if (parent is VlangFunctionOrMethodDeclaration) {
+                return null
+            }
+
+            // when
+            // foo() or {
+            //     err
+            // }
+            if (parent is VlangOrBlockExpr) {
+                return parent
+            }
+
+            // when
+            // if f := foo() {
+            //
+            // } else {
+            //     err
+            // }
+            if (parent is VlangIfExpression && parent.isGuard && PsiTreeUtil.isAncestor(parent.elseBranch, errVariable, false)) {
+                return parent
+            }
+
+            parent = parent.parent
+        }
+        return null
+    }
+
+    fun getContinueStatementOwner(o: PsiElement): VlangCompositeElement? {
+        return PsiTreeUtil.getParentOfType(
+            o,
+            VlangForStatement::class.java,
+            VlangFunctionLit::class.java
+        ) as? VlangForStatement
+    }
+
+    fun getBreakStatementOwner(o: PsiElement): PsiElement? {
+        return getContinueStatementOwner(o)
     }
 
     private fun getStubFile(name: String, stubDir: VirtualFile, psiManager: PsiManager): VlangFile? {

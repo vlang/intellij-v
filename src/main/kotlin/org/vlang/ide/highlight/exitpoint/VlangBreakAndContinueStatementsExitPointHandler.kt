@@ -7,8 +7,7 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.Consumer
 import org.vlang.lang.psi.*
-import org.vlang.lang.psi.impl.VlangPsiImplUtil.getBreakStatementOwner
-import org.vlang.lang.psi.impl.VlangPsiImplUtil.getContinueStatementOwner
+import org.vlang.lang.psi.impl.VlangLangUtil
 
 class VlangBreakAndContinueStatementsExitPointHandler(
     editor: Editor,
@@ -78,11 +77,11 @@ class VlangBreakAndContinueStatementsExitPointHandler(
 
     private fun getStatementOwnerOrResolve(statement: VlangCompositeElement): PsiElement? {
         if (statement is VlangBreakStatement) {
-            val label = statement.labelRef ?: return getBreakStatementOwner(statement)
+            val label = statement.labelRef ?: return VlangLangUtil.getBreakStatementOwner(statement)
             return label.reference.resolve()
         }
         if (statement is VlangContinueStatement) {
-            val label = statement.labelRef ?: return getContinueStatementOwner(statement)
+            val label = statement.labelRef ?: return VlangLangUtil.getContinueStatementOwner(statement)
             return label.reference.resolve()
         }
         return null

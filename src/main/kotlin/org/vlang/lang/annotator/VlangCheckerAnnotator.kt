@@ -4,6 +4,7 @@ import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.psi.PsiElement
 import org.vlang.lang.annotator.checkers.VlangCommonProblemsChecker
+import org.vlang.lang.annotator.checkers.VlangOptionResultProblemsChecker
 import org.vlang.lang.psi.VlangVisitor
 
 class VlangCheckerAnnotator : Annotator {
@@ -19,7 +20,8 @@ class VlangCheckerAnnotator : Annotator {
 
     private fun getCheckerVisitors(holder: AnnotationHolder): List<VlangVisitor> {
         return listOf(
-            VlangCommonProblemsChecker(holder)
+            VlangCommonProblemsChecker(holder),
+            VlangOptionResultProblemsChecker(holder),
         )
     }
 }
