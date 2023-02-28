@@ -340,7 +340,6 @@ public interface VlangTypes {
   IElementType SPAWN = new VlangTokenType("spawn");
   IElementType STATIC = new VlangTokenType("static");
   IElementType STRUCT = new VlangTokenType("struct");
-  IElementType SWITCH = new VlangTokenType("switch");
   IElementType TEMPLATE_ENTRY_END = new VlangTokenType("TEMPLATE_ENTRY_END");
   IElementType TEMPLATE_ENTRY_START = new VlangTokenType("TEMPLATE_ENTRY_START");
   IElementType TILDA = new VlangTokenType("~");

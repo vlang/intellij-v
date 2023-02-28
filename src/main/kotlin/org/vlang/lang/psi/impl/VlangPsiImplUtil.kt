@@ -2322,4 +2322,20 @@ object VlangPsiImplUtil {
     fun canBeAutoImported(moduleName: String): Boolean {
         return moduleName != "main" && moduleName != "builtin" && moduleName != "stubs"
     }
+
+    fun getContinueStatementOwner(o: PsiElement): VlangCompositeElement? {
+        return PsiTreeUtil.getParentOfType(
+            o,
+            VlangForStatement::class.java,
+            VlangFunctionLit::class.java
+        ) as VlangForStatement
+    }
+
+    fun getBreakStatementOwner(o: PsiElement): PsiElement? {
+        val owner = PsiTreeUtil.getParentOfType(
+            o, VlangForStatement::class.java,
+            VlangSelectExpression::class.java, VlangFunctionLit::class.java
+        )
+        return if (owner is VlangFunctionLit) null else owner
+    }
 }

@@ -55,7 +55,6 @@ object VlangTokenTypes {
         RETURN,
         SELECT,
         STRUCT,
-        SWITCH,
         TYPE_,
         PUB,
         AS,

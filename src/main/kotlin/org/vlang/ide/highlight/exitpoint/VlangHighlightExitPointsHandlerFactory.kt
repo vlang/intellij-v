@@ -6,7 +6,7 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.impl.source.tree.LeafPsiElement
-import org.vlang.ide.highlight.exitpoint.VlangFunctionExitPointHandler.Companion.createForElement
+import com.intellij.psi.tree.TokenSet
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.VlangReferenceExpression
 
@@ -16,16 +16,24 @@ class VlangHighlightExitPointsHandlerFactory : HighlightUsagesHandlerFactoryBase
 
         val elementType = target.elementType
         if (elementType === VlangTypes.RETURN || elementType === VlangTypes.FN) {
-            return createForElement(editor, file, target)
+            return VlangFunctionExitPointHandler.createForElement(editor, file, target)
         }
 
         if (elementType == VlangTypes.IDENTIFIER && target.parent is VlangReferenceExpression) {
             val callerName = (target.parent as VlangReferenceExpression).getIdentifier().text
             if (callerName == "panic" || callerName == "exit") {
-                return createForElement(editor, file, target)
+                return VlangFunctionExitPointHandler.createForElement(editor, file, target)
             }
         }
 
+        if (BREAK_HIGHLIGHTING_TOKENS.contains(elementType)) {
+            return VlangBreakAndContinueStatementsExitPointHandler.createForElement(editor, file, target)
+        }
+
         return null
+    }
+
+    companion object {
+        private val BREAK_HIGHLIGHTING_TOKENS = TokenSet.create(VlangTypes.CONTINUE, VlangTypes.BREAK, VlangTypes.FOR, VlangTypes.SELECT)
     }
 }

@@ -25,7 +25,7 @@ class VlangFunctionExitPointHandler(editor: Editor, file: PsiFile, private val t
             }
         }
 
-        object : VlangRecursiveVisitor() {
+        val visitor = object : VlangRecursiveVisitor() {
             override fun visitFunctionLit(literal: VlangFunctionLit) {}
             override fun visitReturnStatement(statement: VlangReturnStatement) {
                 addOccurrence(statement)
@@ -37,8 +37,9 @@ class VlangFunctionExitPointHandler(editor: Editor, file: PsiFile, private val t
                     addOccurrence(o)
                 }
             }
+        }
 
-        }.visitTypeOwner(function)
+        visitor.visitTypeOwner(function)
     }
 
     companion object {
