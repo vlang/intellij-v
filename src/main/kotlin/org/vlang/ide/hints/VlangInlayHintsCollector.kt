@@ -17,6 +17,7 @@ import com.intellij.refactoring.suggested.startOffset
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.VlangLanguage
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.types.VlangResultTypeEx
 import org.vlang.lang.psi.types.VlangUnknownTypeEx
 import org.vlang.utils.line
 
@@ -70,6 +71,12 @@ class VlangInlayHintsCollector(
         val right = element.block
         val openBracket = right.lbrace
         val closeBracket = right.rbrace
+        val leftExpr = element.expression ?: return
+        val leftType = leftExpr.getType(null)
+        if (leftType !is VlangResultTypeEx) {
+            return
+        }
+
         handleImplicitErrorVariable(element.project, openBracket, closeBracket)
     }
 
@@ -81,6 +88,14 @@ class VlangInlayHintsCollector(
         val right = element.block ?: return
         val openBracket = right.lbrace
         val closeBracket = right.rbrace
+
+        val ifExpr = element.parent as? VlangIfExpression ?: return
+        val expr = ifExpr.guardVarDeclaration?.expression ?: return
+        val leftType = expr.getType(null)
+        if (leftType !is VlangResultTypeEx) {
+            return
+        }
+
         handleImplicitErrorVariable(element.project, openBracket, closeBracket)
     }
 

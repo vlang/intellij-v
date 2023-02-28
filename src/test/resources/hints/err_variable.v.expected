@@ -1,0 +1,52 @@
+module hints
+
+fn res() !int {
+	return error("err")
+}
+
+fn opt() ?int {
+	return none
+}
+
+struct Foo {
+	opt_field ?string
+}
+
+fn main() {
+	strukt<# [:  Foo] #> := Foo{}
+
+	opt() or {
+
+	}
+
+	if val<# [:  int] #> := opt() {
+		// ...
+	} else {
+		res() or {<# [err  →] #>
+
+		}
+	}
+
+
+	res() or {<# [err  →] #>
+		opt() or {
+		
+		}
+	}
+
+	if res<# [:  int] #> := res() {
+		// ...
+	} else {<# [err  →] #>
+
+	}
+
+	strukt.opt_field or {
+
+	}
+
+	ch<# [:  chan int] #> := chan int{}
+
+	v<# [:  int] #> := <-ch or {
+
+	}
+}

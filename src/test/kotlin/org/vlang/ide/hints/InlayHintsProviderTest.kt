@@ -9,4 +9,5 @@ class InlayHintsProviderTest : InlayHintsProviderTestBase() {
     fun `test enum fields`() = run("enum_fields.v", VlangEnumValuesInlayHintsProvider())
     fun `test flag enum fields with only decimal`() =
         run("enum_fields_2.v", VlangEnumValuesInlayHintsProvider(), Settings(showOnlyDecimal = true))
+    fun `test err variable`() = run("err_variable.v", VlangInlayHintsProvider())
 }
