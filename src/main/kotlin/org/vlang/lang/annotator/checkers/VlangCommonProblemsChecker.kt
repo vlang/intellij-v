@@ -1,12 +1,18 @@
 package org.vlang.lang.annotator.checkers
 
+import com.intellij.codeInsight.intention.impl.BaseIntentionAction
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.HighlightSeverity
+import com.intellij.openapi.editor.Editor
+import com.intellij.openapi.project.Project
+import com.intellij.psi.PsiFile
 import com.intellij.psi.util.parentOfType
 import org.vlang.lang.psi.*
+import org.vlang.lang.psi.impl.VlangElementFactory
 import org.vlang.lang.psi.impl.VlangLangUtil
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangChannelTypeEx
+import org.vlang.lang.psi.types.VlangMapTypeEx
 import org.vlang.lang.psi.types.VlangStructTypeEx
 
 class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(holder) {
@@ -58,6 +64,44 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
             )
                 .range(expr)
                 .create()
+        }
+    }
+
+    override fun visitForStatement(stmt: VlangForStatement) {
+        val rangeClause = stmt.rangeClause ?: return
+        val right = rangeClause.expression ?: return
+        val rightType = right.getType(null) ?: return
+        val variables = rangeClause.variablesList
+
+        if (rightType is VlangMapTypeEx && variables.size == 1) {
+            holder.newAnnotation(
+                HighlightSeverity.ERROR,
+                "Specify both `key` and `value` variables to iterate over `${rightType.readableName(stmt)}`, use `_` to ignore the key"
+            )
+                .range(stmt.`for`)
+                .withFix(VlangAddKeyToLoopIterateQuickFix("key"))
+                .withFix(VlangAddKeyToLoopIterateQuickFix("_"))
+                .create()
+        }
+    }
+
+    companion object {
+        class VlangAddKeyToLoopIterateQuickFix(val name: String) : BaseIntentionAction() {
+            override fun startInWriteAction() = true
+            override fun getFamilyName() = "Add `$name` variable to loop iterate over map"
+            override fun getText() = "Add `$name` variable to loop iterate over map"
+            override fun isAvailable(project: Project, editor: Editor?, file: PsiFile?): Boolean = true
+
+            override fun invoke(project: Project, editor: Editor, file: PsiFile) {
+                val element = file.findElementAt(editor.caretModel.primaryCaret.offset)!!.parentOfType<VlangForStatement>() ?: return
+                val rangeClause = element.rangeClause ?: return
+                val variables = rangeClause.variablesList
+                val key = VlangElementFactory.createVariableDefinition(project, name)
+                val value = variables[0]
+                rangeClause.addBefore(key, value)
+                rangeClause.addBefore(VlangElementFactory.createComma(project), value)
+                rangeClause.addBefore(VlangElementFactory.createSpace(project), value)
+            }
         }
     }
 }

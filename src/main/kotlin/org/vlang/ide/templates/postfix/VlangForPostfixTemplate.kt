@@ -8,7 +8,9 @@ import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.parentOfType
 import com.intellij.refactoring.suggested.startOffset
-import org.vlang.lang.psi.VlangSimpleStatement
+import org.vlang.lang.psi.VlangExpression
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapAlias
+import org.vlang.lang.psi.types.VlangMapTypeEx
 
 class VlangForPostfixTemplate : PostfixTemplate(
     "vlang.postfix.for", "for",
@@ -19,13 +21,21 @@ class VlangForPostfixTemplate : PostfixTemplate(
                 VlangPostfixUtil.notInsideVarDeclaration(context)
 
     override fun expand(context: PsiElement, editor: Editor) {
-        val element = context.parentOfType<VlangSimpleStatement>() ?: return
+        val expr = context.parentOfType<VlangExpression>() ?: return
         val caret = editor.caretModel.primaryCaret
 
-        caret.moveToOffset(element.startOffset)
-        element.delete()
+        val type = expr.getType(null)?.unwrapAlias()
+        val isMap = type is VlangMapTypeEx
+
+        caret.moveToOffset(expr.startOffset)
+        expr.delete()
         PsiDocumentManager.getInstance(context.project).doPostponedOperationsAndUnblockDocument(editor.document)
 
-        VlangPostfixUtil.startTemplate("for \$value$ in ${element.text} {\n\$END$\n}", context.project, editor, "value" to ConstantNode("value"))
+        if (isMap) {
+            VlangPostfixUtil.startTemplate("for \$key$, \$value$ in ${expr.text} {\n\$END$\n}", context.project, editor, "key" to ConstantNode("key"), "value" to ConstantNode("value"))
+            return
+        }
+
+        VlangPostfixUtil.startTemplate("for \$value$ in ${expr.text} {\n\$END$\n}", context.project, editor, "value" to ConstantNode("value"))
     }
 }

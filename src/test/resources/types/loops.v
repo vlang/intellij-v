@@ -2,6 +2,8 @@ module types
 
 struct Foo {}
 
+type Array = []int
+
 fn main() {
 	a := [1, 2, 3]
 	expr_type(a, '[]int')
@@ -30,5 +32,10 @@ fn main() {
 	for key, value in map_value {
 		expr_type(key, 'string')
 		expr_type(value, 'Foo')
+	}
+
+	arr := Array{}
+	for value in arr {
+		expr_type(value, 'int')
 	}
 }

@@ -104,7 +104,7 @@ object VlangTypeInferenceUtil {
 
         if (element.parent is VlangBinaryExpr) {
             val binaryExpr = element.parent as VlangBinaryExpr
-            val right = binaryExpr.right!!
+            val right = binaryExpr.right ?: return null
             if (binaryExpr.right != null && right.isEquivalentTo(element)) {
                 val left = binaryExpr.left
                 val leftType = left.getType(null)

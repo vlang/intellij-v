@@ -17,12 +17,7 @@ public interface VlangRangeClause extends VlangVarDeclaration {
   //matching getRangeExpression(VlangRangeClause, ...)
   //methods are not found in VlangPsiImplUtil
 
-  //WARNING: getLeftExpressionsList(...) is skipped
-  //matching getLeftExpressionsList(VlangRangeClause, ...)
-  //methods are not found in VlangPsiImplUtil
-
-  //WARNING: getRightExpressionsList(...) is skipped
-  //matching getRightExpressionsList(VlangRangeClause, ...)
-  //methods are not found in VlangPsiImplUtil
+  @NotNull
+  List<VlangVarDefinition> getVariablesList();
 
 }

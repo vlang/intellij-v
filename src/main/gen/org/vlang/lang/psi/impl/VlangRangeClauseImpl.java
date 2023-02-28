@@ -39,4 +39,10 @@ public class VlangRangeClauseImpl extends VlangVarDeclarationImpl implements Vla
     return notNullChild(findChildByType(IN));
   }
 
+  @Override
+  @NotNull
+  public List<VlangVarDefinition> getVariablesList() {
+    return VlangPsiImplUtil.getVariablesList(this);
+  }
+
 }

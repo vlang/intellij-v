@@ -5,6 +5,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.PsiParserFacade
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.util.childrenOfType
 import org.vlang.lang.VlangLanguage
 import org.vlang.lang.doc.psi.VlangDocComment
 import org.vlang.lang.psi.*
@@ -14,9 +15,15 @@ object VlangElementFactory {
         return PsiFileFactory.getInstance(project).createFileFromText("dummy.v", VlangLanguage, text) as VlangFile
     }
 
-    fun createVariableDeclarationStatement(project: Project, name: String, expr: PsiElement): VlangStatement {
-        val file = createFileFromText(project, "fn main() { $name := ${expr.text} }")
+    fun createVariableDeclarationStatement(project: Project, name: String, expr: PsiElement?): VlangStatement {
+        val file = createFileFromText(project, "fn main() { $name := ${expr?.text} }")
         return PsiTreeUtil.findChildOfType(file, VlangSimpleStatement::class.java)!!
+    }
+
+    fun createVariableDefinition(project: Project, name: String): VlangVarDefinition {
+        val stmt = createVariableDeclarationStatement(project, name, null)
+        val decl = stmt.childrenOfType<VlangVarDeclaration>().firstOrNull() ?: error("Cannot create variable definition")
+        return decl.varDefinitionList.firstOrNull() ?: error("Cannot create variable definition")
     }
 
     fun createReferenceExpression(project: Project, name: String): VlangReferenceExpression {

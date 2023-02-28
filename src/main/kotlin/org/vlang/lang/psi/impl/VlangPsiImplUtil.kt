@@ -931,6 +931,11 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getVariablesList(o: VlangRangeClause): List<VlangVarDefinition> {
+        return o.varDefinitionList
+    }
+
+    @JvmStatic
     fun getReference(o: VlangLabelRef): VlangLabelReference {
         return VlangLabelReference(o)
     }
@@ -2165,7 +2170,7 @@ object VlangPsiImplUtil {
     }
 
     private fun processRangeClause(o: VlangVarDefinition, decl: VlangRangeClause, context: ResolveState?): VlangTypeEx? {
-        val rightType = decl.expression?.getType(context)
+        val rightType = decl.expression?.getType(context)?.unwrapAlias()
         if (rightType is VlangStringTypeEx) {
             return VlangPrimitiveTypeEx.U8
         }
