@@ -118,12 +118,6 @@ public class VlangMethodNameImpl extends VlangCompositeElementImpl implements Vl
 
   @Override
   @Nullable
-  public PsiElement getShiftLeft() {
-    return findChildByType(SHIFT_LEFT);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);
   }

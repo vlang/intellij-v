@@ -10,15 +10,15 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
 
-public class VlangMulExprImpl extends VlangBinaryExprImpl implements VlangMulExpr {
+public class VlangAppendStatementImpl extends VlangStatementImpl implements VlangAppendStatement {
 
-  public VlangMulExprImpl(@NotNull ASTNode node) {
+  public VlangAppendStatementImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   @Override
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitMulExpr(this);
+    visitor.visitAppendStatement(this);
   }
 
   @Override
@@ -28,33 +28,21 @@ public class VlangMulExprImpl extends VlangBinaryExprImpl implements VlangMulExp
   }
 
   @Override
-  @Nullable
-  public PsiElement getBitAnd() {
-    return findChildByType(BIT_AND);
+  @NotNull
+  public List<VlangExpression> getExpressionList() {
+    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangExpression.class);
+  }
+
+  @Override
+  @NotNull
+  public VlangShiftLeftOp getShiftLeftOp() {
+    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangShiftLeftOp.class));
   }
 
   @Override
   @Nullable
-  public PsiElement getBitClear() {
-    return findChildByType(BIT_CLEAR);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getMul() {
-    return findChildByType(MUL);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getQuotient() {
-    return findChildByType(QUOTIENT);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getRemainder() {
-    return findChildByType(REMAINDER);
+  public VlangExpression getLeft() {
+    return VlangPsiImplUtil.getLeft(this);
   }
 
 }

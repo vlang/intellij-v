@@ -628,7 +628,7 @@ object VlangPsiImplUtil {
             val calculatedValue = calculateValue(value.expression) ?: return null
             return -calculatedValue
         }
-        if (value is VlangMulExpr && value.shiftLeft != null) {
+        if (value is VlangShiftLeftExpr) {
             val left = calculateValue(value.left) ?: return null
             val right = calculateValue(value.right) ?: return null
             return left shl right.toInt()
@@ -889,6 +889,7 @@ object VlangPsiImplUtil {
             is VlangSendExpr         -> Access.Write
             // for
             is VlangRangeClause      -> if (expression == parent.expression) Access.Read else Access.Write
+            is VlangAppendStatement  -> Access.Write
             else                     -> Access.Read
         }
     }
@@ -933,6 +934,11 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun getVariablesList(o: VlangRangeClause): List<VlangVarDefinition> {
         return o.varDefinitionList
+    }
+
+    @JvmStatic
+    fun getLeft(o: VlangAppendStatement): VlangExpression? {
+        return o.childrenOfType<VlangExpression>().firstOrNull()
     }
 
     @JvmStatic
@@ -1189,9 +1195,10 @@ object VlangPsiImplUtil {
     fun getOperator(o: VlangBinaryExpr): PsiElement? {
         if (o is VlangAndExpr) return o.condAnd
         if (o is VlangOrExpr) return o.condOr
+        if (o is VlangShiftLeftExpr) return o.shiftLeftOp
 
         if (o is VlangMulExpr) {
-            return getNotNullElement(o.mul, o.quotient, o.remainder, o.shiftLeft, o.bitAnd, o.bitClear)
+            return getNotNullElement(o.mul, o.quotient, o.remainder, o.bitAnd, o.bitClear)
         }
         if (o is VlangAddExpr) {
             return getNotNullElement(o.bitXor, o.bitOr, o.minus, o.plus)

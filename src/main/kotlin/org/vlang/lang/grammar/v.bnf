@@ -94,7 +94,7 @@
     char                 = 'char'
   ]
 
-  extends("(Or|And|Add|Conversion|Mul|Selector|Conditional|OrBlock)Expr|(In|NotIn|Is|NotIs)Expression")=BinaryExpr
+  extends("(Or|And|Add|Conversion|Mul|ShiftLeft|Selector|Conditional|OrBlock)Expr|(In|NotIn|Is|NotIs)Expression")=BinaryExpr
   extends(".*(Expr|Literal|Lit|OperandName)|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|SharedExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression|LockExpression|IncDecExpression|LiteralValueExpression|SelectExpression|SpawnExpression|TypeCastExpression")=Expression
 
   implements("ModuleClause|(Var|Param|Field|Label|Var|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|(Struct|TypeAlias|Union|Enum|Interface)Declaration|Receiver|Import(Alias|Name)|GenericParameter")="org.vlang.lang.psi.VlangNamedElement"
@@ -225,6 +225,7 @@ private Statements ::= StatementWithSemi*
 private StatementWithSemi ::= Statement (semi | &'}') { pin=1 recoverWhile=StatementRecover }
 Statement ::=
     BlockNoPin
+  | AppendStatement
   | SimpleStatement
   | ReturnStatement
   | BreakStatement
@@ -343,6 +344,15 @@ AssertStatement ::= assert Expression (',' Expression)?
 
 // defer { ... } rule
 DeferStatement ::= defer Block
+
+// <expr> << <expr>
+AppendStatement ::= DotExpression ShiftLeftOp Expression {
+    methods=[getLeft]
+}
+
+ShiftLeftExpr ::= Expression ShiftLeftOp Expression
+
+ShiftLeftOp ::= <<shiftLeft>>
 
 // <label>:
 LabelRef ::= identifier { methods=[getReference getName] }
@@ -590,6 +600,7 @@ Expression ::=
   | ConditionalExpr
   | RangeExpr
   | AddExpr
+  | ShiftLeftExpr
   | MulExpr
   | UnaryExpr
   | SendExpr
@@ -906,8 +917,9 @@ MulExpr ::= Expression MulOp Expression
 
 private RelOp ::= '==' | '!=' | '<' | '<=' | '>' !'>' | '>='
 private AddOp ::= '+' | '-' | '|' | '^'
-private MulOp ::= '*' | '/' | '%' | '<<' | <<gtGtGt>> | <<gtGt>> | '&' | '&^'
+private MulOp ::= '*' | '/' | '%' | <<gtGtGt>> | <<gtGt>> | '&' | '&^'
 private UnaryOp ::= '+' | '-' | '!' | '^' | '~' | '*' | '&' | '&&' | '<-'
+
 
 fake BinaryExpr ::= Expression+ {
   methods=[left="Expression[0]" right="Expression[1]" getOperator]

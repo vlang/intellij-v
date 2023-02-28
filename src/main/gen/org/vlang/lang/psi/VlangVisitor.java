@@ -29,6 +29,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitAppendStatement(@NotNull VlangAppendStatement o) {
+    visitStatement(o);
+  }
+
   public void visitArgumentList(@NotNull VlangArgumentList o) {
     visitCompositeElement(o);
   }
@@ -672,6 +676,14 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitShebangClause(@NotNull VlangShebangClause o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitShiftLeftExpr(@NotNull VlangShiftLeftExpr o) {
+    visitBinaryExpr(o);
+  }
+
+  public void visitShiftLeftOp(@NotNull VlangShiftLeftOp o) {
     visitCompositeElement(o);
   }
 

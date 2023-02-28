@@ -885,14 +885,13 @@ V Language file
                     PsiElement(VlangTokenType.identifier)('already_imported')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
-                  SIMPLE_STATEMENT
-                    LEFT_HAND_EXPR_LIST
-                      MUL_EXPR
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('newly_imported_modules_idx')
-                        PsiElement(VlangTokenType.<<)('<<')
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('import_entry_idx')
+                  APPEND_STATEMENT
+                    REFERENCE_EXPRESSION
+                      PsiElement(VlangTokenType.identifier)('newly_imported_modules_idx')
+                    SHIFT_LEFT_OP
+                      PsiElement(VlangTokenType.<<)('<<')
+                    REFERENCE_EXPRESSION
+                      PsiElement(VlangTokenType.identifier)('import_entry_idx')
                   PsiElement(VlangTokenType.})('}')
           SIMPLE_STATEMENT
             LEFT_HAND_EXPR_LIST
@@ -1720,24 +1719,23 @@ V Language file
                                         PsiElement(VlangTokenType.int)('1')
                                 BLOCK
                                   PsiElement(VlangTokenType.{)('{')
-                                  SIMPLE_STATEMENT
-                                    LEFT_HAND_EXPR_LIST
-                                      MUL_EXPR
+                                  APPEND_STATEMENT
+                                    REFERENCE_EXPRESSION
+                                      PsiElement(VlangTokenType.identifier)('mod_names_with_src')
+                                    SHIFT_LEFT_OP
+                                      PsiElement(VlangTokenType.<<)('<<')
+                                    INDEX_OR_SLICE_EXPR
+                                      REFERENCE_EXPRESSION
+                                        PsiElement(VlangTokenType.identifier)('mod_names')
+                                      PsiElement(VlangTokenType.[)('[')
+                                      ADD_EXPR
                                         REFERENCE_EXPRESSION
-                                          PsiElement(VlangTokenType.identifier)('mod_names_with_src')
-                                        PsiElement(VlangTokenType.<<)('<<')
-                                        INDEX_OR_SLICE_EXPR
-                                          REFERENCE_EXPRESSION
-                                            PsiElement(VlangTokenType.identifier)('mod_names')
-                                          PsiElement(VlangTokenType.[)('[')
-                                          ADD_EXPR
-                                            REFERENCE_EXPRESSION
-                                              PsiElement(VlangTokenType.identifier)('mod_name_idx')
-                                            PsiElement(VlangTokenType.+)('+')
-                                            LITERAL
-                                              PsiElement(VlangTokenType.int)('1')
-                                          PsiElement(VlangTokenType...)('..')
-                                          PsiElement(VlangTokenType.])(']')
+                                          PsiElement(VlangTokenType.identifier)('mod_name_idx')
+                                        PsiElement(VlangTokenType.+)('+')
+                                        LITERAL
+                                          PsiElement(VlangTokenType.int)('1')
+                                      PsiElement(VlangTokenType...)('..')
+                                      PsiElement(VlangTokenType.])(']')
                                   PsiElement(VlangTokenType.})('}')
                           SIMPLE_STATEMENT
                             VAR_DECLARATION
@@ -2043,25 +2041,24 @@ V Language file
                       PsiComment(VLANG_DOC_COMMENT)
                         PsiElement(VlangTokenType.<DOC_GAP>)('//')
                         PsiElement(VlangTokenType.<DOC_DATA>)('append the path if not yet added to the project dependency')
-                      SIMPLE_STATEMENT
-                        LEFT_HAND_EXPR_LIST
-                          MUL_EXPR
+                      APPEND_STATEMENT
+                        REFERENCE_EXPRESSION
+                          REFERENCE_EXPRESSION
+                            PsiElement(VlangTokenType.identifier)('project')
+                          PsiElement(VlangTokenType..)('.')
+                          PsiElement(VlangTokenType.identifier)('dependencies')
+                        SHIFT_LEFT_OP
+                          PsiElement(VlangTokenType.<<)('<<')
+                        REFERENCE_EXPRESSION
+                          INDEX_OR_SLICE_EXPR
                             REFERENCE_EXPRESSION
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('project')
-                              PsiElement(VlangTokenType..)('.')
-                              PsiElement(VlangTokenType.identifier)('dependencies')
-                            PsiElement(VlangTokenType.<<)('<<')
+                              PsiElement(VlangTokenType.identifier)('new_imports')
+                            PsiElement(VlangTokenType.[)('[')
                             REFERENCE_EXPRESSION
-                              INDEX_OR_SLICE_EXPR
-                                REFERENCE_EXPRESSION
-                                  PsiElement(VlangTokenType.identifier)('new_imports')
-                                PsiElement(VlangTokenType.[)('[')
-                                REFERENCE_EXPRESSION
-                                  PsiElement(VlangTokenType.identifier)('import_idx')
-                                PsiElement(VlangTokenType.])(']')
-                              PsiElement(VlangTokenType..)('.')
-                              PsiElement(VlangTokenType.identifier)('path')
+                              PsiElement(VlangTokenType.identifier)('import_idx')
+                            PsiElement(VlangTokenType.])(']')
+                          PsiElement(VlangTokenType..)('.')
+                          PsiElement(VlangTokenType.identifier)('path')
                       PsiElement(VlangTokenType.})('}')
           SIMPLE_STATEMENT
             LEFT_HAND_EXPR_LIST
@@ -2835,86 +2832,85 @@ V Language file
                   PsiElement(VlangTokenType.int)('1')
             BLOCK
               PsiElement(VlangTokenType.{)('{')
-              SIMPLE_STATEMENT
-                LEFT_HAND_EXPR_LIST
-                  MUL_EXPR
-                    INDEX_OR_SLICE_EXPR
-                      REFERENCE_EXPRESSION
+              APPEND_STATEMENT
+                INDEX_OR_SLICE_EXPR
+                  REFERENCE_EXPRESSION
+                    REFERENCE_EXPRESSION
+                      PsiElement(VlangTokenType.identifier)('ss')
+                    PsiElement(VlangTokenType..)('.')
+                    PsiElement(VlangTokenType.identifier)('imports')
+                  PsiElement(VlangTokenType.[)('[')
+                  REFERENCE_EXPRESSION
+                    PsiElement(VlangTokenType.identifier)('to_dir')
+                  PsiElement(VlangTokenType.])(']')
+                SHIFT_LEFT_OP
+                  PsiElement(VlangTokenType.<<)('<<')
+                LITERAL_VALUE_EXPRESSION
+                  TYPE
+                    TYPE_MODIFIERS
+                      <empty list>
+                    TYPE_REFERENCE_EXPRESSION
+                      PsiElement(VlangTokenType.identifier)('Import')
+                  PsiElement(VlangTokenType.{)('{')
+                  ELEMENT
+                    VALUE
+                      UNPACKING_EXPRESSION
+                        PsiElement(VlangTokenType....)('...')
                         REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('ss')
-                        PsiElement(VlangTokenType..)('.')
-                        PsiElement(VlangTokenType.identifier)('imports')
-                      PsiElement(VlangTokenType.[)('[')
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('to_dir')
-                      PsiElement(VlangTokenType.])(']')
-                    PsiElement(VlangTokenType.<<)('<<')
-                    LITERAL_VALUE_EXPRESSION
-                      TYPE
-                        TYPE_MODIFIERS
-                          <empty list>
-                        TYPE_REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('Import')
-                      PsiElement(VlangTokenType.{)('{')
-                      ELEMENT
-                        VALUE
-                          UNPACKING_EXPRESSION
-                            PsiElement(VlangTokenType....)('...')
+                          PsiElement(VlangTokenType.identifier)('imp')
+                  ELEMENT
+                    KEY
+                      FIELD_NAME
+                        REFERENCE_EXPRESSION
+                          PsiElement(VlangTokenType.identifier)('module_name')
+                    PsiElement(VlangTokenType.:)(':')
+                    VALUE
+                      CALL_EXPR
+                        REFERENCE_EXPRESSION
+                          REFERENCE_EXPRESSION
                             REFERENCE_EXPRESSION
                               PsiElement(VlangTokenType.identifier)('imp')
-                      ELEMENT
-                        KEY
-                          FIELD_NAME
-                            REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('module_name')
-                        PsiElement(VlangTokenType.:)(':')
-                        VALUE
-                          CALL_EXPR
-                            REFERENCE_EXPRESSION
-                              REFERENCE_EXPRESSION
-                                REFERENCE_EXPRESSION
-                                  PsiElement(VlangTokenType.identifier)('imp')
-                                PsiElement(VlangTokenType..)('.')
-                                PsiElement(VlangTokenType.identifier)('absolute_module_name')
-                              PsiElement(VlangTokenType..)('.')
-                              PsiElement(VlangTokenType.identifier)('all_after_last')
-                            ARGUMENT_LIST
-                              PsiElement(VlangTokenType.()('(')
-                              ELEMENT
-                                VALUE
-                                  STRING_LITERAL
-                                    STRING_TEMPLATE
-                                      PsiElement(VlangTokenType.OPEN_QUOTE)(''')
-                                      PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('.')
-                                      PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
-                              PsiElement(VlangTokenType.))(')')
-                      ELEMENT
-                        KEY
-                          FIELD_NAME
-                            REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('resolved')
-                        PsiElement(VlangTokenType.:)(':')
-                        VALUE
-                          OR_EXPR
+                            PsiElement(VlangTokenType..)('.')
+                            PsiElement(VlangTokenType.identifier)('absolute_module_name')
+                          PsiElement(VlangTokenType..)('.')
+                          PsiElement(VlangTokenType.identifier)('all_after_last')
+                        ARGUMENT_LIST
+                          PsiElement(VlangTokenType.()('(')
+                          ELEMENT
+                            VALUE
+                              STRING_LITERAL
+                                STRING_TEMPLATE
+                                  PsiElement(VlangTokenType.OPEN_QUOTE)(''')
+                                  PsiElement(VlangTokenType.LITERAL_STRING_TEMPLATE_ENTRY)('.')
+                                  PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
+                          PsiElement(VlangTokenType.))(')')
+                  ELEMENT
+                    KEY
+                      FIELD_NAME
+                        REFERENCE_EXPRESSION
+                          PsiElement(VlangTokenType.identifier)('resolved')
+                    PsiElement(VlangTokenType.:)(':')
+                    VALUE
+                      OR_EXPR
+                        REFERENCE_EXPRESSION
+                          REFERENCE_EXPRESSION
+                            PsiElement(VlangTokenType.identifier)('imp')
+                          PsiElement(VlangTokenType..)('.')
+                          PsiElement(VlangTokenType.identifier)('resolved')
+                        PsiElement(VlangTokenType.||)('||')
+                        CONDITIONAL_EXPR
+                          REFERENCE_EXPRESSION
                             REFERENCE_EXPRESSION
                               REFERENCE_EXPRESSION
                                 PsiElement(VlangTokenType.identifier)('imp')
                               PsiElement(VlangTokenType..)('.')
-                              PsiElement(VlangTokenType.identifier)('resolved')
-                            PsiElement(VlangTokenType.||)('||')
-                            CONDITIONAL_EXPR
-                              REFERENCE_EXPRESSION
-                                REFERENCE_EXPRESSION
-                                  REFERENCE_EXPRESSION
-                                    PsiElement(VlangTokenType.identifier)('imp')
-                                  PsiElement(VlangTokenType..)('.')
-                                  PsiElement(VlangTokenType.identifier)('path')
-                                PsiElement(VlangTokenType..)('.')
-                                PsiElement(VlangTokenType.identifier)('len')
-                              PsiElement(VlangTokenType.!=)('!=')
-                              LITERAL
-                                PsiElement(VlangTokenType.int)('0')
-                      PsiElement(VlangTokenType.})('}')
+                              PsiElement(VlangTokenType.identifier)('path')
+                            PsiElement(VlangTokenType..)('.')
+                            PsiElement(VlangTokenType.identifier)('len')
+                          PsiElement(VlangTokenType.!=)('!=')
+                          LITERAL
+                            PsiElement(VlangTokenType.int)('0')
+                  PsiElement(VlangTokenType.})('}')
               SIMPLE_STATEMENT
                 VAR_DECLARATION
                   VAR_DEFINITION

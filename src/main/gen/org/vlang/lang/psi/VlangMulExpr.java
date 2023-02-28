@@ -22,7 +22,4 @@ public interface VlangMulExpr extends VlangBinaryExpr {
   @Nullable
   PsiElement getRemainder();
 
-  @Nullable
-  PsiElement getShiftLeft();
-
 }

@@ -131,14 +131,13 @@ V Language file
                         PsiElement(VlangTokenType.identifier)('a')
                     BLOCK
                       PsiElement(VlangTokenType.{)('{')
-                      SIMPLE_STATEMENT
-                        LEFT_HAND_EXPR_LIST
-                          MUL_EXPR
-                            REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('arr')
-                            PsiElement(VlangTokenType.<<)('<<')
-                            REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('v')
+                      APPEND_STATEMENT
+                        REFERENCE_EXPRESSION
+                          PsiElement(VlangTokenType.identifier)('arr')
+                        SHIFT_LEFT_OP
+                          PsiElement(VlangTokenType.<<)('<<')
+                        REFERENCE_EXPRESSION
+                          PsiElement(VlangTokenType.identifier)('v')
                       PsiElement(VlangTokenType.})('}')
                   RETURN_STATEMENT
                     PsiElement(VlangTokenType.return)('return')

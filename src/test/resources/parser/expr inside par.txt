@@ -168,38 +168,37 @@ V Language file
                 PsiElement(VlangTokenType.++)('++')
         BLOCK
           PsiElement(VlangTokenType.{)('{')
-          SIMPLE_STATEMENT
-            LEFT_HAND_EXPR_LIST
-              MUL_EXPR
-                REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('idxs')
-                PsiElement(VlangTokenType.<<)('<<')
-                LITERAL_VALUE_EXPRESSION
-                  TYPE
-                    TYPE_MODIFIERS
-                      <empty list>
-                    TYPE_REFERENCE_EXPRESSION
-                      PsiElement(VlangTokenType.identifier)('RepIndex')
-                  PsiElement(VlangTokenType.{)('{')
-                  ELEMENT
-                    KEY
-                      FIELD_NAME
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('idx')
-                    PsiElement(VlangTokenType.:)(':')
-                    VALUE
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('idx')
-                  ELEMENT
-                    KEY
-                      FIELD_NAME
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('val_idx')
-                    PsiElement(VlangTokenType.:)(':')
-                    VALUE
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('rep_i')
-                  PsiElement(VlangTokenType.})('}')
+          APPEND_STATEMENT
+            REFERENCE_EXPRESSION
+              PsiElement(VlangTokenType.identifier)('idxs')
+            SHIFT_LEFT_OP
+              PsiElement(VlangTokenType.<<)('<<')
+            LITERAL_VALUE_EXPRESSION
+              TYPE
+                TYPE_MODIFIERS
+                  <empty list>
+                TYPE_REFERENCE_EXPRESSION
+                  PsiElement(VlangTokenType.identifier)('RepIndex')
+              PsiElement(VlangTokenType.{)('{')
+              ELEMENT
+                KEY
+                  FIELD_NAME
+                    REFERENCE_EXPRESSION
+                      PsiElement(VlangTokenType.identifier)('idx')
+                PsiElement(VlangTokenType.:)(':')
+                VALUE
+                  REFERENCE_EXPRESSION
+                    PsiElement(VlangTokenType.identifier)('idx')
+              ELEMENT
+                KEY
+                  FIELD_NAME
+                    REFERENCE_EXPRESSION
+                      PsiElement(VlangTokenType.identifier)('val_idx')
+                PsiElement(VlangTokenType.:)(':')
+                VALUE
+                  REFERENCE_EXPRESSION
+                    PsiElement(VlangTokenType.identifier)('rep_i')
+              PsiElement(VlangTokenType.})('}')
           PsiElement(VlangTokenType.})('}')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
@@ -219,38 +218,37 @@ V Language file
                     PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
-                  SIMPLE_STATEMENT
-                    LEFT_HAND_EXPR_LIST
-                      MUL_EXPR
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('idxs')
-                        PsiElement(VlangTokenType.<<)('<<')
-                        LITERAL_VALUE_EXPRESSION
-                          TYPE
-                            TYPE_MODIFIERS
-                              <empty list>
-                            TYPE_REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('RepIndex')
-                          PsiElement(VlangTokenType.{)('{')
-                          ELEMENT
-                            KEY
-                              FIELD_NAME
-                                REFERENCE_EXPRESSION
-                                  PsiElement(VlangTokenType.identifier)('idx')
-                            PsiElement(VlangTokenType.:)(':')
-                            VALUE
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('idx')
-                          ELEMENT
-                            KEY
-                              FIELD_NAME
-                                REFERENCE_EXPRESSION
-                                  PsiElement(VlangTokenType.identifier)('val_idx')
-                            PsiElement(VlangTokenType.:)(':')
-                            VALUE
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('rep_i')
-                          PsiElement(VlangTokenType.})('}')
+                  APPEND_STATEMENT
+                    REFERENCE_EXPRESSION
+                      PsiElement(VlangTokenType.identifier)('idxs')
+                    SHIFT_LEFT_OP
+                      PsiElement(VlangTokenType.<<)('<<')
+                    LITERAL_VALUE_EXPRESSION
+                      TYPE
+                        TYPE_MODIFIERS
+                          <empty list>
+                        TYPE_REFERENCE_EXPRESSION
+                          PsiElement(VlangTokenType.identifier)('RepIndex')
+                      PsiElement(VlangTokenType.{)('{')
+                      ELEMENT
+                        KEY
+                          FIELD_NAME
+                            REFERENCE_EXPRESSION
+                              PsiElement(VlangTokenType.identifier)('idx')
+                        PsiElement(VlangTokenType.:)(':')
+                        VALUE
+                          REFERENCE_EXPRESSION
+                            PsiElement(VlangTokenType.identifier)('idx')
+                      ELEMENT
+                        KEY
+                          FIELD_NAME
+                            REFERENCE_EXPRESSION
+                              PsiElement(VlangTokenType.identifier)('val_idx')
+                        PsiElement(VlangTokenType.:)(':')
+                        VALUE
+                          REFERENCE_EXPRESSION
+                            PsiElement(VlangTokenType.identifier)('rep_i')
+                      PsiElement(VlangTokenType.})('}')
                   PsiElement(VlangTokenType.})('}')
               MATCH_ELSE_ARM_CLAUSE
                 PsiElement(VlangTokenType.else)('else')

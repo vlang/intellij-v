@@ -235,6 +235,21 @@ object VlangParserUtil : GeneratedParserUtilBase() {
     }
 
     @JvmStatic
+    fun shiftLeft(builder: PsiBuilder, level: Int): Boolean {
+        if (isModeOn(builder, level, "noShiftLeft")) {
+            return false
+        }
+
+        val marker = builder.mark()
+        if (!consumeToken(builder, SHIFT_LEFT)) {
+            marker.rollbackTo()
+            return false
+        }
+        marker.collapse(SHIFT_LEFT)
+        return true
+    }
+
+    @JvmStatic
     fun gtGtGt(builder: PsiBuilder, level: Int): Boolean {
         val marker = builder.mark()
         if (!consumeToken(builder, GREATER)) {

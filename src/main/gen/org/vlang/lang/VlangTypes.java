@@ -16,6 +16,7 @@ public interface VlangTypes {
   IElementType AND_EXPR = new VlangCompositeElementType("AND_EXPR");
   IElementType ANONYMOUS_STRUCT_TYPE = VlangElementTypeFactory.stubFactory("ANONYMOUS_STRUCT_TYPE");
   IElementType ANONYMOUS_STRUCT_VALUE_EXPRESSION = new VlangCompositeElementType("ANONYMOUS_STRUCT_VALUE_EXPRESSION");
+  IElementType APPEND_STATEMENT = new VlangCompositeElementType("APPEND_STATEMENT");
   IElementType ARGUMENT_LIST = new VlangCompositeElementType("ARGUMENT_LIST");
   IElementType ARRAY_CREATION = new VlangCompositeElementType("ARRAY_CREATION");
   IElementType ARRAY_CREATION_LIST = new VlangCompositeElementType("ARRAY_CREATION_LIST");
@@ -169,6 +170,8 @@ public interface VlangTypes {
   IElementType SHARED_EXPRESSION = new VlangCompositeElementType("SHARED_EXPRESSION");
   IElementType SHARED_TYPE = VlangElementTypeFactory.stubFactory("SHARED_TYPE");
   IElementType SHEBANG_CLAUSE = new VlangCompositeElementType("SHEBANG_CLAUSE");
+  IElementType SHIFT_LEFT_EXPR = new VlangCompositeElementType("SHIFT_LEFT_EXPR");
+  IElementType SHIFT_LEFT_OP = new VlangCompositeElementType("SHIFT_LEFT_OP");
   IElementType SHORT_STRING_TEMPLATE_ENTRY = new VlangCompositeElementType("SHORT_STRING_TEMPLATE_ENTRY");
   IElementType SIGNATURE = VlangElementTypeFactory.stubFactory("SIGNATURE");
   IElementType SIMPLE_STATEMENT = new VlangCompositeElementType("SIMPLE_STATEMENT");
@@ -372,6 +375,9 @@ public interface VlangTypes {
       }
       else if (type == ANONYMOUS_STRUCT_VALUE_EXPRESSION) {
         return new VlangAnonymousStructValueExpressionImpl(node);
+      }
+      else if (type == APPEND_STATEMENT) {
+        return new VlangAppendStatementImpl(node);
       }
       else if (type == ARGUMENT_LIST) {
         return new VlangArgumentListImpl(node);
@@ -828,6 +834,12 @@ public interface VlangTypes {
       }
       else if (type == SHEBANG_CLAUSE) {
         return new VlangShebangClauseImpl(node);
+      }
+      else if (type == SHIFT_LEFT_EXPR) {
+        return new VlangShiftLeftExprImpl(node);
+      }
+      else if (type == SHIFT_LEFT_OP) {
+        return new VlangShiftLeftOpImpl(node);
       }
       else if (type == SHORT_STRING_TEMPLATE_ENTRY) {
         return new VlangShortStringTemplateEntryImpl(node);

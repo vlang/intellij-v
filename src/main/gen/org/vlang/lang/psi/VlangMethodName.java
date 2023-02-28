@@ -53,9 +53,6 @@ public interface VlangMethodName extends VlangCompositeElement {
   PsiElement getRemainder();
 
   @Nullable
-  PsiElement getShiftLeft();
-
-  @Nullable
   PsiElement getIdentifier();
 
 }

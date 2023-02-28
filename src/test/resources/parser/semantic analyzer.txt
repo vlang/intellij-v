@@ -2080,14 +2080,13 @@ V Language file
                             PsiElement(VlangTokenType.else)('else')
                             BLOCK
                               PsiElement(VlangTokenType.{)('{')
-                              SIMPLE_STATEMENT
-                                LEFT_HAND_EXPR_LIST
-                                  MUL_EXPR
-                                    REFERENCE_EXPRESSION
-                                      PsiElement(VlangTokenType.identifier)('member_names')
-                                    PsiElement(VlangTokenType.<<)('<<')
-                                    REFERENCE_EXPRESSION
-                                      PsiElement(VlangTokenType.identifier)('member_name')
+                              APPEND_STATEMENT
+                                REFERENCE_EXPRESSION
+                                  PsiElement(VlangTokenType.identifier)('member_names')
+                                SHIFT_LEFT_OP
+                                  PsiElement(VlangTokenType.<<)('<<')
+                                REFERENCE_EXPRESSION
+                                  PsiElement(VlangTokenType.identifier)('member_name')
                               PsiElement(VlangTokenType.})('}')
                     SIMPLE_STATEMENT
                       LEFT_HAND_EXPR_LIST
@@ -8977,31 +8976,30 @@ V Language file
                                               PsiElement(VlangTokenType.))(')')
                                         BLOCK
                                           PsiElement(VlangTokenType.{)('{')
-                                          SIMPLE_STATEMENT
-                                            LEFT_HAND_EXPR_LIST
-                                              MUL_EXPR
+                                          APPEND_STATEMENT
+                                            REFERENCE_EXPRESSION
+                                              PsiElement(VlangTokenType.identifier)('declared_fields')
+                                            SHIFT_LEFT_OP
+                                              PsiElement(VlangTokenType.<<)('<<')
+                                            CALL_EXPR
+                                              REFERENCE_EXPRESSION
                                                 REFERENCE_EXPRESSION
-                                                  PsiElement(VlangTokenType.identifier)('declared_fields')
-                                                PsiElement(VlangTokenType.<<)('<<')
-                                                CALL_EXPR
-                                                  REFERENCE_EXPRESSION
+                                                  PsiElement(VlangTokenType.identifier)('name_node')
+                                                PsiElement(VlangTokenType..)('.')
+                                                PsiElement(VlangTokenType.identifier)('text')
+                                              ARGUMENT_LIST
+                                                PsiElement(VlangTokenType.()('(')
+                                                ELEMENT
+                                                  VALUE
                                                     REFERENCE_EXPRESSION
-                                                      PsiElement(VlangTokenType.identifier)('name_node')
-                                                    PsiElement(VlangTokenType..)('.')
-                                                    PsiElement(VlangTokenType.identifier)('text')
-                                                  ARGUMENT_LIST
-                                                    PsiElement(VlangTokenType.()('(')
-                                                    ELEMENT
-                                                      VALUE
+                                                      REFERENCE_EXPRESSION
                                                         REFERENCE_EXPRESSION
-                                                          REFERENCE_EXPRESSION
-                                                            REFERENCE_EXPRESSION
-                                                              PsiElement(VlangTokenType.identifier)('an')
-                                                            PsiElement(VlangTokenType..)('.')
-                                                            PsiElement(VlangTokenType.identifier)('context')
-                                                          PsiElement(VlangTokenType..)('.')
-                                                          PsiElement(VlangTokenType.identifier)('text')
-                                                    PsiElement(VlangTokenType.))(')')
+                                                          PsiElement(VlangTokenType.identifier)('an')
+                                                        PsiElement(VlangTokenType..)('.')
+                                                        PsiElement(VlangTokenType.identifier)('context')
+                                                      PsiElement(VlangTokenType..)('.')
+                                                      PsiElement(VlangTokenType.identifier)('text')
+                                                PsiElement(VlangTokenType.))(')')
                                           PsiElement(VlangTokenType.})('}')
                                   PsiElement(VlangTokenType.})('}')
                               PsiComment(VLANG_DOC_COMMENT)
@@ -13532,14 +13530,13 @@ V Language file
                                           PsiElement(VlangTokenType.else)('else')
                                           BLOCK
                                             PsiElement(VlangTokenType.{)('{')
-                                            SIMPLE_STATEMENT
-                                              LEFT_HAND_EXPR_LIST
-                                                MUL_EXPR
-                                                  REFERENCE_EXPRESSION
-                                                    PsiElement(VlangTokenType.identifier)('existing_case_values')
-                                                  PsiElement(VlangTokenType.<<)('<<')
-                                                  REFERENCE_EXPRESSION
-                                                    PsiElement(VlangTokenType.identifier)('value_text')
+                                            APPEND_STATEMENT
+                                              REFERENCE_EXPRESSION
+                                                PsiElement(VlangTokenType.identifier)('existing_case_values')
+                                              SHIFT_LEFT_OP
+                                                PsiElement(VlangTokenType.<<)('<<')
+                                              REFERENCE_EXPRESSION
+                                                PsiElement(VlangTokenType.identifier)('value_text')
                                             PsiElement(VlangTokenType.})('}')
                                   PsiElement(VlangTokenType.})('}')
                                 ELSE_BRANCH
@@ -13752,14 +13749,13 @@ V Language file
                                                   PsiElement(VlangTokenType.else)('else')
                                                   BLOCK
                                                     PsiElement(VlangTokenType.{)('{')
-                                                    SIMPLE_STATEMENT
-                                                      LEFT_HAND_EXPR_LIST
-                                                        MUL_EXPR
-                                                          REFERENCE_EXPRESSION
-                                                            PsiElement(VlangTokenType.identifier)('existing_case_values')
-                                                          PsiElement(VlangTokenType.<<)('<<')
-                                                          REFERENCE_EXPRESSION
-                                                            PsiElement(VlangTokenType.identifier)('value_text')
+                                                    APPEND_STATEMENT
+                                                      REFERENCE_EXPRESSION
+                                                        PsiElement(VlangTokenType.identifier)('existing_case_values')
+                                                      SHIFT_LEFT_OP
+                                                        PsiElement(VlangTokenType.<<)('<<')
+                                                      REFERENCE_EXPRESSION
+                                                        PsiElement(VlangTokenType.identifier)('value_text')
                                                     PsiElement(VlangTokenType.})('}')
                                       PsiElement(VlangTokenType.})('}')
                                     ELSE_BRANCH
@@ -13845,14 +13841,13 @@ V Language file
                                                 PsiElement(VlangTokenType.else)('else')
                                                 BLOCK
                                                   PsiElement(VlangTokenType.{)('{')
-                                                  SIMPLE_STATEMENT
-                                                    LEFT_HAND_EXPR_LIST
-                                                      MUL_EXPR
-                                                        REFERENCE_EXPRESSION
-                                                          PsiElement(VlangTokenType.identifier)('existing_case_values')
-                                                        PsiElement(VlangTokenType.<<)('<<')
-                                                        REFERENCE_EXPRESSION
-                                                          PsiElement(VlangTokenType.identifier)('value_text')
+                                                  APPEND_STATEMENT
+                                                    REFERENCE_EXPRESSION
+                                                      PsiElement(VlangTokenType.identifier)('existing_case_values')
+                                                    SHIFT_LEFT_OP
+                                                      PsiElement(VlangTokenType.<<)('<<')
+                                                    REFERENCE_EXPRESSION
+                                                      PsiElement(VlangTokenType.identifier)('value_text')
                                                   PsiElement(VlangTokenType.})('}')
                                         PsiElement(VlangTokenType.})('}')
                           PsiElement(VlangTokenType.})('}')

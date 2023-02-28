@@ -20,45 +20,58 @@ class VlangReassignImmutableSymbolInspection : VlangBaseInspection() {
                 val leftExprs = o.leftHandExprList.expressionList
                 for (leftExpr in leftExprs) {
                     if (leftExpr !is VlangReferenceExpression) continue
+                    checkReferenceExpression(leftExpr) { kind, name ->
+                        if (kind == "constant") "Constant '$name' cannot be reassigned"
+                        else "Immutable $kind '$name' cannot be reassigned"
+                    }
+                }
+            }
 
-                    visitQualifier(leftExpr) { qualifier, symbol ->
-                        if (symbol is VlangVarDefinition && !symbol.isMutable()) {
-                            holder.registerProblem(
-                                qualifier,
-                                "Immutable variable '${symbol.name}' cannot be reassigned",
-                                MAKE_MUTABLE_QUICK_FIX
-                            )
-                        }
+            override fun visitAppendStatement(stmt: VlangAppendStatement) {
+                if (VlangUnsafeUtil.insideUnsafe(stmt)) return
+                val leftExpr = stmt.left ?: return
+                if (leftExpr !is VlangReferenceExpression) return
+                checkReferenceExpression(leftExpr) { kind, name -> "Cannot append to immutable $kind '$name'" }
+            }
 
-                        if (symbol is VlangReceiver && !symbol.isMutable()) {
-                            holder.registerProblem(
-                                qualifier,
-                                "Immutable receiver '${symbol.name}' cannot be reassigned",
-                                MAKE_MUTABLE_QUICK_FIX
-                            )
-                        }
+            private fun checkReferenceExpression(leftExpr: VlangExpression?, message: (kind: String, name: String?) -> String) {
+                visitQualifier(leftExpr) { qualifier, symbol ->
+                    if (symbol is VlangVarDefinition && !symbol.isMutable()) {
+                        holder.registerProblem(
+                            qualifier,
+                            message("variable", symbol.name),
+                            MAKE_MUTABLE_QUICK_FIX,
+                        )
+                    }
 
-                        if (symbol is VlangParamDefinition && !symbol.isMutable()) {
-                            holder.registerProblem(
-                                qualifier,
-                                "Immutable parameter '${symbol.name}' cannot be reassigned",
-                                MAKE_MUTABLE_QUICK_FIX
-                            )
-                        }
+                    if (symbol is VlangReceiver && !symbol.isMutable()) {
+                        holder.registerProblem(
+                            qualifier,
+                            message("receiver", symbol.name),
+                            MAKE_MUTABLE_QUICK_FIX,
+                        )
+                    }
 
-                        if (symbol is VlangFieldDefinition && !symbol.isMutable()) {
-                            holder.registerProblem(
-                                qualifier,
-                                "Immutable field '${symbol.name}' cannot be reassigned",
-                            )
-                        }
+                    if (symbol is VlangParamDefinition && !symbol.isMutable()) {
+                        holder.registerProblem(
+                            qualifier,
+                            message("parameter", symbol.name),
+                            MAKE_MUTABLE_QUICK_FIX,
+                        )
+                    }
 
-                        if (symbol is VlangConstDefinition) {
-                            holder.registerProblem(
-                                qualifier,
-                                "Constant '${symbol.name}' cannot be reassigned",
-                            )
-                        }
+                    if (symbol is VlangFieldDefinition && !symbol.isMutable()) {
+                        holder.registerProblem(
+                            qualifier,
+                            message("field", symbol.name),
+                        )
+                    }
+
+                    if (symbol is VlangConstDefinition) {
+                        holder.registerProblem(
+                            qualifier,
+                            message("constant", symbol.name),
+                        )
                     }
                 }
             }

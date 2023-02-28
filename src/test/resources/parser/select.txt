@@ -4457,17 +4457,16 @@ V Language file
                             PsiElement(VlangTokenType.identifier)('enable')
                         BLOCK
                           PsiElement(VlangTokenType.{)('{')
-                          SIMPLE_STATEMENT
-                            LEFT_HAND_EXPR_LIST
-                              MUL_EXPR
-                                REFERENCE_EXPRESSION
-                                  REFERENCE_EXPRESSION
-                                    PsiElement(VlangTokenType.identifier)('ls')
-                                  PsiElement(VlangTokenType..)('.')
-                                  PsiElement(VlangTokenType.identifier)('enabled_features')
-                                PsiElement(VlangTokenType.<<)('<<')
-                                REFERENCE_EXPRESSION
-                                  PsiElement(VlangTokenType.identifier)('feature_val')
+                          APPEND_STATEMENT
+                            REFERENCE_EXPRESSION
+                              REFERENCE_EXPRESSION
+                                PsiElement(VlangTokenType.identifier)('ls')
+                              PsiElement(VlangTokenType..)('.')
+                              PsiElement(VlangTokenType.identifier)('enabled_features')
+                            SHIFT_LEFT_OP
+                              PsiElement(VlangTokenType.<<)('<<')
+                            REFERENCE_EXPRESSION
+                              PsiElement(VlangTokenType.identifier)('feature_val')
                           PsiElement(VlangTokenType.})('}')
                         ELSE_BRANCH
                           PsiElement(VlangTokenType.else)('else')

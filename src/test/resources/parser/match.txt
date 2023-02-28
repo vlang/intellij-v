@@ -1253,22 +1253,21 @@ V Language file
                         PsiElement(VlangTokenType.identifier)('a')
                     BLOCK
                       PsiElement(VlangTokenType.{)('{')
-                      SIMPLE_STATEMENT
-                        LEFT_HAND_EXPR_LIST
-                          MUL_EXPR
-                            REFERENCE_EXPRESSION
-                              PsiElement(VlangTokenType.identifier)('jarr')
-                            PsiElement(VlangTokenType.<<)('<<')
-                            CALL_EXPR
-                              REFERENCE_EXPRESSION
-                                PsiElement(VlangTokenType.identifier)('json_any')
-                              ARGUMENT_LIST
-                                PsiElement(VlangTokenType.()('(')
-                                ELEMENT
-                                  VALUE
-                                    REFERENCE_EXPRESSION
-                                      PsiElement(VlangTokenType.identifier)('val')
-                                PsiElement(VlangTokenType.))(')')
+                      APPEND_STATEMENT
+                        REFERENCE_EXPRESSION
+                          PsiElement(VlangTokenType.identifier)('jarr')
+                        SHIFT_LEFT_OP
+                          PsiElement(VlangTokenType.<<)('<<')
+                        CALL_EXPR
+                          REFERENCE_EXPRESSION
+                            PsiElement(VlangTokenType.identifier)('json_any')
+                          ARGUMENT_LIST
+                            PsiElement(VlangTokenType.()('(')
+                            ELEMENT
+                              VALUE
+                                REFERENCE_EXPRESSION
+                                  PsiElement(VlangTokenType.identifier)('val')
+                            PsiElement(VlangTokenType.))(')')
                       PsiElement(VlangTokenType.})('}')
                   RETURN_STATEMENT
                     PsiElement(VlangTokenType.return)('return')

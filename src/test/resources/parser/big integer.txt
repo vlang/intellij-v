@@ -1140,14 +1140,13 @@ V Language file
                     LITERAL
                       PsiElement(VlangTokenType.hex)('0x3')
             PsiElement(VlangTokenType.})('}')
-      SIMPLE_STATEMENT
-        LEFT_HAND_EXPR_LIST
-          MUL_EXPR
-            REFERENCE_EXPRESSION
-              PsiElement(VlangTokenType.identifier)('padded_input')
-            PsiElement(VlangTokenType.<<)('<<')
-            REFERENCE_EXPRESSION
-              PsiElement(VlangTokenType.identifier)('input')
+      APPEND_STATEMENT
+        REFERENCE_EXPRESSION
+          PsiElement(VlangTokenType.identifier)('padded_input')
+        SHIFT_LEFT_OP
+          PsiElement(VlangTokenType.<<)('<<')
+        REFERENCE_EXPRESSION
+          PsiElement(VlangTokenType.identifier)('input')
       SIMPLE_STATEMENT
         VAR_DECLARATION
           VAR_DEFINITION
@@ -1333,30 +1332,33 @@ V Language file
                   ADD_EXPR
                     PARENTHESES_EXPR
                       PsiElement(VlangTokenType.()('(')
-                      MUL_EXPR
+                      SHIFT_LEFT_EXPR
                         REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('x3')
-                        PsiElement(VlangTokenType.<<)('<<')
+                        SHIFT_LEFT_OP
+                          PsiElement(VlangTokenType.<<)('<<')
                         LITERAL
                           PsiElement(VlangTokenType.int)('24')
                       PsiElement(VlangTokenType.))(')')
                     PsiElement(VlangTokenType.|)('|')
                     PARENTHESES_EXPR
                       PsiElement(VlangTokenType.()('(')
-                      MUL_EXPR
+                      SHIFT_LEFT_EXPR
                         REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('x2')
-                        PsiElement(VlangTokenType.<<)('<<')
+                        SHIFT_LEFT_OP
+                          PsiElement(VlangTokenType.<<)('<<')
                         LITERAL
                           PsiElement(VlangTokenType.int)('16')
                       PsiElement(VlangTokenType.))(')')
                   PsiElement(VlangTokenType.|)('|')
                   PARENTHESES_EXPR
                     PsiElement(VlangTokenType.()('(')
-                    MUL_EXPR
+                    SHIFT_LEFT_EXPR
                       REFERENCE_EXPRESSION
                         PsiElement(VlangTokenType.identifier)('x1')
-                      PsiElement(VlangTokenType.<<)('<<')
+                      SHIFT_LEFT_OP
+                        PsiElement(VlangTokenType.<<)('<<')
                       LITERAL
                         PsiElement(VlangTokenType.int)('8')
                     PsiElement(VlangTokenType.))(')')
@@ -2243,10 +2245,11 @@ V Language file
                 PsiElement(VlangTokenType.identifier)('current')
             ASSIGN_OP
               PsiElement(VlangTokenType.|=)('|=')
-            MUL_EXPR
+            SHIFT_LEFT_EXPR
               REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('value')
-              PsiElement(VlangTokenType.<<)('<<')
+              SHIFT_LEFT_OP
+                PsiElement(VlangTokenType.<<)('<<')
               REFERENCE_EXPRESSION
                 PsiElement(VlangTokenType.identifier)('offset')
           ASSIGNMENT_STATEMENT
@@ -2269,14 +2272,13 @@ V Language file
                     PsiElement(VlangTokenType.int)('32')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
-                  SIMPLE_STATEMENT
-                    LEFT_HAND_EXPR_LIST
-                      MUL_EXPR
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('big_digits')
-                        PsiElement(VlangTokenType.<<)('<<')
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('current')
+                  APPEND_STATEMENT
+                    REFERENCE_EXPRESSION
+                      PsiElement(VlangTokenType.identifier)('big_digits')
+                    SHIFT_LEFT_OP
+                      PsiElement(VlangTokenType.<<)('<<')
+                    REFERENCE_EXPRESSION
+                      PsiElement(VlangTokenType.identifier)('current')
                   ASSIGNMENT_STATEMENT
                     LEFT_HAND_EXPR_LIST
                       REFERENCE_EXPRESSION
@@ -2318,14 +2320,13 @@ V Language file
                 PsiElement(VlangTokenType.int)('0')
             BLOCK
               PsiElement(VlangTokenType.{)('{')
-              SIMPLE_STATEMENT
-                LEFT_HAND_EXPR_LIST
-                  MUL_EXPR
-                    REFERENCE_EXPRESSION
-                      PsiElement(VlangTokenType.identifier)('big_digits')
-                    PsiElement(VlangTokenType.<<)('<<')
-                    REFERENCE_EXPRESSION
-                      PsiElement(VlangTokenType.identifier)('current')
+              APPEND_STATEMENT
+                REFERENCE_EXPRESSION
+                  PsiElement(VlangTokenType.identifier)('big_digits')
+                SHIFT_LEFT_OP
+                  PsiElement(VlangTokenType.<<)('<<')
+                REFERENCE_EXPRESSION
+                  PsiElement(VlangTokenType.identifier)('current')
               PsiElement(VlangTokenType.})('}')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
@@ -6104,10 +6105,11 @@ V Language file
                     PsiElement(VlangTokenType.])(']')
                 ASSIGN_OP
                   PsiElement(VlangTokenType.|=)('|=')
-                MUL_EXPR
+                SHIFT_LEFT_EXPR
                   LITERAL
                     PsiElement(VlangTokenType.int)('1')
-                  PsiElement(VlangTokenType.<<)('<<')
+                  SHIFT_LEFT_OP
+                    PsiElement(VlangTokenType.<<)('<<')
                   REFERENCE_EXPRESSION
                     PsiElement(VlangTokenType.identifier)('offset')
               PsiElement(VlangTokenType.})('}')
@@ -6130,10 +6132,11 @@ V Language file
                     PsiElement(VlangTokenType.~)('~')
                     PARENTHESES_EXPR
                       PsiElement(VlangTokenType.()('(')
-                      MUL_EXPR
+                      SHIFT_LEFT_EXPR
                         LITERAL
                           PsiElement(VlangTokenType.int)('1')
-                        PsiElement(VlangTokenType.<<)('<<')
+                        SHIFT_LEFT_OP
+                          PsiElement(VlangTokenType.<<)('<<')
                         REFERENCE_EXPRESSION
                           PsiElement(VlangTokenType.identifier)('offset')
                       PsiElement(VlangTokenType.))(')')
@@ -8441,29 +8444,28 @@ V Language file
                     REFERENCE_EXPRESSION
                       PsiElement(VlangTokenType.identifier)('divisor')
                 PsiElement(VlangTokenType.))(')')
-          SIMPLE_STATEMENT
-            LEFT_HAND_EXPR_LIST
-              MUL_EXPR
+          APPEND_STATEMENT
+            REFERENCE_EXPRESSION
+              PsiElement(VlangTokenType.identifier)('rune_array')
+            SHIFT_LEFT_OP
+              PsiElement(VlangTokenType.<<)('<<')
+            INDEX_OR_SLICE_EXPR
+              REFERENCE_EXPRESSION
                 REFERENCE_EXPRESSION
-                  PsiElement(VlangTokenType.identifier)('rune_array')
-                PsiElement(VlangTokenType.<<)('<<')
-                INDEX_OR_SLICE_EXPR
+                  PsiElement(VlangTokenType.identifier)('big')
+                PsiElement(VlangTokenType..)('.')
+                PsiElement(VlangTokenType.identifier)('digit_array')
+              PsiElement(VlangTokenType.[)('[')
+              CALL_EXPR
+                REFERENCE_EXPRESSION
                   REFERENCE_EXPRESSION
-                    REFERENCE_EXPRESSION
-                      PsiElement(VlangTokenType.identifier)('big')
-                    PsiElement(VlangTokenType..)('.')
-                    PsiElement(VlangTokenType.identifier)('digit_array')
-                  PsiElement(VlangTokenType.[)('[')
-                  CALL_EXPR
-                    REFERENCE_EXPRESSION
-                      REFERENCE_EXPRESSION
-                        PsiElement(VlangTokenType.identifier)('digit')
-                      PsiElement(VlangTokenType..)('.')
-                      PsiElement(VlangTokenType.identifier)('int')
-                    ARGUMENT_LIST
-                      PsiElement(VlangTokenType.()('(')
-                      PsiElement(VlangTokenType.))(')')
-                  PsiElement(VlangTokenType.])(']')
+                    PsiElement(VlangTokenType.identifier)('digit')
+                  PsiElement(VlangTokenType..)('.')
+                  PsiElement(VlangTokenType.identifier)('int')
+                ARGUMENT_LIST
+                  PsiElement(VlangTokenType.()('(')
+                  PsiElement(VlangTokenType.))(')')
+              PsiElement(VlangTokenType.])(']')
           SIMPLE_STATEMENT
             LEFT_HAND_EXPR_LIST
               UNSAFE_EXPRESSION
@@ -8526,14 +8528,13 @@ V Language file
                   PsiElement(VlangTokenType.int)('1')
             BLOCK
               PsiElement(VlangTokenType.{)('{')
-              SIMPLE_STATEMENT
-                LEFT_HAND_EXPR_LIST
-                  MUL_EXPR
-                    REFERENCE_EXPRESSION
-                      PsiElement(VlangTokenType.identifier)('rune_array')
-                    PsiElement(VlangTokenType.<<)('<<')
-                    LITERAL
-                      PsiElement(VlangTokenType.char)('`-`')
+              APPEND_STATEMENT
+                REFERENCE_EXPRESSION
+                  PsiElement(VlangTokenType.identifier)('rune_array')
+                SHIFT_LEFT_OP
+                  PsiElement(VlangTokenType.<<)('<<')
+                LITERAL
+                  PsiElement(VlangTokenType.char)('`-`')
               PsiElement(VlangTokenType.})('}')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
@@ -9340,14 +9341,13 @@ V Language file
                   PsiElement(VlangTokenType.identifier)('non_zero_found')
                 BLOCK
                   PsiElement(VlangTokenType.{)('{')
-                  SIMPLE_STATEMENT
-                    LEFT_HAND_EXPR_LIST
-                      MUL_EXPR
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('result')
-                        PsiElement(VlangTokenType.<<)('<<')
-                        REFERENCE_EXPRESSION
-                          PsiElement(VlangTokenType.identifier)('value')
+                  APPEND_STATEMENT
+                    REFERENCE_EXPRESSION
+                      PsiElement(VlangTokenType.identifier)('result')
+                    SHIFT_LEFT_OP
+                      PsiElement(VlangTokenType.<<)('<<')
+                    REFERENCE_EXPRESSION
+                      PsiElement(VlangTokenType.identifier)('value')
                   PsiElement(VlangTokenType.})('}')
           ASSIGNMENT_STATEMENT
             LEFT_HAND_EXPR_LIST
