@@ -53,6 +53,7 @@ class VlangUnusedParameterInspection : VlangBaseInspection() {
 
             override fun visitReceiver(receiver: VlangReceiver) {
                 super.visitReceiver(receiver)
+                if (receiver.isBlank()) return
 
                 val search = ReferencesSearch.search(receiver, receiver.useScope)
                 if (search.findFirst() != null) return
