@@ -7,7 +7,6 @@ import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElementVisitor
 import com.intellij.psi.util.parentOfType
-import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.ide.inspections.VlangBaseInspection
 import org.vlang.lang.psi.*
 
@@ -18,27 +17,36 @@ class VlangVariableNotCapturedInspection : VlangBaseInspection() {
                 super.visitReferenceExpression(o)
 
                 val resolved = o.reference.resolve() ?: return
-                if (resolved !is VlangVarDefinition && resolved !is VlangParamDefinition) return
+                if (resolved !is VlangVarDefinition && resolved !is VlangParamDefinition && resolved !is VlangReceiver) return
                 resolved as VlangNamedElement
                 if (resolved.name == null) return
 
-                val definedInLambda = resolved.parentOfType<VlangFunctionLit>() != null
-                if (definedInLambda) return
+                val outerLambda = o.parentOfType<VlangFunctionLit>()
+                val definedInLambda = resolved.parentOfType<VlangFunctionLit>()
+                if (definedInLambda == outerLambda) return
 
                 val functionLit = o.parentOfType<VlangFunctionLit>() ?: return
                 val captureList = functionLit.captureList?.captureList ?: emptyList()
                 if (captureList.any { it.referenceExpression.text == resolved.name }) return
 
+                val kind = when (resolved) {
+                    is VlangVarDefinition   -> "variable"
+                    is VlangParamDefinition -> "parameter"
+                    is VlangReceiver        -> "receiver"
+                    else                    -> "variable"
+                }
+                val kindTitle = kind.replaceFirstChar { it.titlecase() }
+
                 holder.registerProblem(
-                    o, "Variable '${resolved.name}' is not captured",
-                    ProblemHighlightType.GENERIC_ERROR, CaptureVariableQuickFix()
+                    o, "$kindTitle '${resolved.name}' is not captured",
+                    ProblemHighlightType.GENERIC_ERROR, CaptureVariableQuickFix(kind)
                 )
             }
         }
     }
 
-    class CaptureVariableQuickFix : LocalQuickFix {
-        override fun getFamilyName() = "Add variable to capture list"
+    class CaptureVariableQuickFix(private val kind: String) : LocalQuickFix {
+        override fun getFamilyName() = "Add $kind to capture list"
 
         override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
             val element = descriptor.psiElement ?: return

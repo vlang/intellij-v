@@ -20,5 +20,7 @@ class VlangInspectionsTest : InspectionTestBase() {
     fun `test empty control flow statement`() = doTest("probableBugs/ctrlflow_with_empty_body.v", VlangControlFlowWithEmptyBodiesInspection())
     fun `test variable redeclaration`()       = doTest("general/variable_redeclaration.v", VlangVariableRedeclarationInspection())
     fun `test not captured variable`()        = doTest("probableBugs/not_captured_variable.v", VlangVariableNotCapturedInspection())
+    fun `test not captured variable deep nested`() = doTest("probableBugs/not_captured_variable_deep.v", VlangVariableNotCapturedInspection())
+    fun `test not captured receiver`()        = doTest("probableBugs/not_captured_receiver.v", VlangVariableNotCapturedInspection())
     fun `test append to immutable`()          = doTest("validity/append_to_immutable.v", VlangReassignImmutableSymbolInspection())
 }

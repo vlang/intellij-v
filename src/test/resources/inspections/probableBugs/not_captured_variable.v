@@ -11,7 +11,7 @@ fn main(param int) {
 	mut f := fn () {
 		println(<error descr="Variable 'age' is not captured">age</error>)
 		println(<error descr="Variable 'name' is not captured">name</error>)
-		println(<error descr="Variable 'param' is not captured">param</error>)
+		println(<error descr="Parameter 'param' is not captured">param</error>)
 	}
 
 	f = fn [age] () {
