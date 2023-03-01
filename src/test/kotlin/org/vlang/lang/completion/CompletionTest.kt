@@ -273,4 +273,19 @@ class CompletionTest : CompletionTestBase() {
         """.trimIndent(), 0,
         ""
     )
+
+    fun `test no _ in completion`() = checkExcludes(
+        """
+        module main
+        
+        const _ = 1
+
+        _ := 20
+        _ = 10
+        
+        /*caret*/
+        
+        """.trimIndent(), 0,
+        "_"
+    )
 }

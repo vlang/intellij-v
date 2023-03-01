@@ -208,6 +208,10 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
                     return false
                 }
 
+                if (e.isBlank()) {
+                    return false
+                }
+
                 // forbid raw map completion
                 if (e is VlangStructDeclaration && e.name == "map") {
                     return false
@@ -233,6 +237,10 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
             }
 
             if (e is VlangNamedElement) {
+                if (e.isBlank()) {
+                    return false
+                }
+
                 if (e.name?.startsWith("C.") == true) {
                     return file.isCFile()
                 }
