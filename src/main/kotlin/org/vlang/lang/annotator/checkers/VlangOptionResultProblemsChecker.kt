@@ -41,6 +41,16 @@ class VlangOptionResultProblemsChecker(holder: AnnotationHolder) : VlangCheckerB
         val rightExpr = guard.expression ?: return
         val rightType = rightExpr.getType(null)
 
+        // a[10] or {} - is valid
+        if (rightExpr is VlangIndexOrSliceExpr) {
+            return
+        }
+
+        // <-ch or {} - is valid
+        if (rightExpr is VlangUnaryExpr && rightExpr.sendChannel != null) {
+            return
+        }
+
         if (rightType !is VlangResultTypeEx && rightType !is VlangOptionTypeEx) {
             holder.newAnnotation(
                 HighlightSeverity.ERROR,
