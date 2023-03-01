@@ -36,6 +36,21 @@ class VlangOptionResultProblemsChecker(holder: AnnotationHolder) : VlangCheckerB
         }
     }
 
+    override fun visitIfExpression(expr: VlangIfExpression) {
+        val guard = expr.guardVarDeclaration ?: return
+        val rightExpr = guard.expression ?: return
+        val rightType = rightExpr.getType(null)
+
+        if (rightType !is VlangResultTypeEx && rightType !is VlangOptionTypeEx) {
+            holder.newAnnotation(
+                HighlightSeverity.ERROR,
+                "Cannot unwrap non-Option and non-Result type in 'if' expression"
+            )
+                .range(rightExpr)
+                .create()
+        }
+    }
+
     override fun visitCallExprWithPropagate(expr: VlangCallExprWithPropagate) {
         val called = expr.resolve() ?: return
         if (called !is VlangSignatureOwner) {
@@ -87,15 +102,18 @@ class VlangOptionResultProblemsChecker(holder: AnnotationHolder) : VlangCheckerB
     private fun checkErrVariableUsage(element: PsiElement, holder: AnnotationHolder) {
         val owner = VlangLangUtil.getErrVariableOwner(element) ?: return
         val typeElement = when (owner) {
-            is VlangOrBlockExpr  -> owner.expression
+            is VlangOrBlockExpr -> owner.expression
             is VlangIfExpression -> owner.guardVarDeclaration?.expression
-            else                 -> null
+            else -> null
         } ?: return
 
         val type = typeElement.getType(null)
         if (type !is VlangResultTypeEx) {
             val action = if (typeElement is VlangCallExpr) "returns" else "has"
-            holder.newAnnotation(HighlightSeverity.WEAK_WARNING, "'err' is always 'none', since '${typeElement.text}' $action non-Result type")
+            holder.newAnnotation(
+                HighlightSeverity.WEAK_WARNING,
+                "'err' is always 'none', since '${typeElement.text}' $action non-Result type"
+            )
                 .create()
         }
     }

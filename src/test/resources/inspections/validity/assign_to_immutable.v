@@ -45,6 +45,8 @@ fn (b Boo) foo2() {
 const boo = Boo{}
 <warning descr="Immutable field 'name' cannot be reassigned"><warning descr="Constant 'boo' cannot be reassigned">boo</warning>.name</warning> = ''
 
+fn opt() ?int {}
+
 fn main() {
 	<warning descr="Constant 'constant' cannot be reassigned">constant</warning> = 200
 
@@ -58,11 +60,11 @@ fn main() {
 		i++ // ok
 	}
 
-	if immutable_assign := 100 {
+	if immutable_assign := opt() {
 		<warning descr="Immutable variable 'immutable_assign' cannot be reassigned">immutable_assign</warning> = 200
 	}
 
-	if mut mutable_assign := 100 {
+	if mut mutable_assign := opt() {
 		mutable_assign = 200 // ok
 	}
 

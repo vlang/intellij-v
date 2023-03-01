@@ -45,6 +45,8 @@ fn (mut b Boo) foo2() {
 const boo = Boo{}
 boo.name = ''
 
+fn opt() ?int {}
+
 fn main() {
 	constant = 200
 
@@ -58,11 +60,11 @@ fn main() {
 		i++ // ok
 	}
 
-	if mut immutable_assign := 100 {
+	if mut immutable_assign := opt() {
 		immutable_assign = 200
 	}
 
-	if mut mutable_assign := 100 {
+	if mut mutable_assign := opt() {
 		mutable_assign = 200 // ok
 	}
 
