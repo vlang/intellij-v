@@ -95,7 +95,7 @@ class VlangOptionResultProblemsChecker(holder: AnnotationHolder) : VlangCheckerB
         val type = typeElement.getType(null)
         if (type !is VlangResultTypeEx) {
             val action = if (typeElement is VlangCallExpr) "returns" else "has"
-            holder.newAnnotation(HighlightSeverity.WEAK_WARNING, "'err' is always 'none', since '${typeElement.text}' $action Option type")
+            holder.newAnnotation(HighlightSeverity.WEAK_WARNING, "'err' is always 'none', since '${typeElement.text}' $action non-Result type")
                 .create()
         }
     }
