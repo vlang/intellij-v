@@ -23,4 +23,5 @@ class VlangInspectionsTest : InspectionTestBase() {
     fun `test not captured variable deep nested`() = doTest("probableBugs/not_captured_variable_deep.v", VlangVariableNotCapturedInspection())
     fun `test not captured receiver`()        = doTest("probableBugs/not_captured_receiver.v", VlangVariableNotCapturedInspection())
     fun `test append to immutable`()          = doTest("validity/append_to_immutable.v", VlangReassignImmutableSymbolInspection())
+    fun `test mutation immutably captured variable`() = doTest("validity/mutation_immutably_captured_variable.v", VlangReassignImmutableSymbolInspection())
 }

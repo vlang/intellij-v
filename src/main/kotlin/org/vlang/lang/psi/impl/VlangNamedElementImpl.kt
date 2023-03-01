@@ -145,6 +145,12 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
         return captureList.find { it.referenceExpression.text == name } != null
     }
 
+    override fun getCapturePlace(context: PsiElement): VlangCapture? {
+        val functionLit = context.parentOfType<VlangFunctionLit>()
+        val captureList = functionLit?.captureList?.captureList ?: emptyList()
+        return captureList.find { it.referenceExpression.text == name }
+    }
+
     override fun setName(name: String): PsiElement? {
         val identifier = getIdentifier()
         val newIdentifier = VlangElementFactory.createIdentifier(project, name)

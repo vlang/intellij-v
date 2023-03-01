@@ -38,4 +38,14 @@ public class VlangCaptureImpl extends VlangCompositeElementImpl implements Vlang
     return VlangPsiTreeUtil.getChildOfType(this, VlangVarModifiers.class);
   }
 
+  @Override
+  public boolean isMutable() {
+    return VlangPsiImplUtil.isMutable(this);
+  }
+
+  @Override
+  public void makeMutable() {
+    VlangPsiImplUtil.makeMutable(this);
+  }
+
 }

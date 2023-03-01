@@ -13,4 +13,5 @@ interface VlangNamedElement : VlangTypeOwner, VlangVisibilityOwner, VlangDocumen
     fun isDeprecated(): Boolean
     fun getModuleName(): String?
     fun isCaptured(context: PsiElement): Boolean
+    fun getCapturePlace(context: PsiElement): VlangCapture?
 }

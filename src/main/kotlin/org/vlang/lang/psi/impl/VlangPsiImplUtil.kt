@@ -460,6 +460,21 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun isMutable(o: VlangCapture): Boolean {
+        return o.varModifiers?.isMutable ?: false
+    }
+
+    @JvmStatic
+    fun makeMutable(o: VlangCapture) {
+        makeMutable(o.project, o.varModifiers)
+    }
+
+    @JvmStatic
+    fun isMutable(o: VlangVarModifiers): Boolean {
+        return o.varModifierList.any { it.text == "mut" }
+    }
+
+    @JvmStatic
     fun getOwnFieldList(o: VlangAnonymousStructType): List<VlangFieldDefinition> {
         return o.fieldsGroupList.flatMap { it.fieldDeclarationList }.mapNotNull { it.fieldDefinition }
     }

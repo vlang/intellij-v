@@ -10,4 +10,6 @@ public interface VlangVarModifiers extends VlangCompositeElement {
   @NotNull
   List<VlangVarModifier> getVarModifierList();
 
+  boolean isMutable();
+
 }

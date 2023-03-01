@@ -32,4 +32,9 @@ public class VlangVarModifiersImpl extends VlangCompositeElementImpl implements 
     return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangVarModifier.class);
   }
 
+  @Override
+  public boolean isMutable() {
+    return VlangPsiImplUtil.isMutable(this);
+  }
+
 }

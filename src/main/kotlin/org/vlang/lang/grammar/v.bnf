@@ -538,7 +538,9 @@ GlobalVariableDefinition ::= identifier (VarModifiers Type | GlobalVariableValue
 
 private GlobalVariableValue ::= '=' (<<withOff Expression "BLOCK?">> | (!() Expression)) { pin=1 }
 
-VarModifiers ::= VarModifier*
+VarModifiers ::= VarModifier* {
+  methods=[isMutable]
+}
 VarModifier ::= mut | shared | volatile | static
 
 SymbolVisibility ::= pub | '__global'
@@ -680,7 +682,10 @@ CaptureList ::= '[' (Capture | ',' Capture)* ']' {
   methods=[addCapture]
 }
 // [mut] <ident>
-Capture ::= VarModifiers? ReferenceExpression {pin=2}
+Capture ::= VarModifiers? ReferenceExpression {
+  pin=2
+  methods=[isMutable makeMutable]
+}
 
 ////// TYPES //////
 

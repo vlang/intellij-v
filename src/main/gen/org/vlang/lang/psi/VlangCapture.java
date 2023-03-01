@@ -13,4 +13,8 @@ public interface VlangCapture extends VlangCompositeElement {
   @Nullable
   VlangVarModifiers getVarModifiers();
 
+  boolean isMutable();
+
+  void makeMutable();
+
 }
