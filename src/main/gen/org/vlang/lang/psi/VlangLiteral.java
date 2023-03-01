@@ -39,4 +39,6 @@ public interface VlangLiteral extends VlangExpression {
 
   boolean isNumeric();
 
+  boolean isBoolean();
+
 }

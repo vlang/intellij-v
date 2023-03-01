@@ -1996,6 +1996,11 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun isBoolean(o: VlangLiteral): Boolean {
+        return o.`true` != null || o.`false` != null
+    }
+
+    @JvmStatic
     fun getSymbolVisibility(o: VlangVarDefinition): VlangSymbolVisibility? {
         return null
     }

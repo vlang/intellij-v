@@ -1086,7 +1086,7 @@ Literal ::=
   | char
   | none
   | nil {
-  methods=[isNumeric]
+  methods=[isNumeric isBoolean]
 }
 
 // just different strings

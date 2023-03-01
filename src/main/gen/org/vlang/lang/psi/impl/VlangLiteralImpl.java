@@ -92,4 +92,9 @@ public class VlangLiteralImpl extends VlangExpressionImpl implements VlangLitera
     return VlangPsiImplUtil.isNumeric(this);
   }
 
+  @Override
+  public boolean isBoolean() {
+    return VlangPsiImplUtil.isBoolean(this);
+  }
+
 }

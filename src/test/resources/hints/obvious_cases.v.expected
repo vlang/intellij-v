@@ -1,0 +1,13 @@
+module hints
+
+struct Foo {
+	name string
+}
+
+fn main() {
+	foo := Foo{}
+	name := "hello"
+	is_adult := true
+	age<# [:  int] #> := 18
+	arr := []int{}
+}

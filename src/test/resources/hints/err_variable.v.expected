@@ -13,7 +13,7 @@ struct Foo {
 }
 
 fn main() {
-	strukt<# [:  Foo] #> := Foo{}
+	strukt := Foo{}
 
 	opt() or {
 
@@ -30,7 +30,7 @@ fn main() {
 
 	res() or {<# [err  →] #>
 		opt() or {
-		
+
 		}
 	}
 
@@ -44,7 +44,7 @@ fn main() {
 
 	}
 
-	ch<# [:  chan int] #> := chan int{}
+	ch := chan int{}
 
 	v<# [:  int] #> := <-ch or {
 

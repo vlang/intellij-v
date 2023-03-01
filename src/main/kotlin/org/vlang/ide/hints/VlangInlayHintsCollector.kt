@@ -127,6 +127,15 @@ class VlangInlayHintsCollector(
             return
         }
 
+        val decl = element.parent as? VlangVarDeclaration
+        if (decl != null) {
+            if (decl.expressionList.size == 1) {
+                if (isObviousCase(decl.expressionList[0])) {
+                    return
+                }
+            }
+        }
+
         val type = element.getTypeInner(null) ?: return
         if (type is VlangUnknownTypeEx) {
             // no need show hint if type is unknown
@@ -144,6 +153,10 @@ class VlangInlayHintsCollector(
             presentation = finalPresentation,
             placeAtTheEndOfLine = false
         )
+    }
+
+    private fun isObviousCase(element: PsiElement): Boolean {
+        return element is VlangLiteralValueExpression || (element is VlangLiteral && element.isBoolean) || element is VlangStringLiteral
     }
 
     private fun handleSlice(element: VlangIndexOrSliceExpr) {
