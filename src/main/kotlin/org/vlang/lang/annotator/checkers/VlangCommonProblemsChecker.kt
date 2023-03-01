@@ -126,7 +126,7 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
     override fun visitWrongPointerType(type: VlangWrongPointerType) {
         holder.newAnnotation(
             HighlightSeverity.ERROR,
-            "Use '&T' instead of '*T' to create a pointer type"
+            "Use '&T' instead of '*T' to define a pointer type"
         )
             .withFix(VlangChangePointerToCorrect)
             .range(type)

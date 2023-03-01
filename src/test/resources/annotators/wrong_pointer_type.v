@@ -1,10 +1,10 @@
 module validity
 
-fn foo1() <error descr="Use '&T' instead of '*T' to create a pointer type"><caret>*int</error> {
+fn foo1() <error descr="Use '&T' instead of '*T' to define a pointer type"><caret>*int</error> {
 	return unsafe { nil }
 }
 
-fn foo2() <error descr="Use '&T' instead of '*T' to create a pointer type">**int</error> {
+fn foo2() <error descr="Use '&T' instead of '*T' to define a pointer type">**int</error> {
 	return unsafe { nil }
 }
 
