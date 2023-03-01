@@ -10,10 +10,8 @@ import com.intellij.psi.util.parentOfType
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangElementFactory
 import org.vlang.lang.psi.impl.VlangLangUtil
+import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
-import org.vlang.lang.psi.types.VlangChannelTypeEx
-import org.vlang.lang.psi.types.VlangMapTypeEx
-import org.vlang.lang.psi.types.VlangStructTypeEx
 
 class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(holder) {
     override fun visitContinueStatement(stmt: VlangContinueStatement) {
@@ -64,6 +62,26 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
             )
                 .range(expr)
                 .create()
+        }
+    }
+
+    override fun visitAliasType(type: VlangAliasType) {
+        val visited = mutableMapOf<VlangType, VlangTypeEx>()
+        val typeUnionList = type.typeUnionList?.typeList ?: return
+        if (typeUnionList.size == 1) {
+            return
+        }
+
+        typeUnionList.forEach {
+            val unionType = it.toEx(visited)
+            if (unionType is VlangInterfaceTypeEx) {
+                holder.newAnnotation(
+                    HighlightSeverity.ERROR,
+                    "Sum type cannot hold an interface types"
+                )
+                    .range(it)
+                    .create()
+            }
         }
     }
 
