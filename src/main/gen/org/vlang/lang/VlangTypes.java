@@ -223,6 +223,7 @@ public interface VlangTypes {
   IElementType VAR_DEFINITION = VlangElementTypeFactory.stubFactory("VAR_DEFINITION");
   IElementType VAR_MODIFIER = new VlangCompositeElementType("VAR_MODIFIER");
   IElementType VAR_MODIFIERS = new VlangCompositeElementType("VAR_MODIFIERS");
+  IElementType WRONG_POINTER_TYPE = VlangElementTypeFactory.stubFactory("WRONG_POINTER_TYPE");
 
   IElementType AS = new VlangTokenType("as");
   IElementType ASM = new VlangTokenType("asm");
@@ -993,6 +994,9 @@ public interface VlangTypes {
       }
       else if (type == VAR_MODIFIERS) {
         return new VlangVarModifiersImpl(node);
+      }
+      else if (type == WRONG_POINTER_TYPE) {
+        return new VlangWrongPointerTypeImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

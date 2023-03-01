@@ -718,7 +718,7 @@ private TypeLit ::=
   | TupleType
   | SharedType
   | NoneType
-  | PointerType
+  | PointerType | WrongPointerType
   | OptionType
   | ResultType
   | FunctionType
@@ -749,6 +749,11 @@ NoneType ::= none
 // &&<type>
 // &&&<type>
 PointerType ::= ('&' | '&&')+ Type {pin=1}
+
+// In languages like Go, pointers use an asterisk, not an ampersand,
+// so this rule is needed to properly parse and then give an error to the user.
+WrongPointerType ::= '*'+ Type {pin=1}
+
 // !<type>
 // bare !
 ResultType ::= '!' Type? {pin=1}

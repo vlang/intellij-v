@@ -899,6 +899,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitWrongPointerType(@NotNull VlangWrongPointerType o) {
+    visitType(o);
+  }
+
   public void visitAttributeOwner(@NotNull VlangAttributeOwner o) {
     visitCompositeElement(o);
   }

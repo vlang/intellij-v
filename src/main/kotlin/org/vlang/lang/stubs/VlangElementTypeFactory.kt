@@ -22,6 +22,7 @@ object VlangElementTypeFactory {
             put("SHARED_TYPE", VlangSharedTypeImpl::class.java)
             put("NONE_TYPE", VlangNoneTypeImpl::class.java)
             put("POINTER_TYPE", VlangPointerTypeImpl::class.java)
+            put("WRONG_POINTER_TYPE", VlangPointerTypeImpl::class.java)
             put("ANONYMOUS_STRUCT_TYPE", VlangAnonymousStructTypeImpl::class.java)
             put("STRUCT_TYPE", VlangStructTypeImpl::class.java)
             put("TYPE", VlangTypeImpl::class.java)

@@ -123,6 +123,16 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
         }
     }
 
+    override fun visitWrongPointerType(type: VlangWrongPointerType) {
+        holder.newAnnotation(
+            HighlightSeverity.ERROR,
+            "Use '&T' instead of '*T' to create a pointer type"
+        )
+            .withFix(VlangChangePointerToCorrect)
+            .range(type)
+            .create()
+    }
+
     override fun visitForStatement(stmt: VlangForStatement) {
         val rangeClause = stmt.rangeClause ?: return
         val right = rangeClause.expression ?: return
@@ -175,6 +185,21 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
                     nextWhitespace.delete()
                 }
                 captureList.delete()
+            }
+        }
+
+        object VlangChangePointerToCorrect : BaseIntentionAction() {
+            override fun startInWriteAction() = true
+            override fun getFamilyName() = "Change '*' to '&'"
+            override fun getText() = "Change '*' to '&'"
+            override fun isAvailable(project: Project, editor: Editor?, file: PsiFile?): Boolean = true
+
+            override fun invoke(project: Project, editor: Editor, file: PsiFile) {
+                val element = file.findElementAt(editor.caretModel.primaryCaret.offset)!!.parentOfType<VlangWrongPointerType>() ?: return
+                val text = element.text
+                val correct = text.replace("*", "&")
+                val correctType = VlangElementFactory.createType(project, correct)
+                element.replace(correctType)
             }
         }
     }

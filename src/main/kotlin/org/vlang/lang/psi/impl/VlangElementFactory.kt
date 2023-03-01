@@ -26,6 +26,11 @@ object VlangElementFactory {
         return decl.varDefinitionList.firstOrNull() ?: error("Cannot create variable definition")
     }
 
+    fun createType(project: Project, text: String): VlangType {
+        val fieldDeclaration = createFieldDeclaration(project, "a", text) as VlangFieldDeclaration
+        return fieldDeclaration.type!!
+    }
+
     fun createReferenceExpression(project: Project, name: String): VlangReferenceExpression {
         val file = createFileFromText(project, "fn main() { a := $name }")
         return PsiTreeUtil.findChildOfType(file, VlangReferenceExpression::class.java)!!

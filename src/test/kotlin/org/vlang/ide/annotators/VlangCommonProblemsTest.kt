@@ -8,4 +8,5 @@ class VlangCommonProblemsTest : AnnotatorTestBase() {
     fun `test for over map without key`() = doTestQuickFix("for_over_map_without_key.v", "Add `_` variable to loop iterate over map")
     fun `test sum type with interface`() = doTest("sum_type_with_interface_type.v")
     fun `test capture variable list`() = doTestQuickFix("capture_list_variables.v")
+    fun `test wrong pointer type`() = doTestQuickFix("wrong_pointer_type.v")
 }

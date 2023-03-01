@@ -49,7 +49,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
       CHANNEL_TYPE, ENUM_TYPE, FIXED_SIZE_ARRAY_TYPE, FUNCTION_TYPE,
       INTERFACE_TYPE, MAP_TYPE, NONE_TYPE, OPTION_TYPE,
       POINTER_TYPE, RESULT_TYPE, SHARED_TYPE, STRUCT_TYPE,
-      THREAD_TYPE, TUPLE_TYPE, TYPE),
+      THREAD_TYPE, TUPLE_TYPE, TYPE, WRONG_POINTER_TYPE),
     create_token_set_(ADD_EXPR, AND_EXPR, ARRAY_CREATION, AS_EXPRESSION,
       CALL_EXPR, CALL_EXPR_WITH_PROPAGATE, COMPILE_TIME_IF_EXPRESSION, CONDITIONAL_EXPR,
       DOT_EXPRESSION, DUMP_CALL_EXPR, ENUM_FETCH, EXPRESSION,
@@ -6020,7 +6020,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   //   | TupleType
   //   | SharedType
   //   | NoneType
-  //   | PointerType
+  //   | PointerType | WrongPointerType
   //   | OptionType
   //   | ResultType
   //   | FunctionType
@@ -6040,6 +6040,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = SharedType(b, l + 1);
     if (!r) r = NoneType(b, l + 1);
     if (!r) r = PointerType(b, l + 1);
+    if (!r) r = WrongPointerType(b, l + 1);
     if (!r) r = OptionType(b, l + 1);
     if (!r) r = ResultType(b, l + 1);
     if (!r) r = FunctionType(b, l + 1);
@@ -6411,6 +6412,35 @@ public class VlangParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NOT_);
     r = !MemberModifiers(b, l + 1);
     exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // '*'+ Type
+  public static boolean WrongPointerType(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "WrongPointerType")) return false;
+    if (!nextTokenIs(b, MUL)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, WRONG_POINTER_TYPE, null);
+    r = WrongPointerType_0(b, l + 1);
+    p = r; // pin = 1
+    r = r && Type(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // '*'+
+  private static boolean WrongPointerType_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "WrongPointerType_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, MUL);
+    while (r) {
+      int c = current_position_(b);
+      if (!consumeToken(b, MUL)) break;
+      if (!empty_element_parsed_guard_(b, "WrongPointerType_0", c)) break;
+    }
+    exit_section_(b, m, null, r);
     return r;
   }
 
