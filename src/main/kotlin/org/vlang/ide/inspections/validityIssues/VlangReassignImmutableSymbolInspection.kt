@@ -58,10 +58,22 @@ class VlangReassignImmutableSymbolInspection : VlangBaseInspection() {
                 )
             }
 
+            override fun visitRangeClause(clause: VlangRangeClause) {
+                val mutable = clause.variablesList.any { it.isMutable() }
+                if (!mutable) return
+
+                val rightExpr = clause.expression ?: return
+                checkReferenceExpression(
+                    rightExpr,
+                    { kind, name -> "Cannot have mutable variable when iterate over immutable $kind '$name'" },
+                    { kind, name -> "Cannot have mutable variable when iterate over immutably captured $kind '$name'" },
+                )
+            }
+
             private fun checkReferenceExpression(
                 leftExpr: VlangExpression?,
                 message: (kind: String, name: String?) -> String,
-                captureVariableMessage: (kind: String, name: String?) -> String,
+                captureVariableMessage: (kind: String, name: String?) -> String = message,
             ) {
                 if (leftExpr == null) return
 
