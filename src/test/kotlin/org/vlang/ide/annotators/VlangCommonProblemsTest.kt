@@ -7,4 +7,5 @@ class VlangCommonProblemsTest : AnnotatorTestBase() {
     fun `test send channel expr`() = doTest("send_channel_expr_for_non_chan_type.v")
     fun `test for over map without key`() = doTestQuickFix("for_over_map_without_key.v", "Add `_` variable to loop iterate over map")
     fun `test sum type with interface`() = doTest("sum_type_with_interface_type.v")
+    fun `test capture variable list`() = doTestQuickFix("capture_list_variables.v")
 }

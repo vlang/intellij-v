@@ -32,12 +32,12 @@ fn main(param int) {
 
 	if name := foo() {
 		for i := 0; i < 100; i++ {
-			f = fn [] () {
+			f = fn () {
 				println(<error descr="Variable 'i' is not captured">i</error>)
 				println(<error descr="Variable 'name' is not captured">name</error>)
 			}
 
-			f = fn [] () {
+			f = fn () {
 				i := 100
 
 				println(i)

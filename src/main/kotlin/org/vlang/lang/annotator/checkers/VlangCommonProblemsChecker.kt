@@ -6,6 +6,7 @@ import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
+import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.util.parentOfType
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangElementFactory
@@ -85,6 +86,43 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
         }
     }
 
+    override fun visitFunctionLit(fn: VlangFunctionLit) {
+        val captureList = fn.captureList
+        if (captureList != null) {
+            val isEmpty = captureList.captureList.size
+            if (isEmpty == 0) {
+                holder.newAnnotation(
+                    HighlightSeverity.ERROR,
+                    "Capture list cannot be empty"
+                )
+                    .withFix(VlangRemoveEmptyCaptureList)
+                    .range(captureList)
+                    .create()
+            }
+        }
+
+        val parameters = fn.getSignature()?.parameters?.paramDefinitionList ?: return
+        val captures = fn.captureList?.captureList?.map { it.referenceExpression } ?: return
+
+        val duplicates = captures.filter { capture ->
+            parameters.any { param ->
+                param.name == capture.text
+            }
+        }
+
+        // Capture variable X duplicates parameter name Y
+        duplicates.forEach {
+            val name = it.text
+            val param = parameters.first { param -> param.name == name }
+            holder.newAnnotation(
+                HighlightSeverity.ERROR,
+                "Capture variable '${name}' duplicates parameter '${param.name}'"
+            )
+                .range(it)
+                .create()
+        }
+    }
+
     override fun visitForStatement(stmt: VlangForStatement) {
         val rangeClause = stmt.rangeClause ?: return
         val right = rangeClause.expression ?: return
@@ -119,6 +157,24 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
                 rangeClause.addBefore(key, value)
                 rangeClause.addBefore(VlangElementFactory.createComma(project), value)
                 rangeClause.addBefore(VlangElementFactory.createSpace(project), value)
+            }
+        }
+
+        object VlangRemoveEmptyCaptureList : BaseIntentionAction() {
+            override fun startInWriteAction() = true
+            override fun getFamilyName() = "Remove empty capture list"
+            override fun getText() = "Remove empty capture list"
+            override fun isAvailable(project: Project, editor: Editor?, file: PsiFile?): Boolean = true
+
+            override fun invoke(project: Project, editor: Editor, file: PsiFile) {
+                val element = file.findElementAt(editor.caretModel.primaryCaret.offset)!!.parentOfType<VlangFunctionLit>() ?: return
+                val captureList = element.captureList ?: return
+                val nextWhitespace = captureList.nextSibling
+
+                if (nextWhitespace is PsiWhiteSpace) {
+                    nextWhitespace.delete()
+                }
+                captureList.delete()
             }
         }
     }
