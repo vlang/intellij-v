@@ -40,7 +40,7 @@ class VlangFieldNameReference(element: VlangReferenceExpressionBase) :
         if (type == null) {
             val callExpr = VlangCodeInsightUtil.getCallExpr(element)
             val paramTypes = VlangCodeInsightUtil.getCalledParams(callExpr)
-            type = paramTypes?.lastOrNull { it.unwrapAlias() is VlangStructTypeEx }?: return true
+            type = paramTypes?.lastOrNull { it.unwrapAlias().unwrapPointer() is VlangStructTypeEx }?: return true
         }
 
         val typeToProcess = type.unwrapPointer().unwrapAlias()

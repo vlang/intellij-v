@@ -10,6 +10,7 @@ import org.vlang.lang.psi.*
 import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapAlias
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapPointer
 import org.vlang.utils.insideAny
 import org.vlang.utils.parentNth
 import org.vlang.utils.parentOfTypeWithStop
@@ -93,10 +94,10 @@ object VlangCodeInsightUtil {
     }
 
     fun isAllowedParamsForTrailingStruct(params: List<VlangParamDefinition>, paramTypes: List<VlangTypeEx>): Boolean {
-        if (paramTypes.none { it.unwrapAlias() is VlangStructTypeEx }) return false
+        if (paramTypes.none { it.unwrapAlias().unwrapPointer() is VlangStructTypeEx }) return false
         if (params.isEmpty()) return false
 
-        val structType = paramTypes.last().unwrapAlias()
+        val structType = paramTypes.last().unwrapAlias().unwrapPointer()
         if (params.size > 1 && structType !is VlangStructTypeEx) return false
         return true
     }

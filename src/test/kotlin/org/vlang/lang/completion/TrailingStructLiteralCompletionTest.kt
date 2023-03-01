@@ -319,4 +319,23 @@ class TrailingStructLiteralCompletionTest : CompletionTestBase() {
         0,
         "boo"
     )
+
+    fun `test second struct field for pointer struct`() = checkEquals(
+        """
+        module main
+        
+        struct Params {
+            foo int
+            boo int
+        }
+        
+        fn boo(params &Params) {}
+
+        fn main() {
+        	boo(foo: 100, /*caret*/)
+        }
+        """.trimIndent(),
+        0,
+        "boo"
+    )
 }
