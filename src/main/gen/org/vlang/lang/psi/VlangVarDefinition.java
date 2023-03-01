@@ -35,8 +35,6 @@ public interface VlangVarDefinition extends VlangMutabilityOwner, VlangNamedElem
 
   void makeImmutable();
 
-  boolean isCaptured(@NotNull PsiElement original);
-
   //WARNING: getValue(...) is skipped
   //matching getValue(VlangVarDefinition, ...)
   //methods are not found in VlangPsiImplUtil

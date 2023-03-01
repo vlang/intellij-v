@@ -139,6 +139,12 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
         return containingFile.getModuleQualifiedName()
     }
 
+    override fun isCaptured(context: PsiElement): Boolean {
+        val functionLit = context.parentOfType<VlangFunctionLit>()
+        val captureList = functionLit?.captureList?.captureList ?: emptyList()
+        return captureList.find { it.referenceExpression.text == name } != null
+    }
+
     override fun setName(name: String): PsiElement? {
         val identifier = getIdentifier()
         val newIdentifier = VlangElementFactory.createIdentifier(project, name)

@@ -2046,13 +2046,6 @@ object VlangPsiImplUtil {
     fun isPublic(o: VlangVarDefinition): Boolean = true
 
     @JvmStatic
-    fun isCaptured(o: VlangVarDefinition, original: PsiElement): Boolean {
-        val functionLit = original.parentOfType<VlangFunctionLit>()
-        val captureList = functionLit?.captureList?.captureList ?: emptyList()
-        return captureList.find { it.referenceExpression.text == o.name } != null
-    }
-
-    @JvmStatic
     fun isMutable(o: VlangVarDefinition): Boolean {
         val inFor = o.parentNth<VlangForClause>(3) != null
         if (inFor) {

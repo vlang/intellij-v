@@ -693,7 +693,7 @@ object DocumentationGenerator {
         }
     }
 
-    fun VlangVarDefinition.generateDoc(original: PsiElement?): String {
+    fun VlangVarDefinition.generateDoc(originalElement: PsiElement?): String {
         return buildString {
             generateModuleName(containingFile)
             append(DocumentationMarkup.DEFINITION_START)
@@ -702,7 +702,7 @@ object DocumentationGenerator {
             val modifiersDoc = varModifiers?.generateDoc()
             part(modifiersDoc)
 
-            if (original != null && isCaptured(original)) {
+            if (originalElement != null && isCaptured(originalElement)) {
                 part("captured", asKeyword)
             }
 
@@ -751,6 +751,10 @@ object DocumentationGenerator {
             val type = getType(null)
 
             part(varModifiers.generateDoc())
+
+            if (originalElement != null && isCaptured(originalElement)) {
+                part("captured", asKeyword)
+            }
 
             part("parameter", asKeyword)
             part(name ?: "it", asIdentifier)

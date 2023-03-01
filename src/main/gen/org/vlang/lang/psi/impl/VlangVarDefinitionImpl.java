@@ -86,11 +86,6 @@ public class VlangVarDefinitionImpl extends VlangNamedElementImpl<VlangVarDefini
   }
 
   @Override
-  public boolean isCaptured(@NotNull PsiElement original) {
-    return VlangPsiImplUtil.isCaptured(this, original);
-  }
-
-  @Override
   @Nullable
   public VlangSymbolVisibility getSymbolVisibility() {
     return VlangPsiImplUtil.getSymbolVisibility(this);

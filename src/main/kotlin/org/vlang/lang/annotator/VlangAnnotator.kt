@@ -70,9 +70,16 @@ class VlangAnnotator : Annotator {
             is VlangFieldDefinition                 -> public(resolved, VlangColor.PUBLIC_FIELD, VlangColor.FIELD)
             is VlangEnumFieldDefinition             -> public(resolved, VlangColor.ENUM_FIELD, VlangColor.ENUM_FIELD)
             is VlangTypeAliasDeclaration            -> public(resolved, VlangColor.PUBLIC_TYPE_ALIAS, VlangColor.TYPE_ALIAS)
-            is VlangParamDefinition                 -> mutable(resolved, VlangColor.MUTABLE_PARAMETER, VlangColor.PARAMETER)
             is VlangReceiver                        -> mutable(resolved, VlangColor.MUTABLE_RECEIVER, VlangColor.RECEIVER)
             is VlangGlobalVariableDefinition        -> VlangColor.GLOBAL_VARIABLE
+
+            is VlangParamDefinition                 ->
+                if (resolved.isCaptured(element)) {
+                    mutable(resolved, VlangColor.MUTABLE_CAPTURED_VARIABLE, VlangColor.CAPTURED_VARIABLE)
+                } else {
+                    mutable(resolved, VlangColor.MUTABLE_PARAMETER, VlangColor.PARAMETER)
+                }
+
             is VlangVarDefinition                   -> if (resolved.isCaptured(element)) {
                 mutable(resolved, VlangColor.MUTABLE_CAPTURED_VARIABLE, VlangColor.CAPTURED_VARIABLE)
             } else {
