@@ -18,5 +18,21 @@ pub const $Funtion = TypeInfo{}
 
 struct CompileTimeTypeInfo {
 pub:
+	// fields describes the list of structure fields.
+	// This field can only be used inside `$for`.
+	//
+	// Example:
+	// ```v
+	// struct Foo {
+	//   a int
+	//   b string
+	// }
+	//
+	// fn main() {
+	//   $for field in Foo.fields {
+	//     println(field.name)
+	//   }
+	// }
+	// ```
 	fields []FieldData
 }

@@ -49,6 +49,6 @@ class VlangFileElementType : IStubFileElementType<VlangFileStub>("VLANG_FILE", V
 
     companion object {
         val INSTANCE = VlangFileElementType()
-        const val VERSION = 82
+        const val VERSION = 83
     }
 }

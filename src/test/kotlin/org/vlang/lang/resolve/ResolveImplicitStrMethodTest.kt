@@ -105,6 +105,6 @@ class ResolveImplicitStrMethodTest : ResolveTestBase() {
             }
         """.trimIndent())
 
-        assertQualifiedReferencedTo("METHOD_DECLARATION stubs.Any.str")
+        assertQualifiedReferencedTo("METHOD_DECLARATION main.Book.str")
     }
 }

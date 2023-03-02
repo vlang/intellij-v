@@ -51,7 +51,7 @@ class WeightCompletionTest : CompletionTestBase() {
             fiel/*caret*/
         }
         """.trimIndent(), 0,
-        "f.field", "f.fields",
+        "f.field",
     )
 
     fun `test struct method completion inside method`() = checkOrderedEquals(

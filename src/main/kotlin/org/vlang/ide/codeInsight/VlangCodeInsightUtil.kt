@@ -51,9 +51,15 @@ object VlangCodeInsightUtil {
         return literalValue.elementList.any { it.key == null && PsiTreeUtil.isAncestor(it, element, false) }
     }
 
-    fun insideCompileTimeIf(element: PsiElement?): Boolean {
+    fun insideCompileTime(element: PsiElement?): Boolean {
         if (element == null) return false
         return element.insideAny<VlangCompileTimeForStatement, VlangCompileTimeIfExpression>()
+    }
+
+    fun insideCompileTimeFor(element: PsiElement?): Boolean {
+        if (element == null) return false
+        val forStatement = element.parentOfType<VlangCompileTimeForStatement>()
+        return PsiTreeUtil.isAncestor(forStatement?.rangeClause?.expression, element, false)
     }
 
     fun ownerPresentableName(element: VlangNamedElement): String? {

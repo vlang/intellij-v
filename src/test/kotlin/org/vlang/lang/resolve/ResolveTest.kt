@@ -117,4 +117,26 @@ class ResolveTest : ResolveTestBase() {
 
         assertQualifiedReferencedTo("FIELD_DEFINITION unnamed.User.age")
     }
+
+    fun `test resolve compile time fields field`() {
+        mainFile("a.v", """
+            module main
+            
+            struct Foo {
+                a int
+                b int
+                fields []string
+            }
+            
+            fn main() {
+                foo := Foo{}
+                ${"$"}for field in Foo./*caret*/fields {
+                    foo./*caret*/fields
+                }
+            }
+        """.trimIndent())
+
+        assertQualifiedReferencedTo("FIELD_DEFINITION stubs.CompileTimeTypeInfo.fields")
+        assertQualifiedReferencedTo("FIELD_DEFINITION main.Foo.fields")
+    }
 }

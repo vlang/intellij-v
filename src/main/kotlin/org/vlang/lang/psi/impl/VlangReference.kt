@@ -16,7 +16,6 @@ import com.intellij.util.ArrayUtil
 import org.vlang.configurations.VlangConfiguration
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.ide.codeInsight.VlangTypeInferenceUtil
-import org.vlang.lang.completion.providers.ReferenceCompletionProvider
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangPsiImplUtil.processNamedElements
 import org.vlang.lang.psi.types.*
@@ -185,13 +184,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         val localResolve = isLocalResolve(contextFile, file)
         val newState = state.put(LOCAL_RESOLVE, localResolve)
 
-        val addCompileTimeInfo = if (processor is ReferenceCompletionProvider.MyScopeProcessor) {
-            VlangCodeInsightUtil.insideCompileTimeIf(identifier)
-        } else {
-            true
-        }
-
-        if (addCompileTimeInfo && typ.qualifiedName() != "stubs.CompileTimeTypeInfo") {
+        if (VlangCodeInsightUtil.insideCompileTimeFor(identifier) && typ.qualifiedName() != "stubs.CompileTimeTypeInfo") {
             if (!processCompileTimeTypeInfo(processor, newState)) return false
         }
 
@@ -749,7 +742,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
     }
 
     private fun processCompileTimeConstants(processor: VlangScopeProcessor, state: ResolveState): Boolean {
-        if (!VlangCodeInsightUtil.insideCompileTimeIf(identifier)) return true
+        if (!VlangCodeInsightUtil.insideCompileTime(identifier)) return true
         if (!processStubFile("compile_time_constants.v", processor, state)) return false
         return true
     }
