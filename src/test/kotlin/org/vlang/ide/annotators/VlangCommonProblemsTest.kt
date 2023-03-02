@@ -9,4 +9,5 @@ class VlangCommonProblemsTest : AnnotatorTestBase() {
     fun `test sum type with interface`() = doTest("sum_type_with_interface_type.v")
     fun `test capture variable list`() = doTestQuickFix("capture_list_variables.v")
     fun `test wrong pointer type`() = doTestQuickFix("wrong_pointer_type.v")
+    fun `test struct embedding`() = doTestQuickFix("struct_embedding.v")
 }

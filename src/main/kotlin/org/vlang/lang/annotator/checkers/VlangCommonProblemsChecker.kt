@@ -1,6 +1,8 @@
 package org.vlang.lang.annotator.checkers
 
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction
+import com.intellij.codeInspection.ProblemHighlightType
+import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.Editor
@@ -131,6 +133,43 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
             .withFix(VlangChangePointerToCorrect)
             .range(type)
             .create()
+    }
+
+    override fun visitStructType(type: VlangStructType) {
+        val fieldList = type.fieldsGroupList.flatMap { it.fieldDeclarationList }
+
+        var sawField = false
+        fieldList.forEach { field ->
+            if (field.embeddedDefinition == null) {
+                sawField = true
+            } else {
+                if (sawField) {
+                    holder.newAnnotation(
+                        HighlightSeverity.ERROR,
+                        "Embedded structs must be defined before any other fields"
+                    )
+                        .range(field)
+                        .create()
+                }
+            }
+        }
+
+        checkEmbeddedStructs(fieldList.mapNotNull { it.embeddedDefinition })
+    }
+
+    private fun checkEmbeddedStructs(embedded: List<VlangEmbeddedDefinition>) {
+        val names = HashSet<String>()
+        for (embed in embedded) {
+            val name = embed.text
+            if (name != null && !names.add(name)) {
+                holder.newAnnotation(
+                    HighlightSeverity.ERROR,
+                    "Cannot embed '$name' more than once"
+                )
+                    .range(embed)
+                    .create()
+            }
+        }
     }
 
     override fun visitForStatement(stmt: VlangForStatement) {
