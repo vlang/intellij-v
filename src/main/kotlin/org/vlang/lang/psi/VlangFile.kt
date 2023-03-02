@@ -315,7 +315,9 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
         return listOf(*stub.getChildrenByType(elementType, f))
     }
 
-    private fun String.normalizeSlashes(): String {
-        return this.replace("\\", "/")
+    companion object {
+        fun String.normalizeSlashes(): String {
+            return this.replace("\\", "/")
+        }
     }
 }

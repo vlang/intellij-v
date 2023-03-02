@@ -6,9 +6,11 @@ import com.intellij.psi.PsiElement
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangLangUtil
+import org.vlang.lang.psi.types.VlangAnyTypeEx
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangOptionTypeEx
 import org.vlang.lang.psi.types.VlangResultTypeEx
+import org.vlang.lang.psi.types.VlangUnknownTypeEx
 
 class VlangOptionResultProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(holder) {
     override fun visitOrBlockExpr(expr: VlangOrBlockExpr) {
@@ -24,7 +26,7 @@ class VlangOptionResultProblemsChecker(holder: AnnotationHolder) : VlangCheckerB
             return
         }
 
-        val leftType = leftExpr.getType(null)
+        val leftType = leftExpr.getType(null) ?: return
 
         if (leftType !is VlangResultTypeEx && leftType !is VlangOptionTypeEx) {
             holder.newAnnotation(
@@ -39,7 +41,7 @@ class VlangOptionResultProblemsChecker(holder: AnnotationHolder) : VlangCheckerB
     override fun visitIfExpression(expr: VlangIfExpression) {
         val guard = expr.guardVarDeclaration ?: return
         val rightExpr = guard.expression ?: return
-        val rightType = rightExpr.getType(null)
+        val rightType = rightExpr.getType(null) ?: return
 
         // a[10] or {} - is valid
         if (rightExpr is VlangIndexOrSliceExpr) {
@@ -117,7 +119,7 @@ class VlangOptionResultProblemsChecker(holder: AnnotationHolder) : VlangCheckerB
             else -> null
         } ?: return
 
-        val type = typeElement.getType(null)
+        val type = typeElement.getType(null) ?: return
         if (type !is VlangResultTypeEx) {
             val action = if (typeElement is VlangCallExpr) "returns" else "has"
             holder.newAnnotation(

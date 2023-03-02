@@ -1599,7 +1599,7 @@ object VlangPsiImplUtil {
 
         // json.decode(type) -> type
         if (expr is VlangJsonCallExpr) {
-            return expr.jsonArgumentList.type.toEx()
+            return VlangResultTypeEx(expr.jsonArgumentList.type.toEx(), expr)
         }
 
         // <type>(<expr>) -> type

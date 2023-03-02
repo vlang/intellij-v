@@ -89,6 +89,12 @@
                          displayName="Show failed assertions"
                          enabledByDefault="true" level="ERROR"
                          implementationClass="org.vlang.ide.inspections.general.VlangTestFailedLineInspection"/>
+
+        <localInspection language="vlang" groupPath="V"
+                         groupName="General" shortName="VlangCallArgumentsCountMismatchInspection"
+                         displayName="Call arguments count mismatch"
+                         enabledByDefault="true" level="ERROR"
+                         implementationClass="org.vlang.ide.inspections.general.VlangCallArgumentsCountMismatchInspection"/>
         <!-- endregion General inspections -->
 
         <!-- region Validity issues inspections -->
