@@ -2359,6 +2359,6 @@ object VlangPsiImplUtil {
     }
 
     fun canBeAutoImported(moduleName: String): Boolean {
-        return moduleName != "main" && moduleName != "builtin" && moduleName != "stubs"
+        return !moduleName.endsWith(".main") && moduleName != "main" && moduleName != "builtin" && moduleName != "stubs"
     }
 }
