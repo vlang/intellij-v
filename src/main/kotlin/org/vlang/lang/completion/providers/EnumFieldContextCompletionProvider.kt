@@ -3,13 +3,9 @@ package org.vlang.lang.completion.providers
 import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.codeInsight.completion.CompletionProvider
 import com.intellij.codeInsight.completion.CompletionResultSet
-import com.intellij.codeInsight.lookup.LookupElementBuilder
-import com.intellij.codeInsight.template.impl.ConstantNode
 import com.intellij.util.ProcessingContext
-import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.ide.codeInsight.VlangTypeInferenceUtil
 import org.vlang.lang.completion.VlangCompletionUtil
-import org.vlang.lang.psi.impl.VlangLangUtil
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapAlias
 import org.vlang.lang.psi.types.VlangEnumTypeEx
 

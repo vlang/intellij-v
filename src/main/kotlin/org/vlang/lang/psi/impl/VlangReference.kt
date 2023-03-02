@@ -197,6 +197,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
         if (typ is VlangSumTypeEx) {
             if (!processMethods(typ, processor, newState, localResolve)) return false
+            if (!processSymTypeFields(typ, processor, newState)) return false
             if (!processAnyType(contextFile, processor, newState, localResolve)) return false
             return true
         }
@@ -354,6 +355,11 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         if (!processMethods(typ, processor, newState, localResolve)) return false
 
         return true
+    }
+
+    private fun processSymTypeFields(typ: VlangSumTypeEx, processor: VlangScopeProcessor, newState: ResolveState): Boolean {
+        val fields = typ.getFields(project)
+        return processNamedElements(processor, newState, fields, true)
     }
 
     private fun processAnyType(

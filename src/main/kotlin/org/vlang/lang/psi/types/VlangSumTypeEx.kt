@@ -3,6 +3,7 @@ package org.vlang.lang.psi.types
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
+import org.vlang.lang.psi.VlangFieldDefinition
 import org.vlang.lang.psi.VlangTypeAliasDeclaration
 import org.vlang.lang.stubs.index.VlangNamesIndex
 
@@ -71,4 +72,25 @@ open class VlangSumTypeEx(val name: String, val types: List<VlangTypeEx>, anchor
     }
 
     override fun hashCode(): Int = name.hashCode()
+
+    fun getFields(project: Project): List<VlangFieldDefinition> {
+        return getFieldsList(project).flatten()
+    }
+
+    fun findCommonFields(project: Project): List<VlangFieldDefinition> {
+        val fields = getFieldsList(project)
+        val commonFields = fields.first().filter { field ->
+            fields.all { fieldList -> fieldList.any { it.name == field.name } }
+        }
+        return commonFields
+    }
+
+    private fun getFieldsList(project: Project) = types.mapNotNull {
+        val singleType = it.unwrapPointer().unwrapAlias().unwrapPointer()
+        if (singleType is VlangStructTypeEx) {
+            singleType.fieldsList(project).toSet()
+        } else {
+            null
+        }
+    }
 }
