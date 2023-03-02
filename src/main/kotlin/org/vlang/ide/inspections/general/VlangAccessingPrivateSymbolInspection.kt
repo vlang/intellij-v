@@ -35,6 +35,7 @@ class VlangAccessingPrivateSymbolInspection : VlangBaseInspection() {
                     !fromBuiltin &&
                     !fromStubs &&
                     !fromC &&
+                    resolved !is VlangGlobalVariableDefinition &&
                     !resolved.isPublic() &&
                     !VlangCodeInsightUtil.sameModule(o, resolved)
                 ) {
