@@ -93,13 +93,6 @@ class VlangRawOptionOrResultTypeUsedInspection : VlangBaseInspection() {
                         AddOrBlockQuickFix.INSTANCE, AddResultPropagationQuickFix.INSTANCE,
                     )
                 }
-
-                if (type is VlangOptionTypeEx) {
-                    holder.registerProblem(
-                        expr, "Option value should have either an `or {}` block, or `?` at the end",
-                        AddOrBlockQuickFix.INSTANCE, AddOptionPropagationQuickFix.INSTANCE,
-                    )
-                }
             }
         }
     }
@@ -123,28 +116,6 @@ class VlangRawOptionOrResultTypeUsedInspection : VlangBaseInspection() {
 
         companion object {
             val INSTANCE = AddOrBlockQuickFix()
-        }
-    }
-
-    class AddOptionPropagationQuickFix : LocalQuickFix {
-        override fun getFamilyName() = "Add ?"
-
-        override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
-            val element = descriptor.psiElement
-            val editor = FileEditorManager.getInstance(project).selectedEditor as? TextEditor ?: return
-
-            val propagation = VlangElementFactory.createOptionalPropagation(project, element)
-            val newPropagation = element.replace(propagation)
-
-            editor.editor.caretModel.moveToOffset(newPropagation.endOffset)
-        }
-
-        override fun generatePreview(project: Project, previewDescriptor: ProblemDescriptor): IntentionPreviewInfo {
-            return IntentionPreviewInfo.EMPTY
-        }
-
-        companion object {
-            val INSTANCE = AddOptionPropagationQuickFix()
         }
     }
 
