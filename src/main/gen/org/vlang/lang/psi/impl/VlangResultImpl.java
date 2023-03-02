@@ -38,4 +38,9 @@ public class VlangResultImpl extends VlangStubbedElementImpl<VlangResultStub> im
     return notNullChild(VlangPsiTreeUtil.getStubChildOfType(this, VlangType.class));
   }
 
+  @Override
+  public boolean isVoid() {
+    return VlangPsiImplUtil.isVoid(this);
+  }
+
 }

@@ -12,4 +12,6 @@ public interface VlangResult extends VlangCompositeElement, StubBasedPsiElement<
   @NotNull
   VlangType getType();
 
+  boolean isVoid();
+
 }

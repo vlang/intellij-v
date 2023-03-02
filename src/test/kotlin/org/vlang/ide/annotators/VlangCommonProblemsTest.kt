@@ -10,4 +10,5 @@ class VlangCommonProblemsTest : AnnotatorTestBase() {
     fun `test capture variable list`() = doTestQuickFix("capture_list_variables.v")
     fun `test wrong pointer type`() = doTestQuickFix("wrong_pointer_type.v")
     fun `test struct embedding`() = doTestQuickFix("struct_embedding.v")
+    fun `test return count mismatch`() = doTestQuickFix("return_count_mismatch.v")
 }

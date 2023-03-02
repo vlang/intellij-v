@@ -82,4 +82,54 @@ class TypingTest : TypingTestBase() {
         "${"\${}"}"
         """.trimIndent()
     )
+
+    fun `test comma in result type`() = type(
+        """
+        fn foo() string<caret> {}
+        """.trimIndent(),
+        ",",
+        """
+        fn foo() (string,<caret>) {}
+        """.trimIndent()
+    )
+
+    fun `test second comma in result type`() = type(
+        """
+        fn foo() (string,<caret>) {}
+        """.trimIndent(),
+        ",",
+        """
+        fn foo() (string,,<caret>) {}
+        """.trimIndent()
+    )
+
+    fun `test second comma in result type after last type`() = type(
+        """
+        fn foo() (string, int<caret>) {}
+        """.trimIndent(),
+        ",",
+        """
+        fn foo() (string, int,<caret>) {}
+        """.trimIndent()
+    )
+
+    fun `test comma in result type after )`() = type(
+        """
+        fn foo() (string, int)<caret> {}
+        """.trimIndent(),
+        ",",
+        """
+        fn foo() (string, int),<caret> {}
+        """.trimIndent()
+    )
+
+    fun `test comma in result type with space after first type`() = type(
+        """
+        fn foo() string <caret> {}
+        """.trimIndent(),
+        ",",
+        """
+        fn foo() string ,<caret> {}
+        """.trimIndent()
+    )
 }

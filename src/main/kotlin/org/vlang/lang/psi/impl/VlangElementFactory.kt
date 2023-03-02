@@ -70,6 +70,11 @@ object VlangElementFactory {
         return PsiTreeUtil.findChildOfType(file, VlangSymbolVisibility::class.java)!!
     }
 
+    fun createFunctionResult(project: Project, text: String): VlangResult {
+        val file = createFileFromText(project, "fn main() $text {}")
+        return PsiTreeUtil.findChildOfType(file, VlangResult::class.java)!!
+    }
+
     fun createComma(project: Project): PsiElement {
         return PsiTreeUtil.findChildOfType(
             createFileFromText(project, "fn main() { 1,2 }"),

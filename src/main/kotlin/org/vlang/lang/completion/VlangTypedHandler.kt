@@ -2,13 +2,17 @@ package org.vlang.lang.completion
 
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import com.intellij.openapi.editor.Editor
+import com.intellij.openapi.editor.actionSystem.TypedAction
+import com.intellij.openapi.editor.impl.TypedActionImpl
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
+import com.intellij.psi.util.parentOfType
+import com.intellij.refactoring.suggested.startOffset
+import org.vlang.ide.editor.VlangEditorUtil
+import org.vlang.lang.VlangTypes
 import org.vlang.lang.completion.VlangCompletionUtil.showCompletion
-import org.vlang.lang.psi.VlangAttribute
-import org.vlang.lang.psi.VlangFile
-import org.vlang.lang.psi.VlangReferenceExpression
+import org.vlang.lang.psi.*
 import org.vlang.utils.inside
 
 class VlangTypedHandler : TypedHandlerDelegate() {
@@ -59,6 +63,21 @@ class VlangTypedHandler : TypedHandlerDelegate() {
             return Result.STOP
         }
 
+        if (c == ',') {
+            if (isAfterFunctionResultType(editor, offset)) {
+                PsiDocumentManager.getInstance(project).commitDocument(document)
+                val element = file.findElementAt(offset - 2)
+                val resultElement = element?.parentOfType<VlangResult>()
+                if (resultElement != null && !resultElement.isVoid) {
+                    val lparenOffset = resultElement.startOffset
+                    beginUndoablePostProcessing()
+                    document.insertString(lparenOffset, "(")
+                    document.insertString(editor.caretModel.offset, ")")
+                }
+                return Result.STOP
+            }
+        }
+
         PsiDocumentManager.getInstance(project).commitDocument(document)
         PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(document)
 
@@ -69,5 +88,47 @@ class VlangTypedHandler : TypedHandlerDelegate() {
         }
 
         return Result.DEFAULT
+    }
+
+    private fun isAfterFunctionResultType(editor: Editor, offset: Int): Boolean {
+        if (offset == 0) return false
+        if (offset >= editor.document.textLength) return false
+        val iterator = editor.highlighter.createIterator(offset)
+        var token = VlangEditorUtil.skipWhitespacesForward(iterator)
+        if (token != VlangTypes.LBRACE && token != VlangTokenTypes.NLS) {
+            return false
+        }
+
+        val beforeIterator = editor.highlighter.createIterator(offset - 1)
+        beforeIterator.retreat()
+
+        val beforeToken = beforeIterator.tokenType
+        if (beforeToken == VlangTypes.RPAREN) {
+            // when fn () (int, string)<caret>
+            // ->  fn () (int, string),
+            return false
+        }
+
+        // check presence of fn keyword in same line
+        beforeIterator.advance()
+        while (!beforeIterator.atEnd()) {
+            token = beforeIterator.tokenType
+
+            if (token == VlangTokenTypes.NLS) {
+                return true
+            }
+
+            if (token == VlangTypes.FN) {
+                return true
+            }
+
+            beforeIterator.retreat()
+        }
+
+        return false
+    }
+
+    private fun beginUndoablePostProcessing() {
+        (TypedAction.getInstance() as TypedActionImpl).defaultRawTypedHandler.beginUndoablePostProcessing()
     }
 }

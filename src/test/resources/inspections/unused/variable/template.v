@@ -1,5 +1,5 @@
 
-fn foo() {
+fn foo() string {
 	name := 'foo'
 	age := 10
 
@@ -14,7 +14,7 @@ fn foo1() {
 	println(tmpl)
 }
 
-fn foo2() {
+fn foo2() string {
 	name := 'foo'
 	age := 10
 

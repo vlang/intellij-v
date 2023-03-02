@@ -328,7 +328,9 @@ CompileTimeForStatement ::= '$for' <<enterMode "BLOCK?">> (ForClause | RangeClau
 
 // return <expr>
 // return <expr>, <expr>
-ReturnStatement ::= return ExpressionList?
+ReturnStatement ::= return ExpressionList? {
+    methods=[getOwner]
+}
 
 // break [<label>]
 BreakStatement ::= break LabelRef?
@@ -775,6 +777,7 @@ Signature ::= Parameters Result? {
 }
 Result ::= Type {
   stubClass="org.vlang.lang.stubs.VlangResultStub"
+  methods=[isVoid]
 }
 Parameters ::= '(' ParameterList? ','? ')' {
   pin=1

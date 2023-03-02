@@ -1,12 +1,12 @@
 package org.vlang.lang.annotator.checkers
 
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction
-import com.intellij.codeInspection.ProblemHighlightType
-import com.intellij.codeInspection.ProblemsHolder
+import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.util.parentOfType
@@ -172,6 +172,54 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
         }
     }
 
+    override fun visitReturnStatement(ret: VlangReturnStatement) {
+        val owner = ret.owner ?: return
+        val signature = owner.getSignature() ?: return
+        val result = signature.result
+        val (countResultTypes, maxAllowedTypesCount) = when (val type = result?.type) {
+            is VlangTupleType -> type.typeListNoPin.typeList.size to type.typeListNoPin.typeList.size
+            is VlangResultType,
+            is VlangOptionType,
+                              -> {
+                val isEmpty = type.type == null
+                if (isEmpty) 0 to 1 else 1 to 1
+            }
+
+            null              -> 0 to 0
+            else              -> 1 to 1
+        }
+        val countReturnExpressions = ret.expressionList.size
+
+        if (countResultTypes != countReturnExpressions) {
+            if (countReturnExpressions > countResultTypes && countReturnExpressions <= maxAllowedTypesCount) {
+                return
+            }
+
+            val expectedCount = if (maxAllowedTypesCount != countResultTypes) "$countResultTypes or $maxAllowedTypesCount" else "$countResultTypes"
+
+            val messageBegin = if (countReturnExpressions > countResultTypes) "Too many return values" else "Not enough return values"
+            holder.newAnnotation(
+                HighlightSeverity.ERROR,
+                "$messageBegin, expected $expectedCount, got $countReturnExpressions"
+            )
+                .range(ret)
+                .create()
+        }
+    }
+
+    override fun visitTupleType(tuple: VlangTupleType) {
+        val countTypes = tuple.typeListNoPin.typeList.size
+        if (countTypes == 1) {
+            holder.newAnnotation(
+                HighlightSeverity.WEAK_WARNING,
+                "Redundant parentheses"
+            )
+                .withFix(UnwrapQuickFix(tuple.parent))
+                .range(tuple)
+                .create()
+        }
+    }
+
     override fun visitForStatement(stmt: VlangForStatement) {
         val rangeClause = stmt.rangeClause ?: return
         val right = rangeClause.expression ?: return
@@ -239,6 +287,20 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
                 val correct = text.replace("*", "&")
                 val correctType = VlangElementFactory.createType(project, correct)
                 element.replace(correctType)
+            }
+        }
+
+        class UnwrapQuickFix(element: PsiElement) : LocalQuickFixAndIntentionActionOnPsiElement(element) {
+            override fun startInWriteAction() = true
+            override fun getFamilyName() = "Unwrap parentheses"
+            override fun getText() = "Unwrap parentheses"
+
+            override fun invoke(project: Project, file: PsiFile, editor: Editor?, startElement: PsiElement, endElement: PsiElement) {
+                if (startElement !is VlangResult) return
+                val text = startElement.text
+                val withoutParens = text.removeSurrounding("(", ")")
+                val newResult = VlangElementFactory.createFunctionResult(project, withoutParens)
+                startElement.replace(newResult)
             }
         }
     }

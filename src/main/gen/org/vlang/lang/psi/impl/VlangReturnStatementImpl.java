@@ -39,4 +39,10 @@ public class VlangReturnStatementImpl extends VlangStatementImpl implements Vlan
     return notNullChild(findChildByType(RETURN));
   }
 
+  @Override
+  @Nullable
+  public VlangSignatureOwner getOwner() {
+    return VlangPsiImplUtil.getOwner(this);
+  }
+
 }

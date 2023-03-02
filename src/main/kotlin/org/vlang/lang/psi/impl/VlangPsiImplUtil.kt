@@ -952,6 +952,11 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getOwner(o: VlangReturnStatement): VlangSignatureOwner? {
+        return o.parentOfType()
+    }
+
+    @JvmStatic
     fun getLeft(o: VlangAppendStatement): VlangExpression? {
         return o.childrenOfType<VlangExpression>().firstOrNull()
     }
@@ -1138,6 +1143,15 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun getContents(o: VlangStringLiteral): String {
         return o.text.substring(1, o.text.length - 1)
+    }
+
+    @JvmStatic
+    fun isVoid(o: VlangResult): Boolean {
+        val type = o.type
+        if (type is VlangTupleType) {
+            return type.typeListNoPin.typeList.isEmpty()
+        }
+        return false
     }
 
     @JvmStatic
