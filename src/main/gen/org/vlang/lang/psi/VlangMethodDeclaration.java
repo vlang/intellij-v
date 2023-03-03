@@ -58,4 +58,6 @@ public interface VlangMethodDeclaration extends VlangSignatureOwner, VlangFuncti
 
   boolean isMutable();
 
+  boolean byReference();
+
 }

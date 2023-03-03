@@ -33,7 +33,7 @@ object VlangCTypeParser {
         // Foo_string
         val thirdPart = parts[2]
         // mos likely key is enum
-        if (thirdPart[0].isUpperCase()) {
+        if (thirdPart[0].isUpperCase() && !thirdPart.startsWith("Array_") && !thirdPart.startsWith("Map_")) {
             // Foo_string -> Foo, string
             val (remaining, key) = thirdPart.split('_', limit = 2)
 
@@ -75,7 +75,24 @@ object VlangCTypeParser {
         return type.removeSuffix("*").trim()
     }
 
+    /**
+     * Example:
+     *
+     *    "_option_int" -> "int"
+     */
+    fun parseOptionType(type: String): String {
+        if (!type.startsWith("_option_")) {
+            return type
+        }
+
+        return type.substring(8)
+    }
+
     fun convertCNameToVName(name: String): String {
         return name.replace("__", ".")
+    }
+
+    fun toCName(name: String): String {
+        return name.replace(".", "__")
     }
 }

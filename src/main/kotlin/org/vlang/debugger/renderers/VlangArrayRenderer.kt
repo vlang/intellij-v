@@ -34,7 +34,7 @@ object VlangArrayRenderer : VlangValueRenderer() {
         return getVariableChildrenWithType(elementType, value, offset, size)
     }
 
-    fun getVariableChildrenWithType(elementType: String, value: VlangValue, offset: Int, size: Int): DebuggerDriver.ResultList<VlangValue> {
+    fun getVariableChildrenWithType(elementTypeRaw: String, value: VlangValue, offset: Int, size: Int): DebuggerDriver.ResultList<VlangValue> {
         val len = value["len"].data.intValue()
         val data = value["data"]
         val dataAddress = data.llValue.address?.toString(16)
@@ -42,7 +42,7 @@ object VlangArrayRenderer : VlangValueRenderer() {
         if (dataAddress == null) {
             val elements = (0 until len)
                 .asSequence()
-                .mapIndexed { index, it -> value.context.evaluate("(($elementType*)(${value.llValue.name}.data))[$index]") }
+                .mapIndexed { index, it -> value.context.evaluate("(($elementTypeRaw*)(${value.llValue.name}.data))[$index]") }
                 .mapIndexed { index, it -> it.withName("$index") }
                 .map { it.withContext(value.context) }
                 .toList()
@@ -53,8 +53,17 @@ object VlangArrayRenderer : VlangValueRenderer() {
             )
         }
 
+        var elementIsPointer = false
+        var elementType = elementTypeRaw
+        if (elementType.endsWith("_ptr")) {
+            elementType = elementType.removeSuffix("_ptr")
+            elementIsPointer = true
+        }
+
+        val pointer = if (elementIsPointer) "*" else ""
+
         // cast memory to fixed size array of elementType
-        val array = value.evaluate("(($elementType(*)[$len])(*(i64*)0x$dataAddress))")
+        val array = value.evaluate("($pointer($elementType(*$pointer)[$len])(*(i64*)0x$dataAddress))")
         // and get children
         return array.withContext(value.context).getVariableChildren(offset, size, true)
     }

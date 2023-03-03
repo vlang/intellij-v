@@ -747,6 +747,11 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun byReference(o: VlangMethodDeclaration): Boolean {
+        return o.receiver.takeReference()
+    }
+
+    @JvmStatic
     fun getQualifier(o: VlangReferenceExpression): VlangCompositeElement? {
         return PsiTreeUtil.getChildOfType(o, VlangExpression::class.java)
     }

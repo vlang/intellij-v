@@ -18,6 +18,8 @@ class VlangDebuggerState : PersistentStateComponent<VlangDebuggerState?> {
     var lldbPath: String? = null
     var downloadAutomatically: Boolean = true
     var stopsAtPanics: Boolean = true
+    var showStrMethodResult: Boolean = true
+    var dontUsePrettyPrinters: Boolean = false
 
     override fun getState() = this
 

@@ -102,6 +102,8 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
         val isDebug = ctx.environment.runner is VlangDebugRunner
         if (isDebug) {
             commandLine.withParameters("-g")
+            commandLine.addParameters("-no-parallel", "-no-retry-compilation", "-skip-unused")
+            commandLine.addParameters("-keepc")
 
             // Debugging with TCC not working on Windows and Linux for some reasons
             if (SystemInfo.isLinux) {

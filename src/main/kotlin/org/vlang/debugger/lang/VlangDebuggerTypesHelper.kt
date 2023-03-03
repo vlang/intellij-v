@@ -23,19 +23,9 @@ class VlangDebuggerTypesHelper(process: CidrDebugProcess) : CidrDebuggerTypesHel
 
     override fun resolveProperty(value: CidrMemberValue, dynamicTypeName: String?): XSourcePosition? = null
 
-    override fun resolveToDeclaration(position: XSourcePosition?, `var`: LLValue): PsiElement? {
+    override fun resolveToDeclaration(position: XSourcePosition?, value: LLValue): PsiElement? {
         val context = getContextElement(position)
-        return resolveToDeclaration(context, `var`.name)
-    }
-
-    override fun filterLocalVariables(
-        position: XSourcePosition?,
-        vars: MutableList<LLValue>,
-        expirable: Expirable
-    ): CompletableFuture<List<LLValue>> {
-        return CompletableFuture.completedFuture(vars.filter {
-            !it.name.startsWith("_")
-        })
+        return resolveToDeclaration(context, value.name)
     }
 }
 

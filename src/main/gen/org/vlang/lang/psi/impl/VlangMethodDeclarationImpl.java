@@ -129,4 +129,9 @@ public class VlangMethodDeclarationImpl extends VlangMethodDeclarationWithScopeH
     return VlangPsiImplUtil.isMutable(this);
   }
 
+  @Override
+  public boolean byReference() {
+    return VlangPsiImplUtil.byReference(this);
+  }
+
 }

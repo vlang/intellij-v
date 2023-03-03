@@ -4,5 +4,6 @@
     <lineBreakpointFileTypesProvider implementation="org.vlang.debugger.VlangLineBreakpointFileTypesProvider"/>
     <debugProcessConfigurator implementation="org.vlang.debugger.runconfig.VlangDebugProcessConfigurator"/>
     <valueRendererExtension implementation="org.vlang.debugger.VlangValueRendererExtension"/>
+    <localVariablesFilterHandler implementation="org.vlang.debugger.lang.VlangLocalVariablesFilterHandler"/>
   </extensions>
 </idea-plugin>

@@ -33,7 +33,7 @@ class VlangInheritorsLineMarkerProvider : LineMarkerProviderDescriptor() {
             val parent = element.getParent()
 
             if (parent is VlangInterfaceType) {
-                val iface = parent.parent as VlangInterfaceDeclaration
+                val iface = parent.parent as? VlangInterfaceDeclaration ?: continue
                 if (hasImplementations(iface, VlangInheritorsSearch)) {
                     specsWithImplementations.add(iface)
                     result.add(createTypeSpecInfo(element, iface))

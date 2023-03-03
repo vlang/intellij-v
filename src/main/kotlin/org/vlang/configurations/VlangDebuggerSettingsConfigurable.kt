@@ -14,6 +14,8 @@ class VlangDebuggerSettingsConfigurable : Configurable {
         var lldbPath: String,
         var downloadAutomatically: Boolean,
         var stopsAtPanics: Boolean,
+        var showStrMethodResult: Boolean,
+        var dontUsePrettyPrinters: Boolean,
     )
 
     private val mainPanel: DialogPanel
@@ -21,6 +23,8 @@ class VlangDebuggerSettingsConfigurable : Configurable {
         lldbPath = "",
         downloadAutomatically = true,
         stopsAtPanics = true,
+        showStrMethodResult = true,
+        dontUsePrettyPrinters = false,
     )
 
     init {
@@ -36,13 +40,29 @@ class VlangDebuggerSettingsConfigurable : Configurable {
                     .comment("Path to the LLDB debugger executable")
             }
             row {
+                checkBox("Download and update debugger automatically")
+                    .bindSelected(model::downloadAutomatically)
+            }
+            row {
                 checkBox("Stop execution when panics")
                     .bindSelected(model::stopsAtPanics)
                     .comment("When panic occurs, the debugger will stop execution for you to inspect the stack trace")
             }
             row {
-                checkBox("Download and update debugger automatically")
-                    .bindSelected(model::downloadAutomatically)
+                checkBox("Show result of str() method")
+                    .bindSelected(model::showStrMethodResult)
+                    .comment("""
+                        When the debugger stops at a breakpoint, it will show the result of the user-defined <code>str()</> method (if any) right after variable name.
+                        Note that if the method has more than 3 statements, then it will not be executed.
+                        """.trimIndent())
+            }
+            row {
+                checkBox("Don't use pretty printers")
+                    .bindSelected(model::dontUsePrettyPrinters)
+                    .comment("""
+                        Pretty printers are used to show the values of variables in the debugger in a convenient readable form.
+                        This setting allows you to <b>disable</b> them in order to be able to see how variables are represented in C code.
+                        """.trimIndent())
             }
         }
     }
@@ -57,7 +77,9 @@ class VlangDebuggerSettingsConfigurable : Configurable {
         val settings = VlangDebuggerState.getInstance()
         return model.lldbPath != settings.lldbPath ||
                 model.downloadAutomatically != settings.downloadAutomatically ||
-                model.stopsAtPanics != settings.stopsAtPanics
+                model.stopsAtPanics != settings.stopsAtPanics ||
+                model.showStrMethodResult != settings.showStrMethodResult ||
+                model.dontUsePrettyPrinters != settings.dontUsePrettyPrinters
     }
 
     override fun apply() {
@@ -68,6 +90,8 @@ class VlangDebuggerSettingsConfigurable : Configurable {
             lldbPath = model.lldbPath
             downloadAutomatically = model.downloadAutomatically
             stopsAtPanics = model.stopsAtPanics
+            showStrMethodResult = model.showStrMethodResult
+            dontUsePrettyPrinters = model.dontUsePrettyPrinters
         }
     }
 
@@ -78,6 +102,8 @@ class VlangDebuggerSettingsConfigurable : Configurable {
             lldbPath = settings.lldbPath ?: ""
             downloadAutomatically = settings.downloadAutomatically
             stopsAtPanics = settings.stopsAtPanics
+            showStrMethodResult = settings.showStrMethodResult
+            dontUsePrettyPrinters = settings.dontUsePrettyPrinters
         }
 
         mainPanel.reset()

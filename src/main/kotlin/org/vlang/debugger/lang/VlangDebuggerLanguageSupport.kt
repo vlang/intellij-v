@@ -24,12 +24,24 @@ class VlangDebuggerLanguageSupport : CidrDebuggerLanguageSupport() {
                 attributes: SimpleTextAttributes,
                 renderForUiLabel: Boolean,
             ): ColoredText {
-                val functionName = frame.frame.function
-                    .replace("__", ".")
-                    .replace("_T_", "<T>")
+                val rawName = frame.frame.function
+                    .replace(GENERIC_TYPE_IN_CALLSTACK_REGEX, "[$1]")
+
+                val parts = rawName.split("__")
+                val fixedName = parts.joinToString(".") {
+                    val firstCharIsUpperCase = it.first().isUpperCase()
+                    var res = it
+                    if (firstCharIsUpperCase) {
+                        val indexOfUnderscore = it.indexOf('_')
+                        if (indexOfUnderscore != -1) {
+                            res = it.replaceFirst("_", ".")
+                        }
+                    }
+                    res
+                }
 
                 val builder = ColoredText.builder()
-                    .append(functionName, attributes)
+                    .append(fixedName, attributes)
 
                 return builder.build()
             }
@@ -52,6 +64,11 @@ class VlangDebuggerLanguageSupport : CidrDebuggerLanguageSupport() {
                     return "chan " + convertType(chanType)
                 }
 
+                if (type.startsWith("_option_")) {
+                    val optionType = VlangCTypeParser.parseOptionType(type)
+                    return "?" + convertType(optionType)
+                }
+
                 if (type.startsWith("Map_")) {
                     val (key, value) = VlangCTypeParser.parseMapType(type)
                     return "map[" + convertType(key) + "]" + convertType(value)
@@ -67,6 +84,11 @@ class VlangDebuggerLanguageSupport : CidrDebuggerLanguageSupport() {
                 if (type.startsWith("Array_")) {
                     val arrayType = type.substringAfter("Array_")
                     return "[]" + convertType(arrayType)
+                }
+
+                if (type.endsWith("_ptr")) {
+                    val elementType = type.removeSuffix("_ptr")
+                    return "&" + convertType(elementType)
                 }
                
                 if (type.contains("__")) {
@@ -103,5 +125,6 @@ class VlangDebuggerLanguageSupport : CidrDebuggerLanguageSupport() {
 
     companion object {
         private val GENERIC_TYPE_REGEX = "_[A-Z]_(\\w+)".toRegex()
+        private val GENERIC_TYPE_IN_CALLSTACK_REGEX = "_([A-Z])_".toRegex()
     }
 }

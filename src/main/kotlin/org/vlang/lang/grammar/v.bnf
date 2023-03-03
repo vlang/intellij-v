@@ -576,7 +576,7 @@ FunctionDeclaration ::= Attributes? SymbolVisibility? fn identifier GenericParam
 MethodDeclaration ::= Attributes? SymbolVisibility? fn '(' Receiver ')' MethodName GenericParameters? Signature BlockWithConsume? {
   pin=7
   stubClass="org.vlang.lang.stubs.VlangMethodDeclarationStub"
-  methods=[getReceiverType getTypeInner getIdentifier getQualifiedName getOwner isMutable]
+  methods=[getReceiverType getTypeInner getIdentifier getQualifiedName getOwner isMutable byReference]
   mixin="org.vlang.lang.psi.impl.VlangMethodDeclarationWithScopeHolder"
 }
 // <ident> or <ops> for overload
