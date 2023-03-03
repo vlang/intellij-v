@@ -10,9 +10,7 @@ import com.intellij.util.Processor
 import com.intellij.util.containers.JBIterable
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet
 import org.vlang.lang.psi.*
-import org.vlang.lang.psi.impl.VlangLangUtil
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
-import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapAlias
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapPointer
 import org.vlang.lang.psi.types.VlangFunctionTypeEx
 import org.vlang.lang.psi.types.VlangStructTypeEx

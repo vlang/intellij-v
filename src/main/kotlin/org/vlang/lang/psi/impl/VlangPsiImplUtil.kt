@@ -2030,6 +2030,19 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getInitializer(o: VlangVarDefinition): VlangExpression? {
+        val parent = o.parent
+        if (parent is VlangRangeClause) return null
+        if (parent is VlangVarDeclaration) {
+            val defineIndex = parent.varDefinitionList.indexOf(o)
+            val exprList = parent.expressionList
+            return exprList.getOrNull(defineIndex)
+        }
+
+        return null
+    }
+
+    @JvmStatic
     fun getSymbolVisibility(o: VlangVarDefinition): VlangSymbolVisibility? {
         return null
     }

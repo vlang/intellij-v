@@ -87,6 +87,12 @@ public class VlangVarDefinitionImpl extends VlangNamedElementImpl<VlangVarDefini
 
   @Override
   @Nullable
+  public VlangExpression getInitializer() {
+    return VlangPsiImplUtil.getInitializer(this);
+  }
+
+  @Override
+  @Nullable
   public VlangSymbolVisibility getSymbolVisibility() {
     return VlangPsiImplUtil.getSymbolVisibility(this);
   }

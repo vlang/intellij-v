@@ -827,7 +827,7 @@ private ExpressionListRecover ::= !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' |
 private VarDefinitionList ::= VarDefinition (',' VarDefinition)*
 VarDefinition ::= VarModifiers? identifier {
   pin=2
-  methods=[getTypeInner getName getReference isMutable isPublic makeMutable makeImmutable getValue getSymbolVisibility]
+  methods=[getTypeInner getName getReference isMutable isPublic makeMutable makeImmutable getInitializer getSymbolVisibility]
   implements="org.vlang.lang.psi.VlangMutabilityOwner"
   stubClass="org.vlang.lang.stubs.VlangVarDefinitionStub"
 }

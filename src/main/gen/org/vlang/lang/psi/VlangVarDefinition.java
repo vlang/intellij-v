@@ -35,9 +35,8 @@ public interface VlangVarDefinition extends VlangMutabilityOwner, VlangNamedElem
 
   void makeImmutable();
 
-  //WARNING: getValue(...) is skipped
-  //matching getValue(VlangVarDefinition, ...)
-  //methods are not found in VlangPsiImplUtil
+  @Nullable
+  VlangExpression getInitializer();
 
   @Nullable
   VlangSymbolVisibility getSymbolVisibility();

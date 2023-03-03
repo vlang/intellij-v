@@ -178,6 +178,9 @@ Provides support for <a href="https://vlang.io/">V</a> language
         <codeInsight.implementMethod language="vlang"
                                      implementationClass="org.vlang.ide.refactoring.VlangImplementMethodsHandler"/>
         <renamePsiElementProcessor implementation="org.vlang.ide.refactoring.VlangRenameProcessor"/>
+        <nameSuggestionProvider implementation="org.vlang.ide.refactoring.VlangNameSuggestionProvider"/>
+        <lang.namesValidator language="vlang"
+                             implementationClass="org.vlang.ide.refactoring.VlangNamesValidator"/>
         <!-- endregion Refactorings -->
 
         <!-- endregion V File -->

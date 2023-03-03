@@ -1,6 +1,5 @@
 package org.vlang.ide.templates.postfix
 
-import com.intellij.codeInsight.template.impl.ConstantNode
 import com.intellij.codeInsight.template.impl.MacroCallNode
 import com.intellij.codeInsight.template.postfix.templates.PostfixTemplate
 import com.intellij.openapi.editor.Document
@@ -10,12 +9,10 @@ import com.intellij.psi.util.parentOfType
 import com.intellij.refactoring.suggested.startOffset
 import org.vlang.ide.templates.VlangSuggestVariableNameMacro
 import org.vlang.lang.psi.VlangExpression
-import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapAlias
-import org.vlang.lang.psi.types.VlangMapTypeEx
 
-class VlangForPostfixTemplate : PostfixTemplate(
-    "vlang.postfix.for", "for",
-    "for value in array", null
+class VlangForIndexedPostfixTemplate : PostfixTemplate(
+    "vlang.postfix.fori", "fori",
+    "for index, value in array", null
 ) {
     override fun isApplicable(context: PsiElement, copyDocument: Document, newOffset: Int) =
         VlangPostfixUtil.isExpression(context) &&
@@ -25,28 +22,18 @@ class VlangForPostfixTemplate : PostfixTemplate(
         val expr = context.parentOfType<VlangExpression>() ?: return
         val caret = editor.caretModel.primaryCaret
         val document = editor.document
-        val type = expr.getType(null)?.unwrapAlias()
-        val isMap = type is VlangMapTypeEx
 
         caret.moveToOffset(expr.startOffset)
         document.deleteString(expr.textRange.startOffset, expr.textRange.endOffset)
+
+        val indexVariable = MacroCallNode(VlangSuggestVariableNameMacro())
         val valueVariable = MacroCallNode(VlangSuggestVariableNameMacro())
 
-        if (isMap) {
-            VlangPostfixUtil.startTemplate(
-                "for \$key$, \$value$ in ${expr.text} {\n\$END$\n}",
-                context.project,
-                editor,
-                "key" to ConstantNode("key"),
-                "value" to valueVariable
-            )
-            return
-        }
-
         VlangPostfixUtil.startTemplate(
-            "for \$value$ in ${expr.text} {\n\$END$\n}",
+            "for \$key$, \$value$ in ${expr.text} {\n\$END$\n}",
             context.project,
             editor,
+            "key" to indexVariable,
             "value" to valueVariable
         )
     }

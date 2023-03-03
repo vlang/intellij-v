@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiManager
+import com.intellij.psi.ResolveState
 import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.CachedValuesManager
 import com.intellij.psi.util.PsiModificationTracker
@@ -13,6 +14,7 @@ import org.vlang.lang.psi.*
 import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.stubs.index.VlangMethodIndex
+import org.vlang.utils.ancestorOrSelf
 
 object VlangLangUtil {
     fun getErrVariableDefinition(project: Project): VlangConstDefinition? {
@@ -164,6 +166,20 @@ object VlangLangUtil {
         }
 
         return o.toString()
+    }
+
+    fun findNamesInScope(ctx: PsiElement): List<String> {
+        val function = ctx.ancestorOrSelf<VlangFunctionOrMethodDeclaration>() ?: return emptyList()
+
+        val result = mutableListOf<String>()
+        function.processDeclarations({ element, _ ->
+            if (element is VlangNamedElement && element.name != null) {
+                result.add(element.name!!)
+            }
+            true
+        }, ResolveState.initial(), null, ctx)
+
+        return result
     }
 
     fun getDefaultValue(element: PsiElement, type: VlangTypeEx?): String = when (type) {

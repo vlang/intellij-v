@@ -1,5 +1,5 @@
 module postfix
 
-mp := map[string]int{}
+name_to_id := map[string]int{}
 
-mp.for<caret>
+name_to_id.for<caret>

@@ -18,7 +18,8 @@ class VlangPostfixTemplateProvider : PostfixTemplateProvider {
         VlangParPostfixTemplate(),
         VlangReturnPostfixTemplate(),
         VlangMatchPostfixTemplate(),
-        VlangForPostfixTemplate()
+        VlangForPostfixTemplate(),
+        VlangForIndexedPostfixTemplate(),
     )
 
     override fun isTerminalSymbol(currentChar: Char) = currentChar == '.'
