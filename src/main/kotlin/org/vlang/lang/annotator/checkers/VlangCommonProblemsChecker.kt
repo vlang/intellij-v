@@ -6,10 +6,13 @@ import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.util.parentOfType
+import com.intellij.refactoring.suggested.endOffset
+import com.intellij.refactoring.suggested.startOffset
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangElementFactory
 import org.vlang.lang.psi.impl.VlangLangUtil
@@ -135,6 +138,72 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
             .create()
     }
 
+    override fun visitStructDeclaration(struct: VlangStructDeclaration) {
+        val type = struct.structType
+        val groups = type.fieldsGroupList
+
+        val usedModifiers = mutableSetOf<String>()
+        groups.forEach { group ->
+            val modifiers = group.memberModifiers ?: return@forEach
+            val name = modifiers.text
+            if (usedModifiers.contains(name)) {
+                holder.newAnnotation(
+                    HighlightSeverity.ERROR,
+                    "Duplicate modifier group '$name'"
+                )
+                    .range(TextRange(modifiers.startOffset, modifiers.endOffset - 1))
+                    .create()
+            }
+            usedModifiers.add(name)
+        }
+    }
+
+    override fun visitUnfinishedMemberModifiers(modifiers: VlangUnfinishedMemberModifiers) {
+        holder.newAnnotation(
+            HighlightSeverity.ERROR,
+            "Expected ':' after modifiers"
+        )
+            .range(modifiers)
+            .create()
+    }
+
+    override fun visitMemberModifiers(modifiers: VlangMemberModifiers) {
+        if (modifiers.memberModifierList.size < 2) {
+            return
+        }
+
+        val parent = modifiers.parent
+        val list = modifiers.memberModifierList
+
+        val used = mutableSetOf<String>()
+        list.forEach {
+            val name = it.text
+            if (used.contains(name)) {
+                holder.newAnnotation(
+                    HighlightSeverity.ERROR,
+                    "Duplicate modifier '$name'"
+                )
+                    .range(it)
+                    .create()
+            }
+            used.add(name)
+        }
+
+        if (parent is VlangFieldsGroup && modifiers.memberModifierList.size == 2) {
+            val first = list.first()
+            val last = list.last()
+            if (first.textMatches("mut") && last.textMatches("pub")) {
+                holder.newAnnotation(
+                    HighlightSeverity.ERROR,
+                    "Use 'pub mut' instead of 'mut pub'"
+                )
+                    .range(modifiers)
+                    .withFix(FlipMutPubModifiersQuickFix(modifiers))
+                    .create()
+            }
+        }
+    }
+
     override fun visitStructType(type: VlangStructType) {
         val fieldList = type.fieldsGroupList.flatMap { it.fieldDeclarationList }
 
@@ -195,7 +264,8 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
                 return
             }
 
-            val expectedCount = if (maxAllowedTypesCount != countResultTypes) "$countResultTypes or $maxAllowedTypesCount" else "$countResultTypes"
+            val expectedCount =
+                if (maxAllowedTypesCount != countResultTypes) "$countResultTypes or $maxAllowedTypesCount" else "$countResultTypes"
 
             val messageBegin = if (countReturnExpressions > countResultTypes) "Too many return values" else "Not enough return values"
             holder.newAnnotation(
@@ -301,6 +371,24 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
                 val withoutParens = text.removeSurrounding("(", ")")
                 val newResult = VlangElementFactory.createFunctionResult(project, withoutParens)
                 startElement.replace(newResult)
+            }
+        }
+
+        class FlipMutPubModifiersQuickFix(element: PsiElement) : LocalQuickFixAndIntentionActionOnPsiElement(element) {
+            override fun startInWriteAction() = true
+            override fun getFamilyName() = "Flip mut/pub modifiers"
+            override fun getText() = "Flip mut/pub modifiers"
+
+            override fun invoke(project: Project, file: PsiFile, editor: Editor?, startElement: PsiElement, endElement: PsiElement) {
+                if (startElement !is VlangMemberModifiers) return
+                val list = startElement.memberModifierList
+
+                val first = list.first()
+                val last = list.last()
+                val lastCopy = list.last().copy()
+
+                last.replace(first)
+                first.replace(lastCopy)
             }
         }
     }

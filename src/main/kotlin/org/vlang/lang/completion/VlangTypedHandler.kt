@@ -7,7 +7,10 @@ import com.intellij.openapi.editor.impl.TypedActionImpl
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
+import com.intellij.psi.PsiWhiteSpace
+import com.intellij.psi.util.elementType
 import com.intellij.psi.util.parentOfType
+import com.intellij.refactoring.suggested.endOffset
 import com.intellij.refactoring.suggested.startOffset
 import org.vlang.ide.editor.VlangEditorUtil
 import org.vlang.lang.VlangTypes
@@ -75,6 +78,17 @@ class VlangTypedHandler : TypedHandlerDelegate() {
                     document.insertString(editor.caretModel.offset, ")")
                 }
                 return Result.STOP
+            }
+        }
+
+        if (c == ':' && prevElement != null) {
+            if (prevElement.elementType == VlangTypes.MUT || prevElement.elementType == VlangTypes.PUB) {
+                val modifiers = prevElement.parentOfType<VlangUnfinishedMemberModifiers>() ?: return Result.DEFAULT
+                val fieldsGroup = modifiers.parent
+                val beforeGroup = fieldsGroup.prevSibling
+                if (beforeGroup is PsiWhiteSpace && !beforeGroup.text.contains("\n")) {
+                    document.deleteString(beforeGroup.startOffset, beforeGroup.endOffset)
+                }
             }
         }
 

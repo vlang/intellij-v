@@ -394,17 +394,19 @@ AnonymousStructType ::= struct '{' FieldsGroup* '}' {
   methods=[getFieldList getOwnFieldList]
 }
 
-StructType ::= (struct | union) identifier GenericParameters? '{' FieldsGroup* '}' {
+StructType ::= (struct | union) identifier GenericParameters? '{'  FieldsGroup* '}' {
   pin=1
   implements="org.vlang.lang.psi.VlangFieldListOwner"
   methods=[getFieldList getOwnFieldList getEmbeddedStructs getEmbeddedStructList isUnion]
 }
 
-FieldsGroup ::= WithModifiersFieldsGroup | WithoutModifiersFieldsGroup {
+FieldsGroup ::= UnfinishedMemberModifiers | WithModifiersFieldsGroup | WithoutModifiersFieldsGroup {
   methods=[getMemberModifierList]
   implements="org.vlang.lang.psi.VlangMemberModifiersOwner"
 }
 
+// meta rule to deal with completion for modifiers
+UnfinishedMemberModifiers ::= MemberModifier+ !(':' | semi)
 MemberModifiers ::= MemberModifier* ':' {pin=2}
 MemberModifier ::= mut | pub | '__global'
 

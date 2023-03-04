@@ -6,6 +6,7 @@ import com.intellij.codeInsight.completion.CompletionResultSet
 import com.intellij.codeInsight.completion.CompletionType
 import org.vlang.lang.completion.VlangCompletionPatterns.cachedReferenceExpression
 import org.vlang.lang.completion.VlangCompletionPatterns.insideStatementWithLabel
+import org.vlang.lang.completion.VlangCompletionPatterns.insideStruct
 import org.vlang.lang.completion.VlangCompletionPatterns.onExpression
 import org.vlang.lang.completion.VlangCompletionPatterns.onModuleImportName
 import org.vlang.lang.completion.VlangCompletionPatterns.onStatement
@@ -27,6 +28,7 @@ class VlangCompletionContributor : CompletionContributor() {
         extend(CompletionType.BASIC, onExpression(),       EnumFieldContextCompletionProvider)
         extend(CompletionType.BASIC, onType(),             MapTypeCompletionProvider)
         extend(CompletionType.BASIC, onType(),             ChanTypeCompletionProvider)
+        extend(CompletionType.BASIC, insideStruct(),       StructFieldGroupModifierCompletionProvider)
 
         extend(CompletionType.BASIC, insideStatementWithLabel(),  LabelCompletionProvider)
         extend(CompletionType.BASIC, referenceExpression(),       ReferenceCompletionProvider)

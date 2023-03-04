@@ -216,6 +216,7 @@ public interface VlangTypes {
   IElementType TYPE_REFERENCE_EXPRESSION = VlangElementTypeFactory.stubFactory("TYPE_REFERENCE_EXPRESSION");
   IElementType TYPE_UNION_LIST = VlangElementTypeFactory.stubFactory("TYPE_UNION_LIST");
   IElementType UNARY_EXPR = new VlangCompositeElementType("UNARY_EXPR");
+  IElementType UNFINISHED_MEMBER_MODIFIERS = new VlangCompositeElementType("UNFINISHED_MEMBER_MODIFIERS");
   IElementType UNPACKING_EXPRESSION = new VlangCompositeElementType("UNPACKING_EXPRESSION");
   IElementType UNSAFE_EXPRESSION = new VlangCompositeElementType("UNSAFE_EXPRESSION");
   IElementType VALUE = new VlangCompositeElementType("VALUE");
@@ -973,6 +974,9 @@ public interface VlangTypes {
       }
       else if (type == UNARY_EXPR) {
         return new VlangUnaryExprImpl(node);
+      }
+      else if (type == UNFINISHED_MEMBER_MODIFIERS) {
+        return new VlangUnfinishedMemberModifiersImpl(node);
       }
       else if (type == UNPACKING_EXPRESSION) {
         return new VlangUnpackingExpressionImpl(node);

@@ -139,11 +139,6 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         // Other
         extend(
             CompletionType.BASIC,
-            insideStruct(),
-            StructKeywordsCompletionProvider("pub", "mut", "shared")
-        )
-        extend(
-            CompletionType.BASIC,
             onIfElse(),
             ElseIfKeywordCompletionProvider(),
         )
@@ -362,9 +357,6 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
             result.addAllElements(elements)
         }
     }
-
-    private inner class StructKeywordsCompletionProvider(private vararg val keywords: String) :
-        KeywordsCompletionProvider(*keywords, needSpace = true)
 
     private inner class PureBlockKeywordCompletionProvider(private vararg val keywords: String) :
         CompletionProvider<CompletionParameters>() {

@@ -2048,12 +2048,13 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // WithModifiersFieldsGroup | WithoutModifiersFieldsGroup
+  // UnfinishedMemberModifiers | WithModifiersFieldsGroup | WithoutModifiersFieldsGroup
   public static boolean FieldsGroup(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FieldsGroup")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, FIELDS_GROUP, "<fields group>");
-    r = WithModifiersFieldsGroup(b, l + 1);
+    r = UnfinishedMemberModifiers(b, l + 1);
+    if (!r) r = WithModifiersFieldsGroup(b, l + 1);
     if (!r) r = WithoutModifiersFieldsGroup(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
@@ -5678,7 +5679,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (struct | union) identifier GenericParameters? '{' FieldsGroup* '}'
+  // (struct | union) identifier GenericParameters? '{'  FieldsGroup* '}'
   public static boolean StructType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StructType")) return false;
     if (!nextTokenIs(b, "<struct type>", STRUCT, UNION)) return false;
@@ -6204,6 +6205,52 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, BIT_AND);
     if (!r) r = consumeToken(b, COND_AND);
     if (!r) r = consumeToken(b, SEND_CHANNEL);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // MemberModifier+ !(':' | semi)
+  public static boolean UnfinishedMemberModifiers(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UnfinishedMemberModifiers")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, UNFINISHED_MEMBER_MODIFIERS, "<unfinished member modifiers>");
+    r = UnfinishedMemberModifiers_0(b, l + 1);
+    r = r && UnfinishedMemberModifiers_1(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // MemberModifier+
+  private static boolean UnfinishedMemberModifiers_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UnfinishedMemberModifiers_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = MemberModifier(b, l + 1);
+    while (r) {
+      int c = current_position_(b);
+      if (!MemberModifier(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "UnfinishedMemberModifiers_0", c)) break;
+    }
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // !(':' | semi)
+  private static boolean UnfinishedMemberModifiers_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UnfinishedMemberModifiers_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NOT_);
+    r = !UnfinishedMemberModifiers_1_0(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // ':' | semi
+  private static boolean UnfinishedMemberModifiers_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UnfinishedMemberModifiers_1_0")) return false;
+    boolean r;
+    r = consumeToken(b, COLON);
+    if (!r) r = semi(b, l + 1);
     return r;
   }
 

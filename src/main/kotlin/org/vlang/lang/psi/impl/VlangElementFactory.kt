@@ -103,13 +103,9 @@ object VlangElementFactory {
         )!!
     }
 
-    fun createOptionalPropagation(project: Project, expression: PsiElement): VlangCompositeElement {
-        val file = createFileFromText(project, "${expression.text}?")
-        val call = PsiTreeUtil.findChildOfType(file, VlangCallExprWithPropagate::class.java)
-        if (call != null) {
-            return call
-        }
-        return PsiTreeUtil.findChildOfType(file, VlangDotExpression::class.java)!!
+    fun createMemberModifiers(project: Project, text: String): VlangMemberModifiers {
+        val file = createFileFromText(project, "struct Foo { $text a int }")
+        return PsiTreeUtil.findChildOfType(file, VlangMemberModifiers::class.java)!!
     }
 
     fun createResultPropagation(project: Project, expression: PsiElement): VlangCompositeElement {

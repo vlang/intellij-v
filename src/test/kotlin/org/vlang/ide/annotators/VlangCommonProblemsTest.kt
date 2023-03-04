@@ -11,4 +11,8 @@ class VlangCommonProblemsTest : AnnotatorTestBase() {
     fun `test wrong pointer type`() = doTestQuickFix("wrong_pointer_type.v")
     fun `test struct embedding`() = doTestQuickFix("struct_embedding.v")
     fun `test return count mismatch`() = doTestQuickFix("return_count_mismatch.v")
+    fun `test duplicate struct fields group modifier`() = doTest("duplicate_struct_fields_group_modifier.v")
+    fun `test duplicate modifier in list`() = doTest("duplicate_modifier_in_list.v")
+    fun `test unfinished modifier list in structs`() = doTest("unfinished_modifier_list_in_structs.v")
+    fun `test wrong modifiers order in structs`() = doTestQuickFix("wrong_modifiers_order_in_structs.v")
 }

@@ -14,6 +14,9 @@ public interface VlangFieldsGroup extends VlangMemberModifiersOwner {
   VlangMemberModifiers getMemberModifiers();
 
   @Nullable
+  VlangUnfinishedMemberModifiers getUnfinishedMemberModifiers();
+
+  @Nullable
   PsiElement getSemicolon();
 
   @Nullable

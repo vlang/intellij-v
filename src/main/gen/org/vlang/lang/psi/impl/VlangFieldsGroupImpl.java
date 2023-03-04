@@ -40,6 +40,12 @@ public class VlangFieldsGroupImpl extends VlangCompositeElementImpl implements V
 
   @Override
   @Nullable
+  public VlangUnfinishedMemberModifiers getUnfinishedMemberModifiers() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangUnfinishedMemberModifiers.class);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getSemicolon() {
     return findChildByType(SEMICOLON);
   }

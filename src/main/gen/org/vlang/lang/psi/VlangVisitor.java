@@ -870,6 +870,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitUnfinishedMemberModifiers(@NotNull VlangUnfinishedMemberModifiers o) {
+    visitCompositeElement(o);
+  }
+
   public void visitUnpackingExpression(@NotNull VlangUnpackingExpression o) {
     visitExpression(o);
   }
