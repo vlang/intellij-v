@@ -19,9 +19,9 @@ class VlangReassignImmutableSymbolInspection : VlangBaseInspection() {
 
                 val leftExprs = o.leftHandExprList.expressionList
                 for (leftExpr in leftExprs) {
-                    if (leftExpr !is VlangReferenceExpression) continue
+                    val expr = extractExpressionToCheck(leftExpr) ?: continue
                     checkReferenceExpression(
-                        leftExpr,
+                        expr,
                         { kind, name ->
                             if (kind == "constant") "Constant '$name' cannot be reassigned"
                             else "Immutable $kind '$name' cannot be reassigned"
@@ -31,6 +31,15 @@ class VlangReassignImmutableSymbolInspection : VlangBaseInspection() {
                             else "Immutably captured $kind '$name' cannot be reassigned"
                         },
                     )
+                }
+            }
+
+            fun extractExpressionToCheck(expr: VlangExpression?): VlangReferenceExpression? {
+                return when (expr) {
+                    is VlangIndexOrSliceExpr    -> extractExpressionToCheck(expr.expressionList.firstOrNull())
+                    is VlangParenthesesExpr     -> extractExpressionToCheck(expr.expression)
+                    is VlangReferenceExpression -> expr
+                    else                        -> null
                 }
             }
 
