@@ -76,22 +76,29 @@ object VlangLangUtil {
         default: String?,
     ) = methods.firstOrNull()?.receiver?.name ?: default
 
-    fun importTypesFromSignature(signature: VlangSignature, file: VlangFile) {
-        val currentModule = file.getModuleQualifiedName()
-        val typesToImport = findTypesForImport(signature, currentModule)
-        if (typesToImport.isEmpty()) {
+    fun importType(type: VlangTypeEx, context: VlangFile) {
+        val types = findTypesForImport(listOf(type), context.getModuleQualifiedName())
+        if (types.isEmpty()) {
             return
         }
 
-        typesToImport.forEach { file.addImport(it.module(), null) }
+        types.forEach { context.addImport(it.module(), null) }
     }
 
-    private fun findTypesForImport(signature: VlangSignature, currentModule: String): MutableSet<VlangTypeEx> {
-        val typesToImport = mutableSetOf<VlangTypeEx>()
+    fun importTypesFromSignature(signature: VlangSignature, context: VlangFile) {
+        val rawTypes = signature.parameters.paramDefinitionList.mapNotNull { it.type } + signature.result?.type
+        val types = findTypesForImport(rawTypes.map { it.toEx() }, context.getModuleQualifiedName())
+        if (types.isEmpty()) {
+            return
+        }
 
-        val types = signature.parameters.paramDefinitionList.mapNotNull { it.type }
+        types.forEach { context.addImport(it.module(), null) }
+    }
+
+    private fun findTypesForImport(types: List<VlangTypeEx>, currentModule: String): MutableSet<VlangTypeEx> {
+        val result = mutableSetOf<VlangTypeEx>()
         types.forEach { type ->
-            type.toEx().accept(object : VlangTypeVisitor {
+            type.accept(object : VlangTypeVisitor {
                 override fun enter(type: VlangTypeEx): Boolean {
                     if (type is VlangImportableTypeEx) {
                         // type from current module no need to import
@@ -99,7 +106,7 @@ object VlangLangUtil {
                             return true
                         }
 
-                        typesToImport.add(type)
+                        result.add(type)
                     }
 
                     return true
@@ -107,7 +114,7 @@ object VlangLangUtil {
             })
         }
 
-        return typesToImport
+        return result
     }
 
     /**

@@ -405,4 +405,56 @@ class ImplementTest : ImplementBaseTest() {
         """.trimIndent(),
         "Writer",
     )
+
+    fun `test immutable field interface and mutable field struct`() = doTest(
+        """
+        interface Writer {
+            name string
+        }
+        
+        struct /*caret*/Name {
+        mut:
+        	name string
+        }
+        """.trimIndent(),
+        """
+        interface Writer {
+            name string
+        }
+        
+        struct Name {
+        mut:
+        	name string
+        }
+        """.trimIndent(),
+        "Writer",
+    )
+
+    fun `test immutable method interface and mutable method struct`() = doTest(
+        """
+        interface Writer {
+            name() string
+        }
+        
+        struct /*caret*/Name {
+        }
+        
+        fn (mut n Name) name() string {
+            return ''       
+        }
+        """.trimIndent(),
+        """
+        interface Writer {
+            name() string
+        }
+        
+        struct Name {
+        }
+        
+        fn (mut n Name) name() string {
+            return ''       
+        }
+        """.trimIndent(),
+        "Writer",
+    )
 }

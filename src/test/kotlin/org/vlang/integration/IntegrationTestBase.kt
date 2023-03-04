@@ -1,6 +1,7 @@
 package org.vlang.integration
 
 import com.intellij.codeInsight.completion.CompletionType
+import com.intellij.codeInsight.generation.ImplementMethodsHandler
 import com.intellij.codeInsight.lookup.Lookup
 import com.intellij.openapi.application.QueryExecutorBase
 import com.intellij.openapi.application.WriteAction
@@ -11,13 +12,17 @@ import com.intellij.psi.PsiDirectory
 import com.intellij.psi.search.searches.DefinitionsScopedSearch
 import com.intellij.psi.util.parentOfType
 import com.intellij.refactoring.BaseRefactoringProcessor
+import com.intellij.testFramework.TestModeFlags
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 import com.intellij.util.CommonProcessors
 import org.intellij.lang.annotations.Language
+import org.vlang.ide.refactoring.VlangImplementMethodsHandler
+import org.vlang.lang.psi.VlangInterfaceDeclaration
 import org.vlang.lang.psi.VlangNamedElement
 import org.vlang.lang.psi.impl.VlangModule
 import org.vlang.lang.search.VlangGotoUtil
+import org.vlang.lang.stubs.index.VlangNamesIndex
 
 abstract class IntegrationTestBase : BasePlatformTestCase() {
     override fun getTestDataPath() = "src/test/resources/integration"
@@ -59,6 +64,12 @@ abstract class IntegrationTestBase : BasePlatformTestCase() {
         fun file(name: String, @Language("vlang") text: String) {
             myFixture.addFileToProject("${directory.path}/$name", text)
             myFixture.configureFromTempProjectFile("${directory.path}/$name")
+        }
+
+        fun directory(name: String, action: DirectoryContext.() -> Unit) {
+            val dir = WriteAction.compute<VirtualFile, RuntimeException> { directory.createChildDirectory(this, name) }
+            val context = DirectoryContext(myFixture, dir)
+            context.action()
         }
     }
 
@@ -122,7 +133,11 @@ abstract class IntegrationTestBase : BasePlatformTestCase() {
             myFixture.configureByText(name, content)
         }
 
-        fun <T : VlangNamedElement> assertSearch(caretIndex: Int, search: QueryExecutorBase<T, DefinitionsScopedSearch.SearchParameters>, vararg results: String) {
+        fun <T : VlangNamedElement> assertSearch(
+            caretIndex: Int,
+            search: QueryExecutorBase<T, DefinitionsScopedSearch.SearchParameters>,
+            vararg results: String,
+        ) {
             moveCaretToPos(caretIndex)
 
             val offset = myFixture.editor.caretModel.offset
@@ -139,7 +154,10 @@ abstract class IntegrationTestBase : BasePlatformTestCase() {
             }
         }
 
-        fun <T : VlangNamedElement> assertNoSearchResults(caretIndex: Int, search: QueryExecutorBase<T, DefinitionsScopedSearch.SearchParameters>) {
+        fun <T : VlangNamedElement> assertNoSearchResults(
+            caretIndex: Int,
+            search: QueryExecutorBase<T, DefinitionsScopedSearch.SearchParameters>,
+        ) {
             moveCaretToPos(caretIndex)
 
             val offset = myFixture.editor.caretModel.offset
@@ -165,13 +183,12 @@ abstract class IntegrationTestBase : BasePlatformTestCase() {
         fun renameWithConflicts(
             caretIndex: Int,
             newName: String,
-            conflicts: Set<String>
+            conflicts: Set<String>,
         ) {
             try {
                 renameElement(caretIndex, newName)
                 error("Conflicts $conflicts missing")
-            }
-            catch (e: BaseRefactoringProcessor.ConflictsInTestsException) {
+            } catch (e: BaseRefactoringProcessor.ConflictsInTestsException) {
                 assertEquals(e.messages.toSet(), conflicts)
             }
         }
@@ -185,6 +202,21 @@ abstract class IntegrationTestBase : BasePlatformTestCase() {
 
             myFixture.complete(CompletionType.BASIC, 1)
             CompletionContext(myFixture).action()
+        }
+
+        fun implementInterface(caretIndex: Int, name: String) {
+            moveCaretToPos(caretIndex)
+
+            val offset = myFixture.editor.caretModel.offset
+            val element = myFixture.file.findElementAt(offset)?.parentOfType<VlangNamedElement>()
+            check(element != null) { "No named element at caret $caretIndex" }
+
+            val iface = VlangNamesIndex.find(name, myFixture.project, null).firstOrNull() as? VlangInterfaceDeclaration
+                ?: error("No interface $name found")
+
+            TestModeFlags.set(VlangImplementMethodsHandler.TESTING_INTERFACE_TO_IMPLEMENT, iface, myFixture.testRootDisposable)
+
+            VlangImplementMethodsHandler().invoke(myFixture.project, myFixture.editor, myFixture.file)
         }
 
         fun finishCompletion() {

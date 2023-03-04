@@ -93,12 +93,19 @@ class VlangImplementMethodsHandler : LanguageCodeInsightActionHandler {
         struct: VlangStructDeclaration,
         iface: VlangInterfaceDeclaration,
     ) {
+        val addedFields = mutableListOf<VlangTypeEx>()
+
         WriteCommandAction.runWriteCommandAction(project) {
             val fields = iface.interfaceType.fieldList
             for (field in fields) {
                 if (field.name == null || isAlreadyImplementedField(struct, field)) continue
 
-                struct.addField(field.name!!, field.getType(null).toString(), field.isMutable())
+                val type = field.getType(null)
+                val typeName = type?.readableName(struct) ?: continue
+                val name = field.name ?: continue
+
+                struct.addField(name, typeName, field.isMutable())
+                addedFields.add(type)
             }
         }
 
@@ -136,6 +143,10 @@ class VlangImplementMethodsHandler : LanguageCodeInsightActionHandler {
         WriteCommandAction.runWriteCommandAction(project) {
             for (addedSignature in addedSignatures) {
                 VlangLangUtil.importTypesFromSignature(addedSignature, file)
+            }
+
+            for (addedField in addedFields) {
+                VlangLangUtil.importType(addedField, file)
             }
         }
 
@@ -190,7 +201,8 @@ class VlangImplementMethodsHandler : LanguageCodeInsightActionHandler {
         val structMethods = struct.structType.toEx().methodsList(struct.project)
         return structMethods
             .filter { it.name == method.name }
-            .filter { it.receiver.isMutable() == method.isMutable }
+            // if interface method immutable, don't care about struct method mutability
+            .filter { !method.isMutable || it.receiver.isMutable() == method.isMutable }
             .any { structMethod ->
                 val interfaceTypeEx = VlangFunctionTypeEx.from(method) ?: return@any false
                 val structTypeEx = VlangFunctionTypeEx.from(structMethod) ?: return@any false
@@ -203,7 +215,8 @@ class VlangImplementMethodsHandler : LanguageCodeInsightActionHandler {
         val structFields = struct.structType.fieldList
         return structFields
             .filter { it.name == field.name }
-            .filter { it.isMutable() == field.isMutable() }
+            // if interface field immutable, don't care about struct field mutability
+            .filter { !field.isMutable() || it.isMutable() == field.isMutable() }
             .any { structField ->
                 val structFieldType = structField.getType(null) ?: return@any false
                 val interfaceFieldType = field.getType(null) ?: return@any false
@@ -276,7 +289,7 @@ class VlangImplementMethodsHandler : LanguageCodeInsightActionHandler {
 
     companion object {
         val TESTING_INTERFACE_TO_IMPLEMENT: Key<VlangInterfaceDeclaration> =
-            Key.create<VlangInterfaceDeclaration>("VlangImplementMethodsHandler.TESTING_INTERFACE_TO_IMPLEMENT")
+            Key.create("VlangImplementMethodsHandler.TESTING_INTERFACE_TO_IMPLEMENT")
 
         fun findStructDeclaration(element: PsiElement) = element.parentOfType<VlangStructDeclaration>()
     }

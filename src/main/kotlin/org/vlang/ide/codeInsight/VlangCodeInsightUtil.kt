@@ -240,7 +240,12 @@ object VlangCodeInsightUtil {
             return name.removePrefix("$MAIN_MODULE.")
         }
 
-        return name
+        val parts = name.split(".")
+        if (parts.size < 3) {
+            return name
+        }
+
+        return parts.subList(parts.size - 2, parts.size).joinToString(".")
     }
 
     fun isDirectlyAccessible(containingFile: PsiFile, file: PsiFile): Boolean {
