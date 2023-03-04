@@ -6,6 +6,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import org.vlang.lang.stubs.VlangSignatureStub;
+import kotlin.Pair;
 
 public interface VlangSignature extends VlangCompositeElement, StubBasedPsiElement<VlangSignatureStub> {
 
@@ -14,5 +15,8 @@ public interface VlangSignature extends VlangCompositeElement, StubBasedPsiEleme
 
   @Nullable
   VlangResult getResult();
+
+  @NotNull
+  Pair<Integer, Integer> resultCount();
 
 }

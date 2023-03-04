@@ -51,3 +51,43 @@ fn res_two() ! {
 fn single_paren_res() <weak_warning descr="Redundant parentheses">(string)</weak_warning> {
 	return ''
 }
+
+fn one_one_2() string {
+	return one_one()
+}
+
+fn one_one_3() string {
+	<error descr="Too many return values, expected 1, got 2">return two_two()</error>
+}
+
+fn two_two_2() (string, int) {
+	return two_two()
+}
+
+fn two_two_3() (string, int) {
+	<error descr="Expected 2 return values, but 'one_one()' returns 1'">return one_one()</error>
+}
+
+fn two_two_4() (string, int) {
+	return one_one(), 10
+}
+
+fn three_two_2() (string, int, bool) {
+	<error descr="Expected 3 return values, but 'two_two()' returns 2'">return two_two()</error>
+}
+
+fn three_two_3() (string, int, bool) {
+	return two_two(), true
+}
+
+fn three_two_4() (string, int, bool) {
+	<error descr="Expected 3 return values, but 'one_one()' returns 1'">return one_one()</error>
+}
+
+fn three_two_5() (string, int, bool) {
+	<error descr="Not enough return values, expected 3, got 2">return one_one(), 10</error>
+}
+
+fn three_two_6() (string, int, bool) {
+	return one_one(), 10, true
+}

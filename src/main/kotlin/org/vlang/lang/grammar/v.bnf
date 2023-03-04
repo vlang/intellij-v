@@ -776,6 +776,7 @@ FunctionType ::= fn GenericParameters? Signature {
 Signature ::= Parameters Result? {
   pin=1
   stubClass="org.vlang.lang.stubs.VlangSignatureStub"
+  methods=[resultCount]
 }
 Result ::= Type {
   stubClass="org.vlang.lang.stubs.VlangResultStub"

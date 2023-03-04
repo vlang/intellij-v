@@ -10,6 +10,7 @@ import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.stubs.VlangSignatureStub;
 import org.vlang.lang.psi.*;
+import kotlin.Pair;
 import com.intellij.psi.stubs.IStubElementType;
 
 public class VlangSignatureImpl extends VlangStubbedElementImpl<VlangSignatureStub> implements VlangSignature {
@@ -42,6 +43,12 @@ public class VlangSignatureImpl extends VlangStubbedElementImpl<VlangSignatureSt
   @Nullable
   public VlangResult getResult() {
     return VlangPsiTreeUtil.getStubChildOfType(this, VlangResult.class);
+  }
+
+  @Override
+  @NotNull
+  public Pair<Integer, Integer> resultCount() {
+    return VlangPsiImplUtil.resultCount(this);
   }
 
 }

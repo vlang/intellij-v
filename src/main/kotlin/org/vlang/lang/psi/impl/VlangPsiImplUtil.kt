@@ -1151,6 +1151,22 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun resultCount(o: VlangSignature): Pair<Int, Int> {
+        return when (val type = o.result?.type) {
+            is VlangTupleType -> type.typeListNoPin.typeList.size to type.typeListNoPin.typeList.size
+            is VlangResultType,
+            is VlangOptionType,
+                              -> {
+                val isEmpty = type.type == null
+                if (isEmpty) 0 to 1 else 1 to 1
+            }
+
+            null              -> 0 to 0
+            else              -> 1 to 1
+        }
+    }
+
+    @JvmStatic
     fun isVoid(o: VlangResult): Boolean {
         val type = o.type
         if (type is VlangTupleType) {

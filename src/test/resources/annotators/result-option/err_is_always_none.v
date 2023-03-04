@@ -1,5 +1,7 @@
 module annotators
 
+fn error(msg string) ! {}
+
 fn res() !int {
 	return error("err")
 }

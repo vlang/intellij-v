@@ -244,33 +244,53 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
     override fun visitReturnStatement(ret: VlangReturnStatement) {
         val owner = ret.owner ?: return
         val signature = owner.getSignature() ?: return
-        val result = signature.result
-        val (countResultTypes, maxAllowedTypesCount) = when (val type = result?.type) {
-            is VlangTupleType -> type.typeListNoPin.typeList.size to type.typeListNoPin.typeList.size
-            is VlangResultType,
-            is VlangOptionType,
-                              -> {
-                val isEmpty = type.type == null
-                if (isEmpty) 0 to 1 else 1 to 1
-            }
-
-            null              -> 0 to 0
-            else              -> 1 to 1
-        }
+        val (countResultTypes, maxAllowedResultTypesCount) = signature.resultCount()
         val countReturnExpressions = ret.expressionList.size
 
-        if (countResultTypes != countReturnExpressions) {
-            if (countReturnExpressions > countResultTypes && countReturnExpressions <= maxAllowedTypesCount) {
+        if (countReturnExpressions == 1 && countResultTypes > 1) {
+            val expr = ret.expressionList.first()
+            if (expr is VlangCallExpr) {
+                val called = expr.resolve() as? VlangSignatureOwner
+                val calledFunctionResultCount = called?.getSignature()?.resultCount()
+                if (calledFunctionResultCount != null && calledFunctionResultCount.second != maxAllowedResultTypesCount) {
+                    holder.newAnnotation(
+                        HighlightSeverity.ERROR,
+                        "Expected $countResultTypes return values, but '${expr.text}' returns ${calledFunctionResultCount.second}'"
+                    )
+                        .range(ret)
+                        .create()
+                    return
+                }
+
+                if (calledFunctionResultCount != null) {
+                    return
+                }
+            }
+        }
+
+        val results = ret.expressionList.mapNotNull { expr ->
+            if (expr is VlangCallExpr) {
+                val called = expr.resolve() as? VlangSignatureOwner
+                called?.getSignature()?.resultCount()
+            } else {
+                1 to 1
+            }
+        }
+        val countReturnValues = results.sumOf { it.first }
+        val maxCountReturnExpressions = results.sumOf { it.second }
+
+        if (countResultTypes != countReturnValues && maxAllowedResultTypesCount != maxCountReturnExpressions) {
+            if (countReturnValues > countResultTypes && countReturnValues <= maxAllowedResultTypesCount) {
                 return
             }
 
             val expectedCount =
-                if (maxAllowedTypesCount != countResultTypes) "$countResultTypes or $maxAllowedTypesCount" else "$countResultTypes"
+                if (maxAllowedResultTypesCount != countResultTypes) "$countResultTypes or $maxAllowedResultTypesCount" else "$countResultTypes"
 
-            val messageBegin = if (countReturnExpressions > countResultTypes) "Too many return values" else "Not enough return values"
+            val messageBegin = if (countReturnValues > countResultTypes) "Too many return values" else "Not enough return values"
             holder.newAnnotation(
                 HighlightSeverity.ERROR,
-                "$messageBegin, expected $expectedCount, got $countReturnExpressions"
+                "$messageBegin, expected $expectedCount, got $countReturnValues"
             )
                 .range(ret)
                 .create()
