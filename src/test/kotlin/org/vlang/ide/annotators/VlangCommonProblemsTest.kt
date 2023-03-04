@@ -15,4 +15,5 @@ class VlangCommonProblemsTest : AnnotatorTestBase() {
     fun `test duplicate modifier in list`() = doTest("duplicate_modifier_in_list.v")
     fun `test unfinished modifier list in structs`() = doTest("unfinished_modifier_list_in_structs.v")
     fun `test wrong modifiers order in structs`() = doTestQuickFix("wrong_modifiers_order_in_structs.v")
+    fun `test if expression without else`() = doTestQuickFix("if_expression_without_else.v")
 }

@@ -7,9 +7,11 @@ import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
+import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiWhiteSpace
+import com.intellij.psi.util.findTopmostParentInFile
 import com.intellij.psi.util.parentOfType
 import com.intellij.refactoring.suggested.endOffset
 import com.intellij.refactoring.suggested.startOffset
@@ -328,6 +330,23 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
         }
     }
 
+    override fun visitIfExpression(expr: VlangIfExpression) {
+        val ifExpr = expr.findTopmostParentInFile(true) { it is VlangIfExpression } ?: return
+        val isStatement = ifExpr.parent is VlangLeftHandExprList && ifExpr.parent.parent is VlangStatement
+        if (!isStatement) {
+            val hasElse = expr.elseBranch != null
+            if (!hasElse) {
+                holder.newAnnotation(
+                    HighlightSeverity.ERROR,
+                    "If must have an else branch when used as an expression"
+                )
+                    .range(expr.`if`)
+                    .withFix(AddElseQuickFix(expr))
+                    .create()
+            }
+        }
+    }
+
     companion object {
         class VlangAddKeyToLoopIterateQuickFix(val name: String) : BaseIntentionAction() {
             override fun startInWriteAction() = true
@@ -409,6 +428,33 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
 
                 last.replace(first)
                 first.replace(lastCopy)
+            }
+        }
+
+        class AddElseQuickFix(element: PsiElement) : LocalQuickFixAndIntentionActionOnPsiElement(element) {
+            override fun startInWriteAction() = true
+            override fun getFamilyName() = "Add else branch"
+            override fun getText() = "Add else branch"
+
+            override fun invoke(project: Project, file: PsiFile, editor: Editor?, startElement: PsiElement, endElement: PsiElement) {
+                if (startElement !is VlangIfExpression) return
+
+                val document = PsiDocumentManager.getInstance(project).getDocument(file) ?: return
+                val startLine = document.getLineNumber(startElement.textOffset)
+                val endLine = document.getLineNumber(startElement.textRange.endOffset)
+                val isOneLine = startLine == endLine
+                val elseText = if (isOneLine) " else {  }" else " else {\n\t\n}"
+
+                val elseBranch = VlangElementFactory.createElseBranch(project, elseText)
+                startElement.add(VlangElementFactory.createSpace(project))
+                val addedElseBranch = startElement.add(elseBranch)
+
+                if (editor != null) {
+                    val shiftBack = if (isOneLine) 2 else 3
+                    val offset = addedElseBranch.textOffset + addedElseBranch.textLength - shiftBack
+                    editor.caretModel.moveToOffset(offset)
+                    editor.selectionModel.removeSelection()
+                }
             }
         }
     }

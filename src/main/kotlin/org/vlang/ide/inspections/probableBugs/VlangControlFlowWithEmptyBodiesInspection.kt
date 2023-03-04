@@ -8,44 +8,53 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElementVisitor
 import com.intellij.psi.util.childrenOfType
+import com.intellij.psi.util.findTopmostParentInFile
 import com.intellij.psi.util.parentOfType
 import org.vlang.ide.inspections.VlangBaseInspection
-import org.vlang.lang.psi.VlangElseBranch
-import org.vlang.lang.psi.VlangForStatement
-import org.vlang.lang.psi.VlangIfExpression
-import org.vlang.lang.psi.VlangVisitor
+import org.vlang.lang.psi.*
 
 class VlangControlFlowWithEmptyBodiesInspection : VlangBaseInspection() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
         return object : VlangVisitor() {
-            override fun visitIfExpression(o: VlangIfExpression) {
-                super.visitIfExpression(o)
-
-                if (o.elseBranch != null) {
+            override fun visitIfExpression(expr: VlangIfExpression) {
+                super.visitIfExpression(expr)
+                val ifExpr = expr.findTopmostParentInFile(true) { el -> el is VlangIfExpression } ?: return
+                val isStatement = ifExpr.parent is VlangLeftHandExprList && ifExpr.parent.parent is VlangStatement
+                if (!isStatement) {
                     return
                 }
 
-                val ifBlock = o.block ?: return
+                if (expr.elseBranch != null) {
+                    return
+                }
+
+                val ifBlock = expr.block ?: return
                 if (ifBlock.statementList.isEmpty() && ifBlock.childrenOfType<PsiComment>().isEmpty()) {
                     // todo: remove if and negate the else condition, then simplify the statement
                     holder.registerProblem(
-                        o.`if`, "'if' has empty body",
+                        expr.`if`, "'if' has empty body",
                         ProblemHighlightType.WARNING, EmptyControlFlowQuickFix()
                     )
                 }
             }
 
-            override fun visitElseBranch(o: VlangElseBranch) {
-                super.visitElseBranch(o)
+            override fun visitElseBranch(elseBranch: VlangElseBranch) {
+                super.visitElseBranch(elseBranch)
 
-                if (o.ifExpression != null) {
+                val parentIf = elseBranch.findTopmostParentInFile(false) { el -> el is VlangIfExpression } ?: return
+                val isStatement = parentIf.parent is VlangLeftHandExprList && parentIf.parent.parent is VlangStatement
+                if (!isStatement) {
                     return
                 }
 
-                val elseBlock = o.block ?: return
+                if (elseBranch.ifExpression != null) {
+                    return
+                }
+
+                val elseBlock = elseBranch.block ?: return
                 if (elseBlock.statementList.isEmpty() && elseBlock.childrenOfType<PsiComment>().isEmpty()) {
                     holder.registerProblem(
-                        o.`else`, "'else' has empty body",
+                        elseBranch.`else`, "'else' has empty body",
                         ProblemHighlightType.WARNING, EmptyControlFlowQuickFix()
                     )
                 }

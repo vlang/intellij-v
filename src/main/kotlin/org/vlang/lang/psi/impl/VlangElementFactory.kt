@@ -75,6 +75,11 @@ object VlangElementFactory {
         return PsiTreeUtil.findChildOfType(file, VlangResult::class.java)!!
     }
 
+    fun createElseBranch(project: Project, text: String = "else {\n\t\n}"): VlangElseBranch {
+        val file = createFileFromText(project, "fn main() { if true {} $text")
+        return PsiTreeUtil.findChildOfType(file, VlangElseBranch::class.java)!!
+    }
+
     fun createComma(project: Project): PsiElement {
         return PsiTreeUtil.findChildOfType(
             createFileFromText(project, "fn main() { 1,2 }"),
