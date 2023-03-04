@@ -1,9 +1,8 @@
 package org.vlang.lang.completion
 
 import com.intellij.codeInsight.AutoPopupController
-import com.intellij.codeInsight.completion.InsertHandler
-import com.intellij.codeInsight.completion.InsertionContext
-import com.intellij.codeInsight.completion.PrioritizedLookupElement
+import com.intellij.codeInsight.completion.*
+import com.intellij.codeInsight.completion.impl.CamelHumpMatcher
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.codeInsight.lookup.LookupElementPresentation
@@ -68,6 +67,14 @@ object VlangCompletionUtil {
         "VMOD_FILE" to "The content to the nearest v.mod file",
         "VMODROOT" to "The absolute path to the nearest v.mod file's directory",
     )
+
+    fun withCamelHumpPrefixMatcher(resultSet: CompletionResultSet): CompletionResultSet {
+        return resultSet.withPrefixMatcher(createPrefixMatcher(resultSet.prefixMatcher.prefix))
+    }
+
+    fun createPrefixMatcher(prefix: String): PrefixMatcher {
+        return CamelHumpMatcher(prefix, false)
+    }
 
     fun LookupElementBuilder.withPriority(priority: Int): LookupElement {
         return PrioritizedLookupElement.withPriority(this, priority.toDouble())

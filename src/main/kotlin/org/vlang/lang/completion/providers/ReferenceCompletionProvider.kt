@@ -34,9 +34,10 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
         result: CompletionResultSet,
     ) {
         val element = parameters.position
+        val set = VlangCompletionUtil.withCamelHumpPrefixMatcher(result)
 
         if (VlangCompletionUtil.isCompileTimeIdentifier(element)) {
-            fillCompileTimeConstantsVariants(result)
+            fillCompileTimeConstantsVariants(set)
             return
         }
 
@@ -47,13 +48,13 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
             val refExpression = ref.element as? VlangReferenceExpression
             val variants = VlangStructLiteralCompletion.allowedVariants(refExpression, element)
 
-            fillStructFieldNameVariants(parameters, result, variants, refExpression)
+            fillStructFieldNameVariants(parameters, set, variants, refExpression)
 
             if (variants != VlangStructLiteralCompletion.Variants.FIELD_NAME_ONLY) {
-                ref.processResolveVariants(MyScopeProcessor(parameters, result, file, ref.forTypes))
+                ref.processResolveVariants(MyScopeProcessor(parameters, set, file, ref.forTypes))
             }
         } else if (ref is VlangCachedReference<*>) {
-            ref.processResolveVariants(MyScopeProcessor(parameters, result, file, false))
+            ref.processResolveVariants(MyScopeProcessor(parameters, set, file, false))
         }
     }
 
