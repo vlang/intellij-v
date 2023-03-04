@@ -8,6 +8,7 @@ import com.intellij.patterns.PsiElementPattern
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
 import org.vlang.lang.VlangTypes.*
 import org.vlang.lang.psi.*
@@ -30,6 +31,7 @@ object VlangCompletionPatterns {
             .notInsideArrayInit()
             .notInsideStructInitWithKeys()
             .notInsideTrailingStruct()
+            .noTopLevelNext()
 
     /**
      * Statements like:
@@ -42,6 +44,7 @@ object VlangCompletionPatterns {
             .withSuperParent(3, VlangSimpleStatement::class.java)
             .notAfterDot()
             .notAfterLiteral()
+            .noTopLevelNext()
 
     /**
      * Any top-level statements like:
@@ -49,7 +52,10 @@ object VlangCompletionPatterns {
      *     import mod
      */
     fun onTopLevel(): PsiElementPattern.Capture<PsiElement?> =
-        onStatement().withSuperParent(4, VlangFile::class.java)
+        psiElement()
+            .withSuperParent(2, VlangLeftHandExprList::class.java)
+            .withSuperParent(3, VlangSimpleStatement::class.java)
+            .withSuperParent(4, VlangFile::class.java)
 
     /**
      * Any place where type expected like:
@@ -152,12 +158,14 @@ object VlangCompletionPatterns {
         return psiElement()
             .withParent(VlangReferenceExpressionBase::class.java)
             .notAfterLiteral()
+            .noTopLevelNext()
     }
 
     fun cachedReferenceExpression(): PsiElementPattern.Capture<PsiElement> {
         return psiElement()
             .withParent(psiElement().withReference(VlangCachedReference::class.java))
             .notAfterLiteral()
+            .noTopLevelNext()
     }
 
     private fun PsiElementPattern.Capture<PsiElement>.notAfterDot(): PsiElementPattern.Capture<PsiElement> {
@@ -180,7 +188,7 @@ object VlangCompletionPatterns {
         }))
     }
 
-     private fun PsiElementPattern.Capture<PsiElement>.notInsideArrayInit(): PsiElementPattern.Capture<PsiElement> {
+    private fun PsiElementPattern.Capture<PsiElement>.notInsideArrayInit(): PsiElementPattern.Capture<PsiElement> {
         return andNot(psiElement().with(object : PatternCondition<PsiElement>("notInsideArrayInit") {
             override fun accepts(t: PsiElement, context: ProcessingContext?): Boolean {
                 val element = t.parentNth<VlangElement>(3) ?: return false
@@ -230,6 +238,22 @@ object VlangCompletionPatterns {
                 if (prevElement.key == null) return false
 
                 return true
+            }
+        }))
+    }
+
+    private fun PsiElementPattern.Capture<PsiElement>.noTopLevelNext(): PsiElementPattern.Capture<PsiElement> {
+        return andNot(psiElement().with(object : PatternCondition<PsiElement>("noTopLevelNext") {
+            override fun accepts(t: PsiElement, context: ProcessingContext?): Boolean {
+                val statement = t.parentOfType<VlangStatement>() ?: return false
+                val next = PsiTreeUtil.skipWhitespacesAndCommentsForward(statement) ?: return false
+                return next is VlangFunctionOrMethodDeclaration ||
+                        next is VlangStructDeclaration ||
+                        next is VlangInterfaceDeclaration ||
+                        next is VlangImportDeclaration ||
+                        next is VlangConstDeclaration ||
+                        next is VlangTypeAliasDeclaration ||
+                        next is VlangGlobalVariableDeclaration
             }
         }))
     }

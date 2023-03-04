@@ -260,7 +260,9 @@ class CompletionTest : CompletionTestBase() {
         """
         module main
         
-        1/*caret*/
+        fn main() {
+            1/*caret*/
+        }
         """.trimIndent(), 0,
         ""
     )
@@ -287,5 +289,97 @@ class CompletionTest : CompletionTestBase() {
         
         """.trimIndent(), 0,
         "_"
+    )
+
+    fun `test no reference completion before top level`() = checkExcludes(
+        """
+        module main
+        
+        /*caret*/
+        
+        fn foo() {}
+        
+        fn main() {
+            
+        }
+        
+        """.trimIndent(), 0,
+        "foo"
+    )
+
+    fun `test reference completion inside function`() = checkIncludes(
+        """
+        module main
+        
+        fn foo() {}
+        
+        fn main() {
+            /*caret*/
+        }
+        
+        """.trimIndent(), 0,
+        "foo"
+    )
+
+    fun `test reference completion after all top level`() = checkIncludes(
+        """
+        module main
+        
+        fn foo() {}
+        
+        fn main() {
+            
+        }
+        
+        /*caret*/
+        """.trimIndent(), 0,
+        "foo"
+    )
+
+    fun `test break before any other in loop`() = checkFirstBeforeSecond(
+        """
+        module main
+        
+        fn foo() {}
+        
+        fn main() {
+            for i in 0 .. 10 {
+                /*caret*/
+            }
+        }
+        
+        """.trimIndent(), 0,
+        "break", "foo"
+    )
+
+    fun `test continue before any other in loop`() = checkFirstBeforeSecond(
+        """
+        module main
+        
+        fn foo() {}
+        
+        fn main() {
+            for i in 0 .. 10 {
+                /*caret*/
+            }
+        }
+        
+        """.trimIndent(), 0,
+        "continue", "foo"
+    )
+
+    fun `test fn before foo() after all top level`() = checkFirstBeforeSecond(
+        """
+        module main
+        
+        fn foo() {}
+        
+        fn main() {
+           
+        }
+        
+        f/*caret*/
+        """.trimIndent(), 0,
+        "fn", "foo"
     )
 }

@@ -32,7 +32,8 @@ class VlangAttributesCompletionContributor : CompletionContributor() {
         private val ATTRIBUTES = listOf(
             "params", "noinit", "required", "skip", "assert_continues",
             "unsafe", "manualfree", "heap", "nonnull", "primary", "inline",
-            "direct_array_access", "live", "flag", "noinline", "noreturn", "typedef", "console",
+            "direct_array_access", "live", "flag", "noinline", "noreturn",
+            "typedef", "console", "keep_args_alive",
         )
     }
 

@@ -117,6 +117,35 @@ abstract class CompletionTestBase : BasePlatformTestCase() {
         }
     }
 
+    fun checkFirstBeforeSecond(
+        @Language("vlang") txt: String,
+        count: Int,
+        first: String,
+        second: String,
+    ){
+        val newText = txt.replace(CARET, CARET_ORIGINAL)
+        val isTest = newText.startsWith("// test")
+        val fileName = if (isTest) "a_test.v" else "a.v"
+        myFixture.configureByText(fileName, newText)
+        myFixture.complete(CompletionType.BASIC, count)
+        val stringList = myFixture.lookupElementStrings ?: emptyList()
+        assertNotNull(
+            """
+            
+            Possibly the single variant has been completed.
+            File after:
+            ${myFixture.file.text}
+            """.trimIndent(), stringList
+        )
+
+        val firstIndex = stringList.indexOf(first)
+        check(firstIndex != -1) { "Not found $first in $stringList" }
+        val secondIndex = stringList.indexOf(second)
+        check(secondIndex != -1) { "Not found $second in $stringList" }
+
+        check(firstIndex < secondIndex) { "Expected $first before $second, but got: $stringList" }
+    }
+
     companion object {
         const val CARET = "/*caret*/"
         const val CARET_ORIGINAL = "<caret>"

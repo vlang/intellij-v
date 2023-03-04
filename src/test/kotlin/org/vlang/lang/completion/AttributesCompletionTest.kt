@@ -84,5 +84,6 @@ class AttributesCompletionTest : CompletionTestBase() {
         "table",
         "typedef",
         "unsafe",
+        "keep_args_alive",
     )
 }

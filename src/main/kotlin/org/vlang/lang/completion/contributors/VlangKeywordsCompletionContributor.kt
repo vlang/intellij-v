@@ -6,7 +6,6 @@ import com.intellij.codeInsight.template.impl.ConstantNode
 import com.intellij.util.ProcessingContext
 import org.vlang.lang.completion.VlangCompletionPatterns.insideForStatement
 import org.vlang.lang.completion.VlangCompletionPatterns.insideSqlStatement
-import org.vlang.lang.completion.VlangCompletionPatterns.insideStruct
 import org.vlang.lang.completion.VlangCompletionPatterns.onCompileTimeIfElse
 import org.vlang.lang.completion.VlangCompletionPatterns.onExpression
 import org.vlang.lang.completion.VlangCompletionPatterns.onIfElse
@@ -18,7 +17,10 @@ import org.vlang.lang.completion.VlangCompletionUtil.KEYWORD_PRIORITY
 import org.vlang.lang.completion.VlangCompletionUtil.StringInsertHandler
 import org.vlang.lang.completion.VlangCompletionUtil.TemplateStringInsertHandler
 import org.vlang.lang.completion.VlangCompletionUtil.showCompletion
+import org.vlang.lang.completion.VlangCompletionUtil.toVlangLookupElement
 import org.vlang.lang.completion.VlangCompletionUtil.withPriority
+import org.vlang.lang.completion.VlangLookupElementProperties
+import org.vlang.lang.completion.sort.withVlangSorter
 import org.vlang.lang.sql.VlangSqlUtil
 
 class VlangKeywordsCompletionContributor : CompletionContributor() {
@@ -26,18 +28,18 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         // Top Level
         extend(CompletionType.BASIC, onTopLevel(), TypeAliasCompletionProvider)
         extend(CompletionType.BASIC, onTopLevel(), ConstCompletionProvider)
-        extend(CompletionType.BASIC, onTopLevel(), CompletionAfterKeywordsCompletionProvider("import"))
+        extend(CompletionType.BASIC, onTopLevel(), CompletionAfterContextKeywordsCompletionProvider("import"))
 
         extend(
             CompletionType.BASIC,
             onTopLevel(),
-            KeywordsCompletionProvider(
+            ContextKeywordsCompletionProvider(
                 "fn",
                 "module",
                 "pub",
                 "static",
                 "__global",
-                needSpace = true
+                needSpace = true,
             )
         )
         extend(
@@ -155,13 +157,17 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         extend(
             CompletionType.BASIC,
             insideForStatement(),
-            KeywordsCompletionProvider("continue", "break")
+            ContextKeywordsCompletionProvider("continue", "break")
         )
         extend(
             CompletionType.BASIC,
             insideSqlStatement(),
             SqlKeywordsCompletionProvider
         )
+    }
+
+    override fun fillCompletionVariants(parameters: CompletionParameters, result: CompletionResultSet) {
+        super.fillCompletionVariants(parameters, withVlangSorter(parameters, result))
     }
 
     private val elseElement = LookupElementBuilder.create("else")
@@ -338,9 +344,21 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         }
     }
 
+    open class ContextKeywordsCompletionProvider(
+        vararg keywords: String,
+        needSpace: Boolean = false,
+    ) : KeywordsCompletionProvider(
+        *keywords,
+        needSpace = needSpace,
+        properties =  VlangLookupElementProperties(
+            isContextElement = true,
+        ),
+    )
+
     open class KeywordsCompletionProvider(
         private vararg val keywords: String,
         private val needSpace: Boolean = false,
+        private val properties: VlangLookupElementProperties = VlangLookupElementProperties(),
     ) : CompletionProvider<CompletionParameters>() {
 
         override fun addCompletions(
@@ -353,6 +371,7 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
                     .withInsertHandler(StringInsertHandler(" ", 1, needSpace))
                     .bold()
                     .withPriority(KEYWORD_PRIORITY)
+                    .toVlangLookupElement(properties)
             }
             result.addAllElements(elements)
         }
@@ -410,13 +429,24 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
                     )
                     .bold()
                     .withPriority(KEYWORD_PRIORITY)
+                    .toVlangLookupElement(
+                        VlangLookupElementProperties(
+                            isContextElement = true,
+                        )
+                    )
             }
 
             result.addAllElements(elements)
         }
     }
 
-    open class CompletionAfterKeywordsCompletionProvider(private vararg val keywords: String) :
+    class CompletionAfterContextKeywordsCompletionProvider(vararg keywords: String) :
+        CompletionAfterKeywordsCompletionProvider(*keywords, properties = VlangLookupElementProperties(isContextElement = true))
+
+    open class CompletionAfterKeywordsCompletionProvider(
+        private vararg val keywords: String,
+        private val properties: VlangLookupElementProperties = VlangLookupElementProperties(),
+    ) :
         CompletionProvider<CompletionParameters>() {
 
         override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
@@ -428,6 +458,7 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
                     }
                     .bold()
                     .withPriority(KEYWORD_PRIORITY)
+                    .toVlangLookupElement(properties)
             }
 
             result.addAllElements(elements)

@@ -149,16 +149,16 @@ Provides support for <a href="https://vlang.io/">V</a> language
 
         <!-- region Completion -->
         <completion.contributor
+                language="vlang"
+                implementationClass="org.vlang.lang.completion.contributors.VlangKeywordsCompletionContributor"/>
+
+        <completion.contributor
+                language="vlang"
+                implementationClass="org.vlang.lang.completion.contributors.VlangAttributesCompletionContributor"/>
+
+        <completion.contributor
             language="vlang"
             implementationClass="org.vlang.lang.completion.contributors.VlangCompletionContributor"/>
-
-        <completion.contributor
-            language="vlang"
-            implementationClass="org.vlang.lang.completion.contributors.VlangAttributesCompletionContributor"/>
-
-        <completion.contributor
-            language="vlang"
-            implementationClass="org.vlang.lang.completion.contributors.VlangKeywordsCompletionContributor"/>
 
         <typedHandler implementation="org.vlang.lang.completion.VlangTypedHandler"/>
         <enterHandlerDelegate implementation="org.vlang.lang.completion.VlangEnterHandlerDelegate"/>
