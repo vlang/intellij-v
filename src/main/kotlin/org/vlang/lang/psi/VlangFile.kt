@@ -150,6 +150,7 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
         val rootDirs = listOfNotNull(projectDir, stdlib, modules, src, localModules, stubs)
 
         val moduleNames = mutableListOf<String>()
+        val virtualFile = originalFile.virtualFile
         var dir = virtualFile?.parent
         val insideTopLevelDir = dir == projectDir
         val dirName = dir?.name ?: ""

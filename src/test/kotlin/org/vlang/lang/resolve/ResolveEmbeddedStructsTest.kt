@@ -15,7 +15,7 @@ open class ResolveEmbeddedStructsTest : ResolveTestBase() {
             
             fn main() {
                 t := Test{}
-                t.<caret>foo
+                t./*caret*/foo
             }
         """.trimIndent())
 
@@ -36,11 +36,11 @@ open class ResolveEmbeddedStructsTest : ResolveTestBase() {
             
             fn main() {
                 t := Test{}
-                t.<caret>ForEmbed
+                t./*caret*/ForEmbed
             }
         """.trimIndent())
 
-        assertReferencedTo("STRUCT_DECLARATION ForEmbed")
+        assertReferencedTo("EMBEDDED_DEFINITION ForEmbed")
     }
 
     fun `test embedded struct field with embedded struct name`() {
@@ -57,7 +57,7 @@ open class ResolveEmbeddedStructsTest : ResolveTestBase() {
             
             fn main() {
                 t := Test{}
-                t.ForEmbed.<caret>foo
+                t.ForEmbed./*caret*/foo
             }
         """.trimIndent())
 
@@ -83,7 +83,7 @@ open class ResolveEmbeddedStructsTest : ResolveTestBase() {
             
             fn main() {
                 t := Test{}
-                t.<caret>bar
+                t./*caret*/bar
             }
         """.trimIndent())
 
@@ -109,12 +109,14 @@ open class ResolveEmbeddedStructsTest : ResolveTestBase() {
             
             fn main() {
                 t := Test{}
-                t.ForEmbed.<caret>foo
-                t.ForEmbed2.<caret>foo
+                t./*caret*/ForEmbed./*caret*/foo
+                t./*caret*/ForEmbed2./*caret*/foo
             }
         """.trimIndent())
 
+        assertQualifiedReferencedTo("EMBEDDED_DEFINITION main.ForEmbed")
         assertQualifiedReferencedTo("FIELD_DEFINITION main.ForEmbed.foo")
+        assertQualifiedReferencedTo("EMBEDDED_DEFINITION main.ForEmbed2")
         assertQualifiedReferencedTo("FIELD_DEFINITION main.ForEmbed2.foo")
     }
 
@@ -132,7 +134,7 @@ open class ResolveEmbeddedStructsTest : ResolveTestBase() {
             
             fn main() {
                 t := Test{}
-                t.<caret>foo()
+                t./*caret*/foo()
             }
         """.trimIndent())
 
@@ -155,7 +157,7 @@ open class ResolveEmbeddedStructsTest : ResolveTestBase() {
             
             fn main() {
                 t := TestAlias{}
-                t.<caret>foo()
+                t./*caret*/foo()
             }
         """.trimIndent())
 

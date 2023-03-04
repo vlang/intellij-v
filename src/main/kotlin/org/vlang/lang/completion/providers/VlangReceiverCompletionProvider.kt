@@ -9,15 +9,17 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
 import org.vlang.lang.completion.VlangCompletionUtil
+import org.vlang.lang.completion.VlangCompletionUtil.toVlangLookupElement
+import org.vlang.lang.completion.VlangLookupElementProperties
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangElementFactory
 import org.vlang.lang.psi.impl.VlangScopeProcessor
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapPointer
 
-// TODO:
 object VlangReceiverCompletionProvider : CompletionProvider<CompletionParameters>() {
     override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
+        val set = VlangCompletionUtil.withCamelHumpPrefixMatcher(result)
         val pos = parameters.position
         val referenceExpression = pos.parentOfType<VlangReferenceExpression>() ?: return
         if (referenceExpression.getQualifier() != null) {
@@ -62,23 +64,33 @@ object VlangReceiverCompletionProvider : CompletionProvider<CompletionParameters
                 val name = named.name ?: return true
                 val lookup = "$receiverName.$name"
 
-                val lookupElement = if (element is VlangFieldDefinition) {
-                    VlangCompletionUtil.createFieldLookupElement(
-                        named,
-                        lookup,
-                        priority = VlangCompletionUtil.CONTEXT_COMPLETION_PRIORITY + 1
-                    )
-                } else if (element is VlangMethodDeclaration) {
-                    VlangCompletionUtil.createMethodLookupElement(
-                        named,
-                        lookup,
-                        priority = VlangCompletionUtil.CONTEXT_COMPLETION_PRIORITY + 1
-                    )
-                } else {
-                    return true
+                val lookupElement = when (element) {
+                    is VlangFieldDefinition   -> {
+                        VlangCompletionUtil.createFieldLookupElement(
+                            named,
+                            lookup,
+                            insertHandler = VlangCompletionUtil.FieldInsertHandler(),
+                        )
+                    }
+
+                    is VlangMethodDeclaration -> {
+                        VlangCompletionUtil.createMethodLookupElement(
+                            named,
+                            lookup,
+                            insertHandler = VlangCompletionUtil.FunctionInsertHandler(element, null),
+                        )
+                    }
+
+                    else                      -> return true
                 }
 
-                result.addElement(lookupElement)
+                set.addElement(
+                    lookupElement.toVlangLookupElement(
+                        properties = VlangLookupElementProperties(
+                            isContextElement = true,
+                        )
+                    )
+                )
                 return true
             }
         })

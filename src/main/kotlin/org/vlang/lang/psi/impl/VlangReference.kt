@@ -257,7 +257,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
                 if (!processMethods(typ, processor, newState, localResolve)) return false
             }
 
-            val embedded = structType.embeddedStructList.mapNotNull { it.type.typeReferenceExpression?.resolve() as? VlangNamedElement }
+            val embedded = structType.embeddedStructList
             if (!processNamedElements(processor, newState, embedded, localResolve)) return false
 
             if (!processAnyType(contextFile, processor, newState, localResolve)) return false
@@ -884,7 +884,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
     private fun processBlock(processor: VlangScopeProcessor, state: ResolveState, localResolve: Boolean): Boolean {
         val delegate = createDelegate(processor)
         ResolveUtil.treeWalkUp(myElement, delegate)
-        return processNamedElements(processor, state, delegate.getVariants(), localResolve)
+        return processNamedElements(processor, state.put(NOT_PROCESS_EMBEDDED_DEFINITION, true), delegate.getVariants(), localResolve)
     }
 
     private fun processPseudoParams(processor: VlangScopeProcessor, state: ResolveState): Boolean {

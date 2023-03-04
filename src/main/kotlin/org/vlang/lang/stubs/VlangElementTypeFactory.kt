@@ -66,6 +66,7 @@ object VlangElementTypeFactory {
         "PLAIN_ATTRIBUTE"               -> VlangPlainAttributeStubElementType(name)
         "ATTRIBUTE_KEY"                 -> VlangAttributeKeyStubElementType(name)
         "ATTRIBUTE_VALUE"               -> VlangAttributeValueStubElementType(name)
+        "EMBEDDED_DEFINITION"           -> VlangEmbeddedDefinitionStubElementType(name)
 
         else                            -> {
             val c = TYPES[name] ?: throw RuntimeException("Unknown element type: $name")

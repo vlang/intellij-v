@@ -90,31 +90,31 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
         val alreadyAssignedFields = VlangStructLiteralCompletion.alreadyAssignedFields(elementList)
 
         VlangFieldNameReference(refExpression).processResolveVariants(object : MyScopeProcessor(parameters, result, file, false) {
-            override fun execute(o: PsiElement, state: ResolveState): Boolean {
+            override fun execute(element: PsiElement, state: ResolveState): Boolean {
                 val structFieldName =
-                    when (o) {
-                        is VlangFieldDefinition    -> o.name
-                        is VlangEmbeddedDefinition -> o.type.toEx().name()
+                    when (element) {
+                        is VlangFieldDefinition    -> element.name
+                        is VlangEmbeddedDefinition -> element.type.toEx().name()
                         else                       -> null
                     }
 
                 val structFieldType =
-                    when (o) {
-                        is VlangFieldDefinition    -> o.getType(null)
-                        is VlangEmbeddedDefinition -> o.type.toEx()
+                    when (element) {
+                        is VlangFieldDefinition    -> element.getType(null)
+                        is VlangEmbeddedDefinition -> element.type.toEx()
                         else                       -> null
                     }
 
-                val structFieldElement = if (o is VlangEmbeddedDefinition) {
-                    (o.type.resolveType() as? VlangStructType)?.parent ?: o
+                val structFieldElement = if (element is VlangEmbeddedDefinition) {
+                    (element.type.resolveType() as? VlangStructType)?.parent ?: element
                 } else {
-                    o
+                    element
                 }
 
-                val containingFile = o.containingFile as? VlangFile ?: return true
+                val containingFile = element.containingFile as? VlangFile ?: return true
 
                 // don't add private fields from other modules
-                if (o is VlangFieldDefinition && !o.isPublic() && !isLocalResolve(file, containingFile)) {
+                if (element is VlangFieldDefinition && !element.isPublic() && !isLocalResolve(file, containingFile)) {
                     return true
                 }
 
@@ -188,10 +188,10 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
 
         private val processedNames = mutableSetOf<String>()
 
-        override fun execute(o: PsiElement, state: ResolveState): Boolean {
-            if (accept(o, state, file, forTypes)) {
+        override fun execute(element: PsiElement, state: ResolveState): Boolean {
+            if (accept(element, state, file, forTypes)) {
                 addElement(
-                    o,
+                    element,
                     state,
                     forTypes,
                     processedNames,

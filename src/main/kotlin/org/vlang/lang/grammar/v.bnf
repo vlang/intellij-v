@@ -97,7 +97,7 @@
   extends("(Or|And|Add|Conversion|Mul|ShiftLeft|Selector|Conditional|OrBlock)Expr|(In|NotIn|Is|NotIs)Expression")=BinaryExpr
   extends(".*(Expr|Literal|Lit|OperandName)|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|SharedExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression|LockExpression|IncDecExpression|LiteralValueExpression|SelectExpression|SpawnExpression|TypeCastExpression")=Expression
 
-  implements("ModuleClause|(Var|Param|Field|Label|Var|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|(Struct|TypeAlias|Union|Enum|Interface)Declaration|Receiver|Import(Alias|Name)|GenericParameter")="org.vlang.lang.psi.VlangNamedElement"
+  implements("ModuleClause|(Var|Param|Field|Label|Var|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|(Struct|TypeAlias|Union|Enum|Interface)Declaration|Receiver|Import(Alias|Name)|GenericParameter|EmbeddedDefinition")="org.vlang.lang.psi.VlangNamedElement"
   implements("FunctionLit|(Function|Method)Declaration")="org.vlang.lang.psi.VlangSignatureOwner"
   implements("(Function|Method)Declaration")="org.vlang.lang.psi.VlangFunctionOrMethodDeclaration"
   implements(".*ReferenceExpression|FieldName|EnumFetch")="org.vlang.lang.psi.VlangReferenceExpressionBase"
@@ -111,9 +111,9 @@
 
   extends("(Function|Method)Declaration")="org.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
   extends("Type|GenericParameters|Signature|Result|Parameters|TypeUnionList|EmbeddedInterfaceDefinition|TypeReferenceExpression|Attributes|Attribute|PlainAttribute|AttributeExpression|AttributeValue|AttributeKey")="org.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
-  extends("ModuleClause|(Struct|TypeAlias|Union|Enum|Interface)Declaration|(Var|Label|Param|Field|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
+  extends("ModuleClause|(Struct|TypeAlias|Union|Enum|Interface)Declaration|(Var|Label|Param|Field|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter|EmbeddedDefinition")="org.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
 
-  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum|Interface)Declaration|.*Type|(Var|Label|Field|Param|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter|GenericParameters|Parameters|Result|Signature|TypeUnionList|EmbeddedInterfaceDefinition|TypeReferenceExpression|Attributes|Attribute|PlainAttribute|AttributeExpression|AttributeValue|AttributeKey")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
+  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum|Interface)Declaration|.*Type|(Var|Label|Field|Param|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter|GenericParameters|Parameters|Result|Signature|TypeUnionList|EmbeddedInterfaceDefinition|TypeReferenceExpression|Attributes|Attribute|PlainAttribute|AttributeExpression|AttributeValue|AttributeKey|EmbeddedDefinition")='org.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
 
   extends("Sql.*Statement")=SqlBlockStatement
   extends(".*Statement")=Statement
@@ -424,8 +424,8 @@ FieldDefinition ::= identifier {
 }
 
 EmbeddedDefinition ::= Type {
-  implements="org.vlang.lang.psi.VlangTypeOwner"
-  methods=[getType]
+  stubClass="org.vlang.lang.stubs.VlangEmbeddedDefinitionStub"
+  methods=[getName getIdentifier getType]
 }
 
 

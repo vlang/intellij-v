@@ -67,6 +67,7 @@ class VlangAnnotator : Annotator {
 
             is VlangEnumDeclaration                 -> public(resolved, VlangColor.PUBLIC_ENUM, VlangColor.ENUM)
             is VlangInterfaceDeclaration            -> public(resolved, VlangColor.PUBLIC_INTERFACE, VlangColor.INTERFACE)
+            is VlangEmbeddedDefinition              -> VlangColor.STRUCT
             is VlangFieldDefinition                 -> public(resolved, VlangColor.PUBLIC_FIELD, VlangColor.FIELD)
             is VlangEnumFieldDefinition             -> public(resolved, VlangColor.ENUM_FIELD, VlangColor.ENUM_FIELD)
             is VlangTypeAliasDeclaration            -> public(resolved, VlangColor.PUBLIC_TYPE_ALIAS, VlangColor.TYPE_ALIAS)

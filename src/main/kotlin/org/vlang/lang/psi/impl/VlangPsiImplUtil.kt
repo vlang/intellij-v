@@ -26,6 +26,7 @@ import org.vlang.lang.codeInsight.controlFlow.instructions.VlangInstruction
 import org.vlang.lang.codeInsight.controlFlow.instructions.VlangInstructionProcessor
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangReferenceBase.Companion.LOCAL_RESOLVE
+import org.vlang.lang.psi.impl.VlangReferenceBase.Companion.NOT_PROCESS_EMBEDDED_DEFINITION
 import org.vlang.lang.psi.impl.imports.VlangModuleReference
 import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.isGeneric
@@ -196,6 +197,21 @@ object VlangPsiImplUtil {
         }
 
         return o.interfaceType.identifier?.text ?: ""
+    }
+
+    @JvmStatic
+    fun getName(o: VlangEmbeddedDefinition): String {
+        val stub = o.stub
+        if (stub != null) {
+            return stub.name ?: ""
+        }
+
+        return o.getIdentifier()?.text ?: ""
+    }
+
+    @JvmStatic
+    fun getIdentifier(o: VlangEmbeddedDefinition): PsiElement? {
+        return o.type.identifier
     }
 
     @JvmStatic
@@ -2385,6 +2401,10 @@ object VlangPsiImplUtil {
                 continue
             if (!definition.isValid || checkContainingFile)
                 continue
+
+            if (definition is VlangEmbeddedDefinition && state.get(NOT_PROCESS_EMBEDDED_DEFINITION) == true)
+                continue
+
             if (!processor.execute(definition, state.put(LOCAL_RESOLVE, localResolve)))
                 return false
         }

@@ -845,6 +845,22 @@ object DocumentationGenerator {
         }
     }
 
+    fun VlangEmbeddedDefinition.generateDoc(): String {
+        return buildString {
+            generateModuleName(containingFile)
+            append(DocumentationMarkup.DEFINITION_START)
+            val owner = parent?.parentOfType<VlangType>()!!
+
+            part("anonymous field", asKeyword)
+            append(owner.toEx().generateDoc(this@generateDoc))
+            append(".")
+            part(name, asField)
+
+            append(DocumentationMarkup.DEFINITION_END)
+            generateCommentsPart(this@generateDoc)
+        }
+    }
+
     fun VlangTypeAliasDeclaration.generateDoc(originalElement: PsiElement?): String {
         val genericParameters = aliasType?.genericParameters
         val typeList = aliasType?.typeUnionList?.typeList?.map { it.toEx() } ?: emptyList()

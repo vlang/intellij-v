@@ -198,7 +198,7 @@ public class VlangVisitor extends PsiElementVisitor {
   }
 
   public void visitEmbeddedDefinition(@NotNull VlangEmbeddedDefinition o) {
-    visitTypeOwner(o);
+    visitNamedElement(o);
   }
 
   public void visitEmbeddedInterfaceDefinition(@NotNull VlangEmbeddedInterfaceDefinition o) {

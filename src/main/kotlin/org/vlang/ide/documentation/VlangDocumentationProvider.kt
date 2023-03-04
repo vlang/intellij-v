@@ -29,6 +29,7 @@ class VlangDocumentationProvider : AbstractDocumentationProvider() {
         is VlangTypeAliasDeclaration        -> element.generateDoc(originalElement)
         is VlangModuleClause                -> element.generateDoc()
         is VlangPomTargetPsiElement         -> element.generateDoc()
+        is VlangEmbeddedDefinition          -> element.generateDoc()
         else                                -> null
     }
 
