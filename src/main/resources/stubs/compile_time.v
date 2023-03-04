@@ -125,3 +125,30 @@ pub fn $compile_error(msg string)
 // }
 // ```
 pub fn $compile_warn(msg string)
+
+// _likely_ is a hint to the compiler that the passed expression is **likely to be true**,
+// so it can generate assembly code, with less chance of
+// [branch misprediction](https://en.wikipedia.org/wiki/Branch_predictor).
+//
+// Example:
+// ```
+// if _likely_(x > 0) {
+//   // code
+// }
+// ```
+//
+// In a non-C backend, it is ignored.
+pub fn _likely_(typ bool) bool
+
+// _unlikely_ is a hint to the compiler that the passed expression is **highly improbable**.
+// See also [branch predictor](https://en.wikipedia.org/wiki/Branch_predictor).
+//
+// Example:
+// ```
+// if _unlikely_(x < 0) {
+//   // code
+// }
+// ```
+//
+// In a non-C backend, it is ignored.
+pub fn _unlikely_(typ bool) bool

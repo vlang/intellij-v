@@ -139,4 +139,22 @@ class ResolveTest : ResolveTestBase() {
         assertQualifiedReferencedTo("FIELD_DEFINITION stubs.CompileTimeTypeInfo.fields")
         assertQualifiedReferencedTo("FIELD_DEFINITION main.Foo.fields")
     }
+
+    fun `test resolve _unlikely_ and _likely_`() {
+        mainFile("a.v", """
+            module main
+            
+            fn main() {
+                if /*caret*/_unlikely_(true) {
+                    println("unlikely")
+                }
+                if /*caret*/_likely_(true) {
+                    println("likely")
+                }
+            }
+        """.trimIndent())
+
+        assertQualifiedReferencedTo("FUNCTION_DECLARATION stubs._unlikely_")
+        assertQualifiedReferencedTo("FUNCTION_DECLARATION stubs._likely_")
+    }
 }

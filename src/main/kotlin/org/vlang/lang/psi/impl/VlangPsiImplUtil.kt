@@ -1483,6 +1483,10 @@ object VlangPsiImplUtil {
             return exprType
         }
 
+        if (expr is VlangShiftLeftExpr) {
+            return VlangPrimitiveTypeEx.INT
+        }
+
         if (expr is VlangIncDecExpression) {
             return expr.expression.getType(context)
         }

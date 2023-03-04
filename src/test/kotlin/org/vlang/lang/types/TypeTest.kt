@@ -36,4 +36,5 @@ class TypeTest : TypeTestBase() {
     fun `test threads`() = doTestFile("threads.v")
     fun `test cast`() = doTestFile("cast.v")
     fun `test arithmetic`() = doTestFile("arithmetic.v")
+    fun `test likely unlikely`() = doTestFile("likely_unlikely.v")
 }
