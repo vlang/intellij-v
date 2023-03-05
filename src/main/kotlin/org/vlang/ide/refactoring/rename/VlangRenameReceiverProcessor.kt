@@ -102,6 +102,10 @@ class VlangRenameReceiverProcessor : RenamePsiElementProcessor() {
             }
         }
 
+        fun renameAllReceivers() {
+            EP_NAME.findExtension(VlangRenameReceiverProcessor::class.java)?.renameOnlyCurrentReceiver = false
+        }
+
         const val RENAME_ONLY_CURRENT_RECEIVER = "Rename only the current receiver"
         const val RENAME_ALL_RECEIVERS = "Rename all receivers"
     }

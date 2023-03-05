@@ -175,6 +175,12 @@
                          displayName="Constant naming convention"
                          enabledByDefault="true" level="ERROR"
                          implementationClass="org.vlang.ide.inspections.namingConventions.VlangConstantNamingConventionInspection"/>
+
+        <localInspection language="vlang" groupPath="V"
+                         groupName="Naming conventions" shortName="VlangReceiverNamesInspection"
+                         displayName="Receiver names"
+                         enabledByDefault="true" level="WEAK WARNING"
+                         implementationClass="org.vlang.ide.inspections.namingConventions.VlangReceiverNamesInspection"/>
         <!-- endregion Naming conventions -->
 
         <!-- region Types Mismatch -->

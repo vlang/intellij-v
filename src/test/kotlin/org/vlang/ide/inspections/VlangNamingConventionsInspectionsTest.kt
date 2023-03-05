@@ -13,6 +13,9 @@ class VlangNamingConventionsInspectionsTest : InspectionTestBase("namingConventi
     fun `test pseudo builtin`() = doTest("builtin/pseudo_builtin.v", FUNCTION, CLASS_LIKE, ALIAS)
     fun `test translated`()     = doTest("translated/translated.v", FUNCTION, CLASS_LIKE, ALIAS)
 
+    fun `test generic receivers names`() = doTest("generic_receivers_names.v", VlangReceiverNamesInspection())
+    fun `test different receivers names`() = doTest("different_receivers_names.v", VlangReceiverNamesInspection())
+
     companion object {
         val FUNCTION = VlangFunctionNamingConventionInspection()
         val CLASS_LIKE = VlangClassLikeNamingConventionInspection()
