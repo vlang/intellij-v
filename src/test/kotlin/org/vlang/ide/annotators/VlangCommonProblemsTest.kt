@@ -17,4 +17,5 @@ class VlangCommonProblemsTest : AnnotatorTestBase() {
     fun `test wrong modifiers order in structs`() = doTestQuickFix("wrong_modifiers_order_in_structs.v")
     fun `test if expression without else`() = doTestQuickFix("if_expression_without_else.v")
     fun `test attributes for interface members`() = doTest("attributes_for_interface_members.v")
+    fun `test assign values count mismatch`() = doTest("assign_values_count_mismatch.v")
 }

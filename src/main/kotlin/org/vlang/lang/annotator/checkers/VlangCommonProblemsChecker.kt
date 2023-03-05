@@ -367,6 +367,38 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
         }
     }
 
+    override fun visitVarDeclaration(decl: VlangVarDeclaration) {
+        val left = decl.varDefinitionList
+        val right = decl.expressionList
+
+        checkListCountMismatch(decl, left, right)
+    }
+
+    override fun visitAssignmentStatement(assign: VlangAssignmentStatement) {
+        val left = assign.leftHandExprList.expressionList
+        val right = assign.expressionList
+
+        checkListCountMismatch(assign, left, right)
+    }
+
+    private fun checkListCountMismatch(
+        context: PsiElement,
+        left: List<PsiElement>,
+        right: List<VlangExpression>,
+    ) {
+        val hasCallsRight = right.any { it is VlangCallExpr }
+        if (!hasCallsRight) {
+            if (left.size != right.size) {
+                holder.newAnnotation(
+                    HighlightSeverity.ERROR,
+                    "Expected ${left.size} values on the right side, got ${right.size}"
+                )
+                    .range(context)
+                    .create()
+            }
+        }
+    }
+
     companion object {
         class VlangAddKeyToLoopIterateQuickFix(val name: String) : BaseIntentionAction() {
             override fun startInWriteAction() = true
