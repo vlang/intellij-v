@@ -382,4 +382,78 @@ class CompletionTest : CompletionTestBase() {
         """.trimIndent(), 0,
         "fn", "foo"
     )
+
+    fun `test nil outside unsafe`() = doTestCompletion(
+        """
+        module main
+        
+        fn main() {
+           nil/*caret*/
+        }
+        """.trimIndent(),
+        """
+        module main
+        
+        fn main() {
+           unsafe { nil }
+        }
+        """.trimIndent()
+    )
+
+    fun `test nil outside unsafe 2`() = doTestCompletion(
+        """
+        module main
+        
+        fn main() {
+           println(nil/*caret*/)
+        }
+        """.trimIndent(),
+        """
+        module main
+        
+        fn main() {
+           println(unsafe { nil })
+        }
+        """.trimIndent()
+    )
+
+    fun `test nil inside unsafe`() = doTestCompletion(
+        """
+        module main
+        
+        fn main() {
+           unsafe { nil/*caret*/ }
+        }
+        """.trimIndent(),
+        """
+        module main
+        
+        fn main() {
+           unsafe { nil }
+        }
+        """.trimIndent()
+    )
+
+    fun `test nil inside unsafe 2`() = doTestCompletion(
+        """
+        module main
+        
+        fn main() {
+           unsafe {
+              println(100)
+              println(nil/*caret*/)
+           }
+        }
+        """.trimIndent(),
+        """
+        module main
+        
+        fn main() {
+           unsafe {
+              println(100)
+              println(nil)
+           }
+        }
+        """.trimIndent()
+    )
 }

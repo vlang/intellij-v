@@ -10,9 +10,9 @@ import com.intellij.refactoring.suggested.startOffset
 import org.vlang.ide.templates.postfix.VlangPostfixTemplateProvider.Companion.findAllExpressions
 import org.vlang.lang.psi.VlangExpression
 
-class VlangArgPostfixTemplate : PostfixTemplateWithExpressionSelector(
-    "vlang.postfix.arg", "arg",
-    "call(arg)", getExpressions(), null
+class VlangUnsafePostfixTemplate : PostfixTemplateWithExpressionSelector(
+    "vlang.postfix.unsafe", "unsafe",
+    "unsafe { expr }", getExpressions(), null
 ) {
     override fun isApplicable(context: PsiElement, copyDocument: Document, newOffset: Int) =
         VlangPostfixUtil.isExpression(context)
@@ -21,9 +21,9 @@ class VlangArgPostfixTemplate : PostfixTemplateWithExpressionSelector(
         val document = editor.document
         val caret = editor.caretModel.primaryCaret
 
-        document.insertString(expression.endOffset, ")")
-        document.insertString(expression.startOffset, "(")
-        caret.moveToOffset(expression.startOffset)
+        document.insertString(expression.startOffset, "unsafe { ")
+        document.insertString(expression.endOffset + "unsafe { ".length, " }")
+        caret.moveToOffset(expression.endOffset + 2)
     }
 
     companion object {

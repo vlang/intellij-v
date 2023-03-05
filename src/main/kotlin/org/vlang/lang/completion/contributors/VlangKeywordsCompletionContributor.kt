@@ -23,6 +23,7 @@ import org.vlang.lang.completion.VlangCompletionUtil.withPriority
 import org.vlang.lang.completion.VlangLookupElementProperties
 import org.vlang.lang.completion.sort.withVlangSorter
 import org.vlang.lang.sql.VlangSqlUtil
+import org.vlang.lang.utils.VlangUnsafeUtil
 import org.vlang.utils.isTestFile
 
 class VlangKeywordsCompletionContributor : CompletionContributor() {
@@ -94,11 +95,15 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
         extend(
             CompletionType.BASIC,
             onExpression(),
+            NilKeywordCompletionProvider
+        )
+        extend(
+            CompletionType.BASIC,
+            onExpression(),
             KeywordsCompletionProvider(
                 "none",
                 "true",
                 "false",
-                "nil",
                 "static",
                 needSpace = false,
             )
@@ -401,6 +406,27 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
             }
 
             result.addAllElements(elements)
+        }
+    }
+
+    private object NilKeywordCompletionProvider : CompletionProvider<CompletionParameters>() {
+        override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
+            val insideUnsafe = VlangUnsafeUtil.insideUnsafe(parameters.position)
+
+            val element = LookupElementBuilder.create("nil")
+                .bold()
+                .withInsertHandler { ctx, _ ->
+                    if (insideUnsafe) return@withInsertHandler
+
+                    val editor = ctx.editor
+                    val document = ctx.document
+                    document.insertString(ctx.startOffset, "unsafe { ")
+                    document.insertString(ctx.tailOffset, " }")
+                    editor.caretModel.moveToOffset(ctx.tailOffset)
+                }
+                .withPriority(KEYWORD_PRIORITY)
+
+            result.addElement(element)
         }
     }
 

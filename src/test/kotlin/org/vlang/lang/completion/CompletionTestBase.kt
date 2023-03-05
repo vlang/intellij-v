@@ -21,6 +21,16 @@ abstract class CompletionTestBase : BasePlatformTestCase() {
         myFixture.checkResult(after)
     }
 
+    protected open fun doTestPostfix(
+        txt: String,
+        @Language("vlang") after: String,
+    ) {
+        val newText = txt.replace(CARET, CARET_ORIGINAL)
+        myFixture.configureByText("a.v", newText)
+        myFixture.type("\t")
+        myFixture.checkResult(after)
+    }
+
     enum class CheckType {
         EQUALS, INCLUDES, EXCLUDES, ORDERED_EQUALS, EMPTY, NOT_EMPTY, FIRST,
     }
