@@ -18,12 +18,16 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.elementType
 import com.intellij.psi.util.parentOfType
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
+import org.vlang.ide.codeInsight.VlangTypeInferenceUtil
 import org.vlang.ide.ui.VIcons
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangReferenceBase.Companion.MODULE_NAME
 import org.vlang.lang.psi.impl.VlangReferenceBase.Companion.NEED_QUALIFIER_NAME
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapAlias
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapPointer
+import org.vlang.lang.psi.types.VlangFunctionTypeEx
 import javax.swing.Icon
 
 object VlangCompletionUtil {
@@ -511,6 +515,30 @@ object VlangCompletionUtil {
     class FunctionInsertHandler(private val function: VlangSignatureOwner, moduleName: String?) : ElementInsertHandler(moduleName) {
         override fun handleInsertion(context: InsertionContext, item: LookupElement) {
             val caretOffset = context.editor.caretModel.offset
+            val element = context.file.findElementAt(caretOffset - 1)
+
+            if (element != null) {
+                val type = VlangTypeInferenceUtil.getContextType(element.parent)?.unwrapPointer()?.unwrapAlias()
+
+                if (type is VlangFunctionTypeEx) {
+                    // we don't want to add parentheses for function if context type is function type
+                    //
+                    // Example:
+                    // struct Name {
+                    // 	 cb fn ()
+                    // }
+                    //
+                    // fn foo() {}
+                    //
+                    // fn main() {
+                    // 	 n := Name{
+                    // 	   cb: foo // don't add parentheses here
+                    // 	 }
+                    // }
+                    return
+                }
+            }
+
             val takeZeroArguments = VlangCodeInsightUtil.takeZeroArguments(function)
             val isGeneric = function.genericParameters != null
 

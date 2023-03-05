@@ -201,4 +201,124 @@ class FunctionCompletionTest : CompletionTestBase() {
         }
         """.trimIndent()
     )
+
+    fun `test function in context type with same type`() = doTestCompletion(
+        """
+        module main
+        
+        fn foo() {}
+        
+        struct Name {
+            cb fn ()
+        }
+        
+        fn main() {
+            n := Name{cb: fo<caret>}
+        }
+        """.trimIndent(),
+        """
+        module main
+        
+        fn foo() {}
+        
+        struct Name {
+            cb fn ()
+        }
+        
+        fn main() {
+            n := Name{cb: foo}
+        }
+        """.trimIndent()
+    )
+
+    fun `test function in context type with same type with alias`() = doTestCompletion(
+        """
+        module main
+        
+        type Callback = fn ()
+        
+        fn foo() {}
+        
+        struct Name {
+            cb Callback
+        }
+        
+        fn main() {
+            n := Name{cb: fo<caret>}
+        }
+        """.trimIndent(),
+        """
+        module main
+        
+        type Callback = fn ()
+        
+        fn foo() {}
+        
+        struct Name {
+            cb Callback
+        }
+        
+        fn main() {
+            n := Name{cb: foo}
+        }
+        """.trimIndent()
+    )
+
+    fun `test function in context type with incomplete type`() = doTestCompletion(
+        """
+        module main
+        
+        fn foo() {}
+        
+        struct Name {
+            cb fn () string
+        }
+        
+        fn main() {
+            n := Name{cb: fo<caret>}
+        }
+        """.trimIndent(),
+        """
+        module main
+        
+        fn foo() {}
+        
+        struct Name {
+            cb fn () string
+        }
+        
+        fn main() {
+            n := Name{cb: foo}
+        }
+        """.trimIndent()
+    )
+
+    fun `test function in context type with non function type`() = doTestCompletion(
+        """
+        module main
+        
+        fn foo() {}
+        
+        struct Name {
+            cb string
+        }
+        
+        fn main() {
+            n := Name{cb: fo<caret>}
+        }
+        """.trimIndent(),
+        """
+        module main
+        
+        fn foo() {}
+        
+        struct Name {
+            cb string
+        }
+        
+        fn main() {
+            n := Name{cb: foo()}
+        }
+        """.trimIndent()
+    )
 }
