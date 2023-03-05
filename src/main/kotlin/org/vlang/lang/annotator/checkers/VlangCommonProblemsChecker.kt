@@ -243,6 +243,21 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
         }
     }
 
+    override fun visitMembersGroup(group: VlangMembersGroup) {
+        val attributes =
+            group.fieldDeclarationList.mapNotNull { it.attribute } +
+                    group.interfaceMethodDeclarationList.mapNotNull { it.attribute }
+
+        attributes.forEach {
+            holder.newAnnotation(
+                HighlightSeverity.ERROR,
+                "Attributes are not allowed for interface members"
+            )
+                .range(it)
+                .create()
+        }
+    }
+
     override fun visitReturnStatement(ret: VlangReturnStatement) {
         val owner = ret.owner ?: return
         val signature = owner.getSignature() ?: return

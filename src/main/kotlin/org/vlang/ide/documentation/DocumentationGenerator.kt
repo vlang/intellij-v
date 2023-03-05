@@ -637,6 +637,49 @@ object DocumentationGenerator {
         }
     }
 
+    private fun StringBuilder.generateMemberGroups(membersGroups: List<VlangMembersGroup>, decl: VlangInterfaceDeclaration) {
+        for (group in membersGroups) {
+            val modifiers = group.memberModifiers?.memberModifierList?.joinToString(" ", postfix = ":\n") {
+                DocumentationUtils.colorize(it.text, asKeyword)
+            }
+
+            appendNotNull(modifiers)
+
+            val fieldNameMaxWidth = group.fieldDeclarationList
+                .mapNotNull { it.fieldDefinition }
+                .maxOfOrNull { it.name?.length ?: 0 } ?: 0
+
+            group.fieldDeclarationList.forEach { field ->
+                val definition = field.fieldDefinition
+                if (definition != null) {
+                    append("   ")
+                    part(definition.name, asField)
+
+                    val pad = " ".repeat(fieldNameMaxWidth - (definition.name?.length ?: 0))
+                    append(pad)
+
+                    append(definition.getType(null)?.generateDoc(decl))
+                    append("\n")
+                }
+
+                val embedded = field.embeddedDefinition
+                if (embedded != null) {
+                    append("   ")
+                    append(embedded.getType(null).generateDoc(decl))
+                    append("\n")
+                }
+            }
+
+            group.interfaceMethodDeclarationList.forEach { method ->
+                append("   ")
+
+                append(method.generateDoc())
+
+                append("\n")
+            }
+        }
+    }
+
     fun VlangEnumDeclaration.generateDoc(originalElement: PsiElement?): String {
         return buildString {
             generateModuleName(containingFile)
@@ -664,6 +707,20 @@ object DocumentationGenerator {
             part("interface", asKeyword)
             colorize(name, asDeclaration)
             appendNotNull(interfaceType.genericParameters.generateDoc())
+
+            append(" {")
+
+            val memberGroups = interfaceType.membersGroupList
+            val fields = memberGroups.flatMap { it.fieldDeclarationList }
+            val methods = memberGroups.flatMap { it.interfaceMethodDeclarationList }
+
+            if (fields.isNotEmpty() || methods.isNotEmpty()) {
+                append("\n")
+                generateMemberGroups(memberGroups, this@generateDoc)
+            }
+
+            append("}")
+
             append(DocumentationMarkup.DEFINITION_END)
 
             generateCommentsPart(this@generateDoc)
@@ -782,6 +839,18 @@ object DocumentationGenerator {
             append(DocumentationMarkup.DEFINITION_END)
 
             generateCommentsPart(this@generateDoc.parent)
+        }
+    }
+
+    fun VlangInterfaceMethodDeclaration.generateDoc(): String {
+        val definition = interfaceMethodDefinition
+        val parameters = definition.getSignature().parameters
+        val returnType = definition.getSignature().result
+
+        return buildString {
+            colorize(definition.name ?: "anon", asDeclaration)
+            part(parameters.generateDoc(noWraps = true))
+            appendNotNull(returnType?.generateDoc())
         }
     }
 
@@ -998,6 +1067,7 @@ object DocumentationGenerator {
             val string = VlangTokenTypes.STRING_LITERALS.contains(type)
             val operators = VlangTokenTypes.OPERATORS.contains(type)
             val stringInterpolation = VlangTokenTypes.STRING_INTERPOLATION.contains(type)
+            val booleanLiteral = tokenText == "true" || tokenText == "false"
 
             if (tokenText.contains("\n")) {
                 builder.append("...")
@@ -1006,12 +1076,13 @@ object DocumentationGenerator {
 
             builder.append(
                 when {
-                    keyword -> colorize(tokenText, asKeyword)
-                    number  -> colorize(tokenText, asNumber)
-                    string  -> colorize(tokenText, asString)
-                    operators -> colorize(tokenText, asOperator)
-                    stringInterpolation  -> colorize(tokenText, asStringInterpolation)
-                    else    -> tokenText
+                    keyword             -> colorize(tokenText, asKeyword)
+                    number              -> colorize(tokenText, asNumber)
+                    string              -> colorize(tokenText, asString)
+                    operators           -> colorize(tokenText, asOperator)
+                    stringInterpolation -> colorize(tokenText, asStringInterpolation)
+                    booleanLiteral      -> colorize(tokenText, asKeyword)
+                    else                -> tokenText
                 }
             )
             lexer.advance()

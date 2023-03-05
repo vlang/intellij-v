@@ -1,0 +1,27 @@
+<div class='content'><span class='grayed'>Module: </span><a href="psi_element://#interfaces">interfaces</a></div><div class='definition'><pre><span style="color:#000080;font-weight:bold;">interface</span> <span style="color:#000000;">Empty</span> {}</pre></div><br><br><br><div class='content'><span class='grayed'>Module: </span><a href="psi_element://#interfaces">interfaces</a></div><div class='definition'><pre><span style="color:#000080;font-weight:bold;">interface</span> <span style="color:#000000;">Field</span> {
+   <span style="color:#660e7a;font-weight:bold;">foo</span> ?<span style="color:#000080;font-weight:bold;">string</span>
+}</pre></div><div class='content'><p><a href="psi_element://Field">Field</a> is interface</p>
+</div><br><br><br><div class='content'><span class='grayed'>Module: </span><a href="psi_element://#interfaces">interfaces</a></div><div class='definition'><pre><span style="color:#000080;font-weight:bold;">interface</span> <span style="color:#000000;">Method</span> {
+   <span style="color:#000000;">foo</span>() <span style="color:#000080;font-weight:bold;">string</span>
+}</pre></div><br><br><br><div class='content'><span class='grayed'>Module: </span><a href="psi_element://#interfaces">interfaces</a></div><div class='definition'><pre><span style="color:#000080;font-weight:bold;">interface</span> <span style="color:#000000;">MethodAndField</span> {
+   <span style="color:#660e7a;font-weight:bold;">bar</span> <span style="color:#000080;font-weight:bold;">string</span>
+   <span style="color:#000000;">foo</span>() (<span style="color:#000080;font-weight:bold;">string</span>, <span style="color:#000080;font-weight:bold;">int</span>)
+}</pre></div><br><br><br><div class='content'><span class='grayed'>Module: </span><a href="psi_element://#interfaces">interfaces</a></div><div class='definition'><pre><span style="color:#000080;font-weight:bold;">interface</span> <span style="color:#000000;">SeveralFields</span> {
+   <span style="color:#660e7a;font-weight:bold;">foo</span> <span style="color:#000080;font-weight:bold;">string</span>
+   <span style="color:#660e7a;font-weight:bold;">b</span>   <span style="color:#000080;font-weight:bold;">string</span>
+}</pre></div><br><br><br><div class='content'><span class='grayed'>Module: </span><a href="psi_element://#interfaces">interfaces</a></div><div class='definition'><pre><span style="color:#000080;font-weight:bold;">interface</span> <span style="color:#000000;">SeveralMethods</span> {
+   <span style="color:#000000;">foo</span>() <span style="color:#000080;font-weight:bold;">string</span>
+   <span style="color:#000000;">bar</span>(<span style="color:#000000;">f</span> <span style="color:#000080;font-weight:bold;">string</span>, <span style="color:#000000;">b</span> <span style="color:#000080;font-weight:bold;">int</span>, <span style="color:#000000;">f</span> <span style="color:#000080;font-weight:bold;">bool</span>, <span style="color:#000000;">i</span> <span style="color:#000080;font-weight:bold;">f64</span>) <span style="color:#000080;font-weight:bold;">string</span>
+}</pre></div><br><br><br><div class='content'><span class='grayed'>Module: </span><a href="psi_element://#interfaces">interfaces</a></div><div class='definition'><pre><span style="color:#000080;font-weight:bold;">interface</span> <span style="color:#000000;">SeveralMethodsAndFields</span> {
+   <span style="color:#660e7a;font-weight:bold;">foo</span> <span style="color:#000080;font-weight:bold;">string</span>
+   <span style="color:#660e7a;font-weight:bold;">b</span>   <span style="color:#000080;font-weight:bold;">string</span>
+   <span style="color:#000000;">foo</span>(<span style="color:#000000;">age</span> <span style="color:#000080;font-weight:bold;">int</span>) <span style="color:#000080;font-weight:bold;">string</span>
+   <span style="color:#000000;">bar</span>() <span style="color:#000080;font-weight:bold;">string</span>
+}</pre></div><div class='content'><p><a href="psi_element://SeveralMethodsAndFields">SeveralMethodsAndFields</a> is interface</p>
+</div><br><br><br><div class='content'><span class='grayed'>Module: </span><a href="psi_element://#interfaces">interfaces</a></div><div class='definition'><pre><span style="color:#000080;font-weight:bold;">interface</span> <span style="color:#000000;">WithEmbedded</span> {
+   <span style="color:#000000;">SeveralMethodsAndFields</span>
+   <span style="color:#660e7a;font-weight:bold;">foo</span> !<span style="color:#000080;font-weight:bold;">string</span>
+}</pre></div><br><br><br><div class='content'><span class='grayed'>Module: </span><a href="psi_element://#interfaces">interfaces</a></div><div class='definition'><pre><span style="color:#000080;font-weight:bold;">interface</span> <span style="color:#000000;">WithOwnMethods</span> {
+   <span style="color:#000000;">SeveralMethodsAndFields</span>
+   <span style="color:#660e7a;font-weight:bold;">foo</span> !<span style="color:#000080;font-weight:bold;">string</span>
+}</pre></div><table class='sections'><tr><td valign='top' class='section'><p>Methods:</td><tr><td valign='top'><p><code style='white-space: nowrap;'><span style="color:#000000;">some_method</span>() </code></p></td></tr></table><br>

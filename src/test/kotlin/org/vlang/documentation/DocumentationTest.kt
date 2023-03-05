@@ -15,6 +15,7 @@ class DocumentationTest : DocumentationTestBase() {
     fun `test structs`() = doTest("structs", "main.v")
     fun `test type methods`() = doTest("type_methods", "main.v")
     fun `test embedded definition`() = doTest("embedded_definition", "main.v")
+    fun `test interfaces`() = doTest("interfaces", "main.v")
 
     fun `test rendered doc`() = doTest("rendered", "main.v")
 }
