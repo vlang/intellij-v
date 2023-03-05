@@ -28,7 +28,7 @@ object VlangCompletionPatterns {
             .withParent(VlangReferenceExpression::class.java)
             .notAfterDot()
             .notAfterLiteral()
-            .notInsideArrayInit()
+            .notInsideArrayOrChanInit()
             .notInsideStructInitWithKeys()
             .notInsideTrailingStruct()
             .noTopLevelNext()
@@ -188,14 +188,14 @@ object VlangCompletionPatterns {
         }))
     }
 
-    private fun PsiElementPattern.Capture<PsiElement>.notInsideArrayInit(): PsiElementPattern.Capture<PsiElement> {
-        return andNot(psiElement().with(object : PatternCondition<PsiElement>("notInsideArrayInit") {
+    private fun PsiElementPattern.Capture<PsiElement>.notInsideArrayOrChanInit(): PsiElementPattern.Capture<PsiElement> {
+        return andNot(psiElement().with(object : PatternCondition<PsiElement>("notInsideArrayOrChanInit") {
             override fun accepts(t: PsiElement, context: ProcessingContext?): Boolean {
                 val element = t.parentNth<VlangElement>(3) ?: return false
                 // if 'key: <caret>'
                 if (element.key != null) return false
                 val parent = element.parent as? VlangLiteralValueExpression
-                return parent != null && parent.type is VlangArrayType
+                return parent != null && (parent.type is VlangArrayType || parent.type is VlangChannelType)
             }
         }))
     }

@@ -13,6 +13,7 @@ import org.vlang.lang.psi.types.VlangArrayTypeEx
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapAlias
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapPointer
+import org.vlang.lang.psi.types.VlangChannelTypeEx
 import org.vlang.lang.psi.types.VlangStructTypeEx
 import org.vlang.lang.psi.types.VlangTypeEx
 
@@ -46,6 +47,10 @@ class VlangFieldNameReference(element: VlangReferenceExpressionBase) :
         val typeToProcess = type.unwrapPointer().unwrapAlias()
         if (typeToProcess is VlangArrayTypeEx) {
             return processStructType(fieldProcessor, VlangStructTypeEx.ArrayInit, false)
+        }
+
+        if (typeToProcess is VlangChannelTypeEx) {
+            return processStructType(fieldProcessor, VlangStructTypeEx.ChanInit, false)
         }
 
         val typeFile = type.anchor()?.containingFile as? VlangFile

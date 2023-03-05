@@ -7,6 +7,7 @@ import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangPsiImplUtil
 import org.vlang.lang.psi.types.VlangArrayTypeEx
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
+import org.vlang.lang.psi.types.VlangChannelTypeEx
 import org.vlang.utils.parentNth
 
 internal object VlangStructLiteralCompletion {
@@ -37,6 +38,10 @@ internal object VlangStructLiteralCompletion {
             val type = possiblyLiteralValueExpression.getType(null)
             if (type is VlangArrayTypeEx) {
                 // for []int{<caret>}, allow only fields
+                return Variants.FIELD_NAME_ONLY
+            }
+            if (type is VlangChannelTypeEx) {
+                // for chan int{<caret>}, allow only fields
                 return Variants.FIELD_NAME_ONLY
             }
         }

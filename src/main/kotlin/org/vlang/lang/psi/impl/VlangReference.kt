@@ -958,6 +958,9 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         if (type is VlangArrayTypeEx) {
             return processType(VlangStructTypeEx.ArrayInit, processor, state)
         }
+        if (type is VlangChannelTypeEx) {
+            return processType(VlangStructTypeEx.ChanInit, processor, state)
+        }
         return processType(type, processor, state)
     }
 

@@ -82,5 +82,10 @@ open class VlangStructTypeEx(private val name: String, anchor: PsiElement?) :
             override val moduleName: String
                 get() = VlangCodeInsightUtil.STUBS_MODULE
         }
+
+        val ChanInit = object : VlangStructTypeEx("ChanInit", null) {
+            override val moduleName: String
+                get() = VlangCodeInsightUtil.STUBS_MODULE
+        }
     }
 }
