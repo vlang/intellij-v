@@ -19,7 +19,7 @@ import org.vlang.lang.completion.sort.withVlangSorter
 class VlangCompletionContributor : CompletionContributor() {
     init {
         extend(CompletionType.BASIC, onTopLevel(),         MethodNameCompletionProvider)
-        extend(CompletionType.BASIC, onTopLevel(),         SpecialTestFunctionsCompletionProvider)
+        extend(CompletionType.BASIC, onTopLevel(),         TestFunctionsCompletionProvider)
         extend(CompletionType.BASIC, onModuleImportName(), ModuleNameCompletionProvider)
         extend(CompletionType.BASIC, onStatement(),        ReturnKeywordCompletionProvider)
         extend(CompletionType.BASIC, onExpression(),       MapInitCompletionProvider)

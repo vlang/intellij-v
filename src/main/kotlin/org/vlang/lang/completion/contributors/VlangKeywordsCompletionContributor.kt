@@ -13,6 +13,7 @@ import org.vlang.lang.completion.VlangCompletionPatterns.onMatchElse
 import org.vlang.lang.completion.VlangCompletionPatterns.onStatement
 import org.vlang.lang.completion.VlangCompletionPatterns.onTopLevel
 import org.vlang.lang.completion.VlangCompletionPatterns.onType
+import org.vlang.lang.completion.VlangCompletionUtil.CONTEXT_KEYWORD_PRIORITY
 import org.vlang.lang.completion.VlangCompletionUtil.KEYWORD_PRIORITY
 import org.vlang.lang.completion.VlangCompletionUtil.StringInsertHandler
 import org.vlang.lang.completion.VlangCompletionUtil.TemplateStringInsertHandler
@@ -22,6 +23,7 @@ import org.vlang.lang.completion.VlangCompletionUtil.withPriority
 import org.vlang.lang.completion.VlangLookupElementProperties
 import org.vlang.lang.completion.sort.withVlangSorter
 import org.vlang.lang.sql.VlangSqlUtil
+import org.vlang.utils.isTestFile
 
 class VlangKeywordsCompletionContributor : CompletionContributor() {
     init {
@@ -208,6 +210,9 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
 
     private object AssertKeywordCompletionProvider : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
+            val insideTestFile = parameters.originalFile.virtualFile?.isTestFile ?: false
+            val priority = if (insideTestFile) CONTEXT_KEYWORD_PRIORITY else KEYWORD_PRIORITY
+
             val plainAssert = LookupElementBuilder.create("assert")
                 .withTailText(" expr")
                 .withInsertHandler { ctx, item ->
@@ -215,7 +220,10 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
                     showCompletion(ctx.editor)
                 }
                 .bold()
-                .withPriority(KEYWORD_PRIORITY)
+                .withPriority(priority)
+                .toVlangLookupElement(VlangLookupElementProperties(
+                    isContextElement = insideTestFile
+                ))
 
             val assertWithMessage = LookupElementBuilder.create("assert")
                 .withTailText(" expr, 'message'")
@@ -227,7 +235,10 @@ class VlangKeywordsCompletionContributor : CompletionContributor() {
                     )
                 )
                 .bold()
-                .withPriority(KEYWORD_PRIORITY)
+                .withPriority(priority)
+                .toVlangLookupElement(VlangLookupElementProperties(
+                    isContextElement = insideTestFile
+                ))
 
             result.addElement(plainAssert)
             result.addElement(assertWithMessage)

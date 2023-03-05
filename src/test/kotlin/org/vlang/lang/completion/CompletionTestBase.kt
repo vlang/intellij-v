@@ -98,7 +98,7 @@ abstract class CompletionTestBase : BasePlatformTestCase() {
             }
             CheckType.INCLUDES       -> {
                 varList.removeAll(stringList.toSet())
-                assertTrue("Missing variants: $varList", varList.isEmpty())
+                assertTrue("Missing variants: $varList, variants: $stringList", varList.isEmpty())
             }
             CheckType.EXCLUDES       -> {
                 varList.retainAll(stringList.toSet())
