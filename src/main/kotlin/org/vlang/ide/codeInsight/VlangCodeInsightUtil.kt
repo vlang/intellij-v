@@ -134,7 +134,7 @@ object VlangCodeInsightUtil {
         val parentIf = element.parentOfTypeWithStop<VlangIfExpression>() ?: return false
 
         // if err used in nested if
-        if (PsiTreeUtil.isAncestor(parentIf.expression, element, false)) {
+        if (PsiTreeUtil.isAncestor(parentIf.expression, element, false) || PsiTreeUtil.isAncestor(parentIf.block, element, false)) {
             val secondParentIf = parentIf.parentOfType<VlangIfExpression>(false) ?: return false
             return secondParentIf.isGuard
         }

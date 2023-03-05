@@ -30,4 +30,24 @@ open class ResolveErrVariableTest : ResolveTestBase() {
         assertReferencedTo("CONST_DEFINITION err")
         assertReferencedTo("CONST_DEFINITION err")
     }
+
+    fun `test err inside if expression inside if guard`() {
+        mainFile("a.v", """
+            module main
+            
+            fn foo() !int {}
+            
+            fn main() {
+                if a := foo() {
+            
+                } else {
+                    if true {
+                        println(/*caret*/err)
+                    }
+                }
+            }
+        """.trimIndent())
+
+        assertReferencedTo("CONST_DEFINITION err")
+    }
 }
