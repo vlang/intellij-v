@@ -1,4 +1,4 @@
-package org.vlang.ide.refactoring
+package org.vlang.ide.refactoring.rename
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveState

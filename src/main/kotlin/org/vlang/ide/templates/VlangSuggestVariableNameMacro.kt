@@ -5,7 +5,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.codeInsight.lookup.LookupFocusDegree
 import com.intellij.codeInsight.template.*
 import com.intellij.psi.PsiDocumentManager
-import org.vlang.ide.refactoring.VlangNameSuggestionProvider
+import org.vlang.ide.refactoring.rename.VlangNameSuggestionProvider
 import org.vlang.lang.psi.VlangTypeOwner
 
 class VlangSuggestVariableNameMacro : Macro() {

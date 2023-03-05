@@ -1,4 +1,4 @@
-package org.vlang.ide.refactoring
+package org.vlang.ide.refactoring.rename
 
 import com.intellij.lang.refactoring.NamesValidator
 import com.intellij.openapi.project.Project

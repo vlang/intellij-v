@@ -1,4 +1,4 @@
-package org.vlang.ide.refactoring
+package org.vlang.ide.refactoring.rename
 
 import ai.grazie.utils.capitalize
 import com.google.common.collect.Sets
