@@ -1173,8 +1173,10 @@ object VlangPsiImplUtil {
             is VlangResultType,
             is VlangOptionType,
                               -> {
-                val isEmpty = type.type == null
-                if (isEmpty) 0 to 1 else 1 to 1
+                val inner = type.type ?: return 0 to 1
+                if (inner is VlangTupleType) return 1 to inner.typeListNoPin.typeList.size
+
+                1 to 1
             }
 
             null              -> 0 to 0

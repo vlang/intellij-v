@@ -91,3 +91,23 @@ fn three_two_5() (string, int, bool) {
 fn three_two_6() (string, int, bool) {
 	return one_one(), 10, true
 }
+
+fn three_two_7() (string, int, bool) {
+	return one_one(), int(10), true
+}
+
+fn option_two() ?(string, int) {
+	return none
+}
+
+fn option_two_2() ?(string, int) {
+	return "1", 2
+}
+
+fn option_three() ?(string, int, bool) {
+	return none
+}
+
+fn option_three_2() ?(string, int, bool) {
+	return "1", 2, true
+}

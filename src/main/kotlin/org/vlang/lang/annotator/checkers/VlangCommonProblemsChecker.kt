@@ -287,8 +287,13 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
 
         val results = ret.expressionList.mapNotNull { expr ->
             if (expr is VlangCallExpr) {
-                val called = expr.resolve() as? VlangSignatureOwner
-                called?.getSignature()?.resultCount()
+                val resolved = expr.resolve()
+                if (resolved !is VlangSignatureOwner) {
+                    // for example casts like `i32(1)`
+                    return@mapNotNull 1 to 1
+                }
+
+                resolved.getSignature()?.resultCount()
             } else {
                 1 to 1
             }
