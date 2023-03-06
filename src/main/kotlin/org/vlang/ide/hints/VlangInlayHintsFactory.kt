@@ -49,7 +49,7 @@ class VlangInlayHintsFactory(
         is VlangFunctionTypeEx         -> functionType(type, level, anchor)
         is VlangAnonStructTypeEx       -> anonStructType(type, level, anchor)
         is VlangGenericInstantiationEx -> genericInstantiation(type, level, anchor)
-        is VlangResolvableTypeEx<*>    -> resolvableType(type, level, anchor)
+        is VlangResolvableTypeEx<*>    -> resolvableType(type, anchor)
         else                           -> text(type.readableName(anchor))
     }
 
@@ -70,7 +70,7 @@ class VlangInlayHintsFactory(
         return factory.seq(text("struct "), fields)
     }
 
-    private fun resolvableType(type: VlangResolvableTypeEx<*>, level: Int, anchor: PsiElement): InlayPresentation {
+    private fun resolvableType(type: VlangResolvableTypeEx<*>, anchor: PsiElement): InlayPresentation {
         return factory.psiSingleReference(text((type as VlangTypeEx).readableName(anchor))) {
             type.resolve(anchor.project)
         }
@@ -144,7 +144,7 @@ class VlangInlayHintsFactory(
                 8
             ), DefaultLanguageHighlighterColors.INLAY_DEFAULT
         )
-        return DynamicInsetPresentation(rounding, offsetFromTopProvider!!)
+        return DynamicInsetPresentation(rounding, offsetFromTopProvider)
     }
 
     private fun container(base: InlayPresentation): InlayPresentation {
@@ -161,7 +161,7 @@ class VlangInlayHintsFactory(
                 8
             ), DefaultLanguageHighlighterColors.INLAY_DEFAULT
         )
-        return DynamicInsetPresentation(rounding, offsetFromTopProvider!!)
+        return DynamicInsetPresentation(rounding, offsetFromTopProvider)
     }
 
     private fun List<InlayPresentation>.join(separator: String = ""): InlayPresentation {

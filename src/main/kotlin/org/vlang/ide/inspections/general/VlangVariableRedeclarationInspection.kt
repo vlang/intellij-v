@@ -14,7 +14,7 @@ class VlangVariableRedeclarationInspection : VlangBaseInspection() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
         return object : VlangVisitor() {
             override fun visitVarDefinition(def: VlangVarDefinition) {
-                val res = def.reference?.resolve()
+                val res = def.reference.resolve()
                 if (res != null) {
                     val kind = if (res is VlangParamDefinition) "as parameter " else if (res is VlangReceiver) "as receiver " else ""
                     holder.registerProblem(

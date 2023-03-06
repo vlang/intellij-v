@@ -44,7 +44,7 @@ class VlangNewToolchainDialog(private val toolchainFilter: Condition<Path>, proj
             row("Location:") {
                 cell(pathToToolchainComboBox)
                     .align(AlignX.FILL)
-                    .validationOnApply { validateToolchainPath(it) }
+                    .validationOnApply { validateToolchainPath() }
             }
             row("Version:") {
                 cell(toolchainVersion)
@@ -119,7 +119,7 @@ class VlangNewToolchainDialog(private val toolchainFilter: Condition<Path>, proj
         }
     }
 
-    private fun ValidationInfoBuilder.validateToolchainPath(it: VlangToolchainPathChoosingComboBox): ValidationInfo? {
+    private fun ValidationInfoBuilder.validateToolchainPath(): ValidationInfo? {
         if (model.toolchainLocation.isEmpty()) {
             return error("Toolchain location is required")
         }

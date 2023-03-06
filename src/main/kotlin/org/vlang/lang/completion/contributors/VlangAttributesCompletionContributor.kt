@@ -51,7 +51,7 @@ class VlangAttributesCompletionContributor : CompletionContributor() {
 
         val ATTRIBUTES = listOf("sql", "table", "deprecated", "deprecated_after", "export", "callconv")
 
-        val INSERT_HANDLER = InsertHandler<LookupElement> { context, item ->
+        val INSERT_HANDLER = InsertHandler<LookupElement> { context, _ ->
             val offset = context.tailOffset
             context.document.insertString(offset, ": ''")
             context.editor.caretModel.moveToOffset(offset + 3)

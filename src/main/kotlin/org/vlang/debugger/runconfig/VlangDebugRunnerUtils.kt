@@ -10,11 +10,9 @@ import com.intellij.xdebugger.XDebugProcess
 import com.intellij.xdebugger.XDebugProcessStarter
 import com.intellij.xdebugger.XDebugSession
 import com.intellij.xdebugger.XDebuggerManager
-import org.vlang.ide.run.VlangRunConfigurationRunState
 
 object VlangDebugRunnerUtils {
     fun showRunContent(
-        state: VlangRunConfigurationRunState,
         environment: ExecutionEnvironment,
         runExecutable: GeneralCommandLine,
     ): RunContentDescriptor {

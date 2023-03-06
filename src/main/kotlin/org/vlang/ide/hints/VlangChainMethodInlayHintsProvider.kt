@@ -4,7 +4,7 @@ import com.intellij.codeInsight.hints.*
 import com.intellij.codeInsight.hints.presentation.InlayPresentation
 import com.intellij.codeInsight.hints.presentation.InsetPresentation
 import com.intellij.codeInsight.hints.presentation.MenuOnClickPresentation
-import com.intellij.codeInsight.hints.settings.InlayHintsConfigurable
+import com.intellij.codeInsight.hints.settings.showInlaySettings
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.components.service
@@ -100,7 +100,7 @@ class VlangChainMethodInlayHintsProvider : InlayHintsProvider<VlangChainMethodIn
                 InlayProviderDisablingAction(name, VlangLanguage, project, key),
                 object : AnAction("Hints Settings...") {
                     override fun actionPerformed(e: AnActionEvent) {
-                        InlayHintsConfigurable.showSettingsDialogForLanguage(project, VlangLanguage)
+                        showInlaySettings(project, VlangLanguage, null)
                     }
                 }
             )

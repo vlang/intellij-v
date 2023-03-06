@@ -32,7 +32,7 @@ object VlangPsiTreeUtil {
         var stub: StubElement<*>? = this
         while (stub != null) {
             if (stub is T) {
-                return stub as T
+                return stub
             }
             stub = stub.parentStub
         }
@@ -104,29 +104,6 @@ object VlangPsiTreeUtil {
             return Couple.of(startElement, startElement)
         }
         return Couple.of(startElement, endElement)
-    }
-
-    fun getTopLevelElementsInRange(
-        file: VlangFile,
-        startOffset: Int,
-        endOffset: Int,
-        clazz: Class<out PsiElement?>
-    ): Array<PsiElement> {
-        val elementRange = getElementRange(file, startOffset, endOffset)
-            ?: return PsiElement.EMPTY_ARRAY
-        val topmostElementRange = getTopmostElementRange(elementRange)
-            ?: return PsiElement.EMPTY_ARRAY
-        if (!clazz.isInstance(topmostElementRange.first) || !clazz.isInstance(topmostElementRange.second)) {
-            return PsiElement.EMPTY_ARRAY
-        }
-        val result = ContainerUtil.newSmartList<PsiElement?>()
-        var start = topmostElementRange.first
-        while (start != null && !start.isEquivalentTo(topmostElementRange.second)) {
-            if (clazz.isInstance(start)) result.add(start)
-            start = start.nextSibling
-        }
-        result.add(topmostElementRange.second)
-        return PsiUtilCore.toPsiElementArray(result)
     }
 
     @JvmStatic

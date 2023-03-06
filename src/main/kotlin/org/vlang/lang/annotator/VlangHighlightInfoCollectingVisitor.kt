@@ -217,12 +217,12 @@ class VlangHighlightInfoCollectingVisitor : VlangVisitor(), HighlightVisitor, Du
         }
 
         return when (element.elementType) {
-            VlangTypes.IDENTIFIER -> highlightIdentifier(element, parent)
+            VlangTypes.IDENTIFIER -> highlightIdentifier(element)
             else                  -> null
         }
     }
 
-    private fun highlightIdentifier(element: PsiElement, parent: VlangCompositeElement): VlangColor? {
+    private fun highlightIdentifier(element: PsiElement): VlangColor? {
         return when (element.text) {
             // pseudo keywords
             in listOf("_likely_", "_unlikely_", "sql", "map") -> VlangColor.KEYWORD

@@ -110,7 +110,7 @@ object VlangSuperSearch : QueryExecutorBase<VlangNamedElement, DefinitionsScoped
         val searchScope = GlobalSearchScope.allScope(project)
         val candidatesProcessor = createCandidatesProcessor(processor, struct)
 
-        VlangGotoUtil.searchInContentFirst(project, searchScope) { scope ->
+        VlangGotoUtil.searchInContentFirst(project, searchScope) {
             processFieldInterfaces(project, fields, candidatesProcessor, visitedInterfaces)
         }
     }

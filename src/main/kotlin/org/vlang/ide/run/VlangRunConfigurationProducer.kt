@@ -89,7 +89,7 @@ class VlangRunConfigurationProducer : LazyRunConfigurationProducer<VlangRunConfi
             return moduleName
         }
 
-        val containingDir = containingFile.containingDirectory.virtualFile ?: return null
+        val containingDir = containingFile.containingDirectory.virtualFile
         val projectDir = project.guessProjectDir() ?: return null
         val projectSrcDir = projectDir.findChild("src")
 

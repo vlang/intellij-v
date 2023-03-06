@@ -96,7 +96,7 @@ open class VlangRunConfigurationEditor(private val project: Project) : SettingsE
         mainPanel = panel {
             row("Run kind:") {
                 kindComboBox = comboBox(listOf(RunKind.File, RunKind.Directory))
-                    .bindItemNullable(model::runKind)
+                    .bindItem(model::runKind)
             }.bottomGap(BottomGap.NONE)
 
             row("File:") {

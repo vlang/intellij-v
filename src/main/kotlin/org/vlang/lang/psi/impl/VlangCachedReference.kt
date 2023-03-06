@@ -36,6 +36,6 @@ abstract class VlangCachedReference<T : PsiElement>(element: T, range: TextRange
 
     companion object {
         private val MY_RESOLVER =
-            ResolveCache.AbstractResolver { r: VlangCachedReference<*>, b: Boolean -> r.resolveInner() }
+            ResolveCache.AbstractResolver { r: VlangCachedReference<*>, _ -> r.resolveInner() }
     }
 }

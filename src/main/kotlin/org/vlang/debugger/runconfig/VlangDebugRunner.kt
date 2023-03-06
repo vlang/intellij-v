@@ -16,7 +16,7 @@ import org.vlang.ide.test.configuration.VlangTestConfiguration
 import java.io.File
 import java.util.concurrent.ExecutionException
 
-@Suppress("UnstableApiUsage")
+@Suppress("UnstableApiUsage", "DEPRECATION")
 open class VlangDebugRunner : ProgramRunner<RunnerSettings> {
     override fun getRunnerId() = RUNNER_ID
 
@@ -67,14 +67,13 @@ open class VlangDebugRunner : ProgramRunner<RunnerSettings> {
         val additionalArguments = ParametersListUtil.parse(conf.programArguments)
         commandLine.addParameters(additionalArguments)
 
-        return showRunContent(state, environment, commandLine)
+        return showRunContent(environment, commandLine)
     }
 
     private fun showRunContent(
-        state: VlangRunConfigurationRunState,
         environment: ExecutionEnvironment,
         runExecutable: GeneralCommandLine,
-    ): RunContentDescriptor = VlangDebugRunnerUtils.showRunContent(state, environment, runExecutable)
+    ): RunContentDescriptor = VlangDebugRunnerUtils.showRunContent(environment, runExecutable)
 
     private fun assertAvailability() {
         if (!PlatformUtils.isIdeaUltimate() &&

@@ -16,7 +16,7 @@ class VlangDocAnnotator : Annotator {
         if (holder.isBatchMode) return
         val color = when {
             element is VlangDocComment && element.owner != null -> VlangColor.DOC_COMMENT
-            element.elementType == VlangDocElementTypes.DOC_DATA -> when (val parent = element.parent) {
+            element.elementType == VlangDocElementTypes.DOC_DATA -> when (element.parent) {
                 is VlangDocCodeFence                                   -> VlangColor.DOC_CODE
                 is VlangDocCodeFenceStartEnd,
                 is VlangDocCodeFenceLang -> VlangColor.DOC_CODE

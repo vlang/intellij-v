@@ -2,7 +2,7 @@ package org.vlang.ide.hints
 
 import com.intellij.codeInsight.hints.*
 import com.intellij.codeInsight.hints.presentation.*
-import com.intellij.codeInsight.hints.settings.InlayHintsConfigurable
+import com.intellij.codeInsight.hints.settings.showInlaySettings
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.components.service
@@ -225,12 +225,11 @@ class VlangInlayHintsCollector(
                         settings.action()
                         inlayHintsSettings.storeSettings(key, VlangLanguage, settings)
                         InlayHintsPassFactory.forceHintsUpdateOnNextPass()
-                        InlayHintsConfigurable.updateInlayHintsUI()
                     }
                 },
                 object : AnAction("Hints Settings...") {
                     override fun actionPerformed(e: AnActionEvent) {
-                        InlayHintsConfigurable.showSettingsDialogForLanguage(file.project, VlangLanguage)
+                        showInlaySettings(file.project, VlangLanguage, null)
                     }
                 }
             )

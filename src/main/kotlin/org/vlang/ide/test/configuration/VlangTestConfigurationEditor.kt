@@ -59,15 +59,15 @@ open class VlangTestConfigurationEditor(private val project: Project) : Settings
                 buttonsGroup {
                     row("Scope:") {
                         directoryRadioButton = radioButton("Directory", VlangTestScope.Directory)
-                            .horizontalAlign(HorizontalAlign.LEFT)
+                            .align(AlignX.LEFT)
                             .apply {
                                 component.isSelected = true
                             }
 
                         fileRadioButton = radioButton("File", VlangTestScope.File)
-                            .horizontalAlign(HorizontalAlign.LEFT)
+                            .align(AlignX.LEFT)
                         functionRadioButton = radioButton("Function", VlangTestScope.Function)
-                            .horizontalAlign(HorizontalAlign.LEFT)
+                            .align(AlignX.LEFT)
                     }.bottomGap(BottomGap.SMALL)
                 }.bind(model::scope)
 

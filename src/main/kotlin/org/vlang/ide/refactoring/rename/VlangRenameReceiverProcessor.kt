@@ -52,11 +52,11 @@ class VlangRenameReceiverProcessor : RenamePsiElementProcessor() {
                         .filter { it.name != "_" }
                         .forEach { allRenames[it] = newName }
                 }
-            }, "Looking for method usages", true, project
+            }, "Looking for Method Usages", true, project
         )
     }
 
-    override fun substituteElementToRename(element: PsiElement, editor: Editor, renameCallback: Pass<PsiElement>) {
+    override fun substituteElementToRename(element: PsiElement, editor: Editor, renameCallback: Pass<in PsiElement>) {
         val receiver = element as? VlangReceiver ?: return
         val type = receiver.getType(null)?.unwrapPointer() ?: return
         val methods = type.ownMethodsList(element.project)

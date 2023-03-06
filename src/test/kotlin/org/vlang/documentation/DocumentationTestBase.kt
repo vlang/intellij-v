@@ -11,6 +11,8 @@ import org.vlang.lang.psi.VlangNamedElement
 import org.vlang.lang.psi.VlangReferenceExpression
 import org.vlang.utils.toPath
 import java.io.File
+import java.nio.file.Files
+import kotlin.io.path.exists
 
 @Suppress("DEPRECATION")
 abstract class DocumentationTestBase : BasePlatformTestCase() {
@@ -18,11 +20,11 @@ abstract class DocumentationTestBase : BasePlatformTestCase() {
 
     fun doTest(dir: String, filename: String) {
         val modDir = "$testDataPath/$dir/mod"
-        if (modDir.toPath().exists()) {
+        if (Files.exists(modDir.toPath())) {
             myFixture.copyDirectoryToProject("$dir/mod", "mod")
         }
         val readmeFile = "$testDataPath/$dir/README.md"
-        if (readmeFile.toPath().exists()) {
+        if (Files.exists(readmeFile.toPath())) {
             myFixture.copyFileToProject("$dir/README.md", "README.md")
         }
 

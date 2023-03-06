@@ -12,9 +12,6 @@ object VlangClosureContextRenderer : VlangValueRenderer() {
     override fun getDisplayType(type: String): String = "Closure Context"
 
     override fun getData(value: VlangValue): LLValueData {
-        val ordinalValue = DebugValue(value.context, "captured variables", "int")
-            .withValue("ssss").toVL()
-
         return value.data.withName("captured variables")
     }
 }

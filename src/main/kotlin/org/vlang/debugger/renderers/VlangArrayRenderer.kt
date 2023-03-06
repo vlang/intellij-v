@@ -42,7 +42,7 @@ object VlangArrayRenderer : VlangValueRenderer() {
         if (dataAddress == null) {
             val elements = (0 until len)
                 .asSequence()
-                .mapIndexed { index, it -> value.context.evaluate("(($elementTypeRaw*)(${value.llValue.name}.data))[$index]") }
+                .mapIndexed { index, _ -> value.context.evaluate("(($elementTypeRaw*)(${value.llValue.name}.data))[$index]") }
                 .mapIndexed { index, it -> it.withName("$index") }
                 .map { it.withContext(value.context) }
                 .toList()

@@ -99,11 +99,11 @@ class VlangReassignImmutableSymbolInspection : VlangBaseInspection() {
                     }
 
                     val quickFix = when (symbol) {
-                        is VlangVarDefinition   -> MAKE_MUTABLE_QUICK_FIX
-                        is VlangReceiver        -> MAKE_MUTABLE_QUICK_FIX
-                        is VlangParamDefinition -> MAKE_MUTABLE_QUICK_FIX
-                        is VlangFieldDefinition -> null
-                        is VlangConstDefinition -> null
+                        is VlangVarDefinition   -> listOf(MAKE_MUTABLE_QUICK_FIX)
+                        is VlangReceiver        -> listOf(MAKE_MUTABLE_QUICK_FIX)
+                        is VlangParamDefinition -> listOf(MAKE_MUTABLE_QUICK_FIX)
+                        is VlangFieldDefinition -> listOf()
+                        is VlangConstDefinition -> listOf()
                         else                    -> return@visitQualifier
                     }
 
@@ -125,7 +125,7 @@ class VlangReassignImmutableSymbolInspection : VlangBaseInspection() {
                     holder.registerProblem(
                         qualifier,
                         message(kind, symbol.name),
-                        quickFix,
+                        *quickFix.toTypedArray(),
                     )
                 }
             }
