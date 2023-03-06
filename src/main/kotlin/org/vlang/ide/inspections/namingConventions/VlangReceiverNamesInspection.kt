@@ -69,7 +69,7 @@ class VlangReceiverNamesInspection : VlangNamingConventionInspectionBase() {
                 type: VlangTypeEx,
             ): Pair<List<VlangMethodDeclaration>, Boolean> {
                 val methods = type.ownMethodsList(project)
-                val receiverNames = methods.map { it.receiver.name }
+                val receiverNames = methods.mapNotNull { it.receiver.name }.filter { it != "_" }
                 val hasMultipleNames = receiverNames.distinct().size > 1
                 return Pair(methods, hasMultipleNames)
             }

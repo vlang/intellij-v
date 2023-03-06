@@ -6,6 +6,7 @@ import com.intellij.openapi.progress.ProgressManager
 import com.intellij.psi.PsiElementVisitor
 import com.intellij.psi.search.searches.ReferencesSearch
 import org.vlang.ide.inspections.VlangBaseInspection
+import org.vlang.ide.inspections.unused.VlangUnusedVariableInspection.Companion.RENAME_TO_UNDERSCORE_FIX
 import org.vlang.lang.psi.*
 
 class VlangUnusedParameterInspection : VlangBaseInspection() {
@@ -58,7 +59,11 @@ class VlangUnusedParameterInspection : VlangBaseInspection() {
                 val search = ReferencesSearch.search(receiver, receiver.useScope)
                 if (search.findFirst() != null) return
 
-                holder.registerProblem(receiver.getIdentifier(), "Unused receiver <code>#ref</code> #loc", ProblemHighlightType.LIKE_UNUSED_SYMBOL)
+                holder.registerProblem(
+                    receiver.getIdentifier(),
+                    "Unused receiver <code>#ref</code> #loc", ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+                    RENAME_TO_UNDERSCORE_FIX,
+                )
             }
         }
     }

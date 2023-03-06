@@ -19,7 +19,7 @@ foo1.surname!
 foo1.surname?
 <error descr="Cannot use propagation '!' for non-Option and non-Result type">foo()!</error>
 <error descr="Cannot use propagation '?' for non-Option and non-Result type">foo()?</error>
-<error descr="Use '?' to propagate the Option instead of '!'">opt()!</error>
+<warning descr="Use '?' to propagate the Option instead of '!'">opt()!</warning>
 opt()?
 res()!
-<error descr="Use '!' to propagate the Result instead of '?'">res()?</error>
+<warning descr="Use '!' to propagate the Result instead of '?'">res()?</warning>

@@ -86,11 +86,11 @@ object VlangCodeInsightUtil {
             return element.parent.parentNth(4)
         }
 
-        val parentValue = element.parentOfTypeWithStop<VlangValue>(VlangBlock::class)
+        val parentValue = element.parentOfTypeWithStop<VlangValue>(VlangSignatureOwner::class)
         if (parentValue != null) {
-            return parentValue.parentNth(3) ?: element.parentOfTypeWithStop(VlangBlock::class)
+            return parentValue.parentNth(3) ?: element.parentOfTypeWithStop(VlangSignatureOwner::class)
         }
-        return element.parentOfTypeWithStop(VlangBlock::class)
+        return element.parentOfTypeWithStop(VlangSignatureOwner::class)
     }
 
     fun getCalledParams(callExpr: VlangCallExpr?): List<VlangTypeEx>? {
@@ -121,8 +121,13 @@ object VlangCodeInsightUtil {
     }
 
     fun insideOrGuard(element: PsiElement): Boolean {
-        val orBlock = element.parentOfTypeWithStop<VlangOrBlockExpr>() ?: return false
-        return PsiTreeUtil.isAncestor(orBlock.block, element, false)
+        var orBlock = element.parentOfTypeWithStop<VlangOrBlockExpr>() ?: return false
+
+        while (PsiTreeUtil.isAncestor(orBlock.expression, element, false)) {
+            orBlock = orBlock.parentOfTypeWithStop() ?: return false
+        }
+
+        return true
     }
 
     fun takeZeroArguments(owner: VlangSignatureOwner): Boolean {

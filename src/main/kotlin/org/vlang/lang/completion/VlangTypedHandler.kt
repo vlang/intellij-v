@@ -92,13 +92,15 @@ class VlangTypedHandler : TypedHandlerDelegate() {
             }
         }
 
-        PsiDocumentManager.getInstance(project).commitDocument(document)
-        PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(document)
+        if (c == '[') {
+            PsiDocumentManager.getInstance(project).commitDocument(document)
+            PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(document)
 
-        val parent = file.findElementAt(offset - 1)?.parent
-        if (c == '[' && parent is VlangAttribute) {
-            showCompletion(editor)
-            return Result.STOP
+            val parent = file.findElementAt(offset - 1)?.parent
+            if (parent is VlangAttribute) {
+                showCompletion(editor)
+                return Result.STOP
+            }
         }
 
         return Result.DEFAULT

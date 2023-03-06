@@ -50,4 +50,24 @@ open class ResolveErrVariableTest : ResolveTestBase() {
 
         assertReferencedTo("CONST_DEFINITION err")
     }
+
+    fun `test err inside call expr with or block`() {
+        mainFile("a.v", """
+            module main
+            
+            fn foo() !int {}
+            fn foo2(str string) !int
+            
+            fn main() {
+                foo() or {
+                    foo1(/*caret*/err) or {
+                        println(/*caret*/err)
+                    }
+                }
+            }
+        """.trimIndent())
+
+        assertReferencedTo("CONST_DEFINITION err")
+        assertReferencedTo("CONST_DEFINITION err")
+    }
 }

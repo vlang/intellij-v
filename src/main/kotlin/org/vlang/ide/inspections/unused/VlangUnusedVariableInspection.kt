@@ -25,7 +25,7 @@ class VlangUnusedVariableInspection : VlangBaseInspection() {
                 val search = ReferencesSearch.search(variable, variable.useScope)
                 if (search.findFirst() != null) return
 
-                val fixes = mutableListOf<LocalQuickFix>(RENAME_TO_UNDERSCORE_FIX)
+                val fixes = mutableListOf(RENAME_TO_UNDERSCORE_FIX)
                 if (canBeDeleted(variable)) {
                     fixes.add(DELETE_VARIABLE_FIX)
                 }
@@ -71,13 +71,13 @@ class VlangUnusedVariableInspection : VlangBaseInspection() {
     }
 
     companion object {
-        private val RENAME_TO_UNDERSCORE_FIX = object : LocalQuickFix {
+        val RENAME_TO_UNDERSCORE_FIX = object : LocalQuickFix {
             override fun getFamilyName() = "Rename to _"
 
             override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
                 val element = descriptor.psiElement
-                val variable = element.parentOfType<VlangVarDefinition>() ?: return
-                val identifier = variable.getIdentifier()
+                val variable = element.parent as? VlangNamedElement ?: return
+                val identifier = variable.getIdentifier() ?: return
                 identifier.replace(VlangElementFactory.createIdentifier(project, "_"))
             }
         }

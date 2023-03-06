@@ -62,11 +62,13 @@ object VlangTypeInferenceUtil {
         if (parentStructInit != null) {
             val withoutKeys = parentStructInit.elementList.any { it.key == null }
             if (withoutKeys) {
-                val index = parentStructInit.elementList.indexOfFirst { PsiTreeUtil.isAncestor(it.value, element, false) }
+                val elem = parentStructInit.elementList.firstOrNull { PsiTreeUtil.isAncestor(it.value, element, false) }
+                val key = elem?.key
+                val fieldName = key?.fieldName?.text ?: return null
                 val struct = parentStructInit.getType(null) as? VlangStructTypeEx ?: return null
-                val structDecl = struct.resolve(element.project) as? VlangStructDeclaration ?: return null
+                val structDecl = struct.resolve(element.project) ?: return null
                 val structType = structDecl.structType
-                return structType.fieldList.getOrNull(index)?.getType(null)
+                return structType.fieldList.firstOrNull { it.name == fieldName }?.getType(null)
             }
         }
 

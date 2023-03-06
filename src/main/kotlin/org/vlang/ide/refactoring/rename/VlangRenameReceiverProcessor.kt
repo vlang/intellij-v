@@ -49,6 +49,7 @@ class VlangRenameReceiverProcessor : RenamePsiElementProcessor() {
                 DumbService.getInstance(project).runReadActionInSmartMode {
                     type.ownMethodsList(project)
                         .map { it.receiver }
+                        .filter { it.name != "_" }
                         .forEach { allRenames[it] = newName }
                 }
             }, "Looking for method usages", true, project

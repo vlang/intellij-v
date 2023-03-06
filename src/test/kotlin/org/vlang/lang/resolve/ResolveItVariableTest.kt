@@ -82,4 +82,25 @@ open class ResolveItVariableTest : ResolveTestBase() {
 
         assertReferencedTo("PARAM_DEFINITION null")
     }
+
+    fun `test inside if`() {
+        mainFile("a.v", """
+            module main
+            
+            module main
+            
+            struct Foo {
+                has_arg bool
+                name string
+            }
+            
+            arr := [Foo{}]
+            arr.map(if /*caret*/it.has_arg { /*caret*/it.name } else { /*caret*/it.name }).join(',')
+
+        """.trimIndent())
+
+        assertReferencedTo("PARAM_DEFINITION null")
+        assertReferencedTo("PARAM_DEFINITION null")
+        assertReferencedTo("PARAM_DEFINITION null")
+    }
 }

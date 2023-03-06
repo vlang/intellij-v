@@ -75,7 +75,7 @@ class VlangOptionResultProblemsChecker(holder: AnnotationHolder) : VlangCheckerB
 
         if (resultType is VlangOptionTypeEx && expectedResult) {
             holder.newAnnotation(
-                HighlightSeverity.ERROR,
+                HighlightSeverity.WARNING,
                 "Use '?' to propagate the Option instead of '!'"
             )
                 .range(expr)
@@ -84,7 +84,7 @@ class VlangOptionResultProblemsChecker(holder: AnnotationHolder) : VlangCheckerB
 
         if (resultType is VlangResultTypeEx && !expectedResult) {
             holder.newAnnotation(
-                HighlightSeverity.ERROR,
+                HighlightSeverity.WARNING,
                 "Use '!' to propagate the Result instead of '?'"
             )
                 .range(expr)

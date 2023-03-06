@@ -235,4 +235,30 @@ open class ResolveEnumFetchTest : ResolveTestBase() {
         assertReferencedTo("ENUM_FIELD_DEFINITION red")
         assertReferencedTo("ENUM_FIELD_DEFINITION green")
     }
+
+    fun `test with unpacking struct init`() {
+        mainFile("a.v", """
+            module main
+
+            enum Colors {
+                red
+                green
+            }
+            
+            struct Colorful {
+                color Colors
+                name string
+            }
+            
+            other := Colorful{}
+            
+            c := Colorful{
+                ...other
+                color: ./*caret*/green
+            }
+
+        """.trimIndent())
+
+        assertReferencedTo("ENUM_FIELD_DEFINITION green")
+    }
 }

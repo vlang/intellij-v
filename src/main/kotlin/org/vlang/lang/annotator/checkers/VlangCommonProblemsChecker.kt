@@ -389,7 +389,8 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
         left: List<PsiElement>,
         right: List<VlangExpression>,
     ) {
-        val hasCallsRight = right.any { it is VlangCallExpr }
+        val hasCallsRight =
+            right.any { it is VlangCallExpr || it is VlangOrBlockExpr || it is VlangIfExpression || it is VlangMatchExpression }
         if (!hasCallsRight) {
             if (left.size != right.size) {
                 holder.newAnnotation(
