@@ -8,3 +8,6 @@ a1, b1 := 1, 2
 a3 := 2
 <error descr="Expected 1 values on the right side, got 2">a4 := 1, 2</error>
 a5 := 1, foo() // don't check currently
+
+for index, token in tokens {
+}

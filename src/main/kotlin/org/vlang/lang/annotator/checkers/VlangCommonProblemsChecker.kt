@@ -368,6 +368,8 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
     }
 
     override fun visitVarDeclaration(decl: VlangVarDeclaration) {
+        if (decl is VlangRangeClause) return
+
         val left = decl.varDefinitionList
         val right = decl.expressionList
 
