@@ -1,10 +1,6 @@
 <?xml version='1.0'?>
 <list>
-    <option name="org.vlang.CONSTANT">
-        <value>
-            <option name="FOREGROUND" value="72cfd6"/>
-        </value>
-    </option>
+    <option name="org.vlang.CONSTANT" baseAttributes="DEFAULT_CONSTANT"/>
     <option name="org.vlang.ENUM" baseAttributes="DEFAULT_CLASS_NAME"/>
     <option name="org.vlang.ENUM_FIELD" baseAttributes="DEFAULT_INSTANCE_FIELD"/>
     <option name="org.vlang.INTERFACE" baseAttributes="DEFAULT_INTERFACE_NAME"/>
@@ -16,24 +12,9 @@
         </value>
     </option>
     <option name="org.vlang.PUBLIC_ENUM" baseAttributes="DEFAULT_CLASS_NAME"/>
-    <option name="org.vlang.PUBLIC_FIELD">
-        <value>
-            <option name="FOREGROUND" value="72cfd6"/>
-            <option name="FONT_TYPE" value="2"/>
-        </value>
-    </option>
-    <option name="org.vlang.PUBLIC_INTERFACE">
-        <value>
-            <option name="FOREGROUND" value="ced0d6"/>
-            <option name="FONT_TYPE" value="2"/>
-        </value>
-    </option>
-    <option name="org.vlang.PUBLIC_STRUCT">
-        <value>
-            <option name="FOREGROUND" value="ced0d6"/>
-            <option name="FONT_TYPE" value="2"/>
-        </value>
-    </option>
+    <option name="org.vlang.PUBLIC_FIELD" baseAttributes="DEFAULT_IDENTIFIER"/>
+    <option name="org.vlang.PUBLIC_INTERFACE" baseAttributes="DEFAULT_CLASS_NAME"/>
+    <option name="org.vlang.PUBLIC_STRUCT" baseAttributes="DEFAULT_CLASS_NAME"/>
     <option name="org.vlang.PUBLIC_TYPE_ALIAS" baseAttributes="DEFAULT_IDENTIFIER"/>
     <option name="org.vlang.STRUCT" baseAttributes="DEFAULT_CLASS_NAME"/>
     <option name="org.vlang.TYPE_ALIAS" baseAttributes="DEFAULT_IDENTIFIER"/>
