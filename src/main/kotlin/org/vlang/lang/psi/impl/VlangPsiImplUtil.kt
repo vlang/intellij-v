@@ -342,7 +342,7 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getIdentifier(o: VlangFieldName): PsiElement? {
+    fun getIdentifier(o: VlangFieldName): PsiElement {
         return o.referenceExpression.getIdentifier()
     }
 
@@ -887,7 +887,7 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getQualifiedName(o: VlangInterfaceMethodDefinition): String? {
+    fun getQualifiedName(o: VlangInterfaceMethodDefinition): String {
         val owner = o.getOwner()
         return owner.getQualifiedName() + "." + o.name
     }

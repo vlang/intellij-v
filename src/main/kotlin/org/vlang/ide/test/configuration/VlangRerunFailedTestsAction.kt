@@ -14,7 +14,7 @@ class VlangRerunFailedTestsAction(container: ComponentContainer, props: VlangTes
         init(props)
     }
 
-    override fun getRunProfile(environment: ExecutionEnvironment): MyRunProfile? {
+    override fun getRunProfile(environment: ExecutionEnvironment): MyRunProfile {
         val configuration = myConsoleProperties.configuration as VlangTestConfiguration
         return RemotePhpUnitRerunProfile(configuration, getFailedTestPatterns(configuration.project))
     }

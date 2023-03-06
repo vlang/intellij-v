@@ -3,7 +3,6 @@ package org.vlang.lang.codeInsight.controlFlow.instructions.impl
 import org.vlang.lang.codeInsight.controlFlow.instructions.VlangFunctionCallInstruction
 import org.vlang.lang.codeInsight.controlFlow.instructions.VlangInstructionProcessor
 import org.vlang.lang.psi.VlangCallExpr
-import org.vlang.lang.psi.VlangFunctionDeclaration
 
 class VlangFunctionCallInstructionImpl(private val call: VlangCallExpr) :
     VlangLinearInstructionImpl(call), VlangFunctionCallInstruction {

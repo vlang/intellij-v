@@ -1071,7 +1071,7 @@ object DocumentationGenerator {
 
             if (tokenText.contains("\n")) {
                 builder.append("...")
-                break;
+                break
             }
 
             builder.append(

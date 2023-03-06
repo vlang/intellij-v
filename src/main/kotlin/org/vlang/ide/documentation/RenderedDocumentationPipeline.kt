@@ -35,7 +35,7 @@ fun documentationAsHtml(text: String, context: PsiElement): String {
         .replace("psi://element/", DocumentationManagerProtocol.PSI_ELEMENT_PROTOCOL)
 }
 
-fun VlangDocComment.documentationAsHtml(renderMode: VlangDocRenderMode = VlangDocRenderMode.QUICK_DOC_POPUP): String? {
+fun VlangDocComment.documentationAsHtml(renderMode: VlangDocRenderMode = VlangDocRenderMode.QUICK_DOC_POPUP): String {
     val documentationText = VlangDocKind.of(tokenType)
         .removeDecoration(text)
         .joinToString("\n")

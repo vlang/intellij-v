@@ -1,21 +1,15 @@
 package org.vlang.ide.templates.postfix
 
 import com.intellij.codeInsight.template.postfix.templates.PostfixTemplateExpressionSelector
-import com.intellij.codeInsight.template.postfix.templates.PostfixTemplateExpressionSelectorBase
 import com.intellij.codeInsight.template.postfix.templates.PostfixTemplateWithExpressionSelector
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.util.Condition
-import com.intellij.openapi.util.Conditions
 import com.intellij.psi.PsiElement
-import com.intellij.psi.SyntaxTraverser
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.psi.util.PsiUtilCore
 import com.intellij.refactoring.suggested.endOffset
 import com.intellij.refactoring.suggested.startOffset
 import org.vlang.ide.templates.postfix.VlangPostfixTemplateProvider.Companion.findAllExpressions
 import org.vlang.lang.psi.VlangExpression
-import org.vlang.lang.psi.VlangStatement
 
 class VlangNotPostfixTemplate : PostfixTemplateWithExpressionSelector(
     "vlang.postfix.not", "not",

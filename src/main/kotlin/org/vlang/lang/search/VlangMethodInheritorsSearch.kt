@@ -6,7 +6,6 @@ import com.intellij.util.Processor
 import org.vlang.lang.psi.VlangInterfaceMethodDefinition
 import org.vlang.lang.psi.VlangNamedElement
 import org.vlang.lang.psi.VlangStructDeclaration
-import org.vlang.lang.psi.impl.VlangLangUtil
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 
 object VlangMethodInheritorsSearch : QueryExecutorBase<VlangNamedElement, DefinitionsScopedSearch.SearchParameters>(true) {

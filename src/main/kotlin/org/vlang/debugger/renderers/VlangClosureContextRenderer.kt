@@ -3,7 +3,6 @@ package org.vlang.debugger.renderers
 import com.intellij.openapi.project.Project
 import com.jetbrains.cidr.execution.debugger.backend.LLValue
 import com.jetbrains.cidr.execution.debugger.backend.LLValueData
-import org.vlang.debugger.withDescription
 import org.vlang.debugger.withName
 
 object VlangClosureContextRenderer : VlangValueRenderer() {

@@ -14,7 +14,7 @@ abstract class VlangLightType<E : VlangCompositeElement>(
 ) : LightElement(element.manager, element.language), VlangType {
 
     init {
-        setNavigationElement(element)
+        navigationElement = element
     }
 
     override val genericArguments: VlangGenericArguments?

@@ -7,7 +7,6 @@ import com.intellij.psi.stubs.StubOutputStream
 import com.intellij.util.ArrayFactory
 import org.vlang.lang.psi.VlangInterfaceDeclaration
 import org.vlang.lang.psi.impl.VlangInterfaceDeclarationImpl
-import org.vlang.lang.stubs.VlangEmbeddedInterfaceDefinitionStub
 import org.vlang.lang.stubs.VlangInterfaceDeclarationStub
 import org.vlang.lang.stubs.VlangTypeStub
 import org.vlang.lang.stubs.index.VlangClassLikeIndex

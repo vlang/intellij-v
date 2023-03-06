@@ -17,7 +17,7 @@ class VlangLabelReference(label: VlangLabelRef) : VlangCachedReference<VlangLabe
     }
 
     override fun processResolveVariants(processor: VlangScopeProcessor): Boolean {
-       return processAllDefinitions(processor);
+       return processAllDefinitions(processor)
     }
 
     private fun processAllDefinitions(processor: VlangScopeProcessor): Boolean {

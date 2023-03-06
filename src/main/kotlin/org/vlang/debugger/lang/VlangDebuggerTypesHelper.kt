@@ -1,6 +1,5 @@
 package org.vlang.debugger.lang
 
-import com.intellij.openapi.util.Expirable
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference
 import com.intellij.psi.ResolveState
@@ -12,7 +11,6 @@ import com.jetbrains.cidr.execution.debugger.evaluation.CidrMemberValue
 import org.vlang.lang.psi.VlangFunctionOrMethodDeclaration
 import org.vlang.lang.psi.VlangNamedElement
 import org.vlang.utils.ancestorOrSelf
-import java.util.concurrent.CompletableFuture
 
 class VlangDebuggerTypesHelper(process: CidrDebugProcess) : CidrDebuggerTypesHelper(process) {
     override fun createReferenceFromText(`var`: LLValue, context: PsiElement): PsiReference? = null

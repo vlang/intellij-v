@@ -2,7 +2,6 @@ package org.vlang.lang.psi.impl
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.psi.util.parentOfType
 import org.vlang.lang.psi.*
 
 open class VlangVarProcessor(

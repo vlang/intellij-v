@@ -5,8 +5,6 @@ import com.jetbrains.cidr.execution.debugger.backend.LLValue
 import com.jetbrains.cidr.execution.debugger.backend.LLValueData
 import org.vlang.debugger.withContext
 import org.vlang.debugger.withDescription
-import org.vlang.debugger.withHasLongerDescription
-import org.vlang.debugger.withIsSynthetic
 
 object VlangStringRenderer : VlangValueRenderer() {
     override fun isApplicable(project: Project, value: LLValue): Boolean = value.type == "string" || value.type == "string *"

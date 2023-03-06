@@ -12,8 +12,8 @@ import org.vlang.lang.psi.VlangFile
 import org.vlang.lang.stubs.TextHolder
 
 abstract class VlangStubbedElementImpl<T : StubBase<*>> : StubBasedPsiElementBase<T>, VlangCompositeElement {
-    constructor(stub: T, nodeType: IStubElementType<*, *>) : super(stub, nodeType) {}
-    constructor(node: ASTNode) : super(node) {}
+    constructor(stub: T, nodeType: IStubElementType<*, *>) : super(stub, nodeType)
+    constructor(node: ASTNode) : super(node)
 
     override fun toString() = elementType.toString()
 

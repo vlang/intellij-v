@@ -3,7 +3,6 @@ package org.vlang.debugger.runconfig
 import com.intellij.execution.filters.TextConsoleBuilder
 import com.intellij.xdebugger.XDebugSession
 import com.jetbrains.cidr.execution.debugger.CidrLocalDebugProcess
-import com.jetbrains.cidr.execution.debugger.evaluation.CidrPhysicalValue
 
 class VlangLocalDebugProcess(
     runParameters: VlangDebugRunParameters,

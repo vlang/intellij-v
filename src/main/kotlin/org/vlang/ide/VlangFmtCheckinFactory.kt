@@ -25,7 +25,7 @@ import javax.swing.JPanel
 class VlangFmtCheckinFactory : CheckinHandlerFactory() {
     override fun createHandler(panel: CheckinProjectPanel, commitContext: CommitContext): CheckinHandler {
         return object : CheckinHandler() {
-            override fun getBeforeCheckinConfigurationPanel(): RefreshableOnComponent? {
+            override fun getBeforeCheckinConfigurationPanel(): RefreshableOnComponent {
                 val checkBox = JCheckBox("V fmt")
 
                 return object : RefreshableOnComponent {

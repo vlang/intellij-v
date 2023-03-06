@@ -55,7 +55,7 @@ class VlangDownloadedLldbToolEnvironment(private val project: Project) : CidrToo
                         }
                     }
                 })
-            return if (dialog.ask(project)) Messages.OK else Messages.CANCEL;
+            return if (dialog.ask(project)) Messages.OK else Messages.CANCEL
         }
     }
 }

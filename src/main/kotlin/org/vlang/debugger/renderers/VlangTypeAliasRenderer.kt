@@ -5,13 +5,9 @@ import com.intellij.openapi.project.Project
 import com.jetbrains.cidr.execution.debugger.backend.LLValue
 import com.jetbrains.cidr.execution.debugger.backend.LLValueData
 import org.vlang.debugger.withContext
-import org.vlang.debugger.withDescription
-import org.vlang.debugger.withName
-import org.vlang.lang.psi.VlangInterfaceDeclaration
 import org.vlang.lang.psi.VlangTypeAliasDeclaration
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangStringTypeEx
-import org.vlang.lang.stubs.index.VlangClassLikeIndex
 import org.vlang.lang.stubs.index.VlangNamesIndex
 
 object VlangTypeAliasRenderer : VlangValueRenderer() {

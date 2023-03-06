@@ -5,12 +5,12 @@ import com.intellij.psi.ElementManipulator
 import org.vlang.lang.psi.impl.VlangStringLiteralImpl
 
 class VlangStringLiteralManipulator : ElementManipulator<VlangStringLiteralImpl> {
-    override fun handleContentChange(literal: VlangStringLiteralImpl, range: TextRange, newContent: String?): VlangStringLiteralImpl? {
+    override fun handleContentChange(literal: VlangStringLiteralImpl, range: TextRange, newContent: String?): VlangStringLiteralImpl {
         val newText = range.replace(literal.text, newContent!!)
         return literal.updateText(newText) as VlangStringLiteralImpl
     }
 
-    override fun handleContentChange(element: VlangStringLiteralImpl, newContent: String?): VlangStringLiteralImpl? {
+    override fun handleContentChange(element: VlangStringLiteralImpl, newContent: String?): VlangStringLiteralImpl {
         return handleContentChange(element, TextRange(0, element.textLength), newContent)
     }
 

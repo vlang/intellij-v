@@ -1,6 +1,5 @@
 package org.vlang.integration.completion
 
-import com.intellij.codeInsight.lookup.Lookup
 import org.vlang.integration.IntegrationTestBase
 
 class GlobalVariableCompletion : IntegrationTestBase() {

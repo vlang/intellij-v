@@ -4,7 +4,6 @@ import com.intellij.openapi.progress.ProgressManager
 import org.vlang.lang.codeInsight.controlFlow.instructions.VlangInstruction
 import org.vlang.lang.codeInsight.controlFlow.instructions.VlangInstructionProcessor
 import java.util.*
-import java.util.concurrent.LinkedBlockingDeque
 import kotlin.collections.ArrayDeque
 
 object VlangControlFlowUtil {

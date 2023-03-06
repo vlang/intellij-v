@@ -1,6 +1,5 @@
 package org.vlang.lang.codeInsight.controlFlow.instructions.impl
 
-import com.intellij.openapi.progress.ProgressIndicatorProvider
 import com.intellij.psi.PsiElement
 import org.vlang.lang.codeInsight.controlFlow.instructions.VlangInstruction
 import org.vlang.lang.codeInsight.controlFlow.instructions.VlangInstructionProcessor

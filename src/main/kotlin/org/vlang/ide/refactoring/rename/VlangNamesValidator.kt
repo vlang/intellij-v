@@ -13,7 +13,7 @@ object VlangNamesValidator : NamesValidator {
     }
 
     override fun isIdentifier(name: String, project: Project?): Boolean {
-        return tokenType(name) == VlangTypes.IDENTIFIER;
+        return tokenType(name) == VlangTypes.IDENTIFIER
     }
 
     private fun tokenType(text: String): IElementType? {

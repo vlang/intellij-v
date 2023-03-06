@@ -31,7 +31,7 @@ class VlangLanguageCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvider
         commonSettings.BLANK_LINES_AROUND_CLASS
     }
 
-    override fun getCodeSample(settingsType: SettingsType): String? {
+    override fun getCodeSample(settingsType: SettingsType): String {
         return """
             // Vlang code sample
             fn main() {

@@ -4,8 +4,6 @@ import com.intellij.psi.stubs.IStubElementType
 import com.intellij.psi.stubs.StubElement
 import com.intellij.util.io.StringRef
 import org.vlang.lang.psi.VlangResult
-import org.vlang.lang.psi.VlangSignature
-import org.vlang.lang.psi.VlangType
 
 class VlangResultStub(parent: StubElement<*>?, elementType: IStubElementType<*, *>?, ref: StringRef?) :
     StubWithText<VlangResult>(parent, elementType, ref) {

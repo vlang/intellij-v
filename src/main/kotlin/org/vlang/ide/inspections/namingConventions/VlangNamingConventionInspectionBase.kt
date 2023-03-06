@@ -80,7 +80,7 @@ abstract class VlangNamingConventionInspectionBase : VlangBaseInspection() {
         }
 
         override fun generatePreview(project: Project, previewDescriptor: ProblemDescriptor): IntentionPreviewInfo {
-            return IntentionPreviewInfo.EMPTY;
+            return IntentionPreviewInfo.EMPTY
         }
     }
 
@@ -99,7 +99,7 @@ abstract class VlangNamingConventionInspectionBase : VlangBaseInspection() {
         }
 
         override fun generatePreview(project: Project, previewDescriptor: ProblemDescriptor): IntentionPreviewInfo {
-            return IntentionPreviewInfo.EMPTY;
+            return IntentionPreviewInfo.EMPTY
         }
     }
 

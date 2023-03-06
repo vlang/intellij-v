@@ -35,7 +35,7 @@ class VlangLocalToolchain(
 
         other as VlangLocalToolchain
 
-        return FileUtil.comparePaths(other.homePath(), homePath()) == 0;
+        return FileUtil.comparePaths(other.homePath(), homePath()) == 0
     }
 
     override fun hashCode(): Int = homePath.hashCode()

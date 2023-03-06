@@ -159,7 +159,7 @@ object VlangGenericInferer {
         resolved: PsiElement,
         expr: VlangReferenceExpression?,
         genericType: VlangTypeEx,
-    ): VlangTypeEx? {
+    ): VlangTypeEx {
         if (resolved !is VlangFieldDefinition) {
             return genericType
         }

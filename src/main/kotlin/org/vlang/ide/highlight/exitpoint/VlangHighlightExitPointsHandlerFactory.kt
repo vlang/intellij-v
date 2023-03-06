@@ -15,7 +15,7 @@ class VlangHighlightExitPointsHandlerFactory : HighlightUsagesHandlerFactoryBase
         if (target !is LeafPsiElement) return null
 
         val elementType = target.elementType
-        if (elementType === VlangTypes.RETURN || elementType === VlangTypes.FN) {
+        if (elementType == VlangTypes.RETURN || elementType == VlangTypes.FN) {
             return VlangFunctionExitPointHandler.createForElement(editor, file, target)
         }
 
