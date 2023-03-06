@@ -10,6 +10,7 @@ import org.vlang.lang.psi.impl.VlangPsiImplUtil
 import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapGenericInstantiation
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapPointer
 import org.vlang.utils.inside
 import org.vlang.utils.parentNth
 
@@ -139,8 +140,8 @@ object VlangTypeInferenceUtil {
             val params = function.getSignature()?.parameters?.paramDefinitionList ?: return null
 
             if (function is VlangMethodDeclaration) {
-                val receiverType = function.receiverType.toEx()
-                if (receiverType == VlangEnumTypeEx.FLAG_ENUM) {
+                val receiverType = function.receiverType.toEx().unwrapPointer()
+                if (receiverType is VlangEnumTypeEx && receiverType.name == VlangEnumTypeEx.FLAG_ENUM.name) {
                     return callerType(callExpr)
                 }
             }

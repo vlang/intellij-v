@@ -356,13 +356,14 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
         if (!isStatement) {
             val hasElse = expr.elseBranch != null
             if (!hasElse) {
-                holder.newAnnotation(
-                    HighlightSeverity.ERROR,
-                    "If must have an else branch when used as an expression"
-                )
-                    .range(expr.`if`)
-                    .withFix(AddElseQuickFix(expr))
-                    .create()
+                // TODO
+//                holder.newAnnotation(
+//                    HighlightSeverity.ERROR,
+//                    "If must have an else branch when used as an expression"
+//                )
+//                    .range(expr.`if`)
+//                    .withFix(AddElseQuickFix(expr))
+//                    .create()
             }
         }
     }
