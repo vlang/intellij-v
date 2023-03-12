@@ -1,8 +1,6 @@
 # IntelliJ V Changelog
 
-## [Unreleased]
-
-## [0.0.1-beta.3] - 06.03.2023
+## [0.0.1-beta.3-231-EAP] - 06.03.2023
 
 ### Added
 
@@ -11,8 +9,9 @@
 - Added type methods in Quick Documentation (works only for declarations)
 - Added highlighting for `break` and `continue` inside `for` and `select`
   If the `for` is marked with a label, then the label that is specified in
-  the current `continue` or `break` will be highlighted.
+  the current `continue` or `break` will be highlighted
 - Added documentation for compile-time `fields` field
+- Added documentation for `cap` field in `chan` init
 - Added call count mismatch inspection
 - Added initial name generation when refactor or rename
 - Added `fori` postfix template
@@ -21,8 +20,8 @@
 - Added completion for plain test functions
 - Added renaming of all receivers
 - Added Receiver names inspection
-  - receiver name is generic (self, me, this)
-  - receiver names are different
+    - receiver name is generic (self, me, this)
+    - receiver names are different
 - New checkers:
     - `continue` and `break` outside `for`
     - default value for interface field is not allowed
@@ -57,21 +56,21 @@
     - added support for deep nested anon functions
 - Improved debugger
     - added variable with all captured variables in current anon function
-    - added pretty printer for `stringg.Builder`
+    - added pretty printer for `strings.Builder`
     - show values for array of pointers
     - show custom `str()` method result right after name
     - show aliases for string as string
     - improved handling for maps
     - improved names in call stack
     - don't show `mr_*` variables
-    - don't show thread__t1 and arg__t1 variables
+    - don't show `thread__*` and `arg__*` variables
 - Improved modifier list handling inside structs
     - unindent modifiers list in structs when type `:` after it
     - improved completion for modifiers in struct
     - warn about duplicate modifier in list
     - warn about duplicate modifiers group in struct
 - `continue` and `break` inside loops higher in the autocomplete list
-- Improved completion for the top level, don't show expressions if there is a function, structure, etc. next.
+- Improved completion for the top level, don't show expressions if there is a function, structure, etc. next
 - Improved postfix completion, added `unsafe` and `not` postfix templates and improved `nil` completion in safe context
 - Improved `chan` init fields autocomplete
 
@@ -109,7 +108,7 @@
 
 ### Added
 
-- Added caching for `resolve()` for types, it should speed up resolving for big projects.
+- Added caching for `resolve()` for types, it should speed up resolving for big projects
 - Added auto import for module when complete global variable name
 - Added context completion for enum fields
 - Added `dump()` postfix template
