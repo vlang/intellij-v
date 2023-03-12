@@ -19,7 +19,7 @@ class VlangInheritorsCodeVisionProvider : InheritorsCodeVisionProvider() {
         private const val ID = "VlangInheritorsCodeVisionProvider"
     }
 
-    override val defaultAnchor: CodeVisionAnchorKind = CodeVisionAnchorKind.Top
+    override val defaultAnchor: CodeVisionAnchorKind = CodeVisionAnchorKind.Right
     override val id: String = ID
     override val name: String = "VlangInheritorsCodeVisionProvider"
     override val relativeOrderings = listOf(CodeVisionRelativeOrdering.CodeVisionRelativeOrderingAfter("VlangUsagesCodeVisionProvider"))

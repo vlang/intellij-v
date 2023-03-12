@@ -20,7 +20,7 @@ class VlangUsagesCodeVisionProvider : ReferencesCodeVisionProvider() {
         private const val ID = "VlangUsagesCodeVisionProvider"
     }
 
-    override val defaultAnchor: CodeVisionAnchorKind = CodeVisionAnchorKind.Top
+    override val defaultAnchor: CodeVisionAnchorKind = CodeVisionAnchorKind.Right
     override val id: String = ID
     override val name: String = "VlangUsagesCodeVisionProvider"
     override val relativeOrderings = listOf(CodeVisionRelativeOrdering.CodeVisionRelativeOrderingFirst)
