@@ -1,10 +1,18 @@
 package org.vlang.ide
 
+import com.intellij.ide.BrowserUtil
+import com.intellij.ide.plugins.InstalledPluginsState
+import com.intellij.ide.plugins.PluginManager
+import com.intellij.ide.plugins.PluginManagerCore
+import com.intellij.ide.util.PropertiesComponent
+import com.intellij.openapi.extensions.PluginId
+import com.intellij.openapi.options.ShowSettingsUtil
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.startup.StartupActivity
 import com.intellij.openapi.util.registry.Registry
 import com.jetbrains.cidr.execution.debugger.evaluation.CidrValue
 import org.vlang.configurations.VlangProjectStructureState.Companion.projectStructure
+import org.vlang.notifications.VlangNotification
 import org.vlang.projectWizard.VlangToolchainFlavor
 import org.vlang.toolchain.VlangKnownToolchainsState
 import org.vlang.toolchain.VlangToolchain
@@ -40,6 +48,8 @@ class VlangPostStartupActivity : StartupActivity {
             // ignore
         }
 
+        checkUpdates(project)
+
         invokeLater {
             project.projectStructure.determineProjectStructure(project)
         }
@@ -59,5 +69,48 @@ class VlangPostStartupActivity : StartupActivity {
             VlangKnownToolchainsState.getInstance().knownToolchains = toolchainCandidates.toSet()
             return toolchainCandidates
         }
+
+        private fun checkUpdates(project: Project) {
+            val hasNewerVersion = InstalledPluginsState.getInstance().hasNewerVersion(PLUGIN_ID)
+            if (!hasNewerVersion) {
+                return
+            }
+
+            val plugin = PluginManagerCore.getPlugin(PLUGIN_ID) ?: return
+            val currentVersion = plugin.version
+
+            val dontShowForVersion = PropertiesComponent.getInstance(project).getValue(DONT_SHOW_UPDATE_NOTIFICATION)
+            if (dontShowForVersion != null && dontShowForVersion == currentVersion) {
+                // skip any update for current version
+                return
+            }
+
+            VlangNotification("New version of the V plugin is available")
+                .withActions(
+                    VlangNotification.Action("Update") { _, notification ->
+                        invokeLater {
+                            ShowSettingsUtil.getInstance().showSettingsDialog(project, "Plugins")
+                            notification.expire()
+                        }
+                    }
+                )
+                .withActions(
+                    VlangNotification.Action("What's new?") { _, notification ->
+                        BrowserUtil.browse("${PLUGIN_URL}/versions")
+                        notification.expire()
+                    }
+                )
+                .withActions(
+                    VlangNotification.Action("Don't show again") { _, notification ->
+                        PropertiesComponent.getInstance(project).setValue(DONT_SHOW_UPDATE_NOTIFICATION, currentVersion, null)
+                        notification.expire()
+                    }
+                )
+                .show(project)
+        }
+
+        private val PLUGIN_ID = PluginId.getId("org.vlang")
+        private val PLUGIN_URL = "https://plugins.jetbrains.com/plugin/20287-vlang"
+        private const val DONT_SHOW_UPDATE_NOTIFICATION = "org.vlang.dont.show.update.notification"
     }
 }
