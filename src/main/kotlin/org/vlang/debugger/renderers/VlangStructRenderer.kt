@@ -43,6 +43,10 @@ object VlangStructRenderer : VlangValueRenderer() {
         val method = runReadAction { type.findMethod(value.project, "str") } ?: return value.data
         if (!enoughSimpleMethod(method)) return value.data
 
+        val isMutable = runReadAction { method.isMutable }
+        // skip mutable methods because they can change the value
+        if (isMutable) return value.data
+
         val byReference = runReadAction { method.byReference() }
         val dereference = if (!byReference) "*" else ""
 
@@ -57,7 +61,7 @@ object VlangStructRenderer : VlangValueRenderer() {
     private fun enoughSimpleMethod(method: VlangMethodDeclaration): Boolean {
         val body = method.getBlock() ?: return false
         val statements = body.statementList
-        if (statements.size > 2) return false
+        if (statements.size > 3) return false
         return true
     }
 }

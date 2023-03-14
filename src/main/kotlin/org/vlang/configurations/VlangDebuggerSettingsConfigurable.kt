@@ -54,7 +54,7 @@ class VlangDebuggerSettingsConfigurable : Configurable {
                 checkBox("Show result of str() method")
                     .bindSelected(model::showStrMethodResult)
                     .comment("""
-                        When the debugger stops at a breakpoint, it will show the result of the user-defined <code>str()</> method (if any) right after variable name.
+                        When the debugger stops at a breakpoint, it will show the result of the user-defined <code>str()</> method (if any non mutable) right after variable name.
                         Note that if the method has more than 3 statements, then it will not be executed.
                         """.trimIndent())
             }
