@@ -88,6 +88,24 @@ object VlangCTypeParser {
         return type.substring(8)
     }
 
+    /**
+     * Example:
+     *
+     *    "main__Foo_ptr" -> "main__Foo*"
+     *    "main__Foo_ptr_ptr" -> "main__Foo**"
+     */
+    fun convertPointerTypeToC(type: String): String {
+        if (!type.endsWith("_ptr")) {
+            return type
+        }
+
+        val parts = type.split("_ptr")
+        val name = parts[0]
+        val stars = parts.drop(1).joinToString("") { "*" }
+
+        return "$name$stars"
+    }
+
     fun convertCNameToVName(name: String): String {
         return name.replace("__", ".")
     }

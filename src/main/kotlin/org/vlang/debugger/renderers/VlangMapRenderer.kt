@@ -18,7 +18,8 @@ object VlangMapRenderer : VlangValueRenderer() {
 
     override fun getVariableChildren(value: VlangValue, offset: Int, size: Int): DebuggerDriver.ResultList<VlangValue> {
         val type = value.llValue.type
-        val (keyType, valueType) = VlangCTypeParser.parseMapType(type)
+        val (keyType, rawValueType) = VlangCTypeParser.parseMapType(type)
+        val valueType = VlangCTypeParser.convertPointerTypeToC(rawValueType)
 
         val varRef = if (value.llValue.address != null) {
             "(struct map*)0x" + value.llValue.address?.toString(16)
