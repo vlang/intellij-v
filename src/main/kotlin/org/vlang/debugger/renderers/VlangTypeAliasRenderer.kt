@@ -20,9 +20,8 @@ object VlangTypeAliasRenderer : VlangValueRenderer() {
             VlangNamesIndex.find(fqn, project, null).firstOrNull()
         }
         if (alias !is VlangTypeAliasDeclaration) return false
-        val aliasType = alias.aliasType ?: return false
-        val types = aliasType.typeUnionList ?: return false
-        if (types.typeList.size > 1) return false
+        val isAlias = runReadAction { alias.aliasType?.isAlias ?: false }
+        if (!isAlias) return false
 
         this.alias = alias
         return true
@@ -32,12 +31,13 @@ object VlangTypeAliasRenderer : VlangValueRenderer() {
 
     override fun getData(value: VlangValue): LLValueData {
         val alias = this.alias ?: return value.data
-        val aliasedType = alias.aliasType?.typeUnionList?.typeList?.firstOrNull()?.toEx() ?: return value.data
+        val aliasedType = runReadAction { alias.aliasType?.typeUnionList?.typeList?.firstOrNull()?.toEx() } ?: return value.data
         if (aliasedType is VlangStringTypeEx) {
             return VlangStringRenderer.getData(value)
         }
 
-        if (alias.getQualifiedName() == "strings.Builder") {
+        val qualifiedName = runReadAction { alias.getQualifiedName() }
+        if (qualifiedName == "strings.Builder") {
             val address = value.llValue.address ?: return value.data
             val dataAddress = address.toString(16)
             val strValue = value.context.evaluate("strings__Builder_str((strings__Builder*)(0x$dataAddress))")

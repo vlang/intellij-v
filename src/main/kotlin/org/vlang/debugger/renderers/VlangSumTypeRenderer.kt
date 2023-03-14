@@ -20,9 +20,8 @@ object VlangSumTypeRenderer : VlangValueRenderer() {
             VlangNamesIndex.find(fqn, project, null).firstOrNull()
         }
         if (sumType !is VlangTypeAliasDeclaration) return false
-        val aliasType = sumType.aliasType ?: return false
-        val types = aliasType.typeUnionList ?: return false
-        return types.typeList.size > 1
+        val isAlias = runReadAction { sumType.aliasType?.isAlias ?: false }
+        return !isAlias
     }
 
     override fun getDisplayType(type: String): String = type
