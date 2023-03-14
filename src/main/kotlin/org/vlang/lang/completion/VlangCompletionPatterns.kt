@@ -63,7 +63,9 @@ object VlangCompletionPatterns {
      *    fn foo() <caret>
      */
     fun onType(): PsiElementPattern.Capture<PsiElement> =
-        psiElement().withParent(VlangTypeReferenceExpression::class.java)
+        psiElement()
+            .withParent(VlangTypeReferenceExpression::class.java)
+            .notAfterLiteral()
 
     /**
      * Element after if/else expression like:
@@ -132,6 +134,7 @@ object VlangCompletionPatterns {
     fun insideStruct(): PsiElementPattern.Capture<PsiElement> =
         psiElement()
             .withSuperParent(6, VlangStructType::class.java)
+            .notAfterLiteral()
 
     fun insideForStatement(): ElementPattern<out PsiElement?> {
         return onStatement()
@@ -182,8 +185,21 @@ object VlangCompletionPatterns {
                 // and prev leaf of error element is literal
                 // and return true to disable completion
                 // true because this matcher used in andNot() matcher.
-                val prevLeaf = PsiTreeUtil.prevLeaf(t) as? PsiErrorElement ?: return false
-                return PsiTreeUtil.prevLeaf(prevLeaf)?.parent is VlangLiteral
+                // Other option when we have `age int = 10<caret>`, then prev element is VlangTypeModifiers,
+                // so we need to check that prev leaf is error element or VlangTypeModifiers
+                val rawPrevLeaf = PsiTreeUtil.prevLeaf(t)
+
+                // in some cases prev leaf can be literal
+                val prevParent = rawPrevLeaf?.parent
+                if (prevParent is VlangLiteral) return true
+
+                val prevPrev = if (rawPrevLeaf is PsiErrorElement || rawPrevLeaf is VlangTypeModifiers) {
+                    PsiTreeUtil.prevLeaf(rawPrevLeaf)
+                } else {
+                    return false
+                }
+
+                return prevPrev?.parent is VlangLiteral
             }
         }))
     }

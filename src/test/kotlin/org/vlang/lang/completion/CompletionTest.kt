@@ -456,4 +456,28 @@ class CompletionTest : CompletionTestBase() {
         }
         """.trimIndent()
     )
+
+    fun `test after literal as default value of struct field`() = checkEmpty(
+        """
+        struct Name {
+            age int = 22/*caret*/
+        }
+        """.trimIndent(), 0,
+    )
+
+    fun `test after literal in array`() = checkEmpty(
+        """
+        const aaa = [
+            0, 1, 2/*caret*/
+        ]
+        """.trimIndent(), 0,
+    )
+
+    fun `test literal methods`() = checkIncludes(
+        """
+        const aaa = [
+            0, 1, 2./*caret*/
+        ]
+        """.trimIndent(), 0, "str"
+    )
 }
