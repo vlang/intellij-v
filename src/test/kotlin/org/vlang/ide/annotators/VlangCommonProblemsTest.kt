@@ -18,4 +18,5 @@ class VlangCommonProblemsTest : AnnotatorTestBase() {
 //    fun `test if expression without else`() = doTestQuickFix("if_expression_without_else.v")
     fun `test attributes for interface members`() = doTest("attributes_for_interface_members.v")
     fun `test assign values count mismatch`() = doTest("assign_values_count_mismatch.v")
+    fun `test it variable inside array init is deprecated`() = doTestQuickFix("it_variable_inside_array_init_is_deprecated.v")
 }

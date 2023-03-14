@@ -10,7 +10,7 @@ type element_type = any
 // arr_with_len := []int{len: 1} // [0]
 // arr_with_cap := []int{len: 1, cap: 100} // [0]
 // arr_with_len_init := []int{len: 1, init: 1} [1]
-// arr_with_init := []int{len: 2, cap: 100, init: it * 2} [0, 2]
+// arr_with_init := []int{len: 2, cap: 100, init: index * 2} [0, 2]
 // ```
 //
 // Array initializer can contain three **optional** fields:
@@ -43,17 +43,17 @@ type element_type = any
 // assert arr == [0, 0]
 // ```
 //
-// In `init` field, you can use special `it` variable to refer to the current index.
+// In `init` field, you can use special `index` variable to refer to the current index.
 //
 // ```
-// arr := []int{len: 3, init: it * 2}
+// arr := []int{len: 3, init: index * 2}
 // assert arr == [0, 2, 4]
 // ```
 pub struct ArrayInit {
-	// current_index represent the current element index that is being initialized inside `init`.
+	// index represent the current element index that is being initialized inside `init`.
 	//
 	// See [ArrayInit](#ArrayInit) documentation for more info.
-	current_index int
+	index int
 pub:
 	// len field represent number of pre-allocated and initialized elements in the array
 	//

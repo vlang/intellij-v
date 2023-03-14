@@ -20,6 +20,7 @@ object VlangCodeInsightUtil {
     const val BUILTIN_MODULE = "builtin"
     const val STUBS_MODULE = "stubs"
     const val IT_VARIABLE = "it"
+    const val INDEX_VARIABLE = "index"
     private const val ERR_VARIABLE = "err"
 
     fun isErrVariable(element: PsiElement): Boolean {
@@ -32,6 +33,10 @@ object VlangCodeInsightUtil {
 
     fun isSortABVariable(element: PsiElement): Boolean {
         return element.elementType == VlangTypes.IDENTIFIER && (element.textMatches("a") || element.textMatches("b"))
+    }
+
+    fun isIndexVariable(element: PsiElement): Boolean {
+        return element.elementType == VlangTypes.IDENTIFIER && element.textMatches(INDEX_VARIABLE)
     }
 
     fun insideArrayCreation(element: PsiElement): Boolean {

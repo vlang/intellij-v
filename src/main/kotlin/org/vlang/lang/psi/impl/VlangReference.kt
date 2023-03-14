@@ -432,13 +432,15 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         }
 
         if (VlangCodeInsightUtil.insideArrayCreation(identifier!!)) {
-            // []int{init: it}
-            //             ^^
-            if (VlangCodeInsightUtil.isItVariable(identifier!!)) {
+            // []int{init: index}
+            //             ^^^^^
+            val needResolve = VlangCodeInsightUtil.isIndexVariable(identifier!!) ||
+                    VlangCodeInsightUtil.isItVariable(identifier!!) // TODO: remove it variable when it will be removed from V
+            if (needResolve) {
                 val struct = getArrayInitStruct() ?: return false
                 val fields = struct.structType.fieldList
-                val field = fields.find { it.name == "current_index" } ?: return true
-                return processor.execute(field, state.put(SEARCH_NAME, "current_index").put(ACTUAL_NAME, "current_index"))
+                val field = fields.find { it.name == "index" } ?: return true
+                return processor.execute(field, state.put(SEARCH_NAME, "index").put(ACTUAL_NAME, "index"))
             }
         }
 

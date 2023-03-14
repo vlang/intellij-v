@@ -2,6 +2,7 @@ package org.vlang.lang.annotator.checkers
 
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement
+import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.Editor
@@ -15,6 +16,7 @@ import com.intellij.psi.util.findTopmostParentInFile
 import com.intellij.psi.util.parentOfType
 import com.intellij.refactoring.suggested.endOffset
 import com.intellij.refactoring.suggested.startOffset
+import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangElementFactory
 import org.vlang.lang.psi.impl.VlangLangUtil
@@ -403,7 +405,46 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
         }
     }
 
+    override fun visitElement(element: VlangElement) {
+        val parent = element.parent
+        if (parent !is VlangLiteralValueExpression) return
+
+        val isArrayInit = parent.type is VlangArrayType || parent.type is VlangFixedSizeArrayType
+        if (!isArrayInit) return
+
+        val name = element.key?.fieldName?.text ?: return
+        if (name != "init") return
+
+        val value = element.value ?: return
+        val checker = object : VlangRecursiveVisitor() {
+            override fun visitReferenceExpression(ref: VlangReferenceExpression) {
+                if (ref.textMatches(VlangCodeInsightUtil.IT_VARIABLE)) {
+                    holder.newAnnotation(
+                        HighlightSeverity.WARNING,
+                        "'it' is deprecated, use 'index' instead"
+                    )
+                        .highlightType(ProblemHighlightType.LIKE_DEPRECATED)
+                        .withFix(VlangReplaceItVariableWithIndex(ref))
+                        .range(ref)
+                        .create()
+                }
+            }
+        }
+
+        value.accept(checker)
+    }
+
     companion object {
+        class VlangReplaceItVariableWithIndex(element: PsiElement) : LocalQuickFixAndIntentionActionOnPsiElement(element) {
+            override fun getFamilyName() = "Replace 'it' with 'index'"
+            override fun getText() = "Replace 'it' with 'index'"
+
+            override fun invoke(project: Project, file: PsiFile, editor: Editor?, startElement: PsiElement, endElement: PsiElement) {
+                val ref = startElement as? VlangReferenceExpression ?: return
+                ref.reference.handleElementRename("index")
+            }
+        }
+
         class VlangAddKeyToLoopIterateQuickFix(val name: String) : BaseIntentionAction() {
             override fun startInWriteAction() = true
             override fun getFamilyName() = "Add `$name` variable to loop iterate over map"
