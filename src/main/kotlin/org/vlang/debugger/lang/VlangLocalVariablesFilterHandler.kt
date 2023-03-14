@@ -23,8 +23,13 @@ class VlangLocalVariablesFilterHandler : LocalVariablesFilterHandler {
                 !it.name.startsWith("_") &&
                         !it.name.startsWith("mr_") &&
                         !it.name.startsWith("thread__") &&
-                        !it.name.startsWith("arg__")
+                        !it.name.startsWith("arg__") &&
+                        !DEFER_VARIABLE_REGEX.matches(it.name)
             }
         return CompletableFuture.completedFuture(filteredVars)
+    }
+
+    companion object {
+        val DEFER_VARIABLE_REGEX = "^.*_defer_\\d+$".toRegex()
     }
 }
