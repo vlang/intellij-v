@@ -1,6 +1,7 @@
 package org.vlang.debugger.lang
 
 import com.intellij.execution.configurations.RunProfile
+import com.intellij.openapi.util.SystemInfo
 import com.intellij.ui.ColoredText
 import com.intellij.ui.SimpleTextAttributes
 import com.intellij.xdebugger.evaluation.XDebuggerEditorsProvider
@@ -46,7 +47,20 @@ class VlangDebuggerLanguageSupport : CidrDebuggerLanguageSupport() {
                 return builder.build()
             }
 
+            private fun convertPrimitive(type: String): String? {
+                if (!IS_WINDOWS) {
+                    return null
+                }
+
+                return PRIMITIVE_TYPES_MAP[type]
+            }
+
             private fun convertType(type: String): String {
+                val primitive = convertPrimitive(type)
+                if (primitive != null) {
+                    return primitive
+                }
+
                 // main__Foo (*)(int)
                 if (type.contains("(*)")) {
                     val parts = type.split("(*)").map { it.trim() }
@@ -114,6 +128,22 @@ class VlangDebuggerLanguageSupport : CidrDebuggerLanguageSupport() {
 
                 return super.getValueDisplayType(value, renderForUiLabel)
             }
+
+            val IS_WINDOWS = SystemInfo.isWindows
+            val PRIMITIVE_TYPES_MAP = mapOf(
+                "double" to "f64",
+                "float" to "f32",
+                "int" to "int",
+                "long" to "i64",
+                "long long" to "i64",
+                "unsigned int" to "u32",
+                "unsigned long" to "u64",
+                "unsigned long long" to "u64",
+                "char" to "i8",
+                "unsigned char" to "u8",
+                "short" to "i16",
+                "unsigned short" to "u16",
+            )
         }
     }
 
