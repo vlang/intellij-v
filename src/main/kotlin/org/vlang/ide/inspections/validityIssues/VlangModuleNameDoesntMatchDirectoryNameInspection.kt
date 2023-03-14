@@ -5,6 +5,7 @@ import com.intellij.codeInspection.LocalQuickFix
 import com.intellij.codeInspection.ProblemDescriptor
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.project.guessProjectDir
 import com.intellij.psi.PsiElementVisitor
 import org.vlang.ide.inspections.VlangBaseInspection
 import org.vlang.lang.psi.VlangModuleClause
@@ -15,10 +16,16 @@ class VlangModuleNameDoesntMatchDirectoryNameInspection : VlangBaseInspection() 
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
         return object : VlangVisitor() {
             override fun visitModuleClause(module: VlangModuleClause) {
+                val project = module.project
+                val projectRoot = project.guessProjectDir() ?: return
+                val containingDirectory = module.containingFile?.containingDirectory ?: return
+                // skip modules in root dir
+                if (containingDirectory.virtualFile == projectRoot) return
+
                 val moduleName = module.name
                 if (moduleName == "main" || moduleName == "builtin") return
 
-                val directoryName = module.containingFile?.containingDirectory?.name ?: return
+                val directoryName = containingDirectory.name
                 if (directoryName == "src") return
 
                 if (moduleName != directoryName) {
