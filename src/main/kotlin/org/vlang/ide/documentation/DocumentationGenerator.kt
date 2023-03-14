@@ -1133,7 +1133,7 @@ object DocumentationGenerator {
             append("Module: ")
             append(DocumentationMarkup.GRAYED_END)
 
-            val dir = containingFile.containingDirectory!!
+            val dir = containingFile.containingDirectory ?: return
             val module = VlangModule.fromDirectory(dir)
             val moduleNameParts = module.name.split(".")
 

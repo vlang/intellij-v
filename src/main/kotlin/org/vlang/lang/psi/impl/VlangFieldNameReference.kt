@@ -12,6 +12,7 @@ import org.vlang.lang.psi.impl.VlangReferenceBase.Companion.LOCAL_RESOLVE
 import org.vlang.lang.psi.types.VlangArrayTypeEx
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapAlias
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapGenericInstantiation
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapPointer
 import org.vlang.lang.psi.types.VlangChannelTypeEx
 import org.vlang.lang.psi.types.VlangStructTypeEx
@@ -41,10 +42,10 @@ class VlangFieldNameReference(element: VlangReferenceExpressionBase) :
         if (type == null) {
             val callExpr = VlangCodeInsightUtil.getCallExpr(element)
             val paramTypes = VlangCodeInsightUtil.getCalledParams(callExpr)
-            type = paramTypes?.lastOrNull { it.unwrapAlias().unwrapPointer() is VlangStructTypeEx }?: return true
+            type = paramTypes?.lastOrNull { it.unwrapPointer().unwrapAlias().unwrapGenericInstantiation() is VlangStructTypeEx }?: return true
         }
 
-        val typeToProcess = type.unwrapPointer().unwrapAlias()
+        val typeToProcess = type.unwrapPointer().unwrapAlias().unwrapGenericInstantiation()
         if (typeToProcess is VlangArrayTypeEx) {
             return processStructType(fieldProcessor, VlangStructTypeEx.ArrayInit, false)
         }

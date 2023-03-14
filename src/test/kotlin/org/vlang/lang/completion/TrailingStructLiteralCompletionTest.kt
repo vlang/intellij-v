@@ -338,4 +338,42 @@ class TrailingStructLiteralCompletionTest : CompletionTestBase() {
         0,
         "boo"
     )
+
+    fun `test generic trailing struct`() = checkIncludes(
+        """
+        module main
+        
+        struct Params[T] {
+            foo T
+            boo int
+        }
+        
+        fn boo[T](params &Params[T]) {}
+
+        fn main() {
+        	boo[string](/*caret*/)
+        }
+        """.trimIndent(),
+        0,
+        "foo", "boo",
+    )
+
+    fun `test generic trailing struct second param`() = checkEquals(
+        """
+        module main
+        
+        struct Params[T] {
+            foo T
+            boo int
+        }
+        
+        fn boo[T](params &Params[T]) {}
+
+        fn main() {
+        	boo[string](foo: "", /*caret*/)
+        }
+        """.trimIndent(),
+        0,
+        "boo",
+    )
 }
