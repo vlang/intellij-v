@@ -28,8 +28,11 @@ object VlangInterfaceRenderer : VlangValueRenderer() {
         val innerStruct = getInnerStructName(value) ?: return value.data.withDescription(name)
 
         val presentation = innerStruct.withContext(value.context).data.presentableValue
+        if (presentation.startsWith("0x")) {
+            return value.data.withDescription("$name at $presentation")
+        }
 
-        return value.data.withDescription(presentation)
+        return value.data.withDescription(name)
     }
 
     override fun getVariableChildren(value: VlangValue, offset: Int, size: Int): DebuggerDriver.ResultList<VlangValue> {
