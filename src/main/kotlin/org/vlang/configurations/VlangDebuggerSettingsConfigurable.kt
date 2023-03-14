@@ -16,6 +16,7 @@ class VlangDebuggerSettingsConfigurable : Configurable {
         var stopsAtPanics: Boolean,
         var showStrMethodResult: Boolean,
         var dontUsePrettyPrinters: Boolean,
+        var dontStepIntoGeneratedFunctions: Boolean,
     )
 
     private val mainPanel: DialogPanel
@@ -25,6 +26,7 @@ class VlangDebuggerSettingsConfigurable : Configurable {
         stopsAtPanics = true,
         showStrMethodResult = true,
         dontUsePrettyPrinters = false,
+        dontStepIntoGeneratedFunctions = false,
     )
 
     init {
@@ -57,6 +59,14 @@ class VlangDebuggerSettingsConfigurable : Configurable {
                         """.trimIndent())
             }
             row {
+                checkBox("Don't step into generated functions")
+                    .bindSelected(model::dontStepIntoGeneratedFunctions)
+                    .comment("""
+                        When you invoke the <b>Step Into</b> action, the debugger will skip all generated functions (e.g. <code>I_None___to_Interface_IError</code>).
+                        This makes debugging easier, but you can disable this behavior if you want to see the generated code.
+                        """.trimIndent())
+            }
+            row {
                 checkBox("Don't use pretty printers")
                     .bindSelected(model::dontUsePrettyPrinters)
                     .comment("""
@@ -79,7 +89,8 @@ class VlangDebuggerSettingsConfigurable : Configurable {
                 model.downloadAutomatically != settings.downloadAutomatically ||
                 model.stopsAtPanics != settings.stopsAtPanics ||
                 model.showStrMethodResult != settings.showStrMethodResult ||
-                model.dontUsePrettyPrinters != settings.dontUsePrettyPrinters
+                model.dontUsePrettyPrinters != settings.dontUsePrettyPrinters ||
+                model.dontStepIntoGeneratedFunctions != settings.dontStepIntoGeneratedFunctions
     }
 
     override fun apply() {
@@ -92,6 +103,7 @@ class VlangDebuggerSettingsConfigurable : Configurable {
             stopsAtPanics = model.stopsAtPanics
             showStrMethodResult = model.showStrMethodResult
             dontUsePrettyPrinters = model.dontUsePrettyPrinters
+            dontStepIntoGeneratedFunctions = model.dontStepIntoGeneratedFunctions
         }
     }
 
@@ -104,6 +116,7 @@ class VlangDebuggerSettingsConfigurable : Configurable {
             stopsAtPanics = settings.stopsAtPanics
             showStrMethodResult = settings.showStrMethodResult
             dontUsePrettyPrinters = settings.dontUsePrettyPrinters
+            dontStepIntoGeneratedFunctions = settings.dontStepIntoGeneratedFunctions
         }
 
         mainPanel.reset()

@@ -20,6 +20,7 @@ class VlangDebuggerState : PersistentStateComponent<VlangDebuggerState?> {
     var stopsAtPanics: Boolean = true
     var showStrMethodResult: Boolean = true
     var dontUsePrettyPrinters: Boolean = false
+    var dontStepIntoGeneratedFunctions: Boolean = true
 
     override fun getState() = this
 

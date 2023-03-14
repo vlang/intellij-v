@@ -15,8 +15,13 @@ class VlangDebugProcessConfigurationHelper(private val process: CidrDebugProcess
     fun configure() {
         process.postCommand { driver ->
             try {
-                if (VlangDebuggerState.getInstance().stopsAtPanics) {
+                val state = VlangDebuggerState.getInstance()
+                if (state.stopsAtPanics) {
                     driver.setBreakOnPanic()
+                }
+
+                if (state.dontStepIntoGeneratedFunctions) {
+                    driver.setSteppingFilters()
                 }
 
                 driver.setBreakForGC()
@@ -50,5 +55,22 @@ class VlangDebugProcessConfigurationHelper(private val process: CidrDebugProcess
         for (command in commands) {
             executeInterpreterCommand(threadId, frameIndex, command)
         }
+    }
+
+    private fun DebuggerDriver.setSteppingFilters() {
+        val regexes = mutableListOf<String>()
+        regexes.add("^v_typeof_.*")
+        regexes.add("^I_.*to_Interface.*")
+        regexes.add("^memdup$")
+        regexes.add("^indent_.*")
+
+        val command = when (this) {
+            is LLDBDriver -> "settings set target.process.thread.step-avoid-regexp"
+            is GDBDriver  -> "skip -rfu"
+            else          -> return
+        }
+
+        val regex = regexes.joinToString("|")
+        executeInterpreterCommand(threadId, frameIndex, "$command $regex")
     }
 }
