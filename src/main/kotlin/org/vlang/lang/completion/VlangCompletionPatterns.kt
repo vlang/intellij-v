@@ -51,11 +51,12 @@ object VlangCompletionPatterns {
      *
      *     import mod
      */
-    fun onTopLevel(): PsiElementPattern.Capture<PsiElement?> =
+    fun onTopLevel(): PsiElementPattern.Capture<PsiElement> =
         psiElement()
             .withSuperParent(2, VlangLeftHandExprList::class.java)
             .withSuperParent(3, VlangSimpleStatement::class.java)
             .withSuperParent(4, VlangFile::class.java)
+            .notAfterLiteral()
 
     /**
      * Any place where type expected like:

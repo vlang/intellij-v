@@ -473,6 +473,12 @@ class CompletionTest : CompletionTestBase() {
         """.trimIndent(), 0,
     )
 
+    fun `test after literal in top level constant`() = checkEmpty(
+        """
+        const aaa = 100/*caret*/
+        """.trimIndent(), 0,
+    )
+
     fun `test literal methods`() = checkIncludes(
         """
         const aaa = [
