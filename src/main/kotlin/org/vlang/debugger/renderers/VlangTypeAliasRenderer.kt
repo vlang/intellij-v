@@ -40,7 +40,7 @@ object VlangTypeAliasRenderer : VlangValueRenderer() {
         if (qualifiedName == "strings.Builder") {
             val address = value.llValue.address ?: return value.data
             val dataAddress = address.toString(16)
-            val strValue = value.context.evaluate("strings__Builder_str((strings__Builder*)(0x$dataAddress))")
+            val strValue = value.context.evaluate("strings__Builder_after((strings__Builder*)(0x$dataAddress), 0)")
             return strValue.withContext(value.context).data
         }
 
