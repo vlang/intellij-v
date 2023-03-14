@@ -75,7 +75,7 @@ public class VlangInterfaceMethodDefinitionImpl extends VlangNamedElementImpl<Vl
   }
 
   @Override
-  @Nullable
+  @NotNull
   public String getQualifiedName() {
     return VlangPsiImplUtil.getQualifiedName(this);
   }

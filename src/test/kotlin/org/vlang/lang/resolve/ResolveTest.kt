@@ -157,4 +157,20 @@ class ResolveTest : ResolveTestBase() {
         assertQualifiedReferencedTo("FUNCTION_DECLARATION stubs._unlikely_")
         assertQualifiedReferencedTo("FUNCTION_DECLARATION stubs._likely_")
     }
+
+    fun `test resolve struct inside for without last statement`() {
+        mainFile("a.v", """
+            module main
+
+            struct Foo {}
+            
+            fn main() {
+                for i := 0; i < 100; {
+                    /*caret*/Foo{}
+                }
+            }
+        """.trimIndent())
+
+        assertQualifiedReferencedTo("STRUCT_DECLARATION main.Foo")
+    }
 }

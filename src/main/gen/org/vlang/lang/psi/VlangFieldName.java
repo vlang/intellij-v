@@ -10,7 +10,7 @@ public interface VlangFieldName extends VlangReferenceExpressionBase {
   @NotNull
   VlangReferenceExpression getReferenceExpression();
 
-  @Nullable
+  @NotNull
   PsiElement getIdentifier();
 
   @Nullable

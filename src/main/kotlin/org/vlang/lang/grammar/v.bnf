@@ -314,7 +314,7 @@ ForStatement ::= for (ForClause | RangeClause | BeforeBlockExpression)? Block {p
 
 // С form of for loop
 // [<statement>]; [<expression>]; [<statement>]
-ForClause ::= SimpleStatement? ';' Expression? ';' (<<enterMode "noBraces">> SimpleStatement <<exitModeSafe "noBraces">>)? {methods=[processDeclarations]}
+ForClause ::= SimpleStatement? ';' Expression? ';' (<<withOn "noBraces" SimpleStatement>>)? {methods=[processDeclarations]}
 
 // <var>* in <expression>
 RangeClause ::= VarDefinitionList in BeforeBlockExpression {

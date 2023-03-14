@@ -10,8 +10,8 @@ public interface VlangForClause extends VlangCompositeElement {
   @Nullable
   VlangExpression getExpression();
 
-  @NotNull
-  List<VlangStatement> getStatementList();
+  @Nullable
+  VlangStatement getStatement();
 
   //WARNING: processDeclarations(...) is skipped
   //matching processDeclarations(VlangForClause, ...)

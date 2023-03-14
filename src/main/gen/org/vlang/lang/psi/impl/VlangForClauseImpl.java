@@ -33,9 +33,9 @@ public class VlangForClauseImpl extends VlangCompositeElementImpl implements Vla
   }
 
   @Override
-  @NotNull
-  public List<VlangStatement> getStatementList() {
-    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangStatement.class);
+  @Nullable
+  public VlangStatement getStatement() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangStatement.class);
   }
 
 }

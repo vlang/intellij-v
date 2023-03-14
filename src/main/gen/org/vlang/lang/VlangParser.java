@@ -2134,7 +2134,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // SimpleStatement? ';' Expression? ';' (<<enterMode "noBraces">> SimpleStatement <<exitModeSafe "noBraces">>)?
+  // SimpleStatement? ';' Expression? ';' (<<withOn "noBraces" SimpleStatement>>)?
   public static boolean ForClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForClause")) return false;
     boolean r;
@@ -2162,23 +2162,16 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (<<enterMode "noBraces">> SimpleStatement <<exitModeSafe "noBraces">>)?
+  // (<<withOn "noBraces" SimpleStatement>>)?
   private static boolean ForClause_4(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForClause_4")) return false;
     ForClause_4_0(b, l + 1);
     return true;
   }
 
-  // <<enterMode "noBraces">> SimpleStatement <<exitModeSafe "noBraces">>
+  // <<withOn "noBraces" SimpleStatement>>
   private static boolean ForClause_4_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ForClause_4_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = enterMode(b, l + 1, "noBraces");
-    r = r && SimpleStatement(b, l + 1);
-    r = r && exitModeSafe(b, l + 1, "noBraces");
-    exit_section_(b, m, null, r);
-    return r;
+    return withOn(b, l + 1, "noBraces", VlangParser::SimpleStatement);
   }
 
   /* ********************************************************** */
