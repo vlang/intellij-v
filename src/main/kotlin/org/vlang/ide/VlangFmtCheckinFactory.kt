@@ -96,9 +96,10 @@ class VlangFmtCheckinFactory : CheckinHandlerFactory() {
         private const val V_FMT = "V_FMT"
 
         private fun commitButtonMessage(executor: CommitExecutor?, panel: CheckinProjectPanel): String {
-            return StringUtil.trimEnd(executor?.actionText ?: panel.commitActionName, "...")
+            val text = executor?.actionText ?: panel.commitActionName
+            return text.removeSuffix("...")
         }
 
-        private fun enabled(panel: CheckinProjectPanel): Boolean = PropertiesComponent.getInstance(panel.project).getBoolean(V_FMT, false)
+        private fun enabled(panel: CheckinProjectPanel): Boolean = PropertiesComponent.getInstance(panel.project).getBoolean(V_FMT, true)
     }
 }
