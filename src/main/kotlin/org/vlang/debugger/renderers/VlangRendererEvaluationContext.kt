@@ -10,13 +10,19 @@ import org.vlang.debugger.withContext
 class VlangRendererEvaluationContext(
     val evaluationContext: VlangLldbEvaluationContext,
     root: LLValue,
+    var withColors: Boolean = true,
 ) {
     private val dataStack = mutableSetOf(root)
     private val childStack = mutableSetOf(root)
 
-    fun getData(value: LLValue): LLValueData {
+    fun getData(value: LLValue, withColors: Boolean = true): LLValueData {
         if (dataStack.add(value)) {
+            val withColorsInitial = evaluationContext.withColors
+            evaluationContext.withColors = withColors
+
             val data = evaluationContext.getData(value)
+
+            evaluationContext.withColors = withColorsInitial
             dataStack.remove(value)
             return data
         }

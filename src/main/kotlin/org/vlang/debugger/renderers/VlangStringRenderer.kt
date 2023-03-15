@@ -17,11 +17,13 @@ object VlangStringRenderer : VlangValueRenderer() {
             return value.llValue.withContext(value.context).data
         }
 
+        val needHighlight = value.context.withColors
+
         val strField = value["str"].llValue
         val data = value.context.getData(strField)
         val text = data.description ?: return value.data
         return value.data
-            .withDescription(highlightString(text))
+            .withDescription(if (needHighlight) highlightString(text) else text)
             .withHasLongerDescription(needLongerDescription(text))
     }
 }

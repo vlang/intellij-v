@@ -37,7 +37,7 @@ object VlangMapRenderer : VlangValueRenderer() {
             keyData.zip(valueData) { key, value ->
                 val keyValue = key.llValue
                     .withData(
-                        name = key.data.presentableValue,
+                        name = key.getDataWithoutColors().presentableValue,
                         data = LLValueData(key.data.value, value.data.presentableValue, false, true, false),
                         children = listOf(
                             key.llValue.withName("key"),

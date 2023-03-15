@@ -13,6 +13,7 @@ import org.vlang.debugger.withContext
 
 class VlangLldbEvaluationContext(
     val project: Project,
+    var withColors: Boolean,
     driver: DebuggerDriver,
     expirable: Expirable?,
     thread: LLThread,
@@ -30,7 +31,7 @@ class VlangLldbEvaluationContext(
 
         val renderer = findRenderer(value)
             ?: return getRawData(value)
-        return renderer.getData(value.withContext(VlangRendererEvaluationContext(this, value)))
+        return renderer.getData(value.withContext(VlangRendererEvaluationContext(this, value, withColors)))
     }
 
     /**

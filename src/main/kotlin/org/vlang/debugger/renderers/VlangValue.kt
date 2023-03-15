@@ -18,6 +18,9 @@ class VlangValue(val context: VlangRendererEvaluationContext, val llValue: LLVal
 
     val data: LLValueData get() = context.getData(llValue)
 
+    fun getDataWithoutColors(): LLValueData =
+        context.getData(llValue, false)
+
     fun evaluate(expression: String): LLValue =
         context.evaluate(expression)
 
