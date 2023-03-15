@@ -91,6 +91,34 @@ object VlangCTypeParser {
     /**
      * Example:
      *
+     *    "anon_fn_" -> "fn ()"
+     *    "anon_fn_int" -> "fn (int)"
+     *    "anon_fn_int_string" -> "fn (int, string)"
+     *    "anon_fn_int_string__bool" -> "fn (int, string) bool"
+     *    "anon_fn_int__string" -> "fn (int) string
+     */
+    fun parseAnonFnType(type: String): String {
+        if (!type.startsWith("anon_fn_")) {
+            return type
+        }
+
+        val parts = type.split("__")
+
+        val args = parts[0].substring(8)
+        val returnType = parts.getOrNull(1)
+
+        val argsString = if (args.isEmpty()) {
+            "()"
+        } else {
+            "(${args.replace("_", ", ")})"
+        }
+
+        return "fn $argsString${returnType?.let { " $it" } ?: ""}"
+    }
+
+    /**
+     * Example:
+     *
      *    "main__Foo_ptr" -> "main__Foo*"
      *    "main__Foo_ptr_ptr" -> "main__Foo**"
      */

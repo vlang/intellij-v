@@ -5,5 +5,6 @@
     <debugProcessConfigurator implementation="org.vlang.debugger.runconfig.VlangDebugProcessConfigurator"/>
     <valueRendererExtension implementation="org.vlang.debugger.VlangValueRendererExtension"/>
     <localVariablesFilterHandler implementation="org.vlang.debugger.lang.VlangLocalVariablesFilterHandler"/>
+    <valueRendererFactory implementation="org.vlang.debugger.VlangValueRendererFactory"/>
   </extensions>
 </idea-plugin>

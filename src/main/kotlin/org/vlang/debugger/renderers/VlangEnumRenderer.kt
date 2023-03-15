@@ -11,7 +11,7 @@ import org.vlang.lang.stubs.index.VlangClassLikeIndex
 
 object VlangEnumRenderer : VlangValueRenderer() {
     override fun isApplicable(project: Project, value: LLValue): Boolean {
-        val type = value.type
+        val type = value.type.replace(alignRegex, "")
         val fqn = VlangCTypeParser.convertCNameToVName(type)
         val klass = runReadAction {
             VlangClassLikeIndex.find(fqn, project, null, null).firstOrNull()
@@ -34,7 +34,15 @@ object VlangEnumRenderer : VlangValueRenderer() {
         val enumFieldName = enumFieldFqn.substringAfterLast(".")
 
         val intValue = getEnumIntValue(value)
-        return value.data.withDescription("$enumFieldName = $intValue").withChildren()
+        return value.data
+            .withDescription(
+                buildString {
+                    identifier(enumFieldName)
+                    append(" = ")
+                    number(intValue.toString())
+                }
+            )
+            .withChildren()
     }
 
     override fun getVariableChildren(

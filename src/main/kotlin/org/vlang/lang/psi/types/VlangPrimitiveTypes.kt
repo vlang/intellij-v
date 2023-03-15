@@ -28,5 +28,9 @@ enum class VlangPrimitiveTypes(val value: String, val size: Int, val numeric: Bo
         fun isPrimitiveType(name: String): Boolean {
             return values().any { it.value == name }
         }
+
+        fun isNumeric(name: String): Boolean {
+            return values().any { it.value == name && it.numeric }
+        }
     }
 }

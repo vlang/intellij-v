@@ -5,6 +5,7 @@ import com.jetbrains.cidr.execution.debugger.backend.LLValue
 import com.jetbrains.cidr.execution.debugger.backend.LLValueData
 import org.vlang.debugger.withContext
 import org.vlang.debugger.withDescription
+import org.vlang.debugger.withHasLongerDescription
 
 object VlangStringRenderer : VlangValueRenderer() {
     override fun isApplicable(project: Project, value: LLValue): Boolean = value.type == "string" || value.type == "string *"
@@ -18,6 +19,9 @@ object VlangStringRenderer : VlangValueRenderer() {
 
         val strField = value["str"].llValue
         val data = value.context.getData(strField)
-        return value.data.withDescription(data.description)
+        val text = data.description ?: return value.data
+        return value.data
+            .withDescription(highlightString(text))
+            .withHasLongerDescription(needLongerDescription(text))
     }
 }

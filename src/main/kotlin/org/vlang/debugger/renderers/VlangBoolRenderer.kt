@@ -12,6 +12,11 @@ object VlangBoolRenderer : VlangValueRenderer() {
 
     override fun getData(value: VlangValue): LLValueData {
         val isTrue = value.data.value.any { it == '1' }
-        return value.data.withDescription("$isTrue")
+        val text = if (isTrue) "true" else "false"
+        return value.data.withDescription(
+            buildString {
+                keyword(text)
+            }
+        )
     }
 }

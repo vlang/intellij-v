@@ -61,6 +61,10 @@ class VlangDebuggerLanguageSupport : CidrDebuggerLanguageSupport() {
                     return primitive
                 }
 
+                if (type == "void") {
+                    return ""
+                }
+
                 // main__Foo (*)(int)
                 if (type.contains("(*)")) {
                     val parts = type.split("(*)").map { it.trim() }
@@ -70,7 +74,8 @@ class VlangDebuggerLanguageSupport : CidrDebuggerLanguageSupport() {
                         .split(",")
                         .joinToString(", ") { convertType(it.trim()) }
 
-                    return "fn ($argTypes) $returnType"
+                    val base = if (argTypes == "...") "fn ()" else "fn ($argTypes)"
+                    return if (returnType.isNotEmpty()) "$base $returnType" else base
                 }
 
                 if (type.startsWith("chan_")) {
@@ -103,6 +108,10 @@ class VlangDebuggerLanguageSupport : CidrDebuggerLanguageSupport() {
                 if (type.endsWith("_ptr")) {
                     val elementType = type.removeSuffix("_ptr")
                     return "&" + convertType(elementType)
+                }
+
+                if (type.startsWith("anon_fn_")) {
+                   return VlangCTypeParser.parseAnonFnType(type)
                 }
                
                 if (type.contains("__")) {

@@ -39,6 +39,9 @@ fun LLValueData.withIsSynthetic(isSynthetic: Boolean) =
 fun LLValueData.withHasLongerDescription(hasLongerDescription: Boolean) =
     LLValueData(this.value, this.description, hasLongerDescription, this.mayHaveChildren(), isSynthetic)
 
+fun LLValueData.withMayHaveChildren(mayHaveChildren: Boolean) =
+    LLValueData(this.value, this.description, this.hasLongerDescription(), mayHaveChildren, isSynthetic)
+
 fun LLValueData.withName(name: String) =
     LLValueData(name, this.description, this.hasLongerDescription(), this.mayHaveChildren(), this.isSynthetic)
 

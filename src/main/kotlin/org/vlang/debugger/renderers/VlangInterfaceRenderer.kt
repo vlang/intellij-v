@@ -29,7 +29,13 @@ object VlangInterfaceRenderer : VlangValueRenderer() {
 
         val presentation = innerStruct.withContext(value.context).data.presentableValue
         if (presentation.startsWith("0x")) {
-            return value.data.withDescription("$name at $presentation")
+            return value.data.withDescription(
+                buildString {
+                    identifier(name)
+                    append(" at ")
+                    number(presentation)
+                }
+            )
         }
 
         return value.data.withDescription(name)

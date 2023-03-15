@@ -325,11 +325,12 @@ Provides support for <a href="https://vlang.io/">V</a> language
 
         <!-- Debugger Renderers -->
         <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangStringRenderer"/>
-        <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangClosureContextRenderer"/>
         <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangArrayRenderer"/>
         <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangMapRenderer"/>
         <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangChannelRenderer"/>
         <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangBoolRenderer"/>
+        <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangPrimitiveTypesRenderer"/>
+        <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangFunctionRenderer"/>
         <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangEnumRenderer"/>
         <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangIErrorRenderer"/>
         <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangOptionRenderer"/>
@@ -337,6 +338,7 @@ Provides support for <a href="https://vlang.io/">V</a> language
         <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangInterfaceRenderer"/>
         <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangTypeAliasRenderer"/>
         <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangSumTypeRenderer"/>
+        <debuggerValueRenderer implementation="org.vlang.debugger.renderers.VlangPointerTypeRenderer"/>
         <!-- Debugger Renderers End -->
     </extensions>
 

@@ -4,9 +4,8 @@ import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.project.Project
 import com.jetbrains.cidr.execution.debugger.backend.LLValue
 import com.jetbrains.cidr.execution.debugger.backend.LLValueData
+import org.vlang.debugger.*
 import org.vlang.debugger.lang.VlangDebuggerState
-import org.vlang.debugger.withContext
-import org.vlang.debugger.withDescription
 import org.vlang.lang.psi.VlangMethodDeclaration
 import org.vlang.lang.psi.VlangStructDeclaration
 import org.vlang.lang.psi.types.VlangStructTypeEx
@@ -32,20 +31,20 @@ object VlangStructRenderer : VlangValueRenderer() {
 
     override fun getData(value: VlangValue): LLValueData {
         if (!VlangDebuggerState.getInstance().showStrMethodResult) {
-            return value.data
+            return highlightPointer(value)
         }
-        if (klass == null) return value.data
-        val name = runReadAction { klass?.getQualifiedName() } ?: return value.data
+        if (klass == null) return highlightPointer(value)
+        val name = runReadAction { klass?.getQualifiedName() } ?: return highlightPointer(value)
         val cname = VlangCTypeParser.toCName(name)
         val strMethodName = "${cname}_str"
 
-        val type = runReadAction { klass!!.getType(null) } as? VlangStructTypeEx ?: return value.data
-        val method = runReadAction { type.findMethod(value.project, "str") } ?: return value.data
+        val type = runReadAction { klass!!.getType(null) } as? VlangStructTypeEx ?: return highlightPointer(value)
+        val method = runReadAction { type.findMethod(value.project, "str") } ?: return highlightPointer(value)
         if (!enoughSimpleMethod(method)) return value.data
 
         val isMutable = runReadAction { method.isMutable }
         // skip mutable methods because they can change the value
-        if (isMutable) return value.data
+        if (isMutable) return highlightPointer(value)
 
         val byReference = runReadAction { method.byReference() }
         val dereference = if (!byReference) "*" else ""
@@ -55,7 +54,10 @@ object VlangStructRenderer : VlangValueRenderer() {
         val argument = "($cname*)(0x$address)"
         val strResult = value.context.evaluate("$strMethodName($dereference$argument)").withContext(value.context)
 
-        return value.data.withDescription(strResult.data.presentableValue)
+        val presentableValue = strResult.data.presentableValue
+        return value.data
+            .withDescription(presentableValue)
+            .withHasLongerDescription(needLongerDescription(presentableValue))
     }
 
     private fun enoughSimpleMethod(method: VlangMethodDeclaration): Boolean {
@@ -64,4 +66,6 @@ object VlangStructRenderer : VlangValueRenderer() {
         if (statements.size > 3) return false
         return true
     }
+
+    private fun highlightPointer(value: VlangValue): LLValueData = processPointer(value) ?: value.data
 }
