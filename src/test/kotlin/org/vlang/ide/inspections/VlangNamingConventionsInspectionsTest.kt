@@ -16,6 +16,8 @@ class VlangNamingConventionsInspectionsTest : InspectionTestBase("namingConventi
     fun `test generic receivers names`() = doTest("generic_receivers_names.v", VlangReceiverNamesInspection())
     fun `test different receivers names`() = doTest("different_receivers_names.v", VlangReceiverNamesInspection())
 
+    fun `test var names`() = doTest("variables.v", VlangVarNamingConventionInspection())
+
     companion object {
         val FUNCTION = VlangFunctionNamingConventionInspection()
         val CLASS_LIKE = VlangClassLikeNamingConventionInspection()
