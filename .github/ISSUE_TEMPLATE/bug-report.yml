@@ -77,3 +77,15 @@ body:
       label: IDE Type (IDEA Community/Ultimate, GoLand, CLion, etc.)
     validations:
         required: true
+
+  - type: textarea
+    id: plugin-version
+    attributes:
+      label: Plugin Version
+      description: |
+        1. Open Settings | Plugins
+        2. Select 'Installed' tab
+        3. Type `Vlang` in the search box
+        4. The version is displayed in the right panel
+    validations:
+        required: true
