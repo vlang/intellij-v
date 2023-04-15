@@ -2,6 +2,7 @@ package org.vlang.lang.psi
 
 import com.intellij.extapi.psi.PsiFileBase
 import com.intellij.openapi.project.guessProjectDir
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveState
@@ -30,7 +31,7 @@ import org.vlang.lang.stubs.types.VlangFunctionDeclarationStubElementType
 import org.vlang.lang.stubs.types.VlangInterfaceDeclarationStubElementType
 import org.vlang.lang.stubs.types.VlangStructDeclarationStubElementType
 
-class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, VlangLanguage) {
+open class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, VlangLanguage) {
     override fun getFileType() = VlangFileType
 
     override fun toString() = "V Language file"
@@ -141,17 +142,22 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
             return moduleName
         }
 
+        val virtualFile = originalFile.virtualFile
+        var dir = virtualFile?.parent
+
         val projectDir = project.guessProjectDir() ?: return ""
         val stdlib = VlangConfiguration.getInstance(project).stdlibLocation
         val modules = VlangConfiguration.getInstance(project).modulesLocation
         val src = VlangConfiguration.getInstance(project).srcLocation
         val localModules = VlangConfiguration.getInstance(project).localModulesLocation
         val stubs = VlangConfiguration.getInstance(project).stubsLocation
-        val rootDirs = listOfNotNull(projectDir, stdlib, modules, src, localModules, stubs)
+
+        val insideLocalModules = modules != null && virtualFile != null && virtualFile.path.startsWith(modules.path)
+
+        val vmodDir = if (insideLocalModules) null else findTopMostVmodFile(dir)
+        val rootDirs = listOfNotNull(projectDir, stdlib, modules, src, localModules, stubs, vmodDir)
 
         val moduleNames = mutableListOf<String>()
-        val virtualFile = originalFile.virtualFile
-        var dir = virtualFile?.parent
         val insideTopLevelDir = dir == projectDir
         val dirName = dir?.name ?: ""
         var depth = 0
@@ -181,7 +187,7 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
 
         val qualifierNames = moduleNames.reversed().toMutableList()
 
-        if (modules != null && virtualFile != null && virtualFile.path.startsWith(modules.path)) {
+        if (insideLocalModules) {
             if (qualifierNames.isNotEmpty() && qualifierNames[0] == moduleName) {
                 // iui.iui.* -> iui.*
                 qualifierNames.removeAt(0)
@@ -201,6 +207,25 @@ class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Vlan
         }
 
         return moduleName
+    }
+
+    private fun findTopMostVmodFile(file: VirtualFile?): VirtualFile? {
+        if (file == null) return null
+
+        val projectDir = project.guessProjectDir() ?: return null
+
+        var dir = file
+        var depth = 0
+        while (dir != null && dir != projectDir && dir.name != "/" && depth < 10) {
+            if (dir.children.any { it.name == "v.mod" }) {
+                return dir
+            }
+
+            dir = dir.parent
+            depth++
+        }
+
+        return null
     }
 
     fun getImports(): List<VlangImportSpec> {
