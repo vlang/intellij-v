@@ -147,6 +147,12 @@
                          implementationClass="org.vlang.ide.inspections.namingConventions.VlangClassLikeNamingConventionInspection"/>
 
         <localInspection language="vlang" groupPath="V"
+                         groupName="Naming conventions" shortName="VlangVarNamingConventionInspection"
+                         displayName="Variable naming convention"
+                         enabledByDefault="true" level="ERROR"
+                         implementationClass="org.vlang.ide.inspections.namingConventions.VlangVarNamingConventionInspection"/>
+
+        <localInspection language="vlang" groupPath="V"
                          groupName="Naming conventions" shortName="VlangTypeAliasNamingConventionInspection"
                          displayName="Type alias naming convention"
                          enabledByDefault="true" level="ERROR"
