@@ -8,6 +8,8 @@ import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.project.DumbAware
+import com.intellij.openapi.util.TextRange
+import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.impl.source.tree.LeafPsiElement
@@ -15,6 +17,7 @@ import com.intellij.psi.util.elementType
 import org.vlang.ide.colors.VlangColor
 import org.vlang.lang.VlangTypes
 import org.vlang.lang.completion.VlangCompletionUtil
+import org.vlang.lang.doc.psi.VlangDocComment
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.types.VlangPrimitiveTypes
 import org.vlang.lang.sql.VlangSqlUtil
@@ -176,6 +179,13 @@ class VlangHighlightInfoCollectingVisitor : VlangVisitor(), HighlightVisitor, Du
         }
     }
 
+    override fun visitComment(comment: PsiComment) {
+        val docComment = comment as? VlangDocComment ?: return
+        if (!docComment.isValidDoc()) return
+        val range = docComment.getOwnerNameRangeInElement() ?: return
+        highlight(docComment, VlangColor.COMMENT_REFERENCE, range.shiftRight(docComment.textOffset))
+    }
+
     private fun highlightLeaf(element: PsiElement): VlangColor? {
         val parent = element.parent as? VlangCompositeElement ?: return null
 
@@ -226,7 +236,7 @@ class VlangHighlightInfoCollectingVisitor : VlangVisitor(), HighlightVisitor, Du
         return when (element.text) {
             // pseudo keywords
             in listOf("_likely_", "_unlikely_", "sql", "map") -> VlangColor.KEYWORD
-            else                                               -> null
+            else                                              -> null
         }
     }
 
@@ -258,16 +268,20 @@ class VlangHighlightInfoCollectingVisitor : VlangVisitor(), HighlightVisitor, Du
         return if (element.isMutable()) ifMutable else ifNoMutable
     }
 
-    private fun highlightInfo(element: PsiElement?, attribute: TextAttributesKey) {
+    private fun highlightInfo(element: PsiElement?, attribute: TextAttributesKey, range: TextRange? = null) {
         if (element == null) return
         val builder = HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION)
-            .range(element).needsUpdateOnTyping(false).textAttributes(attribute)
+            .needsUpdateOnTyping(false)
+            .textAttributes(attribute)
+
+        if (range != null) builder.range(range) else builder.range(element)
+
         if (isUnitTestMode) builder.description(attribute.externalName)
         myHighlightInfoSink!!.accept(builder.createUnconditionally())
     }
 
-    private fun highlight(element: PsiElement?, color: VlangColor) {
-        highlightInfo(element, color.textAttributesKey)
+    private fun highlight(element: PsiElement?, color: VlangColor, range: TextRange? = null) {
+        highlightInfo(element, color.textAttributesKey, range)
     }
 
     companion object {

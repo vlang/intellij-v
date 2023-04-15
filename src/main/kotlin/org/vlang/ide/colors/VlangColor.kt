@@ -107,6 +107,7 @@ enum class VlangColor(readableName: @NlsContexts.AttributeDescriptor String, def
     DOC_EMPHASIS("Doc//Italic"),
     DOC_STRONG("Doc//Bold"),
     DOC_CODE("Doc//Code", Default.DOC_COMMENT_MARKUP),
+    COMMENT_REFERENCE("Doc//Comment reference", Default.DOC_COMMENT),
 
     // C Interop
     COMPILE_DIRECTIVE("C Interop//Compile directive", Default.METADATA),

@@ -48,6 +48,7 @@ enum <ENUM>PrivateTypes</ENUM> {
 	<ENUM_FIELD>complex</ENUM_FIELD>
 }
 
+// <COMMENT_REFERENCE>IPublic</COMMENT_REFERENCE> interface documentation
 pub interface <PUBLIC_INTERFACE>IPublic</PUBLIC_INTERFACE> {
 	<INTERFACE_METHOD>method</INTERFACE_METHOD>() <PUBLIC_TYPE_ALIAS>PublicCallback</PUBLIC_TYPE_ALIAS>
 }
