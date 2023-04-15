@@ -49,7 +49,11 @@ class VlangMissingFunctionNameInDocInspection : VlangBaseInspection() {
                 val comment = decl.getDocumentation() ?: return
                 val owner = comment.owner ?: return
                 val name = owner.name
-                val newCommentText = comment.text.replaceRange(0, 3, "// $name ")
+                val newCommentText = if (comment.text.length > 2) {
+                    comment.text.replaceRange(0, 3, "// $name ")
+                } else {
+                    "// $name"
+                }
                 val newComment = VlangElementFactory.createDocComment(project, newCommentText)
                 comment.replace(newComment)
             }
