@@ -28,3 +28,16 @@ fn main() {
 		println(param1)
 	}
 }
+
+fn foo(name string) string {
+	return $tmpl('./path.txt')
+}
+
+fn foo1(name string) {
+	tmpl := $tmpl('./path.txt')
+	println(tmpl)
+}
+
+fn foo2(name string) string {
+	return $vweb.html()
+}

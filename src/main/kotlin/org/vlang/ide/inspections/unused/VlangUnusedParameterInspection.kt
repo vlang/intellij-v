@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElementVisitor
 import com.intellij.psi.search.searches.ReferencesSearch
 import org.vlang.ide.inspections.VlangBaseInspection
 import org.vlang.ide.inspections.unused.VlangUnusedVariableInspection.Companion.RENAME_TO_UNDERSCORE_FIX
+import org.vlang.ide.inspections.unused.VlangUnusedVariableInspection.Companion.needCheck
 import org.vlang.lang.psi.*
 
 class VlangUnusedParameterInspection : VlangBaseInspection() {
@@ -43,6 +44,7 @@ class VlangUnusedParameterInspection : VlangBaseInspection() {
                 for (parameter in parameters) {
                     ProgressManager.checkCanceled()
                     if (parameter.isBlank()) continue
+                    if (!needCheck(parameter)) return
                     val identifier = parameter.getIdentifier() ?: continue
 
                     val search = ReferencesSearch.search(parameter, parameter.useScope)
@@ -55,6 +57,7 @@ class VlangUnusedParameterInspection : VlangBaseInspection() {
             override fun visitReceiver(receiver: VlangReceiver) {
                 super.visitReceiver(receiver)
                 if (receiver.isBlank()) return
+                if (!needCheck(receiver)) return
 
                 val search = ReferencesSearch.search(receiver, receiver.useScope)
                 if (search.findFirst() != null) return
