@@ -392,6 +392,9 @@ object DocumentationGenerator {
                         val nameLength = name?.length ?: 0
                         append("".padEnd(paramNameMaxWidth - nameLength))
                         append(" ")
+                        if (param.isVariadic) {
+                            append("...")
+                        }
                         append(param.type.toEx().generateDoc(this@generateDoc))
                     }
                 } + ","
@@ -418,6 +421,9 @@ object DocumentationGenerator {
             if (name != null) {
                 colorize(name, asIdentifier)
                 append(" ")
+            }
+            if (isVariadic) {
+                append("...")
             }
             append(type.toEx().generateDoc(this@generateDocForMethod))
         }

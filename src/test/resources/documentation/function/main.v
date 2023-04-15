@@ -47,3 +47,7 @@ fn /*caret*/foo9() (int, string) {
 fn /*caret*/foo10(mut /*caret*/a ...string) {
 
 }
+
+fn /*caret*/foo11(s int, /*caret*/a ...string) {
+
+}
