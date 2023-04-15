@@ -1448,6 +1448,7 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun getTypeInner(o: VlangConstDefinition, context: ResolveState?): VlangTypeEx? {
         val expr = o.expression ?: return null
+        if (expr.text == o.name) return null
         return getTypeInner(expr, context)
     }
 
