@@ -910,7 +910,7 @@ JsonArgumentList ::= '(' <<enterMode "PAR">> Type ','? ElementList? '...'? ','? 
 // <expr>[0..]
 // <expr>[..]
 left IndexOrSliceExpr ::= ('[' | '#[') IndexOrSliceInner ']' !identifier {
-  methods=[isSlice]
+  methods=[isSlice getExpression getRange getSliceStart getSliceEnd]
 }
 private IndexOrSliceInner ::= EmptySlice | ((SliceExprBody | IndexExprBody) '..'?)
 EmptySlice ::= '..' &']'

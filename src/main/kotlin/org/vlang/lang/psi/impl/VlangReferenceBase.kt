@@ -20,6 +20,7 @@ abstract class VlangReferenceBase<T : VlangReferenceExpressionBase>(element: T, 
         val LOCAL_RESOLVE = KeyWithDefaultValue.create("LOCAL_RESOLVE", false)
         val NOT_PROCESS_METHODS = KeyWithDefaultValue.create("NOT_PROCESS_METHODS", false)
         val NOT_PROCESS_EMBEDDED_DEFINITION = KeyWithDefaultValue.create("NOT_PROCESS_EMBEDDED_DEFINITION", false)
+        val PROCESS_PRIVATE_MEMBERS = KeyWithDefaultValue.create("PROCESS_PRIVATE_MEMBERS", false)
 
         @JvmStatic
         protected fun getPath(file: PsiFile?): String? {

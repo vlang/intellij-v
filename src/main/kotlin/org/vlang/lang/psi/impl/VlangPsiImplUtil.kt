@@ -12,6 +12,8 @@ import com.intellij.psi.impl.source.tree.LeafElement
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.util.*
+import com.intellij.refactoring.suggested.endOffset
+import com.intellij.refactoring.suggested.startOffset
 import org.vlang.configurations.VlangConfiguration
 import org.vlang.ide.codeInsight.VlangAttributesUtil
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
@@ -34,6 +36,7 @@ import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapAlias
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapArray
 import org.vlang.lang.sql.VlangSqlUtil
+import org.vlang.utils.childOfType
 import org.vlang.utils.inside
 import org.vlang.utils.parentNth
 import org.vlang.utils.stubOrPsiParentOfType
@@ -1204,6 +1207,49 @@ object VlangPsiImplUtil {
         return o.emptySlice != null ||
                 PsiTreeUtil.findSiblingForward(lbrack, VlangTypes.RANGE, false, null) != null ||
                 PsiTreeUtil.findSiblingForward(lbrack, VlangTypes.RANGE_EXPR, false, null) != null
+    }
+
+    @JvmStatic
+    fun getExpression(o: VlangIndexOrSliceExpr): PsiElement? {
+        return o.expressionList.firstOrNull()
+    }
+
+    @JvmStatic
+    fun getRange(o: VlangIndexOrSliceExpr): Pair<PsiElement?, PsiElement?>? {
+        if (o.emptySlice != null) return null to null
+
+        val rangeExpr = o.childOfType<VlangRangeExpr>()
+        if (rangeExpr != null) {
+            return rangeExpr.left to rangeExpr.right
+        }
+
+        val lbrack = o.lbrack ?: o.hashLbrack ?: return null
+        val rbrack = o.rbrack
+
+        // arr[..10]
+        val rangeVariant1 = lbrack.nextSibling
+        // arr[10..]
+        val rangeVariant2 = rbrack.prevSibling
+
+        if (rangeVariant1.textMatches("..")) {
+            // arr[..<10]
+            return null to rangeVariant2
+        } else if (rangeVariant2.textMatches("..")) {
+            // arr[10≤..]
+            return rangeVariant1 to null
+        }
+
+        return null
+    }
+
+    @JvmStatic
+    fun getSliceStart(o: VlangIndexOrSliceExpr): PsiElement? {
+        return getRange(o)?.first
+    }
+
+    @JvmStatic
+    fun getSliceEnd(o: VlangIndexOrSliceExpr): PsiElement? {
+        return getRange(o)?.second
     }
 
     @JvmStatic

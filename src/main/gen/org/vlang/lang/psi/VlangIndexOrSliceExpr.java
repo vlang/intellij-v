@@ -4,6 +4,7 @@ package org.vlang.lang.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import kotlin.Pair;
 
 public interface VlangIndexOrSliceExpr extends VlangExpression {
 
@@ -35,5 +36,17 @@ public interface VlangIndexOrSliceExpr extends VlangExpression {
   PsiElement getRbrack();
 
   boolean isSlice();
+
+  @Nullable
+  PsiElement getExpression();
+
+  @Nullable
+  Pair<PsiElement, PsiElement> getRange();
+
+  @Nullable
+  PsiElement getSliceStart();
+
+  @Nullable
+  PsiElement getSliceEnd();
 
 }
