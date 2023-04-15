@@ -30,6 +30,10 @@ class VlangDebuggerLanguageSupport : CidrDebuggerLanguageSupport() {
 
                 val parts = rawName.split("__")
                 val fixedName = parts.joinToString(".") {
+                    if (it.isEmpty()) {
+                        return@joinToString ""
+                    }
+
                     val firstCharIsUpperCase = it.first().isUpperCase()
                     var res = it
                     if (firstCharIsUpperCase) {

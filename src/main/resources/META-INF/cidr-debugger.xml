@@ -6,5 +6,7 @@
     <valueRendererExtension implementation="org.vlang.debugger.VlangValueRendererExtension"/>
     <localVariablesFilterHandler implementation="org.vlang.debugger.lang.VlangLocalVariablesFilterHandler"/>
     <valueRendererFactory implementation="org.vlang.debugger.VlangValueRendererFactory"/>
+    <editorsExtension language="vlang" implementationClass="org.vlang.debugger.lang.VlangEditorsExtension"/>
+    <backendConsoleInjectionHelper implementation="org.vlang.debugger.VlangBackendConsoleInjectionHelper"/>
   </extensions>
 </idea-plugin>

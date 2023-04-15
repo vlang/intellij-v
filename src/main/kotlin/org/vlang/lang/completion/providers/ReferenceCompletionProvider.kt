@@ -21,6 +21,7 @@ import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.*
 import org.vlang.lang.psi.impl.VlangReference.Companion.isLocalResolve
 import org.vlang.lang.psi.impl.VlangReferenceBase.Companion.LOCAL_RESOLVE
+import org.vlang.lang.psi.impl.VlangReferenceBase.Companion.PROCESS_PRIVATE_MEMBERS
 import org.vlang.lang.psi.types.VlangArrayTypeEx
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.isNullableEqual
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
@@ -205,7 +206,7 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
         private fun accept(e: PsiElement, state: ResolveState, file: VlangFile, forTypes: Boolean): Boolean {
             if (forTypes) {
                 if (e !is VlangNamedElement) return false
-                if (!e.isPublic() && !state.get(LOCAL_RESOLVE)) {
+                if (!e.isPublic() && !state.get(LOCAL_RESOLVE) && !state.get(PROCESS_PRIVATE_MEMBERS)) {
                     return false
                 }
 
@@ -253,6 +254,10 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
                 // forbid raw map completion
                 if (e is VlangStructDeclaration && e.name == "map") {
                     return false
+                }
+
+                if ((e is VlangMethodDeclaration || e is VlangFieldDefinition) && state.get(PROCESS_PRIVATE_MEMBERS)) {
+                    return true
                 }
 
                 return state.get(LOCAL_RESOLVE) || e.isPublic()

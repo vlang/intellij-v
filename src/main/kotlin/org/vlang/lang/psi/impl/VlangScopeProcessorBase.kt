@@ -9,6 +9,7 @@ abstract class VlangScopeProcessorBase(
     private val requestedNameElement: PsiElement,
     val origin: PsiElement,
     private val isForCompletion: Boolean,
+    private val isForCodeFragment: Boolean = false,
 ) : VlangScopeProcessor() {
 
     private val result = mutableSetOf<VlangNamedElement>()
@@ -50,4 +51,5 @@ abstract class VlangScopeProcessorBase(
     protected abstract fun crossOff(e: PsiElement): Boolean
 
     override fun isCompletion() = isForCompletion
+    override fun isCodeFragment() = isForCodeFragment
 }
