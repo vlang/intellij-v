@@ -434,6 +434,19 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
         value.accept(checker)
     }
 
+    override fun visitEnumType(enum: VlangEnumType) {
+        val identifier = enum.identifier ?: return
+        val fields = enum.fieldList
+        if (fields.isEmpty()) {
+            holder.newAnnotation(
+                HighlightSeverity.WARNING,
+                "Enum must have at least one field"
+            )
+                .range(identifier)
+                .create()
+        }
+    }
+
     companion object {
         class VlangReplaceItVariableWithIndex(element: PsiElement) : LocalQuickFixAndIntentionActionOnPsiElement(element) {
             override fun getFamilyName() = "Replace 'it' with 'index'"

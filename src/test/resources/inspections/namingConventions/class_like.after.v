@@ -3,9 +3,13 @@ module main
 struct Foo {}
 interface Ifoo {}
 union Ufoo {}
-enum Efoo {}
+enum Efoo {
+	red
+}
 
 struct f {}
 interface i {}
 union u {}
-enum e {}
+enum e {
+	red
+}

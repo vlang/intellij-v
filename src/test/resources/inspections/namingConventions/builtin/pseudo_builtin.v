@@ -14,11 +14,15 @@ fn (s string) __invalid_snake_case() {}
 struct foo {}
 interface ifoo {}
 union ufoo {}
-enum efoo {}
+enum efoo {
+	red
+}
 
 struct f {}
 interface i {}
 union u {}
-enum e {}
+enum e {
+	red
+}
 
 type mystring = string
