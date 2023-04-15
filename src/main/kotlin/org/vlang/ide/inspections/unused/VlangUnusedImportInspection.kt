@@ -14,7 +14,7 @@ import org.vlang.lang.psi.impl.imports.VlangImportOptimizer
 
 class VlangUnusedImportInspection : VlangBaseInspection() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
-        val file = holder.file as VlangFile
+        val file = holder.file as? VlangFile ?: return PsiElementVisitor.EMPTY_VISITOR
         val imports = file.getImports()
         val unusedImports = VlangImportOptimizer.collectUnusedImports(file, imports)
 

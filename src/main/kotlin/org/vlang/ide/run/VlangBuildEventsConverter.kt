@@ -46,9 +46,9 @@ class VlangBuildEventsConverter(private val ctx: VlangBuildContext) : BuildOutpu
     }
 
     private fun getMessageKind(line: String): MessageEvent.Kind = when {
-        line.contains("error")   -> MessageEvent.Kind.ERROR
-        line.contains("warning") -> MessageEvent.Kind.WARNING
-        else                     -> MessageEvent.Kind.SIMPLE
+        line.contains("error:")   -> MessageEvent.Kind.ERROR
+        line.contains("warning:") -> MessageEvent.Kind.WARNING
+        else                      -> MessageEvent.Kind.SIMPLE
     }
 
     private fun handleCompilerMessage(
@@ -116,7 +116,10 @@ class VlangBuildEventsConverter(private val ctx: VlangBuildContext) : BuildOutpu
         return FileMessageEventImpl(
             ctx.parentId,
             MessageEvent.Kind.ERROR,
-            VLANG_MESSAGE_GROUP, "C gen error", "Error while compiling generated C code. See full build log for details", FilePosition(ctx.workingDirectory.toFile(), 0, 0)
+            VLANG_MESSAGE_GROUP,
+            "C gen error",
+            "Error while compiling generated C code. See full build log for details",
+            FilePosition(ctx.workingDirectory.toFile(), 0, 0)
         )
     }
 
