@@ -150,8 +150,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         state: ResolveState,
     ): Boolean {
         val moduleName = importPath.qualifiedName
-        if (processModule(moduleName, processor, state)) return true
-        return false
+        return processModule(moduleName, processor, state)
     }
 
     private fun processModule(moduleName: String, processor: VlangScopeProcessor, state: ResolveState): Boolean {
@@ -243,14 +242,12 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             // so we just resolve it to UnknownCDeclaration struct
             if (typ.qualifiedName() == VlangStructTypeEx.UnknownCDeclarationStruct.qualifiedName()) {
                 if (isMethodRef && !processMethods(typ, processor, state.put(SEARCH_NAME, "unknown_method"), localResolve)) return false
-                if (!processNamedElements(
-                        processor,
-                        state.put(SEARCH_NAME, "unknown_field"),
-                        structType.fieldList,
-                        localResolve
-                    )
-                ) return false
-                return true
+                return processNamedElements(
+                    processor,
+                    state.put(SEARCH_NAME, "unknown_field"),
+                    structType.fieldList,
+                    localResolve
+                )
             }
 
             // If it is a call, then most likely it is a method call, but it
@@ -536,8 +533,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             return true
         }
 
-        if (!processStubFile("c_decl.v", processor, state.put(SEARCH_NAME, "UnknownCDeclaration"))) return false
-        return true
+        return processStubFile("c_decl.v", processor, state.put(SEARCH_NAME, "UnknownCDeclaration"))
     }
 
     private fun needResolveGenericParameterForMethod(parentMethod: VlangMethodDeclaration?): Boolean {
@@ -653,8 +649,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
     private fun processStubFile(name: String, processor: VlangScopeProcessor, state: ResolveState): Boolean {
         val file = stubsManager.findFile(name) ?: return true
-        if (!processFileEntities(file, processor, state, false)) return false
-        return true
+        return processFileEntities(file, processor, state, false)
     }
 
     // TODO: redone
@@ -757,8 +752,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
     private fun processCompileTimeConstants(processor: VlangScopeProcessor, state: ResolveState): Boolean {
         if (!VlangCodeInsightUtil.insideCompileTime(identifier)) return true
-        if (!processStubFile("compile_time_constants.v", processor, state)) return false
-        return true
+        return processStubFile("compile_time_constants.v", processor, state)
     }
 
     private fun processImportedModulesForCompletion(file: VlangFile, processor: VlangScopeProcessor, state: ResolveState): Boolean {
@@ -1061,9 +1055,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
         other as VlangReference
 
-        if (element != other.element) return false
-
-        return true
+        return element == other.element
     }
 
     override fun hashCode(): Int = element.hashCode()

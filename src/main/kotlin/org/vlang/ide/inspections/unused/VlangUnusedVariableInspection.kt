@@ -62,10 +62,7 @@ class VlangUnusedVariableInspection : VlangBaseInspection() {
                     .mapNotNull { it.expression?.text }
                     .any { it == "\$vweb.html" || it.startsWith("\$tmpl") }
 
-                if (anyReturnTemplate) {
-                    return true
-                }
-                return false
+                return anyReturnTemplate
             }
         }
     }

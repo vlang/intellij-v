@@ -107,11 +107,7 @@ object VlangCompletionUtil {
             return true
         }
 
-        if (parent is VlangStructType || parent is VlangEnumDeclaration || parent is VlangInterfaceType) {
-            return true
-        }
-
-        return false
+        return parent is VlangStructType || parent is VlangEnumDeclaration || parent is VlangInterfaceType
     }
 
     fun createModuleLookupElement(element: VlangFile): LookupElement? {

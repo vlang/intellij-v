@@ -51,9 +51,7 @@ class VlangSharedTypeEx(val inner: VlangTypeEx, anchor: PsiElement) : VlangResol
 
         other as VlangSharedTypeEx
 
-        if (inner != other.inner) return false
-
-        return true
+        return inner == other.inner
     }
 
     override fun hashCode(): Int = inner.hashCode() * 31

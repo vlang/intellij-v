@@ -91,8 +91,7 @@ class VlangModule(
 
     override fun isValid(): Boolean {
         if (!isValid || project.isDisposed) return false
-        if (!directory.isValid) return false
-        return true
+        return directory.isValid
     }
 
     override fun equals(other: Any?): Boolean {
@@ -102,9 +101,7 @@ class VlangModule(
         other as VlangModule
 
         if (name != other.name) return false
-        if (directory != other.directory) return false
-
-        return true
+        return directory == other.directory
     }
 
     override fun hashCode(): Int {

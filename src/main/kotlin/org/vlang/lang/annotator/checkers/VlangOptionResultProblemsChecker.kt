@@ -6,11 +6,9 @@ import com.intellij.psi.PsiElement
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.impl.VlangLangUtil
-import org.vlang.lang.psi.types.VlangAnyTypeEx
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangOptionTypeEx
 import org.vlang.lang.psi.types.VlangResultTypeEx
-import org.vlang.lang.psi.types.VlangUnknownTypeEx
 
 class VlangOptionResultProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(holder) {
     override fun visitOrBlockExpr(expr: VlangOrBlockExpr) {

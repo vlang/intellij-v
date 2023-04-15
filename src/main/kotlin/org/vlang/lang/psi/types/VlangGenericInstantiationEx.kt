@@ -83,9 +83,7 @@ class VlangGenericInstantiationEx(
         other as VlangGenericInstantiationEx
 
         if (inner != other.inner) return false
-        if (specialization != other.specialization) return false
-
-        return true
+        return specialization == other.specialization
     }
 
     override fun hashCode(): Int = inner.hashCode() * 31 + specialization.hashCode()

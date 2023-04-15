@@ -3,16 +3,13 @@ package org.vlang.lang
 import com.intellij.lang.ASTNode
 import com.intellij.lang.ParserDefinition
 import com.intellij.lang.ParserDefinition.SpaceRequirements
-import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.openapi.project.Project
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import org.vlang.debugger.VlangDebugInjectionListener
 import org.vlang.lang.VlangTypes.Factory
 import org.vlang.lang.doc.psi.impl.VlangDocCommentImpl
 import org.vlang.lang.lexer.VlangLexer
-import org.vlang.lang.psi.VlangDebuggerExpressionCodeFragment
 import org.vlang.lang.psi.VlangDocElementTypes
 import org.vlang.lang.psi.VlangFile
 import org.vlang.lang.psi.VlangTokenTypes

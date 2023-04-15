@@ -34,7 +34,7 @@ class VlangDebuggerLanguageSupport : CidrDebuggerLanguageSupport() {
                         return@joinToString ""
                     }
 
-                    val firstCharIsUpperCase = it.first().isUpperCase()
+                    val firstCharIsUpperCase = it.isNotEmpty() && it.first().isUpperCase()
                     var res = it
                     if (firstCharIsUpperCase) {
                         val indexOfUnderscore = it.indexOf('_')

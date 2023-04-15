@@ -8,7 +8,6 @@ import com.jetbrains.cidr.execution.debugger.backend.DebuggerCommandException
 import org.vlang.lang.psi.VlangFile
 import org.vlang.lang.psi.VlangStatement
 import org.vlang.lang.psi.impl.VlangElementFactory
-import java.lang.IllegalArgumentException
 
 class VlangExpressionTranspiler {
     fun transpile(project: Project, file: VirtualFile, offset: Int?, expr: String): String {

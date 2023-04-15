@@ -12,8 +12,6 @@ import com.intellij.psi.impl.source.tree.LeafElement
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.util.*
-import com.intellij.refactoring.suggested.endOffset
-import com.intellij.refactoring.suggested.startOffset
 import org.vlang.configurations.VlangConfiguration
 import org.vlang.ide.codeInsight.VlangAttributesUtil
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
@@ -694,11 +692,7 @@ object VlangPsiImplUtil {
     private fun isMutableMember(member: VlangNamedElement): Boolean {
         val group = member.parentOfType<VlangMemberModifiersOwner>()
         val modifiers = group?.memberModifierList
-        val withMutModifier = modifiers?.any { it.text == "mut" } ?: false
-        if (withMutModifier) {
-            return true
-        }
-        return false
+        return modifiers?.any { it.text == "mut" } ?: false
     }
 
     @JvmStatic
@@ -2405,11 +2399,7 @@ object VlangPsiImplUtil {
 
     fun processSignatureOwner(o: VlangSignatureOwner, processor: VlangScopeProcessorBase): Boolean {
         val signature = o.getSignature() ?: return true
-        if (!processParameters(processor, signature.parameters)) {
-            return false
-        }
-
-        return true
+        return processParameters(processor, signature.parameters)
     }
 
     private fun processParameters(processor: VlangScopeProcessorBase, parameters: VlangParameters): Boolean {

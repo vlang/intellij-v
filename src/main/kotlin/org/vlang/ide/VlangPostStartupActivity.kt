@@ -2,7 +2,6 @@ package org.vlang.ide
 
 import com.intellij.ide.BrowserUtil
 import com.intellij.ide.plugins.InstalledPluginsState
-import com.intellij.ide.plugins.PluginManager
 import com.intellij.ide.plugins.PluginManagerCore
 import com.intellij.ide.util.PropertiesComponent
 import com.intellij.openapi.extensions.PluginId

@@ -58,9 +58,7 @@ class VlangFieldNameReference(element: VlangReferenceExpressionBase) :
         val originFile = element.containingFile as VlangFile
         val localResolve = typeFile == null || VlangReference.isLocalResolve(typeFile, originFile)
 
-        if (!processStructType(fieldProcessor, typeToProcess, localResolve)) return false
-
-        return true
+        return processStructType(fieldProcessor, typeToProcess, localResolve)
     }
 
     private fun processStructType(fieldProcessor: VlangScopeProcessor, type: VlangTypeEx?, localResolve: Boolean): Boolean {

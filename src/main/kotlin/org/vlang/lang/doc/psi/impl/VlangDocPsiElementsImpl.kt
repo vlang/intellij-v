@@ -1,6 +1,5 @@
 package org.vlang.lang.doc.psi.impl
 
-import com.intellij.openapi.util.TextRange
 import com.intellij.psi.LiteralTextEscaper
 import com.intellij.psi.PsiLanguageInjectionHost
 import com.intellij.psi.PsiWhiteSpace

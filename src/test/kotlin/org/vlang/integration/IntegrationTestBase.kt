@@ -1,7 +1,6 @@
 package org.vlang.integration
 
 import com.intellij.codeInsight.completion.CompletionType
-import com.intellij.codeInsight.generation.ImplementMethodsHandler
 import com.intellij.codeInsight.lookup.Lookup
 import com.intellij.openapi.application.QueryExecutorBase
 import com.intellij.openapi.application.WriteAction

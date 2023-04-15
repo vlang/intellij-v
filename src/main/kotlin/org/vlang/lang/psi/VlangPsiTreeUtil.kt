@@ -8,9 +8,7 @@ import com.intellij.psi.StubBasedPsiElement
 import com.intellij.psi.impl.source.tree.TreeUtil
 import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.psi.util.PsiUtilCore
 import com.intellij.util.SmartList
-import com.intellij.util.containers.ContainerUtil
 
 object VlangPsiTreeUtil {
     @JvmStatic

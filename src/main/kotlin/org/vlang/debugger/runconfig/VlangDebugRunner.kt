@@ -6,7 +6,6 @@ import com.intellij.execution.executors.DefaultDebugExecutor
 import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.execution.runners.ProgramRunner
 import com.intellij.execution.ui.RunContentDescriptor
-import com.intellij.task.*
 import com.intellij.util.PlatformUtils
 import com.intellij.util.execution.ParametersListUtil
 import org.jetbrains.concurrency.resolvedPromise

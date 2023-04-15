@@ -28,9 +28,7 @@ class VlangAdditionalLibraryRootsProvider : AdditionalLibraryRootsProvider() {
             other as LibraryBase
 
             if (name != other.name) return false
-            if (sourceRoot != other.sourceRoot) return false
-
-            return true
+            return sourceRoot == other.sourceRoot
         }
 
         override fun hashCode() = sourceRoot.hashCode()

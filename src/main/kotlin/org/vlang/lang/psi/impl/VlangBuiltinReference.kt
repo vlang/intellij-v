@@ -45,8 +45,7 @@ class VlangBuiltinReference<T : PsiElement>(element: T) : VlangCachedReference<T
     private fun processStubs(processor: VlangScopeProcessor, state: ResolveState): Boolean {
         val stdlib = VlangConfiguration.getInstance(myElement.project).stubsLocation ?: return true
         val psiManager = PsiManager.getInstance(myElement.project)
-        if (!processStubFile("builtin_compile_time.v", stdlib, psiManager, processor, state)) return false
-        return true
+        return processStubFile("builtin_compile_time.v", stdlib, psiManager, processor, state)
     }
 
     private fun processStubFile(
@@ -59,17 +58,14 @@ class VlangBuiltinReference<T : PsiElement>(element: T) : VlangCachedReference<T
         val compileTimeFile = stdlib.findChild(name) ?: return true
         val compileTimePsiFile = psiManager.findFile(compileTimeFile) as? VlangFile ?: return true
 
-        if (!VlangPsiImplUtil.processNamedElements(
-                processor,
-                state,
-                compileTimePsiFile.getFunctions(),
-                Conditions.alwaysTrue(),
-                localResolve = false,
-                checkContainingFile = false
-            )
-        ) return false
-
-        return true
+        return VlangPsiImplUtil.processNamedElements(
+            processor,
+            state,
+            compileTimePsiFile.getFunctions(),
+            Conditions.alwaysTrue(),
+            localResolve = false,
+            checkContainingFile = false
+        )
     }
 
     private fun createContextOnElement(element: PsiElement): ResolveState {
