@@ -26,7 +26,14 @@ class VlangMissingFunctionNameInDocInspection : VlangBaseInspection() {
 
                 val name = owner.name
                 val commentText = comment.text
-                val firstWord = commentText.removePrefix("//").trim().substringBefore(" ")
+
+                val preparedCommentText = commentText.removePrefix("//").trim()
+                val endOfFirstWord = preparedCommentText.indexOfFirst { it.isWhitespace() || it == '\n' }
+                val firstWord = if (endOfFirstWord != -1) {
+                    preparedCommentText.substring(0, endOfFirstWord).trim()
+                } else {
+                    preparedCommentText
+                }
                 val identifier = owner.getIdentifier() ?: return
                 if (name != firstWord) {
                     holder.registerProblem(
