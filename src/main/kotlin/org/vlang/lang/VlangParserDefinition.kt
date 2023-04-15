@@ -30,31 +30,7 @@ class VlangParserDefinition : ParserDefinition {
 
     override fun getFileNodeType() = VlangFileElementType.INSTANCE
 
-    override fun createFile(viewProvider: FileViewProvider): PsiFile {
-        val default = { VlangFile(viewProvider) }
-
-        val project = viewProvider.manager.project
-        val injectionHost = InjectedLanguageManager.getInstance(project).getInjectionHost(viewProvider)
-
-        if (injectionHost != null) {
-            // this class is contained in clion.jar, so it cannot be used inside `is` type check
-            if (injectionHost.javaClass.simpleName != "GDBExpressionPlaceholder") {
-                return default()
-            }
-
-            val injectionListener = project.messageBus.syncPublisher(VlangDebugInjectionListener.INJECTION_TOPIC)
-            val contextResult = VlangDebugInjectionListener.DebugContext()
-            injectionListener.evalDebugContext(injectionHost, contextResult)
-            val context = contextResult.element ?: return default()
-
-            val fragment = VlangDebuggerExpressionCodeFragment(viewProvider, context)
-            injectionListener.didInject(injectionHost)
-
-            return fragment
-        }
-
-        return default()
-    }
+    override fun createFile(viewProvider: FileViewProvider): PsiFile = VlangFile(viewProvider)
 
     override fun spaceExistenceTypeBetweenTokens(left: ASTNode, right: ASTNode) = SpaceRequirements.MAY
 

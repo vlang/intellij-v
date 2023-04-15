@@ -15,7 +15,7 @@ class VlangAccessingPrivateSymbolInspection : VlangBaseInspection() {
                 super.visitReferenceExpression(o)
 
                 val containingFile = o.containingFile as? VlangFile ?: return
-                if (containingFile.isTestFile() || containingFile.isTranslatedFile()) {
+                if (containingFile.isTestFile() || containingFile.isTranslatedFile() || containingFile is VlangCodeFragment) {
                     return
                 }
 

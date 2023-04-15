@@ -3,7 +3,6 @@ package org.vlang.debugger.v2c
 import org.vlang.ide.codeInsight.VlangCodeInsightUtil
 import org.vlang.lang.psi.*
 import org.vlang.lang.psi.types.*
-import java.lang.IllegalArgumentException
 
 class VlangExpressionEvaluator : VlangVisitor() {
     private var toPredefine = false
@@ -32,8 +31,12 @@ class VlangExpressionEvaluator : VlangVisitor() {
 
             val qualifierType = qualifier.getType(null)
 
-            // mutable parameters are always pointers
-            if (qualifierType is VlangPointerTypeEx || (resolvedQualifier is VlangParamDefinition && resolvedQualifier.isMutable())) {
+            val isPointer = qualifierType is VlangPointerTypeEx ||
+                    // mutable parameters and receivers are always pointers
+                    (resolvedQualifier is VlangParamDefinition && resolvedQualifier.isMutable()) ||
+                    (resolvedQualifier is VlangReceiver && resolvedQualifier.isMutable())
+
+            if (isPointer) {
                 append("->")
             } else {
                 append(".")
@@ -78,15 +81,30 @@ class VlangExpressionEvaluator : VlangVisitor() {
         }
 
         if (called is VlangMethodDeclaration) {
-            val fqn = called.getQualifiedName()?.toCname(true) ?: called.name
-            if (fqn != null) {
-                append(fqn)
+            if (called.getModuleName() == "stubs") {
+                val qualifierType = qualifier?.getType(null)
+                append(qualifierType?.toCname() + "_str")
+            } else {
+                val fqn = called.getQualifiedName()?.toCname(true) ?: called.name
+                if (fqn != null) {
+                    append(fqn)
+                }
             }
         }
 
         append("(")
 
         if (qualifier != null) {
+            if (called is VlangMethodDeclaration) {
+                val receiverByPointer = called.receiverType is VlangPointerType || called.receiver.isMutable()
+                val qualifierType = qualifier.getType(null)
+                val qualifierTypeIsPointer = qualifierType is VlangPointerTypeEx
+
+                if (!receiverByPointer && qualifierTypeIsPointer) {
+                    append("*")
+                }
+            }
+
             qualifier.accept(this)
 
             if (args.isNotEmpty()) {
@@ -229,8 +247,16 @@ class VlangExpressionEvaluator : VlangVisitor() {
     }
 
     private fun String.toCname(isMethod: Boolean = false): String {
-        return this.removePrefix("builtin.")
-            .replace(".", if (isMethod) "_" else "__")
+        val name = removePrefix("builtin.")
+        if (isMethod) {
+            val parts = name.split(".")
+            if (parts.size == 2) {
+                return parts.joinToString("_")
+            }
+            return parts.subList(0, parts.size - 1).joinToString("__") + "_" + parts.last()
+        }
+
+        return name.replace(".", "__")
     }
 
     private fun createTmpVar() = "tmp${tmpVarCounter++}"

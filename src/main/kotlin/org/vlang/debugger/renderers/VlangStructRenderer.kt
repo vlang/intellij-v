@@ -67,10 +67,9 @@ object VlangStructRenderer : VlangValueRenderer() {
     }
 
     private fun enoughSimpleMethod(method: VlangMethodDeclaration): Boolean {
-        val body = method.getBlock() ?: return false
+        val body = runReadAction { method.getBlock() } ?: return false
         val statements = body.statementList
-        if (statements.size > 3) return false
-        return true
+        return statements.size <= 3
     }
 
     private fun highlightPointer(value: VlangValue): LLValueData = processPointer(value) ?: value.data
