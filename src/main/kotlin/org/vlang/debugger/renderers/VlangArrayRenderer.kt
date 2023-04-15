@@ -39,10 +39,19 @@ object VlangArrayRenderer : VlangValueRenderer() {
         val data = value["data"]
         val dataAddress = data.llValue.address?.toString(16)
 
+        var elementIsPointer = false
+        var elementType = elementTypeRaw
+        if (elementType.endsWith("_ptr")) {
+            elementType = elementType.removeSuffix("_ptr")
+            elementIsPointer = true
+        }
+
+        val pointer = if (elementIsPointer) "*" else ""
+
         if (dataAddress == null) {
             val elements = (0 until len)
                 .asSequence()
-                .mapIndexed { index, _ -> value.context.evaluate("(($elementTypeRaw*)(${value.llValue.name}.data))[$index]") }
+                .mapIndexed { index, _ -> value.context.evaluate("(($elementType*$pointer)(${value.llValue.name}.data))[$index]") }
                 .mapIndexed { index, it -> it.withName("$index") }
                 .map { it.withContext(value.context) }
                 .toList()
@@ -52,15 +61,6 @@ object VlangArrayRenderer : VlangValueRenderer() {
                 false,
             )
         }
-
-        var elementIsPointer = false
-        var elementType = elementTypeRaw
-        if (elementType.endsWith("_ptr")) {
-            elementType = elementType.removeSuffix("_ptr")
-            elementIsPointer = true
-        }
-
-        val pointer = if (elementIsPointer) "*" else ""
 
         // cast memory to fixed size array of elementType
         val array = value.evaluate("($pointer($elementType(*$pointer)[$len])(*(i64*)0x$dataAddress))")

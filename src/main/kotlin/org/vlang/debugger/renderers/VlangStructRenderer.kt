@@ -34,13 +34,19 @@ object VlangStructRenderer : VlangValueRenderer() {
             return highlightPointer(value)
         }
         if (klass == null) return highlightPointer(value)
+
+        val data = value.data
+        if (data.isNullPointer) {
+            return highlightPointer(value)
+        }
+
         val name = runReadAction { klass?.getQualifiedName() } ?: return highlightPointer(value)
         val cname = VlangCTypeParser.toCName(name)
         val strMethodName = "${cname}_str"
 
         val type = runReadAction { klass!!.getType(null) } as? VlangStructTypeEx ?: return highlightPointer(value)
         val method = runReadAction { type.findMethod(value.project, "str") } ?: return highlightPointer(value)
-        if (!enoughSimpleMethod(method)) return value.data
+        if (!enoughSimpleMethod(method)) return highlightPointer(value)
 
         val isMutable = runReadAction { method.isMutable }
         // skip mutable methods because they can change the value
