@@ -21,6 +21,11 @@ class VlangOptionResultProblemsChecker(holder: AnnotationHolder) : VlangCheckerB
             return
         }
 
+        // sql db { ... } or {} - is valid
+        if (leftExpr is VlangSqlExpression) {
+            return
+        }
+
         // <-ch or {} - is valid
         if (expr.parent is VlangUnaryExpr && (expr.parent as VlangUnaryExpr).sendChannel != null) {
             return
@@ -45,6 +50,11 @@ class VlangOptionResultProblemsChecker(holder: AnnotationHolder) : VlangCheckerB
 
         // a[10] or {} - is valid
         if (rightExpr is VlangIndexOrSliceExpr) {
+            return
+        }
+
+        // sql db { ... } or {} - is valid
+        if (rightExpr is VlangSqlExpression) {
             return
         }
 

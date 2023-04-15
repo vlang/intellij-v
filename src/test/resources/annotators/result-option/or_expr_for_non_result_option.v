@@ -19,3 +19,9 @@ opt() or {}
 res() or {}
 foo1.name <error descr="Left expression of 'or' operator must be 'Option' or 'Result' type or '<-chan' or 'arr[i]' expression">or</error> {}
 foo1.surname or {}
+
+sql db {
+
+} or {
+
+}
