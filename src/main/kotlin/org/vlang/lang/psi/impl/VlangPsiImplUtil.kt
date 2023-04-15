@@ -1387,24 +1387,10 @@ object VlangPsiImplUtil {
             val table = tableRef.typeReferenceExpression.resolve() as? VlangNamedElement ?: return null
             val type = table.getType(context) ?: return null
 
-            val limitClause = lastStatement.sqlLimitClause
-            if (limitClause != null && limitClause.expression.text == "1") {
-                return type
-            }
-
-            val whereClause = lastStatement.sqlWhereClause
-            if (whereClause != null) {
-                val condition = whereClause.expression
-                if (condition is VlangConditionalExpr && condition.eq != null) {
-                    val left = condition.expressionList.firstOrNull() as? VlangReferenceExpression
-                    val resolved = left?.resolve()
-                    if (resolved is VlangFieldDefinition && resolved.isPrimary) {
-                        return type
-                    }
-                }
-            }
-
-            return VlangArrayTypeEx(type, table)
+            return VlangResultTypeEx(
+                VlangArrayTypeEx(type, table),
+                table
+            )
         }
         return null
     }

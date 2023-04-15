@@ -24,6 +24,11 @@ import org.vlang.utils.inside
 class VlangRawOptionOrResultTypeUsedInspection : VlangBaseInspection() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
         return object : VlangVisitor() {
+            override fun visitSqlExpression(sql: VlangSqlExpression) {
+                val type = sql.getType(null) ?: return
+                checkType(sql, type)
+            }
+
             override fun visitCallExpr(call: VlangCallExpr) {
                 super.visitCallExpr(call)
 
