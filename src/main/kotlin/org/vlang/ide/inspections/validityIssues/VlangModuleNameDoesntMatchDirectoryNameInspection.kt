@@ -22,7 +22,7 @@ class VlangModuleNameDoesntMatchDirectoryNameInspection : VlangBaseInspection() 
                 // skip modules in root dir
                 if (containingDirectory.virtualFile == projectRoot) return
 
-                val moduleName = module.name
+                val moduleName = module.name.removePrefix("@")
                 if (moduleName == "main" || moduleName == "builtin") return
 
                 val directoryName = containingDirectory.name
