@@ -1,5 +1,38 @@
 # IntelliJ V Changelog
 
+## [Unreleased]
+
+## [0.0.1-beta.4] - 17.04.2023
+
+### Added
+
+- Added initial debugger expression evaluation
+- Added highlighting elements in doc comments
+- Added `...` in Quick Documentation for vararg parameters
+- Added warning for enum without fields
+
+### Changed
+
+- Now rename of element will also rename it name in doc comment
+- Don't highlight parameters and receivers as unused in functions with `$tmpl` call
+- Updated ORM handling for latest V changes
+- Allow `@name` in module declaration
+- Now, if the module name is a keyword, then plugin create a file with a name starting with "@"
+
+### Improved
+
+- Pretty printers for array and structs in some cases
+- Handling project with **v.mod** in sub folders
+
+### Fixed
+
+- `Fill all fields...` now uses first enum value as default value
+- Several exceptions in different cases
+- Missing Function name quickfix for empty comment
+- False positive for Missing Function name inspection with multiline comment
+- Type inference indexing of map pass by reference
+- Build events parser
+
 ## [0.0.1-beta.3-231-EAP] - 06.03.2023
 
 ### Added
