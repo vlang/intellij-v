@@ -10,6 +10,9 @@
 - Added highlighting elements in doc comments
 - Added `...` in Quick Documentation for vararg parameters
 - Added warning for enum without fields
+- Added support for new `index` variable inside array initialization and deprecated `it` variable (with quick fix)
+- Added documentation for `$option`, `$int` etc.
+- Add notification about new version
 
 ### Changed
 
@@ -18,11 +21,23 @@
 - Updated ORM handling for latest V changes
 - Allow `@name` in module declaration
 - Now, if the module name is a keyword, then plugin create a file with a name starting with "@"
+- Check `v fmt` checkbox in commit dialog by default
+- Place code vision on right side
+- Don't show generated `defer` variables in debugger
 
 ### Improved
 
 - Pretty printers for array and structs in some cases
 - Handling project with **v.mod** in sub folders
+- Naming convention inspection now checks variable names as well (thank you @saturn4er!)
+- In debugger, now `NULL` displays as `nil`
+- Values (numbers, strings, pointers) now highlight in debugger
+- Function types now displayed in more readable way in debugger
+- Enums with alignment now also displayed in debugger in correct way
+- On Windows primitive types also displayed as `u32`/`i32`/etc. instead of `int` or `unsigned` in debugger
+- Support for maps and arrays with pointer type values in debugger
+- Don't step into some generated functions when debug
+- Add name and address to pretty printer for interfaces in debugger
 
 ### Fixed
 
@@ -32,6 +47,11 @@
 - False positive for Missing Function name inspection with multiline comment
 - Type inference indexing of map pass by reference
 - Build events parser
+- Struct init parsing inside `for` without last statement
+- Module name inspection now not warn about root module name
+- Don't show completion variants when type literal value like `100`
+- Don't warn about count arguments for unknown C methods/functions
+- Bug with `str()` call in debugger for `strings.Builder`
 
 ## [0.0.1-beta.3-231-EAP] - 06.03.2023
 
@@ -121,7 +141,7 @@
     - when regenerating interface methods, be aware that `mut x Foo` may also implement an interface method that is not
       mutable and same for fields
     - fixed generation of types for fields
-- Fixed `err` variable resolving inside a nested if inside an if guard in an `else` block
+- Fixed `err` variable resolving inside a nested if inside an `if` guard in an `else` block
 - Fixed enum field resolving for struct init with `...var`
 - Fixed `err` resolving inside call expr with `or` block
 - Fixed `it` resolving if it used in inner if expression
