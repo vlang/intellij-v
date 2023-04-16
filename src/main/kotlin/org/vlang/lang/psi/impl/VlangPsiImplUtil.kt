@@ -33,6 +33,7 @@ import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.isGeneric
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapAlias
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapArray
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapPointer
 import org.vlang.lang.sql.VlangSqlUtil
 import org.vlang.utils.childOfType
 import org.vlang.utils.inside
@@ -1645,21 +1646,18 @@ object VlangPsiImplUtil {
         // <int_array>[1] -> int
         if (expr is VlangIndexOrSliceExpr) {
             val indexExpr = expr.expressionList.firstOrNull() ?: return null
-            val indexType = indexExpr.getType(context) ?: return null
+            val indexType = indexExpr.getType(context)?.unwrapPointer()?.unwrapAlias() ?: return null
 
             // [type, type][0..1] -> type[]
             if (expr.isSlice) {
                 if (indexType is VlangFixedSizeArrayTypeEx) {
+                    // [3]int -> []int
                     return VlangArrayTypeEx(indexType.inner, indexType.anchor()!!)
                 }
                 return indexType
             }
 
-            return if (indexType is VlangAliasTypeEx) {
-                inferTypeForIndexOrSlice(indexType.inner)
-            } else {
-                inferTypeForIndexOrSlice(indexType)
-            }
+            return inferTypeForIndexOrSlice(indexType)
         }
 
         // type{...} -> type
