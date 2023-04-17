@@ -47,6 +47,7 @@ class VlangPostStartupActivity : StartupActivity {
             // ignore
         }
 
+        showVoscaNotification()
         checkUpdates(project)
 
         invokeLater {
@@ -67,6 +68,30 @@ class VlangPostStartupActivity : StartupActivity {
 
             VlangKnownToolchainsState.getInstance().knownToolchains = toolchainCandidates.toSet()
             return toolchainCandidates
+        }
+
+        private fun showVoscaNotification() {
+            val key = "vosca.notification.shown"
+            val isShown = PropertiesComponent.getInstance().getBoolean(key)
+            if (isShown) {
+                return
+            }
+
+            VlangNotification("IntelliJ V is now a VOCSA project!")
+                .withActions(
+                    VlangNotification.Action("Learn more about VOSCA...") { _, notification ->
+                        BrowserUtil.browse("https://blog.vosca.dev/introducing-association/")
+                        PropertiesComponent.getInstance().setValue(key, true)
+                        notification.expire()
+                    }
+                )
+                .withActions(
+                    VlangNotification.Action("Don't show again") { _, notification ->
+                        PropertiesComponent.getInstance().setValue(key, true)
+                        notification.expire()
+                    }
+                )
+                .show(null)
         }
 
         private fun checkUpdates(project: Project) {
