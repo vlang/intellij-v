@@ -84,7 +84,7 @@ pub fn $embed_file(path string, compression_type CompressionType) EmbedFileData
 // code into the current function. That means that the template automatically has
 // access to that function's entire environment (like variables).
 //
-// See [Template documentation](https://github.com/vlang/v/blob/master/vlib/v/TEMPLATES.md) for more details.
+// See [Template documentation](https://docs.vosca.dev/concepts/templates/overview.html) for more details.
 //
 // Example:
 // ```
