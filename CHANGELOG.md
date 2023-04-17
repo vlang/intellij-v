@@ -52,6 +52,7 @@
 - Don't show completion variants when type literal value like `100`
 - Don't warn about count arguments for unknown C methods/functions
 - Bug with `str()` call in debugger for `strings.Builder`
+- Case for compile-time constants like `$Option` or `$Int`
 
 ## [0.0.1-beta.3-231-EAP] - 06.03.2023
 

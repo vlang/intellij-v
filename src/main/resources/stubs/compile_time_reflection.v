@@ -5,137 +5,137 @@ module stubs
 
 // This file contains definitions of compile time reflection.
 
-// $Int describes any integer type.
+// $int describes any integer type.
 //
 // Example:
 // ```
 // $for f in Test.fields {
-//   $if f.typ is $Int {
+//   $if f.typ is $int {
 //     println(f.name)
 //   }
 // }
 // ```
-pub const $Int = TypeInfo{}
+pub const $int = TypeInfo{}
 
-// $Float describes any float type.
+// $float describes any float type.
 //
 // Example:
 // ```
 // $for f in Test.fields {
-//   $if f.typ is $Float {
+//   $if f.typ is $float {
 //     println(f.name)
 //   }
 // }
 // ```
-pub const $Float = TypeInfo{}
+pub const $float = TypeInfo{}
 
-// $Array describes any array type.
+// $array describes any array type.
 //
 // Example:
 // ```
 // $for f in Test.fields {
-//   $if f.typ is $Array {
+//   $if f.typ is $array {
 //     println(f.name)
 //   }
 // }
 // ```
-pub const $Array = TypeInfo{}
+pub const $array = TypeInfo{}
 
-// $Map describes any map type.
+// $map describes any map type.
 //
 // Example:
 // ```
 // $for f in Test.fields {
-//   $if f.typ is $Map {
+//   $if f.typ is $map {
 //     println(f.name)
 //   }
 // }
 // ```
-pub const $Map = TypeInfo{}
+pub const $map = TypeInfo{}
 
-// $Struct describes any struct type.
+// $struct describes any struct type.
 //
 // Example:
 // ```
 // $for f in Test.fields {
-//   $if f.typ is $Struct {
+//   $if f.typ is $struct {
 //     println(f.name)
 //   }
 // }
 // ```
-pub const $Struct = TypeInfo{}
+pub const $struct = TypeInfo{}
 
-// $Interface describes any interface type.
+// $interface describes any interface type.
 //
 // Example:
 // ```
 // $for f in Test.fields {
-//   $if f.typ is $Interface {
+//   $if f.typ is $interface {
 //     println(f.name)
 //   }
 // }
 // ```
-pub const $Interface = TypeInfo{}
+pub const $interface = TypeInfo{}
 
-// $Enum describes any enum type.
+// $enum describes any enum type.
 //
 // Example:
 // ```
 // $for f in Test.fields {
-//   $if f.typ is $Enum {
+//   $if f.typ is $enum {
 //     println(f.name)
 //   }
 // }
 // ```
-pub const $Enum = TypeInfo{}
+pub const $enum = TypeInfo{}
 
-// $Alias describes any alias type.
+// $alias describes any alias type.
 //
 // Example:
 // ```
 // $for f in Test.fields {
-//   $if f.typ is $Alias {
+//   $if f.typ is $alias {
 //     println(f.name)
 //   }
 // }
 // ```
-pub const $Alias = TypeInfo{}
+pub const $alias = TypeInfo{}
 
-// $Sumtype describes any sumtype type.
+// $sumtype describes any sumtype type.
 //
 // Example:
 // ```
 // $for f in Test.fields {
-//   $if f.typ is $Sumtype {
+//   $if f.typ is $sumtype {
 //     println(f.name)
 //   }
 // }
 // ```
-pub const $Sumtype = TypeInfo{}
+pub const $sumtype = TypeInfo{}
 
-// $Function describes any function type.
+// $function describes any function type.
 //
 // Example:
 // ```
 // $for f in Test.fields {
-//   $if f.typ is $Function {
+//   $if f.typ is $function {
 //     println(f.name)
 //   }
 // }
 // ```
-pub const $Function = TypeInfo{}
+pub const $function = TypeInfo{}
 
-// $Option describes any option type.
+// $option describes any option type.
 //
 // Example:
 // ```
 // $for f in Test.fields {
-//   $if f.typ is $Option {
+//   $if f.typ is $option {
 //     println(f.name)
 //   }
 // }
 // ```
-pub const $Option = TypeInfo{}
+pub const $option = TypeInfo{}
 
 struct CompileTimeTypeInfo {
 pub:
