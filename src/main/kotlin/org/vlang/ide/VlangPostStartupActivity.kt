@@ -77,7 +77,7 @@ class VlangPostStartupActivity : StartupActivity {
                 return
             }
 
-            VlangNotification("IntelliJ V is now a VOCSA project!")
+            VlangNotification("IntelliJ V is now a VOSCA project!")
                 .withActions(
                     VlangNotification.Action("Learn more about VOSCA...") { _, notification ->
                         BrowserUtil.browse("https://blog.vosca.dev/introducing-association/")
