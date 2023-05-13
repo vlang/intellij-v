@@ -24,6 +24,28 @@ import org.vlang.lang.psi.types.*
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 
 class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(holder) {
+    override fun visitCallExpr(call: VlangCallExpr) {
+        val resolved = call.resolve() as? VlangSignatureOwner ?: return
+        val parameters = resolved.getSignature()?.parameters?.paramDefinitionList ?: return
+        val arguments = call.argumentList.elementList
+
+        for (i in 0 until minOf(parameters.size, arguments.size)) {
+            val parameter = parameters[i]
+            if (parameter.isMutable()) {
+                val argument = arguments[i].value?.expression
+                if (argument != null && argument is VlangReferenceExpression && argument !is VlangMutExpression) {
+                    holder.newAnnotation(
+                        HighlightSeverity.ERROR,
+                        "Use `mut ${argument.text}` instead of `${argument.text}` to pass a mutable argument"
+                    )
+                        .withFix(WrapExpressionWithMutQuickFix)
+                        .range(argument)
+                        .create()
+                }
+            }
+        }
+    }
+
     override fun visitContinueStatement(stmt: VlangContinueStatement) {
         val owner = VlangLangUtil.getContinueStatementOwner(stmt)
         if (owner == null) {
@@ -565,6 +587,21 @@ class VlangCommonProblemsChecker(holder: AnnotationHolder) : VlangCheckerBase(ho
                     editor.caretModel.moveToOffset(offset)
                     editor.selectionModel.removeSelection()
                 }
+            }
+        }
+
+        object WrapExpressionWithMutQuickFix : BaseIntentionAction() {
+            override fun startInWriteAction(): Boolean = true
+            override fun getText(): String = "Wrap expression with `mut`"
+            override fun getFamilyName(): String = "Wrap expression with `mut`"
+            override fun isAvailable(project: Project, editor: Editor?, file: PsiFile?): Boolean = true
+
+            override fun invoke(project: Project, editor: Editor?, file: PsiFile?) {
+                val element = file?.findElementAt(editor?.caretModel?.offset ?: 0) ?: return
+                val elem = element.parentOfType<VlangElement>() ?: return
+                val expr = elem.value?.expression ?: return
+                val mutExpr = VlangElementFactory.createMutExpression(expr.project, expr.text)
+                expr.replace(mutExpr)
             }
         }
     }
