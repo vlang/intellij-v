@@ -16,6 +16,7 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 import com.intellij.util.CommonProcessors
 import org.intellij.lang.annotations.Language
+import org.vlang.ide.inspections.VlangBaseInspection
 import org.vlang.ide.refactoring.VlangImplementMethodsHandler
 import org.vlang.lang.psi.VlangInterfaceDeclaration
 import org.vlang.lang.psi.VlangNamedElement
@@ -220,6 +221,14 @@ abstract class IntegrationTestBase : BasePlatformTestCase() {
 
         fun finishCompletion() {
             myFixture.finishLookup(Lookup.NORMAL_SELECT_CHAR)
+        }
+
+        fun enableInspection(inspectionToEnable: VlangBaseInspection) {
+            myFixture.enableInspections(inspectionToEnable)
+        }
+
+        fun testInspections() {
+            myFixture.testHighlighting(true, false, true)
         }
 
         companion object {
