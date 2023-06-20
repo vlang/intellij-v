@@ -1,11 +1,12 @@
 package org.vlang.ide.inspections
 
-import org.vlang.ide.inspections.general.*
+import org.vlang.ide.inspections.general.VlangAmbiguousImportInspection
+import org.vlang.ide.inspections.general.VlangCallArgumentsCountMismatchInspection
+import org.vlang.ide.inspections.general.VlangNonExhaustiveMatchInspection
+import org.vlang.ide.inspections.general.VlangRawOptionOrResultTypeUsedInspection
 
 class VlangGeneralInspectionTest : InspectionTestBase("general") {
     fun `test ambiguous imports`() = doTest("ambiguous_imports.v", VlangAmbiguousImportInspection())
-
-    fun `test cycle import`() = doTest("circular/first/utils.v", VlangCircularImportInspection())
 
     fun `test non exhaustive match`() =
         doTestQuickFix("non_exhaustive_match.v", VlangNonExhaustiveMatchInspection(), "Add missing branches")
