@@ -7,6 +7,7 @@ import com.intellij.openapi.editor.Document
 import com.intellij.openapi.editor.FoldingGroup
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.util.TextRange
+import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.PsiTreeUtil
@@ -112,6 +113,23 @@ class VlangFoldingBuilder : FoldingBuilderEx(), DumbAware {
                 super.visitElement(o)
             }
 
+            override fun visitComment(comment: PsiComment) {
+                if (comment.tokenType != VlangTokenTypes.MULTI_LINE_COMMENT) {
+                    return
+                }
+
+                val commentText = comment.text
+                if (!commentText.startsWith("/*") || !commentText.endsWith("*/")) {
+                    return
+                }
+
+                val textRange = comment.textRange
+                val group = FoldingGroup.newGroup("VlangFoldingGroup")
+                val foldingRange = TextRange(textRange.startOffset + 2, textRange.endOffset - 2)
+                descriptors.add(FoldingDescriptor(comment.node, foldingRange, group))
+                super.visitComment(comment)
+            }
+
             private fun genericFolding(el: PsiElement, start: IElementType = VlangTypes.LBRACE) {
                 var lbrack: PsiElement? = null
                 PsiTreeUtil.processElements(el) {
@@ -143,7 +161,10 @@ class VlangFoldingBuilder : FoldingBuilderEx(), DumbAware {
     override fun getPlaceholderText(node: ASTNode) = when (node.elementType) {
         VlangTypes.ARRAY_CREATION -> "[...]"
         VlangTypes.CONST_DECLARATION -> "(...)"
-        VlangTypes.IMPORT_LIST -> "..."
+
+        VlangTypes.IMPORT_LIST,
+        VlangTokenTypes.MULTI_LINE_COMMENT -> "..."
+        
         else -> "{...}"
     }
 
