@@ -31,6 +31,6 @@ module stubs
 // }
 // ```
 //
-// See [Documentation](https://github.com/vlang/v/blob/master/doc/docs.md#optionresult-types-and-error-handling)
+// See [Documentation](https://docs.vosca.dev/concepts/error-handling/overview.html)
 // for more details.
 pub const err = IError{}

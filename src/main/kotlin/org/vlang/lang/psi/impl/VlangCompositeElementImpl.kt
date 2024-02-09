@@ -54,7 +54,7 @@ open class VlangCompositeElementImpl(node: ASTNode) : ASTWrapperPsiElement(node)
             if ((o is VlangIfExpression || o is VlangForStatement || o is VlangBlock)
                 && processor is VlangScopeProcessorBase
             ) {
-                if (!PsiTreeUtil.isAncestor(o, processor.origin, false)) {
+                if (!processor.isCodeFragment() && !PsiTreeUtil.isAncestor(o, processor.origin, false)) {
                     return true
                 }
             }

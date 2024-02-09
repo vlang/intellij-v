@@ -1,5 +1,6 @@
 package org.vlang.lang.doc.psi.impl
 
+import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
 import com.intellij.psi.impl.source.tree.LazyParseablePsiElement
@@ -61,6 +62,32 @@ class VlangDocCommentImpl(type: IElementType, text: CharSequence?) : LazyParseab
         }
 
         return element as? VlangNamedElement ?: getCommentModuleOwner()
+    }
+
+    override fun getOwnerNameRangeInElement(): TextRange? {
+        if (!isValidDoc()) return null
+        val commentText = text
+        val firstWordStart = commentText.indexOfFirst { !it.isWhitespace() && it != '/' }
+        if (firstWordStart == -1) return null
+        val firstWordEnd = commentText.substring(firstWordStart).indexOfFirst { it.isWhitespace() || it == '\n' }
+        if (firstWordEnd == -1) return null
+
+        return TextRange(firstWordStart, firstWordStart + firstWordEnd)
+    }
+
+    override fun isValidDoc(): Boolean {
+        val owner = owner ?: return true
+        val commentText = text
+        val preparedCommentText = commentText.removePrefix("//").trim()
+        val endOfFirstWord = preparedCommentText.indexOfFirst { it.isWhitespace() || it == '\n' }
+        val firstWord = if (endOfFirstWord != -1) {
+            preparedCommentText.substring(0, endOfFirstWord).trim()
+        } else {
+            preparedCommentText
+        }
+
+        val ownerName = owner.name ?: return true
+        return ownerName == firstWord
     }
 
     private fun getCommentModuleOwner(): VlangModuleClause? {

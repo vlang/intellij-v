@@ -2,8 +2,7 @@ package org.vlang.lang.completion
 
 import com.intellij.patterns.ElementPattern
 import com.intellij.patterns.PatternCondition
-import com.intellij.patterns.PlatformPatterns.or
-import com.intellij.patterns.PlatformPatterns.psiElement
+import com.intellij.patterns.PlatformPatterns.*
 import com.intellij.patterns.PsiElementPattern
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiErrorElement
@@ -56,6 +55,7 @@ object VlangCompletionPatterns {
             .withSuperParent(2, VlangLeftHandExprList::class.java)
             .withSuperParent(3, VlangSimpleStatement::class.java)
             .withSuperParent(4, VlangFile::class.java)
+            .notAfterDot()
             .notAfterLiteral()
 
     /**

@@ -21,3 +21,13 @@ fn main() {
 	byte_pointer := byteptr(0)
 	expr_type(byte_pointer[0], 'byte')
 }
+
+fn foo(m &map[string]int) {
+	val := m['']
+	expr_type(val, 'int')
+}
+
+fn goo(a &[]string) {
+	val := a[0]
+	expr_type(val, 'string')
+}

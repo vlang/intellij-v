@@ -6,6 +6,7 @@ import com.intellij.lang.ParserDefinition.SpaceRequirements
 import com.intellij.openapi.project.Project
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiFile
 import org.vlang.lang.VlangTypes.Factory
 import org.vlang.lang.doc.psi.impl.VlangDocCommentImpl
 import org.vlang.lang.lexer.VlangLexer
@@ -26,7 +27,7 @@ class VlangParserDefinition : ParserDefinition {
 
     override fun getFileNodeType() = VlangFileElementType.INSTANCE
 
-    override fun createFile(viewProvider: FileViewProvider) = VlangFile(viewProvider)
+    override fun createFile(viewProvider: FileViewProvider): PsiFile = VlangFile(viewProvider)
 
     override fun spaceExistenceTypeBetweenTokens(left: ASTNode, right: ASTNode) = SpaceRequirements.MAY
 

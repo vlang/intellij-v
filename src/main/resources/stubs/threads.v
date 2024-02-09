@@ -76,5 +76,5 @@ struct ThreadPool[T] {}
 // }
 // ```
 //
-// See [Documentation](https://github.com/vlang/v/blob/master/doc/docs.md#concurrency) for more details.
+// See [Documentation](https://docs.vosca.dev/concepts/concurrency.html) for more details.
 pub fn (t ThreadPool[T]) wait() []T

@@ -11,7 +11,6 @@ import com.intellij.util.Processor
 import com.intellij.util.containers.JBIterable
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet
 import org.vlang.lang.psi.*
-import org.vlang.lang.psi.impl.VlangLangUtil
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.stubs.index.VlangInterfaceFieldFingerprintIndex
 import org.vlang.lang.stubs.index.VlangInterfaceInheritorsIndex

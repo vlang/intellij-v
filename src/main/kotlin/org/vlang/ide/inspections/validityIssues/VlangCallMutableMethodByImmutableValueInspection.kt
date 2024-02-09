@@ -44,10 +44,7 @@ class VlangCallMutableMethodByImmutableValueInspection : VlangBaseInspection() {
                 if (methodReceiverType is VlangStructTypeEx && methodReceiverType.qualifiedName() == "sync.Channel") {
                     return true
                 }
-                if (VlangUnsafeUtil.insideUnsafe(call)) {
-                    return true
-                }
-                return false
+                return VlangUnsafeUtil.insideUnsafe(call)
             }
         }
     }

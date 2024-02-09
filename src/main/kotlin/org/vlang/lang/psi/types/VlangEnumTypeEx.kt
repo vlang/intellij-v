@@ -58,9 +58,7 @@ open class VlangEnumTypeEx(val name: String, anchor: PsiElement?) :
 
         other as VlangEnumTypeEx
 
-        if (name != other.name) return false
-
-        return true
+        return name == other.name
     }
 
     override fun hashCode(): Int = name.hashCode()

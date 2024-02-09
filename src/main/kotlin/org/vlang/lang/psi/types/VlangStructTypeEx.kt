@@ -59,9 +59,7 @@ open class VlangStructTypeEx(private val name: String, anchor: PsiElement?) :
 
         other as VlangStructTypeEx
 
-        if (name != other.name) return false
-
-        return true
+        return name == other.name
     }
 
     override fun hashCode(): Int = name.hashCode()

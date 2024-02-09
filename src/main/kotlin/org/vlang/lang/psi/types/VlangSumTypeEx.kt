@@ -66,9 +66,7 @@ open class VlangSumTypeEx(val name: String, val types: List<VlangTypeEx>, anchor
 
         other as VlangSumTypeEx
 
-        if (name != other.name) return false
-
-        return true
+        return name == other.name
     }
 
     override fun hashCode(): Int = name.hashCode()

@@ -2983,7 +2983,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // ('[' | '#[') IndexOrSliceInner ']' !identifier
   public static boolean IndexOrSliceExpr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IndexOrSliceExpr")) return false;
-    if (!nextTokenIs(b, "<index or slice expr>", HASH_LBRACK, LBRACK)) return false;
+    if (!nextTokenIs(b, "<index or slice expr>", HASH_LBRACK,LBRACK)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _LEFT_, INDEX_OR_SLICE_EXPR, "<index or slice expr>");
     r = IndexOrSliceExpr_0(b, l + 1);

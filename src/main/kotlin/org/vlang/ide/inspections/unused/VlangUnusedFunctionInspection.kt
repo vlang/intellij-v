@@ -46,11 +46,9 @@ class VlangUnusedFunctionInspection : VlangUnusedBaseInspection() {
             if (func is VlangMethodDeclaration && func.name == "str") return false
             if (isIteratorMethod(func)) return false
             if (isVwebMethod(func)) return false
-            if (file.isTestFile() &&
-                func is VlangFunctionDeclaration &&
-                (VlangTestUtil.isTestFunction(func) || VlangTestUtil.isMetaTestFunction(func))
-            ) return false
-            return true
+            return !(file.isTestFile() &&
+                    func is VlangFunctionDeclaration &&
+                    (VlangTestUtil.isTestFunction(func) || VlangTestUtil.isMetaTestFunction(func)))
         }
 
         private fun isIteratorMethod(method: VlangNamedElement): Boolean {

@@ -35,10 +35,7 @@ class VlangModuleReference<T : PsiElement>(element: T) : VlangCachedReference<T>
     override fun processResolveVariants(processor: VlangScopeProcessor): Boolean {
         val state = createContextOnElement(element)
 
-        if (!processModules(processor, state)) {
-            return false
-        }
-        return true
+        return processModules(processor, state)
     }
 
     private fun processModules(processor: VlangScopeProcessor, state: ResolveState): Boolean {

@@ -364,20 +364,12 @@ object VlangParserUtil : GeneratedParserUtilBase() {
             return true
         }
 
-        if (consumeToken(builder, COLON)) {
-            return false
-        }
-
-        return true
+        return !consumeToken(builder, COLON)
     }
 
     @JvmStatic
     fun braceRuleMarker(builder: PsiBuilder, level: Int): Boolean {
-        if (isLastIs(builder, level, "noBraces")) {
-            return false
-        }
-
-        return true
+        return !isLastIs(builder, level, "noBraces")
     }
 
     @JvmStatic

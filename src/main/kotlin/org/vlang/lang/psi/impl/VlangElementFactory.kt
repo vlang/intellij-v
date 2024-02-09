@@ -188,4 +188,9 @@ object VlangElementFactory {
         val children = PsiTreeUtil.findChildrenOfType(file, VlangMatchExpression::class.java)
         return children.last()
     }
+
+    fun createMutExpression(project: Project, text: String?): VlangMutExpression {
+        val file = createFileFromText(project, "fn main() { foo(mut $text) }")
+        return PsiTreeUtil.findChildOfType(file, VlangMutExpression::class.java)!!
+    }
 }

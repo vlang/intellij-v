@@ -34,13 +34,19 @@ object VlangStructRenderer : VlangValueRenderer() {
             return highlightPointer(value)
         }
         if (klass == null) return highlightPointer(value)
+
+        val data = value.data
+        if (data.isNullPointer) {
+            return highlightPointer(value)
+        }
+
         val name = runReadAction { klass?.getQualifiedName() } ?: return highlightPointer(value)
         val cname = VlangCTypeParser.toCName(name)
         val strMethodName = "${cname}_str"
 
         val type = runReadAction { klass!!.getType(null) } as? VlangStructTypeEx ?: return highlightPointer(value)
         val method = runReadAction { type.findMethod(value.project, "str") } ?: return highlightPointer(value)
-        if (!enoughSimpleMethod(method)) return value.data
+        if (!enoughSimpleMethod(method)) return highlightPointer(value)
 
         val isMutable = runReadAction { method.isMutable }
         // skip mutable methods because they can change the value
@@ -61,10 +67,9 @@ object VlangStructRenderer : VlangValueRenderer() {
     }
 
     private fun enoughSimpleMethod(method: VlangMethodDeclaration): Boolean {
-        val body = method.getBlock() ?: return false
+        val body = runReadAction { method.getBlock() } ?: return false
         val statements = body.statementList
-        if (statements.size > 3) return false
-        return true
+        return statements.size <= 3
     }
 
     private fun highlightPointer(value: VlangValue): LLValueData = processPointer(value) ?: value.data

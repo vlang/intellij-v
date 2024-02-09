@@ -67,9 +67,7 @@ open class VlangAliasTypeEx(val name: String, val inner: VlangTypeEx, anchor: Ps
 
         other as VlangAliasTypeEx
 
-        if (name != other.name) return false
-
-        return true
+        return name == other.name
     }
 
     override fun hashCode(): Int = name.hashCode()

@@ -240,6 +240,12 @@ object VlangLangUtil {
         is VlangThreadTypeEx           -> "unsafe { nil }"
         is VlangNoneTypeEx             -> "none"
         is VlangAnyTypeEx              -> "0"
+        is VlangEnumTypeEx             -> {
+            val enum = type.resolve(element.project)
+            val firstVariant = enum?.enumType?.fieldList?.firstOrNull()
+            if (firstVariant != null && firstVariant.name != null) "." + firstVariant.name!!
+            else "0"
+        }
         else                           -> "0"
     }
 }

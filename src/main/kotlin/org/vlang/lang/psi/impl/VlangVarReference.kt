@@ -42,9 +42,7 @@ class VlangVarReference(element: VlangVarDefinition) : VlangCachedReference<Vlan
 
         if (!processCaptureList(p)) return false
 
-        if (!ResolveUtil.treeWalkUp(myElement, p) { it is VlangFunctionLit }) return false
-
-        return true
+        return ResolveUtil.treeWalkUp(myElement, p) { it is VlangFunctionLit }
     }
 
     private fun processCaptureList(processor: VlangVarProcessor): Boolean {

@@ -70,9 +70,7 @@ class VlangPrimitiveTypeEx(val name: VlangPrimitiveTypes) : VlangBaseTypeEx(null
 
         other as VlangPrimitiveTypeEx
 
-        if (name != other.name) return false
-
-        return true
+        return name == other.name
     }
 
     override fun hashCode(): Int {

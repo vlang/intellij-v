@@ -33,7 +33,9 @@ import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.isGeneric
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapAlias
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapArray
+import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapPointer
 import org.vlang.lang.sql.VlangSqlUtil
+import org.vlang.utils.childOfType
 import org.vlang.utils.inside
 import org.vlang.utils.parentNth
 import org.vlang.utils.stubOrPsiParentOfType
@@ -691,11 +693,7 @@ object VlangPsiImplUtil {
     private fun isMutableMember(member: VlangNamedElement): Boolean {
         val group = member.parentOfType<VlangMemberModifiersOwner>()
         val modifiers = group?.memberModifierList
-        val withMutModifier = modifiers?.any { it.text == "mut" } ?: false
-        if (withMutModifier) {
-            return true
-        }
-        return false
+        return modifiers?.any { it.text == "mut" } ?: false
     }
 
     @JvmStatic
@@ -1207,6 +1205,49 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getExpression(o: VlangIndexOrSliceExpr): PsiElement? {
+        return o.expressionList.firstOrNull()
+    }
+
+    @JvmStatic
+    fun getRange(o: VlangIndexOrSliceExpr): Pair<PsiElement?, PsiElement?>? {
+        if (o.emptySlice != null) return null to null
+
+        val rangeExpr = o.childOfType<VlangRangeExpr>()
+        if (rangeExpr != null) {
+            return rangeExpr.left to rangeExpr.right
+        }
+
+        val lbrack = o.lbrack ?: o.hashLbrack ?: return null
+        val rbrack = o.rbrack
+
+        // arr[..10]
+        val rangeVariant1 = lbrack.nextSibling
+        // arr[10..]
+        val rangeVariant2 = rbrack.prevSibling
+
+        if (rangeVariant1.textMatches("..")) {
+            // arr[..<10]
+            return null to rangeVariant2
+        } else if (rangeVariant2.textMatches("..")) {
+            // arr[10≤..]
+            return rangeVariant1 to null
+        }
+
+        return null
+    }
+
+    @JvmStatic
+    fun getSliceStart(o: VlangIndexOrSliceExpr): PsiElement? {
+        return getRange(o)?.first
+    }
+
+    @JvmStatic
+    fun getSliceEnd(o: VlangIndexOrSliceExpr): PsiElement? {
+        return getRange(o)?.second
+    }
+
+    @JvmStatic
     fun getParameters(o: VlangCallExpr): List<VlangExpression> {
         return o.argumentList.elementList.mapNotNull { it?.value?.expression }
     }
@@ -1347,24 +1388,10 @@ object VlangPsiImplUtil {
             val table = tableRef.typeReferenceExpression.resolve() as? VlangNamedElement ?: return null
             val type = table.getType(context) ?: return null
 
-            val limitClause = lastStatement.sqlLimitClause
-            if (limitClause != null && limitClause.expression.text == "1") {
-                return type
-            }
-
-            val whereClause = lastStatement.sqlWhereClause
-            if (whereClause != null) {
-                val condition = whereClause.expression
-                if (condition is VlangConditionalExpr && condition.eq != null) {
-                    val left = condition.expressionList.firstOrNull() as? VlangReferenceExpression
-                    val resolved = left?.resolve()
-                    if (resolved is VlangFieldDefinition && resolved.isPrimary) {
-                        return type
-                    }
-                }
-            }
-
-            return VlangArrayTypeEx(type, table)
+            return VlangResultTypeEx(
+                VlangArrayTypeEx(type, table),
+                table
+            )
         }
         return null
     }
@@ -1408,6 +1435,7 @@ object VlangPsiImplUtil {
     @JvmStatic
     fun getTypeInner(o: VlangConstDefinition, context: ResolveState?): VlangTypeEx? {
         val expr = o.expression ?: return null
+        if (expr.text == o.name) return null
         return getTypeInner(expr, context)
     }
 
@@ -1618,21 +1646,18 @@ object VlangPsiImplUtil {
         // <int_array>[1] -> int
         if (expr is VlangIndexOrSliceExpr) {
             val indexExpr = expr.expressionList.firstOrNull() ?: return null
-            val indexType = indexExpr.getType(context) ?: return null
+            val indexType = indexExpr.getType(context)?.unwrapPointer()?.unwrapAlias() ?: return null
 
             // [type, type][0..1] -> type[]
             if (expr.isSlice) {
                 if (indexType is VlangFixedSizeArrayTypeEx) {
+                    // [3]int -> []int
                     return VlangArrayTypeEx(indexType.inner, indexType.anchor()!!)
                 }
                 return indexType
             }
 
-            return if (indexType is VlangAliasTypeEx) {
-                inferTypeForIndexOrSlice(indexType.inner)
-            } else {
-                inferTypeForIndexOrSlice(indexType)
-            }
+            return inferTypeForIndexOrSlice(indexType)
         }
 
         // type{...} -> type
@@ -2359,11 +2384,7 @@ object VlangPsiImplUtil {
 
     fun processSignatureOwner(o: VlangSignatureOwner, processor: VlangScopeProcessorBase): Boolean {
         val signature = o.getSignature() ?: return true
-        if (!processParameters(processor, signature.parameters)) {
-            return false
-        }
-
-        return true
+        return processParameters(processor, signature.parameters)
     }
 
     private fun processParameters(processor: VlangScopeProcessorBase, parameters: VlangParameters): Boolean {

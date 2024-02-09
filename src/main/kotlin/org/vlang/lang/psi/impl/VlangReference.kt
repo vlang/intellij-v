@@ -71,7 +71,13 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
     fun processResolveVariants(processor: VlangScopeProcessor): Boolean {
         val file = myElement.containingFile as? VlangFile ?: return false
-        val state = createContextOnElement(myElement)
+
+        val state = if (file is VlangCodeFragment) {
+            createContextOnElement(myElement).put(PROCESS_PRIVATE_MEMBERS, true)
+        } else {
+            createContextOnElement(myElement)
+        }
+
         val qualifier = myElement.getQualifier()
         return if (qualifier != null)
             processQualifierExpression(qualifier, processor, state)
@@ -144,8 +150,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         state: ResolveState,
     ): Boolean {
         val moduleName = importPath.qualifiedName
-        if (processModule(moduleName, processor, state)) return true
-        return false
+        return processModule(moduleName, processor, state)
     }
 
     private fun processModule(moduleName: String, processor: VlangScopeProcessor, state: ResolveState): Boolean {
@@ -237,14 +242,12 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             // so we just resolve it to UnknownCDeclaration struct
             if (typ.qualifiedName() == VlangStructTypeEx.UnknownCDeclarationStruct.qualifiedName()) {
                 if (isMethodRef && !processMethods(typ, processor, state.put(SEARCH_NAME, "unknown_method"), localResolve)) return false
-                if (!processNamedElements(
-                        processor,
-                        state.put(SEARCH_NAME, "unknown_field"),
-                        structType.fieldList,
-                        localResolve
-                    )
-                ) return false
-                return true
+                return processNamedElements(
+                    processor,
+                    state.put(SEARCH_NAME, "unknown_field"),
+                    structType.fieldList,
+                    localResolve
+                )
             }
 
             // If it is a call, then most likely it is a method call, but it
@@ -495,7 +498,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             if (!processOffsetOfCall(processor, state)) return false
         }
 
-        if (!processBlock(processor, state, true)) return false
+        if (!processBlock(file, processor, state, true)) return false
         if (!processBuiltin(processor, state)) return false
         if (!processOsModule(file, processor, state)) return false
         if (!processStubs(processor, state)) return false
@@ -530,8 +533,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             return true
         }
 
-        if (!processStubFile("c_decl.v", processor, state.put(SEARCH_NAME, "UnknownCDeclaration"))) return false
-        return true
+        return processStubFile("c_decl.v", processor, state.put(SEARCH_NAME, "UnknownCDeclaration"))
     }
 
     private fun needResolveGenericParameterForMethod(parentMethod: VlangMethodDeclaration?): Boolean {
@@ -647,8 +649,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
     private fun processStubFile(name: String, processor: VlangScopeProcessor, state: ResolveState): Boolean {
         val file = stubsManager.findFile(name) ?: return true
-        if (!processFileEntities(file, processor, state, false)) return false
-        return true
+        return processFileEntities(file, processor, state, false)
     }
 
     // TODO: redone
@@ -697,7 +698,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
     }
 
     private fun processModulesEntities(file: VlangFile, processor: VlangScopeProcessor, state: ResolveState): Boolean {
-        if (!processor.isCompletion()) {
+        if (!processor.isCompletion() || file is VlangDebuggerExpressionCodeFragment) {
             // This method is only for autocompletion when a user writes
             // a symbol (from another module) name, and we want to import
             // the symbol, and the module that contains it.
@@ -751,8 +752,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
     private fun processCompileTimeConstants(processor: VlangScopeProcessor, state: ResolveState): Boolean {
         if (!VlangCodeInsightUtil.insideCompileTime(identifier)) return true
-        if (!processStubFile("compile_time_constants.v", processor, state)) return false
-        return true
+        return processStubFile("compile_time_constants.v", processor, state)
     }
 
     private fun processImportedModulesForCompletion(file: VlangFile, processor: VlangScopeProcessor, state: ResolveState): Boolean {
@@ -883,10 +883,17 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         )
     }
 
-    private fun processBlock(processor: VlangScopeProcessor, state: ResolveState, localResolve: Boolean): Boolean {
-        val delegate = createDelegate(processor)
-        ResolveUtil.treeWalkUp(myElement, delegate)
-        return processNamedElements(processor, state.put(NOT_PROCESS_EMBEDDED_DEFINITION, true), delegate.getVariants(), localResolve)
+    private fun processBlock(file: VlangFile, processor: VlangScopeProcessor, state: ResolveState, localResolve: Boolean): Boolean {
+        val context = if (file is VlangCodeFragment) file.context else myElement
+
+        val newState = if (file is VlangCodeFragment)
+            state.put(PROCESS_PRIVATE_MEMBERS, true)
+        else
+            state
+
+        val delegate = createDelegate(processor, file is VlangCodeFragment)
+        ResolveUtil.treeWalkUp(context, delegate)
+        return processNamedElements(processor, newState.put(NOT_PROCESS_EMBEDDED_DEFINITION, true), delegate.getVariants(), localResolve)
     }
 
     private fun processPseudoParams(processor: VlangScopeProcessor, state: ResolveState): Boolean {
@@ -966,8 +973,8 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         return processType(type, processor, state)
     }
 
-    private fun createDelegate(processor: VlangScopeProcessor): VlangVarProcessor {
-        return object : VlangVarProcessor(identifier!!, myElement, processor.isCompletion()) {
+    private fun createDelegate(processor: VlangScopeProcessor, isCodeFragment: Boolean = false): VlangVarProcessor {
+        return object : VlangVarProcessor(identifier!!, myElement, processor.isCompletion(), isCodeFragment) {
             override fun crossOff(e: PsiElement): Boolean {
                 return if (e is VlangFieldDeclaration)
                     true
@@ -1048,9 +1055,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
         other as VlangReference
 
-        if (element != other.element) return false
-
-        return true
+        return element == other.element
     }
 
     override fun hashCode(): Int = element.hashCode()

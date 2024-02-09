@@ -15,9 +15,7 @@ class VlangLookupElement(
 
         other as VlangLookupElement
 
-        if (props != other.props) return false
-
-        return true
+        return props == other.props
     }
 
     override fun hashCode(): Int {

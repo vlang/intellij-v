@@ -30,14 +30,12 @@ object VlangTypeInferenceUtil {
 
     fun stubThread(type: VlangTypeEx): Boolean {
         val inner = type.unwrapGenericInstantiation()
-        if (inner is VlangStructTypeEx && inner.qualifiedName() == "stubs.Thread") return true
-        return false
+        return inner is VlangStructTypeEx && inner.qualifiedName() == "stubs.Thread"
     }
 
     fun stubThreadPool(type: VlangTypeEx): Boolean {
         val inner = type.unwrapGenericInstantiation()
-        if (inner is VlangStructTypeEx && inner.qualifiedName() == "stubs.ThreadPool") return true
-        return false
+        return inner is VlangStructTypeEx && inner.qualifiedName() == "stubs.ThreadPool"
     }
 
     fun builtinArrayOrPointerTo(type: VlangTypeEx): Boolean {

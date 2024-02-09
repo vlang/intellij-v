@@ -62,9 +62,7 @@ class VlangInterfaceTypeEx(val name: String, anchor: PsiElement) :
 
         other as VlangInterfaceTypeEx
 
-        if (name != other.name) return false
-
-        return true
+        return name == other.name
     }
 
     override fun hashCode(): Int = name.hashCode()

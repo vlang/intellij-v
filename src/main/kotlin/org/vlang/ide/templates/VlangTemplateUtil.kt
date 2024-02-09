@@ -2,6 +2,7 @@ package org.vlang.ide.templates
 
 import com.intellij.openapi.project.guessProjectDir
 import com.intellij.psi.PsiDirectory
+import org.vlang.ide.refactoring.rename.VlangNamesValidator
 import java.util.*
 
 object VlangTemplateUtil {
@@ -11,7 +12,11 @@ object VlangTemplateUtil {
     private val IDENTIFIER_REGEX = Regex("[a-zA-Z_][a-zA-Z0-9_]*")
 
     fun setModuleNameAttribute(directory: PsiDirectory, props: Properties) {
-        props.setProperty(ATTRIBUTE_MODULE_NAME, getModuleName(directory))
+        var moduleName = getModuleName(directory)
+        if (VlangNamesValidator.isKeyword(moduleName, null)) {
+            moduleName = "@$moduleName"
+        }
+        props.setProperty(ATTRIBUTE_MODULE_NAME, moduleName)
     }
 
     private fun getModuleName(directory: PsiDirectory): String {

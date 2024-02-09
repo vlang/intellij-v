@@ -24,11 +24,8 @@ class VlangMissingFunctionNameInDocInspection : VlangBaseInspection() {
                 val owner = comment.owner
                 if (owner !is VlangFunctionDeclaration && owner !is VlangMethodDeclaration) return
 
-                val name = owner.name
-                val commentText = comment.text
-                val firstWord = commentText.removePrefix("//").trim().substringBefore(" ")
                 val identifier = owner.getIdentifier() ?: return
-                if (name != firstWord) {
+                if (!comment.isValidDoc()) {
                     holder.registerProblem(
                         identifier,
                         "Missing function name in doc comment",
@@ -49,7 +46,11 @@ class VlangMissingFunctionNameInDocInspection : VlangBaseInspection() {
                 val comment = decl.getDocumentation() ?: return
                 val owner = comment.owner ?: return
                 val name = owner.name
-                val newCommentText = comment.text.replaceRange(0, 3, "// $name ")
+                val newCommentText = if (comment.text.length > 2) {
+                    comment.text.replaceRange(0, 3, "// $name ")
+                } else {
+                    "// $name"
+                }
                 val newComment = VlangElementFactory.createDocComment(project, newCommentText)
                 comment.replace(newComment)
             }

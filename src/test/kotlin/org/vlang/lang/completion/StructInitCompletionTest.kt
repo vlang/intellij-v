@@ -309,4 +309,54 @@ class StructInitCompletionTest : CompletionTestBase() {
         
         """.trimIndent(),
     )
+
+    fun `test fill all fields for enum`() = doTestCompletion(
+        """
+        module main
+        
+        enum EnumValue {
+            red
+        }
+        
+        enum EnumValue2 {
+            green
+            blue
+        }
+        
+        struct Foo {
+            val  EnumValue
+            val2 EnumValue2
+        }
+        
+        fn main() {
+            arr := Foo{/*caret*/}
+        }
+        
+        """.trimIndent(),
+        """
+        module main
+        
+        enum EnumValue {
+            red
+        }
+        
+        enum EnumValue2 {
+            green
+            blue
+        }
+        
+        struct Foo {
+            val  EnumValue
+            val2 EnumValue2
+        }
+        
+        fn main() {
+            arr := Foo{
+        		val: .red
+        		val2: .green
+        	}
+        }
+        
+        """.trimIndent(),
+    )
 }

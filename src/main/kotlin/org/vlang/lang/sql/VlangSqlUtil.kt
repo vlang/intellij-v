@@ -35,11 +35,7 @@ object VlangSqlUtil {
 
     private fun inWhereExpression(element: PsiElement): Boolean {
         val whereClause = element.parentOfType<VlangSqlWhereClause>() ?: return false
-        if (whereClause.expression !is VlangBinaryExpr) {
-            return true
-        }
-
-        return false
+        return whereClause.expression !is VlangBinaryExpr
     }
 
     private fun leftPartOfExpression(element: PsiElement): Boolean {

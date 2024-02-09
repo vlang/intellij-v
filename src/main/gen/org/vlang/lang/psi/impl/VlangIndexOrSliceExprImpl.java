@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElementVisitor;
 import org.vlang.lang.psi.VlangPsiTreeUtil;
 import static org.vlang.lang.VlangTypes.*;
 import org.vlang.lang.psi.*;
+import kotlin.Pair;
 
 public class VlangIndexOrSliceExprImpl extends VlangExpressionImpl implements VlangIndexOrSliceExpr {
 
@@ -86,4 +87,27 @@ public class VlangIndexOrSliceExprImpl extends VlangExpressionImpl implements Vl
     return VlangPsiImplUtil.isSlice(this);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getExpression() {
+    return VlangPsiImplUtil.getExpression(this);
+  }
+
+  @Override
+  @Nullable
+  public Pair<PsiElement, PsiElement> getRange() {
+    return VlangPsiImplUtil.getRange(this);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSliceStart() {
+    return VlangPsiImplUtil.getSliceStart(this);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSliceEnd() {
+    return VlangPsiImplUtil.getSliceEnd(this);
+  }
 }

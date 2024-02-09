@@ -63,6 +63,7 @@ class VlangDebugProcessConfigurationHelper(private val process: CidrDebugProcess
         regexes.add("^I_.*to_Interface.*")
         regexes.add("^memdup$")
         regexes.add("^indent_.*")
+        regexes.add("^str_intp.*")
 
         val command = when (this) {
             is LLDBDriver -> "settings set target.process.thread.step-avoid-regexp"

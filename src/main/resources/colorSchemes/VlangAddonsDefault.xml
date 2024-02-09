@@ -114,4 +114,9 @@
             <option name="FOREGROUND" value="8a91"/>
         </value>
     </option>
+    <option name="org.vlang.COMMENT_REFERENCE">
+        <value>
+            <option name="FOREGROUND" value="525252"/>
+        </value>
+    </option>
 </list>

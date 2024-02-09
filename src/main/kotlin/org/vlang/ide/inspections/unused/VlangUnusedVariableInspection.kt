@@ -43,30 +43,6 @@ class VlangUnusedVariableInspection : VlangBaseInspection() {
                 if (declaration is VlangRangeClause) return false
                 return declaration.varDefinitionList.size == 1
             }
-
-            private fun needCheck(variable: VlangVarDefinition): Boolean {
-                val containingFunction = variable.parentOfType<VlangFunctionOrMethodDeclaration>()
-                if (containingFunction != null) {
-                    if (functionReturnTemplate(containingFunction)) return false
-                }
-
-                return true
-            }
-
-            private fun functionReturnTemplate(containingFunction: VlangFunctionOrMethodDeclaration?): Boolean {
-                val calls = PsiTreeUtil.findChildrenOfType(containingFunction, VlangCallExpr::class.java)
-
-                // TODO: better solution
-                val anyReturnTemplate = calls
-                    .asSequence()
-                    .mapNotNull { it.expression?.text }
-                    .any { it == "\$vweb.html" || it.startsWith("\$tmpl") }
-
-                if (anyReturnTemplate) {
-                    return true
-                }
-                return false
-            }
         }
     }
 
@@ -93,6 +69,25 @@ class VlangUnusedVariableInspection : VlangBaseInspection() {
                 val newStatement = VlangElementFactory.createStatement(project, expr.text)
                 statement.replace(newStatement)
             }
+        }
+
+        fun needCheck(variable: VlangNamedElement): Boolean {
+            val containingFunction = variable.parentOfType<VlangFunctionOrMethodDeclaration>()
+            if (containingFunction != null) {
+                if (functionReturnTemplate(containingFunction)) return false
+            }
+
+            return true
+        }
+
+        private fun functionReturnTemplate(containingFunction: VlangFunctionOrMethodDeclaration?): Boolean {
+            val calls = PsiTreeUtil.findChildrenOfType(containingFunction, VlangCallExpr::class.java)
+
+            // TODO: better solution
+            return calls
+                .asSequence()
+                .mapNotNull { it.expression?.text }
+                .any { it == "\$vweb.html" || it.startsWith("\$tmpl") }
         }
     }
 }

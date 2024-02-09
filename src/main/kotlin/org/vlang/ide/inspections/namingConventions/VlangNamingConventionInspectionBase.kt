@@ -50,6 +50,11 @@ abstract class VlangNamingConventionInspectionBase : VlangBaseInspection() {
 
         val identifier = named.getIdentifier() ?: return
 
+        if (elementKind == "Variable" && name == "_") {
+            // allow '_' as variable name
+            return
+        }
+
         if (name.startsWith("_") && named !is VlangEnumFieldDefinition && named !is VlangConstDefinition) {
             registerProblem(
                 identifier, "$elementKind name cannot start with '_'",

@@ -2,26 +2,20 @@ package org.vlang.ide.refactoring.rename
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.application.ReadAction
 import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.command.impl.StartMarkAction
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.project.DumbService
-import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.popup.JBPopupFactory
 import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.util.Pass
 import com.intellij.psi.PsiElement
 import com.intellij.refactoring.rename.RenamePsiElementProcessor
-import com.intellij.util.ObjectUtils
 import org.jetbrains.annotations.TestOnly
-import org.vlang.lang.psi.VlangMethodDeclaration
 import org.vlang.lang.psi.VlangReceiver
-import org.vlang.lang.psi.impl.VlangPsiImplUtil
 import org.vlang.lang.psi.types.VlangBaseTypeEx.Companion.unwrapPointer
-import java.util.*
 
 class VlangRenameReceiverProcessor : RenamePsiElementProcessor() {
     private var renameOnlyCurrentReceiver = false

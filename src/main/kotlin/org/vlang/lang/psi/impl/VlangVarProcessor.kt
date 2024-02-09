@@ -8,7 +8,8 @@ open class VlangVarProcessor(
     requestedName: PsiElement,
     origin: PsiElement,
     completion: Boolean,
-) : VlangScopeProcessorBase(requestedName, origin, completion) {
+    isCodeFragment: Boolean = false,
+) : VlangScopeProcessorBase(requestedName, origin, completion, isCodeFragment) {
 
     constructor(origin: PsiElement, completion: Boolean) : this(origin, origin, completion)
 

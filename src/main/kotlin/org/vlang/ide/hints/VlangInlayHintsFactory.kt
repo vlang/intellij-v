@@ -1,6 +1,5 @@
 package org.vlang.ide.hints
 
-import com.intellij.codeInsight.hints.*
 import com.intellij.codeInsight.hints.presentation.*
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.editor.Editor
@@ -50,7 +49,15 @@ class VlangInlayHintsFactory(
         is VlangAnonStructTypeEx       -> anonStructType(type, level, anchor)
         is VlangGenericInstantiationEx -> genericInstantiation(type, level, anchor)
         is VlangResolvableTypeEx<*>    -> resolvableType(type, anchor)
+        is VlangPointerTypeEx          -> pointerType(type, level, anchor)
         else                           -> text(type.readableName(anchor))
+    }
+
+    private fun pointerType(type: VlangPointerTypeEx, level: Int, anchor: PsiElement): InlayPresentation {
+        return factory.seq(
+            text("&"),
+            hint(type.inner, level, anchor),
+        )
     }
 
     private fun anonStructType(type: VlangAnonStructTypeEx, level: Int, anchor: PsiElement): InlayPresentation {
@@ -83,7 +90,7 @@ class VlangInlayHintsFactory(
             collapsed = text(PLACEHOLDER),
             expanded = { parametersHint(type.specialization, level + 1, anchor) },
             suffix = text("]"),
-            startWithPlaceholder = checkSize(level, type.specialization.size)
+            startWithPlaceholder = checkSize(level, type.specialization.size) || checkInnerSize(anchor, type.specialization)
         )
 
         return factory.seq(name, parameters)
@@ -190,6 +197,12 @@ class VlangInlayHintsFactory(
 
     private fun checkSize(level: Int, elementsCount: Int): Boolean =
         level + elementsCount > FOLDING_THRESHOLD
+
+    private fun checkInnerSize(context: PsiElement, elements: List<VlangTypeEx>): Boolean {
+        if (elements.isEmpty()) return false
+        val first = elements.first()
+        return first.readableName(context).length > 8
+    }
 
     companion object {
         private const val PLACEHOLDER: String = "…"
