@@ -110,4 +110,5 @@ public class VlangIndexOrSliceExprImpl extends VlangExpressionImpl implements Vl
   public PsiElement getSliceEnd() {
     return VlangPsiImplUtil.getSliceEnd(this);
   }
+
 }

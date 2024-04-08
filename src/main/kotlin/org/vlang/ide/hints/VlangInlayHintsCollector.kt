@@ -1,5 +1,6 @@
 package org.vlang.ide.hints
 
+import com.intellij.codeInsight.daemon.impl.InlayHintsPassFactoryInternal
 import com.intellij.codeInsight.hints.*
 import com.intellij.codeInsight.hints.presentation.*
 import com.intellij.codeInsight.hints.settings.showInlaySettings
@@ -224,7 +225,7 @@ class VlangInlayHintsCollector(
                         val settings = inlayHintsSettings.findSettings(key, VlangLanguage) { VlangInlayHintsProvider.Settings() }
                         settings.action()
                         inlayHintsSettings.storeSettings(key, VlangLanguage, settings)
-                        InlayHintsPassFactory.forceHintsUpdateOnNextPass()
+                        InlayHintsPassFactoryInternal.forceHintsUpdateOnNextPass()
                     }
                 },
                 object : AnAction("Hints Settings...") {
