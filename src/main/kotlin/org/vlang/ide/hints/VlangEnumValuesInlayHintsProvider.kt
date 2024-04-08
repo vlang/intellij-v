@@ -1,6 +1,5 @@
 package org.vlang.ide.hints
 
-import com.intellij.codeInsight.daemon.impl.InlayHintsPassFactoryInternal
 import com.intellij.codeInsight.hints.*
 import com.intellij.codeInsight.hints.presentation.InlayPresentation
 import com.intellij.codeInsight.hints.presentation.InsetPresentation
@@ -96,7 +95,7 @@ class VlangEnumValuesInlayHintsProvider : InlayHintsProvider<VlangEnumValuesInla
 
                                     val inlayHintsSettings = InlayHintsSettings.instance()
                                     inlayHintsSettings.storeSettings(key, VlangLanguage, settings)
-                                    InlayHintsPassFactoryInternal.forceHintsUpdateOnNextPass()
+                                    InlayHintsFactory.forceHintsUpdateOnNextPass()
                                 }
                             }
                         )

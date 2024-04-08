@@ -2,7 +2,7 @@ module hints
 
 [flag]
 enum FlagEnum as u8 {
-	red<#  = 1 #>
-	other<#  = 2 #>
-	blue<#  = 4 #>
+	red/*<#  = 1 #>*/
+	other/*<#  = 2 #>*/
+	blue/*<#  = 4 #>*/
 }
