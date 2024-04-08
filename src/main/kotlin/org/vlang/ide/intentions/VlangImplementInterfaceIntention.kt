@@ -23,8 +23,7 @@ class VlangImplementInterfaceIntention : VlangBaseIntention(), HighPriorityActio
         return (!application.isHeadlessEnvironment || application.isUnitTestMode) && findStructDeclaration(element) != null
     }
 
-    override operator fun invoke(project: Project, editor: Editor?, element: PsiElement) {
-        if (editor == null) return
+    override operator fun invoke(project: Project, editor: Editor, element: PsiElement) {
         val action = findImplementMethodsAction()
         action?.actionPerformed(
             AnActionEvent.createFromDataContext(

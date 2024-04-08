@@ -1,10 +1,10 @@
 package org.vlang.projectWizard
 
 import com.intellij.openapi.extensions.ExtensionPointName
-import com.intellij.util.io.isDirectory
 import org.vlang.projectWizard.ToolchainUtil.hasExecutable
 import org.vlang.projectWizard.ToolchainUtil.pathToExecutable
 import java.nio.file.Path
+import kotlin.io.path.isDirectory
 
 abstract class VlangToolchainFlavor {
 
