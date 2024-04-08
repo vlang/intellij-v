@@ -124,9 +124,6 @@ Provides support for <a href="https://vlang.io/">V</a> language
                                         implementationClass="org.vlang.lang.search.VlangSuperMarkerProvider"/>
         <codeInsight.gotoSuper language="vlang"
                                implementationClass="org.vlang.lang.search.VlangGotoSuperHandler"/>
-
-        <psi.referenceContributor language="vlang"
-                                  implementation="org.vlang.ide.comments.VlangCommentReferenceContributor"/>
         <!--  endregion Searches -->
 
         <!-- region Code Insight -->

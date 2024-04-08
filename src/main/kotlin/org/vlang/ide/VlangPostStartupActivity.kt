@@ -7,7 +7,7 @@ import com.intellij.ide.util.PropertiesComponent
 import com.intellij.openapi.extensions.PluginId
 import com.intellij.openapi.options.ShowSettingsUtil
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.startup.StartupActivity
+import com.intellij.openapi.startup.ProjectActivity
 import com.intellij.openapi.util.registry.Registry
 import com.jetbrains.cidr.execution.debugger.evaluation.CidrValue
 import org.vlang.configurations.VlangProjectStructureState.Companion.projectStructure
@@ -18,8 +18,9 @@ import org.vlang.toolchain.VlangToolchain
 import org.vlang.toolchain.VlangToolchainService.Companion.toolchainSettings
 import javax.swing.SwingUtilities.invokeLater
 
-class VlangPostStartupActivity : StartupActivity {
-    override fun runActivity(project: Project) {
+class VlangPostStartupActivity : ProjectActivity {
+
+    override suspend fun execute(project: Project) {
         val knownToolchains = VlangKnownToolchainsState.getInstance().knownToolchains
         val toolchainSettings = project.toolchainSettings
 

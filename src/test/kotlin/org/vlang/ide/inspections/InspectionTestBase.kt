@@ -30,7 +30,12 @@ abstract class InspectionTestBase(private val baseFolder: String = "") : BasePla
 
         val qfFile = fixtureFile.replace(".v", ".after.v")
         if (File(myFixture.testDataPath + "/" + qfFile).exists()) {
-            myFixture.getAllQuickFixes().forEach { myFixture.launchAction(it) }
+            myFixture.getAllQuickFixes().forEach {
+                // one fix can affect others - we need to check if the original fix is still available
+                if (it.isAvailable(myFixture.project, myFixture.editor, myFixture.file)) {
+                    myFixture.launchAction(it)
+                }
+            }
             myFixture.checkResultByFile(qfFile)
         }
     }

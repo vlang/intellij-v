@@ -4,13 +4,13 @@ import com.intellij.codeInsight.documentation.DocumentationManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.parentOfTypes
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import com.intellij.util.io.readText
 import org.vlang.lang.psi.VlangImportName
 import org.vlang.lang.psi.VlangNamedElement
 import org.vlang.lang.psi.VlangReferenceExpression
 import org.vlang.utils.toPath
 import java.io.File
 import java.nio.file.Files
+import kotlin.io.path.readText
 
 @Suppress("DEPRECATION")
 abstract class DocumentationTestBase : BasePlatformTestCase() {
