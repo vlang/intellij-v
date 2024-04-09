@@ -31,7 +31,8 @@ intellij {
     val platformVersion = when (platformType) {
         "IU", "IC" -> properties("ideaVersion")
         "CL"       -> properties("clionVersion")
-        else       -> throw IllegalArgumentException("Unknown IDE type: $type, supported types: IU, IC, CL")
+        "GO"       -> properties("golandVersion")
+        else       -> throw IllegalArgumentException("Unknown IDE type: $type, supported types: IU, IC, CL, GO")
     }
 
     pluginName.set(properties("pluginName"))
@@ -42,7 +43,8 @@ intellij {
         "IU" -> properties("ideaPlugins")
         "IC" -> properties("ideaCommunityPlugins")
         "CL" -> properties("clionPlugins")
-        else -> throw IllegalArgumentException("Unknown IDE type: $type, supported types: IU, IC, CL")
+        "GO" -> properties("golandPlugins")
+        else -> throw IllegalArgumentException("Unknown IDE type: $type, supported types: IU, IC, CL, GO")
     }
 
     // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
