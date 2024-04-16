@@ -1,53 +1,53 @@
 <?xml version='1.0'?>
 <list>
-    <option name="org.vlang.CAPTURED_VARIABLE">
+    <option name="io.vlang.CAPTURED_VARIABLE">
         <value>
             <option name="FOREGROUND" value="7dbda2"/>
             <option name="FONT_TYPE" value="2"/>
         </value>
     </option>
-    <option name="org.vlang.CONSTANT">
+    <option name="io.vlang.CONSTANT">
         <value>
             <option name="FOREGROUND" value="9876aa"/>
         </value>
     </option>
-    <option name="org.vlang.CT_CONSTANT">
+    <option name="io.vlang.CT_CONSTANT">
         <value>
             <option name="FOREGROUND" value="9876aa"/>
         </value>
     </option>
-    <option name="org.vlang.CT_FIELD">
+    <option name="io.vlang.CT_FIELD">
         <value>
             <option name="FOREGROUND" value="9876aa"/>
         </value>
     </option>
-    <option name="org.vlang.CT_METHOD_CALL">
+    <option name="io.vlang.CT_METHOD_CALL">
         <value>
             <option name="FOREGROUND" value="9876aa"/>
         </value>
     </option>
-    <option name="org.vlang.ENUM">
+    <option name="io.vlang.ENUM">
         <value>
             <option name="FOREGROUND" value="507874"/>
         </value>
     </option>
-    <option name="org.vlang.ENUM_FIELD">
+    <option name="io.vlang.ENUM_FIELD">
         <value>
             <option name="FOREGROUND" value="9876aa"/>
         </value>
     </option>
-    <option name="org.vlang.GLOBAL_VARIABLE">
+    <option name="io.vlang.GLOBAL_VARIABLE">
         <value>
             <option name="FOREGROUND" value="a9b7c6"/>
             <option name="FONT_TYPE" value="1"/>
         </value>
     </option>
-    <option name="org.vlang.INTERFACE">
+    <option name="io.vlang.INTERFACE">
         <value>
             <option name="FOREGROUND" value="507874"/>
         </value>
     </option>
-    <option name="org.vlang.MUTABLE_CAPTURED_VARIABLE">
+    <option name="io.vlang.MUTABLE_CAPTURED_VARIABLE">
         <value>
             <option name="FOREGROUND" value="7dbda2"/>
             <option name="FONT_TYPE" value="2"/>
@@ -55,146 +55,146 @@
             <option name="EFFECT_TYPE" value="1"/>
         </value>
     </option>
-    <option name="org.vlang.MUTABLE_PARAMETER">
+    <option name="io.vlang.MUTABLE_PARAMETER">
         <value>
             <option name="FOREGROUND" value="a9b7c6"/>
             <option name="EFFECT_COLOR" value="bca5c4"/>
             <option name="EFFECT_TYPE" value="1"/>
         </value>
     </option>
-    <option name="org.vlang.MUTABLE_RECEIVER">
+    <option name="io.vlang.MUTABLE_RECEIVER">
         <value>
             <option name="FOREGROUND" value="a9b7c6"/>
             <option name="EFFECT_COLOR" value="bca5c4"/>
             <option name="EFFECT_TYPE" value="1"/>
         </value>
     </option>
-    <option name="org.vlang.MUTABLE_VARIABLE">
+    <option name="io.vlang.MUTABLE_VARIABLE">
         <value>
             <option name="FOREGROUND" value="a9b7c6"/>
             <option name="EFFECT_COLOR" value="bca5c4"/>
             <option name="EFFECT_TYPE" value="1"/>
         </value>
     </option>
-    <option name="org.vlang.PUBLIC_ENUM">
+    <option name="io.vlang.PUBLIC_ENUM">
         <value>
             <option name="FOREGROUND" value="507874"/>
             <option name="FONT_TYPE" value="2"/>
         </value>
     </option>
-    <option name="org.vlang.PUBLIC_FIELD">
+    <option name="io.vlang.PUBLIC_FIELD">
         <value>
             <option name="FOREGROUND" value="9876aa"/>
             <option name="FONT_TYPE" value="2"/>
         </value>
     </option>
-    <option name="org.vlang.PUBLIC_FUNCTION">
+    <option name="io.vlang.PUBLIC_FUNCTION">
         <value>
             <option name="FOREGROUND" value="ffc66d"/>
             <option name="FONT_TYPE" value="2"/>
         </value>
     </option>
-    <option name="org.vlang.PUBLIC_INTERFACE">
+    <option name="io.vlang.PUBLIC_INTERFACE">
         <value>
             <option name="FOREGROUND" value="507874"/>
             <option name="FONT_TYPE" value="2"/>
         </value>
     </option>
-    <option name="org.vlang.PUBLIC_INTERFACE_METHOD">
+    <option name="io.vlang.PUBLIC_INTERFACE_METHOD">
         <value>
             <option name="FOREGROUND" value="ffc66d"/>
             <option name="FONT_TYPE" value="2"/>
         </value>
     </option>
-    <option name="org.vlang.PUBLIC_MUTABLE_FIELD">
+    <option name="io.vlang.PUBLIC_MUTABLE_FIELD">
         <value>
             <option name="FOREGROUND" value="9876aa"/>
             <option name="FONT_TYPE" value="2"/>
         </value>
     </option>
-    <option name="org.vlang.PUBLIC_STRUCT">
+    <option name="io.vlang.PUBLIC_STRUCT">
         <value>
             <option name="FOREGROUND" value="507874"/>
             <option name="FONT_TYPE" value="2"/>
         </value>
     </option>
-    <option name="org.vlang.PUBLIC_TYPE_ALIAS">
+    <option name="io.vlang.PUBLIC_TYPE_ALIAS">
         <value>
             <option name="FOREGROUND" value="507874"/>
         </value>
     </option>
-    <option name="org.vlang.PUBLIC_UNION">
+    <option name="io.vlang.PUBLIC_UNION">
         <value>
             <option name="FOREGROUND" value="507874"/>
             <option name="FONT_TYPE" value="2"/>
         </value>
     </option>
-    <option name="org.vlang.SQL_CODE">
+    <option name="io.vlang.SQL_CODE">
         <value/>
     </option>
-    <option name="org.vlang.STRUCT">
+    <option name="io.vlang.STRUCT">
         <value>
             <option name="FOREGROUND" value="507874"/>
         </value>
     </option>
-    <option name="org.vlang.TYPE_ALIAS">
+    <option name="io.vlang.TYPE_ALIAS">
         <value>
             <option name="FOREGROUND" value="507874"/>
         </value>
     </option>
-    <option name="org.vlang.UNION">
+    <option name="io.vlang.UNION">
         <value>
             <option name="FOREGROUND" value="507874"/>
         </value>
     </option>
-    <option name="org.vlang.UNSAFE_CODE">
+    <option name="io.vlang.UNSAFE_CODE">
         <value/>
     </option>
-    <option name="org.vlang.USED_LABEL">
+    <option name="io.vlang.USED_LABEL">
         <value>
             <option name="FOREGROUND" value="a9b7c6"/>
             <option name="FONT_TYPE" value="1"/>
         </value>
     </option>
-    <option name="org.vlang.GENERIC_PARAMETER">
+    <option name="io.vlang.GENERIC_PARAMETER">
         <value>
             <option name="FOREGROUND" value="20999D"/>
         </value>
     </option>
-    <option name="org.vlang.DOC_EMPHASIS">
+    <option name="io.vlang.DOC_EMPHASIS">
         <value>
             <option name="FONT_TYPE" value="2"/>
         </value>
     </option>
-    <option name="org.vlang.DOC_STRONG">
+    <option name="io.vlang.DOC_STRONG">
         <value>
             <option name="FONT_TYPE" value="1"/>
         </value>
     </option>
-    <option name="org.vlang.COMPILE_DIRECTIVE">
+    <option name="io.vlang.COMPILE_DIRECTIVE">
         <value>
             <option name="FOREGROUND" value="bbb529"/>
             <option name="FONT_TYPE" value="1"/>
         </value>
     </option>
-    <option name="org.vlang.MUTABLE_RECEIVER">
+    <option name="io.vlang.MUTABLE_RECEIVER">
         <value>
             <option name="FOREGROUND" value="4eade5"/>
             <option name="EFFECT_COLOR" value="bca5c4"/>
             <option name="EFFECT_TYPE" value="1"/>
         </value>
     </option>
-    <option name="org.vlang.RECEIVER">
+    <option name="io.vlang.RECEIVER">
         <value>
             <option name="FOREGROUND" value="4eade5"/>
         </value>
     </option>
-    <option name="org.vlang.MODULE">
+    <option name="io.vlang.MODULE">
         <value>
             <option name="FOREGROUND" value="afbf7e"/>
         </value>
     </option>
-    <option name="org.vlang.COMMENT_REFERENCE">
+    <option name="io.vlang.COMMENT_REFERENCE">
         <value>
             <option name="FOREGROUND" value="A1A1A1"/>
         </value>

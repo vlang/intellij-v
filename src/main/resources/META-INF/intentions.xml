@@ -2,31 +2,31 @@
     <extensions defaultExtensionNs="com.intellij">
         <intentionAction>
             <language>vlang</language>
-            <className>org.vlang.ide.intentions.VlangMakePublicIntention</className>
+            <className>io.vlang.ide.intentions.VlangMakePublicIntention</className>
             <category>V</category>
         </intentionAction>
 
         <intentionAction>
             <language>vlang</language>
-            <className>org.vlang.ide.intentions.VlangMakePrivateIntention</className>
+            <className>io.vlang.ide.intentions.VlangMakePrivateIntention</className>
             <category>V</category>
         </intentionAction>
 
         <intentionAction>
             <language>vlang</language>
-            <className>org.vlang.ide.intentions.VlangMethodToFunctionIntention</className>
+            <className>io.vlang.ide.intentions.VlangMethodToFunctionIntention</className>
             <category>V</category>
         </intentionAction>
 
         <intentionAction>
             <language>vlang</language>
-            <className>org.vlang.ide.intentions.VlangFunctionToMethodIntention</className>
+            <className>io.vlang.ide.intentions.VlangFunctionToMethodIntention</className>
             <category>V</category>
         </intentionAction>
 
         <intentionAction>
             <language>vlang</language>
-            <className>org.vlang.ide.intentions.VlangImplementInterfaceIntention</className>
+            <className>io.vlang.ide.intentions.VlangImplementInterfaceIntention</className>
             <category>V</category>
         </intentionAction>
     </extensions>

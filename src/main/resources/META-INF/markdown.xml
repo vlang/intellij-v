@@ -1,5 +1,5 @@
 <idea-plugin>
   <extensions defaultExtensionNs="org.intellij.markdown">
-    <fenceLanguageProvider implementation="org.vlang.markdown.VlangFenceLanguageProvider"/>
+    <fenceLanguageProvider implementation="io.vlang.markdown.VlangFenceLanguageProvider"/>
   </extensions>
 </idea-plugin>
