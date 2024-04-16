@@ -1,5 +1,11 @@
 # IntelliJ V Changelog
 
+## [0.0.1-beta.5]
+
+### Changed
+
+- Support for IntelliJ Platform 2024.1
+
 ## [0.0.1-beta.3-231-EAP] - 06.03.2023
 
 ### Added
