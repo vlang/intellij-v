@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [0.0.1-beta.5]
+
+### Changed
+
+- Support for IntelliJ Platform 2024.1
+
 ## [0.0.1-beta.4] - 17.04.2023
 
 Learn more in blog post: https://blog.vosca.dev/intellij-v-beta.4/
@@ -144,7 +150,7 @@ Learn more in blog post: https://blog.vosca.dev/intellij-v-beta.4/
     - when regenerating interface methods, be aware that `mut x Foo` may also implement an interface method that is not
       mutable and same for fields
     - fixed generation of types for fields
-- Fixed `err` variable resolving inside a nested if inside an `if` guard in an `else` block
+- Fixed `err` variable resolving inside a nested if inside an if guard in an `else` block
 - Fixed enum field resolving for struct init with `...var`
 - Fixed `err` resolving inside call expr with `or` block
 - Fixed `it` resolving if it used in inner if expression

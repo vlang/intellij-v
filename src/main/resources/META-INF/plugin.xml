@@ -1,7 +1,7 @@
 <idea-plugin xmlns:xi="http://www.w3.org/2001/XInclude">
-    <id>org.vlang</id>
+    <id>io.vlang</id>
     <name>Vlang</name>
-    <vendor>Petr Makhnev</vendor>
+    <vendor>Vlang</vendor>
 
     <description><![CDATA[
 Provides support for <a href="https://vlang.io/">V</a> language
