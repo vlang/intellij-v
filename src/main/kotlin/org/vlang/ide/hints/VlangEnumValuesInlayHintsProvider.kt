@@ -95,7 +95,7 @@ class VlangEnumValuesInlayHintsProvider : InlayHintsProvider<VlangEnumValuesInla
 
                                     val inlayHintsSettings = InlayHintsSettings.instance()
                                     inlayHintsSettings.storeSettings(key, VlangLanguage, settings)
-                                    InlayHintsPassFactory.forceHintsUpdateOnNextPass()
+                                    ParameterHintsPassFactory.forceHintsUpdateOnNextPass()
                                 }
                             }
                         )
