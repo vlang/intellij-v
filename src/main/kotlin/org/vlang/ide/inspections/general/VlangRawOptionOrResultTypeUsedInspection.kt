@@ -46,6 +46,11 @@ class VlangRawOptionOrResultTypeUsedInspection : VlangBaseInspection() {
             }
 
             private fun checkType(expr: PsiElement, type: VlangTypeEx) {
+                val containingFile = expr.containingFile as? VlangFile ?: return
+                if (containingFile is VlangCodeFragment) {
+                    return
+                }
+
                 val parent = expr.parent
                 if (parent is VlangOrBlockExpr ||
                     parent is VlangDotExpression &&

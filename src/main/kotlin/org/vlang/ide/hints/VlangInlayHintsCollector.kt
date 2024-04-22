@@ -224,7 +224,7 @@ class VlangInlayHintsCollector(
                         val settings = inlayHintsSettings.findSettings(key, VlangLanguage) { VlangInlayHintsProvider.Settings() }
                         settings.action()
                         inlayHintsSettings.storeSettings(key, VlangLanguage, settings)
-                        InlayHintsFactory.forceHintsUpdateOnNextPass()
+                        InlayHintsPassFactory.forceHintsUpdateOnNextPass()
                     }
                 },
                 object : AnAction("Hints Settings...") {
