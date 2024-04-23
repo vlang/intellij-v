@@ -12,7 +12,7 @@ import com.intellij.openapi.application.runWriteAction
 import com.intellij.openapi.command.CommandProcessor
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.ui.popup.JBPopupFactory
+import com.intellij.openapi.ui.popup.PopupChooserBuilder
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiReference
@@ -20,6 +20,7 @@ import com.intellij.ui.SimpleColoredComponent
 import com.intellij.ui.SimpleTextAttributes
 import com.intellij.ui.components.JBList
 import com.intellij.util.IncorrectOperationException
+import com.intellij.util.ThreeState
 import com.intellij.util.containers.ContainerUtil
 import com.intellij.util.ui.JBUI
 import io.vlang.ide.ui.VIcons
@@ -120,7 +121,7 @@ class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, H
         // auto import on trying to fix
         if (modulesToImport.size == 1) {
             if (VlangCodeInsightSettings.getInstance().isAddUnambiguousImportsOnTheFly &&
-                (ApplicationManager.getApplication().isUnitTestMode || DaemonListeners.canChangeFileSilently(file, true))
+                (ApplicationManager.getApplication().isUnitTestMode || DaemonListeners.canChangeFileSilently(file, true, ThreeState.UNSURE))
             ) {
                 CommandProcessor.getInstance().runUndoTransparentAction { perform(file, firstModuleToImport) }
                 return true
@@ -181,16 +182,17 @@ class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, H
                 }
             }
 
-            val builder = JBPopupFactory.getInstance().createListPopupBuilder(list).setRequestFocus(true)
+            val builder = PopupChooserBuilder(list)
+                .setRequestFocus(true)
                 .setTitle("Module to Import")
-                .setItemChoosenCallback {
+                .setItemChosenCallback(Runnable {
                     val i = list.selectedIndex
                     if (i < 0) {
-                        return@setItemChoosenCallback
+                        return@Runnable
                     }
 
                     perform(file, modulesToImport[i])
-                }
+                })
                 .setFilteringEnabled { element: Any -> if (element is String) element else element.toString() }
 
             val popup = builder.createPopup()
