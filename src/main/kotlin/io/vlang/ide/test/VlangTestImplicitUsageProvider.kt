@@ -1,0 +1,30 @@
+package io.vlang.ide.test
+
+import com.intellij.codeInsight.daemon.ImplicitUsageProvider
+import com.intellij.openapi.roots.TestSourcesFilter
+import com.intellij.psi.PsiElement
+import io.vlang.lang.psi.VlangFile
+import io.vlang.lang.psi.VlangFunctionDeclaration
+
+/**
+ * Marks all test functions as implicitly used.
+ */
+class VlangTestImplicitUsageProvider : ImplicitUsageProvider {
+    override fun isImplicitUsage(element: PsiElement): Boolean {
+        if (element !is VlangFunctionDeclaration) {
+            return false
+        }
+
+        val containingFile = element.containingFile as? VlangFile ?: return false
+
+        if (!TestSourcesFilter.isTestSources(containingFile.virtualFile, element.project)) {
+            return false
+        }
+
+        return VlangTestUtil.isTestFunction(element)
+    }
+
+    override fun isImplicitRead(element: PsiElement) = false
+
+    override fun isImplicitWrite(element: PsiElement) = false
+}

@@ -1,12 +1,12 @@
 <idea-plugin>
   <extensions defaultExtensionNs="cidr.debugger">
-    <languageSupport language="vlang" implementationClass="org.vlang.debugger.lang.VlangDebuggerLanguageSupport"/>
-    <lineBreakpointFileTypesProvider implementation="org.vlang.debugger.VlangLineBreakpointFileTypesProvider"/>
-    <debugProcessConfigurator implementation="org.vlang.debugger.runconfig.VlangDebugProcessConfigurator"/>
-    <valueRendererExtension implementation="org.vlang.debugger.VlangValueRendererExtension"/>
-    <localVariablesFilterHandler implementation="org.vlang.debugger.lang.VlangLocalVariablesFilterHandler"/>
-    <valueRendererFactory implementation="org.vlang.debugger.VlangValueRendererFactory"/>
-    <editorsExtension language="vlang" implementationClass="org.vlang.debugger.lang.VlangEditorsExtension"/>
-    <backendConsoleInjectionHelper implementation="org.vlang.debugger.VlangBackendConsoleInjectionHelper"/>
+    <languageSupport language="vlang" implementationClass="io.vlang.debugger.lang.VlangDebuggerLanguageSupport"/>
+    <lineBreakpointFileTypesProvider implementation="io.vlang.debugger.VlangLineBreakpointFileTypesProvider"/>
+    <debugProcessConfigurator implementation="io.vlang.debugger.runconfig.VlangDebugProcessConfigurator"/>
+    <valueRendererExtension implementation="io.vlang.debugger.VlangValueRendererExtension"/>
+    <localVariablesFilterHandler implementation="io.vlang.debugger.lang.VlangLocalVariablesFilterHandler"/>
+    <valueRendererFactory implementation="io.vlang.debugger.VlangValueRendererFactory"/>
+    <editorsExtension language="vlang" implementationClass="io.vlang.debugger.lang.VlangEditorsExtension"/>
+    <backendConsoleInjectionHelper implementation="io.vlang.debugger.VlangBackendConsoleInjectionHelper"/>
   </extensions>
 </idea-plugin>

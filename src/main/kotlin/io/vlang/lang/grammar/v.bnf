@@ -1,0 +1,1136 @@
+{
+  parserClass='io.vlang.lang.VlangParser'
+
+  implements='io.vlang.lang.psi.VlangCompositeElement'
+  extends='io.vlang.lang.psi.impl.VlangCompositeElementImpl'
+
+  elementTypeHolderClass='io.vlang.lang.VlangTypes'
+  elementTypeClass='io.vlang.lang.psi.VlangCompositeElementType'
+  tokenTypeClass='io.vlang.lang.psi.VlangTokenType'
+  psiTreeUtilClass='io.vlang.lang.psi.VlangPsiTreeUtil'
+
+  psiClassPrefix='Vlang'
+  psiImplClassSuffix='Impl'
+  psiPackage='io.vlang.lang.psi'
+  psiImplPackage='io.vlang.lang.psi.impl'
+  psiImplUtilClass="io.vlang.lang.psi.impl.VlangPsiImplUtil"
+  parserUtilClass="io.vlang.lang.VlangParserUtil"
+
+  tokens=[
+    LBRACE               =  '{'
+    RBRACE               =  '}'
+    LBRACK               =  '['
+    HASH_LBRACK          =  '#['
+    RBRACK               =  ']'
+    RBRACK_EXP           =  ']!'
+    LPAREN               =  '('
+    RPAREN               =  ')'
+    COLON                =  ':'
+    SEMICOLON            =  ';'
+    COMMA                =  ','
+    EQ                   =  '=='
+    ASSIGN               =  '='
+    NOT_EQ               =  '!='
+    NOT                  =  '!'
+    QUESTION             =  '?'
+    PLUS_PLUS            =  '++'
+    PLUS_ASSIGN          =  '+='
+    PLUS                 =  '+'
+    MINUS_MINUS          =  '--'
+    MINUS_ASSIGN         =  '-='
+    MINUS                =  '-'
+    COND_OR              =  '||'
+    BIT_OR_ASSIGN        =  '|='
+    BIT_CLEAR_ASSIGN     =  '&^='
+    BIT_CLEAR            =  '&^'
+    COND_AND             =  '&&'
+    BIT_AND_ASSIGN       =  '&='
+    BIT_AND              =  '&'
+    BIT_OR               =  '|'
+    SHIFT_LEFT_ASSIGN    =  '<<='
+    SHIFT_LEFT           =  '<<'
+    SEND_CHANNEL         =  '<-'
+    LESS_OR_EQUAL        =  '<='
+    LESS                 =  '<'
+    BIT_XOR_ASSIGN       =  '^='
+    BIT_XOR              =  '^'
+    MUL_ASSIGN           =  '*='
+    MUL                  =  '*'
+    QUOTIENT_ASSIGN      =  '/='
+    QUOTIENT             =  '/'
+    REMAINDER_ASSIGN     =  '%='
+    REMAINDER            =  '%'
+    AT                   =  '@'
+    SHIFT_RIGHT_ASSIGN   =  '>>='
+    UNSIGNED_SHIFT_RIGHT_ASSIGN   =  '>>>='
+    SHIFT_RIGHT          =  '>>'
+    UNSIGNED_SHIFT_RIGHT =  '>>>'
+    GREATER_OR_EQUAL     =  '>='
+    GREATER              =  '>'
+    VAR_ASSIGN           =  ':='
+    TRIPLE_DOT           =  '...'
+    DOT                  =  '.'
+    SAFE_DOT             =  '?.'
+    RANGE                =  '..'
+    TILDA                =  '~'
+    SINGLE_QUOTE         =  "'"
+    DOUBLE_QUOTE         =  '"'
+    BACKTICK             =  '`'
+    DOLLAR               =  '$'
+    NOT_IN               =  '!in'
+    NOT_IS               =  '!is'
+    IF_COMPILE_TIME      =  '$if'
+    ELSE_COMPILE_TIME    =  '$else'
+    FOR_COMPILE_TIME     =  '$for'
+    BUILTIN_GLOBAL       =  '__global'
+    SEMICOLON_SYNTHETIC  = '<NL>'
+    TYPE_                = 'type'
+    DUMP                 = 'dump'
+    OFFSETOF             = 'offsetof'
+    SIZEOF               = 'sizeof'
+    ISREFTYPE            = 'isreftype'
+    C_STRING             = 'c_string'
+    raw_string           = 'raw_string'
+    char                 = 'char'
+  ]
+
+  extends("(Or|And|Add|Conversion|Mul|ShiftLeft|Selector|Conditional|OrBlock)Expr|(In|NotIn|Is|NotIs)Expression")=BinaryExpr
+  extends(".*(Expr|Literal|Lit|OperandName)|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|SharedExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression|LockExpression|IncDecExpression|LiteralValueExpression|SelectExpression|SpawnExpression|TypeCastExpression")=Expression
+
+  implements("ModuleClause|(Var|Param|Field|Label|Var|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|(Struct|TypeAlias|Union|Enum|Interface)Declaration|Receiver|Import(Alias|Name)|GenericParameter|EmbeddedDefinition")="io.vlang.lang.psi.VlangNamedElement"
+  implements("FunctionLit|(Function|Method)Declaration")="io.vlang.lang.psi.VlangSignatureOwner"
+  implements("(Function|Method)Declaration")="io.vlang.lang.psi.VlangFunctionOrMethodDeclaration"
+  implements(".*ReferenceExpression|FieldName|EnumFetch")="io.vlang.lang.psi.VlangReferenceExpressionBase"
+  implements("(Continue|Break|Goto)Statement")="io.vlang.lang.psi.VlangLabelRefOwnerElement"
+
+  implements("(Struct|Interface|Enum|GlobalVariable|Function|Method|TypeAlias|Const)Declaration|ModuleClause")="io.vlang.lang.psi.VlangAttributeOwner"
+  implements("(Function|Method)Declaration|(Struct|Interface|Alias)Type|FunctionLit|InterfaceMethodDefinition")="io.vlang.lang.psi.VlangGenericParametersOwner"
+  implements("CallExpr|Type")="io.vlang.lang.psi.VlangGenericArgumentsOwner"
+
+  implements("(Function|Method)Declaration")="io.vlang.lang.psi.VlangScopeHolder"
+
+  extends("(Function|Method)Declaration")="io.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
+  extends("Type|GenericParameters|Signature|Result|Parameters|TypeUnionList|EmbeddedInterfaceDefinition|TypeReferenceExpression|Attributes|Attribute|PlainAttribute|AttributeExpression|AttributeValue|AttributeKey")="io.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
+  extends("ModuleClause|(Struct|TypeAlias|Union|Enum|Interface)Declaration|(Var|Label|Param|Field|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter|EmbeddedDefinition")="io.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
+
+  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum|Interface)Declaration|.*Type|(Var|Label|Field|Param|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter|GenericParameters|Parameters|Result|Signature|TypeUnionList|EmbeddedInterfaceDefinition|TypeReferenceExpression|Attributes|Attribute|PlainAttribute|AttributeExpression|AttributeValue|AttributeKey|EmbeddedDefinition")='io.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
+
+  extends("Sql.*Statement")=SqlBlockStatement
+  extends(".*Statement")=Statement
+  extends(".*Type|TypeList")=Type
+
+  pin('.*List(?:_\d.*)?')=1
+
+  generateTokenAccessors=true
+}
+
+// [module <ident>]
+// [imports]
+//
+// [TopLevelDeclarations]
+File ::= ShebangClause? ModuleClause? ImportList? TopLevelDeclaration*
+
+// General rule for explicit and implicit ';'
+private semi ::= '<NL>' | ';' | <<eof>>
+private list_separator ::= semi | ','
+
+// #!/usr/bin/env v
+ShebangClause ::= shebang
+
+// [attr] module <name>
+ModuleClause ::= Attributes? module identifier semi {
+  pin=2
+  methods=[getName]
+  stubClass="io.vlang.lang.stubs.VlangModuleClauseStub"
+}
+
+// import <part1>
+// import <part1>.<part2>
+// import <part1>.<part2> { <import list> }
+// import <part1>.<part2> as <alias>
+ImportList ::= (ImportDeclaration semi)+
+
+// import <spec>
+ImportDeclaration ::= import ImportSpec {
+  pin=1
+  methods=[addImportSpec]
+}
+
+// <part1>
+// <part1>.<part2>
+// <part1> { <ref> }
+// <part1> as <alias>
+ImportSpec ::= ImportPath ImportAlias? SelectiveImportList? {
+  methods=[getIdentifier getLastPart getLastPartPsi getName getImportedName getAliasName getPathName resolve]
+}
+
+// <part1>
+// <part1>.<part2>
+ImportPath ::= ImportName ('.' ImportName)* {
+  methods=[getQualifiedName getLastPart getLastPartPsi]
+}
+
+// just identifier
+ImportName ::= identifier {
+  stubClass="io.vlang.lang.stubs.VlangImportNameStub"
+  methods=[getQualifier getNameIdentifier setName getName getTextOffset getReference resolve getQualifiedName]
+}
+
+// { <ref>[, <ref2>] }
+SelectiveImportList ::= '{' ReferenceExpression (list_separator ReferenceExpression)* list_separator? '}' {pin(".*")=2}
+
+// as <ident>
+ImportAlias ::= as ImportAliasName {
+  pin=1
+  stubClass="io.vlang.lang.stubs.VlangImportAliasStub"
+  methods=[getName getIdentifier getQualifiedName]
+}
+
+ImportAliasName ::= identifier {
+  methods=[getReference]
+}
+// end of import rule
+
+////////// TOP LEVEL DECLARATIONS //////////
+
+private TopLevelDeclaration ::= !<<eof>> TopDeclaration semi {pin=1 recoverWhile=TopLevelDeclarationRecover}
+private TopDeclaration ::=
+    ConstDeclaration
+  | FunctionDeclaration
+  | MethodDeclaration
+  | StructDeclaration
+  | EnumDeclaration
+  | InterfaceDeclaration
+  | GlobalVariableDeclaration
+  | CompileTimeForStatement
+  | TypeAliasDeclaration
+  | Statement // for single files without `main()` function
+
+private TopLevelDeclarationRecover ::= !('type' | '__global' | enum | import | '$for' | '$if' | '[' | '!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | '{' | '|' | '|=' | '||' | '&&' | '}' | break | case | const | continue | defer | else | float | for | fn | pub | mut | volatile | shared | go | spawn | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | union | var | unsafe | assert | match | lock | rlock | asm | true | false | none | '$else' | typeof | offsetof | sizeof | isreftype | dump | nil)
+
+////////// TOP LEVEL DECLARATIONS END //////////
+
+
+////////// STATEMENTS //////////
+
+// Block { }
+BlockWithConsume ::= /*<<consumeBlock>> |*/ BlockInner {elementType=Block}
+Block ::= BlockInner {methods=[processDeclarations]}
+private BlockInner ::= '{' ('}' | (<<withOff Statements "BLOCK?" "PAR">> | (!() Statements)) '}') {pin(".*")=1}
+BlockNoPin ::= '{' ('}' | (<<withOff Statements "BLOCK?" "PAR">> | (!() Statements)) '}') {elementType=Block}
+// end of block rule
+
+private Statements ::= StatementWithSemi*
+
+private StatementWithSemi ::= Statement (semi | &'}') { pin=1 recoverWhile=StatementRecover }
+Statement ::=
+    BlockNoPin
+  | AppendStatement
+  | SimpleStatement
+  | ReturnStatement
+  | BreakStatement
+  | ContinueStatement
+  | GotoStatement
+  | ForStatement
+  | CompileTimeForStatement
+  | AssertStatement
+  | AsmBlockStatement
+  | LabeledStatement
+  | DeferStatement {methods=[processDeclarations]}
+
+private StatementRecover ::= !('!' | '?' | '&' | '[' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | '{' | '|' | '|=' | '||' | '&&' | '}' | type | break | case | const | continue | defer | else | float | for | fn | pub | mut | volatile | shared | go | spawn | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | union | var | unsafe | assert | match | lock | rlock | asm | true | false | none | '$for' | '$if' | '$else' | '__global' | typeof | offsetof | sizeof | isreftype | dump | nil)
+
+// attributes start
+// [attr1]
+// [attr2]
+Attributes ::= Attribute (semi Attribute)* semi? {
+  pin=1
+  stubClass="io.vlang.lang.stubs.VlangAttributesStub"
+}
+// [<exprs>]
+Attribute ::= '[' AttributeExpressions ']' {
+  pin=1
+  stubClass="io.vlang.lang.stubs.VlangAttributeStub"
+}
+// <expr>[; <expr2>]
+private AttributeExpressions ::= AttributeExpression (';' AttributeExpression)* {pin(".*")=1}
+// 'if <ident>' or <plain>
+AttributeExpression ::= IfAttribute | PlainAttribute {
+  stubClass="io.vlang.lang.stubs.VlangAttributeExpressionStub"
+}
+// if <ident>
+IfAttribute ::= if Expression {pin=1}
+// <ident> or 10 or "string" [: <ident> or <literal>]
+PlainAttribute ::= AttributeKey AttributeValueWithColon? {
+  stubClass="io.vlang.lang.stubs.VlangPlainAttributeStub"
+}
+AttributeKey ::= AttributeIdentifier | Literal {
+  stubClass="io.vlang.lang.stubs.VlangAttributeKeyStub"
+}
+
+// : <ident> or <literal>
+private AttributeValueWithColon ::= ':' AttributeValue {pin=1}
+AttributeValue ::= identifier | Literal {
+  stubClass="io.vlang.lang.stubs.VlangAttributeValueStub"
+}
+
+AttributeIdentifier ::= AttributeIdentifierPrefix? (identifier | unsafe) {
+  methods=[getReference]
+}
+AttributeIdentifierPrefix ::= (identifier | unsafe) '.'
+// end of attributes
+
+// simple statements
+SimpleStatement ::=
+  VarDeclaration
+  | (LeftHandExprList AssignmentStatement? | SendStatement) {pin(".*")=LeftHandExprList}
+
+// <vars> := <exprs>
+VarDeclaration ::= VarDefinitionList ':=' ExpressionList {pin=2}
+
+// <label>: <stmt>
+LabeledStatement ::= LabelDefinition Statement? {pin=2}
+
+// <label>:
+LabelDefinition ::= identifier ':' {
+  pin=2
+  stubClass="io.vlang.lang.stubs.VlangLabelDefinitionStub"
+}
+
+// = <list>
+left AssignmentStatement ::= AssignOp (ExpressionList) {pin=1}
+AssignOp ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '>>>=' | '&=' | '&^='
+
+// <- <expr>
+left SendStatement ::= '<-' BeforeBlockExpression {pin=1}
+// end of simple statements
+
+// For statement
+// for { ... }
+// for <expr> { ... }
+// for [<statement>] ; [<expr>] ; [<statement>] { ... }
+// for [<expr> ,] <expr> in <expr> { ... }
+ForStatement ::= for (ForClause | RangeClause | BeforeBlockExpression)? Block {pin=1}
+
+// С form of for loop
+// [<statement>]; [<expression>]; [<statement>]
+ForClause ::= SimpleStatement? ';' Expression? ';' (<<withOn "noBraces" SimpleStatement>>)? {methods=[processDeclarations]}
+
+// <var>* in <expression>
+RangeClause ::= VarDefinitionList in BeforeBlockExpression {
+  pin(".*")=2
+  extends=VarDeclaration
+  methods=[getRangeExpression getVariablesList]
+}
+
+// See ForStatement
+CompileTimeForStatement ::= '$for' <<enterMode "BLOCK?">> (ForClause | RangeClause | Expression) Block <<exitModeSafe "BLOCK?">> {pin=1}
+
+// return <expr>
+// return <expr>, <expr>
+ReturnStatement ::= return ExpressionList? {
+    methods=[getOwner]
+}
+
+// break [<label>]
+BreakStatement ::= break LabelRef?
+
+// continue [<label>]
+ContinueStatement ::= continue LabelRef?
+
+// goto <label>
+GotoStatement ::= goto LabelRef
+
+// assert <expr>
+AssertStatement ::= assert Expression (',' Expression)?
+
+// defer { ... } rule
+DeferStatement ::= defer Block
+
+// <expr> << <expr>
+AppendStatement ::= DotExpression ShiftLeftOp Expression {
+    methods=[getLeft]
+}
+
+ShiftLeftExpr ::= Expression ShiftLeftOp Expression
+
+ShiftLeftOp ::= <<shiftLeft>>
+
+// <label>:
+LabelRef ::= identifier { methods=[getReference getName] }
+
+// select { ... }
+SelectExpression ::= select '{' SelectArms '}' {pin=2}
+// <stmt> { ... }
+// else { ... }
+SelectArms ::= (SelectArm | SelectElseArmClause)*
+// <stmt> { ... }
+SelectArm ::= SelectArmStatement Block semi {pin=2}
+SelectArmStatement ::=
+    (<<withOn "noBraces" VarDeclaration>>)
+  | SendStatement
+  | <<withOn "noBraces" LeftHandExprList>> SelectArmAssignmentStatement? {pin(".*")=LeftHandExprList}
+
+left SelectArmAssignmentStatement ::= AssignOp BeforeBlockExpression {extends=AssignmentStatement}
+
+// else { ... }
+SelectElseArmClause ::= else Block semi {pin=1}
+
+// asm [volatile] { ... }
+AsmBlockStatement ::= asm volatile? identifier AsmBlock {pin=1}
+AsmBlock ::= '{' ('}' | (ASM_LINE)* '}') {pin(".*")=1}
+
+////// DECLARATIONS //////
+
+// struct or union
+StructDeclaration ::= Attributes? SymbolVisibility? StructType {
+  stubClass="io.vlang.lang.stubs.VlangStructDeclarationStub"
+  methods=[getIdentifier getName getTypeInner isUnion getKindName isAttribute addField]
+}
+
+AnonymousStructType ::= struct '{' FieldsGroup* '}' {
+  pin=2
+  implements="io.vlang.lang.psi.VlangFieldListOwner"
+  methods=[getFieldList getOwnFieldList]
+}
+
+StructType ::= (struct | union) identifier GenericParameters? '{'  FieldsGroup* '}' {
+  pin=1
+  implements="io.vlang.lang.psi.VlangFieldListOwner"
+  methods=[getFieldList getOwnFieldList getEmbeddedStructs getEmbeddedStructList isUnion]
+}
+
+FieldsGroup ::= UnfinishedMemberModifiers | WithModifiersFieldsGroup | WithoutModifiersFieldsGroup {
+  methods=[getMemberModifierList]
+  implements="io.vlang.lang.psi.VlangMemberModifiersOwner"
+}
+
+// meta rule to deal with completion for modifiers
+UnfinishedMemberModifiers ::= MemberModifier+ !(':' | semi)
+MemberModifiers ::= MemberModifier* ':' {pin=2}
+MemberModifier ::= mut | pub | '__global'
+
+private WithModifiersFieldsGroup ::= MemberModifiers semi? FieldDeclarations {pin=1}
+private WithoutModifiersFieldsGroup ::= !MemberModifiers FieldDeclarations
+
+private FieldDeclarations ::= FieldDeclaration+
+FieldDeclaration ::= (PlainFieldDeclaration | EmbeddedDefinition) semi?
+private PlainFieldDeclaration ::= FieldDefinition Type Attribute? DefaultFieldValue?
+DefaultFieldValue ::= '=' Expression {pin=1}
+FieldDefinition ::= identifier {
+  methods=[getQualifier getQualifiedName getTypeInner isPublic isMutable isPrimary makeMutable makeImmutable getOwner]
+  implements="io.vlang.lang.psi.VlangMutabilityOwner"
+  stubClass="io.vlang.lang.stubs.VlangFieldDefinitionStub"
+}
+
+EmbeddedDefinition ::= Type {
+  stubClass="io.vlang.lang.stubs.VlangEmbeddedDefinitionStub"
+  methods=[getName getIdentifier getType]
+}
+
+
+// interface
+InterfaceDeclaration ::= Attributes? SymbolVisibility? InterfaceType {
+  stubClass="io.vlang.lang.stubs.VlangInterfaceDeclarationStub"
+  methods=[getName getIdentifier getTypeInner]
+}
+
+InterfaceType ::= interface identifier GenericParameters? '{' MembersGroup* '}' {
+  pin=1
+  implements="io.vlang.lang.psi.VlangFieldListOwner"
+  methods=[getFieldList getOwnFieldList getMethodList getEmbeddedInterfaces getEmbeddedInterfacesList]
+}
+
+MembersGroup ::= WithModifiersMembersGroup | WithoutModifiersMemberGroup {
+  methods=[getMemberModifierList]
+  implements="io.vlang.lang.psi.VlangMemberModifiersOwner"
+}
+
+private WithModifiersMembersGroup ::= MemberModifiers semi? InterfaceMembers {pin=1}
+private WithoutModifiersMemberGroup ::= !MemberModifiers InterfaceMembers
+
+private InterfaceMembers ::= InterfaceMember+
+private InterfaceMember ::= InterfaceMethodDeclaration | FieldDeclaration | EmbeddedInterfaceDefinition
+
+InterfaceMethodDeclaration ::= InterfaceMethodDefinition Attribute? DefaultFieldValue? semi
+InterfaceMethodDefinition ::= identifier GenericParameters? Signature {
+  implements="io.vlang.lang.psi.VlangSignatureOwner"
+  stubClass="io.vlang.lang.stubs.VlangInterfaceMethodDefinitionStub"
+  methods=[getTypeInner isPublic isMutable getOwner getQualifiedName]
+}
+
+EmbeddedInterfaceDefinition ::= Type {
+  methods=[getIdentifier getName getTypeReferenceExpression getGoTypeInner]
+  stubClass="io.vlang.lang.stubs.VlangEmbeddedInterfaceDefinitionStub"
+}
+
+
+// enum
+EnumDeclaration ::= Attributes? SymbolVisibility? EnumType {
+  stubClass="io.vlang.lang.stubs.VlangEnumDeclarationStub"
+  methods=[getName getIdentifier getTypeInner isFlag]
+}
+
+EnumType ::= enum identifier EnumBackedTypeAs? '{' EnumFields? '}' {
+  pin=1
+  methods=[getFieldList]
+}
+
+EnumBackedTypeAs ::= as Type {pin=1}
+
+private EnumFields ::= EnumFieldDeclaration (EnumFieldDeclaration)*
+EnumFieldDeclaration ::= EnumFieldDefinition ('=' Expression)? semi? {pin=1}
+EnumFieldDefinition ::= identifier {
+  methods=[isPublic getTypeInner constantValue]
+  stubClass="io.vlang.lang.stubs.VlangEnumFieldDefinitionStub"
+}
+
+// TODO: split for type alias and sum type?
+// [<visibility>] type <ident> = <types>
+TypeAliasDeclaration ::= Attributes? SymbolVisibility? 'type' AliasType {
+  pin=3
+  stubClass="io.vlang.lang.stubs.VlangTypeAliasDeclarationStub"
+  methods=[getIdentifier getName getTypeInner]
+}
+
+AliasType ::= identifier GenericParameters? '=' TypeUnionList {
+  pin=2
+  methods=[isAlias getAliasType]
+}
+
+// <type> [ | <type2>]...
+TypeUnionList ::= Type (semi? '|' Type)* {
+  pin=1
+  stubClass="io.vlang.lang.stubs.VlangTypeUnionListStub"
+}
+
+
+// const declarations
+// [<visibility>] const <name> = <value>
+// [<visibility>] const (<list>)
+ConstDeclaration ::= Attributes? SymbolVisibility? const ( ConstDefinition | '(' ConstDefinitions? ')' ) {
+  pin=3
+  methods=[isMultiline]
+}
+// <spec> [<spec2>]
+private ConstDefinitions ::= ConstDefinition (semi ConstDefinition)* semi? {pin=1}
+// <list> = <list>
+ConstDefinition ::= identifier '=' (<<withOff Expression "BLOCK?">> | (!() Expression)) {
+  pin=2
+  stubClass="io.vlang.lang.stubs.VlangConstDefinitionStub"
+  methods=[getTypeInner isPublic isCompileTime deleteDefinition getName getSymbolVisibility]
+}
+// end of const
+
+
+// global variable declarations
+// <[attrs]> __global <ident> = <expr>
+// <[attrs]> __global (<list>)
+GlobalVariableDeclaration ::= Attributes? '__global' ( GlobalVariableDefinition | '(' GlobalVariableDefinitions? ')' ) {
+  pin(".*")=2
+  methods=[isMultiline]
+}
+// <spec> [<spec2>]
+private GlobalVariableDefinitions ::= GlobalVariableDefinition (semi GlobalVariableDefinition)* semi? {pin=1}
+// <def> = <expr>
+// <def> <type>
+GlobalVariableDefinition ::= identifier (VarModifiers Type | GlobalVariableValue) {
+  pin=1
+  stubClass="io.vlang.lang.stubs.VlangGlobalVariableDefinitionStub"
+  methods=[deleteDefinition getName getTypeInner getSymbolVisibility]
+}
+
+private GlobalVariableValue ::= '=' (<<withOff Expression "BLOCK?">> | (!() Expression)) { pin=1 }
+
+VarModifiers ::= VarModifier* {
+  methods=[isMutable]
+}
+VarModifier ::= mut | shared | volatile | static
+
+SymbolVisibility ::= pub | '__global'
+
+GenericParameters ::= GenericParametersOld | GenericParametersNew {
+  stubClass="io.vlang.lang.stubs.VlangGenericParametersStub"
+  methods=[getParameters]
+}
+GenericParametersOld ::= '<' GenericParameterList? '>' {pin=3 elementType=GenericParameters}
+GenericParametersNew ::= '[' GenericParameterList? ']' {pin=3 elementType=GenericParameters}
+
+GenericParameterList ::= GenericParameter (',' GenericParameter)* ','?
+GenericParameter ::= identifier {
+  stubClass="io.vlang.lang.stubs.VlangGenericParameterStub"
+  methods=[getTypeInner]
+}
+
+GenericArguments ::= GenericArgumentsOld | GenericArgumentsNew {
+  methods=[getTypeArguments]
+}
+GenericArgumentsOld ::= '<' TypeListNoPin? '>' {pin=3 elementType=GenericArguments}
+GenericArgumentsNew ::= <<leftBracket>> TypeListNoPin? ']' {pin=3 elementType=GenericArguments}
+
+FunctionDeclaration ::= Attributes? SymbolVisibility? fn identifier GenericParameters? Signature BlockWithConsume? {
+  pin=4
+  stubClass="io.vlang.lang.stubs.VlangFunctionDeclarationStub"
+  methods=[getName getTypeInner isDefinition isNoReturn isGeneric isCompileTime]
+  mixin="io.vlang.lang.psi.impl.VlangFunctionDeclarationWithScopeHolder"
+}
+
+MethodDeclaration ::= Attributes? SymbolVisibility? fn '(' Receiver ')' MethodName GenericParameters? Signature BlockWithConsume? {
+  pin=7
+  stubClass="io.vlang.lang.stubs.VlangMethodDeclarationStub"
+  methods=[getReceiverType getTypeInner getIdentifier getQualifiedName getOwner isMutable byReference]
+  mixin="io.vlang.lang.psi.impl.VlangMethodDeclarationWithScopeHolder"
+}
+// <ident> or <ops> for overload
+MethodName ::= identifier | AddOp | MulOp | RelOp
+
+// [<modifiers>] <ident> <type>
+Receiver ::= VarModifiers? identifier Type ','? {
+  pin=2
+  methods=[getTypeInner getName isPublic isMutable makeMutable makeImmutable takeReference]
+  implements="io.vlang.lang.psi.VlangMutabilityOwner"
+  stubClass="io.vlang.lang.stubs.VlangReceiverStub"
+}
+
+////// DECLARATIONS END //////
+
+
+////////// STATEMENTS END //////////
+
+
+////////// EXPRESSIONS //////////
+
+Expression ::=
+    OrExpr
+  | AndExpr
+  | ConditionalExpr
+  | RangeExpr
+  | AddExpr
+  | ShiftLeftExpr
+  | MulExpr
+  | UnaryExpr
+  | SendExpr
+  | MatchExpression
+  | SelectExpression
+  | CompileTimeIfExpression
+  | InExpression
+  | NotInExpression
+  | IsExpression
+  | NotIsExpression
+  | AsExpression
+  | MaxGroup
+  | EnumFetch
+  | MutExpression
+  | SharedExpression
+  | GoExpression
+  | SpawnExpression
+  | LockExpression
+  | IncDecExpression
+  | UnpackingExpression
+  | TypeCastExpression
+  | ParenthesesExpr {methods=[getType] implements="io.vlang.lang.psi.VlangTypeOwner"}
+// end of expression rule
+
+TypeCastExpression ::= Type '(' Expression ')' {pin=4}
+
+// (r)lock <var> { ... }
+// (r)lock <var>; (r)lock <var2> { ... }
+LockExpression ::= LockParts+ Block {pin=1}
+LockParts ::= (lock | rlock) BeforeBlockExpressionList? ';'? {pin=1}
+
+// go <expr>
+GoExpression ::= go Expression
+// spawn <expr>
+SpawnExpression ::= spawn Expression
+
+// { ... }
+MapInitExpr ::= <<prevIsNotType>> <<braceRuleMarker>> '{' <<enterMode "MAP_KEY_VALUE">> KeyValues? <<exitMode "MAP_KEY_VALUE">> '}'
+KeyValues ::= KeyValue ((semi | ',') KeyValue)* (semi | ',')? {pin=1}
+// <key> : <value>
+KeyValue ::= Expression ':' Expression {
+  pin=2
+  methods = [
+    keyExpr="Expression[0]"
+    valueExpr="Expression[1]"
+  ]
+}
+
+// struct {...}
+AnonymousStructValueExpression ::= struct '{' ElementList? '}' {pin=2}
+// <type> {...}
+LiteralValueExpression ::= <<braceRuleMarker>> Type <<prevIsNotFunType>> GenericArguments? '{' ElementList? '}'
+private ElementList ::= ElementInner ((',' | semi) ElementInner?)*
+private ElementInner ::= Element | (!() Element) // {recoverWhile=ElementInnerRecover}
+//private ElementInnerRecover ::= !('}' | ',' | semi | ')')
+Element ::= First [':' Value]  {pin(".*")=1}
+private First ::= Key | <<keyOrValueExpression>>
+Key ::= (FieldName &':') | !() Expression // nullability hack for key without reference inside
+FieldName ::= ReferenceExpression { methods=[getIdentifier getQualifier resolve] }
+Value ::= Expression
+
+// end of type init
+
+private MaxGroup ::=
+    DotExpression
+  | Literal
+  | FunctionLit
+
+// fn [[<captures>]] [<generics>] (...) {...}
+FunctionLit ::= fn CaptureList? GenericParameters? Signature Block {
+  pin=1
+  methods=[addCapture processDeclarations]
+}
+// [<var1>, <var2>, ...]
+CaptureList ::= '[' (Capture | ',' Capture)* ']' {
+  pin=1
+  methods=[addCapture]
+}
+// [mut] <ident>
+Capture ::= VarModifiers? ReferenceExpression {
+  pin=2
+  methods=[isMutable makeMutable]
+}
+
+////// TYPES //////
+
+// TODO: make as SharedType?
+TypeModifiers ::= TypeModifier*
+TypeModifier ::= mut | volatile | static
+
+Type ::= TypeModifiers? (TypeLit | TypeName) GenericArguments? {
+  stubClass="io.vlang.lang.stubs.VlangTypeStub"
+  methods=[getIdentifier getUnderlyingType resolveType]
+}
+//  | ParType {
+//  stubClass="io.vlang.lang.stubs.GoTypeStub"
+//  methods=[getUnderlyingType shouldGoDeeper]
+//  }
+//ParType ::= '(' Type ')' {methods=[getActualType]}
+
+private TypeName ::= TypeReferenceExpression QualifiedTypeReferenceExpression*
+
+left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
+TypeReferenceExpression ::= identifier {
+  stubClass="io.vlang.lang.stubs.VlangTypeReferenceExpressionStub"
+  methods=[getReference getQualifier resolve getType]
+}
+
+private TypeLit ::=
+    MapType
+  | ArrayType
+  | FixedSizeArrayType
+  | TupleType
+  | SharedType
+  | NoneType
+  | PointerType | WrongPointerType
+  | OptionType
+  | ResultType
+  | FunctionType
+  | ChannelType
+  | ThreadType
+  | AtomicType
+  | AnonymousStructType
+  | StructType
+  | InterfaceType
+
+// [<expr>]<type>
+ArrayType ::= '['']' Type {pin=3}
+FixedSizeArrayType ::= '[' Expression ']' Type {
+  pin=4
+  methods=[getSize]
+}
+
+// (<type>, <type>, ...)
+TupleType ::= '(' TypeListNoPin ')' {pin=3}
+
+// shared <type>
+SharedType ::= shared Type {pin=1}
+
+// none
+NoneType ::= none
+
+// &<type>
+// &&<type>
+// &&&<type>
+PointerType ::= ('&' | '&&')+ Type {pin=1}
+
+// In languages like Go, pointers use an asterisk, not an ampersand,
+// so this rule is needed to properly parse and then give an error to the user.
+WrongPointerType ::= '*'+ Type {pin=1}
+
+// !<type>
+// bare !
+ResultType ::= '!' Type? {pin=1}
+// ?<type>
+// bare ?
+OptionType ::= '?' Type? {pin=1}
+// fn (...) <type>
+// fn (...) (<type1>, <type2>, ...)
+FunctionType ::= fn GenericParameters? Signature {
+  pin=1
+  implements="io.vlang.lang.psi.VlangSignatureOwner"
+}
+
+// signature
+// (...) ...
+Signature ::= Parameters Result? {
+  pin=1
+  stubClass="io.vlang.lang.stubs.VlangSignatureStub"
+  methods=[resultCount]
+}
+Result ::= Type {
+  stubClass="io.vlang.lang.stubs.VlangResultStub"
+  methods=[isVoid]
+}
+Parameters ::= '(' ParameterList? ','? ')' {
+  pin=1
+  stubClass="io.vlang.lang.stubs.VlangParametersStub"
+}
+
+private ParameterList ::= ParamDefinition (',' (ParamDefinition | &')'))* list_separator? {pin(".*")=1}
+
+ParamDefinition ::= ParamWithName | ParamWithoutName {
+  pin=4
+  stubClass="io.vlang.lang.stubs.VlangParamDefinitionStub"
+  implements="io.vlang.lang.psi.VlangMutabilityOwner"
+  methods = [isVariadic getName isPublic isMutable makeMutable makeImmutable]
+}
+private ParamWithName ::= VarModifiers? identifier '...'? Type
+private ParamWithoutName ::= VarModifiers? '...'? Type
+
+TypeListNoPin ::= Type (',' Type)* ','?
+// end of signature
+
+// map[<type>]<type>
+MapType ::= 'map' '[' Type ']' Type {
+  pin=2
+  methods = [
+    keyType="Type[0]"
+    valueType="Type[1]"
+  ]
+}
+
+// chan <type>
+ChannelType ::= 'chan' Type? {pin=1}
+
+// thread <type>
+ThreadType ::= 'thread' Type? {pin=1}
+
+// atomic <type>
+AtomicType ::= atomic Type? {pin=1}
+
+////// TYPES END //////
+
+LeftHandExprList ::= ExpressionList
+
+private ExpressionList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &')'))* {pin(".*")=1}
+private ExpressionWithRecover ::= Expression !':' {recoverWhile=ExpressionListRecover}
+private ExpressionListRecover ::= !('!' | '?' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+'  | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '>>>=' | '[' | ']' | '^' | '^=' | '{' | '|' | '|=' | '||' | '}' | 'type' | break | case | const | continue | defer | else | float | for | fn | go | spawn | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | enum | union | var | unsafe | assert | match | asm | true | false | none | nil | typeof | offsetof | sizeof | isreftype | dump )
+
+private VarDefinitionList ::= VarDefinition (',' VarDefinition)*
+VarDefinition ::= VarModifiers? identifier {
+  pin=2
+  methods=[getTypeInner getName getReference isMutable isPublic makeMutable makeImmutable getInitializer getSymbolVisibility]
+  implements="io.vlang.lang.psi.VlangMutabilityOwner"
+  stubClass="io.vlang.lang.stubs.VlangVarDefinitionStub"
+}
+
+// <ident>[.<ident>]*
+DotExpression ::= DotPrimaryExpr RightHandExprs {extends=Expression}
+
+private DotPrimaryExpr ::=
+    AnonymousStructValueExpression
+  | SqlExpression
+  | LiteralValueExpression
+  | BuiltinCall
+  | IfExpression
+  | ReferenceExpression
+  | Literal
+  | FunctionLit
+  | ArrayCreation
+  | ParenthesesExpr
+  | UnsafeExpression
+  | MapInitExpr
+
+private BuiltinCall ::= OffsetOfCallExpr | TypeOfCallExpr | SizeOfCallExpr | IsRefTypeCallExpr | DumpCallExpr
+
+IsRefTypeCallExpr ::= isreftype GenericArguments? '('  Expression? ')' {pin=1 methods=[getReference] implements="io.vlang.lang.psi.VlangBuiltinCallOwner"}
+SizeOfCallExpr ::= sizeof GenericArguments? '('  Expression? ')' {pin=1 methods=[getReference] implements="io.vlang.lang.psi.VlangBuiltinCallOwner"}
+TypeOfCallExpr ::= typeof GenericArguments? '(' Expression? ')' {pin=1 methods=[getReference] implements="io.vlang.lang.psi.VlangBuiltinCallOwner"}
+OffsetOfCallExpr ::= offsetof '(' Type ',' ReferenceExpression ')' {pin=1 methods=[getReference] implements="io.vlang.lang.psi.VlangBuiltinCallOwner"}
+DumpCallExpr ::= dump '(' Expression ')' {pin=1 methods=[getReference] implements="io.vlang.lang.psi.VlangBuiltinCallOwner"}
+
+// just <ident> with reference
+ReferenceExpression ::= identifier { methods=[getReference getQualifier resolve getReadWriteAccess safeAccess] extends=Expression}
+left QualifiedReferenceExpression ::= semi? '.' identifier <<checkNoColonIfMap>> {elementType=ReferenceExpression}
+left SafeQualifiedReferenceExpression ::= semi? '?.' identifier {elementType=ReferenceExpression}
+
+private RightHandExprs ::= RightHandExpr*
+
+private RightHandExpr ::=
+    CompileTimeFieldReference
+  | (<<callExprWithPropagate>> | (!() CallExprWithPropagate))
+  | (<<callExpr>> | (!() CallExpr))
+  | IndexOrSliceExpr
+  | SafeQualifiedReferenceExpression
+  | QualifiedReferenceExpression
+  | OrBlockExpr
+  | OptionPropagationExpression
+  | ResultPropagationExpression
+
+// <expr>[<<generics>>](...)
+left CallExpr ::= GenericArguments? ArgumentList {
+  methods=[getParameters getIdentifier getQualifier resolve paramIndexOf]
+}
+
+// <expr>[<<generics>>](...)
+left CallExprWithPropagate ::= GenericArguments? ArgumentList ('!' | '?') {
+  extends=CallExpr
+}
+
+// .$(<dot_expr>)
+left CompileTimeFieldReference ::= '.' '$' '(' DotExpression ')' {pin=2}
+
+// noinspection BnfUnusedRule
+// used in <<callExpr>>
+left JsonCallExpr ::= JsonArgumentList {
+  methods=[getParameters]
+  extends=CallExpr
+}
+
+JsonArgumentList ::= '(' <<enterMode "PAR">> Type ','? ElementList? '...'? ','? <<exitModeSafe "PAR">> ')' {
+  pin=1
+  extends=ArgumentList
+}
+
+// <expr>[<expr>]
+// <expr>#[<expr>]
+// <expr>[0..10]
+// <expr>[..10]
+// <expr>[0..]
+// <expr>[..]
+left IndexOrSliceExpr ::= ('[' | '#[') IndexOrSliceInner ']' !identifier {
+  methods=[isSlice getExpression getRange getSliceStart getSliceEnd]
+}
+private IndexOrSliceInner ::= EmptySlice | ((SliceExprBody | IndexExprBody) '..'?)
+EmptySlice ::= '..' &']'
+private IndexExprBody ::= Expression SliceExprBody?
+private SliceExprBody ::= '..' Expression
+
+// <expr> or { ... }
+left OrBlockExpr ::= or Block
+
+// math and logical expressions
+OrExpr ::= Expression semi? '||' Expression
+AndExpr ::= Expression semi? '&&' Expression
+SendExpr ::= Expression '<-' Expression {
+    methods=[left="Expression[0]" right="Expression[1]"]
+}
+UnaryExpr ::=  UnaryOp Expression {methods=[getOperator]}
+ConditionalExpr ::= Expression RelOp Expression
+AddExpr ::= Expression AddOp Expression
+MulExpr ::= Expression MulOp Expression
+
+private RelOp ::= '==' | '!=' | '<' | '<=' | '>' !'>' | '>='
+private AddOp ::= '+' | '-' | '|' | '^'
+private MulOp ::= '*' | '/' | '%' | <<gtGtGt>> | <<gtGt>> | '&' | '&^'
+private UnaryOp ::= '+' | '-' | '!' | '^' | '~' | '*' | '&' | '&&' | '<-'
+
+
+fake BinaryExpr ::= Expression+ {
+  methods=[left="Expression[0]" right="Expression[1]" getOperator]
+}
+// end of math and logical expressions
+
+ParenthesesExpr ::= '(' <<enterMode "PAR">> Expression <<exitModeSafe "PAR">>')' {pin=1}
+
+// <expr>++/--
+IncDecExpression ::= Expression ('++' | '--') {pin=1}
+
+// <expr>?
+OptionPropagationExpression ::= '?' {pin=1}
+
+// <expr>!
+ResultPropagationExpression ::= '!' {pin=1}
+
+// ...<expr>
+UnpackingExpression ::= '...' Expression {pin=1}
+
+// .<ident>
+EnumFetch ::= '.' identifier {
+  pin=2
+  methods=[getReference getQualifier resolve]
+}
+
+// <expr>..<expr>
+// <expr>...<expr> (inclusive)
+RangeExpr ::= Expression ('..' | '...') !']' Expression {
+  pin=2
+  methods=[left="Expression[0]" right="Expression[1]"]
+}
+
+// mut <expr>
+MutExpression ::= mut Expression
+
+// shared <expr>
+SharedExpression ::= shared Expression
+
+// [<list>]
+// [<list>]! – fixed size array
+ArrayCreation ::= '[' <<enterMode "PAR">> ArrayCreationList? semi? (<<exitModeSafe "PAR">> ']' '!'?) !identifier {
+  methods=[isFixedSize]
+}
+// <expr1>, <expr2>, ..., <exprN>
+ArrayCreationList ::= ExpressionWithRecover (list_separator? ExpressionWithRecover)* list_separator? {pin(".*")=0}
+
+// ([<arg1>, <arg2>[...], ...])
+ArgumentList ::= '(' <<enterMode "PAR">> ElementList? '...'? ','? <<exitModeSafe "PAR">> ')' {pin=1}
+
+external BeforeBlockExpressionInner ::= beforeBlockExpression;
+private BeforeBlockExpression ::= BeforeBlockExpressionInner | !() Expression;
+private BeforeBlockExpressionList ::= BeforeBlockExpression (',' (BeforeBlockExpression | &')'))*
+
+// match <expr> { ... }
+MatchExpression ::= match BeforeBlockExpression '{' MatchArms '}' {
+  pin=1
+  methods=[getArms getExpressionArms getTypeArms getElseArm withElse]
+}
+// <expr>[, <expr2>] { ... }
+// else { ... }
+MatchArms ::= (MatchArm | MatchElseArmClause)*
+// <expr>[, <expr2>] { ... }
+MatchArm ::= MatchExpressionList Block semi {
+  methods=[getParameterList]
+}
+// <expr>[, <expr2>]
+private MatchExpressionList ::= MatchArmExpression (',' MatchArmExpression)*
+// <expr> or <type>
+private MatchArmExpression ::= <<typeOrExpression>>
+// else { ... }
+MatchElseArmClause ::= else Block semi {pin=1}
+
+// <expr> in <expr>
+InExpression ::= Expression in Expression {pin=2}
+// <expr> !in <expr>
+NotInExpression ::= Expression '!in' Expression {pin=2}
+
+// <expr> is <expr>
+IsExpression ::= Expression is Type {pin=2}
+// <expr> !is <expr>
+NotIsExpression ::= Expression '!is' Type {pin=2}
+
+// <expr> as <expr>
+AsExpression ::= Expression as Type {pin=2}
+
+// unsafe { ... }
+UnsafeExpression ::= unsafe Block {pin=1}
+
+// if <condition> { ... }
+IfExpression ::= if Condition semi? Block (semi? ElseBranch)? {
+  pin=1
+  methods=[isGuard]
+}
+
+// else { ... }
+// else if { ... }
+ElseBranch ::= else (IfExpression | Block) {pin=1}
+
+// $if <condition> { ... }
+CompileTimeIfExpression ::= '$if' Condition semi? Block (semi? CompileTimeElseBranch)? {pin=1}
+
+// $else { ... }
+// $else $if { ... }
+CompileTimeElseBranch ::= '$else' (CompileTimeIfExpression | Block) {pin=1}
+
+private Condition ::= GuardVarDeclaration | BeforeBlockExpression
+GuardVarDeclaration ::= VarDefinitionList ':=' BeforeBlockExpression {extends=VarDeclaration}
+
+// sql <ref> { ... }
+SqlExpression ::= 'sql' BeforeBlockExpression SqlBlock {
+  pin=3
+  methods=[getType]
+}
+SqlBlock ::= '{' ('}' | (SqlBlockStatement semi)* '}') {pin(".*")=1}
+
+SqlBlockStatement ::=
+	  SqlCreateStatement
+  | SqlDropStatement
+  | SqlSelectStatement
+  | SqlUpdateStatement
+  | SqlInsertStatement
+  | SqlDeleteStatement
+  | identifier // for completion
+
+SqlCreateStatement ::= semi? 'create' 'table' SqlTableName {pin=2}
+SqlDropStatement ::= semi? 'drop' 'table' SqlTableName {pin=2}
+
+SqlUpdateStatement ::= semi? 'update' SqlTableName semi? 'set' SqlUpdateList SqlWhereClause {pin=2}
+SqlUpdateList ::= SqlUpdateItem (',' SqlUpdateItem)*
+SqlUpdateItem ::= ReferenceExpression '=' Expression
+
+SqlInsertStatement ::= semi? 'insert' ReferenceExpression semi? 'into' SqlTableName {pin=2}
+SqlDeleteStatement ::= semi? 'delete' ((ReferenceExpression SqlFromClause) | SqlFromClause) SqlWhereClause? {pin=2}
+SqlSelectStatement ::= semi? 'select' SqlSelectCountClause? SqlFromClause SqlWhereClause? SqlOrderByClause? SqlLimitClause? SqlOffsetClause? {pin=2}
+SqlSelectCountClause ::= semi? 'count'
+
+SqlFromClause ::= semi? 'from' SqlTableName {pin=2}
+SqlWhereClause ::= semi? 'where' Expression {pin=2}
+SqlLimitClause ::= 'limit' Expression {pin=2}
+SqlOffsetClause ::= 'offset' Expression {pin=2}
+SqlOrderByClause ::= semi?  'order' 'by' SqlReferenceList? SqlOrderByTypes? {pin=2}
+private SqlOrderByTypes ::= 'asc' | 'desc'
+SqlReferenceList ::= semi? SqlReferenceListItem (','? SqlReferenceListItem)* {pin=2}
+SqlReferenceListItem ::= semi? <<endOfLimit>> ReferenceExpression {pin=3}
+
+SqlTableName ::= TypeName {pin=1}
+
+////////// EXPRESSIONS END //////////
+
+
+////// LITERALS //////
+
+// literals like 0 or 10.5 and other
+Literal ::=
+    int
+  | float
+  | hex
+  | oct
+  | bin
+  | true
+  | false
+  | StringLiteral
+  | char
+  | none
+  | nil {
+  methods=[isNumeric isBoolean]
+}
+
+// just different strings
+StringLiteral ::= 'raw_string' | StringTemplate {
+  implements = "com.intellij.psi.PsiLanguageInjectionHost"
+  methods = [isValidHost updateText createLiteralTextEscaper getDecodedText getReferences getContents]
+}
+
+StringTemplate ::= OPEN_QUOTE StringTemplatePart* CLOSING_QUOTE {pin=1}
+
+private StringTemplatePart ::=
+    LITERAL_STRING_TEMPLATE_ENTRY
+  | LITERAL_STRING_TEMPLATE_ESCAPE_ENTRY
+  | LongStringTemplateEntry
+  | ShortStringTemplateEntry
+  | StringTemplateEntry
+  | SHORT_TEMPLATE_ENTRY_START
+
+LongStringTemplateEntry ::= LONG_TEMPLATE_ENTRY_START Expression semi? FormatSpecifier? TEMPLATE_ENTRY_END {pin=1}
+StringTemplateEntry ::= TEMPLATE_ENTRY_START Expression FormatSpecifier? TEMPLATE_ENTRY_END {pin=1}
+
+FormatSpecifier ::= ':' FormatSpecifierExpression
+FormatSpecifierExpression ::= (FormatSpecifierLeftAlignFlag | FormatSpecifierRightAlignFlag)? FormatSpecifierWidthAndPrecision? FormatSpecifierLetter?
+FormatSpecifierLeftAlignFlag ::= '-'
+FormatSpecifierRightAlignFlag ::= '+'
+FormatSpecifierWidthAndPrecision ::= int | float
+FormatSpecifierLetter ::= identifier
+
+ShortStringTemplateEntry ::= SHORT_TEMPLATE_ENTRY_START Expression {pin=2}
+
+////// LITERALS END //////
