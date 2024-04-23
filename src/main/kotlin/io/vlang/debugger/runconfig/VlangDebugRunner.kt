@@ -2,17 +2,19 @@ package io.vlang.debugger.runconfig
 
 import com.intellij.execution.configurations.*
 import com.intellij.execution.executors.DefaultDebugExecutor
+import com.intellij.execution.runners.AsyncProgramRunner
 import com.intellij.execution.runners.ExecutionEnvironment
-import com.intellij.execution.runners.ProgramRunner
 import com.intellij.execution.ui.RunContentDescriptor
 import com.intellij.util.execution.ParametersListUtil
 import io.vlang.ide.run.VlangBuildTaskRunner
 import io.vlang.ide.run.VlangRunConfigurationRunState
 import io.vlang.ide.test.configuration.VlangTestConfiguration
+import org.jetbrains.concurrency.Promise
+import org.jetbrains.concurrency.resolvedPromise
 import java.io.File
 
 
-open class VlangDebugRunner : ProgramRunner<RunnerSettings> {
+open class VlangDebugRunner : AsyncProgramRunner<RunnerSettings>() {
     override fun getRunnerId() = RUNNER_ID
 
     override fun canRun(executorId: String, profile: RunProfile): Boolean {
@@ -23,13 +25,8 @@ open class VlangDebugRunner : ProgramRunner<RunnerSettings> {
         return executorId == DefaultDebugExecutor.EXECUTOR_ID
     }
 
-    override fun execute(environment: ExecutionEnvironment) {
-        val state = environment.state ?: return
-//        @Suppress("UnstableApiUsage")
-//        ExecutionManager.getInstance(environment.project).startRunProfile(environment) {
-//            resolvedPromise(doExecute(state, environment))
-//        }
-        doExecute(state, environment)
+    override fun execute(environment: ExecutionEnvironment, state: RunProfileState): Promise<RunContentDescriptor?> {
+        return resolvedPromise(doExecute(state, environment))
     }
 
     private fun doExecute(state: RunProfileState, environment: ExecutionEnvironment): RunContentDescriptor? {
