@@ -5,7 +5,7 @@ V Language file
   TYPE_ALIAS_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY
@@ -25,7 +25,7 @@ V Language file
   STRUCT_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY
@@ -33,7 +33,7 @@ V Language file
                 PsiElement(VlangTokenType.identifier)('minify')
         PsiElement(VlangTokenType.])(']')
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY
@@ -41,7 +41,7 @@ V Language file
                 PsiElement(VlangTokenType.identifier)('name')
         PsiElement(VlangTokenType.])(']')
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY
@@ -56,7 +56,7 @@ V Language file
                   PsiElement(VlangTokenType.CLOSING_QUOTE)(''')
         PsiElement(VlangTokenType.])(']')
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY
@@ -83,7 +83,7 @@ V Language file
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
           ATTRIBUTE
-            PsiElement(VlangTokenType.[)('[')
+            PsiElement(VlangTokenType.@[)('@[')
             ATTRIBUTE_EXPRESSION
               PLAIN_ATTRIBUTE
                 ATTRIBUTE_KEY
@@ -99,7 +99,7 @@ V Language file
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('int')
           ATTRIBUTE
-            PsiElement(VlangTokenType.[)('[')
+            PsiElement(VlangTokenType.@[)('@[')
             ATTRIBUTE_EXPRESSION
               PLAIN_ATTRIBUTE
                 ATTRIBUTE_KEY
@@ -119,7 +119,7 @@ V Language file
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
           ATTRIBUTE
-            PsiElement(VlangTokenType.[)('[')
+            PsiElement(VlangTokenType.@[)('@[')
             ATTRIBUTE_EXPRESSION
               PLAIN_ATTRIBUTE
                 ATTRIBUTE_KEY
@@ -139,7 +139,7 @@ V Language file
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('bool')
           ATTRIBUTE
-            PsiElement(VlangTokenType.[)('[')
+            PsiElement(VlangTokenType.@[)('@[')
             ATTRIBUTE_EXPRESSION
               PLAIN_ATTRIBUTE
                 ATTRIBUTE_KEY
@@ -162,7 +162,7 @@ V Language file
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
           ATTRIBUTE
-            PsiElement(VlangTokenType.[)('[')
+            PsiElement(VlangTokenType.@[)('@[')
             ATTRIBUTE_EXPRESSION
               PLAIN_ATTRIBUTE
                 ATTRIBUTE_KEY
@@ -181,7 +181,7 @@ V Language file
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
           ATTRIBUTE
-            PsiElement(VlangTokenType.[)('[')
+            PsiElement(VlangTokenType.@[)('@[')
             ATTRIBUTE_EXPRESSION
               PLAIN_ATTRIBUTE
                 ATTRIBUTE_KEY
@@ -201,7 +201,7 @@ V Language file
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
           ATTRIBUTE
-            PsiElement(VlangTokenType.[)('[')
+            PsiElement(VlangTokenType.@[)('@[')
             ATTRIBUTE_EXPRESSION
               PLAIN_ATTRIBUTE
                 ATTRIBUTE_KEY
@@ -221,7 +221,7 @@ V Language file
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('string')
           ATTRIBUTE
-            PsiElement(VlangTokenType.[)('[')
+            PsiElement(VlangTokenType.@[)('@[')
             ATTRIBUTE_EXPRESSION
               PLAIN_ATTRIBUTE
                 ATTRIBUTE_KEY
@@ -236,7 +236,7 @@ V Language file
   FUNCTION_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY
@@ -244,7 +244,7 @@ V Language file
                 PsiElement(VlangTokenType.identifier)('minify')
         PsiElement(VlangTokenType.])(']')
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           IF_ATTRIBUTE
             PsiElement(VlangTokenType.if)('if')

@@ -117,7 +117,7 @@ V Language file
   METHOD_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY
@@ -934,7 +934,7 @@ V Language file
   STRUCT_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY
@@ -977,7 +977,7 @@ V Language file
   FUNCTION_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY
@@ -1685,7 +1685,7 @@ V Language file
   FUNCTION_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY
@@ -1926,7 +1926,7 @@ V Language file
   FUNCTION_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY
@@ -2399,7 +2399,7 @@ V Language file
   FUNCTION_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY
@@ -4945,7 +4945,7 @@ V Language file
   METHOD_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY
@@ -5789,7 +5789,7 @@ V Language file
   METHOD_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY
@@ -6987,7 +6987,7 @@ V Language file
   METHOD_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY
@@ -7271,7 +7271,7 @@ V Language file
   METHOD_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY
@@ -7572,7 +7572,7 @@ V Language file
   METHOD_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY
@@ -7863,7 +7863,7 @@ V Language file
   METHOD_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY
@@ -9076,7 +9076,7 @@ V Language file
   METHOD_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY
@@ -9826,7 +9826,7 @@ V Language file
   FUNCTION_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY
@@ -9896,7 +9896,7 @@ V Language file
   FUNCTION_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY
@@ -9966,7 +9966,7 @@ V Language file
   METHOD_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY
@@ -10734,7 +10734,7 @@ V Language file
   METHOD_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY

@@ -32,7 +32,7 @@ pub struct SemanticAnalyzer {
 pub mut:
 	context    AnalyzerContext
 	parent_sym &Symbol = void_sym
-	formatter  SymbolFormatter [required]
+	formatter  SymbolFormatter @[required]
 	// skips the local scopes and registers only
 	// the top-level ones regardless of its
 	// visibility
@@ -1094,7 +1094,7 @@ pub fn (mut an SemanticAnalyzer) match_expression(node ast.Node, cfg SemanticExp
 	return expected_value_sym
 }
 
-[params]
+@[params]
 pub struct SemanticExpressionAnalyzeConfig {
 	as_value bool
 }

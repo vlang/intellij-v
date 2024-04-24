@@ -48,7 +48,7 @@ pub enum FlagEnum {}
 //
 // Example:
 // ```
-// [flag]
+// @[flag]
 // enum Permissions {
 //   read  // = 0b0001
 //   write // = 0b0010
@@ -67,7 +67,7 @@ pub fn (f FlagEnum) has(flag FlagEnum) bool
 //
 // Example:
 // ```
-// [flag]
+// @[flag]
 // enum Permissions {
 //   read  // = 0b0001
 //   write // = 0b0010
@@ -86,7 +86,7 @@ pub fn (f FlagEnum) all(flag FlagEnum) bool
 //
 // Example:
 // ```
-// [flag]
+// @[flag]
 // enum Permissions {
 //   read  // = 0b0001
 //   write // = 0b0010
@@ -107,7 +107,7 @@ pub fn (f FlagEnum) set(flag FlagEnum)
 //
 // Example:
 // ```
-// [flag]
+// @[flag]
 // enum Permissions {
 //   read  // = 0b0001
 //   write // = 0b0010
@@ -127,7 +127,7 @@ pub fn (f FlagEnum) toggle(flag FlagEnum)
 //
 // Example:
 // ```
-// [flag]
+// @[flag]
 // enum Permissions {
 //   read  // = 0b0001
 //   write // = 0b0010

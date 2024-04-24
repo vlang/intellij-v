@@ -5,7 +5,7 @@ struct TrailingArgs {
 	age  int
 }
 
-[params]
+@[params]
 struct ParamsTrailingArgs {
 	name string
 	age  int

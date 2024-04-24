@@ -92,7 +92,7 @@ enum WithSeveralCustomValue {
 	hdr/*<#  = 40 #>*/
 }
 
-[flag]
+@[flag]
 enum FlagEnum as u8 {
 	red/*<#  = 0b1 (1) #>*/
 	other/*<#  = 0b10 (2) #>*/

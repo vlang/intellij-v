@@ -61,13 +61,13 @@ mut:
 }
 
 struct ComplexFields {
-	value        string        [sql: 'varchar(255)']
+	value        string        @[sql: 'varchar(255)']
 	with_default string = 'default'
-	both         shared string [sql: 'varchar(255)'] = 'default'
+	both         shared string @[sql: 'varchar(255)'] = 'default'
 }
 
 // Complex example
-[heap; minify]
+@[heap; minify]
 pub struct Table {
 mut:
 	parsing_type string // name of the type to enable recursive type parsing

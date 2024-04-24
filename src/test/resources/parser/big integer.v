@@ -26,7 +26,7 @@ pub:
 	is_const bool
 }
 
-[unsafe]
+@[unsafe]
 fn (mut x Integer) free() {
 	if x.is_const {
 		return
@@ -118,7 +118,7 @@ pub fn integer_from_u64(value u64) Integer {
 	}
 }
 
-[params]
+@[params]
 pub struct IntegerConfig {
 	signum int = 1
 }
@@ -127,7 +127,7 @@ pub struct IntegerConfig {
 // By default, positive integers are assumed.
 // If you want a negative integer, use in the following manner:
 // `value := big.integer_from_bytes(bytes, signum: -1)`
-[direct_array_access]
+@[direct_array_access]
 pub fn integer_from_bytes(input []u8, config IntegerConfig) Integer {
 	// Thank you to Miccah (@mcastorina) for this implementation and relevant unit tests.
 	if input.len == 0 {
@@ -178,7 +178,7 @@ pub fn integer_from_radix(all_characters string, radix u32) ?Integer {
 	}
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn validate_string(characters string, radix u32) ? {
 	sign_present := characters[0] == `+` || characters[0] == `-`
 
@@ -197,7 +197,7 @@ fn validate_string(characters string, radix u32) ? {
 	}
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn integer_from_special_string(characters string, chunk_size int) Integer {
 	sign_present := characters[0] == `+` || characters[0] == `-`
 
@@ -239,7 +239,7 @@ fn integer_from_special_string(characters string, chunk_size int) Integer {
 	}
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn integer_from_regular_string(characters string, radix u32) Integer {
 	sign_present := characters[0] == `+` || characters[0] == `-`
 
@@ -461,7 +461,7 @@ pub fn (a Integer) mod_pow(exponent u32, divisor Integer) Integer {
 }
 
 // big_mod_power returns the integer `a` raised to the power of the integer `exponent` modulo the integer `divisor`.
-[direct_array_access]
+@[direct_array_access]
 pub fn (a Integer) big_mod_pow(exponent Integer, divisor Integer) Integer {
 	if exponent.signum < 0 {
 		panic('Exponent needs to be non-negative.')
@@ -543,7 +543,7 @@ fn check_sign(a Integer) {
 }
 
 // get_bit checks whether the bit at the given index is set.
-[direct_array_access]
+@[direct_array_access]
 pub fn (a Integer) get_bit(i u32) bool {
 	check_sign(a)
 	target_index := i / 32
@@ -629,7 +629,7 @@ pub fn (a Integer) bitwise_xor(b Integer) Integer {
 }
 
 // lshift returns the integer `a` shifted left by `amount` bits.
-[direct_array_access]
+@[direct_array_access]
 pub fn (a Integer) lshift(amount u32) Integer {
 	if a.signum == 0 {
 		return a
@@ -653,7 +653,7 @@ pub fn (a Integer) lshift(amount u32) Integer {
 }
 
 // rshift returns the integer `a` shifted right by `amount` bits.
-[direct_array_access]
+@[direct_array_access]
 pub fn (a Integer) rshift(amount u32) Integer {
 	if a.signum == 0 {
 		return a
@@ -680,7 +680,7 @@ pub fn (a Integer) rshift(amount u32) Integer {
 }
 
 // binary_str returns the binary string representation of the integer `a`.
-[direct_array_access]
+@[direct_array_access]
 pub fn (integer Integer) binary_str() string {
 	// We have the zero integer
 	if integer.signum == 0 {
@@ -702,7 +702,7 @@ pub fn (integer Integer) binary_str() string {
 }
 
 // hex returns the hexadecimal string representation of the integer `a`.
-[direct_array_access]
+@[direct_array_access]
 pub fn (integer Integer) hex() string {
 	// We have the zero integer
 	if integer.signum == 0 {
@@ -809,7 +809,7 @@ pub fn (a Integer) int() int {
 
 // bytes returns the a byte representation of the integer a, along with the signum int.
 // NOTE: The byte array returned is in big endian order.
-[direct_array_access]
+@[direct_array_access]
 pub fn (a Integer) bytes() ([]u8, int) {
 	if a.signum == 0 {
 		return []u8{len: 0}, 0
@@ -877,17 +877,17 @@ pub fn (a Integer) isqrt() Integer {
 	return result
 }
 
-[inline]
+@[inline]
 fn bi_min(a Integer, b Integer) Integer {
 	return if a < b { a } else { b }
 }
 
-[inline]
+@[inline]
 fn bi_max(a Integer, b Integer) Integer {
 	return if a > b { a } else { b }
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (bi Integer) msb() u32 {
 	for idx := 0; idx < bi.digits.len; idx += 1 {
 		word := bi.digits[idx]
@@ -955,7 +955,7 @@ fn gcd_binary(x Integer, y Integer) Integer {
 }
 
 // bit_len returns the number of bits required to represent the integer `a`.
-[inline]
+@[inline]
 pub fn (x Integer) bit_len() int {
 	if x.signum == 0 {
 		return 0

@@ -35,17 +35,17 @@ mut:
 
 struct /*caret*/WithAttributes {
 pub:
-	name string [sql: 'Name']
+	name string @[sql: 'Name']
 mut:
-	age int [required; sql: 'Age']
+	age int @[required; sql: 'Age']
 }
 
 struct /*caret*/WithEmbedded {
 	WithAttributes
 pub:
-	name string [sql: 'Name']
+	name string @[sql: 'Name']
 mut:
-	age int [required; sql: 'Age']
+	age int @[required; sql: 'Age']
 }
 
 struct /*caret*/WithOnlyEmbedded {

@@ -7,7 +7,7 @@ struct Some2<T, U> {}
 type /*caret*/String = string
 type /*caret*/StringOrInt = string | int
 
-[typedef]
+@[typedef]
 type /*caret*/WithSelf = []WithSelf | StringOrInt
 type /*caret*/FooOrInt = Foo | int
 type /*caret*/Foo1<T> = Some<T> | Some2<T, int>

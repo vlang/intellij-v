@@ -10,10 +10,10 @@ __global (
 	f2    f64 // initialized to `0.0`
 )
 
-[markused]
+@[markused]
 __global g_main_argc = int(0)
 
-[markused]
+@[markused]
 __global g_main_argv = unsafe { nil }
 
 __global (

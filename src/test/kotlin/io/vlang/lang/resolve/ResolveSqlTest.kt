@@ -5,11 +5,11 @@ open class ResolveSqlTest : ResolveTestBase() {
         mainFile("a.v", """
             module testing
 
-            [table: 'code_storage']
+            @[table: 'code_storage']
             struct CodeStorage {
-                id   int    [primary; sql: serial]
-                code string [nonull]
-                hash string [nonull]
+                id   int    @[primary; sql: serial]
+                code string @[nonull]
+                hash string @[nonull]
             }
             
             fn main() {
@@ -37,9 +37,9 @@ open class ResolveSqlTest : ResolveTestBase() {
 
             [table: 'code_storage']
             struct CodeStorage {
-                id   int    [primary; sql: serial]
-                code string [nonull]
-                hash string [nonull]
+                id   int    @[primary; sql: serial]
+                code string @[nonull]
+                hash string @[nonull]
             }
             
             fn main() {

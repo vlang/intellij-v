@@ -21,11 +21,11 @@ module attributes
 //
 // Example:
 // ```
-// [deprecated: 'use `foo` instead']
-// [deprecated_after: '2023-05-27']
+// @[deprecated: 'use `foo` instead']
+// @[deprecated_after: '2023-05-27']
 // fn boo() {}
 // ```
-[attribute]
+@[attribute]
 pub struct DeprecatedAfter {
 	name            string   = 'deprecated_after'
 	with_arg        bool     = true

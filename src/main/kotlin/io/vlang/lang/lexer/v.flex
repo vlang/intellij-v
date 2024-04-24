@@ -61,6 +61,8 @@ import static io.vlang.lang.psi.VlangDocElementTypes.*;
 %unicode
 %public
 
+//%debug
+
 %function advance
 %type IElementType
 
@@ -256,6 +258,7 @@ REGULAR_SINGLE_STRING_PART=[^\\\'\$]+
 "{"                                       { return LBRACE; }
 
 "#["                                      { return HASH_LBRACK; }
+"@["                                      { return AT_LBRACK; }
 
 "["                                       { return LBRACK; }
 "]"                                       { pushState(MAYBE_SEMICOLON); return RBRACK; }

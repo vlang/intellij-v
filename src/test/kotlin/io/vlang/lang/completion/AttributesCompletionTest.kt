@@ -5,13 +5,13 @@ class AttributesCompletionTest : CompletionTestBase() {
         """
         module main
         
-        [un/*caret*/]
+        @[un/*caret*/]
         fn main() {}
         """.trimIndent(),
         """
         module main
         
-        [unsafe]
+        @[unsafe]
         fn main() {}
         """.trimIndent()
     )
@@ -21,14 +21,14 @@ class AttributesCompletionTest : CompletionTestBase() {
         module main
         
         struct Name {
-            name string [js/*caret*/]
+            name string @[js/*caret*/]
         }
         """.trimIndent(),
         """
         module main
         
         struct Name {
-            name string [json: 'name']
+            name string @[json: 'name']
         }
         """.trimIndent()
     )
@@ -38,14 +38,14 @@ class AttributesCompletionTest : CompletionTestBase() {
         module main
         
         struct Name {
-            name string [depre/*caret*/]
+            name string @[depre/*caret*/]
         }
         """.trimIndent(),
         """
         module main
         
         struct Name {
-            name string [deprecated: '']
+            name string @[deprecated: '']
         }
         """.trimIndent()
     )
@@ -55,7 +55,7 @@ class AttributesCompletionTest : CompletionTestBase() {
         module main
         
         struct Name {
-            name string [/*caret*/]
+            name string @[/*caret*/]
         }
         """.trimIndent(),
         1,

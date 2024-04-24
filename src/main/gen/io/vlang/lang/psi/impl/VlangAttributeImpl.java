@@ -39,15 +39,21 @@ public class VlangAttributeImpl extends VlangStubbedElementImpl<VlangAttributeSt
   }
 
   @Override
-  @NotNull
-  public PsiElement getLbrack() {
-    return notNullChild(findChildByType(LBRACK));
+  @Nullable
+  public PsiElement getAtLbrack() {
+    return findChildByType(AT_LBRACK);
   }
 
   @Override
   @Nullable
+  public PsiElement getLbrack() {
+    return findChildByType(LBRACK);
+  }
+
+  @Override
+  @NotNull
   public PsiElement getRbrack() {
-    return findChildByType(RBRACK);
+    return notNullChild(findChildByType(RBRACK));
   }
 
 }

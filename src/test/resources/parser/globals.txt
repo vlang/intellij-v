@@ -88,7 +88,7 @@ V Language file
   GLOBAL_VARIABLE_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY
@@ -112,7 +112,7 @@ V Language file
   GLOBAL_VARIABLE_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY

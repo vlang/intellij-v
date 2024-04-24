@@ -5,7 +5,7 @@ class FlagEnumCompletionTest : CompletionTestBase() {
         """
         module main
             
-        [flag]
+        @[flag]
         enum Permissions {
             read  // = 0b0001
             write // = 0b0010
@@ -44,7 +44,7 @@ class FlagEnumCompletionTest : CompletionTestBase() {
         """
         module main
         
-        [flag]
+        @[flag]
         enum Permissions {
             read  // = 0b0001
             write // = 0b0010

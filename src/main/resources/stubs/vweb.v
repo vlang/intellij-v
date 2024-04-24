@@ -27,7 +27,7 @@ pub fn (v VWebTemplate) html() vweb.Result
 //
 // Example:
 // ```
-// ['/']
+// @['/']
 // pub fn (mut app App) page_home() vweb.Result {
 //   // will render `./templates/page/home.html`
 //   return $vweb.html()

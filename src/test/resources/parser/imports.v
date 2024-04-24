@@ -41,7 +41,6 @@ pub fn (mut imp Importer) scan_imports(tree &ast.Tree) []int {
 
 		// resolve it later after
 		mut imp_module, import_entry_idx, already_imported := imp.context.store.add_import(imp.context.file_dir,
-			
 			resolved: false
 			absolute_module_name: import_path_node.text(imp.context.text)
 		)
@@ -403,7 +402,7 @@ pub fn (mut imp Import) set_path(path string) {
 	imp.path = path
 }
 
-[unsafe]
+@[unsafe]
 pub fn (imp &Import) free() {
 	unsafe {
 		// imp.absolute_module_name.free()

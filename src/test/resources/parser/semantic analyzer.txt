@@ -262,7 +262,7 @@ V Language file
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('SymbolFormatter')
           ATTRIBUTE
-            PsiElement(VlangTokenType.[)('[')
+            PsiElement(VlangTokenType.@[)('@[')
             ATTRIBUTE_EXPRESSION
               PLAIN_ATTRIBUTE
                 ATTRIBUTE_KEY
@@ -14244,7 +14244,7 @@ V Language file
   STRUCT_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY

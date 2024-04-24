@@ -8,7 +8,7 @@ module attributes
 //
 // Example:
 // ```
-// [unsafe]
+// @[unsafe]
 // fn foo() {}
 //
 // fn main() {
@@ -19,7 +19,7 @@ module attributes
 //   }
 // }
 // ```
-[attribute]
+@[attribute]
 pub struct Unsafe {
 	name            string   = 'unsafe'
 	with_arg        bool     = false

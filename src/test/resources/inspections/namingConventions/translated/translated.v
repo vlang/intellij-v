@@ -1,4 +1,4 @@
-[translated]
+@[translated]
 module translated
 
 // all ok in [translated] module

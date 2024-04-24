@@ -4187,7 +4187,7 @@ V Language file
   METHOD_DECLARATION
     ATTRIBUTES
       ATTRIBUTE
-        PsiElement(VlangTokenType.[)('[')
+        PsiElement(VlangTokenType.@[)('@[')
         ATTRIBUTE_EXPRESSION
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY

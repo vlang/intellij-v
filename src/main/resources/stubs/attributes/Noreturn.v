@@ -9,12 +9,12 @@ module attributes
 // [`exit`](#exit) or [`panic`](#panic).
 //
 // Such functions can not have return types, and should end either in `for {}`, or
-// by calling other `[noreturn]` functions.
+// by calling other `@[noreturn]` functions.
 //
 // Example:
 //
 // ```
-// [noreturn]
+// @[noreturn]
 // fn redirect() {
 //    // do something
 //    exit(1)
@@ -27,7 +27,7 @@ module attributes
 //     }
 // }
 // ```
-[attribute]
+@[attribute]
 pub struct Noreturn {
 	name            string   = 'noreturn'
 	with_arg        bool     = false

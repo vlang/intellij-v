@@ -7,6 +7,7 @@
 ### Changed
 
 - Support for IntelliJ Platform 2024.1
+- Support for new attribute syntax (like `@[inline]`). Old syntax is still supported.
 
 ## [0.0.1-beta.4] - 17.04.2023
 

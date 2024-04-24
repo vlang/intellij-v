@@ -12,10 +12,13 @@ public interface VlangAttribute extends VlangCompositeElement, StubBasedPsiEleme
   @NotNull
   List<VlangAttributeExpression> getAttributeExpressionList();
 
-  @NotNull
-  PsiElement getLbrack();
+  @Nullable
+  PsiElement getAtLbrack();
 
   @Nullable
+  PsiElement getLbrack();
+
+  @NotNull
   PsiElement getRbrack();
 
 }

@@ -19,7 +19,7 @@ mut:
 	age int
 }
 
-[minify]
+@[minify]
 struct MinifiedBoo {
 	name string
 	age int

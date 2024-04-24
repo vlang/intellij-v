@@ -1,6 +1,6 @@
 module enum_fields
 
-[flag]
+@[flag]
 enum WithFlagEnum {
 	/*caret*/red
 	/*caret*/other

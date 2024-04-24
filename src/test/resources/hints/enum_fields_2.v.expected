@@ -1,6 +1,6 @@
 module hints
 
-[flag]
+@[flag]
 enum FlagEnum as u8 {
 	red/*<#  = 1 #>*/
 	other/*<#  = 2 #>*/

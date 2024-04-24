@@ -251,7 +251,7 @@ class VlangHighlightInfoCollectingVisitor : VlangVisitor(), HighlightVisitor, Du
             return VlangColor.ATTRIBUTE
         }
 
-        if (element.parent is VlangAttribute && (element.elementType == VlangTypes.LBRACK || element.elementType == VlangTypes.RBRACK)) {
+        if (element.parent is VlangAttribute && (element.elementType == VlangTypes.AT_LBRACK || element.elementType == VlangTypes.LBRACK || element.elementType == VlangTypes.RBRACK)) {
             return VlangColor.ATTRIBUTE
         }
 
