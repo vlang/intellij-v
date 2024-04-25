@@ -23,8 +23,6 @@ pub fn (v VWebTemplate) html() vweb.Result
 // That means that the template automatically has access to that
 // function's entire environment (like variables).
 //
-// See [vweb documentation](https://modules.vosca.dev/standard_library/vweb.html) for more information.
-//
 // Example:
 // ```
 // @['/']

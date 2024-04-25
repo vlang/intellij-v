@@ -11,8 +11,6 @@
 
 ## [0.0.1-beta.4] - 17.04.2023
 
-Learn more in blog post: https://blog.vosca.dev/intellij-v-beta.4/
-
 ### Added
 
 - Added initial debugger expression evaluation

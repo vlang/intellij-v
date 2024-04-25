@@ -1,7 +1,7 @@
 blank_issues_enabled: false
 contact_links:
   - name: 💬 General Questions and Answers about IntelliJ V
-    url: https://github.com/i582/vlang-idea/discussions/categories/questions-and-answers
+    url: https://github.com/vlang/intellij-v/discussions/categories/questions-and-answers
     about: You can ask and answer questions about plugin in the discussions forum.
 
   - name: 💬 V Discord Server

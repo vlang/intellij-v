@@ -30,7 +30,4 @@ module stubs
 //   //    ^^^ err is set with error("not implemented")
 // }
 // ```
-//
-// See [Documentation](https://docs.vosca.dev/concepts/error-handling/overview.html)
-// for more details.
 pub const err = IError{}

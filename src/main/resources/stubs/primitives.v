@@ -66,17 +66,17 @@ pub type byte = u8
 pub type rune = int
 
 // char is an alias for u8 and is equivalent to u8 in all ways.
-// Mostly used for [C interoperability](https://docs.vosca.dev/advanced-concepts/v-and-c.html).
+// Mostly used for C interoperability.
 pub type char = u8
 
 // voidptr is an untyped pointer.
-// Mostly used for [C interoperability](https://docs.vosca.dev/advanced-concepts/v-and-c.html).
+// Mostly used for C interoperability.
 pub type voidptr = voidptr
 
 // byteptr is a byte pointer.
-// Mostly used for [C interoperability](https://docs.vosca.dev/advanced-concepts/v-and-c.html).
+// Mostly used for C interoperability.
 pub type byteptr = byteptr
 
 // charptr is a char pointer.
-// Mostly used for [C interoperability](https://docs.vosca.dev/advanced-concepts/v-and-c.html).
+// Mostly used for C interoperability.
 pub type charptr = charptr

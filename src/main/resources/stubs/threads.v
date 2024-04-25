@@ -75,6 +75,4 @@ struct ThreadPool[T] {}
 //   // All jobs finished: [1, 4, 9, 16, 25, 36, 49, 64, 81]
 // }
 // ```
-//
-// See [Documentation](https://docs.vosca.dev/concepts/concurrency.html) for more details.
 pub fn (t ThreadPool[T]) wait() []T
