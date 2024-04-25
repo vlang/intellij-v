@@ -2,11 +2,10 @@
 <img src="docs/cover.png">
 </p>
 
-[![Association Official Project][AssociationOfficialBadge]][AssociationUrl]
 ![](https://img.shields.io/badge/Stable%20Release-01.07.2023-orange?logo=semantic-release)
-![Build](https://github.com/i582/vlang-idea/workflows/Build/badge.svg)
-[![Version](https://img.shields.io/jetbrains/plugin/v/20287-vlang.svg)](https://plugins.jetbrains.com/plugin/20287-vlang)
-[![Downloads](https://img.shields.io/jetbrains/plugin/d/20287-vlang.svg)](https://plugins.jetbrains.com/plugin/20287-vlang)
+![Build](https://github.com/vlang/intellij-v/workflows/Build/badge.svg)
+[![Version](https://img.shields.io/jetbrains/plugin/v/24183-vlang.svg)](https://plugins.jetbrains.com/plugin/20287-vlang)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/24183-vlang.svg)](https://plugins.jetbrains.com/plugin/24183-vlang)
 
 # V language plugin for JetBrains IDEs
 
@@ -16,8 +15,6 @@ This plugin adds support of [V](https://vlang.io) language to JetBrains IDEs.
 
 ## Installation & Usage
 
-For installation options, see the
-[Quick Start Guide](https://plugins.jetbrains.com/plugin/20287-vlang/docs/#install-update-the-plugin).
 If you want to jump straight in, use following instructions:
 
 - Using IDE built-in plugin system:
@@ -27,10 +24,8 @@ If you want to jump straight in, use following instructions:
 
 - Manually:
 
-  Download the [latest release](https://github.com/i582/vlang-idea/releases/latest) and install it manually using
+  Download the [latest release](https://github.com/vlang/intellij-v/releases/latest) and install it manually using
   <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
-
-All the plugin's features are described in [documentation](https://plugins.jetbrains.com/plugin/20287-vlang/docs).
 
 ## Compatible IDEs
 
@@ -51,10 +46,5 @@ LLDB only
 ## License
 
 This project is under the **MIT License**. See the
-[LICENSE](https://github.com/i582/vlang-idea/blob/master/LICENSE)
+[LICENSE](https://github.com/vlang/intellij-v/blob/master/LICENSE)
 file for the full license text.
-
-
-[AssociationOfficialBadge]: https://vosca.dev/badge.svg
-
-[AssociationUrl]: https://vosca.dev
