@@ -5,13 +5,19 @@ import com.intellij.openapi.project.Project
 import com.intellij.util.xmlb.XmlSerializerUtil
 import com.intellij.util.xmlb.annotations.Attribute
 import io.vlang.configurations.VlangLibrariesUtil
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @State(
     name = "V Toolchain",
     storages = [Storage(StoragePathMacros.WORKSPACE_FILE)]
 )
-@Service
-class VlangToolchainService(private val project: Project) : PersistentStateComponent<VlangToolchainService.ToolchainState?> {
+@Service(Service.Level.PROJECT)
+class VlangToolchainService(
+    private val project: Project,
+    private val coroutineScope: CoroutineScope
+) : PersistentStateComponent<VlangToolchainService.ToolchainState?> {
+
     private var state = ToolchainState()
     val toolchainLocation: String
         get() = state.toolchainLocation
@@ -22,7 +28,10 @@ class VlangToolchainService(private val project: Project) : PersistentStateCompo
     fun setToolchain(project: Project, newToolchain: VlangToolchain) {
         toolchain = newToolchain
         state.toolchainLocation = newToolchain.homePath()
-        VlangLibrariesUtil.updateLibraries(project)
+
+        coroutineScope.launch {
+            VlangLibrariesUtil.updateLibraries(project)
+        }
     }
 
     fun toolchain(): VlangToolchain {
