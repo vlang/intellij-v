@@ -1,5 +1,7 @@
 # IntelliJ V Changelog
 
+## [Unreleased]
+
 ## [0.0.1-beta.6]
 
 - Support for IntelliJ Platform 2024.2
