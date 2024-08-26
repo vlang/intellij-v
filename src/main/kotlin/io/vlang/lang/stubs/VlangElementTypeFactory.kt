@@ -38,6 +38,7 @@ object VlangElementTypeFactory {
         "ENUM_FIELD_DEFINITION"         -> VlangEnumFieldDefinitionStubElementType(name)
         "FUNCTION_DECLARATION"          -> VlangFunctionDeclarationStubElementType(name)
         "METHOD_DECLARATION"            -> VlangMethodDeclarationStubElementType(name)
+        "STATIC_METHOD_DECLARATION"     -> VlangStaticMethodDeclarationStubElementType(name)
         "STRUCT_DECLARATION"            -> VlangStructDeclarationStubElementType(name)
         "ENUM_DECLARATION"              -> VlangEnumDeclarationStubElementType(name)
         "INTERFACE_DECLARATION"         -> VlangInterfaceDeclarationStubElementType(name)

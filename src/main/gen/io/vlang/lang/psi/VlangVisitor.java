@@ -792,6 +792,14 @@ public class VlangVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitStaticMethodDeclaration(@NotNull VlangStaticMethodDeclaration o) {
+    visitSignatureOwner(o);
+    // visitFunctionOrMethodDeclaration(o);
+    // visitAttributeOwner(o);
+    // visitGenericParametersOwner(o);
+    // visitScopeHolder(o);
+  }
+
   public void visitStringLiteral(@NotNull VlangStringLiteral o) {
     visitExpression(o);
     // visitPsiLanguageInjectionHost(o);

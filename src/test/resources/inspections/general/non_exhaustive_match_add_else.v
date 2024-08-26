@@ -9,34 +9,34 @@ enum MyColors {
 }
 
 fn enums(color MyColors) {
-	<warning descr="Match is not exhaustive, add missing branches for: '.red', '.green', '.blue' or 'else {}' branch">match</warning> color {
+	<error descr="Match is not exhaustive, add missing branches for: '.red', '.green', '.blue' or 'else {}' branch">match</error> color {
 
 	}
 
-	<warning descr="Match is not exhaustive, add missing branches for: '.red', '.green', '.blue' or 'else {}' branch">match</warning> color {}
+	<error descr="Match is not exhaustive, add missing branches for: '.red', '.green', '.blue' or 'else {}' branch">match</error> color {}
 
-	<warning descr="Match is not exhaustive, add missing branches for: '.green', '.blue' or 'else {}' branch">match</warning> color {
+	<error descr="Match is not exhaustive, add missing branches for: '.green', '.blue' or 'else {}' branch">match</error> color {
 		.red {}
 	}
 
-	<warning descr="Match is not exhaustive, add missing branches for: '.blue' or 'else {}' branch">match</warning> color {
+	<error descr="Match is not exhaustive, add missing branches for: '.blue' or 'else {}' branch">match</error> color {
 		.red { println('READ') }
 		.green { println('GREEN') }
 	}
 }
 
 fn types(val StringOrInt) {
-	<warning descr="Match is not exhaustive, add missing branches for: 'MyColors', '[]string', 'int', 'string' or 'else {}' branch">match</warning> val {
+	<error descr="Match is not exhaustive, add missing branches for: 'MyColors', '[]string', 'int', 'string' or 'else {}' branch">match</error> val {
 
 	}
 
-	<warning descr="Match is not exhaustive, add missing branches for: 'MyColors', '[]string', 'int', 'string' or 'else {}' branch">match</warning> val {}
+	<error descr="Match is not exhaustive, add missing branches for: 'MyColors', '[]string', 'int', 'string' or 'else {}' branch">match</error> val {}
 
-	<warning descr="Match is not exhaustive, add missing branches for: '[]string', 'int', 'string' or 'else {}' branch">match</warning> val {
+	<error descr="Match is not exhaustive, add missing branches for: '[]string', 'int', 'string' or 'else {}' branch">match</error> val {
 		MyColors {}
 	}
 
-	<warning descr="Match is not exhaustive, add missing branches for: 'int', 'string' or 'else {}' branch">match</warning> val {
+	<error descr="Match is not exhaustive, add missing branches for: 'int', 'string' or 'else {}' branch">match</error> val {
 		MyColors { println('MyColors') }
 		[]string { println('[]string') }
 	}

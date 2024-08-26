@@ -9,8 +9,8 @@ mut:
 }
 
 fn (b IFoo) foo() {
-	<warning descr="Immutable field 'immutable' cannot be reassigned"><warning descr="Immutable receiver 'b' cannot be reassigned">b</warning>.immutable</warning> = 100
-	<warning descr="Immutable receiver 'b' cannot be reassigned">b</warning>.mutable = 100
+	<error descr="Immutable field 'immutable' cannot be reassigned"><error descr="Immutable receiver 'b' cannot be reassigned">b</error>.immutable</error> = 100
+	<error descr="Immutable receiver 'b' cannot be reassigned">b</error>.mutable = 100
 }
 
 struct Boo {
@@ -26,32 +26,32 @@ struct MinifiedBoo {
 }
 
 fn (b Boo) foo(p string) {
-	<warning descr="Immutable receiver 'b' cannot be reassigned">b</warning> = Boo{}
-	<warning descr="Immutable parameter 'p' cannot be reassigned">p</warning> = ''
-	<warning descr="Immutable field 'name' cannot be reassigned"><warning descr="Immutable receiver 'b' cannot be reassigned">b</warning>.name</warning> = ''
-	<warning descr="Immutable receiver 'b' cannot be reassigned">b</warning>.age = 100
+	<error descr="Immutable receiver 'b' cannot be reassigned">b</error> = Boo{}
+	<error descr="Immutable parameter 'p' cannot be reassigned">p</error> = ''
+	<error descr="Immutable field 'name' cannot be reassigned"><error descr="Immutable receiver 'b' cannot be reassigned">b</error>.name</error> = ''
+	<error descr="Immutable receiver 'b' cannot be reassigned">b</error>.age = 100
 }
 
 fn (mut b Boo) mut_foo(mut p string) {
 	b = Boo{}
-	<warning descr="Immutable field 'name' cannot be reassigned">b.name</warning> = ''
+	<error descr="Immutable field 'name' cannot be reassigned">b.name</error> = ''
 	p = ''
 }
 
 fn (b Boo) foo2() {
-	<warning descr="Immutable field 'name' cannot be reassigned"><warning descr="Immutable receiver 'b' cannot be reassigned">b</warning>.name</warning> = ''
+	<error descr="Immutable field 'name' cannot be reassigned"><error descr="Immutable receiver 'b' cannot be reassigned">b</error>.name</error> = ''
 }
 
 const boo = Boo{}
-<warning descr="Immutable field 'name' cannot be reassigned"><warning descr="Constant 'boo' cannot be reassigned">boo</warning>.name</warning> = ''
+<error descr="Immutable field 'name' cannot be reassigned"><error descr="Constant 'boo' cannot be reassigned">boo</error>.name</error> = ''
 
 fn opt() ?int {}
 
 fn main() {
-	<warning descr="Constant 'constant' cannot be reassigned">constant</warning> = 200
+	<error descr="Constant 'constant' cannot be reassigned">constant</error> = 200
 
 	immutable := 100
-	<warning descr="Immutable variable 'immutable' cannot be reassigned">immutable</warning> = 200
+	<error descr="Immutable variable 'immutable' cannot be reassigned">immutable</error> = 200
 
 	mut mutable := 100
 	mutable = 200
@@ -61,7 +61,7 @@ fn main() {
 	}
 
 	if immutable_assign := opt() {
-		<warning descr="Immutable variable 'immutable_assign' cannot be reassigned">immutable_assign</warning> = 200
+		<error descr="Immutable variable 'immutable_assign' cannot be reassigned">immutable_assign</error> = 200
 	}
 
 	if mut mutable_assign := opt() {
@@ -69,10 +69,10 @@ fn main() {
 	}
 
 	boo := Boo{}
-	<warning descr="Immutable field 'name' cannot be reassigned"><warning descr="Immutable variable 'boo' cannot be reassigned">boo</warning>.name</warning> = ''
-	<warning descr="Immutable variable 'boo' cannot be reassigned">boo</warning>.age = 100
+	<error descr="Immutable field 'name' cannot be reassigned"><error descr="Immutable variable 'boo' cannot be reassigned">boo</error>.name</error> = ''
+	<error descr="Immutable variable 'boo' cannot be reassigned">boo</error>.age = 100
 
 	minified := MinifiedBoo{}
-	<warning descr="Immutable variable 'minified' cannot be reassigned">minified</warning>.name = '' // ok
-	<warning descr="Immutable variable 'minified' cannot be reassigned">minified</warning>.age = 100 // ok
+	<error descr="Immutable variable 'minified' cannot be reassigned">minified</error>.name = '' // ok
+	<error descr="Immutable variable 'minified' cannot be reassigned">minified</error>.age = 100 // ok
 }

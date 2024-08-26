@@ -1,6 +1,17 @@
 # IntelliJ V Changelog
 
-## [Unreleased]
+## [0.0.1-beta.6]
+
+- Support for IntelliJ Platform 2024.2
+- Faster indexing (and smaller index) by filtering out test files from vlib
+- Launch search for vlang installations in coroutine
+- Support for static method syntax
+  - it will not be highlighted as an error
+  - no completions yet
+
+### Build system
+- update Gradle to 8.9
+- move to gradle intellij platform plugin version 2.0.1
 
 ## [0.0.1-beta.5]
 

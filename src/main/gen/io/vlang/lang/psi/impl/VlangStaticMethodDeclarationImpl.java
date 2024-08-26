@@ -11,21 +11,21 @@ import static io.vlang.lang.VlangTypes.*;
 import io.vlang.lang.psi.*;
 import com.intellij.psi.ResolveState;
 import io.vlang.lang.psi.types.VlangTypeEx;
-import io.vlang.lang.stubs.VlangFunctionDeclarationStub;
+import io.vlang.lang.stubs.VlangStaticMethodDeclarationStub;
 import com.intellij.psi.stubs.IStubElementType;
 
-public class VlangFunctionDeclarationImpl extends VlangFunctionDeclarationWithScopeHolder implements VlangFunctionDeclaration {
+public class VlangStaticMethodDeclarationImpl extends VlangStaticMethodDeclarationWithScopeHolder implements VlangStaticMethodDeclaration {
 
-  public VlangFunctionDeclarationImpl(@NotNull VlangFunctionDeclarationStub stub, @NotNull IStubElementType<?, ?> type) {
+  public VlangStaticMethodDeclarationImpl(@NotNull VlangStaticMethodDeclarationStub stub, @NotNull IStubElementType<?, ?> type) {
     super(stub, type);
   }
 
-  public VlangFunctionDeclarationImpl(@NotNull ASTNode node) {
+  public VlangStaticMethodDeclarationImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitFunctionDeclaration(this);
+    visitor.visitStaticMethodDeclaration(this);
   }
 
   @Override
@@ -53,15 +53,27 @@ public class VlangFunctionDeclarationImpl extends VlangFunctionDeclarationWithSc
   }
 
   @Override
-  @NotNull
+  @Nullable
   public VlangSignature getSignature() {
-    return notNullChild(VlangPsiTreeUtil.getStubChildOfType(this, VlangSignature.class));
+    return VlangPsiTreeUtil.getStubChildOfType(this, VlangSignature.class);
   }
 
   @Override
   @Nullable
   public VlangSymbolVisibility getSymbolVisibility() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangSymbolVisibility.class);
+  }
+
+  @Override
+  @NotNull
+  public VlangTypeReferenceExpression getTypeReferenceExpression() {
+    return notNullChild(VlangPsiTreeUtil.getStubChildOfType(this, VlangTypeReferenceExpression.class));
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getDot() {
+    return notNullChild(findChildByType(DOT));
   }
 
   @Override
@@ -77,35 +89,15 @@ public class VlangFunctionDeclarationImpl extends VlangFunctionDeclarationWithSc
   }
 
   @Override
-  @NotNull
-  public String getName() {
-    return VlangPsiImplUtil.getName(this);
-  }
-
-  @Override
   @Nullable
   public VlangTypeEx getTypeInner(@Nullable ResolveState context) {
     return VlangPsiImplUtil.getTypeInner(this, context);
   }
 
   @Override
-  public boolean isDefinition() {
-    return VlangPsiImplUtil.isDefinition(this);
-  }
-
-  @Override
-  public boolean isNoReturn() {
-    return VlangPsiImplUtil.isNoReturn(this);
-  }
-
-  @Override
-  public boolean isGeneric() {
-    return VlangPsiImplUtil.isGeneric(this);
-  }
-
-  @Override
-  public boolean isCompileTime() {
-    return VlangPsiImplUtil.isCompileTime(this);
+  @Nullable
+  public String getQualifiedName() {
+    return VlangPsiImplUtil.getQualifiedName(this);
   }
 
 }

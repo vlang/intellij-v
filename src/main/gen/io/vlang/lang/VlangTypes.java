@@ -198,6 +198,7 @@ public interface VlangTypes {
   IElementType SQL_UPDATE_STATEMENT = new VlangCompositeElementType("SQL_UPDATE_STATEMENT");
   IElementType SQL_WHERE_CLAUSE = new VlangCompositeElementType("SQL_WHERE_CLAUSE");
   IElementType STATEMENT = new VlangCompositeElementType("STATEMENT");
+  IElementType STATIC_METHOD_DECLARATION = VlangElementTypeFactory.stubFactory("STATIC_METHOD_DECLARATION");
   IElementType STRING_LITERAL = new VlangCompositeElementType("STRING_LITERAL");
   IElementType STRING_TEMPLATE = new VlangCompositeElementType("STRING_TEMPLATE");
   IElementType STRING_TEMPLATE_ENTRY = new VlangCompositeElementType("STRING_TEMPLATE_ENTRY");
@@ -921,6 +922,9 @@ public interface VlangTypes {
       }
       else if (type == STATEMENT) {
         return new VlangStatementImpl(node);
+      }
+      else if (type == STATIC_METHOD_DECLARATION) {
+        return new VlangStaticMethodDeclarationImpl(node);
       }
       else if (type == STRING_LITERAL) {
         return new VlangStringLiteralImpl(node);

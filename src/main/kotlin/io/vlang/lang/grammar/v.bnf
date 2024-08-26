@@ -93,28 +93,29 @@
     C_STRING             = 'c_string'
     raw_string           = 'raw_string'
     char                 = 'char'
+    identifier           = 'regexp:[a-zA-Z][a-zA-Z0-9_]*'
   ]
 
   extends("(Or|And|Add|Conversion|Mul|ShiftLeft|Selector|Conditional|OrBlock)Expr|(In|NotIn|Is|NotIs)Expression")=BinaryExpr
   extends(".*(Expr|Literal|Lit|OperandName)|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|SharedExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression|LockExpression|IncDecExpression|LiteralValueExpression|SelectExpression|SpawnExpression|TypeCastExpression")=Expression
 
   implements("ModuleClause|(Var|Param|Field|Label|Var|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|(Struct|TypeAlias|Union|Enum|Interface)Declaration|Receiver|Import(Alias|Name)|GenericParameter|EmbeddedDefinition")="io.vlang.lang.psi.VlangNamedElement"
-  implements("FunctionLit|(Function|Method)Declaration")="io.vlang.lang.psi.VlangSignatureOwner"
-  implements("(Function|Method)Declaration")="io.vlang.lang.psi.VlangFunctionOrMethodDeclaration"
+  implements("FunctionLit|(Function|Method|StaticMethod)Declaration")="io.vlang.lang.psi.VlangSignatureOwner"
+  implements("(Function|Method|StaticMethod)Declaration")="io.vlang.lang.psi.VlangFunctionOrMethodDeclaration"
   implements(".*ReferenceExpression|FieldName|EnumFetch")="io.vlang.lang.psi.VlangReferenceExpressionBase"
   implements("(Continue|Break|Goto)Statement")="io.vlang.lang.psi.VlangLabelRefOwnerElement"
 
-  implements("(Struct|Interface|Enum|GlobalVariable|Function|Method|TypeAlias|Const)Declaration|ModuleClause")="io.vlang.lang.psi.VlangAttributeOwner"
-  implements("(Function|Method)Declaration|(Struct|Interface|Alias)Type|FunctionLit|InterfaceMethodDefinition")="io.vlang.lang.psi.VlangGenericParametersOwner"
+  implements("(Struct|Interface|Enum|GlobalVariable|Function|Method|StaticMethod|TypeAlias|Const)Declaration|ModuleClause")="io.vlang.lang.psi.VlangAttributeOwner"
+  implements("(Function|Method|StaticMethod)Declaration|(Struct|Interface|Alias)Type|FunctionLit|InterfaceMethodDefinition")="io.vlang.lang.psi.VlangGenericParametersOwner"
   implements("CallExpr|Type")="io.vlang.lang.psi.VlangGenericArgumentsOwner"
 
-  implements("(Function|Method)Declaration")="io.vlang.lang.psi.VlangScopeHolder"
+  implements("(Function|Method|StaticMethod)Declaration")="io.vlang.lang.psi.VlangScopeHolder"
 
-  extends("(Function|Method)Declaration")="io.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
+  extends("(Function|Method|StaticMethod)Declaration")="io.vlang.lang.psi.impl.VlangFunctionOrMethodDeclarationImpl<?>"
   extends("Type|GenericParameters|Signature|Result|Parameters|TypeUnionList|EmbeddedInterfaceDefinition|TypeReferenceExpression|Attributes|Attribute|PlainAttribute|AttributeExpression|AttributeValue|AttributeKey")="io.vlang.lang.psi.impl.VlangStubbedElementImpl<?>"
   extends("ModuleClause|(Struct|TypeAlias|Union|Enum|Interface)Declaration|(Var|Label|Param|Field|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter|EmbeddedDefinition")="io.vlang.lang.psi.impl.VlangNamedElementImpl<?>"
 
-  elementTypeFactory("ModuleClause|(Function|Method|Struct|TypeAlias|Union|Enum|Interface)Declaration|.*Type|(Var|Label|Field|Param|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter|GenericParameters|Parameters|Result|Signature|TypeUnionList|EmbeddedInterfaceDefinition|TypeReferenceExpression|Attributes|Attribute|PlainAttribute|AttributeExpression|AttributeValue|AttributeKey|EmbeddedDefinition")='io.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
+  elementTypeFactory("ModuleClause|(Function|Method|StaticMethod|Struct|TypeAlias|Union|Enum|Interface)Declaration|.*Type|(Var|Label|Field|Param|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|Receiver|Import(Alias|Name)|GenericParameter|GenericParameters|Parameters|Result|Signature|TypeUnionList|EmbeddedInterfaceDefinition|TypeReferenceExpression|Attributes|Attribute|PlainAttribute|AttributeExpression|AttributeValue|AttributeKey|EmbeddedDefinition")='io.vlang.lang.stubs.VlangElementTypeFactory.stubFactory'
 
   extends("Sql.*Statement")=SqlBlockStatement
   extends(".*Statement")=Statement
@@ -197,8 +198,9 @@ ImportAliasName ::= identifier {
 private TopLevelDeclaration ::= !<<eof>> TopDeclaration semi {pin=1 recoverWhile=TopLevelDeclarationRecover}
 private TopDeclaration ::=
     ConstDeclaration
-  | FunctionDeclaration
+  | StaticMethodDeclaration
   | MethodDeclaration
+  | FunctionDeclaration
   | StructDeclaration
   | EnumDeclaration
   | InterfaceDeclaration
@@ -570,19 +572,31 @@ GenericArguments ::= GenericArgumentsOld | GenericArgumentsNew {
 GenericArgumentsOld ::= '<' TypeListNoPin? '>' {pin=3 elementType=GenericArguments}
 GenericArgumentsNew ::= <<leftBracket>> TypeListNoPin? ']' {pin=3 elementType=GenericArguments}
 
-FunctionDeclaration ::= Attributes? SymbolVisibility? fn identifier GenericParameters? Signature BlockWithConsume? {
+private fnDecl ::= Attributes? SymbolVisibility? fn  {
+  pin=3
+}
+
+FunctionDeclaration ::= fnDecl identifier GenericParameters? Signature BlockWithConsume? {
   pin=4
   stubClass="io.vlang.lang.stubs.VlangFunctionDeclarationStub"
   methods=[getName getTypeInner isDefinition isNoReturn isGeneric isCompileTime]
   mixin="io.vlang.lang.psi.impl.VlangFunctionDeclarationWithScopeHolder"
 }
 
-MethodDeclaration ::= Attributes? SymbolVisibility? fn '(' Receiver ')' MethodName GenericParameters? Signature BlockWithConsume? {
-  pin=7
+MethodDeclaration ::= fnDecl '(' Receiver ')' MethodName GenericParameters? Signature BlockWithConsume? {
+  pin=5
   stubClass="io.vlang.lang.stubs.VlangMethodDeclarationStub"
   methods=[getReceiverType getTypeInner getIdentifier getQualifiedName getOwner isMutable byReference]
   mixin="io.vlang.lang.psi.impl.VlangMethodDeclarationWithScopeHolder"
 }
+
+StaticMethodDeclaration ::= fnDecl TypeReferenceExpression '.' identifier GenericParameters? Signature BlockWithConsume? {
+  pin=4
+  stubClass="io.vlang.lang.stubs.VlangStaticMethodDeclarationStub"
+  methods=[getType getTypeInner getQualifiedName]
+  mixin="io.vlang.lang.psi.impl.VlangStaticMethodDeclarationWithScopeHolder"
+}
+
 // <ident> or <ops> for overload
 MethodName ::= identifier | AddOp | MulOp | RelOp
 

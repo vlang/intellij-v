@@ -89,6 +89,11 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getIdentifier(o: VlangStaticMethodDeclaration): PsiElement {
+        return o.getIdentifier()
+    }
+
+    @JvmStatic
     fun getIdentifier(o: VlangInterfaceDeclaration): PsiElement? {
         return o.interfaceType.identifier
     }
@@ -583,7 +588,8 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getMethodList(o: VlangInterfaceType): List<VlangInterfaceMethodDefinition> {
-        val ownMethods = o.membersGroupList.flatMap { it.interfaceMethodDeclarationList }.map { it.interfaceMethodDefinition }
+        val ownMethods =
+            o.membersGroupList.flatMap { it.interfaceMethodDeclarationList }.map { it.interfaceMethodDefinition }
 
         val embeddedMethods = o.embeddedInterfaces
             .flatMap { it.methodList }
@@ -841,7 +847,11 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getQualifiedName(o: VlangFieldDefinition): String? {
-        val owner = o.parentOfTypes(VlangStructDeclaration::class, VlangInterfaceDeclaration::class, VlangAnonymousStructType::class)
+        val owner = o.parentOfTypes(
+            VlangStructDeclaration::class,
+            VlangInterfaceDeclaration::class,
+            VlangAnonymousStructType::class
+        )
 
         if (owner is VlangNamedElement) {
             return owner.getQualifiedName() + "." + o.name
@@ -882,6 +892,12 @@ object VlangPsiImplUtil {
         }
 
         return (o as? VlangNamedElementImpl<*>)?.getQualifiedNameBase()
+    }
+
+    @JvmStatic
+    fun getQualifiedName(o: VlangStaticMethodDeclaration): String {
+        val type = o.typeReferenceExpression.getIdentifier().text
+        return type + "." + o.name
     }
 
     @JvmStatic
@@ -1060,7 +1076,10 @@ object VlangPsiImplUtil {
         return addImportDeclaration(list, decl)
     }
 
-    private fun addImportDeclaration(importList: VlangImportList, newImportDeclaration: VlangImportDeclaration): VlangImportSpec {
+    private fun addImportDeclaration(
+        importList: VlangImportList,
+        newImportDeclaration: VlangImportDeclaration
+    ): VlangImportSpec {
         val lastImport = importList.importDeclarationList.last()
         val importDeclaration = importList.addAfter(newImportDeclaration, lastImport) as VlangImportDeclaration
         val importListNextSibling = importList.nextSibling
@@ -1445,7 +1464,10 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getTypeInner(o: VlangEnumDeclaration, context: ResolveState?): VlangTypeEx {
+    fun getTypeInner(
+        o: VlangEnumDeclaration,
+        context: ResolveState?,
+    ): VlangTypeEx {
         return o.enumType.toEx()
     }
 
@@ -1556,7 +1578,7 @@ object VlangPsiImplUtil {
             val reference = expr.getReference()
             val resolved = reference.resolve()
             if (resolved is VlangFunctionDeclaration) {
-                val signature = resolved.getSignature() ?: return null
+                val signature = resolved.getSignature()
                 return processSignatureReturnType(signature, expr, resolved, false)
             }
         }
@@ -1964,7 +1986,11 @@ object VlangPsiImplUtil {
         return inner
     }
 
-    private fun processMapMethodCall(resolved: VlangMethodDeclaration, signature: VlangSignature?, expr: VlangCallExpr): VlangTypeEx? {
+    private fun processMapMethodCall(
+        resolved: VlangMethodDeclaration,
+        signature: VlangSignature?,
+        expr: VlangCallExpr
+    ): VlangTypeEx? {
         val receiverTypeEx = resolved.receiverType.toEx()
         if (!VlangTypeInferenceUtil.builtinMapOrPointerTo(receiverTypeEx)) return null
 
@@ -1981,7 +2007,11 @@ object VlangPsiImplUtil {
         }
     }
 
-    private fun processArrayMethodCall(resolved: VlangMethodDeclaration, signature: VlangSignature?, expr: VlangCallExpr): VlangTypeEx? {
+    private fun processArrayMethodCall(
+        resolved: VlangMethodDeclaration,
+        signature: VlangSignature?,
+        expr: VlangCallExpr
+    ): VlangTypeEx? {
         val receiverType = resolved.receiverType.toEx()
         if (!VlangTypeInferenceUtil.builtinArrayOrPointerTo(receiverType)) return null
 
@@ -2039,7 +2069,11 @@ object VlangPsiImplUtil {
         return null
     }
 
-    private fun processThreadMethodCall(resolved: VlangMethodDeclaration, signature: VlangSignature?, expr: VlangCallExpr): VlangTypeEx? {
+    private fun processThreadMethodCall(
+        resolved: VlangMethodDeclaration,
+        signature: VlangSignature?,
+        expr: VlangCallExpr
+    ): VlangTypeEx? {
         val receiverType = resolved.receiverType.toEx()
         if (!VlangTypeInferenceUtil.stubThread(receiverType)) return null
 
@@ -2284,7 +2318,11 @@ object VlangPsiImplUtil {
         return null
     }
 
-    private fun processRangeClause(o: VlangVarDefinition, decl: VlangRangeClause, context: ResolveState?): VlangTypeEx? {
+    private fun processRangeClause(
+        o: VlangVarDefinition,
+        decl: VlangRangeClause,
+        context: ResolveState?
+    ): VlangTypeEx? {
         val rightType = decl.expression?.getType(context)?.unwrapAlias()
         if (rightType is VlangStringTypeEx) {
             return VlangPrimitiveTypeEx.U8
@@ -2350,7 +2388,11 @@ object VlangPsiImplUtil {
         return unwrapOptionOrResultType(resultType)
     }
 
-    private fun getTypeInVarSpec(o: VlangVarDefinition, decl: VlangVarDeclaration, context: ResolveState?): VlangTypeEx? {
+    private fun getTypeInVarSpec(
+        o: VlangVarDefinition,
+        decl: VlangVarDeclaration,
+        context: ResolveState?
+    ): VlangTypeEx? {
         val defineIndex = decl.varDefinitionList.indexOf(o)
         val varList = decl.varDefinitionList
         val exprList = decl.expressionList
@@ -2407,7 +2449,14 @@ object VlangPsiImplUtil {
         localResolve: Boolean,
         checkContainingFile: Boolean,
     ): Boolean {
-        return processNamedElements(processor, state, elements, Conditions.alwaysTrue(), localResolve, checkContainingFile)
+        return processNamedElements(
+            processor,
+            state,
+            elements,
+            Conditions.alwaysTrue(),
+            localResolve,
+            checkContainingFile
+        )
     }
 
     fun processNamedElements(

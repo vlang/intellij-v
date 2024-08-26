@@ -6,6 +6,7 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.roots.AdditionalLibraryRootsProvider
 import com.intellij.openapi.roots.SyntheticLibrary
+import com.intellij.openapi.roots.SyntheticLibrary.ExcludeFileCondition
 import com.intellij.openapi.vfs.VirtualFile
 import io.vlang.configurations.VlangConfiguration
 import io.vlang.ide.ui.VIcons
@@ -14,7 +15,14 @@ import io.vlang.toolchain.VlangToolchainService.Companion.toolchainSettings
 import javax.swing.Icon
 
 class VlangAdditionalLibraryRootsProvider : AdditionalLibraryRootsProvider() {
-    open class LibraryBase(private val name: String, private val sourceRoot: VirtualFile?, private val icon: Icon = VIcons.V) : SyntheticLibrary(), ItemPresentation {
+
+    open class LibraryBase(
+        protected val name: String,
+        protected val sourceRoot: VirtualFile?,
+        protected val icon: Icon,
+        excludeFileCondition: ExcludeFileCondition? = null,
+    ) : SyntheticLibrary(name, excludeFileCondition), ItemPresentation {
+
         override fun getSourceRoots() = if (sourceRoot == null) emptyList() else listOf(sourceRoot)
 
         override fun getPresentableText() = name
@@ -34,8 +42,37 @@ class VlangAdditionalLibraryRootsProvider : AdditionalLibraryRootsProvider() {
         override fun hashCode() = sourceRoot.hashCode()
     }
 
-    class StandardLibrary(project: Project, toolchain: VlangToolchain) : LibraryBase(toolchain.name(), VlangConfiguration.getInstance(project).stdlibLocation)
-    class StandardModules(sourceRoot: VirtualFile) : LibraryBase("V Modules", sourceRoot, AllIcons.Nodes.PpLib)
+    class StandardLibrary(project: Project, toolchain: VlangToolchain) : LibraryBase(
+        toolchain.name(),
+        VlangConfiguration.getInstance(project).stdlibLocation,
+        VIcons.V,
+        ExcludeFileCondition { isDir, filename, _, _, _ ->
+            isDir && (
+                    filename == "tests"
+                            || filename == "slow_tests"
+                            || filename == "testdata"
+                            || filename == "linux_bare" // builtin/linux_bare
+                    )
+                    || filename.endsWith("_test.v")
+                    || filename.endsWith("_test.js.v")
+                    || filename.endsWith(".vv")
+                    || filename.endsWith(".out")
+        }
+    )
+
+    class StandardModules(sourceRoot: VirtualFile) : LibraryBase(
+        "V Modules",
+        sourceRoot,
+        AllIcons.Nodes.PpLib,
+        ExcludeFileCondition { isDir, filename, _, isStrictRootChild, _ -> isDir && isStrictRootChild.asBoolean && filename == "cache" }
+    ) {
+        override fun getExcludedRoots(): MutableSet<VirtualFile> {
+            sourceRoot ?: return mutableSetOf()
+            val modulesCache = sourceRoot.findChild("cache") ?: return mutableSetOf()
+            return mutableSetOf(modulesCache)
+        }
+    }
+
     class Stubs(sourceRoot: VirtualFile) : LibraryBase("V Stubs", sourceRoot, AllIcons.Nodes.PpLibFolder)
 
     override fun getAdditionalProjectLibraries(project: Project): Collection<SyntheticLibrary> {
@@ -65,21 +102,21 @@ class VlangAdditionalLibraryRootsProvider : AdditionalLibraryRootsProvider() {
 
         val result = mutableListOf<VirtualFile>()
 
-        val toolchain = project.toolchainSettings.toolchain()
-        val sourceRoot = toolchain.stdlibDir()
-        if (sourceRoot != null) {
-            result.add(sourceRoot)
-        }
+//        val toolchain = project.toolchainSettings.toolchain()
+//        val sourceRoot = toolchain.stdlibDir()
+//        if (sourceRoot != null) {
+//            result.add(sourceRoot)
+//        }
 
         val modulesRoot = VlangConfiguration.getInstance(project).modulesLocation
         if (modulesRoot != null) {
             result.add(modulesRoot)
         }
 
-        val stubs = getStubs(project)
-        if (stubs != null) {
-            result.add(stubs.sourceRoots.first())
-        }
+//        val stubs = getStubs(project)
+//        if (stubs != null) {
+//            result.add(stubs.sourceRoots.first())
+//        }
 
         return result
     }

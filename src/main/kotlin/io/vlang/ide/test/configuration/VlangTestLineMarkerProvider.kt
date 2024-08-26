@@ -28,22 +28,9 @@ class VlangTestLineMarkerProvider : RunLineMarkerContributor() {
                 return null
             }
 
-            val magnitude = getTestState(parent)
-                ?.let { TestIconMapper.getMagnitude(it.magnitude) }
+            val icon = getTestStateIcon(getTestState(parent), false)
 
-            val icon = when (magnitude) {
-                TestStateInfo.Magnitude.PASSED_INDEX,
-                TestStateInfo.Magnitude.COMPLETE_INDEX,
-                     -> VIcons.TestGreen
-
-                TestStateInfo.Magnitude.ERROR_INDEX,
-                TestStateInfo.Magnitude.FAILED_INDEX,
-                     -> VIcons.TestRed
-
-                else -> VIcons.Test
-            }
-
-            return Info(icon, { "Run" }, *contextActions)
+            return Info(icon, contextActions) { "Run" }
         }
 
         if (parent is VlangModuleClause) {
@@ -52,7 +39,7 @@ class VlangTestLineMarkerProvider : RunLineMarkerContributor() {
                 return null
             }
 
-            return Info(AllIcons.RunConfigurations.TestState.Run_run, { "Run module tests" }, *contextActions)
+            return Info(AllIcons.RunConfigurations.TestState.Run_run, contextActions) { "Run module tests" }
         }
 
         return null

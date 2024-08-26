@@ -192,6 +192,7 @@ abstract class VlangNamedElementImpl<T : VlangNamedStub<*>> :
             is VlangEnumDeclaration           -> VIcons.Enum
             is VlangMethodDeclaration         -> VIcons.Method
             is VlangFunctionDeclaration       -> VIcons.Function
+            is VlangStaticMethodDeclaration   -> VIcons.StaticMethod
             is VlangVarDefinition             -> VIcons.Variable
             is VlangConstDefinition           -> VIcons.Constant
             is VlangInterfaceMethodDefinition -> VIcons.Method

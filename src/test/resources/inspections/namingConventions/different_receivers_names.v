@@ -6,14 +6,14 @@ struct Thing {
 	name string
 }
 
-fn (<warning descr="Receiver names are different">foo</warning> &Thing) method() {
+fn (<weak_warning descr="Receiver names are different">foo</weak_warning> &Thing) method() {
 	println(foo.name)
 }
 
-fn (<warning descr="Receiver names are different">fo</warning> Thing) method1() {
+fn (<weak_warning descr="Receiver names are different">fo</weak_warning> Thing) method1() {
 	println(fo.name)
 }
 
-fn (<warning descr="Receiver names are different">thing</warning> &Thing) method2() {
+fn (<weak_warning descr="Receiver names are different">thing</weak_warning> &Thing) method2() {
 	println(thing.name)
 }

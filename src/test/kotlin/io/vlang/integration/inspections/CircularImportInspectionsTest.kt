@@ -21,7 +21,7 @@ class CircularImportInspectionsTest : IntegrationTestBase() {
             file("utils.v", """
                 module second
 
-                import <warning descr="Circular import detected">first</warning>
+                import <error descr="Circular import detected">first</error>
                 
                 pub fn util() {
                     first.util()

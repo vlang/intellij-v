@@ -6,10 +6,10 @@ struct Foo {
 }
 
 fn foo() {
-	mut a := <warning descr="Result value should have either an `or {}` block, or `!` at the end">sql ss {
+	mut a := <error descr="Result value should have either an `or {}` block, or `!` at the end">sql ss {
 		select from Foo
-	}</warning>
-	println(<warning descr="Result value should have either an `or {}` block, or `!` at the end">a</warning>)
+	}</error>
+	println(<error descr="Result value should have either an `or {}` block, or `!` at the end">a</error>)
 
 	b := sql ss {
 		select from Foo

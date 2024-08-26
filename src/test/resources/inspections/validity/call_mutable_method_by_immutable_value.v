@@ -17,16 +17,16 @@ fn main(param_person Person, mut param_person_mutable Person) {
 	person := Person{}
 
 	person.other.method() // ok
-	person.other.<warning descr="Cannot call mutable method 'mutable_method' on immutable value">mutable_method</warning>()
+	person.other.<error descr="Cannot call mutable method 'mutable_method' on immutable value">mutable_method</error>()
 
 	person.other_mutable.method() // ok
 	person.other_mutable.mutable_method() // ok
 
 	person.method() // ok
-	person.<warning descr="Cannot call mutable method 'mutable_method' on immutable value">mutable_method</warning>()
+	person.<error descr="Cannot call mutable method 'mutable_method' on immutable value">mutable_method</error>()
 
 	param_person.method() // ok
-	person.<warning descr="Cannot call mutable method 'mutable_method' on immutable value">mutable_method</warning>()
+	person.<error descr="Cannot call mutable method 'mutable_method' on immutable value">mutable_method</error>()
 
 	param_person_mutable.method() // ok
 	param_person_mutable.mutable_method() // ok
@@ -38,10 +38,10 @@ fn main(param_person Person, mut param_person_mutable Person) {
 
 fn (receiver_person &Person) method1() {
 	receiver_person.method() // ok
-	receiver_person.<warning descr="Cannot call mutable method 'mutable_method' on immutable value">mutable_method</warning>()
+	receiver_person.<error descr="Cannot call mutable method 'mutable_method' on immutable value">mutable_method</error>()
 }
 
 fn (mutable_receiver_person &Person) method2() {
 	mutable_receiver_person.method() // ok
-	mutable_receiver_person.<warning descr="Cannot call mutable method 'mutable_method' on immutable value">mutable_method</warning>() // ok
+	mutable_receiver_person.<error descr="Cannot call mutable method 'mutable_method' on immutable value">mutable_method</error>() // ok
 }

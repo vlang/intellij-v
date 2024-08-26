@@ -18,6 +18,7 @@ object VIcons {
     val Union = AllIcons.Nodes.AbstractClass // TODO: change
     val Method = AllIcons.Nodes.Method
     val Function = AllIcons.Nodes.Function
+    val StaticMethod = AllIcons.Nodes.Static
     val Variable = AllIcons.Nodes.Variable
     val Constant = AllIcons.Nodes.Constant
     val Parameter = AllIcons.Nodes.Parameter

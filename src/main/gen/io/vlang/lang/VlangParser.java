@@ -2335,46 +2335,31 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Attributes? SymbolVisibility? fn identifier GenericParameters? Signature BlockWithConsume?
+  // fnDecl identifier GenericParameters? Signature BlockWithConsume?
   public static boolean FunctionDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionDeclaration")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, FUNCTION_DECLARATION, "<function declaration>");
-    r = FunctionDeclaration_0(b, l + 1);
-    r = r && FunctionDeclaration_1(b, l + 1);
-    r = r && consumeTokens(b, 2, FN, IDENTIFIER);
+    r = fnDecl(b, l + 1);
+    r = r && consumeToken(b, IDENTIFIER);
+    r = r && FunctionDeclaration_2(b, l + 1);
+    r = r && Signature(b, l + 1);
     p = r; // pin = 4
-    r = r && report_error_(b, FunctionDeclaration_4(b, l + 1));
-    r = p && report_error_(b, Signature(b, l + 1)) && r;
-    r = p && FunctionDeclaration_6(b, l + 1) && r;
+    r = r && FunctionDeclaration_4(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
-  // Attributes?
-  private static boolean FunctionDeclaration_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "FunctionDeclaration_0")) return false;
-    Attributes(b, l + 1);
-    return true;
-  }
-
-  // SymbolVisibility?
-  private static boolean FunctionDeclaration_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "FunctionDeclaration_1")) return false;
-    SymbolVisibility(b, l + 1);
-    return true;
-  }
-
   // GenericParameters?
-  private static boolean FunctionDeclaration_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "FunctionDeclaration_4")) return false;
+  private static boolean FunctionDeclaration_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FunctionDeclaration_2")) return false;
     GenericParameters(b, l + 1);
     return true;
   }
 
   // BlockWithConsume?
-  private static boolean FunctionDeclaration_6(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "FunctionDeclaration_6")) return false;
+  private static boolean FunctionDeclaration_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FunctionDeclaration_4")) return false;
     BlockWithConsume(b, l + 1);
     return true;
   }
@@ -3777,49 +3762,34 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Attributes? SymbolVisibility? fn '(' Receiver ')' MethodName GenericParameters? Signature BlockWithConsume?
+  // fnDecl '(' Receiver ')' MethodName GenericParameters? Signature BlockWithConsume?
   public static boolean MethodDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MethodDeclaration")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, METHOD_DECLARATION, "<method declaration>");
-    r = MethodDeclaration_0(b, l + 1);
-    r = r && MethodDeclaration_1(b, l + 1);
-    r = r && consumeTokens(b, 0, FN, LPAREN);
+    r = fnDecl(b, l + 1);
+    r = r && consumeToken(b, LPAREN);
     r = r && Receiver(b, l + 1);
     r = r && consumeToken(b, RPAREN);
     r = r && MethodName(b, l + 1);
-    p = r; // pin = 7
-    r = r && report_error_(b, MethodDeclaration_7(b, l + 1));
+    p = r; // pin = 5
+    r = r && report_error_(b, MethodDeclaration_5(b, l + 1));
     r = p && report_error_(b, Signature(b, l + 1)) && r;
-    r = p && MethodDeclaration_9(b, l + 1) && r;
+    r = p && MethodDeclaration_7(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
-  // Attributes?
-  private static boolean MethodDeclaration_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MethodDeclaration_0")) return false;
-    Attributes(b, l + 1);
-    return true;
-  }
-
-  // SymbolVisibility?
-  private static boolean MethodDeclaration_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MethodDeclaration_1")) return false;
-    SymbolVisibility(b, l + 1);
-    return true;
-  }
-
   // GenericParameters?
-  private static boolean MethodDeclaration_7(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MethodDeclaration_7")) return false;
+  private static boolean MethodDeclaration_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MethodDeclaration_5")) return false;
     GenericParameters(b, l + 1);
     return true;
   }
 
   // BlockWithConsume?
-  private static boolean MethodDeclaration_9(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MethodDeclaration_9")) return false;
+  private static boolean MethodDeclaration_7(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MethodDeclaration_7")) return false;
     BlockWithConsume(b, l + 1);
     return true;
   }
@@ -5587,6 +5557,37 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // fnDecl TypeReferenceExpression '.' identifier GenericParameters? Signature BlockWithConsume?
+  public static boolean StaticMethodDeclaration(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "StaticMethodDeclaration")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, STATIC_METHOD_DECLARATION, "<static method declaration>");
+    r = fnDecl(b, l + 1);
+    r = r && TypeReferenceExpression(b, l + 1);
+    r = r && consumeTokens(b, 2, DOT, IDENTIFIER);
+    p = r; // pin = 4
+    r = r && report_error_(b, StaticMethodDeclaration_4(b, l + 1));
+    r = p && report_error_(b, Signature(b, l + 1)) && r;
+    r = p && StaticMethodDeclaration_6(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // GenericParameters?
+  private static boolean StaticMethodDeclaration_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "StaticMethodDeclaration_4")) return false;
+    GenericParameters(b, l + 1);
+    return true;
+  }
+
+  // BlockWithConsume?
+  private static boolean StaticMethodDeclaration_6(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "StaticMethodDeclaration_6")) return false;
+    BlockWithConsume(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
   // 'raw_string' | StringTemplate
   public static boolean StringLiteral(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StringLiteral")) return false;
@@ -5774,8 +5775,9 @@ public class VlangParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // ConstDeclaration
-  //   | FunctionDeclaration
+  //   | StaticMethodDeclaration
   //   | MethodDeclaration
+  //   | FunctionDeclaration
   //   | StructDeclaration
   //   | EnumDeclaration
   //   | InterfaceDeclaration
@@ -5787,8 +5789,9 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "TopDeclaration")) return false;
     boolean r;
     r = ConstDeclaration(b, l + 1);
-    if (!r) r = FunctionDeclaration(b, l + 1);
+    if (!r) r = StaticMethodDeclaration(b, l + 1);
     if (!r) r = MethodDeclaration(b, l + 1);
+    if (!r) r = FunctionDeclaration(b, l + 1);
     if (!r) r = StructDeclaration(b, l + 1);
     if (!r) r = EnumDeclaration(b, l + 1);
     if (!r) r = InterfaceDeclaration(b, l + 1);
@@ -6507,6 +6510,33 @@ public class VlangParser implements PsiParser, LightPsiParser {
     }
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  /* ********************************************************** */
+  // Attributes? SymbolVisibility? fn
+  static boolean fnDecl(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "fnDecl")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = fnDecl_0(b, l + 1);
+    r = r && fnDecl_1(b, l + 1);
+    r = r && consumeToken(b, FN);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // Attributes?
+  private static boolean fnDecl_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "fnDecl_0")) return false;
+    Attributes(b, l + 1);
+    return true;
+  }
+
+  // SymbolVisibility?
+  private static boolean fnDecl_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "fnDecl_1")) return false;
+    SymbolVisibility(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */

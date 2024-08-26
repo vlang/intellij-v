@@ -15,8 +15,10 @@ class VlangMethodIndex : StringStubIndexExtension<VlangMethodDeclaration>() {
         val KEY = StubIndexKey.createIndexKey<String, VlangMethodDeclaration>("vlang.method")
 
         fun find(
-            name: String, project: Project,
-            scope: GlobalSearchScope?, idFilter: IdFilter?
+            name: String,
+            project: Project,
+            scope: GlobalSearchScope?,
+            idFilter: IdFilter?,
         ): Collection<VlangMethodDeclaration> {
             return StubIndex.getElements(KEY, name, project, scope, idFilter, VlangMethodDeclaration::class.java)
         }
@@ -26,7 +28,7 @@ class VlangMethodIndex : StringStubIndexExtension<VlangMethodDeclaration>() {
             project: Project,
             scope: GlobalSearchScope?,
             idFilter: IdFilter?,
-            processor: Processor<VlangMethodDeclaration>
+            processor: Processor<VlangMethodDeclaration>,
         ): Boolean {
             return StubIndex.getInstance().processElements(
                 KEY, name, project, scope, idFilter,

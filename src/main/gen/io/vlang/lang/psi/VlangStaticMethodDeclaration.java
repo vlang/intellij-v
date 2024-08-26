@@ -5,11 +5,11 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
-import io.vlang.lang.stubs.VlangFunctionDeclarationStub;
+import io.vlang.lang.stubs.VlangStaticMethodDeclarationStub;
 import com.intellij.psi.ResolveState;
 import io.vlang.lang.psi.types.VlangTypeEx;
 
-public interface VlangFunctionDeclaration extends VlangSignatureOwner, VlangFunctionOrMethodDeclaration, VlangAttributeOwner, VlangGenericParametersOwner, VlangScopeHolder, StubBasedPsiElement<VlangFunctionDeclarationStub> {
+public interface VlangStaticMethodDeclaration extends VlangSignatureOwner, VlangFunctionOrMethodDeclaration, VlangAttributeOwner, VlangGenericParametersOwner, VlangScopeHolder, StubBasedPsiElement<VlangStaticMethodDeclarationStub> {
 
   @Nullable
   VlangAttributes getAttributes();
@@ -20,11 +20,17 @@ public interface VlangFunctionDeclaration extends VlangSignatureOwner, VlangFunc
   @Nullable
   VlangGenericParameters getGenericParameters();
 
-  @NotNull
+  @Nullable
   VlangSignature getSignature();
 
   @Nullable
   VlangSymbolVisibility getSymbolVisibility();
+
+  @NotNull
+  VlangTypeReferenceExpression getTypeReferenceExpression();
+
+  @NotNull
+  PsiElement getDot();
 
   @NotNull
   PsiElement getFn();
@@ -32,18 +38,14 @@ public interface VlangFunctionDeclaration extends VlangSignatureOwner, VlangFunc
   @NotNull
   PsiElement getIdentifier();
 
-  @NotNull
-  String getName();
+  //WARNING: getType(...) is skipped
+  //matching getType(VlangStaticMethodDeclaration, ...)
+  //methods are not found in VlangPsiImplUtil
 
   @Nullable
   VlangTypeEx getTypeInner(@Nullable ResolveState context);
 
-  boolean isDefinition();
-
-  boolean isNoReturn();
-
-  boolean isGeneric();
-
-  boolean isCompileTime();
+  @Nullable
+  String getQualifiedName();
 
 }

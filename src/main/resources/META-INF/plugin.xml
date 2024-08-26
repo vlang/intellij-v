@@ -4,10 +4,10 @@
     <vendor>Vlang</vendor>
 
     <description><![CDATA[
-Provides support for <a href="https://vlang.io/">V</a> language
-<br>
-<br>
-<a href="https://plugins.jetbrains.com/plugin/24183-vlang/docs">Documentation</a>
+Provides support for <a href="https://vlang.io/">V language</a>
+<br/>
+<br/>
+Repository: <a href="https://github.com/vlang/intellij-v">https://github.com/vlang/intellij-v</a>
     ]]></description>
 
     <depends>com.intellij.modules.platform</depends>

@@ -4,285 +4,417 @@
                                    implementationClass="io.vlang.ide.inspections.suppression.VlangInspectionSuppressor"/>
 
         <!-- region Probable bugs inspections -->
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Probable bugs" shortName="VlangControlFlowWithEmptyBodiesInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Probable bugs"
+                         shortName="VlangControlFlowWithEmptyBodiesInspection"
                          displayName="Control flow with empty body"
-                         enabledByDefault="true" level="WARNING"
+                         enabledByDefault="true"
+                         level="WARNING"
                          implementationClass="io.vlang.ide.inspections.probableBugs.VlangControlFlowWithEmptyBodiesInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Probable bugs" shortName="VlangVariableNotCapturedInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Probable bugs"
+                         shortName="VlangVariableNotCapturedInspection"
                          displayName="Usage of non captured variable"
-                         enabledByDefault="true" level="ERROR"
+                         enabledByDefault="true"
+                         level="ERROR"
                          implementationClass="io.vlang.ide.inspections.probableBugs.VlangVariableNotCapturedInspection"/>
         <!-- endregion Probable bugs inspections -->
 
         <!-- region General inspections -->
-        <localInspection language="vlang" groupPath="V"
-                         groupName="General" shortName="VlangUnresolvedReferenceInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="General"
+                         shortName="VlangUnresolvedReferenceInspection"
                          displayName="Unresolved reference"
-                         enabledByDefault="true" level="ERROR"
+                         enabledByDefault="true"
+                         level="ERROR"
                          implementationClass="io.vlang.ide.inspections.general.VlangUnresolvedReferenceInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="General" shortName="VlangUnresolvedImportInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="General"
+                         shortName="VlangUnresolvedImportInspection"
                          displayName="Unresolved import"
-                         enabledByDefault="true" level="ERROR"
+                         enabledByDefault="true"
+                         level="ERROR"
                          implementationClass="io.vlang.ide.inspections.general.VlangUnresolvedImportInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="General" shortName="VlangCircularImportInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="General"
+                         shortName="VlangCircularImportInspection"
                          displayName="Unresolved import"
-                         enabledByDefault="true" level="ERROR"
+                         enabledByDefault="true"
+                         level="ERROR"
                          implementationClass="io.vlang.ide.inspections.general.VlangCircularImportInspection"/>
 
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="General" shortName="VlangUnresolvedLabelInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="General"
+                         shortName="VlangUnresolvedLabelInspection"
                          displayName="Unresolved label"
-                         enabledByDefault="true" level="ERROR"
+                         enabledByDefault="true"
+                         level="ERROR"
                          implementationClass="io.vlang.ide.inspections.general.VlangUnresolvedLabelInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="General" shortName="VlangVariableRedeclarationInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="General"
+                         shortName="VlangVariableRedeclarationInspection"
                          displayName="Variable redeclaration"
-                         enabledByDefault="true" level="ERROR"
+                         enabledByDefault="true"
+                         level="ERROR"
                          implementationClass="io.vlang.ide.inspections.general.VlangVariableRedeclarationInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="General" shortName="VlangDuplicateFieldInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="General"
+                         shortName="VlangDuplicateFieldInspection"
                          displayName="Duplicate field in struct/interface/enum/union"
-                         enabledByDefault="true" level="ERROR"
+                         enabledByDefault="true"
+                         level="ERROR"
                          implementationClass="io.vlang.ide.inspections.general.VlangDuplicateFieldInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="General" shortName="VlangAmbiguousImportInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="General"
+                         shortName="VlangAmbiguousImportInspection"
                          displayName="Ambiguous import"
-                         enabledByDefault="true" level="ERROR"
+                         enabledByDefault="true"
+                         level="ERROR"
                          implementationClass="io.vlang.ide.inspections.general.VlangAmbiguousImportInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="General" shortName="VlangAccessingPrivateSymbolInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="General"
+                         shortName="VlangAccessingPrivateSymbolInspection"
                          displayName="Accessing private symbol or member"
-                         enabledByDefault="false" level="ERROR"
+                         enabledByDefault="false"
+                         level="ERROR"
                          implementationClass="io.vlang.ide.inspections.general.VlangAccessingPrivateSymbolInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="General" shortName="VlangRawOptionOrResultTypeUsedInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="General"
+                         shortName="VlangRawOptionOrResultTypeUsedInspection"
                          displayName="Raw option or result type used"
-                         enabledByDefault="true" level="ERROR"
+                         enabledByDefault="true"
+                         level="ERROR"
                          implementationClass="io.vlang.ide.inspections.general.VlangRawOptionOrResultTypeUsedInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="General" shortName="VlangMissingFunctionNameInDocInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="General"
+                         shortName="VlangMissingFunctionNameInDocInspection"
                          displayName="Missing function name at beginning of comment"
-                         enabledByDefault="true" level="WEAK WARNING"
+                         enabledByDefault="true"
+                         level="WEAK WARNING"
                          implementationClass="io.vlang.ide.inspections.general.VlangMissingFunctionNameInDocInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="General" shortName="VlangCannotInferTypeInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="General"
+                         shortName="VlangCannotInferTypeInspection"
                          displayName="Cannot infer type"
-                         enabledByDefault="false" level="ERROR"
+                         enabledByDefault="false"
+                         level="ERROR"
                          implementationClass="io.vlang.ide.inspections.general.VlangCannotInferTypeInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="General" shortName="VlangNonExhaustiveMatchInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="General"
+                         shortName="VlangNonExhaustiveMatchInspection"
                          displayName="Non-exhaustive match"
-                         enabledByDefault="true" level="ERROR"
+                         enabledByDefault="true"
+                         level="ERROR"
                          implementationClass="io.vlang.ide.inspections.general.VlangNonExhaustiveMatchInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="General" shortName="VlangTestFailedLineInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="General"
+                         shortName="VlangTestFailedLineInspection"
                          displayName="Show failed assertions"
-                         enabledByDefault="true" level="ERROR"
+                         enabledByDefault="true"
+                         level="ERROR"
                          implementationClass="io.vlang.ide.inspections.general.VlangTestFailedLineInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="General" shortName="VlangCallArgumentsCountMismatchInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="General"
+                         shortName="VlangCallArgumentsCountMismatchInspection"
                          displayName="Call arguments count mismatch"
-                         enabledByDefault="true" level="ERROR"
+                         enabledByDefault="true"
+                         level="ERROR"
                          implementationClass="io.vlang.ide.inspections.general.VlangCallArgumentsCountMismatchInspection"/>
         <!-- endregion General inspections -->
 
         <!-- region Validity issues inspections -->
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Validity issues" shortName="VlangReassignImmutableSymbolInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Validity issues"
+                         shortName="VlangReassignImmutableSymbolInspection"
                          displayName="Attempt to assign to immutable variable/receiver or constant"
-                         enabledByDefault="true" level="ERROR"
+                         enabledByDefault="true"
+                         level="ERROR"
                          implementationClass="io.vlang.ide.inspections.validityIssues.VlangReassignImmutableSymbolInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Validity issues" shortName="VlangCallMutableMethodByImmutableValueInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Validity issues"
+                         shortName="VlangCallMutableMethodByImmutableValueInspection"
                          displayName="Attempt to call mutable method by immutable value"
-                         enabledByDefault="true" level="ERROR"
+                         enabledByDefault="true"
+                         level="ERROR"
                          implementationClass="io.vlang.ide.inspections.validityIssues.VlangCallMutableMethodByImmutableValueInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Validity issues" shortName="VlangModuleNameDoesntMatchDirectoryNameInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Validity issues"
+                         shortName="VlangModuleNameDoesntMatchDirectoryNameInspection"
                          displayName="Module name doesn't match directory name"
-                         enabledByDefault="true" level="ERROR"
+                         enabledByDefault="true"
+                         level="ERROR"
                          implementationClass="io.vlang.ide.inspections.validityIssues.VlangModuleNameDoesntMatchDirectoryNameInspection"/>
         <!-- endregion Validity issues inspections -->
 
         <!-- region Unsafe inspections -->
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Unsafe" shortName="VlangLabelOutsideUnsafeInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Unsafe"
+                         shortName="VlangLabelOutsideUnsafeInspection"
                          displayName="'go to' statement outside unsafe block"
-                         enabledByDefault="true" level="WARNING"
+                         enabledByDefault="true"
+                         level="WARNING"
                          implementationClass="io.vlang.ide.inspections.unsafe.VlangLabelOutsideUnsafeInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Unsafe" shortName="VlangNilOutsideUnsafeInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Unsafe"
+                         shortName="VlangNilOutsideUnsafeInspection"
                          displayName="'nil' usage outside unsafe block"
-                         enabledByDefault="true" level="WARNING"
+                         enabledByDefault="true"
+                         level="WARNING"
                          implementationClass="io.vlang.ide.inspections.unsafe.VlangNilOutsideUnsafeInspection"/>
         <!-- endregion Unsafe inspections -->
 
         <!-- region Style issue -->
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Style issues" shortName="VlangRedundantParenthesesInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Style issues"
+                         shortName="VlangRedundantParenthesesInspection"
                          displayName="Redundant parentheses"
-                         enabledByDefault="true" level="WARNING"
+                         enabledByDefault="true"
+                         level="WARNING"
                          implementationClass="io.vlang.ide.inspections.style.VlangRedundantParenthesesInspection"/>
         <!-- endregion Style issue -->
 
         <!-- region Naming conventions -->
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Naming conventions" shortName="VlangClassLikeNamingConventionInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Naming conventions"
+                         shortName="VlangClassLikeNamingConventionInspection"
                          displayName="Struct/interface/enum/union naming convention"
-                         enabledByDefault="true" level="ERROR"
+                         enabledByDefault="true"
+                         level="ERROR"
                          implementationClass="io.vlang.ide.inspections.namingConventions.VlangClassLikeNamingConventionInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Naming conventions" shortName="VlangVarNamingConventionInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Naming conventions"
+                         shortName="VlangVarNamingConventionInspection"
                          displayName="Variable naming convention"
-                         enabledByDefault="true" level="ERROR"
+                         enabledByDefault="true"
+                         level="ERROR"
                          implementationClass="io.vlang.ide.inspections.namingConventions.VlangVarNamingConventionInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Naming conventions" shortName="VlangTypeAliasNamingConventionInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Naming conventions"
+                         shortName="VlangTypeAliasNamingConventionInspection"
                          displayName="Type alias naming convention"
-                         enabledByDefault="true" level="ERROR"
+                         enabledByDefault="true"
+                         level="ERROR"
                          implementationClass="io.vlang.ide.inspections.namingConventions.VlangTypeAliasNamingConventionInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Naming conventions" shortName="VlangFunctionNamingConventionInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Naming conventions"
+                         shortName="VlangFunctionNamingConventionInspection"
                          displayName="Function and method naming convention"
-                         enabledByDefault="true" level="ERROR"
+                         enabledByDefault="true"
+                         level="ERROR"
                          implementationClass="io.vlang.ide.inspections.namingConventions.VlangFunctionNamingConventionInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Naming conventions" shortName="VlangModuleNamingConventionInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Naming conventions"
+                         shortName="VlangModuleNamingConventionInspection"
                          displayName="Module naming convention"
-                         enabledByDefault="true" level="ERROR"
+                         enabledByDefault="true"
+                         level="ERROR"
                          implementationClass="io.vlang.ide.inspections.namingConventions.VlangModuleNamingConventionInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Naming conventions" shortName="VlangFieldNamingConventionInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Naming conventions"
+                         shortName="VlangFieldNamingConventionInspection"
                          displayName="Field naming convention"
-                         enabledByDefault="true" level="ERROR"
+                         enabledByDefault="true"
+                         level="ERROR"
                          implementationClass="io.vlang.ide.inspections.namingConventions.VlangFieldNamingConventionInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Naming conventions" shortName="VlangConstantNamingConventionInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Naming conventions"
+                         shortName="VlangConstantNamingConventionInspection"
                          displayName="Constant naming convention"
-                         enabledByDefault="true" level="ERROR"
+                         enabledByDefault="true"
+                         level="ERROR"
                          implementationClass="io.vlang.ide.inspections.namingConventions.VlangConstantNamingConventionInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Naming conventions" shortName="VlangReceiverNamesInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Naming conventions"
+                         shortName="VlangReceiverNamesInspection"
                          displayName="Receiver names"
-                         enabledByDefault="true" level="WEAK WARNING"
+                         enabledByDefault="true"
+                         level="WEAK WARNING"
                          implementationClass="io.vlang.ide.inspections.namingConventions.VlangReceiverNamesInspection"/>
         <!-- endregion Naming conventions -->
 
         <!-- region Types Mismatch -->
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Types mismatch" shortName="VlangAssignTypeMismatchInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Types mismatch"
+                         shortName="VlangAssignTypeMismatchInspection"
                          displayName="Type mismatch in assignment"
-                         enabledByDefault="false" level="ERROR"
+                         enabledByDefault="false"
+                         level="ERROR"
                          implementationClass="io.vlang.ide.inspections.typeMismatch.VlangAssignTypeMismatchInspection"/>
         <!-- endregion Types Mismatch -->
 
         <!-- region Unused inspections -->
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Unused" shortName="VlangUnusedFunctionInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Unused"
+                         shortName="VlangUnusedFunctionInspection"
                          displayName="Unused function/method inspection"
-                         enabledByDefault="true" level="WARNING"
+                         enabledByDefault="true"
+                         level="WARNING"
                          implementationClass="io.vlang.ide.inspections.unused.VlangUnusedFunctionInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Unused" shortName="VlangUnusedStructInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Unused"
+                         shortName="VlangUnusedStructInspection"
                          displayName="Unused struct inspection"
-                         enabledByDefault="true" level="WARNING"
+                         enabledByDefault="true"
+                         level="WARNING"
                          implementationClass="io.vlang.ide.inspections.unused.VlangUnusedStructInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Unused" shortName="VlangUnusedInterfaceInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Unused"
+                         shortName="VlangUnusedInterfaceInspection"
                          displayName="Unused interface inspection"
-                         enabledByDefault="true" level="WARNING"
+                         enabledByDefault="true"
+                         level="WARNING"
                          implementationClass="io.vlang.ide.inspections.unused.VlangUnusedInterfaceInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Unused" shortName="VlangUnusedEnumInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Unused"
+                         shortName="VlangUnusedEnumInspection"
                          displayName="Unused enum inspection"
-                         enabledByDefault="true" level="WARNING"
+                         enabledByDefault="true"
+                         level="WARNING"
                          implementationClass="io.vlang.ide.inspections.unused.VlangUnusedEnumInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Unused" shortName="VlangUnusedTypeAliasInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Unused"
+                         shortName="VlangUnusedTypeAliasInspection"
                          displayName="Unused type alias inspection"
-                         enabledByDefault="true" level="WARNING"
+                         enabledByDefault="true"
+                         level="WARNING"
                          implementationClass="io.vlang.ide.inspections.unused.VlangUnusedTypeAliasInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Unused" shortName="VlangUnusedSumTypeInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Unused"
+                         shortName="VlangUnusedSumTypeInspection"
                          displayName="Unused sum type inspection"
-                         enabledByDefault="true" level="WARNING"
+                         enabledByDefault="true"
+                         level="WARNING"
                          implementationClass="io.vlang.ide.inspections.unused.VlangUnusedSumTypeInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Unused" shortName="VlangUnusedConstantInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Unused"
+                         shortName="VlangUnusedConstantInspection"
                          displayName="Unused constant inspection"
-                         enabledByDefault="true" level="WARNING"
+                         enabledByDefault="true"
+                         level="WARNING"
                          implementationClass="io.vlang.ide.inspections.unused.VlangUnusedConstantInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Unused" shortName="VlangUnusedParameterInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Unused"
+                         shortName="VlangUnusedParameterInspection"
                          displayName="Unused parameter inspection"
-                         enabledByDefault="true" level="WARNING"
+                         enabledByDefault="true"
+                         level="WARNING"
                          implementationClass="io.vlang.ide.inspections.unused.VlangUnusedParameterInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Unused" shortName="VlangUnusedLabelInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Unused"
+                         shortName="VlangUnusedLabelInspection"
                          displayName="Unused label inspection"
-                         enabledByDefault="true" level="WARNING"
+                         enabledByDefault="true"
+                         level="WARNING"
                          implementationClass="io.vlang.ide.inspections.unused.VlangUnusedLabelInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Unused" shortName="VlangUnusedImportInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Unused"
+                         shortName="VlangUnusedImportInspection"
                          displayName="Unused import inspection"
-                         enabledByDefault="true" level="WARNING"
+                         enabledByDefault="true"
+                         level="WARNING"
                          implementationClass="io.vlang.ide.inspections.unused.VlangUnusedImportInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Unused" shortName="VlangUnusedVariableInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Unused"
+                         shortName="VlangUnusedVariableInspection"
                          displayName="Unused variable inspection"
-                         enabledByDefault="true" level="WARNING"
+                         enabledByDefault="true"
+                         level="WARNING"
                          implementationClass="io.vlang.ide.inspections.unused.VlangUnusedVariableInspection"/>
         <!-- endregion Unused inspections -->
 
         <!-- region Control flow inspections EXPERIMENTAL -->
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Control flow" shortName="VlangUnreachableStatementInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Control flow"
+                         shortName="VlangUnreachableStatementInspection"
                          displayName="Unreachable statement"
-                         enabledByDefault="false" level="WARNING"
+                         enabledByDefault="false"
+                         level="WARNING"
                          implementationClass="io.vlang.ide.inspections.controlFlow.VlangUnreachableStatementInspection"/>
 
-        <localInspection language="vlang" groupPath="V"
-                         groupName="Control flow" shortName="VlangVariableCanBeImmutableInspection"
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="Control flow"
+                         shortName="VlangVariableCanBeImmutableInspection"
                          displayName="Variable can be immutable"
-                         enabledByDefault="false" level="WARNING"
+                         enabledByDefault="false"
+                         level="WARNING"
                          implementationClass="io.vlang.ide.inspections.controlFlow.VlangVariableCanBeImmutableInspection"/>
         <!-- endregion Control flow inspections -->
     </extensions>

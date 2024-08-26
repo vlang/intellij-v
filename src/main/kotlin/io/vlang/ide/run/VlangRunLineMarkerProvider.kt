@@ -20,7 +20,7 @@ class VlangRunLineMarkerProvider : RunLineMarkerContributor() {
                     return null
                 }
 
-                return Info(AllIcons.RunConfigurations.TestState.Run, { "Run" }, *contextActions)
+                return Info(AllIcons.RunConfigurations.TestState.Run, contextActions) { "Run" }
             }
 
             return null
