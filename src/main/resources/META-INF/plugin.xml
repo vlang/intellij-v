@@ -7,7 +7,9 @@
 Provides support for <a href="https://vlang.io/">V language</a>
 <br/>
 <br/>
-Repository: <a href="https://github.com/vlang/intellij-v">https://github.com/vlang/intellij-v</a>
+Repository: <a href="https://github.com/vlang/intellij-v">https://github.com/vlang/intellij-v</a><br />
+Issues: <a href="https://github.com/vlang/intellij-v/issues">https://github.com/vlang/intellij-v/issues</a><br />
+Discord Server: <a href="https://discord.gg/vlang">https://discord.gg/vlang</a><br />
     ]]></description>
 
     <depends>com.intellij.modules.platform</depends>

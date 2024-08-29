@@ -12,6 +12,7 @@
   - no completions yet
 
 ### Build system
+
 - update Gradle to 8.9
 - move to gradle intellij platform plugin version 2.0.1
 
@@ -222,3 +223,10 @@
 - Don't show `void` type in completion and quick doc
 - Don't show `private` keyword in quick documentation
 - Support 2023.1 EAP
+
+[Unreleased]: https://github.com/vlang/intellij-v//compare/v0.0.1-beta.6...HEAD
+[0.0.1-beta.6]: https://github.com/vlang/intellij-v//compare/v0.0.1-beta.5...v0.0.1-beta.6
+[0.0.1-beta.5]: https://github.com/vlang/intellij-v//compare/v0.0.1-beta.4...v0.0.1-beta.5
+[0.0.1-beta.4]: https://github.com/vlang/intellij-v//compare/v0.0.1-beta.3-231-EAP...v0.0.1-beta.4
+[0.0.1-beta.3-231-EAP]: https://github.com/vlang/intellij-v//compare/v0.0.1-beta.2...v0.0.1-beta.3-231-EAP
+[0.0.1-beta.2]: https://github.com/vlang/intellij-v//commits/v0.0.1-beta.2
