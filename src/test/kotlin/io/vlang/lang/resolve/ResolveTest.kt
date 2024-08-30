@@ -100,7 +100,7 @@ class ResolveTest : ResolveTestBase() {
             }
         """.trimIndent())
 
-        assertQualifiedReferencedTo("METHOD_DECLARATION unnamed.Color.foo")
+        assertQualifiedReferencedTo("METHOD_DECLARATION main.Color.foo")
     }
 
     fun `test offset of fields`() {
@@ -115,7 +115,7 @@ class ResolveTest : ResolveTestBase() {
 
         """.trimIndent())
 
-        assertQualifiedReferencedTo("FIELD_DEFINITION unnamed.User.age")
+        assertQualifiedReferencedTo("FIELD_DEFINITION main.User.age")
     }
 
     fun `test resolve compile time fields field`() {
