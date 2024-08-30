@@ -133,11 +133,6 @@ open class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider,
 
     private fun moduleQualifiedNameInner(): String {
         var moduleName = getModuleName()
-        // when no `module name` in file
-        if (moduleName.isNullOrEmpty() && !isTestFile()) {
-            return "unnamed"
-        }
-
         if (moduleName == "main") {
             return moduleName
         }
