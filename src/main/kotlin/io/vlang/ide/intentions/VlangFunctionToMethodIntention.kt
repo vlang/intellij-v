@@ -9,7 +9,7 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.util.elementType
 import com.intellij.psi.util.parentOfType
-import com.intellij.refactoring.suggested.startOffset
+import com.intellij.psi.util.startOffset
 import io.vlang.lang.VlangTypes
 import io.vlang.lang.psi.VlangFunctionDeclaration
 

@@ -10,8 +10,8 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementVisitor
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.util.endOffset
 import com.intellij.psi.util.parentOfType
-import com.intellij.refactoring.suggested.endOffset
 import io.vlang.ide.codeInsight.VlangCodeInsightUtil
 import io.vlang.ide.inspections.VlangBaseInspection
 import io.vlang.lang.psi.*

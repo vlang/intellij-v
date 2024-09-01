@@ -349,7 +349,10 @@ object VlangCompletionUtil {
     }
 
     private fun createInterfaceMethodLookupElement(
-        element: VlangNamedElement, lookupString: String, moduleName: String?, state: ResolveState,
+        element: VlangNamedElement,
+        lookupString: String,
+        @Suppress("UNUSED_PARAMETER") moduleName: String?,
+        state: ResolveState,
         insertHandler: InsertHandler<LookupElement>? = null,
         priority: Int = 0,
     ): LookupElement {
@@ -806,8 +809,8 @@ object VlangCompletionUtil {
 
             val genericParameters = elem.genericParameters?.text ?: ""
             val signature = elem.getSignature()
-            val parameters = signature?.parameters?.text ?: ""
-            val result = signature?.result?.text
+            val parameters = signature.parameters.text ?: ""
+            val result = signature.result?.text
 
             p.tailText = parameters
             p.itemText = element.lookupString + genericParameters

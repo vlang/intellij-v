@@ -17,7 +17,8 @@ import com.intellij.util.download.DownloadableFileDescription
 import com.intellij.util.download.DownloadableFileService
 import com.intellij.util.io.Decompressor
 import com.intellij.util.system.CpuArch
-import com.jetbrains.cidr.execution.debugger.backend.lldb.LLDBBinUrlProvider
+import com.intellij.util.system.OS
+import com.jetbrains.cidr.execution.debugger.backend.bin.UrlProvider
 import java.io.File
 import java.io.IOException
 import java.net.URL
@@ -29,13 +30,15 @@ import java.util.*
 @Service
 class VlangLldbDownloadService {
 
-    fun getLLDBStatus(lldbPath: String? = VlangDebuggerState.getInstance().lldbPath
-                                          ?: lldbPath().toFile().path): LLDBStatus {
+    fun getLLDBStatus(
+        lldbPath: String? = VlangDebuggerState.getInstance().lldbPath
+            ?: lldbPath().toFile().path,
+    ): LLDBStatus {
         val (frameworkPath, frontendPath) = when {
-            SystemInfo.isMac -> "LLDB.framework" to "LLDBFrontend"
-            SystemInfo.isUnix -> "lib/liblldb.so" to "bin/LLDBFrontend"
+            SystemInfo.isMac     -> "LLDB.framework" to "LLDBFrontend"
+            SystemInfo.isUnix    -> "lib/liblldb.so" to "bin/LLDBFrontend"
             SystemInfo.isWindows -> "bin/liblldb.dll" to "bin/LLDBFrontend.exe"
-            else -> return LLDBStatus.Unavailable
+            else                 -> return LLDBStatus.Unavailable
         }
 
         val frameworkFile = File(FileUtil.join(lldbPath, frameworkPath))
@@ -49,7 +52,8 @@ class VlangLldbDownloadService {
         val lldbFrontendVersion = fileNameWithoutExtension(lldbFrontendUrl.toString())
 
         if (versions[LLDB_FRAMEWORK_PROPERTY_NAME] != lldbFrameworkVersion ||
-            versions[LLDB_FRONTEND_PROPERTY_NAME] != lldbFrontendVersion) return LLDBStatus.NeedToUpdate
+            versions[LLDB_FRONTEND_PROPERTY_NAME] != lldbFrontendVersion
+        ) return LLDBStatus.NeedToUpdate
 
         return LLDBStatus.Binaries(frameworkFile, frontendFile)
     }
@@ -61,29 +65,37 @@ class VlangLldbDownloadService {
             }, "Download debugger", true, project)
 
         when (result) {
-            is DownloadResult.Ok -> {
-                Notifications.Bus.notify(Notification(
-                    VLANG_DEBUGGER_GROUP_ID,
-                    "Debugger",
-                    "Debugger successfully downloaded",
-                    NotificationType.INFORMATION
-                ))
+            is DownloadResult.Ok     -> {
+                Notifications.Bus.notify(
+                    Notification(
+                        VLANG_DEBUGGER_GROUP_ID,
+                        "Debugger",
+                        "Debugger successfully downloaded",
+                        NotificationType.INFORMATION
+                    )
+                )
             }
+
             is DownloadResult.NoUrls -> {
-                Notifications.Bus.notify(Notification(
-                    VLANG_DEBUGGER_GROUP_ID,
-                    "Debugger",
-                    "No URLs for download available",
-                    NotificationType.INFORMATION
-                ))
+                Notifications.Bus.notify(
+                    Notification(
+                        VLANG_DEBUGGER_GROUP_ID,
+                        "Debugger",
+                        "No URLs for download available",
+                        NotificationType.INFORMATION
+                    )
+                )
             }
-            DownloadResult.Failed -> {
-                Notifications.Bus.notify(Notification(
-                    VLANG_DEBUGGER_GROUP_ID,
-                    "Debugger",
-                    "Debugger downloading failed",
-                    NotificationType.ERROR
-                ))
+
+            DownloadResult.Failed    -> {
+                Notifications.Bus.notify(
+                    Notification(
+                        VLANG_DEBUGGER_GROUP_ID,
+                        "Debugger",
+                        "Debugger downloading failed",
+                        NotificationType.ERROR
+                    )
+                )
             }
         }
 
@@ -95,8 +107,7 @@ class VlangLldbDownloadService {
         return try {
             val lldbDir = downloadAndUnarchive(lldbFrameworkUrl.toString(), lldbFrontendUrl.toString())
             DownloadResult.Ok(lldbDir)
-        }
-        catch (e: IOException) {
+        } catch (e: IOException) {
             LOG.warn("Can't download debugger using $lldbUrls", e)
             DownloadResult.Failed
         }
@@ -104,19 +115,9 @@ class VlangLldbDownloadService {
 
     private val lldbUrls: Pair<URL, URL>?
         get() {
-            return when {
-                SystemInfo.isMac -> LLDBBinUrlProvider.lldb.macX64 to LLDBBinUrlProvider.lldbFrontend.macX64
-                SystemInfo.isLinux -> LLDBBinUrlProvider.lldb.linuxX64 to LLDBBinUrlProvider.lldbFrontend.linuxX64
-                SystemInfo.isWindows -> {
-                    if (!CpuArch.is32Bit()) {
-                        LLDBBinUrlProvider.lldb.winX64 to LLDBBinUrlProvider.lldbFrontend.winX64
-                    }
-                    else {
-                        LLDBBinUrlProvider.lldb.winX86 to LLDBBinUrlProvider.lldbFrontend.winX86
-                    }
-                }
-                else -> return null
-            }
+            val lldbUrl = UrlProvider.lldb(OS.CURRENT, CpuArch.CURRENT) ?: return null
+            val lldbFrontend = UrlProvider.lldbFrontend(OS.CURRENT, CpuArch.CURRENT) ?: return null
+            return lldbUrl to lldbFrontend
         }
 
     @Throws(IOException::class)
@@ -168,8 +169,7 @@ class VlangLldbDownloadService {
         if (versionsFile.exists()) {
             try {
                 versionsFile.bufferedReader().use { versions.load(it) }
-            }
-            catch (e: IOException) {
+            } catch (e: IOException) {
                 LOG.warn("Failed to load `$LLDB_VERSIONS`", e)
             }
         }
@@ -181,8 +181,7 @@ class VlangLldbDownloadService {
     fun saveLLDBVersions(versions: Properties) {
         try {
             versions.store(lldbPath().resolve(LLDB_VERSIONS).toFile().bufferedWriter(), "")
-        }
-        catch (e: IOException) {
+        } catch (e: IOException) {
             LOG.warn("Failed to save `$LLDB_VERSIONS`")
         }
     }
@@ -221,8 +220,8 @@ class VlangLldbDownloadService {
         companion object {
             @Throws(IOException::class)
             fun unarchive(archivePath: File, dst: File) {
-                val unarchiver = values().find { archivePath.name.endsWith(it.extension) }
-                                 ?: error("Unexpected archive type: $archivePath")
+                val unarchiver = entries.find { archivePath.name.endsWith(it.extension) }
+                    ?: error("Unexpected archive type: $archivePath")
                 unarchiver.createDecompressor(archivePath).extract(dst)
             }
         }

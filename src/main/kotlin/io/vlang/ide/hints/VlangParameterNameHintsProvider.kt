@@ -5,7 +5,7 @@ import com.intellij.codeInsight.hints.InlayInfo
 import com.intellij.codeInsight.hints.InlayParameterHintsProvider
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import com.intellij.refactoring.suggested.startOffset
+import com.intellij.psi.util.startOffset
 import io.vlang.lang.VlangLanguage
 import io.vlang.lang.psi.*
 import kotlin.math.min

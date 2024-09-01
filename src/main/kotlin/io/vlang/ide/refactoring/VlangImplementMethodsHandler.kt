@@ -20,8 +20,8 @@ import com.intellij.openapi.util.Key
 import com.intellij.openapi.wm.IdeFocusManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
+import com.intellij.psi.util.endOffset
 import com.intellij.psi.util.parentOfType
-import com.intellij.refactoring.suggested.endOffset
 import com.intellij.testFramework.TestModeFlags
 import com.intellij.util.FilteringProcessor
 import com.intellij.util.Processor

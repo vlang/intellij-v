@@ -90,7 +90,7 @@ object VlangPsiTreeUtil {
         if (range.equalsToRange(
                 start,
                 end
-            ) || range.startOffset == start && (children.size == 0 || children[0].textRange.startOffset > start) || range.endOffset == end && (children.size == 0 || children[children.size - 1].textRange.endOffset < end)
+            ) || range.startOffset == start && (children.isEmpty() || children[0].textRange.startOffset > start) || range.endOffset == end && (children.isEmpty() || children[children.size - 1].textRange.endOffset < end)
         ) {
             startElement = commonParent
             endElement = commonParent

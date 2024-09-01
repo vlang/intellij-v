@@ -4,9 +4,9 @@ import com.intellij.codeInsight.template.postfix.templates.PostfixTemplate
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.endOffset
 import com.intellij.psi.util.parentOfType
-import com.intellij.refactoring.suggested.endOffset
-import com.intellij.refactoring.suggested.startOffset
+import com.intellij.psi.util.startOffset
 import io.vlang.lang.psi.VlangExpression
 
 abstract class VlangAbstractPrintPostfixTemplate(private val name: String)

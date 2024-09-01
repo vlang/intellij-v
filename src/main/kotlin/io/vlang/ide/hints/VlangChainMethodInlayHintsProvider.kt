@@ -16,7 +16,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.refactoring.suggested.endOffset
+import com.intellij.psi.util.endOffset
 import io.vlang.lang.VlangLanguage
 import io.vlang.lang.psi.VlangCallExpr
 import io.vlang.utils.childOfType

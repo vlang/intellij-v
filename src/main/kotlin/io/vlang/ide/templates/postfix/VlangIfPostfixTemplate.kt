@@ -5,7 +5,7 @@ import com.intellij.openapi.editor.Document
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.parentOfType
-import com.intellij.refactoring.suggested.startOffset
+import com.intellij.psi.util.startOffset
 import io.vlang.lang.psi.VlangSimpleStatement
 
 class VlangIfPostfixTemplate : PostfixTemplate(

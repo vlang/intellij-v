@@ -37,7 +37,8 @@ class VlangToolchainPathChoosingComboBox(onTextChanged: () -> Unit = {}) :
         }
 
     init {
-        ComboboxSpeedSearch(childComponent)
+        val comboboxSpeedSearch = ComboboxSpeedSearch.installOn(childComponent)
+        comboboxSpeedSearch.setupListeners()
         childComponent.editor = editor
         childComponent.isEditable = true
 
@@ -63,7 +64,6 @@ class VlangToolchainPathChoosingComboBox(onTextChanged: () -> Unit = {}) :
     /**
      * Obtains a list of toolchains on a pool using [toolchainObtainer], then fills the combobox and calls [callback] on the EDT.
      */
-    @Suppress("UnstableApiUsage")
     fun addToolchainsAsync(toolchainObtainer: () -> List<Path>) {
         setBusy(true)
         ApplicationManager.getApplication().executeOnPooledThread {

@@ -4,9 +4,9 @@ import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.util.endOffset
 import com.intellij.psi.util.parentOfType
-import com.intellij.refactoring.suggested.endOffset
-import com.intellij.refactoring.suggested.startOffset
+import com.intellij.psi.util.startOffset
 import com.intellij.util.ProcessingContext
 import io.vlang.lang.completion.VlangCompletionUtil.CONTEXT_COMPLETION_PRIORITY
 import io.vlang.lang.completion.VlangCompletionUtil.withPriority

@@ -12,8 +12,8 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.childrenOfType
-import com.intellij.refactoring.suggested.endOffset
-import com.intellij.refactoring.suggested.startOffset
+import com.intellij.psi.util.endOffset
+import com.intellij.psi.util.startOffset
 import io.vlang.ide.codeInsight.VlangCodeInsightUtil
 import io.vlang.lang.VlangLanguage
 import io.vlang.lang.psi.*

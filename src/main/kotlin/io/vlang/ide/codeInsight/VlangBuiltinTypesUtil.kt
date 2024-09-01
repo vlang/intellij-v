@@ -6,7 +6,7 @@ import com.intellij.openapi.project.Project
 import io.vlang.lang.psi.VlangType
 import io.vlang.lang.psi.impl.VlangElementFactory
 
-@Service
+@Service(Service.Level.PROJECT)
 class VlangBuiltinTypesUtil(private val project: Project) {
     val int = builtinType("int")
     val i8 = builtinType("i8")
@@ -67,7 +67,7 @@ class VlangBuiltinTypesUtil(private val project: Project) {
         """.trimIndent()
         )
 
-        return file.getFunctions().first().getSignature()!!.parameters.paramDefinitionList.first().type
+        return file.getFunctions().first().getSignature().parameters.paramDefinitionList.first().type
     }
 
     companion object {

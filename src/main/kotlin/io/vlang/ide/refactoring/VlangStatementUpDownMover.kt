@@ -6,10 +6,10 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.tree.IElementType
+import com.intellij.psi.util.endOffset
 import com.intellij.psi.util.parentOfType
 import com.intellij.psi.util.parentOfTypes
-import com.intellij.refactoring.suggested.endOffset
-import com.intellij.refactoring.suggested.startOffset
+import com.intellij.psi.util.startOffset
 import io.vlang.ide.documentation.CommentsConverter
 import io.vlang.lang.VlangTypes
 import io.vlang.lang.psi.*
