@@ -99,7 +99,7 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getTypeInner(o: VlangInterfaceDeclaration, context: ResolveState?): VlangTypeEx {
+    fun getTypeInner(o: VlangInterfaceDeclaration, @Suppress("UNUSED_PARAMETER") context: ResolveState?): VlangTypeEx {
         return o.interfaceType.toEx()
     }
 
@@ -254,7 +254,7 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getTypeInner(o: VlangTypeAliasDeclaration, context: ResolveState?): VlangTypeEx {
+    fun getTypeInner(o: VlangTypeAliasDeclaration, @Suppress("UNUSED_PARAMETER") context: ResolveState?): VlangTypeEx {
         return o.aliasType.toEx()
     }
 
@@ -354,7 +354,7 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getQualifier(o: VlangFieldName): VlangCompositeElement? {
+    fun getQualifier(@Suppress("UNUSED_PARAMETER") o: VlangFieldName): VlangCompositeElement? {
         return null
     }
 
@@ -554,7 +554,7 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getType(o: VlangEmbeddedDefinition, context: ResolveState?): VlangTypeEx {
+    fun getType(o: VlangEmbeddedDefinition, @Suppress("UNUSED_PARAMETER") context: ResolveState?): VlangTypeEx {
         return o.type.toEx()
     }
 
@@ -682,12 +682,12 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getTypeInner(o: VlangEnumFieldDefinition, context: ResolveState?): VlangTypeEx {
+    fun getTypeInner(o: VlangEnumFieldDefinition, @Suppress("UNUSED_PARAMETER") context: ResolveState?): VlangTypeEx {
         return o.parentOfType<VlangEnumType>().toEx()
     }
 
     @JvmStatic
-    fun isPublic(o: VlangInterfaceMethodDefinition): Boolean {
+    fun isPublic(@Suppress("UNUSED_PARAMETER") o: VlangInterfaceMethodDefinition): Boolean {
         return true
     }
 
@@ -713,12 +713,12 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun makeMutable(o: VlangFieldDefinition) {
+    fun makeMutable(@Suppress("UNUSED_PARAMETER") o: VlangFieldDefinition) {
         // TODO: implement
     }
 
     @JvmStatic
-    fun makeImmutable(o: VlangFieldDefinition) {
+    fun makeImmutable(@Suppress("UNUSED_PARAMETER") o: VlangFieldDefinition) {
         // TODO: implement
     }
 
@@ -786,6 +786,7 @@ object VlangPsiImplUtil {
         return o.receiver.type
     }
 
+    @Suppress("UNUSED")
     fun getTypeReference(o: VlangType?): VlangTypeReferenceExpression? {
         if (o is VlangPointerType) {
             return PsiTreeUtil.findChildOfAnyType(o, VlangTypeReferenceExpression::class.java)
@@ -841,7 +842,7 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getQualifier(o: VlangFieldDefinition): VlangCompositeElement? {
+    fun getQualifier(@Suppress("UNUSED_PARAMETER") o: VlangFieldDefinition): VlangCompositeElement? {
         return null
     }
 
@@ -1078,7 +1079,7 @@ object VlangPsiImplUtil {
 
     private fun addImportDeclaration(
         importList: VlangImportList,
-        newImportDeclaration: VlangImportDeclaration
+        newImportDeclaration: VlangImportDeclaration,
     ): VlangImportSpec {
         val lastImport = importList.importDeclarationList.last()
         val importDeclaration = importList.addAfter(newImportDeclaration, lastImport) as VlangImportDeclaration
@@ -1140,7 +1141,7 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun isPublic(o: VlangParamDefinition): Boolean = true
+    fun isPublic(@Suppress("UNUSED_PARAMETER") o: VlangParamDefinition): Boolean = true
 
     class VlangLiteralFileReferenceSet(
         str: String,
@@ -1159,7 +1160,7 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun isValidHost(o: VlangStringLiteral): Boolean {
+    fun isValidHost(@Suppress("UNUSED_PARAMETER") o: VlangStringLiteral): Boolean {
         return true
     }
 
@@ -1344,7 +1345,7 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getQualifier(o: VlangEnumFetch): VlangCompositeElement? {
+    fun getQualifier(@Suppress("UNUSED_PARAMETER") o: VlangEnumFetch): VlangCompositeElement? {
         return null
     }
 
@@ -1431,12 +1432,12 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getTypeInner(o: VlangReceiver, context: ResolveState?): VlangTypeEx {
+    fun getTypeInner(o: VlangReceiver, @Suppress("UNUSED_PARAMETER") context: ResolveState?): VlangTypeEx {
         return o.type.toEx()
     }
 
     @JvmStatic
-    fun getTypeInner(o: VlangFieldDefinition, context: ResolveState?): VlangTypeEx {
+    fun getTypeInner(o: VlangFieldDefinition, @Suppress("UNUSED_PARAMETER") context: ResolveState?): VlangTypeEx {
         val fieldDeclaration = o.parent as? VlangFieldDeclaration
         return fieldDeclaration?.type.toEx()
     }
@@ -1459,14 +1460,14 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getTypeInner(o: VlangStructDeclaration, context: ResolveState?): VlangTypeEx {
+    fun getTypeInner(o: VlangStructDeclaration, @Suppress("UNUSED_PARAMETER") context: ResolveState?): VlangTypeEx {
         return o.structType.toEx()
     }
 
     @JvmStatic
     fun getTypeInner(
         o: VlangEnumDeclaration,
-        context: ResolveState?,
+        @Suppress("UNUSED_PARAMETER") context: ResolveState?,
     ): VlangTypeEx {
         return o.enumType.toEx()
     }
@@ -1479,13 +1480,15 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getUnderlyingType(o: VlangType): VlangType? {
+    fun getUnderlyingType(@Suppress("UNUSED_PARAMETER") o: VlangType): VlangType? {
         return null // TODO
     }
 
     fun getParentVlangValue(element: PsiElement): VlangValue? {
         var place: PsiElement? = element
-        while (PsiTreeUtil.getParentOfType(place, VlangLiteralValueExpression::class.java).also { place = it } != null) {
+        while (PsiTreeUtil.getParentOfType(place, VlangLiteralValueExpression::class.java)
+                .also { place = it } != null
+        ) {
             if (place?.parent is VlangValue) {
                 return place?.parent as? VlangValue
             }
@@ -1522,7 +1525,7 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getTypeInner(param: VlangGenericParameter, context: ResolveState?): VlangTypeEx? {
+    fun getTypeInner(param: VlangGenericParameter, @Suppress("UNUSED_PARAMETER") context: ResolveState?): VlangTypeEx? {
         if (param.name == null) {
             return null
         }
@@ -1988,8 +1991,8 @@ object VlangPsiImplUtil {
 
     private fun processMapMethodCall(
         resolved: VlangMethodDeclaration,
-        signature: VlangSignature?,
-        expr: VlangCallExpr
+        @Suppress("UNUSED_PARAMETER") signature: VlangSignature?,
+        expr: VlangCallExpr,
     ): VlangTypeEx? {
         val receiverTypeEx = resolved.receiverType.toEx()
         if (!VlangTypeInferenceUtil.builtinMapOrPointerTo(receiverTypeEx)) return null
@@ -2010,7 +2013,7 @@ object VlangPsiImplUtil {
     private fun processArrayMethodCall(
         resolved: VlangMethodDeclaration,
         signature: VlangSignature?,
-        expr: VlangCallExpr
+        expr: VlangCallExpr,
     ): VlangTypeEx? {
         val receiverType = resolved.receiverType.toEx()
         if (!VlangTypeInferenceUtil.builtinArrayOrPointerTo(receiverType)) return null
@@ -2072,7 +2075,7 @@ object VlangPsiImplUtil {
     private fun processThreadMethodCall(
         resolved: VlangMethodDeclaration,
         signature: VlangSignature?,
-        expr: VlangCallExpr
+        expr: VlangCallExpr,
     ): VlangTypeEx? {
         val receiverType = resolved.receiverType.toEx()
         if (!VlangTypeInferenceUtil.stubThread(receiverType)) return null
@@ -2145,7 +2148,7 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getSymbolVisibility(o: VlangVarDefinition): VlangSymbolVisibility? {
+    fun getSymbolVisibility(@Suppress("UNUSED_PARAMETER") o: VlangVarDefinition): VlangSymbolVisibility? {
         return null
     }
 
@@ -2187,7 +2190,7 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun isPublic(o: VlangVarDefinition): Boolean = true
+    fun isPublic(@Suppress("UNUSED_PARAMETER") o: VlangVarDefinition): Boolean = true
 
     @JvmStatic
     fun isMutable(o: VlangVarDefinition): Boolean {
@@ -2253,7 +2256,7 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun isPublic(o: VlangReceiver): Boolean = true
+    fun isPublic(@Suppress("UNUSED_PARAMETER") o: VlangReceiver): Boolean = true
 
     fun getBuiltinType(name: String, context: PsiElement): VlangType? {
         val builtin = VlangConfiguration.getInstance(context.project).builtinLocation
@@ -2268,7 +2271,7 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getTypeInner(o: VlangSignatureOwner, context: ResolveState?): VlangTypeEx? {
+    fun getTypeInner(o: VlangSignatureOwner, @Suppress("UNUSED_PARAMETER") context: ResolveState?): VlangTypeEx? {
         return VlangFunctionTypeEx.from(o)
     }
 
@@ -2321,7 +2324,7 @@ object VlangPsiImplUtil {
     private fun processRangeClause(
         o: VlangVarDefinition,
         decl: VlangRangeClause,
-        context: ResolveState?
+        context: ResolveState?,
     ): VlangTypeEx? {
         val rightType = decl.expression?.getType(context)?.unwrapAlias()
         if (rightType is VlangStringTypeEx) {
@@ -2391,7 +2394,7 @@ object VlangPsiImplUtil {
     private fun getTypeInVarSpec(
         o: VlangVarDefinition,
         decl: VlangVarDeclaration,
-        context: ResolveState?
+        context: ResolveState?,
     ): VlangTypeEx? {
         val defineIndex = decl.varDefinitionList.indexOf(o)
         val varList = decl.varDefinitionList
@@ -2467,7 +2470,7 @@ object VlangPsiImplUtil {
         localResolve: Boolean,
         checkContainingFile: Boolean,
     ): Boolean {
-        val contextFile = if (checkContainingFile) VlangReference.getContextFile(state) else null
+//        val contextFile = if (checkContainingFile) VlangReference.getContextFile(state) else null
         for (definition in elements) {
             if (!condition.value(definition))
                 continue

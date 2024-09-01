@@ -2,4 +2,5 @@
 .idea
 .fleet
 .qodana
+.intellijPlatform
 build
