@@ -35,7 +35,7 @@ class VlangBackendConsoleInjectionHelper : BackendConsoleInjectionHelper {
 
             override fun stackFrameChanged() {
                 val file = document?.virtualFile ?: return
-                invokeLater(ModalityState.NON_MODAL) {
+                invokeLater(ModalityState.nonModal()) {
                     PsiDocumentManager.getInstance(session.project).reparseFiles(setOf(file), true)
                 }
             }

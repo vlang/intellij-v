@@ -32,7 +32,7 @@ class VlangAnnotator : Annotator {
         }
 
         return when (element.elementType) {
-            VlangTypes.IDENTIFIER -> highlightIdentifier(element, parent)
+            VlangTypes.IDENTIFIER -> highlightIdentifier(parent)
             else                  -> null
         }
     }
@@ -103,7 +103,7 @@ class VlangAnnotator : Annotator {
         }
     }
 
-    private fun highlightIdentifier(element: PsiElement, parent: VlangCompositeElement): VlangColor? {
+    private fun highlightIdentifier(parent: VlangCompositeElement): VlangColor? {
         if (parent is VlangLabelDefinition) {
             return label(parent)
         }

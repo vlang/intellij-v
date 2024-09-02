@@ -16,7 +16,7 @@ class VlangModulesIndex : StringStubIndexExtension<VlangFile>() {
         fun find(
             name: String,
             project: Project,
-            scope: GlobalSearchScope?,
+            @Suppress("UNUSED_PARAMETER") scope: GlobalSearchScope?,
             idFilter: IdFilter? = null,
         ): Collection<VlangFile> {
             val result = mutableListOf<VlangFile>()

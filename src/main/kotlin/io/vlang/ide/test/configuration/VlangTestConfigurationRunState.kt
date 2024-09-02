@@ -20,7 +20,7 @@ import io.vlang.toolchain.VlangToolchainService.Companion.toolchainSettings
 import java.io.File
 
 class VlangTestConfigurationRunState(
-    env: ExecutionEnvironment,
+    @Suppress("UNUSED_PARAMETER") env: ExecutionEnvironment,
     private val conf: VlangTestConfiguration,
 ) : RunProfileState {
 

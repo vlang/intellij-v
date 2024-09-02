@@ -19,7 +19,7 @@ object VlangPsiTreeUtil {
         for (childStub in stub.childrenStubs) {
             val child = childStub.psi
             if (aClass.isInstance(child)) {
-                return child as T
+                return aClass.cast(child)
             }
         }
         return null
@@ -46,7 +46,7 @@ object VlangPsiTreeUtil {
         for (childStub in stub.childrenStubs) {
             val child = childStub.psi
             if (aClass.isInstance(child)) {
-                result.add(child as T)
+                result.add(aClass.cast(child))
             }
         }
         return result

@@ -267,14 +267,20 @@ Discord Server: <a href="https://discord.gg/vlang">https://discord.gg/vlang</a><
 
         <!-- region Live Templates -->
         <defaultLiveTemplates file="/liveTemplates/V.xml"/>
-        <liveTemplateContext implementation="io.vlang.ide.templates.VlangTemplateContextType$Comment" contextId="VLANG_COMMENT"/>
-        <liveTemplateContext implementation="io.vlang.ide.templates.VlangTemplateContextType$Generic" contextId="VLANG_GENERIC"/>
+        <liveTemplateContext implementation="io.vlang.ide.templates.VlangTemplateContextType$Generic"
+                             contextId="VLANG_GENERIC"/>
+
+        <liveTemplateContext implementation="io.vlang.ide.templates.VlangTemplateContextType$Comment"
+                             contextId="VLANG_COMMENT"
+                             baseContextId="VLANG_GENERIC"/>
 
         <liveTemplateContext implementation="io.vlang.ide.templates.VlangTemplateContextType$TopLevel"
-                             contextId="VLANG_TOPLEVEL"/>
+                             contextId="VLANG_TOPLEVEL"
+                             baseContextId="VLANG_GENERIC"/>
 
         <liveTemplateContext implementation="io.vlang.ide.templates.VlangTemplateContextType$Statement"
-                             contextId="VLANG_STATEMENT"/>
+                             contextId="VLANG_STATEMENT"
+                             baseContextId="VLANG_GENERIC"/>
 
         <defaultTemplatePropertiesProvider
             implementation="io.vlang.ide.templates.VlangDefaultTemplatePropertiesProvider"/>

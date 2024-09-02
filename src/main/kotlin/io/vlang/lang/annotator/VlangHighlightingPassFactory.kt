@@ -23,7 +23,7 @@ class VlangHighlightingPassFactory : TextEditorHighlightingPassFactoryRegistrar,
 
     override fun createHighlightingPass(file: PsiFile, editor: Editor): TextEditorHighlightingPass? {
         if (file is VlangFile) {
-            val textRange = FileStatusMap.getDirtyTextRange(editor, passId)
+            val textRange = FileStatusMap.getDirtyTextRange(editor.document, file, passId)
             return if (textRange != null) VlangHighlightingPass(file, editor.document) else null
         }
         return null

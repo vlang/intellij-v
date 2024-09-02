@@ -5,13 +5,16 @@ import com.intellij.codeInsight.daemon.impl.CollectHighlightsUtil
 import com.intellij.codeInsight.daemon.impl.DaemonListeners
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiFile
+import com.intellij.util.ThreeState
 import io.vlang.ide.codeInsight.imports.VlangImportModuleQuickFix
 import io.vlang.lang.VlangLanguage
 import io.vlang.lang.psi.VlangCompositeElement
 
 class VlangReferenceImporter : ReferenceImporter {
     override fun autoImportReferenceAtCursor(editor: Editor, file: PsiFile): Boolean {
-        if (!file.viewProvider.languages.contains(VlangLanguage) || !DaemonListeners.canChangeFileSilently(file, true)) {
+        if (!file.viewProvider.languages.contains(VlangLanguage)
+            || !DaemonListeners.canChangeFileSilently(file, true, ThreeState.UNSURE)
+            ) {
             return false
         }
 

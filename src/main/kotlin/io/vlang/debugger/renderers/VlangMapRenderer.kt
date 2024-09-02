@@ -33,6 +33,7 @@ object VlangMapRenderer : VlangValueRenderer() {
         val keyData = VlangArrayRenderer.getVariableChildrenWithType(keyType, keys.withContext(value.context), offset, size).list
         val valueData = VlangArrayRenderer.getVariableChildrenWithType(valueType, values.withContext(value.context), offset, size).list
 
+        @Suppress("NAME_SHADOWING")
         return DebuggerDriver.ResultList.create(
             keyData.zip(valueData) { key, value ->
                 val keyValue = key.llValue

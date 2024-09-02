@@ -153,7 +153,6 @@ class VlangExpressionEvaluator : VlangVisitor() {
         }
 
         if (innerType is VlangMapTypeEx) {
-            val keyType = innerType.key
             val valueType = innerType.value
 
             val tmpVar = createTmpVar()
