@@ -4,11 +4,9 @@ import com.intellij.navigation.ChooseByNameContributorEx
 import com.intellij.navigation.GotoClassContributor
 import com.intellij.navigation.NavigationItem
 import com.intellij.openapi.progress.ProgressManager
-import com.intellij.openapi.project.Project
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.stubs.StubIndex
 import com.intellij.psi.stubs.StubIndexKey
-import com.intellij.util.ArrayUtil
 import com.intellij.util.Processor
 import com.intellij.util.indexing.FindSymbolParameters
 import com.intellij.util.indexing.IdFilter
@@ -41,9 +39,4 @@ open class VlangGotoContributorBase<T : VlangNamedElement>(
     }
 
     override fun getQualifiedNameSeparator() = "."
-
-    override fun getNames(p: Project, i: Boolean): Array<String> = ArrayUtil.EMPTY_STRING_ARRAY
-
-    override fun getItemsByName(n: String, p: String, p1: Project, i: Boolean): Array<NavigationItem> =
-        NavigationItem.EMPTY_NAVIGATION_ITEM_ARRAY
 }
