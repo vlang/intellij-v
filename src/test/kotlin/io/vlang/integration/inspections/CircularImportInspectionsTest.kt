@@ -7,7 +7,8 @@ class CircularImportInspectionsTest : IntegrationTestBase() {
 
     fun `test simple circular import`() = doTest {
         directory("first") {
-            fileNoLangInj("utils.v",
+            file(
+                "utils.v",
                 """
                 module first
 
@@ -16,11 +17,13 @@ class CircularImportInspectionsTest : IntegrationTestBase() {
                 pub fn util(){
                     second.util()
                 }
-                """.trimIndent())
+                """.trimIndent()
+            )
         }
 
         directory("second") {
-            fileNoLangInj("utils.v",
+            file(
+                "utils.v",
                 """
                 module second
 
@@ -29,17 +32,87 @@ class CircularImportInspectionsTest : IntegrationTestBase() {
                 pub fn util() {
                     first.util()
                 }
-                """.trimIndent())
+                """.trimIndent()
+            )
 
             enableInspection(VlangCircularImportInspection())
             testInspections()
         }
     }
 
+    fun `test no circular import`() = doTest {
+        directory("first") {
+            file(
+                "utils.v",
+                """
+                module first
+
+                pub fn util(){
+                    println("hello")
+                }
+                """.trimIndent()
+            )
+        }
+
+        file(
+            "main.v", """
+                module main
+
+                import first
+
+                pub fn util() {
+                    first.util()
+                }
+                """.trimIndent()
+        )
+
+        enableInspection(VlangCircularImportInspection())
+        testInspections()
+    }
+
+    fun `test circular import with test file`() = doTest {
+        directory("first") {
+            file(
+                "utils.v",
+                """
+                module first
+
+                pub fn util() {
+                    println("hello")
+                }
+                """.trimIndent()
+            )
+
+            file("utils_test.v", """
+                import first
+                                
+                test_util() {
+                    assert true
+                }
+            """.trimIndent())
+        }
+
+        file(
+            "main.v", """
+                module main
+
+                import first
+
+                pub fn util() {
+                    first.util()
+                }
+                """.trimIndent()
+        )
+
+        enableInspection(VlangCircularImportInspection())
+        testInspections()
+    }
+
     fun `test three way import cycle`() = doTest {
 
         directory("first") {
-            fileNoLangInj("utils.v",
+            file(
+                "utils.v",
                 """
                 module first
 
@@ -48,11 +121,13 @@ class CircularImportInspectionsTest : IntegrationTestBase() {
                 pub fn util(){
                     second.util()
                 }
-                """.trimIndent())
+                """.trimIndent()
+            )
         }
 
         directory("second") {
-            fileNoLangInj("utils.v",
+            file(
+                "utils.v",
                 """
                 module second
 
@@ -61,12 +136,13 @@ class CircularImportInspectionsTest : IntegrationTestBase() {
                 pub fn util() {
                     third.util()
                 }
-                """.trimIndent())
+                """.trimIndent()
+            )
         }
 
         directory("third") {
-            fileNoLangInj("utils.v",
-                """
+            file(
+                "utils.v", """
                 module third
 
                 import <error descr="Circular import detected">first</error>
@@ -74,7 +150,8 @@ class CircularImportInspectionsTest : IntegrationTestBase() {
                 pub fn util() {
                     first.util()
                 }
-                """.trimIndent())
+                """.trimIndent()
+            )
 
             enableInspection(VlangCircularImportInspection())
             testInspections()
@@ -82,9 +159,9 @@ class CircularImportInspectionsTest : IntegrationTestBase() {
 
     }
 
-    //extension lambda to create file without language Sytax injection
-    val fileNoLangInj : DirectoryContext.(name: String, text: String) -> Unit = { name, text ->
-        file(name, text)
-    }
+//    //extension lambda to create file without language Syntax injection
+//    val fileNoLangInj: DirectoryContext.(name: String, @Language("vlang") text: String) -> Unit = { name, text ->
+//        file(name, text)
+//    }
 
 }

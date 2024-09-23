@@ -16,14 +16,16 @@ class VlangCircularImportInspection : VlangBaseInspection() {
             if (module in visited) return true // circular import detected, stop here
 
             visited.add(module)
-            module.directory.files.filterIsInstance<VlangFile>().forEach { file ->
-                val imports = file.getImports()
-                for (import in imports) {
-                    import.resolve().firstOrNull()?.let{
-                        return hasCircularImport(it, visited)
+            module.directory.files.filterIsInstance<VlangFile>()
+                .filter { !it.isTestFile() }
+                .forEach { file ->
+                    val imports = file.getImports()
+                    for (import in imports) {
+                        import.resolve().firstOrNull()?.let {
+                            return hasCircularImport(it, visited)
+                        }
                     }
                 }
-            }
             visited.remove(module)
 
             return false // exhausted dfs search, no circular import detected
@@ -36,7 +38,7 @@ class VlangCircularImportInspection : VlangBaseInspection() {
                 val importList = importName.resolve().toList()
                 // check for circular import
                 importList.forEach { module ->
-                    if(hasCircularImport(module, mutableSetOf())){
+                    if (hasCircularImport(module, mutableSetOf())) {
                         holder.registerProblem(
                             importName,
                             "Circular import detected",
