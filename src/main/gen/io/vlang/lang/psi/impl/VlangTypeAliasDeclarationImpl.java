@@ -59,20 +59,17 @@ public class VlangTypeAliasDeclarationImpl extends VlangNamedElementImpl<VlangTy
   }
 
   @Override
-  @Nullable
-  public PsiElement getIdentifier() {
+  public @Nullable PsiElement getIdentifier() {
     return VlangPsiImplUtil.getIdentifier(this);
   }
 
   @Override
-  @NotNull
-  public String getName() {
+  public @NotNull String getName() {
     return VlangPsiImplUtil.getName(this);
   }
 
   @Override
-  @NotNull
-  public VlangTypeEx getTypeInner(@Nullable ResolveState context) {
+  public @NotNull VlangTypeEx getTypeInner(@Nullable ResolveState context) {
     return VlangPsiImplUtil.getTypeInner(this, context);
   }
 

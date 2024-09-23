@@ -47,6 +47,7 @@ object VlangTokenTypes {
         GO,
         GOTO,
         IF,
+        IMPLEMENTS,
         IMPORT,
         INTERFACE,
         MODULE,

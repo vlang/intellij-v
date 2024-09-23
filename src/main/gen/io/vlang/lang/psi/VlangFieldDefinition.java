@@ -14,14 +14,11 @@ public interface VlangFieldDefinition extends VlangMutabilityOwner, VlangNamedEl
   @NotNull
   PsiElement getIdentifier();
 
-  @Nullable
-  VlangCompositeElement getQualifier();
+  @Nullable VlangCompositeElement getQualifier();
 
-  @Nullable
-  String getQualifiedName();
+  @Nullable String getQualifiedName();
 
-  @NotNull
-  VlangTypeEx getTypeInner(@Nullable ResolveState context);
+  @NotNull VlangTypeEx getTypeInner(@Nullable ResolveState context);
 
   boolean isPublic();
 
@@ -33,7 +30,6 @@ public interface VlangFieldDefinition extends VlangMutabilityOwner, VlangNamedEl
 
   void makeImmutable();
 
-  @NotNull
-  VlangNamedElement getOwner();
+  @NotNull VlangNamedElement getOwner();
 
 }

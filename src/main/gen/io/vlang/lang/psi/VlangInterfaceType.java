@@ -25,19 +25,14 @@ public interface VlangInterfaceType extends VlangType, VlangFieldListOwner, Vlan
   @NotNull
   PsiElement getInterface();
 
-  @NotNull
-  List<VlangFieldDefinition> getFieldList();
+  @NotNull List<@NotNull VlangFieldDefinition> getFieldList();
 
-  @NotNull
-  List<VlangFieldDefinition> getOwnFieldList();
+  @NotNull List<@NotNull VlangFieldDefinition> getOwnFieldList();
 
-  @NotNull
-  List<VlangInterfaceMethodDefinition> getMethodList();
+  @NotNull List<@NotNull VlangInterfaceMethodDefinition> getMethodList();
 
-  @NotNull
-  List<VlangInterfaceType> getEmbeddedInterfaces();
+  @NotNull List<@NotNull VlangInterfaceType> getEmbeddedInterfaces();
 
-  @NotNull
-  List<VlangEmbeddedDefinition> getEmbeddedInterfacesList();
+  @NotNull List<@NotNull VlangEmbeddedDefinition> getEmbeddedInterfacesList();
 
 }

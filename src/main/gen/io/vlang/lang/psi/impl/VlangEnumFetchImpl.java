@@ -40,20 +40,17 @@ public class VlangEnumFetchImpl extends VlangExpressionImpl implements VlangEnum
   }
 
   @Override
-  @NotNull
-  public VlangReference getReference() {
+  public @NotNull VlangReference getReference() {
     return VlangPsiImplUtil.getReference(this);
   }
 
   @Override
-  @Nullable
-  public VlangCompositeElement getQualifier() {
+  public @Nullable VlangCompositeElement getQualifier() {
     return VlangPsiImplUtil.getQualifier(this);
   }
 
   @Override
-  @Nullable
-  public PsiElement resolve() {
+  public @Nullable PsiElement resolve() {
     return VlangPsiImplUtil.resolve(this);
   }
 

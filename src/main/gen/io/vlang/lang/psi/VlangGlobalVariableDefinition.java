@@ -34,8 +34,7 @@ public interface VlangGlobalVariableDefinition extends VlangNamedElement, StubBa
   //matching getName(VlangGlobalVariableDefinition, ...)
   //methods are not found in VlangPsiImplUtil
 
-  @Nullable
-  VlangTypeEx getTypeInner(@Nullable ResolveState context);
+  @Nullable VlangTypeEx getTypeInner(@Nullable ResolveState context);
 
   //WARNING: getSymbolVisibility(...) is skipped
   //matching getSymbolVisibility(VlangGlobalVariableDefinition, ...)

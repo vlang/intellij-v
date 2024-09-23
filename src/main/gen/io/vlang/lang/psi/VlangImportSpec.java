@@ -17,28 +17,20 @@ public interface VlangImportSpec extends VlangCompositeElement {
   @Nullable
   VlangSelectiveImportList getSelectiveImportList();
 
-  @NotNull
-  PsiElement getIdentifier();
+  @NotNull PsiElement getIdentifier();
 
-  @NotNull
-  String getLastPart();
+  @NotNull String getLastPart();
 
-  @NotNull
-  PsiElement getLastPartPsi();
+  @NotNull PsiElement getLastPartPsi();
 
-  @NotNull
-  String getName();
+  @NotNull String getName();
 
-  @NotNull
-  String getImportedName();
+  @NotNull String getImportedName();
 
-  @Nullable
-  String getAliasName();
+  @Nullable String getAliasName();
 
-  @NotNull
-  String getPathName();
+  @NotNull String getPathName();
 
-  @NotNull
-  List<VlangModule> resolve();
+  @NotNull List<@NotNull VlangModule> resolve();
 
 }

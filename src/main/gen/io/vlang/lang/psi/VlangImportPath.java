@@ -10,13 +10,10 @@ public interface VlangImportPath extends VlangCompositeElement {
   @NotNull
   List<VlangImportName> getImportNameList();
 
-  @NotNull
-  String getQualifiedName();
+  @NotNull String getQualifiedName();
 
-  @NotNull
-  String getLastPart();
+  @NotNull String getLastPart();
 
-  @NotNull
-  PsiElement getLastPartPsi();
+  @NotNull PsiElement getLastPartPsi();
 
 }

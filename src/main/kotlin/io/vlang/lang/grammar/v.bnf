@@ -398,10 +398,18 @@ AnonymousStructType ::= struct '{' FieldsGroup* '}' {
   methods=[getFieldList getOwnFieldList]
 }
 
-StructType ::= (struct | union) identifier GenericParameters? '{'  FieldsGroup* '}' {
+StructType ::= (struct | union) identifier GenericParameters? ImplementsClause? '{'  FieldsGroup* '}' {
   pin=1
   implements="io.vlang.lang.psi.VlangFieldListOwner"
   methods=[getFieldList getOwnFieldList getEmbeddedStructs getEmbeddedStructList isUnion]
+}
+
+ImplementsClause ::= implements TypeName (',' TypeName)* LastComma?
+
+LastComma ::= ',' {
+//  extends="com.intellij.psi.impl.source.tree.PsiErrorElementImpl"
+  implements="com.intellij.psi.PsiErrorElement"
+  methods=[getErrorDescription]
 }
 
 FieldsGroup ::= UnfinishedMemberModifiers | WithModifiersFieldsGroup | WithoutModifiersFieldsGroup {
@@ -726,6 +734,7 @@ Type ::= TypeModifiers? (TypeLit | TypeName) GenericArguments? {
 private TypeName ::= TypeReferenceExpression QualifiedTypeReferenceExpression*
 
 left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
+
 TypeReferenceExpression ::= identifier {
   stubClass="io.vlang.lang.stubs.VlangTypeReferenceExpressionStub"
   methods=[getReference getQualifier resolve getType]
@@ -747,7 +756,7 @@ private TypeLit ::=
   | AtomicType
   | AnonymousStructType
   | StructType
-  | InterfaceType
+  | InterfaceType // inline interface ???
 
 // [<expr>]<type>
 ArrayType ::= '['']' Type {pin=3}

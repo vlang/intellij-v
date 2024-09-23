@@ -54,11 +54,24 @@ class VlangImplementMethodsHandler : LanguageCodeInsightActionHandler {
             }
         }
 
+        if (element.parentOfType<VlangTypeReferenceExpression>(true) != null && element.parentOfType<VlangImplementsClause>() != null) {
+            val typeRef = element.parentOfType<VlangTypeReferenceExpression>(true)!!
+            val interfaceDeclaration = typeRef.resolve() as? VlangInterfaceDeclaration
+            if (interfaceDeclaration != null) {
+                startImplementing(project, file, editor, struct, interfaceDeclaration)
+                return
+            }
+        }
+
         val oldPopup = project.getUserData(ChooseByNamePopup.CHOOSE_BY_NAME_POPUP_IN_PROJECT_KEY)
         oldPopup?.close(false)
 
         val model =
-            VlangTypeContributorsBasedGotoByModel(project, MyGotoClassLikeContributor(file, struct), "Choose interface to implement")
+            VlangTypeContributorsBasedGotoByModel(
+                project,
+                MyGotoClassLikeContributor(file, struct),
+                "Choose interface to implement"
+            )
         val provider = DefaultChooseByNameItemProvider(file)
         val popup = MyChooseByNamePopup(project, model, provider, oldPopup)
 
@@ -155,12 +168,9 @@ class VlangImplementMethodsHandler : LanguageCodeInsightActionHandler {
 
         if (templateText.isNotEmpty()) {
             val receiverNames = generateReceiverNames(struct)
-            template.addVariable(
-                "RECEIVER", ConstantNode(receiverNames.first())
-                    .withLookupItems(
-                        receiverNames.map { LookupElementBuilder.create(it) }
-                    ), true
-            )
+            val value = ConstantNode(receiverNames.first())
+                .withLookupItems(receiverNames.map { LookupElementBuilder.create(it) })
+            template.addVariable("RECEIVER", value, true)
         }
 
         editor.caretModel.moveToOffset(struct.endOffset)
@@ -197,7 +207,10 @@ class VlangImplementMethodsHandler : LanguageCodeInsightActionHandler {
         return type.readableName(context)
     }
 
-    private fun isAlreadyImplementedMethod(struct: VlangStructDeclaration, method: VlangInterfaceMethodDefinition): Boolean {
+    private fun isAlreadyImplementedMethod(
+        struct: VlangStructDeclaration,
+        method: VlangInterfaceMethodDefinition,
+    ): Boolean {
         val structMethods = struct.structType.toEx().methodsList(struct.project)
         return structMethods
             .filter { it.name == method.name }
@@ -226,7 +239,7 @@ class VlangImplementMethodsHandler : LanguageCodeInsightActionHandler {
 
     private fun generateReceiverNames(struct: VlangStructDeclaration): List<String> {
         val firstLetter = struct.name.first().lowercaseChar().toString()
-        val other = listOf(firstLetter, "this")
+        val other = listOf(firstLetter, "_", "this")
 
         val structMethods = struct.structType.toEx().methodsList(struct.project)
         val first = VlangLangUtil.getUsedReceiverNameOrDefault(structMethods, null)

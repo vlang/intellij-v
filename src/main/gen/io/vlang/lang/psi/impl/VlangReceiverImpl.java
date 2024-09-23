@@ -59,14 +59,12 @@ public class VlangReceiverImpl extends VlangNamedElementImpl<VlangReceiverStub> 
   }
 
   @Override
-  @NotNull
-  public VlangTypeEx getTypeInner(@Nullable ResolveState context) {
+  public @NotNull VlangTypeEx getTypeInner(@Nullable ResolveState context) {
     return VlangPsiImplUtil.getTypeInner(this, context);
   }
 
   @Override
-  @Nullable
-  public String getName() {
+  public @Nullable String getName() {
     return VlangPsiImplUtil.getName(this);
   }
 

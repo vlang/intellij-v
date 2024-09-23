@@ -9,18 +9,24 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
 import com.intellij.psi.impl.source.resolve.ResolveCache
 import com.intellij.psi.search.GlobalSearchScope
+import com.intellij.psi.stubs.StubIndex
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.childrenOfType
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ArrayUtil
+import com.intellij.util.containers.addAllIfNotNull
 import io.vlang.configurations.VlangConfiguration
 import io.vlang.ide.codeInsight.VlangCodeInsightUtil
 import io.vlang.ide.codeInsight.VlangTypeInferenceUtil
 import io.vlang.lang.psi.*
+import io.vlang.lang.psi.impl.VlangPsiImplUtil.createContextOnElement
 import io.vlang.lang.psi.impl.VlangPsiImplUtil.processNamedElements
 import io.vlang.lang.psi.types.*
 import io.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import io.vlang.lang.sql.VlangSqlUtil
+import io.vlang.lang.stubs.VlangInterfaceDeclarationStub
+import io.vlang.lang.stubs.index.VlangClassLikeIndex
+import io.vlang.lang.stubs.index.VlangClassLikeIndex.Companion.KEY
 import io.vlang.lang.stubs.index.VlangGlobalVariablesIndex
 import io.vlang.lang.stubs.index.VlangModulesFingerprintIndex
 import io.vlang.lang.stubs.index.VlangModulesIndex
@@ -469,6 +475,40 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             return processEnumFetch(myElement as VlangEnumFetch, processor, state)
         }
 
+//        if (myElement is VlangTypeReferenceExpression && myElement.parent is VlangStructType) {
+//            val currentFile = element.containingFile as VlangFile
+//            val variants = mutableListOf<VlangNamedElement>()
+//
+////            val resolve = myElement.resolve()
+////            if (resolve != null && resolve is VlangInterfaceDeclaration) {
+////                if (!processType(resolve.interfaceType.toEx(), processor, state)) return false
+////            }
+//            val element =
+//                VlangClassLikeIndex.find(myElement.text, project, GlobalSearchScope.projectScope(project)).firstOrNull()
+//
+//
+//            // Add interfaces from the same file
+//            variants.addAll(currentFile.getInterfaces())
+//
+//            // Add interfaces from imports
+//            currentFile.getImports().forEach {
+//                val importedFile = VlangModulesIndex.find(it.name, project, GlobalSearchScope.projectScope(project)).firstOrNull()
+//                if (importedFile != null) {
+//                    variants.addAll(importedFile.getInterfaces())
+//                }
+//            }
+//
+//            return processNamedElements(
+//                processor,
+//                state,
+////                file.getInterfaces(),
+//                variants,
+//                Conditions.alwaysTrue(),
+//                localResolve = true,
+//                checkContainingFile = false
+//            )
+//        }
+
         when (myElement.parent) {
             is VlangFieldName -> {
                 if (!processTrailingStructParams(processor, state)) return false
@@ -559,7 +599,8 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
         if (receiverType is VlangGenericInstantiationEx && receiverType.inner is VlangResolvableTypeEx<*>) {
             val resolved = (receiverType.inner as VlangResolvableTypeEx<*>).resolve(project) ?: return false
-            val genericParametersOwner = resolved.childrenOfType<VlangGenericParametersOwner>().firstOrNull() ?: return false
+            val genericParametersOwner =
+                resolved.childrenOfType<VlangGenericParametersOwner>().firstOrNull() ?: return false
             val genericParameters = genericParametersOwner.genericParameters?.parameters
                 ?: return false
             if (!processNamedElements(processor, state, genericParameters, false)) return false
@@ -728,7 +769,13 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
                 continue
             }
 
-            if (!processFileEntities(moduleFile, processor, state.put(MODULE_NAME, moduleFile.getModuleQualifiedName()), false)) {
+            if (!processFileEntities(
+                    moduleFile,
+                    processor,
+                    state.put(MODULE_NAME, moduleFile.getModuleQualifiedName()),
+                    false
+                )
+            ) {
                 return false
             }
         }
@@ -755,7 +802,11 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         return processStubFile("compile_time_constants.v", processor, state)
     }
 
-    private fun processImportedModulesForCompletion(file: VlangFile, processor: VlangScopeProcessor, state: ResolveState): Boolean {
+    private fun processImportedModulesForCompletion(
+        file: VlangFile,
+        processor: VlangScopeProcessor,
+        state: ResolveState,
+    ): Boolean {
         if (!processor.isCompletion()) {
             // This method is only for autocompletion when a user writes
             // a symbol (from another module) name, and we want to import
@@ -883,7 +934,12 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         )
     }
 
-    private fun processBlock(file: VlangFile, processor: VlangScopeProcessor, state: ResolveState, localResolve: Boolean): Boolean {
+    private fun processBlock(
+        file: VlangFile,
+        processor: VlangScopeProcessor,
+        state: ResolveState,
+        localResolve: Boolean,
+    ): Boolean {
         val context = if (file is VlangCodeFragment) file.context else myElement
 
         val newState = if (file is VlangCodeFragment)
@@ -893,7 +949,12 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
 
         val delegate = createDelegate(processor, file is VlangCodeFragment)
         ResolveUtil.treeWalkUp(context, delegate)
-        return processNamedElements(processor, newState.put(NOT_PROCESS_EMBEDDED_DEFINITION, true), delegate.getVariants(), localResolve)
+        return processNamedElements(
+            processor,
+            newState.put(NOT_PROCESS_EMBEDDED_DEFINITION, true),
+            delegate.getVariants(),
+            localResolve
+        )
     }
 
     private fun processPseudoParams(processor: VlangScopeProcessor, state: ResolveState): Boolean {
@@ -1017,7 +1078,8 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
         }
     }
 
-    override fun isReferenceTo(element: PsiElement) = couldBeReferenceTo(element, myElement) && super.isReferenceTo(element)
+    override fun isReferenceTo(element: PsiElement) =
+        couldBeReferenceTo(element, myElement) && super.isReferenceTo(element)
 
     private fun couldBeReferenceTo(definition: PsiElement, reference: PsiElement): Boolean {
         if (definition is PsiDirectory && reference is VlangReferenceExpressionBase) return true

@@ -70,26 +70,22 @@ public class VlangCallExprImpl extends VlangExpressionImpl implements VlangCallE
   }
 
   @Override
-  @NotNull
-  public List<VlangExpression> getParameters() {
+  public @NotNull List<@NotNull VlangExpression> getParameters() {
     return VlangPsiImplUtil.getParameters(this);
   }
 
   @Override
-  @Nullable
-  public PsiElement getIdentifier() {
+  public @Nullable PsiElement getIdentifier() {
     return VlangPsiImplUtil.getIdentifier(this);
   }
 
   @Override
-  @Nullable
-  public VlangReferenceExpression getQualifier() {
+  public @Nullable VlangReferenceExpression getQualifier() {
     return VlangPsiImplUtil.getQualifier(this);
   }
 
   @Override
-  @Nullable
-  public PsiElement resolve() {
+  public @Nullable PsiElement resolve() {
     return VlangPsiImplUtil.resolve(this);
   }
 

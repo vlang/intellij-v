@@ -47,6 +47,12 @@ public class VlangStructTypeImpl extends VlangTypeImpl implements VlangStructTyp
 
   @Override
   @Nullable
+  public VlangImplementsClause getImplementsClause() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangImplementsClause.class);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getLbrace() {
     return findChildByType(LBRACE);
   }
@@ -76,26 +82,22 @@ public class VlangStructTypeImpl extends VlangTypeImpl implements VlangStructTyp
   }
 
   @Override
-  @NotNull
-  public List<VlangFieldDefinition> getFieldList() {
+  public @NotNull List<@NotNull VlangFieldDefinition> getFieldList() {
     return VlangPsiImplUtil.getFieldList(this);
   }
 
   @Override
-  @NotNull
-  public List<VlangFieldDefinition> getOwnFieldList() {
+  public @NotNull List<@NotNull VlangFieldDefinition> getOwnFieldList() {
     return VlangPsiImplUtil.getOwnFieldList(this);
   }
 
   @Override
-  @NotNull
-  public List<VlangStructType> getEmbeddedStructs() {
+  public @NotNull List<@NotNull VlangStructType> getEmbeddedStructs() {
     return VlangPsiImplUtil.getEmbeddedStructs(this);
   }
 
   @Override
-  @NotNull
-  public List<VlangEmbeddedDefinition> getEmbeddedStructList() {
+  public @NotNull List<@NotNull VlangEmbeddedDefinition> getEmbeddedStructList() {
     return VlangPsiImplUtil.getEmbeddedStructList(this);
   }
 

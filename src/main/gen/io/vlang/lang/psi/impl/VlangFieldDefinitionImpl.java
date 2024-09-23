@@ -41,20 +41,17 @@ public class VlangFieldDefinitionImpl extends VlangNamedElementImpl<VlangFieldDe
   }
 
   @Override
-  @Nullable
-  public VlangCompositeElement getQualifier() {
+  public @Nullable VlangCompositeElement getQualifier() {
     return VlangPsiImplUtil.getQualifier(this);
   }
 
   @Override
-  @Nullable
-  public String getQualifiedName() {
+  public @Nullable String getQualifiedName() {
     return VlangPsiImplUtil.getQualifiedName(this);
   }
 
   @Override
-  @NotNull
-  public VlangTypeEx getTypeInner(@Nullable ResolveState context) {
+  public @NotNull VlangTypeEx getTypeInner(@Nullable ResolveState context) {
     return VlangPsiImplUtil.getTypeInner(this, context);
   }
 
@@ -84,8 +81,7 @@ public class VlangFieldDefinitionImpl extends VlangNamedElementImpl<VlangFieldDe
   }
 
   @Override
-  @NotNull
-  public VlangNamedElement getOwner() {
+  public @NotNull VlangNamedElement getOwner() {
     return VlangPsiImplUtil.getOwner(this);
   }
 

@@ -21,13 +21,10 @@ public interface VlangType extends VlangGenericArgumentsOwner, StubBasedPsiEleme
   @Nullable
   VlangTypeReferenceExpression getTypeReferenceExpression();
 
-  @Nullable
-  PsiElement getIdentifier();
+  @Nullable PsiElement getIdentifier();
 
-  @Nullable
-  VlangType getUnderlyingType();
+  @Nullable VlangType getUnderlyingType();
 
-  @NotNull
-  VlangType resolveType();
+  @NotNull VlangType resolveType();
 
 }

@@ -17,20 +17,16 @@ public interface VlangStringLiteral extends VlangExpression, PsiLanguageInjectio
 
   boolean isValidHost();
 
-  @NotNull
-  VlangStringLiteral updateText(@NotNull String text);
+  @NotNull VlangStringLiteral updateText(@NotNull String text);
 
-  @NotNull
-  StringLiteralEscaper<VlangStringLiteral> createLiteralTextEscaper();
+  @NotNull StringLiteralEscaper<@NotNull VlangStringLiteral> createLiteralTextEscaper();
 
   //WARNING: getDecodedText(...) is skipped
   //matching getDecodedText(VlangStringLiteral, ...)
   //methods are not found in VlangPsiImplUtil
 
-  @NotNull
-  PsiReference[] getReferences();
+  @NotNull PsiReference @NotNull [] getReferences();
 
-  @NotNull
-  String getContents();
+  @NotNull String getContents();
 
 }

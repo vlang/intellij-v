@@ -14,6 +14,9 @@ public interface VlangStructType extends VlangType, VlangFieldListOwner, VlangGe
   VlangGenericParameters getGenericParameters();
 
   @Nullable
+  VlangImplementsClause getImplementsClause();
+
+  @Nullable
   PsiElement getLbrace();
 
   @Nullable
@@ -28,17 +31,13 @@ public interface VlangStructType extends VlangType, VlangFieldListOwner, VlangGe
   @Nullable
   PsiElement getUnion();
 
-  @NotNull
-  List<VlangFieldDefinition> getFieldList();
+  @NotNull List<@NotNull VlangFieldDefinition> getFieldList();
 
-  @NotNull
-  List<VlangFieldDefinition> getOwnFieldList();
+  @NotNull List<@NotNull VlangFieldDefinition> getOwnFieldList();
 
-  @NotNull
-  List<VlangStructType> getEmbeddedStructs();
+  @NotNull List<@NotNull VlangStructType> getEmbeddedStructs();
 
-  @NotNull
-  List<VlangEmbeddedDefinition> getEmbeddedStructList();
+  @NotNull List<@NotNull VlangEmbeddedDefinition> getEmbeddedStructList();
 
   boolean isUnion();
 

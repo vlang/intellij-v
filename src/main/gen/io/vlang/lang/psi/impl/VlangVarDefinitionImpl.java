@@ -48,20 +48,17 @@ public class VlangVarDefinitionImpl extends VlangNamedElementImpl<VlangVarDefini
   }
 
   @Override
-  @Nullable
-  public VlangTypeEx getTypeInner(@Nullable ResolveState context) {
+  public @Nullable VlangTypeEx getTypeInner(@Nullable ResolveState context) {
     return VlangPsiImplUtil.getTypeInner(this, context);
   }
 
   @Override
-  @NotNull
-  public String getName() {
+  public @NotNull String getName() {
     return VlangPsiImplUtil.getName(this);
   }
 
   @Override
-  @NotNull
-  public PsiReference getReference() {
+  public @NotNull PsiReference getReference() {
     return VlangPsiImplUtil.getReference(this);
   }
 
@@ -86,14 +83,12 @@ public class VlangVarDefinitionImpl extends VlangNamedElementImpl<VlangVarDefini
   }
 
   @Override
-  @Nullable
-  public VlangExpression getInitializer() {
+  public @Nullable VlangExpression getInitializer() {
     return VlangPsiImplUtil.getInitializer(this);
   }
 
   @Override
-  @Nullable
-  public VlangSymbolVisibility getSymbolVisibility() {
+  public @Nullable VlangSymbolVisibility getSymbolVisibility() {
     return VlangPsiImplUtil.getSymbolVisibility(this);
   }
 

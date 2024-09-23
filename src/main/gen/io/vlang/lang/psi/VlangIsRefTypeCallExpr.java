@@ -23,7 +23,6 @@ public interface VlangIsRefTypeCallExpr extends VlangExpression, VlangBuiltinCal
   @NotNull
   PsiElement getIsreftype();
 
-  @NotNull
-  VlangBuiltinReference<VlangIsRefTypeCallExpr> getReference();
+  @NotNull VlangBuiltinReference<@NotNull VlangIsRefTypeCallExpr> getReference();
 
 }

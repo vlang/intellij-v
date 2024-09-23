@@ -22,8 +22,7 @@ public interface VlangFunctionLit extends VlangExpression, VlangSignatureOwner, 
   @NotNull
   PsiElement getFn();
 
-  @NotNull
-  PsiElement addCapture(@NotNull String name);
+  @NotNull PsiElement addCapture(@NotNull String name);
 
   //WARNING: processDeclarations(...) is skipped
   //matching processDeclarations(VlangFunctionLit, ...)

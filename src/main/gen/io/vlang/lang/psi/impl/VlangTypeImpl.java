@@ -57,20 +57,17 @@ public class VlangTypeImpl extends VlangStubbedElementImpl<VlangTypeStub> implem
   }
 
   @Override
-  @Nullable
-  public PsiElement getIdentifier() {
+  public @Nullable PsiElement getIdentifier() {
     return VlangPsiImplUtil.getIdentifier(this);
   }
 
   @Override
-  @Nullable
-  public VlangType getUnderlyingType() {
+  public @Nullable VlangType getUnderlyingType() {
     return VlangPsiImplUtil.getUnderlyingType(this);
   }
 
   @Override
-  @NotNull
-  public VlangType resolveType() {
+  public @NotNull VlangType resolveType() {
     return VlangPsiImplUtil.resolveType(this);
   }
 

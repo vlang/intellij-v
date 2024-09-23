@@ -26,7 +26,6 @@ public interface VlangOffsetOfCallExpr extends VlangExpression, VlangBuiltinCall
   @NotNull
   PsiElement getOffsetof();
 
-  @NotNull
-  VlangBuiltinReference<VlangOffsetOfCallExpr> getReference();
+  @NotNull VlangBuiltinReference<@NotNull VlangOffsetOfCallExpr> getReference();
 
 }

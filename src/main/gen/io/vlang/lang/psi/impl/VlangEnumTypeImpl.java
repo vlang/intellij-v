@@ -70,8 +70,7 @@ public class VlangEnumTypeImpl extends VlangTypeImpl implements VlangEnumType {
   }
 
   @Override
-  @NotNull
-  public List<VlangEnumFieldDefinition> getFieldList() {
+  public @NotNull List<@NotNull VlangEnumFieldDefinition> getFieldList() {
     return VlangPsiImplUtil.getFieldList(this);
   }
 

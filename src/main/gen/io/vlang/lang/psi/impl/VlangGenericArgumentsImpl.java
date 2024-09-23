@@ -27,8 +27,7 @@ public class VlangGenericArgumentsImpl extends VlangCompositeElementImpl impleme
   }
 
   @Override
-  @NotNull
-  public List<VlangType> getTypeArguments() {
+  public @NotNull List<@NotNull VlangType> getTypeArguments() {
     return VlangPsiImplUtil.getTypeArguments(this);
   }
 

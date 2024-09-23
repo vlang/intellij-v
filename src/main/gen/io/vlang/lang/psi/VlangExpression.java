@@ -9,7 +9,6 @@ import io.vlang.lang.psi.types.VlangTypeEx;
 
 public interface VlangExpression extends VlangTypeOwner {
 
-  @Nullable
-  VlangTypeEx getType(@Nullable ResolveState context);
+  @Nullable VlangTypeEx getType(@Nullable ResolveState context);
 
 }

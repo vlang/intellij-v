@@ -45,8 +45,7 @@ public class VlangAttributeIdentifierImpl extends VlangCompositeElementImpl impl
   }
 
   @Override
-  @NotNull
-  public VlangAttributeReference getReference() {
+  public @NotNull VlangAttributeReference getReference() {
     return VlangPsiImplUtil.getReference(this);
   }
 

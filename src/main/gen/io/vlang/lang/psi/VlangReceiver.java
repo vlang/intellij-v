@@ -23,11 +23,9 @@ public interface VlangReceiver extends VlangMutabilityOwner, VlangNamedElement, 
   @NotNull
   PsiElement getIdentifier();
 
-  @NotNull
-  VlangTypeEx getTypeInner(@Nullable ResolveState context);
+  @NotNull VlangTypeEx getTypeInner(@Nullable ResolveState context);
 
-  @Nullable
-  String getName();
+  @Nullable String getName();
 
   boolean isPublic();
 

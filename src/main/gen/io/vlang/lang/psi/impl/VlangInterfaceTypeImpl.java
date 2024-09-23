@@ -70,32 +70,27 @@ public class VlangInterfaceTypeImpl extends VlangTypeImpl implements VlangInterf
   }
 
   @Override
-  @NotNull
-  public List<VlangFieldDefinition> getFieldList() {
+  public @NotNull List<@NotNull VlangFieldDefinition> getFieldList() {
     return VlangPsiImplUtil.getFieldList(this);
   }
 
   @Override
-  @NotNull
-  public List<VlangFieldDefinition> getOwnFieldList() {
+  public @NotNull List<@NotNull VlangFieldDefinition> getOwnFieldList() {
     return VlangPsiImplUtil.getOwnFieldList(this);
   }
 
   @Override
-  @NotNull
-  public List<VlangInterfaceMethodDefinition> getMethodList() {
+  public @NotNull List<@NotNull VlangInterfaceMethodDefinition> getMethodList() {
     return VlangPsiImplUtil.getMethodList(this);
   }
 
   @Override
-  @NotNull
-  public List<VlangInterfaceType> getEmbeddedInterfaces() {
+  public @NotNull List<@NotNull VlangInterfaceType> getEmbeddedInterfaces() {
     return VlangPsiImplUtil.getEmbeddedInterfaces(this);
   }
 
   @Override
-  @NotNull
-  public List<VlangEmbeddedDefinition> getEmbeddedInterfacesList() {
+  public @NotNull List<@NotNull VlangEmbeddedDefinition> getEmbeddedInterfacesList() {
     return VlangPsiImplUtil.getEmbeddedInterfacesList(this);
   }
 

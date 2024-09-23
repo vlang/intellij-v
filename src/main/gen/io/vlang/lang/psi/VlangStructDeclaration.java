@@ -20,23 +20,18 @@ public interface VlangStructDeclaration extends VlangNamedElement, VlangAttribut
   @Nullable
   VlangSymbolVisibility getSymbolVisibility();
 
-  @Nullable
-  PsiElement getIdentifier();
+  @Nullable PsiElement getIdentifier();
 
-  @NotNull
-  String getName();
+  @NotNull String getName();
 
-  @NotNull
-  VlangTypeEx getTypeInner(@Nullable ResolveState context);
+  @NotNull VlangTypeEx getTypeInner(@Nullable ResolveState context);
 
   boolean isUnion();
 
-  @NotNull
-  String getKindName();
+  @NotNull String getKindName();
 
   boolean isAttribute();
 
-  @Nullable
-  PsiElement addField(@NotNull String name, @NotNull String type, boolean mutable);
+  @Nullable PsiElement addField(@NotNull String name, @NotNull String type, boolean mutable);
 
 }

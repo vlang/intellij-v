@@ -46,26 +46,22 @@ public class VlangStringLiteralImpl extends VlangExpressionImpl implements Vlang
   }
 
   @Override
-  @NotNull
-  public VlangStringLiteral updateText(@NotNull String text) {
+  public @NotNull VlangStringLiteral updateText(@NotNull String text) {
     return VlangPsiImplUtil.updateText(this, text);
   }
 
   @Override
-  @NotNull
-  public StringLiteralEscaper<VlangStringLiteral> createLiteralTextEscaper() {
+  public @NotNull StringLiteralEscaper<@NotNull VlangStringLiteral> createLiteralTextEscaper() {
     return VlangPsiImplUtil.createLiteralTextEscaper(this);
   }
 
   @Override
-  @NotNull
-  public PsiReference[] getReferences() {
+  public @NotNull PsiReference @NotNull [] getReferences() {
     return VlangPsiImplUtil.getReferences(this);
   }
 
   @Override
-  @NotNull
-  public String getContents() {
+  public @NotNull String getContents() {
     return VlangPsiImplUtil.getContents(this);
   }
 

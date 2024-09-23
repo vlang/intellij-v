@@ -41,20 +41,15 @@ public interface VlangMethodDeclaration extends VlangSignatureOwner, VlangFuncti
   @NotNull
   PsiElement getFn();
 
-  @Nullable
-  VlangType getReceiverType();
+  @Nullable VlangType getReceiverType();
 
-  @Nullable
-  VlangTypeEx getTypeInner(@Nullable ResolveState context);
+  @Nullable VlangTypeEx getTypeInner(@Nullable ResolveState context);
 
-  @Nullable
-  PsiElement getIdentifier();
+  @Nullable PsiElement getIdentifier();
 
-  @Nullable
-  String getQualifiedName();
+  @Nullable String getQualifiedName();
 
-  @Nullable
-  VlangNamedElement getOwner();
+  @Nullable VlangNamedElement getOwner();
 
   boolean isMutable();
 

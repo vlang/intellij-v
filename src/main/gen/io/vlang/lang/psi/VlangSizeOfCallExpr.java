@@ -23,7 +23,6 @@ public interface VlangSizeOfCallExpr extends VlangExpression, VlangBuiltinCallOw
   @NotNull
   PsiElement getSizeof();
 
-  @NotNull
-  VlangBuiltinReference<VlangSizeOfCallExpr> getReference();
+  @NotNull VlangBuiltinReference<@NotNull VlangSizeOfCallExpr> getReference();
 
 }

@@ -10,14 +10,14 @@ import io.vlang.lang.psi.VlangPsiTreeUtil;
 import static io.vlang.lang.VlangTypes.*;
 import io.vlang.lang.psi.*;
 
-public class VlangMatchArmImpl extends VlangCompositeElementImpl implements VlangMatchArm {
+public class VlangLastCommaImpl extends VlangCompositeElementImpl implements VlangLastComma {
 
-  public VlangMatchArmImpl(@NotNull ASTNode node) {
+  public VlangLastCommaImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitMatchArm(this);
+    visitor.visitLastComma(this);
   }
 
   @Override
@@ -28,25 +28,13 @@ public class VlangMatchArmImpl extends VlangCompositeElementImpl implements Vlan
 
   @Override
   @NotNull
-  public VlangBlock getBlock() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangBlock.class));
+  public PsiElement getComma() {
+    return notNullChild(findChildByType(COMMA));
   }
 
   @Override
-  @Nullable
-  public PsiElement getSemicolon() {
-    return findChildByType(SEMICOLON);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getSemicolonSynthetic() {
-    return findChildByType(SEMICOLON_SYNTHETIC);
-  }
-
-  @Override
-  public @NotNull List<@NotNull VlangCompositeElement> getParameterList() {
-    return VlangPsiImplUtil.getParameterList(this);
+  public @NotNull String getErrorDescription() {
+    return VlangPsiImplUtil.getErrorDescription(this);
   }
 
 }

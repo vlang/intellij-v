@@ -64,8 +64,7 @@ public class VlangOffsetOfCallExprImpl extends VlangExpressionImpl implements Vl
   }
 
   @Override
-  @NotNull
-  public VlangBuiltinReference<VlangOffsetOfCallExpr> getReference() {
+  public @NotNull VlangBuiltinReference<@NotNull VlangOffsetOfCallExpr> getReference() {
     return VlangPsiImplUtil.getReference(this);
   }
 

@@ -14,13 +14,10 @@ public interface VlangEmbeddedDefinition extends VlangNamedElement, StubBasedPsi
   @NotNull
   VlangType getType();
 
-  @NotNull
-  String getName();
+  @NotNull String getName();
 
-  @Nullable
-  PsiElement getIdentifier();
+  @Nullable PsiElement getIdentifier();
 
-  @NotNull
-  VlangTypeEx getType(@Nullable ResolveState context);
+  @NotNull VlangTypeEx getType(@Nullable ResolveState context);
 
 }

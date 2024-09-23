@@ -21,7 +21,6 @@ public interface VlangAliasType extends VlangType, VlangGenericParametersOwner {
 
   boolean isAlias();
 
-  @Nullable
-  VlangType getAliasType();
+  @Nullable VlangType getAliasType();
 
 }

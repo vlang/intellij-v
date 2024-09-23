@@ -10,14 +10,14 @@ import io.vlang.lang.psi.VlangPsiTreeUtil;
 import static io.vlang.lang.VlangTypes.*;
 import io.vlang.lang.psi.*;
 
-public class VlangMatchArmImpl extends VlangCompositeElementImpl implements VlangMatchArm {
+public class VlangImplementsClauseImpl extends VlangCompositeElementImpl implements VlangImplementsClause {
 
-  public VlangMatchArmImpl(@NotNull ASTNode node) {
+  public VlangImplementsClauseImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull VlangVisitor visitor) {
-    visitor.visitMatchArm(this);
+    visitor.visitImplementsClause(this);
   }
 
   @Override
@@ -27,26 +27,21 @@ public class VlangMatchArmImpl extends VlangCompositeElementImpl implements Vlan
   }
 
   @Override
+  @Nullable
+  public VlangLastComma getLastComma() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangLastComma.class);
+  }
+
+  @Override
   @NotNull
-  public VlangBlock getBlock() {
-    return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangBlock.class));
+  public List<VlangTypeReferenceExpression> getTypeReferenceExpressionList() {
+    return VlangPsiTreeUtil.getChildrenOfTypeAsList(this, VlangTypeReferenceExpression.class);
   }
 
   @Override
-  @Nullable
-  public PsiElement getSemicolon() {
-    return findChildByType(SEMICOLON);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getSemicolonSynthetic() {
-    return findChildByType(SEMICOLON_SYNTHETIC);
-  }
-
-  @Override
-  public @NotNull List<@NotNull VlangCompositeElement> getParameterList() {
-    return VlangPsiImplUtil.getParameterList(this);
+  @NotNull
+  public PsiElement getImplements() {
+    return notNullChild(findChildByType(IMPLEMENTS));
   }
 
 }

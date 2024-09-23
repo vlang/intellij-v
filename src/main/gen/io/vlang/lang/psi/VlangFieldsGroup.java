@@ -22,7 +22,6 @@ public interface VlangFieldsGroup extends VlangMemberModifiersOwner {
   @Nullable
   PsiElement getSemicolonSynthetic();
 
-  @NotNull
-  List<VlangMemberModifier> getMemberModifierList();
+  @NotNull List<@NotNull VlangMemberModifier> getMemberModifierList();
 
 }

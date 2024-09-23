@@ -4,15 +4,13 @@ package io.vlang.lang.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiErrorElement;
 
-public interface VlangAppendStatement extends VlangStatement {
-
-  @NotNull
-  List<VlangExpression> getExpressionList();
+public interface VlangLastComma extends PsiErrorElement {
 
   @NotNull
-  VlangShiftLeftOp getShiftLeftOp();
+  PsiElement getComma();
 
-  @Nullable VlangExpression getLeft();
+  @NotNull String getErrorDescription();
 
 }

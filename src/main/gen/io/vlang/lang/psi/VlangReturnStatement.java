@@ -13,7 +13,6 @@ public interface VlangReturnStatement extends VlangStatement {
   @NotNull
   PsiElement getReturn();
 
-  @Nullable
-  VlangSignatureOwner getOwner();
+  @Nullable VlangSignatureOwner getOwner();
 
 }

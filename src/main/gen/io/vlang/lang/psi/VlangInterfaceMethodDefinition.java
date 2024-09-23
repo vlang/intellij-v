@@ -20,17 +20,14 @@ public interface VlangInterfaceMethodDefinition extends VlangSignatureOwner, Vla
   @NotNull
   PsiElement getIdentifier();
 
-  @Nullable
-  VlangTypeEx getTypeInner(@Nullable ResolveState context);
+  @Nullable VlangTypeEx getTypeInner(@Nullable ResolveState context);
 
   boolean isPublic();
 
   boolean isMutable();
 
-  @NotNull
-  VlangInterfaceDeclaration getOwner();
+  @NotNull VlangInterfaceDeclaration getOwner();
 
-  @NotNull
-  String getQualifiedName();
+  @NotNull String getQualifiedName();
 
 }

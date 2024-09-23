@@ -34,8 +34,7 @@ public class VlangImportAliasNameImpl extends VlangCompositeElementImpl implemen
   }
 
   @Override
-  @NotNull
-  public VlangModuleReference<VlangImportAliasName> getReference() {
+  public @NotNull VlangModuleReference<@NotNull VlangImportAliasName> getReference() {
     return VlangPsiImplUtil.getReference(this);
   }
 

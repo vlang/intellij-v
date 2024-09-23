@@ -13,14 +13,11 @@ public interface VlangTypeReferenceExpression extends VlangReferenceExpressionBa
   @NotNull
   PsiElement getIdentifier();
 
-  @NotNull
-  VlangReference getReference();
+  @NotNull VlangReference getReference();
 
-  @Nullable
-  VlangCompositeElement getQualifier();
+  @Nullable VlangCompositeElement getQualifier();
 
-  @Nullable
-  PsiElement resolve();
+  @Nullable PsiElement resolve();
 
   //WARNING: getType(...) is skipped
   //matching getType(VlangTypeReferenceExpression, ...)

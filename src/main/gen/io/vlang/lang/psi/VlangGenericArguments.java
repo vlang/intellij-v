@@ -7,7 +7,6 @@ import com.intellij.psi.PsiElement;
 
 public interface VlangGenericArguments extends VlangCompositeElement {
 
-  @NotNull
-  List<VlangType> getTypeArguments();
+  @NotNull List<@NotNull VlangType> getTypeArguments();
 
 }

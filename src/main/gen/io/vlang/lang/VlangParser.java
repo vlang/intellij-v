@@ -2824,6 +2824,50 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // implements TypeName (',' TypeName)* LastComma?
+  public static boolean ImplementsClause(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ImplementsClause")) return false;
+    if (!nextTokenIs(b, IMPLEMENTS)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, IMPLEMENTS);
+    r = r && TypeName(b, l + 1);
+    r = r && ImplementsClause_2(b, l + 1);
+    r = r && ImplementsClause_3(b, l + 1);
+    exit_section_(b, m, IMPLEMENTS_CLAUSE, r);
+    return r;
+  }
+
+  // (',' TypeName)*
+  private static boolean ImplementsClause_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ImplementsClause_2")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!ImplementsClause_2_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "ImplementsClause_2", c)) break;
+    }
+    return true;
+  }
+
+  // ',' TypeName
+  private static boolean ImplementsClause_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ImplementsClause_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && TypeName(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // LastComma?
+  private static boolean ImplementsClause_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ImplementsClause_3")) return false;
+    LastComma(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
   // as ImportAliasName
   public static boolean ImportAlias(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ImportAlias")) return false;
@@ -3467,6 +3511,18 @@ public class VlangParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "LabeledStatement_1")) return false;
     Statement(b, l + 1);
     return true;
+  }
+
+  /* ********************************************************** */
+  // ','
+  public static boolean LastComma(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LastComma")) return false;
+    if (!nextTokenIs(b, COMMA)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    exit_section_(b, m, LAST_COMMA, r);
+    return r;
   }
 
   /* ********************************************************** */
@@ -5696,7 +5752,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (struct | union) identifier GenericParameters? '{'  FieldsGroup* '}'
+  // (struct | union) identifier GenericParameters? ImplementsClause? '{'  FieldsGroup* '}'
   public static boolean StructType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StructType")) return false;
     if (!nextTokenIs(b, "<struct type>", STRUCT, UNION)) return false;
@@ -5706,8 +5762,9 @@ public class VlangParser implements PsiParser, LightPsiParser {
     p = r; // pin = 1
     r = r && report_error_(b, consumeToken(b, IDENTIFIER));
     r = p && report_error_(b, StructType_2(b, l + 1)) && r;
+    r = p && report_error_(b, StructType_3(b, l + 1)) && r;
     r = p && report_error_(b, consumeToken(b, LBRACE)) && r;
-    r = p && report_error_(b, StructType_4(b, l + 1)) && r;
+    r = p && report_error_(b, StructType_5(b, l + 1)) && r;
     r = p && consumeToken(b, RBRACE) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
@@ -5729,13 +5786,20 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
+  // ImplementsClause?
+  private static boolean StructType_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "StructType_3")) return false;
+    ImplementsClause(b, l + 1);
+    return true;
+  }
+
   // FieldsGroup*
-  private static boolean StructType_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "StructType_4")) return false;
+  private static boolean StructType_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "StructType_5")) return false;
     while (true) {
       int c = current_position_(b);
       if (!FieldsGroup(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "StructType_4", c)) break;
+      if (!empty_element_parsed_guard_(b, "StructType_5", c)) break;
     }
     return true;
   }

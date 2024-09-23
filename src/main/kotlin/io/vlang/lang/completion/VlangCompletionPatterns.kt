@@ -66,7 +66,19 @@ object VlangCompletionPatterns {
     fun onType(): PsiElementPattern.Capture<PsiElement> =
         psiElement()
             .withParent(VlangTypeReferenceExpression::class.java)
+            .andNot(onImplementsClause())
             .notAfterLiteral()
+
+    /**
+     * On implements clause
+     *
+     *    struct A implements <caret>
+     */
+    fun onImplementsClause(): PsiElementPattern.Capture<PsiElement> =
+        psiElement()
+            .withSuperParent(3, VlangStructType::class.java)
+            .withSuperParent(2, VlangImplementsClause::class.java)
+            .withParent(VlangTypeReferenceExpression::class.java)
 
     /**
      * Element after if/else expression like:
@@ -161,6 +173,7 @@ object VlangCompletionPatterns {
     fun referenceExpression(): PsiElementPattern.Capture<PsiElement> {
         return psiElement()
             .withParent(VlangReferenceExpressionBase::class.java)
+            .andNot(onImplementsClause())
             .notAfterLiteral()
             .noTopLevelNext()
     }
@@ -168,6 +181,7 @@ object VlangCompletionPatterns {
     fun cachedReferenceExpression(): PsiElementPattern.Capture<PsiElement> {
         return psiElement()
             .withParent(psiElement().withReference(VlangCachedReference::class.java))
+            .andNot(onImplementsClause())
             .notAfterLiteral()
             .noTopLevelNext()
     }

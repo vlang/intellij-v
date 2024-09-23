@@ -58,8 +58,7 @@ public class VlangIsRefTypeCallExprImpl extends VlangExpressionImpl implements V
   }
 
   @Override
-  @NotNull
-  public VlangBuiltinReference<VlangIsRefTypeCallExpr> getReference() {
+  public @NotNull VlangBuiltinReference<@NotNull VlangIsRefTypeCallExpr> getReference() {
     return VlangPsiImplUtil.getReference(this);
   }
 

@@ -11,7 +11,6 @@ public interface VlangImportAliasName extends VlangCompositeElement {
   @NotNull
   PsiElement getIdentifier();
 
-  @NotNull
-  VlangModuleReference<VlangImportAliasName> getReference();
+  @NotNull VlangModuleReference<@NotNull VlangImportAliasName> getReference();
 
 }

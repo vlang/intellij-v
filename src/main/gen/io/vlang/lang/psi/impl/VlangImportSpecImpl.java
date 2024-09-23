@@ -45,50 +45,42 @@ public class VlangImportSpecImpl extends VlangCompositeElementImpl implements Vl
   }
 
   @Override
-  @NotNull
-  public PsiElement getIdentifier() {
+  public @NotNull PsiElement getIdentifier() {
     return VlangPsiImplUtil.getIdentifier(this);
   }
 
   @Override
-  @NotNull
-  public String getLastPart() {
+  public @NotNull String getLastPart() {
     return VlangPsiImplUtil.getLastPart(this);
   }
 
   @Override
-  @NotNull
-  public PsiElement getLastPartPsi() {
+  public @NotNull PsiElement getLastPartPsi() {
     return VlangPsiImplUtil.getLastPartPsi(this);
   }
 
   @Override
-  @NotNull
-  public String getName() {
+  public @NotNull String getName() {
     return VlangPsiImplUtil.getName(this);
   }
 
   @Override
-  @NotNull
-  public String getImportedName() {
+  public @NotNull String getImportedName() {
     return VlangPsiImplUtil.getImportedName(this);
   }
 
   @Override
-  @Nullable
-  public String getAliasName() {
+  public @Nullable String getAliasName() {
     return VlangPsiImplUtil.getAliasName(this);
   }
 
   @Override
-  @NotNull
-  public String getPathName() {
+  public @NotNull String getPathName() {
     return VlangPsiImplUtil.getPathName(this);
   }
 
   @Override
-  @NotNull
-  public List<VlangModule> resolve() {
+  public @NotNull List<@NotNull VlangModule> resolve() {
     return VlangPsiImplUtil.resolve(this);
   }
 

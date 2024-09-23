@@ -20,13 +20,10 @@ public interface VlangInterfaceDeclaration extends VlangNamedElement, VlangAttri
   @Nullable
   VlangSymbolVisibility getSymbolVisibility();
 
-  @NotNull
-  String getName();
+  @NotNull String getName();
 
-  @Nullable
-  PsiElement getIdentifier();
+  @Nullable PsiElement getIdentifier();
 
-  @NotNull
-  VlangTypeEx getTypeInner(@Nullable ResolveState context);
+  @NotNull VlangTypeEx getTypeInner(@Nullable ResolveState context);
 
 }

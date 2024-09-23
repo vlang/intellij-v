@@ -9,7 +9,6 @@ import io.vlang.lang.stubs.VlangGenericParametersStub;
 
 public interface VlangGenericParameters extends VlangCompositeElement, StubBasedPsiElement<VlangGenericParametersStub> {
 
-  @NotNull
-  List<VlangGenericParameter> getParameters();
+  @NotNull List<@NotNull VlangGenericParameter> getParameters();
 
 }

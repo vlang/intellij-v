@@ -32,11 +32,9 @@ public interface VlangFunctionDeclaration extends VlangSignatureOwner, VlangFunc
   @NotNull
   PsiElement getIdentifier();
 
-  @NotNull
-  String getName();
+  @NotNull String getName();
 
-  @Nullable
-  VlangTypeEx getTypeInner(@Nullable ResolveState context);
+  @Nullable VlangTypeEx getTypeInner(@Nullable ResolveState context);
 
   boolean isDefinition();
 

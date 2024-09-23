@@ -63,8 +63,7 @@ public class VlangModuleClauseImpl extends VlangNamedElementImpl<VlangModuleClau
   }
 
   @Override
-  @NotNull
-  public String getName() {
+  public @NotNull String getName() {
     return VlangPsiImplUtil.getName(this);
   }
 

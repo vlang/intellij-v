@@ -42,10 +42,8 @@ public interface VlangStaticMethodDeclaration extends VlangSignatureOwner, Vlang
   //matching getType(VlangStaticMethodDeclaration, ...)
   //methods are not found in VlangPsiImplUtil
 
-  @Nullable
-  VlangTypeEx getTypeInner(@Nullable ResolveState context);
+  @Nullable VlangTypeEx getTypeInner(@Nullable ResolveState context);
 
-  @Nullable
-  String getQualifiedName();
+  @NotNull String getQualifiedName();
 
 }
