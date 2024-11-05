@@ -40,9 +40,9 @@ public class VlangAsmBlockStatementImpl extends VlangStatementImpl implements Vl
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
+    return notNullChild(findChildByType(IDENTIFIER));
   }
 
   @Override

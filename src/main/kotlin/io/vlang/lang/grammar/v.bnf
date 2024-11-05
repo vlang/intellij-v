@@ -381,7 +381,7 @@ left SelectArmAssignmentStatement ::= AssignOp BeforeBlockExpression {extends=As
 SelectElseArmClause ::= else Block semi {pin=1}
 
 // asm [volatile] { ... }
-AsmBlockStatement ::= asm volatile? identifier AsmBlock {pin=1}
+AsmBlockStatement ::= asm volatile? identifier AsmBlock {pin=3}
 AsmBlock ::= '{' ('}' | (ASM_LINE)* '}') {pin(".*")=1}
 
 ////// DECLARATIONS //////
@@ -492,7 +492,8 @@ EnumBackedTypeAs ::= as Type {pin=1}
 
 private EnumFields ::= EnumFieldDeclaration (EnumFieldDeclaration)*
 EnumFieldDeclaration ::= EnumFieldDefinition ('=' Expression)? semi? {pin=1}
-EnumFieldDefinition ::= identifier {
+EnumFieldDefinition ::= <<remapToIdentifier>> identifier {
+  pin=2
   methods=[isPublic getTypeInner constantValue]
   stubClass="io.vlang.lang.stubs.VlangEnumFieldDefinitionStub"
 }
@@ -733,7 +734,7 @@ Type ::= TypeModifiers? (TypeLit | TypeName) GenericArguments? {
 
 private TypeName ::= TypeReferenceExpression QualifiedTypeReferenceExpression*
 
-left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
+left QualifiedTypeReferenceExpression ::= '.' <<remapToIdentifier>> identifier {elementType=TypeReferenceExpression}
 
 TypeReferenceExpression ::= identifier {
   stubClass="io.vlang.lang.stubs.VlangTypeReferenceExpressionStub"
@@ -982,8 +983,8 @@ ResultPropagationExpression ::= '!' {pin=1}
 UnpackingExpression ::= '...' Expression {pin=1}
 
 // .<ident>
-EnumFetch ::= '.' identifier {
-  pin=2
+EnumFetch ::= '.' <<remapToIdentifier>> identifier {
+  pin=3
   methods=[getReference getQualifier resolve]
 }
 

@@ -379,10 +379,10 @@ public class VlangParser implements PsiParser, LightPsiParser {
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, ASM_BLOCK_STATEMENT, null);
     r = consumeToken(b, ASM);
-    p = r; // pin = 1
-    r = r && report_error_(b, AsmBlockStatement_1(b, l + 1));
-    r = p && report_error_(b, consumeToken(b, IDENTIFIER)) && r;
-    r = p && AsmBlock(b, l + 1) && r;
+    r = r && AsmBlockStatement_1(b, l + 1);
+    r = r && consumeToken(b, IDENTIFIER);
+    p = r; // pin = 3
+    r = r && AsmBlock(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -1702,9 +1702,8 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // EnumFieldDefinition ('=' Expression)? semi?
   public static boolean EnumFieldDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "EnumFieldDeclaration")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, ENUM_FIELD_DECLARATION, null);
+    Marker m = enter_section_(b, l, _NONE_, ENUM_FIELD_DECLARATION, "<enum field declaration>");
     r = EnumFieldDefinition(b, l + 1);
     p = r; // pin = 1
     r = r && report_error_(b, EnumFieldDeclaration_1(b, l + 1));
@@ -1739,14 +1738,14 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier
+  // <<remapToIdentifier>> identifier
   public static boolean EnumFieldDefinition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "EnumFieldDefinition")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, IDENTIFIER);
-    exit_section_(b, m, ENUM_FIELD_DEFINITION, r);
+    Marker m = enter_section_(b, l, _NONE_, ENUM_FIELD_DEFINITION, "<enum field definition>");
+    r = remapToIdentifier(b, l + 1);
+    r = r && consumeToken(b, IDENTIFIER);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -1754,7 +1753,6 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // EnumFieldDeclaration (EnumFieldDeclaration)*
   static boolean EnumFields(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "EnumFields")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = EnumFieldDeclaration(b, l + 1);
@@ -4246,13 +4244,15 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '.' identifier
+  // '.' <<remapToIdentifier>> identifier
   public static boolean QualifiedTypeReferenceExpression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "QualifiedTypeReferenceExpression")) return false;
     if (!nextTokenIs(b, DOT)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _LEFT_, TYPE_REFERENCE_EXPRESSION, null);
-    r = consumeTokens(b, 0, DOT, IDENTIFIER);
+    r = consumeToken(b, DOT);
+    r = r && remapToIdentifier(b, l + 1);
+    r = r && consumeToken(b, IDENTIFIER);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -7012,13 +7012,15 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // '.' identifier
+  // '.' <<remapToIdentifier>> identifier
   public static boolean EnumFetch(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "EnumFetch")) return false;
     if (!nextTokenIsSmart(b, DOT)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokensSmart(b, 2, DOT, IDENTIFIER);
+    r = consumeTokenSmart(b, DOT);
+    r = r && remapToIdentifier(b, l + 1);
+    r = r && consumeToken(b, IDENTIFIER);
     exit_section_(b, m, ENUM_FETCH, r);
     return r;
   }

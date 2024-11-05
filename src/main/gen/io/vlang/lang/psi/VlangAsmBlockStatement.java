@@ -13,7 +13,7 @@ public interface VlangAsmBlockStatement extends VlangStatement {
   @NotNull
   PsiElement getAsm();
 
-  @Nullable
+  @NotNull
   PsiElement getIdentifier();
 
   @Nullable
