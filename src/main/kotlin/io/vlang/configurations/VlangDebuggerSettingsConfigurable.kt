@@ -33,9 +33,7 @@ class VlangDebuggerSettingsConfigurable : Configurable {
         mainPanel = panel {
             row("LLDB path:") {
                 textFieldWithBrowseButton(
-                    "Select Directory with LLDB",
-                    null,
-                    FileChooserDescriptorFactory.createSingleFolderDescriptor()
+                    FileChooserDescriptorFactory.createSingleFolderDescriptor().withTitle("Select Directory with LLDB")
                 )
                     .align(AlignX.FILL)
                     .bindText(model::lldbPath)

@@ -57,7 +57,7 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getErrorDescription(@Suppress("unused") o: VlangLastComma): String {
+    fun getErrorDescription(@Suppress("UNUSED_PARAMETER") o: VlangLastComma): String {
         return "Trailing comma not supported"
     }
 

@@ -100,9 +100,8 @@ open class VlangRunConfigurationEditor(private val project: Project) : SettingsE
 
             row("File:") {
                 textFieldWithBrowseButton(
-                    "Select V File",
-                    project,
-                    FileChooserDescriptorFactory.createSingleFileDescriptor()
+                    FileChooserDescriptorFactory.createSingleFileDescriptor().withTitle("Select V File"),
+                    project
                 )
                     .align(AlignX.FILL)
                     .bindText(model::fileName)
@@ -111,9 +110,8 @@ open class VlangRunConfigurationEditor(private val project: Project) : SettingsE
 
             row("Directory:") {
                 textFieldWithBrowseButton(
-                    "Select V Directory",
-                    project,
-                    FileChooserDescriptorFactory.createSingleFolderDescriptor()
+                    FileChooserDescriptorFactory.createSingleFolderDescriptor().withTitle("Select V Directory"),
+                    project
                 )
                     .align(AlignX.FILL)
                     .bindText(model::directoryName)
@@ -122,9 +120,8 @@ open class VlangRunConfigurationEditor(private val project: Project) : SettingsE
 
             row("Output directory:") {
                 textFieldWithBrowseButton(
-                    "Select V Directory",
-                    project,
-                    FileChooserDescriptorFactory.createSingleFolderDescriptor()
+                    FileChooserDescriptorFactory.createSingleFolderDescriptor().withTitle("Select V Directory"),
+                    project
                 )
                     .align(AlignX.FILL)
                     .bindText(model::outputDir)
@@ -137,9 +134,8 @@ open class VlangRunConfigurationEditor(private val project: Project) : SettingsE
 
             row("Working directory:") {
                 textFieldWithBrowseButton(
-                    "Select V Directory",
-                    project,
-                    FileChooserDescriptorFactory.createSingleFolderDescriptor()
+                    FileChooserDescriptorFactory.createSingleFolderDescriptor().withTitle("Select V Directory"),
+                    project
                 )
                     .align(AlignX.FILL)
                     .bindText(model::workingDir)

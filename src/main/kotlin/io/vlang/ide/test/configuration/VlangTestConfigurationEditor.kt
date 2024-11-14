@@ -72,9 +72,8 @@ open class VlangTestConfigurationEditor(private val project: Project) : Settings
 
                 row("Directory:") {
                     textFieldWithBrowseButton(
-                        "Select V Tests Folder",
-                        project,
-                        FileChooserDescriptorFactory.createSingleFolderDescriptor()
+                        FileChooserDescriptorFactory.createSingleFolderDescriptor().withTitle("Select V Tests Folder"),
+                        project
                     )
                         .align(AlignX.FILL)
                         .bindText(model::directory)
@@ -83,9 +82,8 @@ open class VlangTestConfigurationEditor(private val project: Project) : Settings
 
                 row("Test file:") {
                     textFieldWithBrowseButton(
-                        "Select V Test File",
-                        project,
-                        FileChooserDescriptorFactory.createSingleFileDescriptor()
+                        FileChooserDescriptorFactory.createSingleFileDescriptor().withTitle("Select V Test File"),
+                        project
                     )
                         .align(AlignX.FILL)
                         .bindText(model::filename)

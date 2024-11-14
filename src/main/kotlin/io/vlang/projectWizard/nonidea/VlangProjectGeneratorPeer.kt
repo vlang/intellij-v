@@ -1,5 +1,6 @@
 package io.vlang.projectWizard.nonidea
 
+import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.platform.GeneratorPeerImpl
 import com.intellij.ui.dsl.builder.AlignX
 import com.intellij.ui.dsl.builder.TopGap
@@ -28,5 +29,5 @@ class VlangProjectGeneratorPeer(model: VlangProjectSettingsForm.Model) : Generat
 
     override fun getSettings(): Unit = Unit
 
-    override fun getComponent(): JComponent = newProjectPanel
+    override fun getComponent(myLocationField: TextFieldWithBrowseButton, checkValid: Runnable): JComponent = newProjectPanel
 }

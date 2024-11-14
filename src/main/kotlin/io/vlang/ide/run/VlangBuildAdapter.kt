@@ -130,7 +130,7 @@ class VlangBuildAdapter(
                     val project = environment.project
                     val settings = environment.runnerAndConfigurationSettings
                     return (!DumbService.isDumb(project) || settings == null || settings.type.isDumbAware) &&
-                            !ExecutorRegistry.getInstance().isStarting(environment) &&
+                            !ExecutionManager.getInstance(project).isStarting(environment) &&
                             !processHandler.isProcessTerminating
                 }
 

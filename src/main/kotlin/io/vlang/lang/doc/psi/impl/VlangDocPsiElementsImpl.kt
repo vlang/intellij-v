@@ -31,7 +31,7 @@ abstract class VlangDocElementImpl(type: IElementType) : CompositePsiElement(typ
     override fun toString(): String = "${javaClass.simpleName}($elementType)"
 }
 
-class VlangDocGapImpl(type: IElementType, val text: CharSequence) : LeafPsiElement(type, text), VlangDocGap {
+class VlangDocGapImpl(type: IElementType, text: CharSequence) : LeafPsiElement(type, text), VlangDocGap {
     override fun getTokenType(): IElementType = elementType
 }
 

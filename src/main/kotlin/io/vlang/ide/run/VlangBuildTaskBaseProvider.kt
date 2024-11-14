@@ -24,7 +24,11 @@ abstract class VlangBuildTaskBaseProvider<T : VlangBuildTaskBaseProvider.BuildTa
 
         val result = CompletableFuture<Boolean>()
         ProjectTaskManager.getInstance(environment.project).build(buildableElement).onProcessed {
-            result.complete(!it.hasErrors() && !it.isAborted)
+            if (it == null) {
+                result.complete(false)
+            } else {
+                result.complete(!it.hasErrors() && !it.isAborted)
+            }
         }
         return result.get()
     }
