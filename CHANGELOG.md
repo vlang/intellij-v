@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## [2024.3.1] - 2024-11-14
+
+- Support for intellij platform 2024.3
+- Fix circular dependency error
+- Introduce new implements keyword for interface declarations
+- Keywords can now be used in enums
+- Around 60 deprecation fixes
+
 ## [0.0.1-beta.6]
 
 - Support for IntelliJ Platform 2024.2
@@ -224,7 +232,8 @@
 - Don't show `private` keyword in quick documentation
 - Support 2023.1 EAP
 
-[Unreleased]: https://github.com/vlang/intellij-v//compare/v0.0.1-beta.6...HEAD
+[Unreleased]: https://github.com/vlang/intellij-v//compare/v2024.3.1...HEAD
+[2024.3.1]: https://github.com/vlang/intellij-v//compare/v0.0.1-beta.6...v2024.3.1
 [0.0.1-beta.6]: https://github.com/vlang/intellij-v//compare/v0.0.1-beta.5...v0.0.1-beta.6
 [0.0.1-beta.5]: https://github.com/vlang/intellij-v//compare/v0.0.1-beta.4...v0.0.1-beta.5
 [0.0.1-beta.4]: https://github.com/vlang/intellij-v//compare/v0.0.1-beta.3-231-EAP...v0.0.1-beta.4
