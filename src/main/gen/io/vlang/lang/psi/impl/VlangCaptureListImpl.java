@@ -45,8 +45,7 @@ public class VlangCaptureListImpl extends VlangCompositeElementImpl implements V
   }
 
   @Override
-  @NotNull
-  public PsiElement addCapture(@NotNull String name) {
+  public @NotNull PsiElement addCapture(@NotNull String name) {
     return VlangPsiImplUtil.addCapture(this, name);
   }
 

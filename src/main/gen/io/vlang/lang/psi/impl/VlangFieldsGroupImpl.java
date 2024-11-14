@@ -57,8 +57,7 @@ public class VlangFieldsGroupImpl extends VlangCompositeElementImpl implements V
   }
 
   @Override
-  @NotNull
-  public List<VlangMemberModifier> getMemberModifierList() {
+  public @NotNull List<@NotNull VlangMemberModifier> getMemberModifierList() {
     return VlangPsiImplUtil.getMemberModifierList(this);
   }
 

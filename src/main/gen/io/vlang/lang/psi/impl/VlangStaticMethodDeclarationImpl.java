@@ -89,14 +89,12 @@ public class VlangStaticMethodDeclarationImpl extends VlangStaticMethodDeclarati
   }
 
   @Override
-  @Nullable
-  public VlangTypeEx getTypeInner(@Nullable ResolveState context) {
+  public @Nullable VlangTypeEx getTypeInner(@Nullable ResolveState context) {
     return VlangPsiImplUtil.getTypeInner(this, context);
   }
 
   @Override
-  @Nullable
-  public String getQualifiedName() {
+  public @NotNull String getQualifiedName() {
     return VlangPsiImplUtil.getQualifiedName(this);
   }
 

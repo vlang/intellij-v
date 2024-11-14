@@ -273,6 +273,18 @@ object VlangParserUtil : GeneratedParserUtilBase() {
     }
 
     @JvmStatic
+    fun remapToIdentifier(builder: PsiBuilder, @Suppress("UNUSED_PARAMETER") level: Int): Boolean {
+        if (builder.tokenType == IDENTIFIER) {
+            return true
+        }
+        if (builder.tokenType in VlangTokenTypes.KEYWORDS.types || builder.tokenType in VlangTokenTypes.BOOL_LITERALS.types) {
+            builder.remapCurrentToken(IDENTIFIER)
+            return true
+        }
+        return false
+    }
+
+    @JvmStatic
     fun callExpr(builder: PsiBuilder, level: Int): Boolean {
         val m = builder.latestDoneMarker
         if (m != null) {

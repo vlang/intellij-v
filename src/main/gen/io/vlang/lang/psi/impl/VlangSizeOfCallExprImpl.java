@@ -58,8 +58,7 @@ public class VlangSizeOfCallExprImpl extends VlangExpressionImpl implements Vlan
   }
 
   @Override
-  @NotNull
-  public VlangBuiltinReference<VlangSizeOfCallExpr> getReference() {
+  public @NotNull VlangBuiltinReference<@NotNull VlangSizeOfCallExpr> getReference() {
     return VlangPsiImplUtil.getReference(this);
   }
 

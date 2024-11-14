@@ -52,8 +52,7 @@ public class VlangDumpCallExprImpl extends VlangExpressionImpl implements VlangD
   }
 
   @Override
-  @NotNull
-  public VlangBuiltinReference<VlangDumpCallExpr> getReference() {
+  public @NotNull VlangBuiltinReference<@NotNull VlangDumpCallExpr> getReference() {
     return VlangPsiImplUtil.getReference(this);
   }
 

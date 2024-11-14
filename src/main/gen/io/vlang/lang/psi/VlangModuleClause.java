@@ -24,7 +24,6 @@ public interface VlangModuleClause extends VlangNamedElement, VlangAttributeOwne
   @NotNull
   PsiElement getModule();
 
-  @NotNull
-  String getName();
+  @NotNull String getName();
 
 }

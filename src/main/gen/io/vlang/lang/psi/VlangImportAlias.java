@@ -15,13 +15,10 @@ public interface VlangImportAlias extends VlangNamedElement, StubBasedPsiElement
   @NotNull
   PsiElement getAs();
 
-  @NotNull
-  String getName();
+  @NotNull String getName();
 
-  @Nullable
-  PsiElement getIdentifier();
+  @Nullable PsiElement getIdentifier();
 
-  @NotNull
-  String getQualifiedName();
+  @NotNull String getQualifiedName();
 
 }

@@ -15,7 +15,6 @@ public interface VlangSqlExpression extends VlangExpression {
   @NotNull
   VlangSqlBlock getSqlBlock();
 
-  @Nullable
-  VlangTypeEx getType(@Nullable ResolveState context);
+  @Nullable VlangTypeEx getType(@Nullable ResolveState context);
 
 }

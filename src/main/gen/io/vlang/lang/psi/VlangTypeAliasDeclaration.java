@@ -23,13 +23,10 @@ public interface VlangTypeAliasDeclaration extends VlangNamedElement, VlangAttri
   @NotNull
   PsiElement getType_();
 
-  @Nullable
-  PsiElement getIdentifier();
+  @Nullable PsiElement getIdentifier();
 
-  @NotNull
-  String getName();
+  @NotNull String getName();
 
-  @NotNull
-  VlangTypeEx getTypeInner(@Nullable ResolveState context);
+  @NotNull VlangTypeEx getTypeInner(@Nullable ResolveState context);
 
 }

@@ -62,8 +62,7 @@ public class VlangParamDefinitionImpl extends VlangNamedElementImpl<VlangParamDe
   }
 
   @Override
-  @Nullable
-  public String getName() {
+  public @Nullable String getName() {
     return VlangPsiImplUtil.getName(this);
   }
 

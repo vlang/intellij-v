@@ -42,8 +42,7 @@ public class VlangSqlExpressionImpl extends VlangExpressionImpl implements Vlang
   }
 
   @Override
-  @Nullable
-  public VlangTypeEx getType(@Nullable ResolveState context) {
+  public @Nullable VlangTypeEx getType(@Nullable ResolveState context) {
     return VlangPsiImplUtil.getType(this, context);
   }
 

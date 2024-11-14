@@ -33,20 +33,17 @@ public class VlangImportPathImpl extends VlangCompositeElementImpl implements Vl
   }
 
   @Override
-  @NotNull
-  public String getQualifiedName() {
+  public @NotNull String getQualifiedName() {
     return VlangPsiImplUtil.getQualifiedName(this);
   }
 
   @Override
-  @NotNull
-  public String getLastPart() {
+  public @NotNull String getLastPart() {
     return VlangPsiImplUtil.getLastPart(this);
   }
 
   @Override
-  @NotNull
-  public PsiElement getLastPartPsi() {
+  public @NotNull PsiElement getLastPartPsi() {
     return VlangPsiImplUtil.getLastPartPsi(this);
   }
 

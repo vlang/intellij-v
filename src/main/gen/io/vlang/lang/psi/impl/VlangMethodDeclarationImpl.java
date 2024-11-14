@@ -95,32 +95,27 @@ public class VlangMethodDeclarationImpl extends VlangMethodDeclarationWithScopeH
   }
 
   @Override
-  @Nullable
-  public VlangType getReceiverType() {
+  public @Nullable VlangType getReceiverType() {
     return VlangPsiImplUtil.getReceiverType(this);
   }
 
   @Override
-  @Nullable
-  public VlangTypeEx getTypeInner(@Nullable ResolveState context) {
+  public @Nullable VlangTypeEx getTypeInner(@Nullable ResolveState context) {
     return VlangPsiImplUtil.getTypeInner(this, context);
   }
 
   @Override
-  @Nullable
-  public PsiElement getIdentifier() {
+  public @Nullable PsiElement getIdentifier() {
     return VlangPsiImplUtil.getIdentifier(this);
   }
 
   @Override
-  @Nullable
-  public String getQualifiedName() {
+  public @Nullable String getQualifiedName() {
     return VlangPsiImplUtil.getQualifiedName(this);
   }
 
   @Override
-  @Nullable
-  public VlangNamedElement getOwner() {
+  public @Nullable VlangNamedElement getOwner() {
     return VlangPsiImplUtil.getOwner(this);
   }
 

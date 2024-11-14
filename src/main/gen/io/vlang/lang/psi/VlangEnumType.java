@@ -25,7 +25,6 @@ public interface VlangEnumType extends VlangType {
   @Nullable
   PsiElement getIdentifier();
 
-  @NotNull
-  List<VlangEnumFieldDefinition> getFieldList();
+  @NotNull List<@NotNull VlangEnumFieldDefinition> getFieldList();
 
 }

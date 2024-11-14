@@ -63,8 +63,7 @@ public class VlangMembersGroupImpl extends VlangCompositeElementImpl implements 
   }
 
   @Override
-  @NotNull
-  public List<VlangMemberModifier> getMemberModifierList() {
+  public @NotNull List<@NotNull VlangMemberModifier> getMemberModifierList() {
     return VlangPsiImplUtil.getMemberModifierList(this);
   }
 

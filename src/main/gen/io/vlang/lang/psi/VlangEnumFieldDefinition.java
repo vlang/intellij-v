@@ -16,10 +16,8 @@ public interface VlangEnumFieldDefinition extends VlangNamedElement, StubBasedPs
 
   boolean isPublic();
 
-  @NotNull
-  VlangTypeEx getTypeInner(@Nullable ResolveState context);
+  @NotNull VlangTypeEx getTypeInner(@Nullable ResolveState context);
 
-  @Nullable
-  Long constantValue();
+  @Nullable Long constantValue();
 
 }

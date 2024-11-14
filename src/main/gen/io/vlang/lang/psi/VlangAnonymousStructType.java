@@ -19,10 +19,8 @@ public interface VlangAnonymousStructType extends VlangType, VlangFieldListOwner
   @NotNull
   PsiElement getStruct();
 
-  @NotNull
-  List<VlangFieldDefinition> getFieldList();
+  @NotNull List<@NotNull VlangFieldDefinition> getFieldList();
 
-  @NotNull
-  List<VlangFieldDefinition> getOwnFieldList();
+  @NotNull List<@NotNull VlangFieldDefinition> getOwnFieldList();
 
 }

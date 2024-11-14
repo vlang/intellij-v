@@ -33,14 +33,12 @@ public class VlangLabelRefImpl extends VlangCompositeElementImpl implements Vlan
   }
 
   @Override
-  @NotNull
-  public VlangLabelReference getReference() {
+  public @NotNull VlangLabelReference getReference() {
     return VlangPsiImplUtil.getReference(this);
   }
 
   @Override
-  @NotNull
-  public String getName() {
+  public @NotNull String getName() {
     return VlangPsiImplUtil.getName(this);
   }
 

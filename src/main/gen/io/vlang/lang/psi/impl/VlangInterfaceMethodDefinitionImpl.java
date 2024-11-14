@@ -53,8 +53,7 @@ public class VlangInterfaceMethodDefinitionImpl extends VlangNamedElementImpl<Vl
   }
 
   @Override
-  @Nullable
-  public VlangTypeEx getTypeInner(@Nullable ResolveState context) {
+  public @Nullable VlangTypeEx getTypeInner(@Nullable ResolveState context) {
     return VlangPsiImplUtil.getTypeInner(this, context);
   }
 
@@ -69,14 +68,12 @@ public class VlangInterfaceMethodDefinitionImpl extends VlangNamedElementImpl<Vl
   }
 
   @Override
-  @NotNull
-  public VlangInterfaceDeclaration getOwner() {
+  public @NotNull VlangInterfaceDeclaration getOwner() {
     return VlangPsiImplUtil.getOwner(this);
   }
 
   @Override
-  @NotNull
-  public String getQualifiedName() {
+  public @NotNull String getQualifiedName() {
     return VlangPsiImplUtil.getQualifiedName(this);
   }
 

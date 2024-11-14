@@ -40,8 +40,7 @@ public class VlangRangeClauseImpl extends VlangVarDeclarationImpl implements Vla
   }
 
   @Override
-  @NotNull
-  public List<VlangVarDefinition> getVariablesList() {
+  public @NotNull List<@NotNull VlangVarDefinition> getVariablesList() {
     return VlangPsiImplUtil.getVariablesList(this);
   }
 

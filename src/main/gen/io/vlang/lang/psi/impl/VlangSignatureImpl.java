@@ -46,8 +46,7 @@ public class VlangSignatureImpl extends VlangStubbedElementImpl<VlangSignatureSt
   }
 
   @Override
-  @NotNull
-  public Pair<Integer, Integer> resultCount() {
+  public @NotNull Pair<@NotNull Integer, @NotNull Integer> resultCount() {
     return VlangPsiImplUtil.resultCount(this);
   }
 

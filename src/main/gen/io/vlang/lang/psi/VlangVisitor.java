@@ -3,6 +3,7 @@ package io.vlang.lang.psi;
 
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.PsiLanguageInjectionHost;
 
 public class VlangVisitor extends PsiElementVisitor {
@@ -356,6 +357,10 @@ public class VlangVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitImplementsClause(@NotNull VlangImplementsClause o) {
+    visitCompositeElement(o);
+  }
+
   public void visitImportAlias(@NotNull VlangImportAlias o) {
     visitNamedElement(o);
   }
@@ -456,6 +461,10 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitLabeledStatement(@NotNull VlangLabeledStatement o) {
     visitStatement(o);
+  }
+
+  public void visitLastComma(@NotNull VlangLastComma o) {
+    visitPsiErrorElement(o);
   }
 
   public void visitLeftHandExprList(@NotNull VlangLeftHandExprList o) {
@@ -913,6 +922,10 @@ public class VlangVisitor extends PsiElementVisitor {
 
   public void visitWrongPointerType(@NotNull VlangWrongPointerType o) {
     visitType(o);
+  }
+
+  public void visitPsiErrorElement(@NotNull PsiErrorElement o) {
+    visitElement(o);
   }
 
   public void visitAttributeOwner(@NotNull VlangAttributeOwner o) {

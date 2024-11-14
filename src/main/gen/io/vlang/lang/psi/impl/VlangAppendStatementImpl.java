@@ -40,8 +40,7 @@ public class VlangAppendStatementImpl extends VlangStatementImpl implements Vlan
   }
 
   @Override
-  @Nullable
-  public VlangExpression getLeft() {
+  public @Nullable VlangExpression getLeft() {
     return VlangPsiImplUtil.getLeft(this);
   }
 

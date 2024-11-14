@@ -14,27 +14,20 @@ public interface VlangImportName extends VlangNamedElement, StubBasedPsiElement<
   @NotNull
   PsiElement getIdentifier();
 
-  @NotNull
-  String getQualifier();
+  @NotNull String getQualifier();
 
-  @NotNull
-  PsiElement getNameIdentifier();
+  @NotNull PsiElement getNameIdentifier();
 
-  @NotNull
-  PsiElement setName(@NotNull String newName);
+  @NotNull PsiElement setName(@NotNull String newName);
 
-  @NotNull
-  String getName();
+  @NotNull String getName();
 
   int getTextOffset();
 
-  @NotNull
-  VlangModuleReference<VlangImportName> getReference();
+  @NotNull VlangModuleReference<@NotNull VlangImportName> getReference();
 
-  @NotNull
-  List<VlangModule> resolve();
+  @NotNull List<@NotNull VlangModule> resolve();
 
-  @NotNull
-  String getQualifiedName();
+  @NotNull String getQualifiedName();
 
 }

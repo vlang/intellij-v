@@ -48,8 +48,7 @@ public class VlangBinaryExprImpl extends VlangExpressionImpl implements VlangBin
   }
 
   @Override
-  @Nullable
-  public PsiElement getOperator() {
+  public @Nullable PsiElement getOperator() {
     return VlangPsiImplUtil.getOperator(this);
   }
 

@@ -18,7 +18,7 @@ class VlangClassLikeIndex : StringStubIndexExtension<VlangNamedElement>() {
             name: String,
             project: Project,
             scope: GlobalSearchScope?,
-            idFilter: IdFilter?
+            idFilter: IdFilter? = null
         ): Collection<VlangNamedElement> {
             return StubIndex.getElements(KEY, name, project, scope, idFilter, VlangNamedElement::class.java)
         }

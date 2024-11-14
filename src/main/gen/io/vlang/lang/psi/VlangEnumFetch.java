@@ -14,13 +14,10 @@ public interface VlangEnumFetch extends VlangExpression, VlangReferenceExpressio
   @NotNull
   PsiElement getIdentifier();
 
-  @NotNull
-  VlangReference getReference();
+  @NotNull VlangReference getReference();
 
-  @Nullable
-  VlangCompositeElement getQualifier();
+  @Nullable VlangCompositeElement getQualifier();
 
-  @Nullable
-  PsiElement resolve();
+  @Nullable PsiElement resolve();
 
 }

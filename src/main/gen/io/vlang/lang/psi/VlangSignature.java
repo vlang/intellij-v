@@ -16,7 +16,6 @@ public interface VlangSignature extends VlangCompositeElement, StubBasedPsiEleme
   @Nullable
   VlangResult getResult();
 
-  @NotNull
-  Pair<Integer, Integer> resultCount();
+  @NotNull Pair<@NotNull Integer, @NotNull Integer> resultCount();
 
 }

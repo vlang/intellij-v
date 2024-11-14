@@ -18,14 +18,11 @@ public interface VlangVarDefinition extends VlangMutabilityOwner, VlangNamedElem
   @NotNull
   PsiElement getIdentifier();
 
-  @Nullable
-  VlangTypeEx getTypeInner(@Nullable ResolveState context);
+  @Nullable VlangTypeEx getTypeInner(@Nullable ResolveState context);
 
-  @NotNull
-  String getName();
+  @NotNull String getName();
 
-  @NotNull
-  PsiReference getReference();
+  @NotNull PsiReference getReference();
 
   boolean isMutable();
 
@@ -35,10 +32,8 @@ public interface VlangVarDefinition extends VlangMutabilityOwner, VlangNamedElem
 
   void makeImmutable();
 
-  @Nullable
-  VlangExpression getInitializer();
+  @Nullable VlangExpression getInitializer();
 
-  @Nullable
-  VlangSymbolVisibility getSymbolVisibility();
+  @Nullable VlangSymbolVisibility getSymbolVisibility();
 
 }

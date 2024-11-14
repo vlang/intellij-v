@@ -53,20 +53,17 @@ public class VlangStructDeclarationImpl extends VlangNamedElementImpl<VlangStruc
   }
 
   @Override
-  @Nullable
-  public PsiElement getIdentifier() {
+  public @Nullable PsiElement getIdentifier() {
     return VlangPsiImplUtil.getIdentifier(this);
   }
 
   @Override
-  @NotNull
-  public String getName() {
+  public @NotNull String getName() {
     return VlangPsiImplUtil.getName(this);
   }
 
   @Override
-  @NotNull
-  public VlangTypeEx getTypeInner(@Nullable ResolveState context) {
+  public @NotNull VlangTypeEx getTypeInner(@Nullable ResolveState context) {
     return VlangPsiImplUtil.getTypeInner(this, context);
   }
 
@@ -76,8 +73,7 @@ public class VlangStructDeclarationImpl extends VlangNamedElementImpl<VlangStruc
   }
 
   @Override
-  @NotNull
-  public String getKindName() {
+  public @NotNull String getKindName() {
     return VlangPsiImplUtil.getKindName(this);
   }
 
@@ -87,8 +83,7 @@ public class VlangStructDeclarationImpl extends VlangNamedElementImpl<VlangStruc
   }
 
   @Override
-  @Nullable
-  public PsiElement addField(@NotNull String name, @NotNull String type, boolean mutable) {
+  public @Nullable PsiElement addField(@NotNull String name, @NotNull String type, boolean mutable) {
     return VlangPsiImplUtil.addField(this, name, type, mutable);
   }
 

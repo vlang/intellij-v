@@ -88,26 +88,22 @@ public class VlangIndexOrSliceExprImpl extends VlangExpressionImpl implements Vl
   }
 
   @Override
-  @Nullable
-  public PsiElement getExpression() {
+  public @Nullable PsiElement getExpression() {
     return VlangPsiImplUtil.getExpression(this);
   }
 
   @Override
-  @Nullable
-  public Pair<PsiElement, PsiElement> getRange() {
+  public @Nullable Pair<@Nullable PsiElement, @Nullable PsiElement> getRange() {
     return VlangPsiImplUtil.getRange(this);
   }
 
   @Override
-  @Nullable
-  public PsiElement getSliceStart() {
+  public @Nullable PsiElement getSliceStart() {
     return VlangPsiImplUtil.getSliceStart(this);
   }
 
   @Override
-  @Nullable
-  public PsiElement getSliceEnd() {
+  public @Nullable PsiElement getSliceEnd() {
     return VlangPsiImplUtil.getSliceEnd(this);
   }
 

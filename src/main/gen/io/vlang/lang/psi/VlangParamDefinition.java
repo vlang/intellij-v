@@ -23,8 +23,7 @@ public interface VlangParamDefinition extends VlangMutabilityOwner, VlangNamedEl
 
   boolean isVariadic();
 
-  @Nullable
-  String getName();
+  @Nullable String getName();
 
   boolean isPublic();
 

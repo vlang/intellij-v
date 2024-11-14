@@ -13,7 +13,6 @@ public interface VlangAppendStatement extends VlangStatement {
   @NotNull
   VlangShiftLeftOp getShiftLeftOp();
 
-  @Nullable
-  VlangExpression getLeft();
+  @Nullable VlangExpression getLeft();
 
 }

@@ -82,6 +82,15 @@
         <localInspection language="vlang"
                          groupPath="V"
                          groupName="General"
+                         shortName="VlangInterfaceNotImplementedInspection"
+                         displayName="Explicit interface not implemented"
+                         enabledByDefault="true"
+                         level="ERROR"
+                         implementationClass="io.vlang.ide.inspections.general.VlangInterfaceNotImplementedInspection"/>
+
+        <localInspection language="vlang"
+                         groupPath="V"
+                         groupName="General"
                          shortName="VlangAmbiguousImportInspection"
                          displayName="Ambiguous import"
                          enabledByDefault="true"

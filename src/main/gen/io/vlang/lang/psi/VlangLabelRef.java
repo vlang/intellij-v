@@ -11,10 +11,8 @@ public interface VlangLabelRef extends VlangCompositeElement {
   @NotNull
   PsiElement getIdentifier();
 
-  @NotNull
-  VlangLabelReference getReference();
+  @NotNull VlangLabelReference getReference();
 
-  @NotNull
-  String getName();
+  @NotNull String getName();
 
 }

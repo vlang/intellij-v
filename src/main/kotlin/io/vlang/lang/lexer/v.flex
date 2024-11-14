@@ -329,6 +329,7 @@ REGULAR_SINGLE_STRING_PART=[^\\\'\$]+
 "module"                                  { return MODULE; }
 "import"                                  { return IMPORT ; }
 "struct"                                  { return STRUCT; }
+"implements"                              { return IMPLEMENTS; }
 "union"                                   { return UNION; }
 "interface"                               { return INTERFACE; }
 "enum"                                    { return ENUM; }

@@ -46,14 +46,12 @@ public class VlangEnumFieldDefinitionImpl extends VlangNamedElementImpl<VlangEnu
   }
 
   @Override
-  @NotNull
-  public VlangTypeEx getTypeInner(@Nullable ResolveState context) {
+  public @NotNull VlangTypeEx getTypeInner(@Nullable ResolveState context) {
     return VlangPsiImplUtil.getTypeInner(this, context);
   }
 
   @Override
-  @Nullable
-  public Long constantValue() {
+  public @Nullable Long constantValue() {
     return VlangPsiImplUtil.constantValue(this);
   }
 

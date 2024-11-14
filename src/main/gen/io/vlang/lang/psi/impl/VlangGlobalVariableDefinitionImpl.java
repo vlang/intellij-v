@@ -65,8 +65,7 @@ public class VlangGlobalVariableDefinitionImpl extends VlangNamedElementImpl<Vla
   }
 
   @Override
-  @Nullable
-  public VlangTypeEx getTypeInner(@Nullable ResolveState context) {
+  public @Nullable VlangTypeEx getTypeInner(@Nullable ResolveState context) {
     return VlangPsiImplUtil.getTypeInner(this, context);
   }
 

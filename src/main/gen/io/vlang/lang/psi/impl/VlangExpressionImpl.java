@@ -29,8 +29,7 @@ public abstract class VlangExpressionImpl extends VlangCompositeElementImpl impl
   }
 
   @Override
-  @Nullable
-  public VlangTypeEx getType(@Nullable ResolveState context) {
+  public @Nullable VlangTypeEx getType(@Nullable ResolveState context) {
     return VlangPsiImplUtil.getType(this, context);
   }
 

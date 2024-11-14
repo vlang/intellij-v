@@ -45,8 +45,7 @@ public class VlangMatchArmImpl extends VlangCompositeElementImpl implements Vlan
   }
 
   @Override
-  @NotNull
-  public List<VlangCompositeElement> getParameterList() {
+  public @NotNull List<@NotNull VlangCompositeElement> getParameterList() {
     return VlangPsiImplUtil.getParameterList(this);
   }
 

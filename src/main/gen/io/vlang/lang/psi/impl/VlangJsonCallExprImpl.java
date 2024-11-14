@@ -34,8 +34,7 @@ public class VlangJsonCallExprImpl extends VlangCallExprImpl implements VlangJso
   }
 
   @Override
-  @NotNull
-  public List<VlangExpression> getParameters() {
+  public @NotNull List<@NotNull VlangExpression> getParameters() {
     return VlangPsiImplUtil.getParameters(this);
   }
 

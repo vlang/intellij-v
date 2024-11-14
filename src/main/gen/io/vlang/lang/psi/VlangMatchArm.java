@@ -16,7 +16,6 @@ public interface VlangMatchArm extends VlangCompositeElement {
   @Nullable
   PsiElement getSemicolonSynthetic();
 
-  @NotNull
-  List<VlangCompositeElement> getParameterList();
+  @NotNull List<@NotNull VlangCompositeElement> getParameterList();
 
 }

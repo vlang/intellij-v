@@ -33,8 +33,7 @@ public class VlangGenericParametersImpl extends VlangStubbedElementImpl<VlangGen
   }
 
   @Override
-  @NotNull
-  public List<VlangGenericParameter> getParameters() {
+  public @NotNull List<@NotNull VlangGenericParameter> getParameters() {
     return VlangPsiImplUtil.getParameters(this);
   }
 

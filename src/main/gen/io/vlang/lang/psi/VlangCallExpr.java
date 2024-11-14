@@ -28,17 +28,13 @@ public interface VlangCallExpr extends VlangExpression, VlangGenericArgumentsOwn
   @Nullable
   VlangResultPropagationExpression getResultPropagationExpression();
 
-  @NotNull
-  List<VlangExpression> getParameters();
+  @NotNull List<@NotNull VlangExpression> getParameters();
 
-  @Nullable
-  PsiElement getIdentifier();
+  @Nullable PsiElement getIdentifier();
 
-  @Nullable
-  VlangReferenceExpression getQualifier();
+  @Nullable VlangReferenceExpression getQualifier();
 
-  @Nullable
-  PsiElement resolve();
+  @Nullable PsiElement resolve();
 
   int paramIndexOf(@NotNull PsiElement pos);
 

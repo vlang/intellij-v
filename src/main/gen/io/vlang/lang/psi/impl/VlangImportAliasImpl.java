@@ -45,20 +45,17 @@ public class VlangImportAliasImpl extends VlangNamedElementImpl<VlangImportAlias
   }
 
   @Override
-  @NotNull
-  public String getName() {
+  public @NotNull String getName() {
     return VlangPsiImplUtil.getName(this);
   }
 
   @Override
-  @Nullable
-  public PsiElement getIdentifier() {
+  public @Nullable PsiElement getIdentifier() {
     return VlangPsiImplUtil.getIdentifier(this);
   }
 
   @Override
-  @NotNull
-  public String getQualifiedName() {
+  public @NotNull String getQualifiedName() {
     return VlangPsiImplUtil.getQualifiedName(this);
   }
 

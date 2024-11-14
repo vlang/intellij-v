@@ -8,6 +8,7 @@ import io.vlang.lang.completion.VlangCompletionPatterns.cachedReferenceExpressio
 import io.vlang.lang.completion.VlangCompletionPatterns.insideStatementWithLabel
 import io.vlang.lang.completion.VlangCompletionPatterns.insideStruct
 import io.vlang.lang.completion.VlangCompletionPatterns.onExpression
+import io.vlang.lang.completion.VlangCompletionPatterns.onImplementsClause
 import io.vlang.lang.completion.VlangCompletionPatterns.onModuleImportName
 import io.vlang.lang.completion.VlangCompletionPatterns.onStatement
 import io.vlang.lang.completion.VlangCompletionPatterns.onTopLevel
@@ -29,6 +30,7 @@ class VlangCompletionContributor : CompletionContributor() {
         extend(CompletionType.BASIC, onType(),             MapTypeCompletionProvider)
         extend(CompletionType.BASIC, onType(),             ChanTypeCompletionProvider)
         extend(CompletionType.BASIC, insideStruct(),       StructFieldGroupModifierCompletionProvider)
+        extend(CompletionType.BASIC, onImplementsClause(), InterfaceCompletionProvider)
 
         extend(CompletionType.BASIC, insideStatementWithLabel(),  LabelCompletionProvider)
         extend(CompletionType.BASIC, referenceExpression(),       ReferenceCompletionProvider)

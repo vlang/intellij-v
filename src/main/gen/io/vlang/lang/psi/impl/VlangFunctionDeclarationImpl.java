@@ -77,14 +77,12 @@ public class VlangFunctionDeclarationImpl extends VlangFunctionDeclarationWithSc
   }
 
   @Override
-  @NotNull
-  public String getName() {
+  public @NotNull String getName() {
     return VlangPsiImplUtil.getName(this);
   }
 
   @Override
-  @Nullable
-  public VlangTypeEx getTypeInner(@Nullable ResolveState context) {
+  public @Nullable VlangTypeEx getTypeInner(@Nullable ResolveState context) {
     return VlangPsiImplUtil.getTypeInner(this, context);
   }
 

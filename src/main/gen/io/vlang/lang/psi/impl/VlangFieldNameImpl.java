@@ -33,20 +33,17 @@ public class VlangFieldNameImpl extends VlangCompositeElementImpl implements Vla
   }
 
   @Override
-  @NotNull
-  public PsiElement getIdentifier() {
+  public @NotNull PsiElement getIdentifier() {
     return VlangPsiImplUtil.getIdentifier(this);
   }
 
   @Override
-  @Nullable
-  public VlangCompositeElement getQualifier() {
+  public @Nullable VlangCompositeElement getQualifier() {
     return VlangPsiImplUtil.getQualifier(this);
   }
 
   @Override
-  @Nullable
-  public PsiElement resolve() {
+  public @Nullable PsiElement resolve() {
     return VlangPsiImplUtil.resolve(this);
   }
 

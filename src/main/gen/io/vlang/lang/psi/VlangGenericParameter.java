@@ -14,7 +14,6 @@ public interface VlangGenericParameter extends VlangNamedElement, StubBasedPsiEl
   @NotNull
   PsiElement getIdentifier();
 
-  @Nullable
-  VlangTypeEx getTypeInner(@Nullable ResolveState context);
+  @Nullable VlangTypeEx getTypeInner(@Nullable ResolveState context);
 
 }

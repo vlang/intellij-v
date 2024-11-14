@@ -40,8 +40,7 @@ public class VlangReturnStatementImpl extends VlangStatementImpl implements Vlan
   }
 
   @Override
-  @Nullable
-  public VlangSignatureOwner getOwner() {
+  public @Nullable VlangSignatureOwner getOwner() {
     return VlangPsiImplUtil.getOwner(this);
   }
 

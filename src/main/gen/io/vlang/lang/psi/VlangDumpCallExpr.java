@@ -20,7 +20,6 @@ public interface VlangDumpCallExpr extends VlangExpression, VlangBuiltinCallOwne
   @NotNull
   PsiElement getDump();
 
-  @NotNull
-  VlangBuiltinReference<VlangDumpCallExpr> getReference();
+  @NotNull VlangBuiltinReference<@NotNull VlangDumpCallExpr> getReference();
 
 }

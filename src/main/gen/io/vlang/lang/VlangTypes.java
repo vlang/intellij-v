@@ -93,6 +93,7 @@ public interface VlangTypes {
   IElementType GUARD_VAR_DECLARATION = new VlangCompositeElementType("GUARD_VAR_DECLARATION");
   IElementType IF_ATTRIBUTE = new VlangCompositeElementType("IF_ATTRIBUTE");
   IElementType IF_EXPRESSION = new VlangCompositeElementType("IF_EXPRESSION");
+  IElementType IMPLEMENTS_CLAUSE = new VlangCompositeElementType("IMPLEMENTS_CLAUSE");
   IElementType IMPORT_ALIAS = VlangElementTypeFactory.stubFactory("IMPORT_ALIAS");
   IElementType IMPORT_ALIAS_NAME = new VlangCompositeElementType("IMPORT_ALIAS_NAME");
   IElementType IMPORT_DECLARATION = new VlangCompositeElementType("IMPORT_DECLARATION");
@@ -117,6 +118,7 @@ public interface VlangTypes {
   IElementType LABELED_STATEMENT = new VlangCompositeElementType("LABELED_STATEMENT");
   IElementType LABEL_DEFINITION = VlangElementTypeFactory.stubFactory("LABEL_DEFINITION");
   IElementType LABEL_REF = new VlangCompositeElementType("LABEL_REF");
+  IElementType LAST_COMMA = new VlangCompositeElementType("LAST_COMMA");
   IElementType LEFT_HAND_EXPR_LIST = new VlangCompositeElementType("LEFT_HAND_EXPR_LIST");
   IElementType LITERAL = new VlangCompositeElementType("LITERAL");
   IElementType LITERAL_VALUE_EXPRESSION = new VlangCompositeElementType("LITERAL_VALUE_EXPRESSION");
@@ -280,6 +282,7 @@ public interface VlangTypes {
   IElementType IDENTIFIER = new VlangTokenType("identifier");
   IElementType IF = new VlangTokenType("if");
   IElementType IF_COMPILE_TIME = new VlangTokenType("$if");
+  IElementType IMPLEMENTS = new VlangTokenType("implements");
   IElementType IMPORT = new VlangTokenType("import");
   IElementType IN = new VlangTokenType("in");
   IElementType INT = new VlangTokenType("int");
@@ -608,6 +611,9 @@ public interface VlangTypes {
       else if (type == IF_EXPRESSION) {
         return new VlangIfExpressionImpl(node);
       }
+      else if (type == IMPLEMENTS_CLAUSE) {
+        return new VlangImplementsClauseImpl(node);
+      }
       else if (type == IMPORT_ALIAS) {
         return new VlangImportAliasImpl(node);
       }
@@ -679,6 +685,9 @@ public interface VlangTypes {
       }
       else if (type == LABEL_REF) {
         return new VlangLabelRefImpl(node);
+      }
+      else if (type == LAST_COMMA) {
+        return new VlangLastCommaImpl(node);
       }
       else if (type == LEFT_HAND_EXPR_LIST) {
         return new VlangLeftHandExprListImpl(node);

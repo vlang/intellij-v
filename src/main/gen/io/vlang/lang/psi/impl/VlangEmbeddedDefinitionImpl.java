@@ -41,20 +41,17 @@ public class VlangEmbeddedDefinitionImpl extends VlangNamedElementImpl<VlangEmbe
   }
 
   @Override
-  @NotNull
-  public String getName() {
+  public @NotNull String getName() {
     return VlangPsiImplUtil.getName(this);
   }
 
   @Override
-  @Nullable
-  public PsiElement getIdentifier() {
+  public @Nullable PsiElement getIdentifier() {
     return VlangPsiImplUtil.getIdentifier(this);
   }
 
   @Override
-  @NotNull
-  public VlangTypeEx getType(@Nullable ResolveState context) {
+  public @NotNull VlangTypeEx getType(@Nullable ResolveState context) {
     return VlangPsiImplUtil.getType(this, context);
   }
 

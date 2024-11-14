@@ -10,7 +10,6 @@ public interface VlangJsonCallExpr extends VlangCallExpr {
   @NotNull
   VlangJsonArgumentList getJsonArgumentList();
 
-  @NotNull
-  List<VlangExpression> getParameters();
+  @NotNull List<@NotNull VlangExpression> getParameters();
 
 }

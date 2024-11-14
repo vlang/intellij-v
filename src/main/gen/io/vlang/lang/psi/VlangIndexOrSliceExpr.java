@@ -37,16 +37,12 @@ public interface VlangIndexOrSliceExpr extends VlangExpression {
 
   boolean isSlice();
 
-  @Nullable
-  PsiElement getExpression();
+  @Nullable PsiElement getExpression();
 
-  @Nullable
-  Pair<PsiElement, PsiElement> getRange();
+  @Nullable Pair<@Nullable PsiElement, @Nullable PsiElement> getRange();
 
-  @Nullable
-  PsiElement getSliceStart();
+  @Nullable PsiElement getSliceStart();
 
-  @Nullable
-  PsiElement getSliceEnd();
+  @Nullable PsiElement getSliceEnd();
 
 }

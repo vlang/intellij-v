@@ -40,26 +40,22 @@ public class VlangImportNameImpl extends VlangNamedElementImpl<VlangImportNameSt
   }
 
   @Override
-  @NotNull
-  public String getQualifier() {
+  public @NotNull String getQualifier() {
     return VlangPsiImplUtil.getQualifier(this);
   }
 
   @Override
-  @NotNull
-  public PsiElement getNameIdentifier() {
+  public @NotNull PsiElement getNameIdentifier() {
     return VlangPsiImplUtil.getNameIdentifier(this);
   }
 
   @Override
-  @NotNull
-  public PsiElement setName(@NotNull String newName) {
+  public @NotNull PsiElement setName(@NotNull String newName) {
     return VlangPsiImplUtil.setName(this, newName);
   }
 
   @Override
-  @NotNull
-  public String getName() {
+  public @NotNull String getName() {
     return VlangPsiImplUtil.getName(this);
   }
 
@@ -69,20 +65,17 @@ public class VlangImportNameImpl extends VlangNamedElementImpl<VlangImportNameSt
   }
 
   @Override
-  @NotNull
-  public VlangModuleReference<VlangImportName> getReference() {
+  public @NotNull VlangModuleReference<@NotNull VlangImportName> getReference() {
     return VlangPsiImplUtil.getReference(this);
   }
 
   @Override
-  @NotNull
-  public List<VlangModule> resolve() {
+  public @NotNull List<@NotNull VlangModule> resolve() {
     return VlangPsiImplUtil.resolve(this);
   }
 
   @Override
-  @NotNull
-  public String getQualifiedName() {
+  public @NotNull String getQualifiedName() {
     return VlangPsiImplUtil.getQualifiedName(this);
   }
 

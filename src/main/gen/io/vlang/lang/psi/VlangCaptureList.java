@@ -16,7 +16,6 @@ public interface VlangCaptureList extends VlangCompositeElement {
   @Nullable
   PsiElement getRbrack();
 
-  @NotNull
-  PsiElement addCapture(@NotNull String name);
+  @NotNull PsiElement addCapture(@NotNull String name);
 
 }

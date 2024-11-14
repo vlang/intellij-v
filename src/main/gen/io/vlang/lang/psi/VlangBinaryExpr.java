@@ -16,7 +16,6 @@ public interface VlangBinaryExpr extends VlangExpression {
   @Nullable
   VlangExpression getRight();
 
-  @Nullable
-  PsiElement getOperator();
+  @Nullable PsiElement getOperator();
 
 }

@@ -17,7 +17,6 @@ public interface VlangAttributeIdentifier extends VlangCompositeElement {
   @Nullable
   PsiElement getUnsafe();
 
-  @NotNull
-  VlangAttributeReference getReference();
+  @NotNull VlangAttributeReference getReference();
 
 }
