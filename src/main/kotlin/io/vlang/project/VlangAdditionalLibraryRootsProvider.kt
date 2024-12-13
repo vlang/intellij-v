@@ -6,7 +6,6 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.roots.AdditionalLibraryRootsProvider
 import com.intellij.openapi.roots.SyntheticLibrary
-import com.intellij.openapi.roots.SyntheticLibrary.ExcludeFileCondition
 import com.intellij.openapi.vfs.VirtualFile
 import io.vlang.configurations.VlangConfiguration
 import io.vlang.ide.ui.VIcons
@@ -102,21 +101,20 @@ class VlangAdditionalLibraryRootsProvider : AdditionalLibraryRootsProvider() {
 
         val result = mutableListOf<VirtualFile>()
 
-//        val toolchain = project.toolchainSettings.toolchain()
-//        val sourceRoot = toolchain.stdlibDir()
-//        if (sourceRoot != null) {
-//            result.add(sourceRoot)
-//        }
+        // watch vlib
+        val toolchain = project.toolchainSettings.toolchain()
+        toolchain.stdlibDir()?.let { result.add(it) }
+        toolchain.compiler()?.let { result.add(it) }
 
         val modulesRoot = VlangConfiguration.getInstance(project).modulesLocation
         if (modulesRoot != null) {
             result.add(modulesRoot)
         }
 
-//        val stubs = getStubs(project)
-//        if (stubs != null) {
-//            result.add(stubs.sourceRoots.first())
-//        }
+        val stubs = getStubs(project)
+        if (stubs != null) {
+            result.add(stubs.sourceRoots.first())
+        }
 
         return result
     }

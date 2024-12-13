@@ -65,9 +65,9 @@ public class VlangMethodDeclarationImpl extends VlangMethodDeclarationWithScopeH
   }
 
   @Override
-  @Nullable
+  @NotNull
   public VlangSignature getSignature() {
-    return VlangPsiTreeUtil.getStubChildOfType(this, VlangSignature.class);
+    return notNullChild(VlangPsiTreeUtil.getStubChildOfType(this, VlangSignature.class));
   }
 
   @Override

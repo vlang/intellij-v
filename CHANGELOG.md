@@ -2,7 +2,8 @@
 
 ## [Unreleased]
 
-- Fix 'Slow operations are prohibited on EDT' error after project opening 
+- Fix 'Slow operations are prohibited on EDT' error after project opening
+- Fix mismatch of indexes and psi after `v up` command
 
 ## [2024.3.1] - 2024-11-14
 
