@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Fix 'Slow operations are prohibited on EDT' error after project opening 
+
 ## [2024.3.1] - 2024-11-14
 
 - Support for intellij platform 2024.3
