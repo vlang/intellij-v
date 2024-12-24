@@ -9,6 +9,7 @@ import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.project.Project
 import com.intellij.psi.util.parentOfType
 import com.intellij.refactoring.RefactoringFactory
+import com.intellij.webSymbols.utils.NameCaseUtils
 import io.vlang.ide.codeInsight.VlangCodeInsightUtil
 import io.vlang.ide.inspections.VlangBaseInspection
 import io.vlang.lang.psi.VlangConstDefinition
@@ -96,7 +97,7 @@ abstract class VlangNamingConventionInspectionBase : VlangBaseInspection() {
             val named = descriptor.psiElement.parentOfType<VlangNamedElement>()
 
             val name = named?.name ?: return
-            val newName = name.replace(SNAKE_CASE_HELPER_REGEX, "_$1").lowercase().trim('_')
+            val newName = NameCaseUtils.toSnakeCase(name)
 
             invokeLater {
                 RefactoringFactory.getInstance(project).createRename(named, newName).run()
@@ -109,7 +110,6 @@ abstract class VlangNamingConventionInspectionBase : VlangBaseInspection() {
     }
 
     companion object {
-        private val SNAKE_CASE_HELPER_REGEX = Regex("([A-Z])")
         private val NAME_FIX = NameQuickFix()
         private val TO_SNAKE_CASE_FIX = ToSnakeCaseQuickFix()
     }
