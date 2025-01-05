@@ -39,7 +39,8 @@ Visit [vlang](https://plugins.jetbrains.com/plugin/24183-vlang) plugin page and 
 
 ### Manually:
 
-Build plugin locally or download pre-build version from [releases](https://github.com/vlang/intellij-v/releases). Install it manually using
+Build plugin locally or download pre-build version from [releases](https://github.com/vlang/intellij-v/releases). Install it manually using:
+
 <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
 > [!NOTE]  
