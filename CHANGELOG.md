@@ -5,6 +5,7 @@
 - Fix 'Slow operations are prohibited on EDT' error after project opening
 - Fix mismatch of indexes and psi after `v up` command
 - Change Snake case implementation to covert all caps as single word
+- Fix IndexOutOfBoundsException while typing `}` at the end of the document
 
 ## [2024.3.1] - 2024-11-14
 
