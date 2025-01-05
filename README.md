@@ -53,7 +53,7 @@ To build the plugin clone the repository and run the following command:
 ./gradlew buildPlugin
 ```
 
-The plugin will be built and saved to the `build/distributions` directory. To install it follow instructions from the [manual installation](https://github.com/vlang/intellij-v#building-the-plugin) section.
+The plugin will be built and saved to the `build/distributions` directory. To install it follow instructions from the [manual installation](https://github.com/vlang/intellij-v#manually) section.
 
 ## License
 
