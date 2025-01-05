@@ -25,7 +25,7 @@ class VlangTypedHandler : TypedHandlerDelegate() {
         }
 
         val document = editor.document
-        val chars = document.charsSequence
+        val chars = document.immutableCharSequence
         val offset = editor.caretModel.offset
 
         if (offset > 10) {
@@ -45,7 +45,7 @@ class VlangTypedHandler : TypedHandlerDelegate() {
             }
         }
 
-        if (c == '}') {
+        if (c == '}' && offset < chars.length) {
             val nextChar = chars.subSequence(offset, offset + 1).firstOrNull()
             if (nextChar == '}') {
                 document.deleteString(offset, offset + 1)
