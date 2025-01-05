@@ -2,30 +2,11 @@
 <img src="docs/cover.png">
 </p>
 
-![](https://img.shields.io/badge/Stable%20Release-01.07.2023-orange?logo=semantic-release)
 ![Build](https://github.com/vlang/intellij-v/workflows/Build/badge.svg)
-[![Version](https://img.shields.io/jetbrains/plugin/v/24183-vlang.svg)](https://plugins.jetbrains.com/plugin/20287-vlang)
+[![Version](https://img.shields.io/jetbrains/plugin/v/24183-vlang.svg)](https://plugins.jetbrains.com/plugin/24183-vlang)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/24183-vlang.svg)](https://plugins.jetbrains.com/plugin/24183-vlang)
 
-# V language plugin for JetBrains IDEs
-
-## About
-
-This plugin adds support of [V](https://vlang.io) language to JetBrains IDEs.
-
-## Installation & Usage
-
-If you want to jump straight in, use following instructions:
-
-- Using IDE built-in plugin system:
-
-  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "Vlang"</kbd> >
-  <kbd>Install Plugin</kbd>
-
-- Manually:
-
-  Download the [latest release](https://github.com/vlang/intellij-v/releases/latest) and install it manually using
-  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
+# [V](https://vlang.io) language plugin for JetBrains IDEs
 
 ## Compatible IDEs
 
@@ -42,6 +23,37 @@ in the sets of the available features:
 \** Requires the
 [Native Debugging Support](https://plugins.jetbrains.com/plugin/12775-native-debugging-support) plugin.
 LLDB only
+
+## Installation & Usage
+
+If you want to jump straight in, use following instructions:
+
+### Using IDE built-in plugin system:
+
+<kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "Vlang"</kbd> >
+<kbd>Install Plugin</kbd>
+
+### From JetBrains Marketplace:
+
+Visit [vlang](https://plugins.jetbrains.com/plugin/24183-vlang) plugin page and click on the <kbd>Install</kbd> button.
+
+### Manually:
+
+Build plugin locally or download pre-build version from [releases](https://github.com/vlang/intellij-v/releases). Install it manually using
+<kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
+
+> [!NOTE]  
+> IDE restart might be required after the plugin installation.
+
+## Building the plugin
+
+To build the plugin clone the repository and run the following command:
+
+```bash
+./gradlew buildPlugin
+```
+
+The plugin will be built and saved to the `build/distributions` directory. To install it follow instructions from the [manual installation](https://github.com/vlang/intellij-v#building-the-plugin) section.
 
 ## License
 
