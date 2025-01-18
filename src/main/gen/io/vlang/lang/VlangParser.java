@@ -2561,9 +2561,9 @@ public class VlangParser implements PsiParser, LightPsiParser {
     r = r && remapToIdentifier(b, l + 1);
     r = r && consumeToken(b, IDENTIFIER);
     r = r && FunctionDeclaration_3(b, l + 1);
-    p = r; // pin = 4
-    r = r && report_error_(b, Signature(b, l + 1));
-    r = p && FunctionDeclaration_5(b, l + 1) && r;
+    r = r && Signature(b, l + 1);
+    p = r; // pin = 5
+    r = r && FunctionDeclaration_5(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -4066,10 +4066,10 @@ public class VlangParser implements PsiParser, LightPsiParser {
     r = r && Receiver(b, l + 1);
     r = r && consumeToken(b, RPAREN);
     r = r && MethodName(b, l + 1);
-    p = r; // pin = 5
-    r = r && report_error_(b, MethodDeclaration_5(b, l + 1));
-    r = p && report_error_(b, Signature(b, l + 1)) && r;
-    r = p && MethodDeclaration_7(b, l + 1) && r;
+    r = r && MethodDeclaration_5(b, l + 1);
+    r = r && Signature(b, l + 1);
+    p = r; // pin = 7
+    r = r && MethodDeclaration_7(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }

@@ -140,7 +140,7 @@ private list_separator ::= semi | ','
 // #!/usr/bin/env v
 ShebangClause ::= shebang
 
-// [attr] module <name>
+// @[attr] module <name>
 ModuleClause ::= Attributes? module identifier semi {
   pin=2
   methods=[getName]
@@ -433,6 +433,7 @@ FieldDefinition ::= <<fieldRemapToIdentifier>> identifier {
   methods=[getQualifier getQualifiedName getTypeInner isPublic isMutable isPrimary makeMutable makeImmutable getOwner]
   implements="io.vlang.lang.psi.VlangMutabilityOwner"
   stubClass="io.vlang.lang.stubs.VlangFieldDefinitionStub"
+//  hooks=[MyHook='"FieldDefinition remapping"']
 }
 
 EmbeddedDefinition ::= Type {
@@ -586,14 +587,14 @@ private fnDecl ::= Attributes? SymbolVisibility? fn  {
 }
 
 FunctionDeclaration ::= fnDecl <<remapToIdentifier>> identifier GenericParameters? Signature BlockWithConsume? {
-  pin=4
+  pin=5
   stubClass="io.vlang.lang.stubs.VlangFunctionDeclarationStub"
   methods=[getName getTypeInner isDefinition isNoReturn isGeneric isCompileTime]
   mixin="io.vlang.lang.psi.impl.VlangFunctionDeclarationWithScopeHolder"
 }
 
 MethodDeclaration ::= fnDecl '(' Receiver ')' MethodName GenericParameters? Signature BlockWithConsume? {
-  pin=5
+  pin=7
   stubClass="io.vlang.lang.stubs.VlangMethodDeclarationStub"
   methods=[getReceiverType getTypeInner getIdentifier getQualifiedName getOwner isMutable byReference]
   mixin="io.vlang.lang.psi.impl.VlangMethodDeclarationWithScopeHolder"
