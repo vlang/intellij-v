@@ -6,6 +6,7 @@
 - Fix mismatch of indexes and psi after `v up` command
 - Change Snake case implementation to covert all caps as single word
 - Fix IndexOutOfBoundsException while typing `}` at the end of the document
+- Change order of default value and attribute. Fixes [#22](https://github.com/vlang/intellij-v/issues/22)
 
 ## [2024.3.1] - 2024-11-14
 

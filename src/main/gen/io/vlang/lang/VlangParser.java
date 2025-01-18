@@ -509,25 +509,27 @@ public class VlangParser implements PsiParser, LightPsiParser {
   // '@[' AttributeExpressions ']'
   private static boolean Attribute_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Attribute_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
     r = consumeToken(b, AT_LBRACK);
-    r = r && AttributeExpressions(b, l + 1);
-    r = r && consumeToken(b, RBRACK);
-    exit_section_(b, m, null, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, AttributeExpressions(b, l + 1));
+    r = p && consumeToken(b, RBRACK) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // '[' AttributeExpressions ']'
   private static boolean Attribute_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Attribute_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
     r = consumeToken(b, LBRACK);
-    r = r && AttributeExpressions(b, l + 1);
-    r = r && consumeToken(b, RBRACK);
-    exit_section_(b, m, null, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, AttributeExpressions(b, l + 1));
+    r = p && consumeToken(b, RBRACK) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -4157,7 +4159,7 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // FieldDefinition Type Attribute? DefaultFieldValue?
+  // FieldDefinition Type DefaultFieldValue? Attribute?
   static boolean PlainFieldDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PlainFieldDeclaration")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
@@ -4171,17 +4173,17 @@ public class VlangParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // Attribute?
+  // DefaultFieldValue?
   private static boolean PlainFieldDeclaration_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PlainFieldDeclaration_2")) return false;
-    Attribute(b, l + 1);
+    DefaultFieldValue(b, l + 1);
     return true;
   }
 
-  // DefaultFieldValue?
+  // Attribute?
   private static boolean PlainFieldDeclaration_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PlainFieldDeclaration_3")) return false;
-    DefaultFieldValue(b, l + 1);
+    Attribute(b, l + 1);
     return true;
   }
 

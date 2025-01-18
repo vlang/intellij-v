@@ -252,8 +252,7 @@ Attributes ::= Attribute (semi Attribute)* semi? {
 }
 // @[<exprs>] or [<exprs>]
 Attribute ::= ('@[' AttributeExpressions ']') | ('[' AttributeExpressions ']') {
-  pin("@[")=1
-  pin("[")=1
+  pin(".*")=1
   stubClass="io.vlang.lang.stubs.VlangAttributeStub"
 }
 // <expr>[; <expr2>]
@@ -427,7 +426,7 @@ private WithoutModifiersFieldsGroup ::= !MemberModifiers FieldDeclarations
 
 private FieldDeclarations ::= FieldDeclaration+
 FieldDeclaration ::= (PlainFieldDeclaration | EmbeddedDefinition) semi?
-private PlainFieldDeclaration ::= FieldDefinition Type Attribute? DefaultFieldValue?
+private PlainFieldDeclaration ::= FieldDefinition Type DefaultFieldValue? Attribute?
 DefaultFieldValue ::= '=' Expression {pin=1}
 FieldDefinition ::= identifier {
   methods=[getQualifier getQualifiedName getTypeInner isPublic isMutable isPrimary makeMutable makeImmutable getOwner]

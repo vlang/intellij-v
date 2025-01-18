@@ -63,7 +63,7 @@ mut:
 struct ComplexFields {
 	value        string        @[sql: 'varchar(255)']
 	with_default string = 'default'
-	both         shared string @[sql: 'varchar(255)'] = 'default'
+	both         shared string = 'default' @[sql: 'varchar(255)']
 }
 
 // Complex example

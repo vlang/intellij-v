@@ -18,7 +18,7 @@ public interface VlangAttribute extends VlangCompositeElement, StubBasedPsiEleme
   @Nullable
   PsiElement getLbrack();
 
-  @NotNull
+  @Nullable
   PsiElement getRbrack();
 
 }

@@ -138,6 +138,10 @@ V Language file
               <empty list>
             TYPE_REFERENCE_EXPRESSION
               PsiElement(VlangTokenType.identifier)('bool')
+          DEFAULT_FIELD_VALUE
+            PsiElement(VlangTokenType.=)('=')
+            LITERAL
+              PsiElement(VlangTokenType.false)('false')
           ATTRIBUTE
             PsiElement(VlangTokenType.@[)('@[')
             ATTRIBUTE_EXPRESSION
@@ -149,10 +153,6 @@ V Language file
                       PsiElement(VlangTokenType..)('.')
                     PsiElement(VlangTokenType.identifier)('attr0')
             PsiElement(VlangTokenType.])(']')
-          DEFAULT_FIELD_VALUE
-            PsiElement(VlangTokenType.=)('=')
-            LITERAL
-              PsiElement(VlangTokenType.false)('false')
         FIELD_DECLARATION
           FIELD_DEFINITION
             PsiElement(VlangTokenType.identifier)('name1')
@@ -227,6 +227,12 @@ V Language file
                 ATTRIBUTE_KEY
                   ATTRIBUTE_IDENTIFIER
                     PsiElement(VlangTokenType.unsafe)('unsafe')
+            PsiElement(VlangTokenType.;)(';')
+            ATTRIBUTE_EXPRESSION
+              PLAIN_ATTRIBUTE
+                ATTRIBUTE_KEY
+                  ATTRIBUTE_IDENTIFIER
+                    PsiElement(VlangTokenType.identifier)('value')
                 PsiElement(VlangTokenType.:)(':')
                 ATTRIBUTE_VALUE
                   LITERAL

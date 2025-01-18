@@ -26,7 +26,7 @@ public interface VlangMethodDeclaration extends VlangSignatureOwner, VlangFuncti
   @NotNull
   VlangReceiver getReceiver();
 
-  @NotNull
+  @Nullable
   VlangSignature getSignature();
 
   @Nullable
