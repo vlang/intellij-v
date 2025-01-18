@@ -79,8 +79,9 @@ dependencies {
             "GO" -> properties("golandBundledPlugins")
             else -> throw IllegalArgumentException("Unknown IDE type: $platformType, supported types: IU, IC, CL, GO")
         }
+        val useInstaller = !platformVersion.contains(Regex("EAP|SNAPSHOT"))
 
-        create(platformType, platformVersion, useInstaller = true)
+        create(platformType, platformVersion, useInstaller)
 
         // Plugin Dependencies. Uses `platformBundledPlugins` property from the gradle.properties file for bundled IntelliJ Platform plugins.
         bundledPlugins(bundledPlugins.split(',', ' ').filter(String::isNotEmpty))
@@ -88,7 +89,7 @@ dependencies {
         // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file for plugin from JetBrains Marketplace.
         plugins(platformPlugins.split(',', ' ').filter(String::isNotEmpty))
 
-        instrumentationTools()
+//        instrumentationTools()
         pluginVerifier()
         zipSigner()
         testFramework(TestFrameworkType.Platform)
@@ -126,7 +127,7 @@ intellijPlatform {
 
         ideaVersion {
             sinceBuild = properties("pluginSinceBuild")
-            untilBuild = properties("pluginUntilBuild")
+//            untilBuild = properties("pluginUntilBuild")
         }
     }
 
