@@ -17,6 +17,7 @@ import org.jetbrains.concurrency.resolvedPromise
 import io.vlang.configurations.VlangConfigurationUtil
 import io.vlang.configurations.VlangProjectSettingsConfigurable
 import io.vlang.debugger.runconfig.VlangDebugRunner
+import io.vlang.lang.psi.VlangFile
 import io.vlang.notifications.VlangErrorNotification
 import io.vlang.notifications.VlangNotification
 import io.vlang.toolchain.VlangToolchainService.Companion.toolchainSettings
@@ -149,7 +150,13 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
 
     companion object {
         fun binaryName(conf: VlangRunConfiguration): String {
-            val name = File(conf.fileName).nameWithoutExtension
+            val name = if (!conf.fileName.isEmpty()) {
+                File(conf.fileName).nameWithoutExtension
+            } else if (!conf.directory.isEmpty()) {
+                File(conf.directory).name
+            } else {
+                throw IllegalStateException("Can't determine executable name")
+            }
             if (SystemInfo.isWindows) {
                 return "$name.exe"
             }
