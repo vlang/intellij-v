@@ -68,10 +68,10 @@ jobs:
           CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
           CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
 
-          echo "name=version::$VERSION" >> $GITHUB_OUTPUT
-          echo "name=name::$NAME" >> $GITHUB_OUTPUT
-          echo "name=changelog::$CHANGELOG" >> $GITHUB_OUTPUT
-          echo "name=pluginVerifierHomeDir::~/.pluginVerifier" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "name=$NAME" >> "$GITHUB_OUTPUT"
+          echo "changelog=$CHANGELOG" >> "$GITHUB_OUTPUT"
+          echo "pluginVerifierHomeDir=~/.pluginVerifier" >> "$GITHUB_OUTPUT"
 
           ./gradlew printProductsReleases # prepare list of IDEs for Plugin Verifier
 
