@@ -9,7 +9,7 @@ import io.vlang.debugger.*
 import io.vlang.lang.psi.VlangEnumDeclaration
 import io.vlang.lang.stubs.index.VlangClassLikeIndex
 
-object VlangEnumRenderer : VlangValueRenderer() {
+class VlangEnumRenderer : VlangValueRenderer() {
     override fun isApplicable(project: Project, value: LLValue): Boolean {
         val type = value.type.replace(alignRegex, "")
         val fqn = VlangCTypeParser.convertCNameToVName(type)

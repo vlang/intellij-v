@@ -9,7 +9,7 @@ import io.vlang.lang.psi.VlangFunctionType
 import io.vlang.lang.psi.VlangTypeAliasDeclaration
 import io.vlang.lang.stubs.index.VlangNamesIndex
 
-object VlangFunctionRenderer : VlangValueRenderer() {
+class VlangFunctionRenderer : VlangValueRenderer() {
     override fun isApplicable(project: Project, value: LLValue): Boolean {
         val type = value.type
         if (type.contains("(*)")) {

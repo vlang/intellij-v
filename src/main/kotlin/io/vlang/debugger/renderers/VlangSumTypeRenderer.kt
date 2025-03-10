@@ -12,7 +12,7 @@ import io.vlang.lang.psi.VlangTypeAliasDeclaration
 import io.vlang.lang.psi.types.VlangPrimitiveTypes
 import io.vlang.lang.stubs.index.VlangNamesIndex
 
-object VlangSumTypeRenderer : VlangValueRenderer() {
+class VlangSumTypeRenderer : VlangValueRenderer() {
     override fun isApplicable(project: Project, value: LLValue): Boolean {
         val type = value.type
         val fqn = VlangCTypeParser.convertCNameToVName(type)

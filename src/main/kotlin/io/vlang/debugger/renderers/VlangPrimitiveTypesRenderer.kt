@@ -6,7 +6,8 @@ import com.jetbrains.cidr.execution.debugger.backend.LLValueData
 import io.vlang.debugger.withDescription
 import io.vlang.lang.psi.types.VlangPrimitiveTypes.Companion.isNumeric
 
-object VlangPrimitiveTypesRenderer : VlangValueRenderer() {
+class VlangPrimitiveTypesRenderer : VlangValueRenderer() {
+
     override fun isApplicable(project: Project, value: LLValue): Boolean = isNumeric(value.type) || value.type == "rune"
 
     override fun getDisplayType(type: String): String = type

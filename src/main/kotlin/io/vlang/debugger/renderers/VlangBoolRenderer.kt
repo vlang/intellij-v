@@ -5,7 +5,7 @@ import com.jetbrains.cidr.execution.debugger.backend.LLValue
 import com.jetbrains.cidr.execution.debugger.backend.LLValueData
 import io.vlang.debugger.withDescription
 
-object VlangBoolRenderer : VlangValueRenderer() {
+class VlangBoolRenderer : VlangValueRenderer() {
     override fun isApplicable(project: Project, value: LLValue): Boolean = value.type == "bool" || value.type.startsWith("bool:")
 
     override fun getDisplayType(type: String): String = "bool"

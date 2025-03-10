@@ -7,7 +7,7 @@ import io.vlang.debugger.withContext
 import io.vlang.debugger.withDescription
 import io.vlang.debugger.withHasLongerDescription
 
-object VlangStringRenderer : VlangValueRenderer() {
+class VlangStringRenderer : VlangValueRenderer() {
     override fun isApplicable(project: Project, value: LLValue): Boolean = value.type == "string" || value.type == "string *"
 
     override fun getDisplayType(type: String): String = "string"

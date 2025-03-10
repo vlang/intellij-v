@@ -6,7 +6,9 @@ import com.jetbrains.cidr.execution.debugger.backend.LLValue
 import com.jetbrains.cidr.execution.debugger.backend.LLValueData
 import io.vlang.debugger.*
 
-object VlangMapRenderer : VlangValueRenderer() {
+class VlangMapRenderer(
+    val arrayRenderer: VlangArrayRenderer = VlangArrayRenderer()
+) : VlangValueRenderer() {
     override fun isApplicable(project: Project, value: LLValue): Boolean = value.type.startsWith("Map_")
 
     override fun getDisplayType(type: String): String = "map"
@@ -30,8 +32,8 @@ object VlangMapRenderer : VlangValueRenderer() {
         val keys = value.context.evaluate("map_keys($varRef)")
         val values = value.context.evaluate("map_values($varRef)")
 
-        val keyData = VlangArrayRenderer.getVariableChildrenWithType(keyType, keys.withContext(value.context), offset, size).list
-        val valueData = VlangArrayRenderer.getVariableChildrenWithType(valueType, values.withContext(value.context), offset, size).list
+        val keyData = arrayRenderer.getVariableChildrenWithType(keyType, keys.withContext(value.context), offset, size).list
+        val valueData = arrayRenderer.getVariableChildrenWithType(valueType, values.withContext(value.context), offset, size).list
 
         @Suppress("NAME_SHADOWING")
         return DebuggerDriver.ResultList.create(

@@ -11,7 +11,7 @@ import io.vlang.debugger.withDescription
 import io.vlang.lang.psi.VlangInterfaceDeclaration
 import io.vlang.lang.stubs.index.VlangClassLikeIndex
 
-object VlangInterfaceRenderer : VlangValueRenderer() {
+class VlangInterfaceRenderer : VlangValueRenderer() {
     override fun isApplicable(project: Project, value: LLValue): Boolean {
         val type = value.type
         val fqn = VlangCTypeParser.convertCNameToVName(type)

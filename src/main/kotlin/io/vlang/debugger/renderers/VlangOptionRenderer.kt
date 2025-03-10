@@ -7,7 +7,7 @@ import com.jetbrains.cidr.execution.debugger.backend.LLValueData
 import io.vlang.debugger.withContext
 import io.vlang.debugger.withDescription
 
-object VlangOptionRenderer : VlangValueRenderer() {
+class VlangOptionRenderer : VlangValueRenderer() {
     override fun isApplicable(project: Project, value: LLValue): Boolean = value.type.startsWith("_option_")
 
     override fun getDisplayType(type: String): String = "Option"

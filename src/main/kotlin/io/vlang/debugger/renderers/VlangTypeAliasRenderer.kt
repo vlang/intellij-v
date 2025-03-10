@@ -10,7 +10,10 @@ import io.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import io.vlang.lang.psi.types.VlangStringTypeEx
 import io.vlang.lang.stubs.index.VlangNamesIndex
 
-object VlangTypeAliasRenderer : VlangValueRenderer() {
+class VlangTypeAliasRenderer(
+    val stringRenderer: VlangStringRenderer = VlangStringRenderer()
+) : VlangValueRenderer() {
+
     private var alias: VlangTypeAliasDeclaration? = null
 
     override fun isApplicable(project: Project, value: LLValue): Boolean {
@@ -20,7 +23,7 @@ object VlangTypeAliasRenderer : VlangValueRenderer() {
             VlangNamesIndex.find(fqn, project, null).firstOrNull()
         }
         if (alias !is VlangTypeAliasDeclaration) return false
-        val isAlias = runReadAction { alias.aliasType?.isAlias ?: false }
+        val isAlias = runReadAction { alias.aliasType?.isAlias == true }
         if (!isAlias) return false
 
         this.alias = alias
@@ -33,7 +36,7 @@ object VlangTypeAliasRenderer : VlangValueRenderer() {
         val alias = this.alias ?: return value.data
         val aliasedType = runReadAction { alias.aliasType?.typeUnionList?.typeList?.firstOrNull()?.toEx() } ?: return value.data
         if (aliasedType is VlangStringTypeEx) {
-            return VlangStringRenderer.getData(value)
+            return stringRenderer.getData(value)
         }
 
         val qualifiedName = runReadAction { alias.getQualifiedName() }

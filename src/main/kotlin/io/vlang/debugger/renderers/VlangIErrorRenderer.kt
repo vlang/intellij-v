@@ -8,7 +8,7 @@ import com.jetbrains.cidr.execution.debugger.backend.LLValueData
 import io.vlang.debugger.withContext
 import io.vlang.debugger.withDescription
 
-object VlangIErrorRenderer : VlangValueRenderer() {
+class VlangIErrorRenderer : VlangValueRenderer() {
     override fun isApplicable(project: Project, value: LLValue): Boolean = value.type == "IError"
 
     override fun getDisplayType(type: String): String = "IError"

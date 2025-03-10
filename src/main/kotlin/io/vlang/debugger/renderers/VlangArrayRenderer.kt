@@ -8,7 +8,8 @@ import io.vlang.debugger.withContext
 import io.vlang.debugger.withDescription
 import io.vlang.debugger.withName
 
-object VlangArrayRenderer : VlangValueRenderer() {
+class VlangArrayRenderer : VlangValueRenderer() {
+
     override fun isApplicable(project: Project, value: LLValue): Boolean {
         return value.type.startsWith("Array_")
     }

@@ -11,7 +11,7 @@ import io.vlang.lang.psi.VlangStructDeclaration
 import io.vlang.lang.psi.types.VlangStructTypeEx
 import io.vlang.lang.stubs.index.VlangClassLikeIndex
 
-object VlangStructRenderer : VlangValueRenderer() {
+class VlangStructRenderer : VlangValueRenderer() {
     private var klass: VlangStructDeclaration? = null
 
     override fun isApplicable(project: Project, value: LLValue): Boolean {
