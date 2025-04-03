@@ -192,7 +192,7 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             return true
         }
 
-        val localResolve = isLocalResolve(contextFile, file)
+        val localResolve = isLocalResolve(contextFile, file) && !typ.isBuiltin()
         val newState = state.put(LOCAL_RESOLVE, localResolve)
 
         if (VlangCodeInsightUtil.insideCompileTimeFor(identifier) && typ.qualifiedName() != "stubs.CompileTimeTypeInfo") {
