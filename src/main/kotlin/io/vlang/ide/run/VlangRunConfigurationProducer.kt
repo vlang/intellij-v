@@ -39,8 +39,8 @@ class VlangRunConfigurationProducer : LazyRunConfigurationProducer<VlangRunConfi
         val runAsModule = needRunFileAsModule(containingFile)
         val expectedKind = if (runAsModule) RunKind.Directory else RunKind.File
 
-        return configuration.runKind == expectedKind &&
-                configuration.fileName == containingFile.virtualFile.path
+        return configuration.options.runKind == expectedKind &&
+                configuration.options.fileName == containingFile.virtualFile.path
     }
 
     override fun setupConfigurationFromContext(
@@ -69,16 +69,14 @@ class VlangRunConfigurationProducer : LazyRunConfigurationProducer<VlangRunConfi
             configuration.name = "V Run ${containingFile.name}"
         }
 
-        configuration.runKind = if (runAsModule) RunKind.Directory else RunKind.File
-        configuration.fileName = containingFile.virtualFile.path
-        configuration.directory = containingFile.virtualFile.parent.path
+        configuration.options.runKind = if (runAsModule) RunKind.Directory else RunKind.File
+        configuration.options.fileName = containingFile.virtualFile.path
+        configuration.options.directory = containingFile.virtualFile.parent.path
 
-        if (configuration.runKind == RunKind.File) {
-            configuration.outputDir = configuration.directory
-            configuration.workingDir = configuration.directory
+        if (configuration.options.runKind == RunKind.File) {
+            configuration.options.workingDir = configuration.options.directory
         } else {
-            configuration.outputDir = path(project, "\$PROJECT_DIR$/bin")
-            configuration.workingDir = path(project, "\$PROJECT_DIR$")
+            configuration.options.workingDir = path(project, "\$PROJECT_DIR$")
         }
 
         return true

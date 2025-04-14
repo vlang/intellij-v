@@ -18,32 +18,42 @@ import java.io.File
 
 class VlangRunConfigurationRunState(
     val env: ExecutionEnvironment,
-    val conf: VlangRunConfiguration,
+    val options: VlangRunConfigurationOptions.ExpandedOptions,
 ) : RunProfileState {
 
     override fun execute(executor: Executor, runner: ProgramRunner<*>): ExecutionResult? {
-        if (!conf.runAfterBuild) return null
+
+        if (!options.runAfterBuild) return null
 
         val state = object : CommandLineState(env) {
             override fun createConsole(executor: Executor): ConsoleView? {
-                if (conf.emulateTerminal) {
-                    return TerminalExecutionConsole(conf.project, null)
+                if (options.emulateTerminal) {
+                    return TerminalExecutionConsole(env.project, null)
                 }
 
                 return super.createConsole(executor)
             }
 
             override fun startProcess(): ProcessHandler {
-                val workingDir = conf.workingDir
-                val outputDir = if (conf.outputDir.isEmpty()) File(conf.workingDir) else File(conf.outputDir)
+                val workingDir = options.workingDir
+                val outputFileName = options.outputFileName
 
-                val binName = VlangBuildTaskRunner.binaryName(conf)
-                val exe = File(outputDir, binName)
+                val exe = if (!outputFileName.isEmpty()) {
+                    val file = File(outputFileName)
+                    if (file.isRooted) {
+                        file
+                    } else {
+                        File(workingDir, outputFileName).normalize()
+                    }
+                } else {
+                    val binName = VlangBuildTaskRunner.binaryName(options)
+                    File(workingDir, binName).normalize()
+                }
                 if (!exe.exists()) {
                     throw IllegalStateException("Can't run ${exe.absolutePath}, file not found")
                 }
 
-                val cmd = if (conf.emulateTerminal) {
+                val cmd = if (options.emulateTerminal) {
                     PtyCommandLine()
                         .withInitialColumns(PtyCommandLine.MAX_COLUMNS)
                         .withConsoleMode(true)
@@ -57,16 +67,16 @@ class VlangRunConfigurationRunState(
                     .withCharset(Charsets.UTF_8)
                     .withRedirectErrorStream(true)
 
-                val additionalArguments = ParametersListUtil.parse(conf.programArguments)
+                val additionalArguments = ParametersListUtil.parse(options.programArguments)
                 commandLine.addParameters(additionalArguments)
 
                 val handler = VlangProcessHandler(commandLine)
 
                 // We need remove build artifacts after run if it's single file run conf.
-                if (conf.runKind == VlangRunConfigurationEditor.RunKind.File) {
+                if (options.runKind == VlangRunConfigurationEditor.RunKind.File) {
                     handler.addProcessListener(object : ProcessListener {
                         override fun processTerminated(event: ProcessEvent) {
-                            removeBuildArtifacts(exe, outputDir)
+                            removeBuildArtifacts(exe)
                         }
                     })
                 }
@@ -74,9 +84,10 @@ class VlangRunConfigurationRunState(
                 return handler
             }
 
-            private fun removeBuildArtifacts(exe: File, outputDir: File) {
+            private fun removeBuildArtifacts(exe: File) {
                 exe.delete()
-                val debugSymbolDir = outputDir.resolve(VlangBuildTaskRunner.debugSymbolDir(conf))
+                val outputDir = exe.parentFile
+                val debugSymbolDir = outputDir.resolve(VlangBuildTaskRunner.debugSymbolDir(options))
                 if (debugSymbolDir.exists()) {
                     debugSymbolDir.deleteRecursively()
                 }

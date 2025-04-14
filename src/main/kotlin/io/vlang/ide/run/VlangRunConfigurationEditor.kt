@@ -1,14 +1,18 @@
 package io.vlang.ide.run
 
-import com.intellij.execution.configuration.EnvironmentVariablesComponent
+import com.intellij.execution.configuration.EnvironmentVariablesTextFieldWithBrowseButton
+import com.intellij.ide.macro.MacrosDialog
+import com.intellij.openapi.components.PathMacroManager
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.options.SettingsEditor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.DialogPanel
+import com.intellij.ui.components.fields.ExtendableTextField
 import com.intellij.ui.dsl.builder.*
 import com.intellij.ui.layout.ComboBoxPredicate
 import com.intellij.ui.layout.ComponentPredicate
+import java.io.File
 import javax.swing.JComponent
 import javax.swing.JPanel
 
@@ -20,50 +24,49 @@ open class VlangRunConfigurationEditor(private val project: Project) : SettingsE
         companion object {
             fun fromString(str: String?): RunKind {
                 return when (str) {
-                    "File" -> File
+                    "File"      -> File
                     "Directory" -> Directory
-                    null -> File
-                    else -> throw IllegalArgumentException("Unknown run kind: $str")
+                    null        -> Directory
+                    else        -> throw IllegalArgumentException("Unknown run kind: $str")
                 }
             }
         }
     }
 
-    data class Model(
-        var runKind: RunKind? = RunKind.File,
+    val pathMacroManager = PathMacroManager.getInstance(project)
+
+    private data class Model(
+        var runKind: RunKind? = RunKind.Directory,
         var fileName: String = "",
         var directoryName: String = "",
-        var outputDir: String = "",
+        var outputFileName: String = "",
         var runAfterBuild: Boolean = true,
         var workingDir: String = "",
-        var envs: MutableMap<String, String> = mutableMapOf(),
+        var envs: String = "",
         var buildArguments: String = "",
         var programArguments: String = "",
         var production: Boolean = false,
         var emulateTerminal: Boolean = false,
     )
 
-    private val environmentVariables = EnvironmentVariablesComponent()
+    fun getExpandedWorkingDir(): File = File(pathMacroManager.expandPath(model.workingDir))
+
     private lateinit var mainPanel: DialogPanel
     private val model = Model()
 
-    init {
-        environmentVariables.label.text = "Environment:"
-    }
-
     override fun resetEditorFrom(demoRunConfiguration: VlangRunConfiguration) {
         with(model) {
-            runKind = demoRunConfiguration.runKind
-            fileName = demoRunConfiguration.fileName
-            directoryName = demoRunConfiguration.directory
-            outputDir = demoRunConfiguration.outputDir
-            runAfterBuild = demoRunConfiguration.runAfterBuild
-            workingDir = demoRunConfiguration.workingDir
-            envs = demoRunConfiguration.envs
-            buildArguments = demoRunConfiguration.buildArguments
-            programArguments = demoRunConfiguration.programArguments
-            production = demoRunConfiguration.production
-            emulateTerminal = demoRunConfiguration.emulateTerminal
+            runKind = demoRunConfiguration.options.runKind
+            fileName = demoRunConfiguration.options.fileName
+            directoryName = demoRunConfiguration.options.directory
+            outputFileName = demoRunConfiguration.options.outputFileName
+            runAfterBuild = demoRunConfiguration.options.runAfterBuild
+            workingDir = demoRunConfiguration.options.workingDir
+            envs = demoRunConfiguration.options.envs
+            buildArguments = demoRunConfiguration.options.buildArguments
+            programArguments = demoRunConfiguration.options.programArguments
+            production = demoRunConfiguration.options.production
+            emulateTerminal = demoRunConfiguration.options.emulateTerminal
         }
 
         mainPanel.reset()
@@ -72,11 +75,11 @@ open class VlangRunConfigurationEditor(private val project: Project) : SettingsE
     override fun applyEditorTo(demoRunConfiguration: VlangRunConfiguration) {
         mainPanel.apply()
 
-        with(demoRunConfiguration) {
-            runKind = model.runKind ?: RunKind.File
+        with(demoRunConfiguration.options) {
+            runKind = model.runKind ?: RunKind.Directory
             fileName = model.fileName
             directory = model.directoryName
-            outputDir = model.outputDir
+            outputFileName = model.outputFileName
             runAfterBuild = model.runAfterBuild
             workingDir = model.workingDir
             envs = model.envs
@@ -92,90 +95,151 @@ open class VlangRunConfigurationEditor(private val project: Project) : SettingsE
     private fun component(): JPanel {
         lateinit var kindComboBox: Cell<ComboBox<RunKind>>
 
+        @Suppress("UnstableApiUsage")
         mainPanel = panel {
             row("Run kind:") {
                 kindComboBox = comboBox(listOf(RunKind.File, RunKind.Directory))
                     .bindItem(model::runKind)
-            }.bottomGap(BottomGap.NONE)
+            }
 
-            row("File:") {
+            row("Source file:") {
                 textFieldWithBrowseButton(
-                    FileChooserDescriptorFactory.createSingleFileDescriptor().withTitle("Select V File"),
+                    FileChooserDescriptorFactory.singleFile()
+                        .withTitle("Select V Source File")
+                        .withExtensionFilter("V files", "v", "vv", "vsh"),
                     project
-                )
+                ) { file -> File(file.path).relativeTo(getExpandedWorkingDir()).normalize().toString() }.apply {
+                    MacrosDialog.addTextFieldExtension(
+                        component.textField as ExtendableTextField,
+                        MacrosDialog.Filters.DIRECTORY_PATH,
+                        null
+                    )
+                }
                     .align(AlignX.FILL)
                     .bindText(model::fileName)
-            }.bottomGap(BottomGap.NONE)
+                    .validationOnInput {
+                        val text = it.text.trim()
+                        if (text.isEmpty()) {
+                            return@validationOnInput error("Source file cannot be empty")
+                        }
+                        if (!text.endsWith(".v") && !text.endsWith(".vv") && !text.endsWith(".vsh")) {
+                            return@validationOnInput error("Source file must be a V file (\".v\", \".vv\", \".vsh\")")
+                        }
+                        null
+                    }
+            }
                 .visibleIf(kindComboBox.selectedValueMatches { it == RunKind.File })
 
-            row("Directory:") {
+            row("Source directory:") {
                 textFieldWithBrowseButton(
-                    FileChooserDescriptorFactory.createSingleFolderDescriptor().withTitle("Select V Directory"),
+                    FileChooserDescriptorFactory.createSingleFolderDescriptor().withTitle("Select V Source Directory"),
                     project
-                )
+                ) { file ->
+                    if (file.path == model.workingDir) {
+                        "."
+                    } else {
+                        File(file.path).relativeTo(getExpandedWorkingDir()).normalize().toString()
+                    }
+                }.apply {
+                    MacrosDialog.addTextFieldExtension(
+                        component.textField as ExtendableTextField,
+                        MacrosDialog.Filters.DIRECTORY_PATH,
+                        null
+                    )
+                }
                     .align(AlignX.FILL)
                     .bindText(model::directoryName)
-            }.bottomGap(BottomGap.NONE)
+                    .validationOnInput {
+                        val text = it.text.trim()
+                        if (text.isEmpty()) {
+                            return@validationOnInput error("Source directory cannot be empty")
+                        }
+                        null
+                    }
+            }
                 .visibleIf(kindComboBox.selectedValueMatches { it == RunKind.Directory })
 
-            row("Output directory:") {
+            row("Output file:") {
                 textFieldWithBrowseButton(
-                    FileChooserDescriptorFactory.createSingleFolderDescriptor().withTitle("Select V Directory"),
+                    FileChooserDescriptorFactory.singleFile().withTitle("Select File"),
                     project
-                )
+                ) { file -> File(file.path).relativeTo(getExpandedWorkingDir()).normalize().toString() }.apply {
+                    MacrosDialog.addTextFieldExtension(
+                        component.textField as ExtendableTextField,
+                        MacrosDialog.Filters.DIRECTORY_PATH,
+                        null
+                    )
+                }
                     .align(AlignX.FILL)
-                    .bindText(model::outputDir)
-            }.bottomGap(BottomGap.NONE)
+                    .bindText(model::outputFileName)
+                    .comment("If not empty will override the default output file with <code>-o</code> flag")
+            }
 
             row(" ") {
                 checkBox("Run after build")
                     .bindSelected(model::runAfterBuild)
-            }.bottomGap(BottomGap.NONE)
+            }
 
             row("Working directory:") {
                 textFieldWithBrowseButton(
                     FileChooserDescriptorFactory.createSingleFolderDescriptor().withTitle("Select V Directory"),
                     project
                 )
+                    .apply {
+                        MacrosDialog.addTextFieldExtension(
+                            component.textField as ExtendableTextField,
+                            MacrosDialog.Filters.DIRECTORY_PATH,
+                            null
+                        )
+                    }
                     .align(AlignX.FILL)
                     .bindText(model::workingDir)
-            }.bottomGap(BottomGap.NONE)
+            }
 
-            row(environmentVariables.label) {
-                cell(environmentVariables)
+            row("Environment:") {
+                cell(EnvironmentVariablesTextFieldWithBrowseButton())
+                    .apply {
+                        MacrosDialog.addTextFieldExtension(
+                            component.textField,
+                            MacrosDialog.Filters.DIRECTORY_PATH,
+                            null
+                        )
+                    }
                     .align(AlignX.FILL)
-                    .bind(
-                        componentGet = { it.envs },
-                        componentSet = { component, value -> component.envs = value },
-                        prop = model::envs.toMutableProperty()
-                    )
-            }.bottomGap(BottomGap.NONE)
+                    .bindText(model::envs)
+            }
 
             row(" ") {
                 checkBox("Production build")
                     .bindSelected(model::production)
                     .comment("Builds an optimized version with the <code>-prod</code> flag, increasing compilation time")
-            }.bottomGap(BottomGap.NONE)
+            }
 
             row(" ") {
                 checkBox("Emulate terminal in output console")
                     .bindSelected(model::emulateTerminal)
-            }.bottomGap(BottomGap.NONE)
+            }
 
             row("Build arguments:") {
-                expandableTextField()
+                expandableTextField().apply {
+                    MacrosDialog.addTextFieldExtension(component, MacrosDialog.Filters.DIRECTORY_PATH, null)
+                }
                     .align(AlignX.FILL)
                     .bindText(model::buildArguments)
                     .comment("Arguments to pass to <b>v build</b> command")
-            }.bottomGap(BottomGap.NONE)
+            }
 
             row("Program arguments:") {
-                expandableTextField()
+                expandableTextField().apply {
+                    MacrosDialog.addTextFieldExtension(component, MacrosDialog.Filters.DIRECTORY_PATH, null)
+                }
                     .align(AlignX.FILL)
                     .bindText(model::programArguments)
                     .comment("Arguments to pass when run executable")
-            }.bottomGap(BottomGap.NONE)
+            }
         }
+
+        mainPanel.registerValidators(this)
 
         return mainPanel
     }

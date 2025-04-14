@@ -1,22 +1,26 @@
 package io.vlang.ide.run
 
-import com.intellij.execution.configurations.RunConfigurationOptions
+import com.intellij.execution.configurations.LocatableRunConfigurationOptions
+import com.intellij.openapi.components.PathMacroManager
+import com.intellij.openapi.project.Project
+import io.vlang.ide.run.VlangRunConfigurationEditor.RunKind
 
-class VlangRunConfigurationOptions : RunConfigurationOptions() {
-    private var _runKind = string(VlangRunConfigurationEditor.RunKind.File.name).provideDelegate(this, "runKindRunConfiguration")
-    private var _fileName = string("").provideDelegate(this, "fileNameRunConfiguration")
-    private var _directory = string("").provideDelegate(this, "directoryRunConfiguration")
-    private var _outputDir = string("").provideDelegate(this, "outputDirRunConfiguration")
-    private var _runAfterBuild = property(true).provideDelegate(this, "runAfterBuildRunConfiguration")
-    private var _workingDir = string("").provideDelegate(this, "workingDirRunConfiguration")
-    private var _envs = string("").provideDelegate(this, "envsRunConfiguration")
-    private var _buildArguments = string("").provideDelegate(this, "buildArgumentsRunConfiguration")
-    private var _programArguments = string("").provideDelegate(this, "programArgumentsRunConfiguration")
-    private var _production = property(false).provideDelegate(this, "productionRunConfiguration")
-    private var _emulateTerminal = property(true).provideDelegate(this, "emulateTerminalRunConfiguration")
+class VlangRunConfigurationOptions : LocatableRunConfigurationOptions() {
 
-    var runKind: VlangRunConfigurationEditor.RunKind
-        get() = VlangRunConfigurationEditor.RunKind.fromString(_runKind.getValue(this))
+    private var _runKind = string(RunKind.Directory.name).provideDelegate(this, "runKind")
+    private var _fileName = string("").provideDelegate(this, "fileName")
+    private var _directory = string(".").provideDelegate(this, "directory")
+    private var _outputFileName = string("").provideDelegate(this, "outputFileName")
+    private var _runAfterBuild = property(true).provideDelegate(this, "runAfterBuild")
+    private var _workingDir = string("\$PROJECT_DIR$").provideDelegate(this, "workingDir")
+    private var _envs = string("").provideDelegate(this, "envs")
+    private var _buildArguments = string("").provideDelegate(this, "buildArguments")
+    private var _programArguments = string("").provideDelegate(this, "programArguments")
+    private var _production = property(false).provideDelegate(this, "production")
+    private var _emulateTerminal = property(true).provideDelegate(this, "emulateTerminal")
+
+    var runKind: RunKind
+        get() = RunKind.fromString(_runKind.getValue(this))
         set(value) {
             _runKind.setValue(this, value.name)
         }
@@ -33,10 +37,10 @@ class VlangRunConfigurationOptions : RunConfigurationOptions() {
             _directory.setValue(this, value)
         }
 
-    var outputDir: String
-        get() = _outputDir.getValue(this) ?: ""
+    var outputFileName: String
+        get() = _outputFileName.getValue(this) ?: ""
         set(value) {
-            _outputDir.setValue(this, value)
+            _outputFileName.setValue(this, value)
         }
 
     var runAfterBuild: Boolean
@@ -80,4 +84,60 @@ class VlangRunConfigurationOptions : RunConfigurationOptions() {
         set(value) {
             _emulateTerminal.setValue(this, value)
         }
+
+    fun expandOptions(project: Project): ExpandedOptions {
+        return ExpandedOptions(this, project)
+    }
+
+    class ExpandedOptions(val options: VlangRunConfigurationOptions, project: Project) {
+
+        val macroManager = PathMacroManager.getInstance(project)
+
+        val runKind: RunKind
+            get() = options.runKind
+
+        val fileName: String
+            get() {
+                return macroManager.expandPath(options.fileName)
+            }
+
+        val directory: String
+            get() {
+                return macroManager.expandPath(options.directory)
+            }
+
+        val outputFileName: String
+            get() {
+                return macroManager.expandPath(options.outputFileName)
+            }
+
+        val runAfterBuild: Boolean
+            get() = options.runAfterBuild
+
+        val workingDir: String
+            get() {
+                return macroManager.expandPath(options.workingDir)
+            }
+
+        val envs: String
+            get() {
+                return macroManager.expandPath(options.envs)
+            }
+
+        val buildArguments: String
+            get() {
+                return macroManager.expandPath(options.buildArguments)
+            }
+
+        val programArguments: String
+            get() {
+                return macroManager.expandPath(options.programArguments)
+            }
+
+        val production: Boolean
+            get() = options.production
+
+        val emulateTerminal: Boolean
+            get() = options.emulateTerminal
+    }
 }

@@ -8,7 +8,7 @@ import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.openapi.project.Project
 import org.jdom.Element
 
-open class VlangTestConfiguration(project: Project, factory: ConfigurationFactory, name: String) :
+open class VlangTestConfiguration(project: Project, factory: ConfigurationFactory, name: String?) :
     LocatableConfigurationBase<VlangTestConfigurationOptions>(project, factory, name) {
 
     override fun getOptions() = super.getOptions() as VlangTestConfigurationOptions

@@ -101,7 +101,7 @@ Discord Server: <a href="https://discord.gg/vlang">https://discord.gg/vlang</a><
         <stubIndex implementation="io.vlang.lang.stubs.index.VlangClassLikeIndex"/>
         <stubIndex implementation="io.vlang.lang.stubs.index.VlangInterfaceInheritorsIndex"/>
         <stubIndex implementation="io.vlang.lang.stubs.index.VlangGlobalVariablesIndex"/>
-        <stubElementTypeHolder class="io.vlang.lang.VlangTypes"/>
+        <stubElementTypeHolder externalIdPrefix="vlang" class="io.vlang.lang.VlangTypes"/>
         <!-- endregion Indexes -->
 
         <!-- region Injection -->
