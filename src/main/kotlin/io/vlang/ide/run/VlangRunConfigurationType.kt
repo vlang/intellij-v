@@ -13,13 +13,12 @@ class VlangRunConfigurationType : ConfigurationTypeBase(
 ) {
 
     companion object {
-        const val ID = "VlangRunType"
-        const val FACTORY_RUN_ID = "VlangRun"
+        const val ID = "VlangRun"
     }
 
     init {
         addFactory(object : ConfigurationFactory(this) {
-            override fun getId() = FACTORY_RUN_ID
+            override fun getId() = ID
 
             override fun createTemplateConfiguration(project: Project) =
                 VlangRunConfiguration(project, this, null)
