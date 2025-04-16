@@ -61,14 +61,14 @@ open class VlangRunConfiguration(project: Project, factory: ConfigurationFactory
             if (!opt.fileName.endsWith(".v") && !opt.fileName.endsWith(".vv") && !opt.fileName.endsWith(".vsh") ) {
                 throw RuntimeConfigurationError("Source file must be a V file (\".v\", \".vv\", \".vsh\")")
             }
-            if (!File(opt.workingDir, opt.fileName).exists()) {
+            if (!File(opt.fileName).exists() && !File(opt.workingDir, opt.fileName).exists()) {
                 throw RuntimeConfigurationError("Source file '${opt.fileName}' does not exist")
             }
         } else {
             if (opt.directory.isBlank()) {
                 throw RuntimeConfigurationError("Source directory path is empty")
             }
-            if (!File(opt.workingDir, opt.directory).exists()) {
+            if (!File(opt.directory).exists() && !File(opt.workingDir, opt.directory).exists()) {
                 throw RuntimeConfigurationError("Source directory '${opt.directory}' does not exist")
             }
         }
