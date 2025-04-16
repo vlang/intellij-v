@@ -22,12 +22,13 @@ open class VlangRunConfiguration(project: Project, factory: ConfigurationFactory
     }
 
     override fun suggestedName(): @NlsActions.ActionText String? {
-        val name = if (options.runKind == VlangRunConfigurationEditor.RunKind.File) {
-            File(options.fileName).nameWithoutExtension
+        val opt = expandedOptions()
+        val name = if (opt.runKind == VlangRunConfigurationEditor.RunKind.File) {
+            File(opt.fileName).nameWithoutExtension
         } else {
-            val dir = File(options.directory).name
+            val dir = File(opt.directory).name
             if (dir == ".") {
-                File(options.workingDir).name
+                File(opt.workingDir).name
             } else {
                 dir
             }
