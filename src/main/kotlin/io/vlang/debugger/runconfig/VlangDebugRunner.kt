@@ -37,7 +37,7 @@ open class VlangDebugRunner : AsyncProgramRunner<RunnerSettings>() {
         val workingDir = options.workingDir
         val outputFileName = options.outputFileName
 
-        val env = EnvironmentUtil.getEnvironmentMap() + EnvironmentUtil.parseEnv(options.envs.split("\n", ",").toTypedArray()).apply {
+        val env = EnvironmentUtil.parseEnv(options.envs.split("\n", ",").toTypedArray()).apply {
             EnvironmentUtil.inlineParentOccurrences(this)
         }
 
@@ -69,6 +69,7 @@ open class VlangDebugRunner : AsyncProgramRunner<RunnerSettings>() {
             .withWorkDirectory(workingDir)
             .withCharset(Charsets.UTF_8)
             .withRedirectErrorStream(true)
+            .withParentEnvironmentType(GeneralCommandLine.ParentEnvironmentType.SYSTEM)
             .withEnvironment(env)
 
         val additionalArguments = ParametersListUtil.parse(options.programArguments)

@@ -12,7 +12,6 @@ import java.io.File
 
 open class VlangRunConfiguration(project: Project, factory: ConfigurationFactory?, name: String?) :
     RunConfigurationBase<VlangRunConfigurationOptions>(project, factory, name),
-    RunProfileWithCompileBeforeLaunchOption,
     LocatableConfiguration {
 
     public override fun getOptions() = super.getOptions() as VlangRunConfigurationOptions
