@@ -1,11 +1,11 @@
 package io.vlang.debugger.runconfig
 
 import com.intellij.execution.configurations.*
+import com.intellij.execution.configurations.GeneralCommandLine.ParentEnvironmentType.*
 import com.intellij.execution.executors.DefaultDebugExecutor
 import com.intellij.execution.runners.AsyncProgramRunner
 import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.execution.ui.RunContentDescriptor
-import com.intellij.util.EnvironmentUtil
 import com.intellij.util.execution.ParametersListUtil
 import io.vlang.ide.run.VlangBuildTaskRunner
 import io.vlang.ide.run.VlangRunConfigurationRunState
@@ -37,17 +37,13 @@ open class VlangDebugRunner : AsyncProgramRunner<RunnerSettings>() {
         val workingDir = options.workingDir
         val outputFileName = options.outputFileName
 
-        val env = EnvironmentUtil.parseEnv(options.envs.split("\n", ",").toTypedArray()).apply {
-            EnvironmentUtil.inlineParentOccurrences(this)
-        }
-
         val binName = if (!outputFileName.isEmpty()) {
             outputFileName
         } else {
             VlangBuildTaskRunner.binaryName(options)
         }
 
-        val exe = if (File(binName).isAbsolute) {
+        val exe = if (File(binName).isRooted) {
             File(binName)
         } else {
             File(workingDir, binName)
@@ -69,8 +65,8 @@ open class VlangDebugRunner : AsyncProgramRunner<RunnerSettings>() {
             .withWorkDirectory(workingDir)
             .withCharset(Charsets.UTF_8)
             .withRedirectErrorStream(true)
-            .withParentEnvironmentType(GeneralCommandLine.ParentEnvironmentType.SYSTEM)
-            .withEnvironment(env)
+            .withParentEnvironmentType(if (options.isPassParentEnvs) CONSOLE else NONE)
+            .withEnvironment(options.envsMap)
 
         val additionalArguments = ParametersListUtil.parse(options.programArguments)
         commandLine.addParameters(additionalArguments)

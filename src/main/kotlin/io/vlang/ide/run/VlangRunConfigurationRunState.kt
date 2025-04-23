@@ -4,6 +4,7 @@ import com.intellij.execution.ExecutionResult
 import com.intellij.execution.Executor
 import com.intellij.execution.configurations.CommandLineState
 import com.intellij.execution.configurations.GeneralCommandLine
+import com.intellij.execution.configurations.GeneralCommandLine.ParentEnvironmentType.*
 import com.intellij.execution.configurations.PtyCommandLine
 import com.intellij.execution.configurations.RunProfileState
 import com.intellij.execution.process.ProcessEvent
@@ -47,7 +48,7 @@ class VlangRunConfigurationRunState(
                     }
                 } else {
                     val binName = VlangBuildTaskRunner.binaryName(options)
-                    File(workingDir, binName).normalize()
+                    File(binName)
                 }
                 if (!exe.exists()) {
                     throw IllegalStateException("Can't run ${exe.absolutePath}, file not found")
@@ -64,6 +65,8 @@ class VlangRunConfigurationRunState(
                 val commandLine = cmd
                     .withExePath(exe.absolutePath)
                     .withWorkDirectory(workingDir)
+                    .withParentEnvironmentType(if (options.isPassParentEnvs) CONSOLE else NONE)
+                    .withEnvironment(options.envsMap)
                     .withCharset(Charsets.UTF_8)
                     .withRedirectErrorStream(true)
 

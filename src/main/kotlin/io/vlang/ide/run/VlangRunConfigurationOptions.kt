@@ -3,6 +3,7 @@ package io.vlang.ide.run
 import com.intellij.execution.configurations.LocatableRunConfigurationOptions
 import com.intellij.openapi.components.PathMacroManager
 import com.intellij.openapi.project.Project
+import com.intellij.util.EnvironmentUtil
 import io.vlang.ide.run.VlangRunConfigurationEditor.RunKind
 
 class VlangRunConfigurationOptions : LocatableRunConfigurationOptions() {
@@ -14,6 +15,7 @@ class VlangRunConfigurationOptions : LocatableRunConfigurationOptions() {
     private var _runAfterBuild = property(true).provideDelegate(this, "runAfterBuild")
     private var _workingDir = string("\$PROJECT_DIR$").provideDelegate(this, "workingDir")
     private var _envs = string("").provideDelegate(this, "envs")
+    private var _isPassParentEnvs = property(true).provideDelegate(this, "isPassParentEnvs")
     private var _buildArguments = string("").provideDelegate(this, "buildArguments")
     private var _programArguments = string("").provideDelegate(this, "programArguments")
     private var _production = property(false).provideDelegate(this, "production")
@@ -85,6 +87,12 @@ class VlangRunConfigurationOptions : LocatableRunConfigurationOptions() {
             _emulateTerminal.setValue(this, value)
         }
 
+    var isPassParentEnvs: Boolean
+        get() = _isPassParentEnvs.getValue(this)
+        set(value) {
+            _isPassParentEnvs.setValue(this, value)
+        }
+
     fun expandOptions(project: Project): ExpandedOptions {
         return ExpandedOptions(this, project)
     }
@@ -124,6 +132,9 @@ class VlangRunConfigurationOptions : LocatableRunConfigurationOptions() {
                 return macroManager.expandPath(options.envs)
             }
 
+        val envsMap: Map<String, String>
+            get() = EnvironmentUtil.parseEnv(envs.split("\n", ";").toTypedArray())
+
         val buildArguments: String
             get() {
                 return macroManager.expandPath(options.buildArguments)
@@ -139,5 +150,8 @@ class VlangRunConfigurationOptions : LocatableRunConfigurationOptions() {
 
         val emulateTerminal: Boolean
             get() = options.emulateTerminal
+
+        val isPassParentEnvs: Boolean
+            get() = options.isPassParentEnvs
     }
 }

@@ -2,6 +2,7 @@ package io.vlang.ide.run
 
 import com.intellij.build.BuildViewManager
 import com.intellij.execution.configurations.GeneralCommandLine
+import com.intellij.execution.configurations.GeneralCommandLine.ParentEnvironmentType.*
 import com.intellij.execution.process.ProcessAdapter
 import com.intellij.execution.process.ProcessEvent
 import com.intellij.openapi.application.invokeLater
@@ -9,7 +10,6 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.SystemInfo
 import com.intellij.task.*
-import com.intellij.util.EnvironmentUtil
 import com.intellij.util.execution.ParametersListUtil
 import io.vlang.configurations.VlangConfigurationUtil
 import io.vlang.configurations.VlangProjectSettingsConfigurable
@@ -66,10 +66,6 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
         val outputFileName = options.outputFileName
         val outputDir = File(outputFileName).parentFile
 
-        val env = EnvironmentUtil.getEnvironmentMap() + EnvironmentUtil.parseEnv(options.envs.split("\n", ",").toTypedArray()).apply {
-            EnvironmentUtil.inlineParentOccurrences(this)
-        }
-
         if (outputDir != null && !outputDir.exists()) {
             outputDir.mkdirs()
         }
@@ -98,7 +94,8 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
 
         val commandLine = GeneralCommandLine()
             .withExePath(exe.path)
-            .withEnvironment(env)
+            .withParentEnvironmentType(if (options.isPassParentEnvs) CONSOLE else NONE)
+            .withEnvironment(options.envsMap)
             .withParameters(pathToBuild)
             .withParameters("-color")
             .withWorkDirectory(workingDir)
@@ -155,7 +152,13 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
     companion object {
         fun binaryName(options: VlangRunConfigurationOptions.ExpandedOptions): String {
             val name = if (options.runKind == VlangRunConfigurationEditor.RunKind.File) {
-                File(options.fileName).nameWithoutExtension
+                val file = File(options.fileName)
+                val execFile = File(file.parentFile, file.nameWithoutExtension).normalize().toString()
+                if (file.isRooted) {
+                    execFile
+                } else {
+                    File(options.workingDir, execFile).normalize().toString()
+                }
             } else {
                 File(options.workingDir).resolve(File(options.directory)).normalize().name
             }

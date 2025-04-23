@@ -43,6 +43,7 @@ open class VlangRunConfigurationEditor(private val project: Project) : SettingsE
         var runAfterBuild: Boolean = true,
         var workingDir: String = "",
         var envs: String = "",
+        var isPassParentEnvs: Boolean = true,
         var buildArguments: String = "",
         var programArguments: String = "",
         var production: Boolean = false,
@@ -63,6 +64,7 @@ open class VlangRunConfigurationEditor(private val project: Project) : SettingsE
             runAfterBuild = demoRunConfiguration.options.runAfterBuild
             workingDir = demoRunConfiguration.options.workingDir
             envs = demoRunConfiguration.options.envs
+            isPassParentEnvs = demoRunConfiguration.options.isPassParentEnvs
             buildArguments = demoRunConfiguration.options.buildArguments
             programArguments = demoRunConfiguration.options.programArguments
             production = demoRunConfiguration.options.production
@@ -83,6 +85,7 @@ open class VlangRunConfigurationEditor(private val project: Project) : SettingsE
             runAfterBuild = model.runAfterBuild
             workingDir = model.workingDir
             envs = model.envs
+            isPassParentEnvs = model.isPassParentEnvs
             buildArguments = model.buildArguments
             programArguments = model.programArguments
             production = model.production
@@ -201,9 +204,11 @@ open class VlangRunConfigurationEditor(private val project: Project) : SettingsE
                     .apply {
                         MacrosDialog.addTextFieldExtension(
                             component.textField,
-                            MacrosDialog.Filters.DIRECTORY_PATH,
+                            MacrosDialog.Filters.ALL,
                             null
                         )
+                        component.isPassParentEnvs = model.isPassParentEnvs
+                        component.addChangeListener { model.isPassParentEnvs = component.isPassParentEnvs }
                     }
                     .align(AlignX.FILL)
                     .bindText(model::envs)
