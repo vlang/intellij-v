@@ -46,7 +46,7 @@ open class VlangLLDBDriverConfiguration(
         frame: LLFrame,
         cacheHolder: UserDataHolderEx,
     ): EvaluationContext {
-        return VlangLldbEvaluationContext(project, true, driver, expirable, thread, frame, cacheHolder)
+        return VlangLldbEvaluationContext(project, false, driver, expirable, thread, frame, cacheHolder)
     }
 
     override fun createDriver(handler: DebuggerDriver.Handler, architectureType: ArchitectureType): LLDBDriver {
