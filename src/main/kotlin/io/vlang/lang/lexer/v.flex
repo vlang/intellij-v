@@ -111,7 +111,7 @@ IDENT = {LETTER} {IDENT_PART}*
 IDENT_PART = {LETTER} | {DIGIT}
 
 // JS and C special identifiers like JS.function_name or C.free
-SPECIAL_IDENT = ("JS." | "C.") "@"? {LETTER} ({LETTER} | {DIGIT} | "." )*
+SPECIAL_IDENT = ("JS." | "C." | "WASM.") "@"? {LETTER} ({LETTER} | {DIGIT} | "." )*
 
 STR_DOUBLE = "\""
 STR_SINGLE = "'"

@@ -250,13 +250,19 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
                 return@AcceptPredicate false
             }
 
-            if (e.name?.startsWith("C.") == true) {
-                return@AcceptPredicate file.isCFile()
-            }
-
-            if (e.name?.startsWith("JS.") == true) {
-                return@AcceptPredicate file.isJSFile()
-            }
+//            if (e.name?.startsWith("C.") == true) {
+////                return@AcceptPredicate file.isCFile()
+//                return@AcceptPredicate true
+//            }
+//
+//            if (e.name?.startsWith("JS.") == true) {
+////                return@AcceptPredicate file.isJSFile()
+//                return@AcceptPredicate true
+//            }
+//
+//            if (e.name?.startsWith("WASM.") == true) {
+//                return@AcceptPredicate true
+//            }
 
             // forbid raw map completion
             if (e is VlangStructDeclaration && e.name == "map") {

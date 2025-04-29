@@ -225,7 +225,7 @@ object VlangCodeInsightUtil {
     }
 
     fun nonVlangName(name: String): Boolean {
-        return name.startsWith("JS.") || name.startsWith("C.")
+        return name.startsWith("JS.") || name.startsWith("C.") || name.startsWith("WASM.")
     }
 
     fun getQualifiedName(context: PsiElement, anchor: PsiElement, name: String): String {

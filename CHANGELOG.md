@@ -8,6 +8,8 @@
 - Fix IndexOutOfBoundsException while typing `}` at the end of the document
 - Change order of default value and attribute. Fixes [#22](https://github.com/vlang/intellij-v/issues/22)
 - Builtin functions will not show private members in code completion. Fixes [#9](https://github.com/vlang/intellij-v/issues/9)
+- Add WASM. prefix
+- Remove restrictions for C., JS. completions
 - Refactor RunConfiguration:
   - Add validation
   - Use relative paths to working directory
