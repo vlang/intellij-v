@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Support for intellij platform 2025.1
+  - Remove pluginUntilBuild setting - plugin if compatible should be usable across new major version releases
 - Fix 'Slow operations are prohibited on EDT' error after project opening
 - Fix mismatch of indexes and psi after `v up` command
 - Change Snake case implementation to covert all caps as single word
