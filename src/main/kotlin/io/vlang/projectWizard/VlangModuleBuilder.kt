@@ -61,12 +61,12 @@ class VlangModuleBuilder : ModuleBuilder(), ModuleBuilderListener {
                         val filesToOpen = VlangProjectTemplate()
                             .generateProject(module, baseDir)
 
-                        if (!filesToOpen.isEmpty()) {
+                        if (filesToOpen.isNotEmpty()) {
                             scheduleFilesOpening(module, filesToOpen)
                         }
 
                         setToolchainInfo(module, toolchainLocation)
-                    } catch (ignore: IOException) {
+                    } catch (_: IOException) {
                     }
                 }
             }
