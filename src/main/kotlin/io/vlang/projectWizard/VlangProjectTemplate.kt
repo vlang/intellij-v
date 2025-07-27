@@ -1,6 +1,7 @@
 package io.vlang.projectWizard
 
 import com.intellij.openapi.module.Module
+import com.intellij.openapi.project.projectsDataDir
 import com.intellij.openapi.vfs.VirtualFile
 import java.nio.charset.StandardCharsets
 
@@ -67,7 +68,7 @@ class VlangProjectTemplate {
             """
                 # Binaries for programs and plugins
                 main
-                untitled19
+                ${baseDir.name}
                 *.exe
                 *.exe~
                 *.so
