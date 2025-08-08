@@ -36,6 +36,7 @@ import io.vlang.lang.psi.types.VlangFunctionTypeEx
 import io.vlang.lang.psi.types.VlangTypeEx
 import io.vlang.lang.search.VlangGotoUtil
 import io.vlang.lang.search.VlangSuperSearch
+import javax.swing.SwingUtilities
 
 class VlangImplementMethodsHandler : LanguageCodeInsightActionHandler {
     override fun isValidFor(editor: Editor, file: PsiFile) = file is VlangFile
@@ -91,7 +92,7 @@ class VlangImplementMethodsHandler : LanguageCodeInsightActionHandler {
                 }
                 val chosenElement = popup.chosenElement!!
                 if (chosenElement is VlangInterfaceDeclaration && !project.isDisposed) {
-                    IdeFocusManager.getInstance(project).doWhenFocusSettlesDown {
+                    SwingUtilities.invokeLater {
                         startImplementing(project, file, editor, struct, chosenElement)
                     }
                 }
@@ -130,7 +131,7 @@ class VlangImplementMethodsHandler : LanguageCodeInsightActionHandler {
 
             for (method in methods) {
                 val signature = method.getSignature()
-                if (method == null || method.name == null || isAlreadyImplementedMethod(struct, method)) continue
+                if (method.name == null || isAlreadyImplementedMethod(struct, method)) continue
 
                 val mutable = if (method.isMutable) "mut " else ""
                 val reference = if (method.isMutable) "" else "&"

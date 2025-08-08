@@ -82,7 +82,7 @@ open class VlangTestConfigurationEditor(private val project: Project) : Settings
 
                 row("Test file:") {
                     textFieldWithBrowseButton(
-                        FileChooserDescriptorFactory.createSingleFileDescriptor().withTitle("Select V Test File"),
+                        FileChooserDescriptorFactory.singleFile().withTitle("Select V Test File"),
                         project
                     )
                         .align(AlignX.FILL)

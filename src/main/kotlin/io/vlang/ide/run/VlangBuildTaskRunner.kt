@@ -3,8 +3,8 @@ package io.vlang.ide.run
 import com.intellij.build.BuildViewManager
 import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.execution.configurations.GeneralCommandLine.ParentEnvironmentType.*
-import com.intellij.execution.process.ProcessAdapter
 import com.intellij.execution.process.ProcessEvent
+import com.intellij.execution.process.ProcessListener
 import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
@@ -129,7 +129,7 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
         ctx.processHandler = handler
         ctx.workingDirectory = workingDir.toPath()
         handler.addProcessListener(VlangBuildAdapter(ctx, buildProgressListener))
-        handler.addProcessListener(object : ProcessAdapter() {
+        handler.addProcessListener(object : ProcessListener {
             override fun processTerminated(event: ProcessEvent) {
                 if (event.exitCode == 0) {
                     resultPromise.setResult(TaskRunnerResults.SUCCESS)

@@ -44,7 +44,7 @@ abstract class VlangCodeFragment(
         init(TokenType.CODE_FRAGMENT, contentElementType)
     }
 
-    final override fun init(elementType: IElementType, contentElementType: IElementType?) {
+    final override fun init(elementType: IElementType, contentElementType: IElementType) {
         super.init(elementType, contentElementType)
     }
 

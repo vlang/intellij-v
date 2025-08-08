@@ -9,7 +9,7 @@ import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.project.Project
 import com.intellij.psi.util.parentOfType
 import com.intellij.refactoring.RefactoringFactory
-import com.intellij.webSymbols.utils.NameCaseUtils
+import com.intellij.polySymbols.utils.NameCaseUtils
 import io.vlang.ide.codeInsight.VlangCodeInsightUtil
 import io.vlang.ide.inspections.VlangBaseInspection
 import io.vlang.lang.psi.VlangConstDefinition

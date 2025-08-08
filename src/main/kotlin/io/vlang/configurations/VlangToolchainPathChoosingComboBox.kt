@@ -1,8 +1,6 @@
 package io.vlang.configurations
 
-import com.intellij.openapi.application.AppUIExecutor
-import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.application.ModalityState
+import com.intellij.openapi.application.readAndEdtWriteAction
 import com.intellij.openapi.fileChooser.FileChooser
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.ui.ComboBoxWithWidePopup
@@ -64,20 +62,17 @@ class VlangToolchainPathChoosingComboBox(onTextChanged: () -> Unit = {}) :
     /**
      * Obtains a list of toolchains on a pool using [toolchainObtainer], then fills the combobox and calls [callback] on the EDT.
      */
-    fun addToolchainsAsync(toolchainObtainer: () -> List<Path>) {
+    suspend fun addToolchainsAsync(toolchainObtainer: () -> List<Path>) {
         setBusy(true)
-        ApplicationManager.getApplication().executeOnPooledThread {
-            var toolchains = emptyList<Path>()
-            try {
-                toolchains = toolchainObtainer()
-            } finally {
-                val executor = AppUIExecutor.onUiThread(ModalityState.any()).expireWith(this)
-                executor.execute {
-                    setBusy(false)
-                    childComponent.removeAllItems()
-                    toolchains.forEach(childComponent::addItem)
-                    selectedPath = selectedPath?.ifEmpty { null } ?: (toolchains.firstOrNull()?.pathString ?: "")
-                }
+        readAndEdtWriteAction {
+
+            val toolchains = toolchainObtainer()
+
+            writeAction {
+                setBusy(false)
+                childComponent.removeAllItems()
+                toolchains.forEach(childComponent::addItem)
+                selectedPath = selectedPath?.ifEmpty { null } ?: (toolchains.firstOrNull()?.pathString ?: "")
             }
         }
     }

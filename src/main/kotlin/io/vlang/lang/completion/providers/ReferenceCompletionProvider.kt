@@ -413,8 +413,7 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
                 )
 
                 is VlangImportAlias               -> VlangCompletionUtil.createImportAliasLookupElement(element)
-                is VlangNamedElement              -> VlangCompletionUtil.createVariableLikeLookupElement(element)
-                else                              -> null
+                else                              -> VlangCompletionUtil.createVariableLikeLookupElement(element)
             }
 
             var isContextElement = false
@@ -422,7 +421,7 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
                 isContextElement = lookupElement.priority.toInt() == VlangCompletionUtil.CONTEXT_COMPLETION_PRIORITY
             }
 
-            val isNotDeprecated = element !is VlangNamedElement || !element.isDeprecated()
+            val isNotDeprecated = !element.isDeprecated()
 
             return lookupElement?.toVlangLookupElement(
                 VlangLookupElementProperties(

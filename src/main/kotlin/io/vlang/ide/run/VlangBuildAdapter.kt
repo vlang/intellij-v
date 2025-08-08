@@ -8,10 +8,11 @@ import com.intellij.build.events.impl.*
 import com.intellij.build.output.BuildOutputInstantReaderImpl
 import com.intellij.execution.ExecutionListener
 import com.intellij.execution.ExecutionManager
-import com.intellij.execution.ExecutorRegistry
 import com.intellij.execution.actions.StopProcessAction
 import com.intellij.execution.impl.ExecutionManagerImpl
-import com.intellij.execution.process.*
+import com.intellij.execution.process.ProcessEvent
+import com.intellij.execution.process.ProcessHandler
+import com.intellij.execution.process.ProcessListener
 import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.execution.runners.ExecutionUtil
 import com.intellij.icons.AllIcons
@@ -29,7 +30,7 @@ import javax.swing.JComponent
 class VlangBuildAdapter(
     private val ctx: VlangBuildContext,
     private val buildProgressListener: BuildViewManager,
-) : ProcessAdapter() {
+) : ProcessListener {
 
     private val instantReader = BuildOutputInstantReaderImpl(
         ctx.buildId,

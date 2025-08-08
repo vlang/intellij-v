@@ -30,6 +30,7 @@ import io.vlang.lang.psi.VlangTypeReferenceExpression
 import io.vlang.lang.psi.impl.VlangPsiImplUtil
 import io.vlang.lang.psi.impl.VlangReference
 import io.vlang.lang.stubs.index.VlangModulesFingerprintIndex
+import java.util.function.Function
 
 class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, HintAction, HighPriorityAction {
     private val moduleName: String
@@ -170,7 +171,7 @@ class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, H
         if (modulesToImport.size > 1 && editor != null) {
             val list = JBList(modulesToImport)
 
-            list.installCellRenderer { name ->
+            list.installCellRenderer(Function<String, SimpleColoredComponent> { name ->
                 val parts = name.split('.')
                 val shortName = parts.last()
 
@@ -180,7 +181,7 @@ class VlangImportModuleQuickFix : LocalQuickFixAndIntentionActionOnPsiElement, H
                     append(" ($name)", SimpleTextAttributes.GRAY_ATTRIBUTES)
                     border = JBUI.Borders.empty(2, 4)
                 }
-            }
+            })
 
             val builder = PopupChooserBuilder(list)
                 .setRequestFocus(true)

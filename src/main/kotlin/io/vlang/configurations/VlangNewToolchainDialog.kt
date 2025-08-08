@@ -1,6 +1,8 @@
 package io.vlang.configurations
 
+import com.github.weisj.jsvg.cs
 import com.intellij.icons.AllIcons
+import com.intellij.openapi.progress.runBlockingCancellable
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.openapi.ui.DialogWrapper
@@ -63,9 +65,11 @@ class VlangNewToolchainDialog(private val toolchainFilter: Condition<Path>, proj
             }
         }
 
-        pathToToolchainComboBox.addToolchainsAsync {
-            VlangToolchainFlavor.getApplicableFlavors().flatMap { it.suggestHomePaths() }.distinct().
-                    filter { toolchainFilter.value(it) }
+        runBlockingCancellable {
+            pathToToolchainComboBox.addToolchainsAsync {
+                VlangToolchainFlavor.getApplicableFlavors().flatMap { it.suggestHomePaths() }.distinct()
+                    .filter { toolchainFilter.value(it) }
+            }
         }
 
         val disposable = Disposer.newDisposable()

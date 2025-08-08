@@ -36,7 +36,7 @@ class VlangDownloadedLldbToolEnvironment(private val project: Project) : CidrToo
             if (option == Messages.OK) {
                 val result = VlangLldbDownloadService.getInstance().downloadDebugger(project)
                 if (result is VlangLldbDownloadService.DownloadResult.Ok) {
-                    VlangDebuggerState.getInstance().lldbPath = result.lldbDir.absolutePath
+                    VlangDebuggerState.getInstance().lldbPath = result.lldbDir.toAbsolutePath().toString()
                     return true
                 }
             }

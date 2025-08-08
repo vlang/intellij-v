@@ -1150,7 +1150,7 @@ object DocumentationGenerator {
                     append(".")
                 }
                 moduleNameAtIndex += moduleNamePart
-                DocumentationManagerUtil.createHyperlink(this, module.toPsi(), "#$moduleNameAtIndex", moduleNamePart, true)
+                DocumentationManagerUtil.createHyperlink(this, "#$moduleNameAtIndex", moduleNamePart, true)
             }
 
             append(DocumentationMarkup.CONTENT_END)

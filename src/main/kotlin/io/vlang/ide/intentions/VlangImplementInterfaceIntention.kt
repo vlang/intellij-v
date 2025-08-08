@@ -26,10 +26,12 @@ class VlangImplementInterfaceIntention : VlangBaseIntention(), HighPriorityActio
     override operator fun invoke(project: Project, editor: Editor, element: PsiElement) {
         val action = findImplementMethodsAction()
         action?.actionPerformed(
-            AnActionEvent.createFromDataContext(
-                ActionPlaces.UNKNOWN,
+            AnActionEvent.createEvent(
+                EditorUtil.getEditorDataContext(editor),
                 null,
-                EditorUtil.getEditorDataContext(editor)
+                ActionPlaces.UNKNOWN,
+                ActionUiKind.NONE,
+                null,
             )
         )
     }

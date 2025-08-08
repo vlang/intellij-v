@@ -28,6 +28,7 @@ abstract class VlangLightType<E : VlangCompositeElement>(
 
     override fun toString() = javaClass.simpleName + "{" + element + "}"
 
+    @Deprecated("Deprecated in com.intellij.psi.StubBasedPsiElement, ise getIElementType() instead")
     override fun getElementType() = null
 
     override fun getStub(): VlangTypeStub? = null

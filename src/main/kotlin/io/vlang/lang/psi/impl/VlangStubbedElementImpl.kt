@@ -15,7 +15,7 @@ abstract class VlangStubbedElementImpl<T : StubBase<*>> : StubBasedPsiElementBas
     constructor(stub: T, nodeType: IStubElementType<*, *>) : super(stub, nodeType)
     constructor(node: ASTNode) : super(node)
 
-    override fun toString() = elementType.toString()
+    override fun toString() = elementTypeImpl.toString()
 
     override fun getText(): String? {
         val stub = stub

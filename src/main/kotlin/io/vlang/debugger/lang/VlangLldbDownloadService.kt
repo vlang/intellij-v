@@ -16,6 +16,7 @@ import com.intellij.openapi.util.io.FileUtil
 import com.intellij.util.download.DownloadableFileDescription
 import com.intellij.util.download.DownloadableFileService
 import com.intellij.util.io.Decompressor
+import com.intellij.util.io.delete
 import com.intellij.util.system.CpuArch
 import com.intellij.util.system.OS
 import com.jetbrains.cidr.execution.debugger.backend.bin.UrlProvider
@@ -25,6 +26,7 @@ import java.net.URL
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
+import kotlin.io.path.name
 
 /* Copied from https://github.com/intellij-rust/intellij-rust/blob/master/debugger/src/main/kotlin/org/rust/debugger/RsDebuggerToolchainService.kt*/
 @Service
@@ -121,11 +123,11 @@ class VlangLldbDownloadService {
         }
 
     @Throws(IOException::class)
-    private fun downloadAndUnarchive(lldbFrameworkUrl: String, lldbFrontendUrl: String): File {
+    private fun downloadAndUnarchive(lldbFrameworkUrl: String, lldbFrontendUrl: String): Path {
         val service = DownloadableFileService.getInstance()
 
-        val lldbDir = lldbPath().toFile()
-        lldbDir.deleteRecursively()
+        val lldbDir = lldbPath()
+        lldbDir.delete(recursively = true)
 
         val descriptions = listOf(
             service.createFileDescription(lldbFrameworkUrl),
@@ -133,15 +135,15 @@ class VlangLldbDownloadService {
         )
 
         val downloader = service.createDownloader(descriptions, "Debugger downloading")
-        val downloadDirectory = downloadPath().toFile()
-        val downloadResults = downloader.download(downloadDirectory)
+        val downloadDirectory = downloadPath()
+        val downloadResults = downloader.download(downloadDirectory.toFile())
 
         val versions = Properties()
         for (result in downloadResults) {
             val downloadUrl = result.second.downloadUrl
             val propertyName =
                 if (downloadUrl == lldbFrameworkUrl) LLDB_FRAMEWORK_PROPERTY_NAME else LLDB_FRONTEND_PROPERTY_NAME
-            val archiveFile = result.first
+            val archiveFile = result.first.toPath()
             Unarchiver.unarchive(archiveFile, lldbDir)
             archiveFile.delete()
             versions[propertyName] = fileNameWithoutExtension(downloadUrl)
@@ -181,7 +183,7 @@ class VlangLldbDownloadService {
     fun saveLLDBVersions(versions: Properties) {
         try {
             versions.store(lldbPath().resolve(LLDB_VERSIONS).toFile().bufferedWriter(), "")
-        } catch (e: IOException) {
+        } catch (_: IOException) {
             LOG.warn("Failed to save `$LLDB_VERSIONS`")
         }
     }
@@ -207,19 +209,19 @@ class VlangLldbDownloadService {
     private enum class Unarchiver {
         ZIP {
             override val extension: String = "zip"
-            override fun createDecompressor(file: File): Decompressor = Decompressor.Zip(file)
+            override fun createDecompressor(file: Path): Decompressor = Decompressor.Zip(file)
         },
         TAR {
             override val extension: String = "tar.gz"
-            override fun createDecompressor(file: File): Decompressor = Decompressor.Tar(file)
+            override fun createDecompressor(file: Path): Decompressor = Decompressor.Tar(file)
         };
 
         protected abstract val extension: String
-        protected abstract fun createDecompressor(file: File): Decompressor
+        protected abstract fun createDecompressor(file: Path): Decompressor
 
         companion object {
             @Throws(IOException::class)
-            fun unarchive(archivePath: File, dst: File) {
+            fun unarchive(archivePath: Path, dst: Path) {
                 val unarchiver = entries.find { archivePath.name.endsWith(it.extension) }
                     ?: error("Unexpected archive type: $archivePath")
                 unarchiver.createDecompressor(archivePath).extract(dst)
@@ -228,7 +230,7 @@ class VlangLldbDownloadService {
     }
 
     sealed class DownloadResult {
-        class Ok(val lldbDir: File) : DownloadResult()
+        class Ok(val lldbDir: Path) : DownloadResult()
         object NoUrls : DownloadResult()
         object Failed : DownloadResult()
     }

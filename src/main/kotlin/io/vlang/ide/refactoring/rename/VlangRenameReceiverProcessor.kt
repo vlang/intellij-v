@@ -6,11 +6,10 @@ import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.command.impl.StartMarkAction
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.progress.ProgressManager
-import com.intellij.openapi.project.DumbService
 import com.intellij.openapi.ui.popup.JBPopupFactory
 import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.util.Pass
+import com.intellij.platform.ide.progress.runWithModalProgressBlocking
 import com.intellij.psi.PsiElement
 import com.intellij.refactoring.rename.RenamePsiElementProcessor
 import org.jetbrains.annotations.TestOnly
@@ -38,19 +37,19 @@ class VlangRenameReceiverProcessor : RenamePsiElementProcessor() {
         }
 
         val project = runReadAction { element.project }
-        ProgressManager.getInstance().runProcessWithProgressSynchronously(
-            {
-                DumbService.getInstance(project).runReadActionInSmartMode {
-                    type.ownMethodsList(project)
-                        .map { it.receiver }
-                        .filter { it.name != "_" }
-                        .forEach { allRenames[it] = newName }
-                }
-            }, "Looking for Method Usages", true, project
-        )
+        runWithModalProgressBlocking(project, "Looking for Method Usages") {
+            type.ownMethodsList(project)
+                .map { it.receiver }
+                .filter { it.name != "_" }
+                .forEach { allRenames[it] = newName }
+        }
     }
 
-    override fun substituteElementToRename(element: PsiElement, editor: Editor, renameCallback: Pass<in PsiElement>) {
+    override fun substituteElementToRename(
+        element: PsiElement,
+        editor: Editor,
+        renameCallback: Pass<in PsiElement>,
+    ) {
         val receiver = element as? VlangReceiver ?: return
         val type = receiver.getType(null)?.unwrapPointer() ?: return
         val methods = type.ownMethodsList(element.project)
@@ -72,7 +71,8 @@ class VlangRenameReceiverProcessor : RenamePsiElementProcessor() {
             renameCallback.pass(element)
             return
         }
-        JBPopupFactory.getInstance().createPopupChooserBuilder(listOf(RENAME_ALL_RECEIVERS, RENAME_ONLY_CURRENT_RECEIVER))
+        JBPopupFactory.getInstance()
+            .createPopupChooserBuilder(listOf(RENAME_ALL_RECEIVERS, RENAME_ONLY_CURRENT_RECEIVER))
             .setMovable(false)
             .setResizable(false)
             .setRequestFocus(true)

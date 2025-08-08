@@ -89,7 +89,7 @@ class VlangBuildEventsConverter(private val ctx: VlangBuildContext) : BuildOutpu
 
     private fun readWholeMessage(line: String, reader: BuildOutputInstantReader): String {
         val allMessage = StringBuilder()
-        var cleanReadLine: String?
+        var cleanReadLine: String
         var readLine: String?
         var readLines = 0
 
@@ -105,7 +105,7 @@ class VlangBuildEventsConverter(private val ctx: VlangBuildContext) : BuildOutpu
             }
 
             allMessage.append(readLine + "\n")
-        } while (cleanReadLine != null && (cleanReadLine.matches(MESSAGE_LINE) || cleanReadLine.matches(MESSAGE_ERROR_LINE)))
+        } while (cleanReadLine.matches(MESSAGE_LINE) || cleanReadLine.matches(MESSAGE_ERROR_LINE))
 
         reader.pushBack(readLines)
         return line + "\n" + allMessage
