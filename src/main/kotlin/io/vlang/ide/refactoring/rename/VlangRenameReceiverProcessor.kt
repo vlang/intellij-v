@@ -3,6 +3,7 @@ package io.vlang.ide.refactoring.rename
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.runReadAction
+import com.intellij.openapi.application.smartReadAction
 import com.intellij.openapi.command.impl.StartMarkAction
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.editor.Editor
@@ -38,10 +39,12 @@ class VlangRenameReceiverProcessor : RenamePsiElementProcessor() {
 
         val project = runReadAction { element.project }
         runWithModalProgressBlocking(project, "Looking for Method Usages") {
-            type.ownMethodsList(project)
-                .map { it.receiver }
-                .filter { it.name != "_" }
-                .forEach { allRenames[it] = newName }
+            smartReadAction(project) {
+                type.ownMethodsList(project)
+                    .map { it.receiver }
+                    .filter { it.name != "_" }
+                    .forEach { allRenames[it] = newName }
+            }
         }
     }
 
