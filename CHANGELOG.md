@@ -1,6 +1,8 @@
 # IntelliJ V Changelog
 
 ## [Unreleased]
+- Support for intellij platform 2025.2
+- Fix default run configuration to use current working directory
 
 ## [2025.1.1] - 2025-04-29
 
