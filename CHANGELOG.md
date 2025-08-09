@@ -1,6 +1,9 @@
 # IntelliJ V Changelog
 
 ## [Unreleased]
+
+## [2025.2.1] - 2025-08-09
+
 - Support for intellij platform 2025.2
 - Fix default run configuration to use current working directory
 
@@ -253,7 +256,8 @@
 - Don't show `private` keyword in quick documentation
 - Support 2023.1 EAP
 
-[Unreleased]: https://github.com/vlang/intellij-v//compare/v2025.1.1...HEAD
+[Unreleased]: https://github.com/vlang/intellij-v//compare/v2025.2.1...HEAD
+[2025.2.1]: https://github.com/vlang/intellij-v//compare/v2025.1.1...v2025.2.1
 [2025.1.1]: https://github.com/vlang/intellij-v//compare/v2024.3.1...v2025.1.1
 [2024.3.1]: https://github.com/vlang/intellij-v//compare/v0.0.1-beta.6...v2024.3.1
 [0.0.1-beta.6]: https://github.com/vlang/intellij-v//compare/v0.0.1-beta.5...v0.0.1-beta.6
