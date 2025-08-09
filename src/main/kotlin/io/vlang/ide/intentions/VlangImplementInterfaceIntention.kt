@@ -2,6 +2,7 @@ package io.vlang.ide.intentions
 
 import com.intellij.codeInsight.intention.HighPriorityAction
 import com.intellij.openapi.actionSystem.*
+import com.intellij.openapi.actionSystem.ex.ActionUtil
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.ex.util.EditorUtil
@@ -24,16 +25,15 @@ class VlangImplementInterfaceIntention : VlangBaseIntention(), HighPriorityActio
     }
 
     override operator fun invoke(project: Project, editor: Editor, element: PsiElement) {
-        val action = findImplementMethodsAction()
-        action?.actionPerformed(
-            AnActionEvent.createEvent(
-                EditorUtil.getEditorDataContext(editor),
-                null,
-                ActionPlaces.UNKNOWN,
-                ActionUiKind.NONE,
-                null,
-            )
+        val action = findImplementMethodsAction() ?: return
+        val event = AnActionEvent.createEvent(
+            EditorUtil.getEditorDataContext(editor),
+            null,
+            ActionPlaces.UNKNOWN,
+            ActionUiKind.NONE,
+            null,
         )
+        ActionUtil.performAction(action, event)
     }
 
     override fun getShortcut(): ShortcutSet? {
