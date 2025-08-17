@@ -4,7 +4,7 @@ module new
 type Foo = int
 
 @[minify]
-@[name]
+@[name] @[in_one_line]
 @[name2: 'name']
 @[sevaral; attributes]
 struct Name {

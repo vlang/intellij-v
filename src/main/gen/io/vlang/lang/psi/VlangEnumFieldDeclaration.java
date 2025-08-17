@@ -7,6 +7,9 @@ import com.intellij.psi.PsiElement;
 
 public interface VlangEnumFieldDeclaration extends VlangCompositeElement {
 
+  @Nullable
+  VlangAttributes getAttributes();
+
   @NotNull
   VlangEnumFieldDefinition getEnumFieldDefinition();
 

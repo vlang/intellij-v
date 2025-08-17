@@ -46,6 +46,14 @@ V Language file
           PLAIN_ATTRIBUTE
             ATTRIBUTE_KEY
               ATTRIBUTE_IDENTIFIER
+                PsiElement(VlangTokenType.identifier)('in_one_line')
+        PsiElement(VlangTokenType.])(']')
+      ATTRIBUTE
+        PsiElement(VlangTokenType.@[)('@[')
+        ATTRIBUTE_EXPRESSION
+          PLAIN_ATTRIBUTE
+            ATTRIBUTE_KEY
+              ATTRIBUTE_IDENTIFIER
                 PsiElement(VlangTokenType.identifier)('name2')
             PsiElement(VlangTokenType.:)(':')
             ATTRIBUTE_VALUE

@@ -59,3 +59,11 @@ pub enum Platform {
 	raw
 	cross
 }
+
+@['TopAnnotation'; AnotherAnnotation: 3]
+enum AnnotatedEnum {
+	none @['None']
+	one = 1 @['One'; value: 1]
+	two @[two: 2] @['Two']
+	three
+}

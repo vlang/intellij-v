@@ -27,6 +27,12 @@ public class VlangEnumFieldDeclarationImpl extends VlangCompositeElementImpl imp
   }
 
   @Override
+  @Nullable
+  public VlangAttributes getAttributes() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangAttributes.class);
+  }
+
+  @Override
   @NotNull
   public VlangEnumFieldDefinition getEnumFieldDefinition() {
     return notNullChild(VlangPsiTreeUtil.getChildOfType(this, VlangEnumFieldDefinition.class));

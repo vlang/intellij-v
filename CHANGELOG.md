@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Allow attributes on enum values. Fixes [#38](https://github.com/vlang/intellij-v/issues/38)
+
 ## [2025.2.1] - 2025-08-09
 
 - Support for intellij platform 2025.2

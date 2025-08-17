@@ -246,7 +246,7 @@ private StatementRecover ::= !('!' | '?' | '&' | '@[' | '[' | '(' | '*' | '+' | 
 // attributes start
 // @[attr1]
 // @[attr2]
-Attributes ::= Attribute (semi Attribute)* semi? {
+Attributes ::= Attribute (semi? Attribute)* semi? {
   pin=1
   stubClass="io.vlang.lang.stubs.VlangAttributesStub"
 }
@@ -490,7 +490,7 @@ EnumType ::= enum identifier EnumBackedTypeAs? '{' EnumFields? '}' {
 EnumBackedTypeAs ::= as Type {pin=1}
 
 private EnumFields ::= EnumFieldDeclaration (EnumFieldDeclaration)*
-EnumFieldDeclaration ::= EnumFieldDefinition ('=' Expression)? semi? {pin=1}
+EnumFieldDeclaration ::= EnumFieldDefinition ('=' Expression)? Attributes? semi? {pin=1}
 EnumFieldDefinition ::= <<remapToIdentifier>> identifier {
   pin=2
   methods=[isPublic getTypeInner constantValue]
