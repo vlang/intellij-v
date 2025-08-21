@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Allow attributes on enum values. Fixes [#38](https://github.com/vlang/intellij-v/issues/38)
+- Fix a freeze after clicking button to add a toolchain [#37](https://github.com/vlang/intellij-v/issues/37)
 
 ## [2025.2.1] - 2025-08-09
 
