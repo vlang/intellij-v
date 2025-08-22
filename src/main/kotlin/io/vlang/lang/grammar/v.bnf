@@ -355,7 +355,7 @@ AppendStatement ::= DotExpression ShiftLeftOp Expression {
     methods=[getLeft]
 }
 
-ShiftLeftExpr ::= Expression ShiftLeftOp Expression
+ShiftLeftExpr ::= Expression '<NL>'? ShiftLeftOp '<NL>'? Expression
 
 ShiftLeftOp ::= <<shiftLeft>>
 
@@ -946,15 +946,15 @@ private SliceExprBody ::= '..' Expression
 left OrBlockExpr ::= or Block
 
 // math and logical expressions
-OrExpr ::= Expression semi? '||' Expression
-AndExpr ::= Expression semi? '&&' Expression
+OrExpr ::= Expression '<NL>'? '||' '<NL>'? Expression
+AndExpr ::= Expression '<NL>'? '&&' '<NL>'? Expression
 SendExpr ::= Expression '<-' Expression {
     methods=[left="Expression[0]" right="Expression[1]"]
 }
 UnaryExpr ::=  UnaryOp Expression {methods=[getOperator]}
-ConditionalExpr ::= Expression RelOp Expression
-AddExpr ::= Expression AddOp Expression
-MulExpr ::= Expression MulOp Expression
+ConditionalExpr ::= Expression '<NL>'? RelOp '<NL>'? Expression
+AddExpr ::= Expression '<NL>'? AddOp '<NL>'? Expression
+MulExpr ::= Expression '<NL>'? MulOp '<NL>'? Expression
 
 private RelOp ::= '==' | '!=' | '<' | '<=' | '>' !'>' | '>='
 private AddOp ::= '+' | '-' | '|' | '^'

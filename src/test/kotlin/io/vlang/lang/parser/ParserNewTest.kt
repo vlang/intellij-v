@@ -15,4 +15,5 @@ class ParserNewTest : ParserTestBase("parser/new", "v", VlangParserDefinition())
     fun `test isreftype`() = doTest(true)
     fun `test before block expr`() = doTest(true)
     fun `test struct init inside for loop without last statement`() = doTest(true)
+    fun `test multiline operators`() = doTest(true)
 }
