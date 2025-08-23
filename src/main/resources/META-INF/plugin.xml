@@ -242,6 +242,7 @@ Discord Server: <a href="https://discord.gg/vlang">https://discord.gg/vlang</a><
         <projectTaskRunner order="last" implementation="io.vlang.ide.run.VlangBuildTaskRunner"/>
         <programRunner order="last" implementation="io.vlang.debugger.runconfig.VlangDebugRunner"/>
         <console.folding implementation="io.vlang.ide.run.VlangConsoleFolding"/>
+        <consoleFilterProvider implementation="io.vlang.ide.run.VlangConsoleFilterProvider"/>
         <applicationService serviceImplementation="io.vlang.debugger.lang.VlangDebuggerState"/>
         <runLineMarkerContributor id="VlangRunLineMarkerProvider" language="vlang"
                                   implementationClass="io.vlang.ide.run.VlangRunLineMarkerProvider"/>
