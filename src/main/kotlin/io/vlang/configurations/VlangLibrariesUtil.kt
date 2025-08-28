@@ -9,6 +9,10 @@ import com.intellij.openapi.roots.ex.ProjectRootManagerEx
 
 object VlangLibrariesUtil {
     fun updateLibraries(project: Project) {
+        if (project.isDefault) {
+            return
+        }
+
         invokeLater(ModalityState.nonModal()) {
             WriteAction.run<RuntimeException> {
                 ProjectRootManagerEx.getInstanceEx(project).makeRootsChange({}, RootsChangeRescanningInfo.TOTAL_RESCAN)
