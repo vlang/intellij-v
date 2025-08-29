@@ -15,6 +15,10 @@ import io.vlang.projectWizard.VlangToolchainFlavor
 import io.vlang.toolchain.VlangKnownToolchainsState
 import io.vlang.toolchain.VlangToolchain
 import io.vlang.utils.toPath
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import java.io.File
 import java.nio.file.Path
 import javax.swing.JComponent
@@ -63,13 +67,16 @@ class VlangNewToolchainDialog(private val toolchainFilter: Condition<Path>, proj
             }
         }
 
-        pathToToolchainComboBox.addToolchainsAsync {
+        val disposable = Disposer.newDisposable()
+        mainPanel.registerValidators(disposable)
+
+        val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+        Disposer.register(disposable, scope::cancel)
+
+        pathToToolchainComboBox.addToolchainsAsync(scope) {
             VlangToolchainFlavor.getApplicableFlavors().flatMap { it.suggestHomePaths() }.distinct()
                 .filter { toolchainFilter.value(it) }
         }
-
-        val disposable = Disposer.newDisposable()
-        mainPanel.registerValidators(disposable)
 
         init()
     }
