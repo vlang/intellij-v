@@ -1,7 +1,6 @@
 package io.vlang.lang.completion.providers
 
 import com.intellij.codeInsight.completion.*
-import com.intellij.codeInsight.completion.XmlCompletionContributor.createLookupElement
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.codeInsight.template.TemplateManager
@@ -126,7 +125,6 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
                     fields.add(structFieldName to structFieldType)
                 }
 
-                // При инициализации структуры мы можем использовать приватные поля
                 val newState = state.put(LOCAL_RESOLVE, true)
 
                 if (structFieldName != null && alreadyAssignedFields.contains(structFieldName)) {
@@ -191,7 +189,7 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
         fun accept(e: PsiElement, state: ResolveState, file: VlangFile): Boolean
     }
 
-    val forTypesAccept = AcceptPredicate { e: PsiElement, state: ResolveState, file: VlangFile ->
+    val forTypesAccept = AcceptPredicate { e: PsiElement, state: ResolveState, _: VlangFile ->
         if (e !is VlangNamedElement) {
             return@AcceptPredicate false
         }
@@ -215,7 +213,7 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
                 e is VlangInterfaceDeclaration
     }
 
-    val interfacesOnlyAccept = AcceptPredicate { e: PsiElement, state: ResolveState, file: VlangFile ->
+    val interfacesOnlyAccept = AcceptPredicate { e: PsiElement, state: ResolveState, _: VlangFile ->
         if (e !is VlangNamedElement) {
             return@AcceptPredicate false
         }
@@ -231,7 +229,7 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
         return@AcceptPredicate e is VlangInterfaceDeclaration
     }
 
-    val genericAccept = AcceptPredicate { e: PsiElement, state: ResolveState, file: VlangFile ->
+    val genericAccept = AcceptPredicate { e: PsiElement, state: ResolveState, _: VlangFile ->
         if (e is VlangFile) {
             return@AcceptPredicate true
         }
@@ -342,6 +340,7 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
             val kind = when (element) {
                 is VlangFunctionDeclaration       -> VlangLookupElementProperties.ElementKind.FUNCTION
                 is VlangMethodDeclaration         -> VlangLookupElementProperties.ElementKind.METHOD
+                is VlangStaticMethodDeclaration   -> VlangLookupElementProperties.ElementKind.STATIC_METHOD
                 is VlangStructDeclaration         -> VlangLookupElementProperties.ElementKind.STRUCT
                 is VlangEnumDeclaration           -> VlangLookupElementProperties.ElementKind.ENUM
                 is VlangInterfaceDeclaration      -> VlangLookupElementProperties.ElementKind.INTERFACE
@@ -394,6 +393,7 @@ object ReferenceCompletionProvider : CompletionProvider<CompletionParameters>() 
             val lookupElement = when (element) {
                 is VlangFunctionDeclaration       -> VlangCompletionUtil.createFunctionLookupElement(element, state)
                 is VlangMethodDeclaration         -> VlangCompletionUtil.createMethodLookupElement(element)
+                is VlangStaticMethodDeclaration   -> VlangCompletionUtil.createStaticMethodLookupElement(element)
                 is VlangStructDeclaration         -> VlangCompletionUtil.createStructLookupElement(
                     element,
                     state,

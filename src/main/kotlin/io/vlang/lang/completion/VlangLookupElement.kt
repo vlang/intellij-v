@@ -39,6 +39,7 @@ data class VlangLookupElementProperties(
         // Top Priority
         FIELD,
         METHOD,
+        STATIC_METHOD,
         FUNCTION,
         STRUCT,
         INTERFACE,

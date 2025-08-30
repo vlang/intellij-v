@@ -9,24 +9,18 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
 import com.intellij.psi.impl.source.resolve.ResolveCache
 import com.intellij.psi.search.GlobalSearchScope
-import com.intellij.psi.stubs.StubIndex
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.childrenOfType
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ArrayUtil
-import com.intellij.util.containers.addAllIfNotNull
 import io.vlang.configurations.VlangConfiguration
 import io.vlang.ide.codeInsight.VlangCodeInsightUtil
 import io.vlang.ide.codeInsight.VlangTypeInferenceUtil
 import io.vlang.lang.psi.*
-import io.vlang.lang.psi.impl.VlangPsiImplUtil.createContextOnElement
 import io.vlang.lang.psi.impl.VlangPsiImplUtil.processNamedElements
 import io.vlang.lang.psi.types.*
 import io.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import io.vlang.lang.sql.VlangSqlUtil
-import io.vlang.lang.stubs.VlangInterfaceDeclarationStub
-import io.vlang.lang.stubs.index.VlangClassLikeIndex
-import io.vlang.lang.stubs.index.VlangClassLikeIndex.Companion.KEY
 import io.vlang.lang.stubs.index.VlangGlobalVariablesIndex
 import io.vlang.lang.stubs.index.VlangModulesFingerprintIndex
 import io.vlang.lang.stubs.index.VlangModulesIndex
@@ -256,6 +250,22 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
                 )
             }
 
+            val embedded = structType.embeddedStructList
+            if (!processNamedElements(processor, newState, embedded, localResolve)) return false
+
+            // our element qualifier (identifier before dot) equals to struct name and therefore is a Type
+            if ((element.getQualifier() as? VlangReferenceExpression)?.lastChild?.text == typ.name()) {
+                // it is a static method call
+
+                // TODO: suggest embedded types names
+
+                val staticMethods = file?.children?.filterIsInstance<VlangStaticMethodDeclaration>() ?: emptyList()
+                if (!processNamedElements(processor, newState, staticMethods, localResolve)) return false
+
+                return true
+            }
+            // it is a field or method access
+
             // If it is a call, then most likely it is a method call, but it
             // could be a function call that is stored in a structure field.
             if (isMethodRef) {
@@ -265,9 +275,6 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
                 if (!processNamedElements(processor, newState, structType.fieldList, localResolve)) return false
                 if (!processMethods(typ, processor, newState, localResolve)) return false
             }
-
-            val embedded = structType.embeddedStructList
-            if (!processNamedElements(processor, newState, embedded, localResolve)) return false
 
             if (!processAnyType(contextFile, processor, newState, localResolve)) return false
             return true
