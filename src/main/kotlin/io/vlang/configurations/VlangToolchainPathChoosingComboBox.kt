@@ -3,7 +3,6 @@ package io.vlang.configurations
 import com.intellij.openapi.application.EDT
 import com.intellij.openapi.fileChooser.FileChooser
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
-import com.intellij.openapi.progress.currentThreadCoroutineScope
 import com.intellij.openapi.ui.ComboBoxWithWidePopup
 import com.intellij.openapi.ui.ComponentWithBrowseButton
 import com.intellij.ui.AnimatedIcon
@@ -12,9 +11,7 @@ import com.intellij.ui.components.fields.ExtendableTextComponent
 import com.intellij.ui.components.fields.ExtendableTextField
 import io.vlang.utils.addTextChangeListener
 import io.vlang.utils.pathAsPath
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.nio.file.Path
 import javax.swing.plaf.basic.BasicComboBoxEditor
 import kotlin.io.path.pathString
@@ -66,7 +63,7 @@ class VlangToolchainPathChoosingComboBox(onTextChanged: () -> Unit = {}) :
     /**
      * Obtains a list of toolchains on a default pool using [toolchainObtainer], then fills the combobox on the EDT.
      */
-    fun addToolchainsAsync(toolchainObtainer: () -> List<Path>) = currentThreadCoroutineScope().launch {
+    fun addToolchainsAsync(scope: CoroutineScope, toolchainObtainer: () -> List<Path>) = scope.launch {
         withContext(Dispatchers.EDT) {
             setBusy(true)
 

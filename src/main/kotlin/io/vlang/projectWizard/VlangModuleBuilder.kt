@@ -1,22 +1,32 @@
 package io.vlang.projectWizard
 
+import com.intellij.ide.impl.MultipleFileOpener.Companion.openFiles
+import com.intellij.ide.util.PsiNavigationSupport
+import com.intellij.ide.util.RunOnceUtil
 import com.intellij.ide.util.projectWizard.ModuleBuilder
 import com.intellij.ide.util.projectWizard.ModuleBuilderListener
 import com.intellij.ide.util.projectWizard.ModuleWizardStep
 import com.intellij.ide.util.projectWizard.WizardContext
 import com.intellij.openapi.Disposable
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ModalityState
+import com.intellij.openapi.application.invokeAndWaitIfNeeded
 import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.application.runWriteAction
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.module.Module
 import com.intellij.openapi.module.ModuleType
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.roots.ModifiableRootModel
+import com.intellij.openapi.startup.ProjectActivity
+import com.intellij.openapi.startup.StartupActivity
+import com.intellij.openapi.startup.StartupManager
 import com.intellij.openapi.vfs.VirtualFile
 import io.vlang.configurations.VlangProjectSettingsForm
 import io.vlang.ide.ui.VIcons
 import io.vlang.toolchain.VlangToolchain
 import io.vlang.toolchain.VlangToolchainService.Companion.toolchainSettings
+import kotlinx.html.InputType
 import java.io.IOException
 
 class VlangModuleBuilder : ModuleBuilder(), ModuleBuilderListener {
@@ -62,7 +72,7 @@ class VlangModuleBuilder : ModuleBuilder(), ModuleBuilderListener {
                             .generateProject(module, baseDir)
 
                         if (filesToOpen.isNotEmpty()) {
-                            scheduleFilesOpening(module, filesToOpen)
+                            scheduleFilesOpening(module.project, filesToOpen)
                         }
 
                         setToolchainInfo(module, toolchainLocation)
@@ -78,33 +88,14 @@ class VlangModuleBuilder : ModuleBuilder(), ModuleBuilderListener {
             settings.setToolchain(project, VlangToolchain.fromPath(toolchainLocation))
         }
 
-        private fun scheduleFilesOpening(module: Module, files: Collection<VirtualFile>) {
-//            runWhenNonModalIfModuleNotDisposed(module) {
-                val manager = FileEditorManager.getInstance(module.project)
-                files.forEach { file ->
-                    manager.openFile(file, true)
+        private fun scheduleFilesOpening(project: Project, files: Collection<VirtualFile>) = invokeLater {
+            if (!ApplicationManager.getApplication().isHeadlessEnvironment) {
+                val navigation = PsiNavigationSupport.getInstance()
+                files.forEachIndexed { index, file ->
+                    // open all files, but focus only the last one
+                    navigation.createNavigatable(project, file, -1).navigate(index == files.size - 1)
                 }
-//            }
+            }
         }
-
-//        private fun runWhenNonModalIfModuleNotDisposed(module: Module, runnable: Runnable) {
-//            // runnable must not be executed immediately because the new project model might be not yet committed, so V Toolchain won't be found
-//            // In WebStorm we get already initialized project at this point, but in IntelliJ IDEA - not yet initialized.
-//            if (module.project.isInitialized) {
-//                ApplicationManager.getApplication().invokeLater(runnable, ModalityState.nonModal(), module.disposed)
-//                return
-//            }
-//
-//            StartupManager.getInstance(module.project).runAfterOpened {
-//                if (ModalityState.current() === ModalityState.nonModal()) {
-//                    runnable.run()
-//                } else {
-//                    ApplicationManager.getApplication()
-//                        .invokeLater(runnable, ModalityState.nonModal()) {
-//                            module.isDisposed
-//                        }
-//                }
-//            }
-//        }
     }
 }
