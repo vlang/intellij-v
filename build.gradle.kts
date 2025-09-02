@@ -174,7 +174,3 @@ intellijPlatformTesting {
         }
     }
 }
-
-tasks.withType<Test>().configureEach {
-    systemProperty("idea.home.path", project.projectDir.path)
-}
