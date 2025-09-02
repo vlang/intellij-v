@@ -6,6 +6,7 @@ import com.intellij.psi.PsiElementVisitor
 import com.intellij.psi.util.PsiTreeUtil
 import io.vlang.ide.inspections.unused.VlangDeleteQuickFix.Companion.DELETE_FUNCTION_FIX
 import io.vlang.ide.inspections.unused.VlangDeleteQuickFix.Companion.DELETE_METHOD_FIX
+import io.vlang.ide.inspections.unused.VlangDeleteQuickFix.Companion.DELETE_STATIC_METHOD_FIX
 import io.vlang.ide.test.VlangTestUtil
 import io.vlang.lang.psi.*
 import io.vlang.lang.search.VlangSuperMarkerProvider
@@ -15,6 +16,8 @@ class VlangUnusedFunctionInspection : VlangUnusedBaseInspection() {
         return object : VlangVisitor() {
             override fun visitFunctionDeclaration(func: VlangFunctionDeclaration) = check(holder, func)
             override fun visitMethodDeclaration(method: VlangMethodDeclaration) = check(holder, method)
+            override fun visitStaticMethodDeclaration(staticMethod: VlangStaticMethodDeclaration) =
+                check(holder, staticMethod)
         }
     }
 
@@ -25,17 +28,37 @@ class VlangUnusedFunctionInspection : VlangUnusedBaseInspection() {
     }
 
     override fun registerProblem(holder: ProblemsHolder, element: VlangNamedElement) {
-        val kind = if (element is VlangFunctionDeclaration) "function" else "method"
-        val range = when (element) {
-            is VlangFunctionDeclaration -> element.getIdentifier().textRangeInParent
-            is VlangMethodDeclaration   -> element.methodName.textRangeInParent
-            else                        -> return
+        when (element) {
+            is VlangFunctionDeclaration     -> {
+                holder.registerProblem(
+                    element,
+                    "Unused function '${element.name}'",
+                    ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+                    element.getIdentifier().textRangeInParent,
+                    DELETE_FUNCTION_FIX,
+                )
+            }
+
+            is VlangMethodDeclaration       -> {
+                holder.registerProblem(
+                    element,
+                    "Unused method '${element.name}'",
+                    ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+                    element.methodName.textRangeInParent,
+                    DELETE_METHOD_FIX,
+                )
+            }
+
+            is VlangStaticMethodDeclaration -> {
+                holder.registerProblem(
+                    element,
+                    "Unused static method '${element.name}'",
+                    ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+                    element.getIdentifier().textRangeInParent,
+                    DELETE_STATIC_METHOD_FIX,
+                )
+            }
         }
-        holder.registerProblem(
-            element, "Unused $kind '${element.name}'",
-            ProblemHighlightType.LIKE_UNUSED_SYMBOL, range,
-            if (element is VlangFunctionDeclaration) DELETE_FUNCTION_FIX else DELETE_METHOD_FIX,
-        )
     }
 
     companion object {

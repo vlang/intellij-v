@@ -28,6 +28,8 @@ import java.util.function.Consumer
 class VlangHighlightInfoCollectingVisitor : VlangVisitor(), HighlightVisitor, DumbAware {
     var myHighlightInfoSink: Consumer<HighlightInfo>? = null
 
+    private val isUnitTestMode = ApplicationManager.getApplication().isUnitTestMode
+
     override fun suitableForFile(file: PsiFile): Boolean {
         return file is VlangFile && InjectedLanguageManager.getInstance(file.project).isInjectedFragment(file)
     }
@@ -54,6 +56,13 @@ class VlangHighlightInfoCollectingVisitor : VlangVisitor(), HighlightVisitor, Du
     }
 
     override fun visitMethodDeclaration(o: VlangMethodDeclaration) {
+        highlight(
+            o.nameIdentifier,
+            public(o, VlangColor.PUBLIC_FUNCTION, VlangColor.FUNCTION)
+        )
+    }
+
+    override fun visitStaticMethodDeclaration(o: VlangStaticMethodDeclaration) {
         highlight(
             o.nameIdentifier,
             public(o, VlangColor.PUBLIC_FUNCTION, VlangColor.FUNCTION)
@@ -282,9 +291,5 @@ class VlangHighlightInfoCollectingVisitor : VlangVisitor(), HighlightVisitor, Du
 
     private fun highlight(element: PsiElement?, color: VlangColor, range: TextRange? = null) {
         highlightInfo(element, color.textAttributesKey, range)
-    }
-
-    companion object {
-        private val isUnitTestMode = ApplicationManager.getApplication().isUnitTestMode
     }
 }

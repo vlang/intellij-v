@@ -59,7 +59,8 @@ class VlangAnnotator : Annotator {
         return when (resolved) {
             is VlangFunctionDeclaration             -> public(resolved, VlangColor.PUBLIC_FUNCTION, VlangColor.FUNCTION)
             is VlangMethodDeclaration               -> public(resolved, VlangColor.PUBLIC_FUNCTION, VlangColor.FUNCTION)
-            is VlangInterfaceMethodDefinition       -> public(resolved, VlangColor.INTERFACE_METHOD, VlangColor.INTERFACE_METHOD)
+            is VlangStaticMethodDeclaration         -> public(resolved, VlangColor.PUBLIC_FUNCTION, VlangColor.FUNCTION)
+            is VlangInterfaceMethodDefinition       -> VlangColor.INTERFACE_METHOD
             is VlangStructDeclaration               -> if (!resolved.isUnion)
                 public(resolved, VlangColor.PUBLIC_STRUCT, VlangColor.STRUCT)
             else
@@ -69,7 +70,7 @@ class VlangAnnotator : Annotator {
             is VlangInterfaceDeclaration            -> public(resolved, VlangColor.PUBLIC_INTERFACE, VlangColor.INTERFACE)
             is VlangEmbeddedDefinition              -> VlangColor.STRUCT
             is VlangFieldDefinition                 -> public(resolved, VlangColor.PUBLIC_FIELD, VlangColor.FIELD)
-            is VlangEnumFieldDefinition             -> public(resolved, VlangColor.ENUM_FIELD, VlangColor.ENUM_FIELD)
+            is VlangEnumFieldDefinition             -> VlangColor.ENUM_FIELD
             is VlangTypeAliasDeclaration            -> public(resolved, VlangColor.PUBLIC_TYPE_ALIAS, VlangColor.TYPE_ALIAS)
             is VlangReceiver                        -> mutable(resolved, VlangColor.MUTABLE_RECEIVER, VlangColor.RECEIVER)
             is VlangGlobalVariableDefinition        -> VlangColor.GLOBAL_VARIABLE

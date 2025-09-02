@@ -28,8 +28,9 @@ class VlangUsagesCodeVisionProvider : ReferencesCodeVisionProvider() {
     override fun acceptsFile(file: PsiFile): Boolean = file is VlangFile
 
     override fun acceptsElement(element: PsiElement): Boolean {
-        return element is VlangFunctionDeclaration && canBeExplicitlyUsed(element) ||
-                element is VlangMethodDeclaration && canBeExplicitlyUsed(element) ||
+        return (element is VlangFunctionDeclaration && canBeExplicitlyUsed(element)) ||
+                (element is VlangMethodDeclaration && canBeExplicitlyUsed(element)) ||
+                (element is VlangStaticMethodDeclaration && canBeExplicitlyUsed(element)) ||
                 element is VlangStructDeclaration ||
                 element is VlangEnumDeclaration ||
                 element is VlangInterfaceDeclaration ||

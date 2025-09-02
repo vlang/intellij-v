@@ -601,7 +601,7 @@ MethodDeclaration ::= fnDecl '(' Receiver ')' MethodName GenericParameters? Sign
 StaticMethodDeclaration ::= fnDecl TypeReferenceExpression '.' identifier GenericParameters? Signature BlockWithConsume? {
   pin=4
   stubClass="io.vlang.lang.stubs.VlangStaticMethodDeclarationStub"
-  methods=[getType getTypeInner getQualifiedName]
+  methods=[getType getTypeInner getQualifiedName getName]
   mixin="io.vlang.lang.psi.impl.VlangStaticMethodDeclarationWithScopeHolder"
 }
 

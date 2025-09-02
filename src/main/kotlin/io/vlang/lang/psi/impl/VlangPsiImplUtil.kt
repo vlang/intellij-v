@@ -52,6 +52,16 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
+    fun getName(o: VlangStaticMethodDeclaration): String {
+        val stub = o.stub
+        if (stub != null) {
+            return stub.name ?: ""
+        }
+
+        return o.getIdentifier().text ?: ""
+    }
+
+    @JvmStatic
     fun isDefinition(o: VlangFunctionDeclaration): Boolean {
         return o.getBlock() == null
     }

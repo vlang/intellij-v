@@ -46,4 +46,6 @@ public interface VlangStaticMethodDeclaration extends VlangSignatureOwner, Vlang
 
   @NotNull String getQualifiedName();
 
+  @NotNull String getName();
+
 }

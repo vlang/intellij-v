@@ -98,4 +98,9 @@ public class VlangStaticMethodDeclarationImpl extends VlangStaticMethodDeclarati
     return VlangPsiImplUtil.getQualifiedName(this);
   }
 
+  @Override
+  public @NotNull String getName() {
+    return VlangPsiImplUtil.getName(this);
+  }
+
 }
