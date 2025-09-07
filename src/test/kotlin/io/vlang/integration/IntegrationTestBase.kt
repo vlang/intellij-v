@@ -220,7 +220,7 @@ abstract class IntegrationTestBase : BasePlatformTestCase() {
         }
 
         fun finishCompletion() {
-            myFixture.finishLookup(Lookup.NORMAL_SELECT_CHAR)
+            myFixture.finishLookup(Lookup.REPLACE_SELECT_CHAR)
         }
 
         fun enableInspection(inspectionToEnable: VlangBaseInspection) {

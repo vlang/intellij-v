@@ -32,7 +32,7 @@ class GlobalVariableCompletion : IntegrationTestBase() {
             import mod
             
             fn main() {
-                global_nameo/*caret 0*/
+                global_name/*caret 0*/
             }
         """.trimIndent())
     }

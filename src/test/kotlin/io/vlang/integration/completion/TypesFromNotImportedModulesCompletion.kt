@@ -16,7 +16,7 @@ class TypesFromNotImportedModulesCompletion : IntegrationTestBase() {
             module foo
             
             fn main() {
-                Rend/*caret 0*/
+                Render/*caret 0*/
             }
         """.trimIndent())
 
@@ -32,7 +32,7 @@ class TypesFromNotImportedModulesCompletion : IntegrationTestBase() {
             import mod
             
             fn main() {
-                mod.Rendererd/*caret 0*/
+                mod.Renderer/*caret 0*/
             }
         """.trimIndent())
     }
