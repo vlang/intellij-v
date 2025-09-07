@@ -32,42 +32,76 @@ object VlangElementTypeFactory {
         }
     }
 
+    val FIELD_DEFINITION = VlangFieldDefinitionStubElementType("FIELD_DEFINITION")
+    val ENUM_FIELD_DEFINITION = VlangEnumFieldDefinitionStubElementType("ENUM_FIELD_DEFINITION")
+    val FUNCTION_DECLARATION = VlangFunctionDeclarationStubElementType("FUNCTION_DECLARATION")
+    val METHOD_DECLARATION = VlangMethodDeclarationStubElementType("METHOD_DECLARATION")
+    val STATIC_METHOD_DECLARATION = VlangStaticMethodDeclarationStubElementType("STATIC_METHOD_DECLARATION")
+    val STRUCT_DECLARATION = VlangStructDeclarationStubElementType("STRUCT_DECLARATION")
+    val ENUM_DECLARATION = VlangEnumDeclarationStubElementType("ENUM_DECLARATION")
+    val INTERFACE_DECLARATION = VlangInterfaceDeclarationStubElementType("INTERFACE_DECLARATION")
+    val INTERFACE_METHOD_DEFINITION = VlangInterfaceMethodDefinitionStubElementType("INTERFACE_METHOD_DEFINITION")
+    val TYPE_ALIAS_DECLARATION = VlangTypeAliasDeclarationStubElementType("TYPE_ALIAS_DECLARATION")
+    val IMPORT_NAME = VlangImportNameStubElementType("IMPORT_NAME")
+    val IMPORT_ALIAS = VlangImportAliasStubElementType("IMPORT_ALIAS")
+    val PARAM_DEFINITION = VlangParamDefinitionStubElementType("PARAM_DEFINITION")
+    val RECEIVER = VlangReceiverStubElementType("RECEIVER")
+    val CONST_DEFINITION = VlangConstDefinitionStubElementType("CONST_DEFINITION")
+    val GLOBAL_VARIABLE_DEFINITION = VlangGlobalVariableDefinitionStubElementType("GLOBAL_VARIABLE_DEFINITION")
+    val VAR_DEFINITION = VlangVarDefinitionStubElementType("VAR_DEFINITION")
+    val LABEL_DEFINITION = VlangLabelDefinitionStubElementType("LABEL_DEFINITION")
+    val GENERIC_PARAMETER = VlangGenericParameterStubElementType("GENERIC_PARAMETER")
+    val GENERIC_PARAMETERS = VlangGenericParametersStubElementType("GENERIC_PARAMETERS")
+    val SIGNATURE = VlangSignatureStubElementType("SIGNATURE")
+    val PARAMETERS = VlangParametersStubElementType("PARAMETERS")
+    val RESULT = VlangResultStubElementType("RESULT")
+    val TYPE_UNION_LIST = VlangTypeUnionListStubElementType("TYPE_UNION_LIST")
+    val EMBEDDED_INTERFACE_DEFINITION = VlangEmbeddedInterfaceDefinitionStubElementType("EMBEDDED_INTERFACE_DEFINITION")
+    val TYPE_REFERENCE_EXPRESSION = VlangTypeReferenceExpressionStubElementType("TYPE_REFERENCE_EXPRESSION")
+    val ATTRIBUTES = VlangAttributesStubElementType("ATTRIBUTES")
+    val ATTRIBUTE = VlangAttributeStubElementType("ATTRIBUTE")
+    val ATTRIBUTE_EXPRESSION = VlangAttributeExpressionStubElementType("ATTRIBUTE_EXPRESSION")
+    val PLAIN_ATTRIBUTE = VlangPlainAttributeStubElementType("PLAIN_ATTRIBUTE")
+    val ATTRIBUTE_KEY = VlangAttributeKeyStubElementType("ATTRIBUTE_KEY")
+    val ATTRIBUTE_VALUE = VlangAttributeValueStubElementType("ATTRIBUTE_VALUE")
+    val EMBEDDED_DEFINITION = VlangEmbeddedDefinitionStubElementType("EMBEDDED_DEFINITION")
+
     @JvmStatic
     fun stubFactory(name: String) = when (name) {
-        "FIELD_DEFINITION"              -> VlangFieldDefinitionStubElementType(name)
-        "ENUM_FIELD_DEFINITION"         -> VlangEnumFieldDefinitionStubElementType(name)
-        "FUNCTION_DECLARATION"          -> VlangFunctionDeclarationStubElementType(name)
-        "METHOD_DECLARATION"            -> VlangMethodDeclarationStubElementType(name)
-        "STATIC_METHOD_DECLARATION"     -> VlangStaticMethodDeclarationStubElementType(name)
-        "STRUCT_DECLARATION"            -> VlangStructDeclarationStubElementType(name)
-        "ENUM_DECLARATION"              -> VlangEnumDeclarationStubElementType(name)
-        "INTERFACE_DECLARATION"         -> VlangInterfaceDeclarationStubElementType(name)
-        "INTERFACE_METHOD_DEFINITION"   -> VlangInterfaceMethodDefinitionStubElementType(name)
-        "TYPE_ALIAS_DECLARATION"        -> VlangTypeAliasDeclarationStubElementType(name)
-        "IMPORT_NAME"                   -> VlangImportNameStubElementType(name)
-        "IMPORT_ALIAS"                  -> VlangImportAliasStubElementType(name)
-        "PARAM_DEFINITION"              -> VlangParamDefinitionStubElementType(name)
-        "RECEIVER"                      -> VlangReceiverStubElementType(name)
-        "CONST_DEFINITION"              -> VlangConstDefinitionStubElementType(name)
-        "GLOBAL_VARIABLE_DEFINITION"    -> VlangGlobalVariableDefinitionStubElementType(name)
+        "FIELD_DEFINITION"              -> FIELD_DEFINITION
+        "ENUM_FIELD_DEFINITION"         -> ENUM_FIELD_DEFINITION
+        "FUNCTION_DECLARATION"          -> FUNCTION_DECLARATION
+        "METHOD_DECLARATION"            -> METHOD_DECLARATION
+        "STATIC_METHOD_DECLARATION"     -> STATIC_METHOD_DECLARATION
+        "STRUCT_DECLARATION"            -> STRUCT_DECLARATION
+        "ENUM_DECLARATION"              -> ENUM_DECLARATION
+        "INTERFACE_DECLARATION"         -> INTERFACE_DECLARATION
+        "INTERFACE_METHOD_DEFINITION"   -> INTERFACE_METHOD_DEFINITION
+        "TYPE_ALIAS_DECLARATION"        -> TYPE_ALIAS_DECLARATION
+        "IMPORT_NAME"                   -> IMPORT_NAME
+        "IMPORT_ALIAS"                  -> IMPORT_ALIAS
+        "PARAM_DEFINITION"              -> PARAM_DEFINITION
+        "RECEIVER"                      -> RECEIVER
+        "CONST_DEFINITION"              -> CONST_DEFINITION
+        "GLOBAL_VARIABLE_DEFINITION"    -> GLOBAL_VARIABLE_DEFINITION
         "MODULE_CLAUSE"                 -> VlangModuleClauseStubElementType.INSTANCE
-        "VAR_DEFINITION"                -> VlangVarDefinitionStubElementType(name)
-        "LABEL_DEFINITION"              -> VlangLabelDefinitionStubElementType(name)
-        "GENERIC_PARAMETER"             -> VlangGenericParameterStubElementType(name)
-        "GENERIC_PARAMETERS"            -> VlangGenericParametersStubElementType(name)
-        "SIGNATURE"                     -> VlangSignatureStubElementType(name)
-        "PARAMETERS"                    -> VlangParametersStubElementType(name)
-        "RESULT"                        -> VlangResultStubElementType(name)
-        "TYPE_UNION_LIST"               -> VlangTypeUnionListStubElementType(name)
-        "EMBEDDED_INTERFACE_DEFINITION" -> VlangEmbeddedInterfaceDefinitionStubElementType(name)
-        "TYPE_REFERENCE_EXPRESSION"     -> VlangTypeReferenceExpressionStubElementType(name)
-        "ATTRIBUTES"                    -> VlangAttributesStubElementType(name)
-        "ATTRIBUTE"                     -> VlangAttributeStubElementType(name)
-        "ATTRIBUTE_EXPRESSION"          -> VlangAttributeExpressionStubElementType(name)
-        "PLAIN_ATTRIBUTE"               -> VlangPlainAttributeStubElementType(name)
-        "ATTRIBUTE_KEY"                 -> VlangAttributeKeyStubElementType(name)
-        "ATTRIBUTE_VALUE"               -> VlangAttributeValueStubElementType(name)
-        "EMBEDDED_DEFINITION"           -> VlangEmbeddedDefinitionStubElementType(name)
+        "VAR_DEFINITION"                -> VAR_DEFINITION
+        "LABEL_DEFINITION"              -> LABEL_DEFINITION
+        "GENERIC_PARAMETER"             -> GENERIC_PARAMETER
+        "GENERIC_PARAMETERS"            -> GENERIC_PARAMETERS
+        "SIGNATURE"                     -> SIGNATURE
+        "PARAMETERS"                    -> PARAMETERS
+        "RESULT"                        -> RESULT
+        "TYPE_UNION_LIST"               -> TYPE_UNION_LIST
+        "EMBEDDED_INTERFACE_DEFINITION" -> EMBEDDED_INTERFACE_DEFINITION
+        "TYPE_REFERENCE_EXPRESSION"     -> TYPE_REFERENCE_EXPRESSION
+        "ATTRIBUTES"                    -> ATTRIBUTES
+        "ATTRIBUTE"                     -> ATTRIBUTE
+        "ATTRIBUTE_EXPRESSION"          -> ATTRIBUTE_EXPRESSION
+        "PLAIN_ATTRIBUTE"               -> PLAIN_ATTRIBUTE
+        "ATTRIBUTE_KEY"                 -> ATTRIBUTE_KEY
+        "ATTRIBUTE_VALUE"               -> ATTRIBUTE_VALUE
+        "EMBEDDED_DEFINITION"           -> EMBEDDED_DEFINITION
 
         else                            -> {
             val c = TYPES[name] ?: throw RuntimeException("Unknown element type: $name")

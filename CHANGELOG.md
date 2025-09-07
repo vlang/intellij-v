@@ -10,7 +10,8 @@
   - Please file issues for missing features.
 - Update compile time pseudo variables:
   - Add @DIR, @LOCATION, @VCURRENTHASH, @VMODHASH, @BUILD_DATE, @BUILD_TIME, @BUILD_TIMESTAMP, 
-    @OS, @CCOMPILER, @BACKEND, @PLATFORM     
+    @OS, @CCOMPILER, @BACKEND, @PLATFORM
+- Fix 'All stub element types should be created before index initialization is complete.' exception
 
 ## [2025.2.1] - 2025-08-09
 
