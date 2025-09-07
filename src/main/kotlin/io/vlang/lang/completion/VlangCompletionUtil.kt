@@ -37,6 +37,7 @@ object VlangCompletionUtil {
     const val NOT_IMPORTED_METHOD_PRIORITY = 0
     const val METHOD_PRIORITY = NOT_IMPORTED_METHOD_PRIORITY + 0
     const val NOT_IMPORTED_FUNCTION_PRIORITY = 0
+    const val STATIC_METHOD_PRIORITY = NOT_IMPORTED_FUNCTION_PRIORITY + 0
     const val FUNCTION_PRIORITY = NOT_IMPORTED_FUNCTION_PRIORITY + 0
     const val NOT_IMPORTED_STRUCT_PRIORITY = 0
     const val STRUCT_PRIORITY = NOT_IMPORTED_STRUCT_PRIORITY + 0
@@ -210,6 +211,18 @@ object VlangCompletionUtil {
             element, name,
             insertHandler = FunctionInsertHandler(element, null),
             priority = METHOD_PRIORITY,
+        )
+    }
+
+    fun createStaticMethodLookupElement(element: VlangStaticMethodDeclaration): LookupElement? {
+        val name = element.name
+        if (name.isEmpty()) {
+            return null
+        }
+        return createStaticMethodLookupElement(
+            element, name,
+            insertHandler = FunctionInsertHandler(element, null),
+            priority = STATIC_METHOD_PRIORITY,
         )
     }
 
@@ -396,6 +409,18 @@ object VlangCompletionUtil {
         return PrioritizedLookupElement.withPriority(
             LookupElementBuilder.createWithSmartPointer(lookupString, element)
                 .withRenderer(METHOD_RENDERER)
+                .withInsertHandler(insertHandler), priority.toDouble()
+        )
+    }
+
+    fun createStaticMethodLookupElement(
+        element: VlangNamedElement, lookupString: String,
+        insertHandler: InsertHandler<LookupElement>? = null,
+        priority: Int = 0,
+    ): LookupElement {
+        return PrioritizedLookupElement.withPriority(
+            LookupElementBuilder.createWithSmartPointer(lookupString, element)
+                .withRenderer(STATIC_METHOD_RENDERER)
                 .withInsertHandler(insertHandler), priority.toDouble()
         )
     }
@@ -733,6 +758,25 @@ object VlangCompletionUtil {
             p.tailText = signature?.parameters?.text + " of " + type
 
             p.icon = icon
+            p.typeText = typeText
+            p.isTypeGrayed = true
+            p.itemText = element.lookupString + genericParameters
+            p.isStrikeout = elem.isDeprecated()
+        }
+    }
+
+    private val STATIC_METHOD_RENDERER = object : LookupElementRenderer<LookupElement>() {
+        override fun renderElement(element: LookupElement, p: LookupElementPresentation) {
+            val elem = element.psiElement as? VlangStaticMethodDeclaration ?: return
+            val signature = elem.getSignature()
+
+            val genericParameters = elem.genericParameters?.text ?: ""
+            val typeText = signature?.result?.text ?: ""
+
+            val type = elem.typeReferenceExpression.getIdentifier().text // TODO: resolve actual type
+            p.tailText = signature?.parameters?.text + " of " + type
+
+            p.icon = VIcons.StaticMethod
             p.typeText = typeText
             p.isTypeGrayed = true
             p.itemText = element.lookupString + genericParameters

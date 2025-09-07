@@ -25,6 +25,7 @@ class VlangDeleteQuickFix(
     companion object {
         val DELETE_FUNCTION_FIX = VlangDeleteQuickFix("Delete function", VlangFunctionDeclaration::class)
         val DELETE_METHOD_FIX = VlangDeleteQuickFix("Delete method", VlangMethodDeclaration::class)
+        val DELETE_STATIC_METHOD_FIX = VlangDeleteQuickFix("Delete static method", VlangStaticMethodDeclaration::class)
         val DELETE_TYPE_ALIAS_FIX = VlangDeleteQuickFix("Delete type alias", VlangTypeAliasDeclaration::class)
         val DELETE_SUM_TYPE_FIX = VlangDeleteQuickFix("Delete sum type", VlangTypeAliasDeclaration::class)
         val DELETE_STRUCT_FIX = VlangDeleteQuickFix("Delete struct", VlangStructDeclaration::class)

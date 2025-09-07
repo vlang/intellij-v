@@ -9,24 +9,18 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
 import com.intellij.psi.impl.source.resolve.ResolveCache
 import com.intellij.psi.search.GlobalSearchScope
-import com.intellij.psi.stubs.StubIndex
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.childrenOfType
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ArrayUtil
-import com.intellij.util.containers.addAllIfNotNull
 import io.vlang.configurations.VlangConfiguration
 import io.vlang.ide.codeInsight.VlangCodeInsightUtil
 import io.vlang.ide.codeInsight.VlangTypeInferenceUtil
 import io.vlang.lang.psi.*
-import io.vlang.lang.psi.impl.VlangPsiImplUtil.createContextOnElement
 import io.vlang.lang.psi.impl.VlangPsiImplUtil.processNamedElements
 import io.vlang.lang.psi.types.*
 import io.vlang.lang.psi.types.VlangBaseTypeEx.Companion.toEx
 import io.vlang.lang.sql.VlangSqlUtil
-import io.vlang.lang.stubs.VlangInterfaceDeclarationStub
-import io.vlang.lang.stubs.index.VlangClassLikeIndex
-import io.vlang.lang.stubs.index.VlangClassLikeIndex.Companion.KEY
 import io.vlang.lang.stubs.index.VlangGlobalVariablesIndex
 import io.vlang.lang.stubs.index.VlangModulesFingerprintIndex
 import io.vlang.lang.stubs.index.VlangModulesIndex
@@ -256,6 +250,42 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
                 )
             }
 
+            val embedded = structType.embeddedStructList
+            if (!processNamedElements(processor, newState, embedded, localResolve)) return false
+
+            // Check if we're accessing via a Type (static access) vs instance access
+            val qualifier = element.getQualifier() as? VlangReferenceExpression
+            val isStaticAccess = qualifier?.let { qualifierExpr ->
+                // Check the entire qualifier chain to see if it starts with a type declaration
+                var currentQualifier: VlangReferenceExpression? = qualifierExpr
+                while (currentQualifier != null) {
+                    val resolved = currentQualifier.resolve()
+                    if (resolved is VlangStructDeclaration ||
+                        resolved is VlangInterfaceDeclaration ||
+                        resolved is VlangTypeAliasDeclaration ||
+                        resolved is VlangEnumDeclaration) {
+                        return@let true
+                    }
+                    // Move to the next level up in the qualifier chain
+                    currentQualifier = currentQualifier.getQualifier() as? VlangReferenceExpression
+                }
+                false
+            } ?: false
+
+            if (isStaticAccess && !VlangCodeInsightUtil.insideCompileTimeFor(identifier)) {
+                // names of qualified type and embeded types
+                val names = ArrayUtil.append(embedded.mapNotNull { it.name }.toTypedArray(), declaration.name)
+
+                val staticMethods = file?.children
+                    ?.filterIsInstance<VlangStaticMethodDeclaration>()
+                    ?.filter { it.typeReferenceExpression.text in names }
+                    ?: emptyList()
+                if (!processNamedElements(processor, newState, staticMethods, localResolve)) return false
+
+                return true
+            }
+            // it is a field or method access
+
             // If it is a call, then most likely it is a method call, but it
             // could be a function call that is stored in a structure field.
             if (isMethodRef) {
@@ -265,9 +295,6 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
                 if (!processNamedElements(processor, newState, structType.fieldList, localResolve)) return false
                 if (!processMethods(typ, processor, newState, localResolve)) return false
             }
-
-            val embedded = structType.embeddedStructList
-            if (!processNamedElements(processor, newState, embedded, localResolve)) return false
 
             if (!processAnyType(contextFile, processor, newState, localResolve)) return false
             return true

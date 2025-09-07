@@ -163,4 +163,45 @@ open class ResolveEmbeddedStructsTest : ResolveTestBase() {
 
         assertReferencedTo("METHOD_DECLARATION foo")
     }
+
+    fun `test embedded struct static method only for static access`() {
+        mainFile("a.v", """
+            module main
+
+            struct ForEmbed {}
+            
+            fn ForEmbed.static_method() {}
+
+            struct Test {
+                ForEmbed
+            }
+
+            fn main() {
+                Test.ForEmbed./*caret*/static_method()
+            }
+        """.trimIndent())
+
+        assertReferencedTo("STATIC_METHOD_DECLARATION static_method")
+    }
+
+    fun `test embedded struct instance method only for instance access`() {
+        mainFile("a.v", """
+            module main
+
+            struct ForEmbed {}
+            fn (e ForEmbed) foo() {}
+            fn ForEmbed.static_method() {}
+
+            struct Test {
+                ForEmbed
+            }
+
+            fn main() {
+                t := Test{}
+                t.ForEmbed./*caret*/foo()
+            }
+        """.trimIndent())
+
+        assertReferencedTo("METHOD_DECLARATION foo")
+    }
 }
