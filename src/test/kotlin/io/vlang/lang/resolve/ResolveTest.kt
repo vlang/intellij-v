@@ -119,7 +119,7 @@ class ResolveTest : ResolveTestBase() {
     }
 
     fun `test resolve compile time fields field`() {
-        mainFile("a.v", """
+        mainFile("a.v", $$"""
             module main
             
             struct Foo {
@@ -130,7 +130,7 @@ class ResolveTest : ResolveTestBase() {
             
             fn main() {
                 foo := Foo{}
-                ${"$"}for field in Foo./*caret*/fields {
+                $for field in Foo./*caret*/fields {
                     foo./*caret*/fields
                 }
             }

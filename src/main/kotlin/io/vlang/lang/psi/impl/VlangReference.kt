@@ -253,13 +253,33 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             val embedded = structType.embeddedStructList
             if (!processNamedElements(processor, newState, embedded, localResolve)) return false
 
-            // our element qualifier (identifier before dot) equals to struct name and therefore is a Type
-            if ((element.getQualifier() as? VlangReferenceExpression)?.lastChild?.text == typ.name()) {
-                // it is a static method call
+            // Check if we're accessing via a Type (static access) vs instance access
+            val qualifier = element.getQualifier() as? VlangReferenceExpression
+            val isStaticAccess = qualifier?.let { qualifierExpr ->
+                // Check the entire qualifier chain to see if it starts with a type declaration
+                var currentQualifier: VlangReferenceExpression? = qualifierExpr
+                while (currentQualifier != null) {
+                    val resolved = currentQualifier.resolve()
+                    if (resolved is VlangStructDeclaration ||
+                        resolved is VlangInterfaceDeclaration ||
+                        resolved is VlangTypeAliasDeclaration ||
+                        resolved is VlangEnumDeclaration) {
+                        return@let true
+                    }
+                    // Move to the next level up in the qualifier chain
+                    currentQualifier = currentQualifier.getQualifier() as? VlangReferenceExpression
+                }
+                false
+            } ?: false
 
-                // TODO: suggest embedded types names
+            if (isStaticAccess && !VlangCodeInsightUtil.insideCompileTimeFor(identifier)) {
+                // names of qualified type and embeded types
+                val names = ArrayUtil.append(embedded.mapNotNull { it.name }.toTypedArray(), declaration.name)
 
-                val staticMethods = file?.children?.filterIsInstance<VlangStaticMethodDeclaration>() ?: emptyList()
+                val staticMethods = file?.children
+                    ?.filterIsInstance<VlangStaticMethodDeclaration>()
+                    ?.filter { it.typeReferenceExpression.text in names }
+                    ?: emptyList()
                 if (!processNamedElements(processor, newState, staticMethods, localResolve)) return false
 
                 return true
