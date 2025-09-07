@@ -22,11 +22,17 @@ pub const @STRUCT = ''
 // @FILE replaced with the absolute path of the V source file.
 pub const @FILE = ''
 
+// @DIR The absolute path of the *folder*, where the V source file is
+pub const @DIR = ''
+
 // @LINE replaced with the V line number where it appears (as a string).
 pub const @LINE = ''
 
 // @FILE_LINE replaced with `@FILE:@LINE`, but the file part is a relative path.
 pub const @FILE_LINE = ''
+
+// @LOCATION File, line and name of the current type + method; suitable for logging
+pub const @LOCATION = ''
 
 // @COLUMN replaced with the column where it appears (as a string).
 pub const @COLUMN = ''
@@ -40,11 +46,38 @@ pub const @VEXEROOT = ''
 // @VHASH replaced with the shortened commit hash of the V compiler.
 pub const @VHASH = ''
 
+// @VCURRENTHASH Similar to `@VHASH`, but changes when the compiler is recompiled on a different commit (after local modifications, or after using git bisect etc)
+pub const @VCURRENTHASH = ''
+
 // @VMOD_FILE replaced with the contents of the nearest v.mod file.
 pub const @VMOD_FILE = ''
 
+// @VMODHASH The shortened commit hash, derived from the .git directory next to the nearest v.mod (as a string)
+pub const @VMODHASH = ''
+
 // @VMODROOT replaced with the folder, where the nearest v.mod file is.
 pub const @VMODROOT = ''
+
+// @BUILD_DATE The build date, for example '2024-09-13' (UTC timezone)
+pub const @BUILD_DATE = ''
+
+// @BUILD_TIME The build time, for example '12:32:07' (UTC timezone)
+pub const @BUILD_TIME = ''
+
+// @BUILD_TIMESTAMP The build timestamp, for example '1726219885' (UTC timezone)
+pub const @BUILD_TIMESTAMP = ''
+
+// @OS The OS type, for example 'linux'
+pub const @OS = ''
+
+// @CCOMPILER The C compiler type, for example 'gcc'
+pub const @CCOMPILER = ''
+
+// @BACKEND The current language backend, for example 'c' or 'golang'
+pub const @BACKEND = ''
+
+// @PLATFORM The platform type, for example 'amd64'
+pub const @PLATFORM = ''
 
 // CompressionType is the type of compression used for the embedded file.
 // See [$embed_file] for more details.

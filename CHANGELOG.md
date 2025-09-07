@@ -8,6 +8,9 @@
 - Introduce links in console when program panic's and shows backtrace. [#12](https://github.com/vlang/intellij-v/issues/12)
 - Basic support for static methods. [#24](https://github.com/vlang/intellij-v/issues/24)
   - Please file issues for missing features.
+- Update compile time pseudo variables:
+  - Add @DIR, @LOCATION, @VCURRENTHASH, @VMODHASH, @BUILD_DATE, @BUILD_TIME, @BUILD_TIMESTAMP, 
+    @OS, @CCOMPILER, @BACKEND, @PLATFORM     
 
 ## [2025.2.1] - 2025-08-09
 
