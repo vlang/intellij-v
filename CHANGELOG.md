@@ -4,6 +4,7 @@
 
 - Allow attributes on enum values. [#38](https://github.com/vlang/intellij-v/issues/38)
 - Fix a freeze after clicking button to add a toolchain. [#37](https://github.com/vlang/intellij-v/issues/37)
+  - improved latter by zcg - thanks! [#40](https://github.com/vlang/intellij-v/issues/40)
 - Allow newlines in between operators in expressions. [#34](https://github.com/vlang/intellij-v/issues/34)
 - Introduce links in console when program panic's and shows backtrace. [#12](https://github.com/vlang/intellij-v/issues/12)
 - Basic support for static methods. [#24](https://github.com/vlang/intellij-v/issues/24)
@@ -12,6 +13,7 @@
   - Add @DIR, @LOCATION, @VCURRENTHASH, @VMODHASH, @BUILD_DATE, @BUILD_TIME, @BUILD_TIMESTAMP, 
     @OS, @CCOMPILER, @BACKEND, @PLATFORM
 - Fix 'All stub element types should be created before index initialization is complete.' exception
+- Many small fixes and improvements
 
 ## [2025.2.1] - 2025-08-09
 
