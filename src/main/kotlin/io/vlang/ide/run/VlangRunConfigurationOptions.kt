@@ -16,7 +16,7 @@ class VlangRunConfigurationOptions : LocatableRunConfigurationOptions() {
     private var _workingDir = string("\$PROJECT_DIR$").provideDelegate(this, "workingDir")
     private var _envs = string("").provideDelegate(this, "envs")
     private var _isPassParentEnvs = property(true).provideDelegate(this, "isPassParentEnvs")
-    private var _buildArguments = string("").provideDelegate(this, "buildArguments")
+    private var _buildArguments = string("-g -keepc").provideDelegate(this, "buildArguments")
     private var _programArguments = string("").provideDelegate(this, "programArguments")
     private var _production = property(false).provideDelegate(this, "production")
     private var _emulateTerminal = property(true).provideDelegate(this, "emulateTerminal")
