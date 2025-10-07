@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+- Refactor Vlang element type factory
+  - Hopefully finally fixes all 'All stub element types should be created before index initialization is complete.' exceptions
+
 ## [2025.2.2] - 2025-09-08
 
 - Allow attributes on enum values. [#38](https://github.com/vlang/intellij-v/issues/38)

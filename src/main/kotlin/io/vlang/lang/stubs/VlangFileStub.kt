@@ -5,13 +5,12 @@ import com.intellij.psi.stubs.StubElement
 import io.vlang.lang.VlangFileElementType
 import io.vlang.lang.psi.VlangFile
 import io.vlang.lang.psi.VlangModuleClause
-import io.vlang.lang.stubs.types.VlangModuleClauseStubElementType
 
 class VlangFileStub(file: VlangFile?) : PsiFileStubImpl<VlangFile?>(file) {
     override fun getType() = VlangFileElementType.INSTANCE
 
     private fun getModuleClauseStub(): StubElement<VlangModuleClause>? {
-        return findChildStubByType(VlangModuleClauseStubElementType.INSTANCE)
+        return findChildStubByType(VlangElementTypeFactory.MODULE_CLAUSE)
     }
 
     fun getModuleName(): String? {

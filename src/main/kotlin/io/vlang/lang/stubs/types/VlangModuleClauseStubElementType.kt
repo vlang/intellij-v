@@ -26,8 +26,4 @@ class VlangModuleClauseStubElementType : VlangStubElementType<VlangModuleClauseS
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>): VlangModuleClauseStub {
         return VlangModuleClauseStub(parentStub, this, dataStream.readName(), dataStream.readName())
     }
-
-    companion object {
-        val INSTANCE = VlangModuleClauseStubElementType()
-    }
 }
