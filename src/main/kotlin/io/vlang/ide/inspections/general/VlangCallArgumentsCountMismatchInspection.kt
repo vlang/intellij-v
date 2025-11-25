@@ -33,7 +33,7 @@ class VlangCallArgumentsCountMismatchInspection : VlangBaseInspection() {
                 if (called is VlangNamedElement) {
                     val fqn = called.getQualifiedName() ?: return
                     // skip some magic functions
-                    if (fqn == "json.decode" || fqn == "builtin.array.sort" || fqn == "builtin.new_node" || fqn == "builtin.new_map" || fqn == "main.App.text") {
+                    if (fqn == "json.decode" || fqn == "builtin.array.sort" || fqn == "builtin.array.sorted" || fqn == "builtin.new_node" || fqn == "builtin.new_map" || fqn == "main.App.text") {
                         return
                     }
 

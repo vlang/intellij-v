@@ -171,7 +171,7 @@ object VlangGenericInferer {
             // possibly generic struct initialization
             // Foo[int]{ x: 100 }
             //           ^ type for this is int
-            val literalValue = expr?.parentOfType<VlangLiteralValueExpression>() ?:  return genericType
+            val literalValue = expr?.parentOfType<VlangLiteralValueExpression>() ?: return genericType
             qualifierType = literalValue.getType(null)
         }
 
@@ -200,7 +200,11 @@ object VlangGenericInferer {
             callExpr = VlangCodeInsightUtil.getCallExpr(callExpr) ?: return null
         }
 
-        val methodsName = if (isItVariable) arrayOf("filter", "map", "any", "all") else arrayOf("sort")
+        val methodsName = if (isItVariable) {
+            arrayOf("filter", "map", "any", "all", "count")
+        } else {
+            arrayOf("sort", "sorted")
+        }
         while (!VlangCodeInsightUtil.isArrayMethodCall(callExpr, *methodsName)) {
             callExpr = VlangCodeInsightUtil.getCallExpr(callExpr) ?: return null
         }

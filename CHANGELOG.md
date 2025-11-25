@@ -4,6 +4,7 @@
 
 - Refactor Vlang element type factory
   - Hopefully finally fixes all 'All stub element types should be created before index initialization is complete.' exceptions
+- Add support for _count_ and _sorted_ "pseudo" params methods to array
 
 ## [2025.2.2] - 2025-09-08
 

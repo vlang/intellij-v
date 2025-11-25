@@ -123,7 +123,8 @@ object VlangCodeInsightUtil {
             return false
         }
 
-        return function.receiverType?.textMatches("array") == true
+        val receiverType = function.receiverType?.text?.trimStart('&') ?: return false
+        return receiverType == "array"
     }
 
     fun insideOrGuard(element: PsiElement): Boolean {

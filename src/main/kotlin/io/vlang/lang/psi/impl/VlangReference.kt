@@ -7,6 +7,7 @@ import com.intellij.openapi.util.Conditions
 import com.intellij.openapi.util.RecursionManager
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
+import com.intellij.psi.impl.source.resolve.FileContextUtil.getContextFile
 import com.intellij.psi.impl.source.resolve.ResolveCache
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.PsiTreeUtil
@@ -1001,7 +1002,12 @@ class VlangReference(el: VlangReferenceExpressionBase, val forTypes: Boolean = f
             callExpr = VlangCodeInsightUtil.getCallExpr(callExpr) ?: return true
         }
 
-        val methodsName = if (isItVariable) arrayOf("filter", "map", "any", "all") else arrayOf("sort")
+        val methodsName = if (isItVariable) {
+            arrayOf("filter", "map", "any", "all", "count")
+        } else {
+            arrayOf("sort", "sorted")
+        }
+
         while (!VlangCodeInsightUtil.isArrayMethodCall(callExpr, *methodsName)) {
             callExpr = VlangCodeInsightUtil.getCallExpr(callExpr) ?: return true
         }

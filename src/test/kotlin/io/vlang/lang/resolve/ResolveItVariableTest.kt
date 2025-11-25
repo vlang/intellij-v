@@ -8,10 +8,14 @@ open class ResolveItVariableTest : ResolveTestBase() {
             fn main() {
                 [1, 2, 3].filter(/*caret*/it > 100)
                 [1, 2, 3].any(/*caret*/it > 100)
+                [1, 2, 3].all(/*caret*/it > 100)
                 [1, 2, 3].map(/*caret*/it > 100)
+                [1, 2, 3].count(/*caret*/it > 100)
             }
         """.trimIndent())
 
+        assertReferencedTo("PARAM_DEFINITION null")
+        assertReferencedTo("PARAM_DEFINITION null")
         assertReferencedTo("PARAM_DEFINITION null")
         assertReferencedTo("PARAM_DEFINITION null")
         assertReferencedTo("PARAM_DEFINITION null")
@@ -30,9 +34,15 @@ open class ResolveItVariableTest : ResolveTestBase() {
                 arr.map(/*caret*/it./*caret*/age)
                 arr.filter(/*caret*/it./*caret*/age > 100)
                 arr.any(/*caret*/it./*caret*/age > 100)
+                arr.all(/*caret*/it./*caret*/age > 100)
+                arr.count(/*caret*/it./*caret*/age > 100)
             }
         """.trimIndent())
 
+        assertReferencedTo("PARAM_DEFINITION null")
+        assertReferencedTo("FIELD_DEFINITION age")
+        assertReferencedTo("PARAM_DEFINITION null")
+        assertReferencedTo("FIELD_DEFINITION age")
         assertReferencedTo("PARAM_DEFINITION null")
         assertReferencedTo("FIELD_DEFINITION age")
         assertReferencedTo("PARAM_DEFINITION null")
@@ -55,16 +65,27 @@ open class ResolveItVariableTest : ResolveTestBase() {
             fn process_input(input string) []int {
                 mut result := split(input)
                     .map(sum(/*caret*/split(/*caret*/it)./*caret*/map(/*caret*/it)) or { 0 })
-                result.sort(a > b)
+                result./*caret*/sorted(/*caret*/a > /*caret*/b)
+                result./*caret*/sort(/*caret*/a > /*caret*/b)
                 println(result./*caret*/all(/*caret*/it == 1))
                 return result
             }
         """.trimIndent())
 
+        // map
         assertReferencedTo("FUNCTION_DECLARATION split")
         assertReferencedTo("PARAM_DEFINITION null")
         assertReferencedTo("METHOD_DECLARATION map")
         assertReferencedTo("PARAM_DEFINITION null")
+        // result.sort(a > b)
+        assertReferencedTo("METHOD_DECLARATION sorted")
+        assertReferencedTo("PARAM_DEFINITION null")
+        assertReferencedTo("PARAM_DEFINITION null")
+        // result.sort(a > b)
+        assertReferencedTo("METHOD_DECLARATION sort")
+        assertReferencedTo("PARAM_DEFINITION null")
+        assertReferencedTo("PARAM_DEFINITION null")
+        // println(result./*caret*/all(/*caret*/it == 1))
         assertReferencedTo("METHOD_DECLARATION all")
         assertReferencedTo("PARAM_DEFINITION null")
     }

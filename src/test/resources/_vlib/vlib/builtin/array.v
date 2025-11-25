@@ -418,6 +418,13 @@ pub fn (a array) filter(predicate fn (voidptr) bool) array
 // Example: array.any(it.name == 'Bob') // will yield `true` if any element has `.name == 'Bob'`
 pub fn (a array) any(predicate fn (voidptr) bool) bool
 
+// count counts how many elements in array pass the test.
+// Ignore the function signature. `count` does not take an actual callback. Rather, it
+// takes an `it` expression.
+//
+// Example: a := [10,3,5,7]; assert a.count(it % 2 == 1) == 3 // will return how many elements are odd
+pub fn (a array) count(predicate fn (voidptr) bool) int
+
 // all tests whether all elements in the array pass the test.
 // Ignore the function signature. `all` does not take an actual callback. Rather, it
 // takes an `it` expression.
@@ -457,6 +464,12 @@ pub fn (a array) map(callback fn (voidptr) voidptr) array
 // Example: array.sort(b < a) // will sort the array in decending order
 // Example: array.sort(b.name < a.name) // will sort descending by the .name field
 pub fn (mut a array) sort(callback fn (voidptr, voidptr) int)
+
+// sorted returns a sorted copy of the original array. The original array is *NOT* modified.
+// See also .sort() .
+// Example: assert [9,1,6,3,9].sorted() == [1,3,6,9,9]
+// Example: assert [9,1,6,3,9].sorted(b < a) == [9,9,6,3,1]
+pub fn (a &array) sorted(callback fn (voidptr, voidptr) int) array
 
 // sort_with_compare sorts the array in-place using the results of the
 // given function to determine sort order.
