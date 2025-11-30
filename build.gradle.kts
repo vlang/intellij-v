@@ -81,7 +81,7 @@ dependencies {
         }
         val useInstaller = !platformVersion.contains(Regex("EAP|SNAPSHOT"))
 
-        create(platformType, platformVersion, useInstaller)
+        create(platformType, platformVersion) { this.useInstaller = useInstaller }
 
         // Plugin Dependencies. Uses `platformBundledPlugins` property from the gradle.properties file for bundled IntelliJ Platform plugins.
         bundledPlugins(bundledPlugins.split(',', ' ').filter(String::isNotEmpty))
