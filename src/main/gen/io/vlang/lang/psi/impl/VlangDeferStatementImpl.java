@@ -34,9 +34,27 @@ public class VlangDeferStatementImpl extends VlangStatementImpl implements Vlang
   }
 
   @Override
+  @Nullable
+  public PsiElement getLparen() {
+    return findChildByType(LPAREN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRparen() {
+    return findChildByType(RPAREN);
+  }
+
+  @Override
   @NotNull
   public PsiElement getDefer() {
     return notNullChild(findChildByType(DEFER));
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getFn() {
+    return findChildByType(FN);
   }
 
 }

@@ -348,7 +348,7 @@ GotoStatement ::= goto LabelRef
 AssertStatement ::= assert Expression (',' Expression)?
 
 // defer { ... } rule
-DeferStatement ::= defer Block
+DeferStatement ::= defer ( '(' fn ')' )? Block
 
 // <expr> << <expr>
 AppendStatement ::= DotExpression ShiftLeftOp Expression {

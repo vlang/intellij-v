@@ -10,7 +10,16 @@ public interface VlangDeferStatement extends VlangStatement {
   @NotNull
   VlangBlock getBlock();
 
+  @Nullable
+  PsiElement getLparen();
+
+  @Nullable
+  PsiElement getRparen();
+
   @NotNull
   PsiElement getDefer();
+
+  @Nullable
+  PsiElement getFn();
 
 }

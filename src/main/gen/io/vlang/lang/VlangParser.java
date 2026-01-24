@@ -1418,15 +1418,33 @@ public class VlangParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // defer Block
+  // defer ( '(' fn ')' )? Block
   public static boolean DeferStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DeferStatement")) return false;
     if (!nextTokenIs(b, DEFER)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, DEFER);
+    r = r && DeferStatement_1(b, l + 1);
     r = r && Block(b, l + 1);
     exit_section_(b, m, DEFER_STATEMENT, r);
+    return r;
+  }
+
+  // ( '(' fn ')' )?
+  private static boolean DeferStatement_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "DeferStatement_1")) return false;
+    DeferStatement_1_0(b, l + 1);
+    return true;
+  }
+
+  // '(' fn ')'
+  private static boolean DeferStatement_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "DeferStatement_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, LPAREN, FN, RPAREN);
+    exit_section_(b, m, null, r);
     return r;
   }
 
