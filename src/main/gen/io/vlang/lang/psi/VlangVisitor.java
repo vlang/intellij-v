@@ -156,6 +156,22 @@ public class VlangVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitCompileTimeMatchArm(@NotNull VlangCompileTimeMatchArm o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitCompileTimeMatchArms(@NotNull VlangCompileTimeMatchArms o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitCompileTimeMatchElseArmClause(@NotNull VlangCompileTimeMatchElseArmClause o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitCompileTimeMatchExpression(@NotNull VlangCompileTimeMatchExpression o) {
+    visitExpression(o);
+  }
+
   public void visitConditionalExpr(@NotNull VlangConditionalExpr o) {
     visitBinaryExpr(o);
   }

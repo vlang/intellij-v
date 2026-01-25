@@ -46,6 +46,10 @@ public interface VlangTypes {
   IElementType COMPILE_TIME_FIELD_REFERENCE = new VlangCompositeElementType("COMPILE_TIME_FIELD_REFERENCE");
   IElementType COMPILE_TIME_FOR_STATEMENT = new VlangCompositeElementType("COMPILE_TIME_FOR_STATEMENT");
   IElementType COMPILE_TIME_IF_EXPRESSION = new VlangCompositeElementType("COMPILE_TIME_IF_EXPRESSION");
+  IElementType COMPILE_TIME_MATCH_ARM = new VlangCompositeElementType("COMPILE_TIME_MATCH_ARM");
+  IElementType COMPILE_TIME_MATCH_ARMS = new VlangCompositeElementType("COMPILE_TIME_MATCH_ARMS");
+  IElementType COMPILE_TIME_MATCH_ELSE_ARM_CLAUSE = new VlangCompositeElementType("COMPILE_TIME_MATCH_ELSE_ARM_CLAUSE");
+  IElementType COMPILE_TIME_MATCH_EXPRESSION = new VlangCompositeElementType("COMPILE_TIME_MATCH_EXPRESSION");
   IElementType CONDITIONAL_EXPR = new VlangCompositeElementType("CONDITIONAL_EXPR");
   IElementType CONST_DECLARATION = new VlangCompositeElementType("CONST_DECLARATION");
   IElementType CONST_DEFINITION = VlangElementTypeFactory.stubFactory("CONST_DEFINITION");
@@ -299,6 +303,7 @@ public interface VlangTypes {
   IElementType LONG_TEMPLATE_ENTRY_START = new VlangTokenType("LONG_TEMPLATE_ENTRY_START");
   IElementType LPAREN = new VlangTokenType("(");
   IElementType MATCH = new VlangTokenType("match");
+  IElementType MATCH_COMPILE_TIME = new VlangTokenType("$match");
   IElementType MINUS = new VlangTokenType("-");
   IElementType MINUS_ASSIGN = new VlangTokenType("-=");
   IElementType MINUS_MINUS = new VlangTokenType("--");
@@ -472,6 +477,18 @@ public interface VlangTypes {
       }
       else if (type == COMPILE_TIME_IF_EXPRESSION) {
         return new VlangCompileTimeIfExpressionImpl(node);
+      }
+      else if (type == COMPILE_TIME_MATCH_ARM) {
+        return new VlangCompileTimeMatchArmImpl(node);
+      }
+      else if (type == COMPILE_TIME_MATCH_ARMS) {
+        return new VlangCompileTimeMatchArmsImpl(node);
+      }
+      else if (type == COMPILE_TIME_MATCH_ELSE_ARM_CLAUSE) {
+        return new VlangCompileTimeMatchElseArmClauseImpl(node);
+      }
+      else if (type == COMPILE_TIME_MATCH_EXPRESSION) {
+        return new VlangCompileTimeMatchExpressionImpl(node);
       }
       else if (type == CONDITIONAL_EXPR) {
         return new VlangConditionalExprImpl(node);

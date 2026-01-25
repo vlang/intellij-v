@@ -389,6 +389,7 @@ REGULAR_SINGLE_STRING_PART=[^\\\'\$]+
 "$for"                                    { return FOR_COMPILE_TIME; }
 "$if"                                     { return IF_COMPILE_TIME; }
 "$else"                                   { return ELSE_COMPILE_TIME; }
+"$match"                                  { return MATCH_COMPILE_TIME; }
 
 "asm"                                     { pushState(ASM_BLOCK); return ASM; }
 

@@ -6,6 +6,7 @@
   - Hopefully finally fixes all 'All stub element types should be created before index initialization is complete.' exceptions
 - Add support for _count_ and _sorted_ "pseudo" params methods to array.
 - Add basic support for `defer(fn)` syntax. [#51](https://github.com/vlang/intellij-v/issues/51)
+- Add support for compile time `$match` expression. [#44](https://github.com/vlang/intellij-v/issues/44)
 
 ## [2025.2.2] - 2025-09-08
 

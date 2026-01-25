@@ -29,8 +29,32 @@ public class VlangSendStatementImpl extends VlangStatementImpl implements VlangS
 
   @Override
   @Nullable
+  public VlangConstDeclaration getConstDeclaration() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangConstDeclaration.class);
+  }
+
+  @Override
+  @Nullable
+  public VlangEnumDeclaration getEnumDeclaration() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangEnumDeclaration.class);
+  }
+
+  @Override
+  @Nullable
   public VlangExpression getExpression() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangExpression.class);
+  }
+
+  @Override
+  @Nullable
+  public VlangFunctionDeclaration getFunctionDeclaration() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangFunctionDeclaration.class);
+  }
+
+  @Override
+  @Nullable
+  public VlangGlobalVariableDeclaration getGlobalVariableDeclaration() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangGlobalVariableDeclaration.class);
   }
 
   @Override
@@ -41,8 +65,20 @@ public class VlangSendStatementImpl extends VlangStatementImpl implements VlangS
 
   @Override
   @Nullable
+  public VlangInterfaceDeclaration getInterfaceDeclaration() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangInterfaceDeclaration.class);
+  }
+
+  @Override
+  @Nullable
   public VlangLabelDefinition getLabelDefinition() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangLabelDefinition.class);
+  }
+
+  @Override
+  @Nullable
+  public VlangMethodDeclaration getMethodDeclaration() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangMethodDeclaration.class);
   }
 
   @Override
@@ -73,6 +109,24 @@ public class VlangSendStatementImpl extends VlangStatementImpl implements VlangS
   @Nullable
   public VlangStatement getStatement() {
     return VlangPsiTreeUtil.getChildOfType(this, VlangStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public VlangStaticMethodDeclaration getStaticMethodDeclaration() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangStaticMethodDeclaration.class);
+  }
+
+  @Override
+  @Nullable
+  public VlangStructDeclaration getStructDeclaration() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangStructDeclaration.class);
+  }
+
+  @Override
+  @Nullable
+  public VlangTypeAliasDeclaration getTypeAliasDeclaration() {
+    return VlangPsiTreeUtil.getChildOfType(this, VlangTypeAliasDeclaration.class);
   }
 
   @Override

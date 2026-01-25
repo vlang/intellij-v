@@ -62,6 +62,7 @@ object VlangTokenTypes {
         MUT,
         IF_COMPILE_TIME,
         ELSE_COMPILE_TIME,
+        MATCH_COMPILE_TIME,
         UNSAFE,
         BUILTIN_GLOBAL,
         ASSERT,

@@ -28,4 +28,5 @@ class ParserTest : ParserTestBase("parser", "v", VlangParserDefinition()) {
     fun `test static function`() = doTest(true)
     fun `test enum keyword fields`() = doTest(true)
     fun `test defer fn`() = doTest(true)
+    fun `test compile time match`() = doTest(true)
 }

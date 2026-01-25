@@ -83,6 +83,7 @@
     IF_COMPILE_TIME      =  '$if'
     ELSE_COMPILE_TIME    =  '$else'
     FOR_COMPILE_TIME     =  '$for'
+    MATCH_COMPILE_TIME   =  '$match'
     BUILTIN_GLOBAL       =  '__global'
     SEMICOLON_SYNTHETIC  = '<NL>'
     TYPE_                = 'type'
@@ -97,7 +98,7 @@
   ]
 
   extends("(Or|And|Add|Conversion|Mul|ShiftLeft|Selector|Conditional|OrBlock)Expr|(In|NotIn|Is|NotIs)Expression")=BinaryExpr
-  extends(".*(Expr|Literal|Lit|OperandName)|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|SharedExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression|LockExpression|IncDecExpression|LiteralValueExpression|SelectExpression|SpawnExpression|TypeCastExpression")=Expression
+  extends(".*(Expr|Literal|Lit|OperandName)|MapInitExpr|UnsafeExpression|CompileTimeIfExpression|CompileTimeMatchExpression|IfExpression|ArrayCreation|InExpression|NotInExpression|MatchExpression|EnumFetch|MutExpression|SharedExpression|DotExpression|IsExpression|NotIsExpression|AsExpression|UnpackingExpression|ConstexprIdentifierExpression|SqlExpression|GoExpression|LockExpression|IncDecExpression|LiteralValueExpression|SelectExpression|SpawnExpression|TypeCastExpression")=Expression
 
   implements("ModuleClause|(Var|Param|Field|Label|Var|Const|EnumField|GlobalVariable|InterfaceMethod)Definition|(Struct|TypeAlias|Union|Enum|Interface)Declaration|Receiver|Import(Alias|Name)|GenericParameter|EmbeddedDefinition")="io.vlang.lang.psi.VlangNamedElement"
   implements("FunctionLit|(Function|Method|StaticMethod)Declaration")="io.vlang.lang.psi.VlangSignatureOwner"
@@ -209,7 +210,7 @@ private TopDeclaration ::=
   | TypeAliasDeclaration
   | Statement // for single files without `main()` function
 
-private TopLevelDeclarationRecover ::= !('type' | '__global' | enum | import | '$for' | '$if' | '@[' | '[' | '!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | '{' | '|' | '|=' | '||' | '&&' | '}' | break | case | const | continue | defer | else | float | for | fn | pub | mut | volatile | shared | go | spawn | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | union | var | unsafe | assert | match | lock | rlock | asm | true | false | none | '$else' | typeof | offsetof | sizeof | isreftype | dump | nil)
+private TopLevelDeclarationRecover ::= !('type' | '__global' | enum | import | '$for' | '$if' | '$match' | '@[' | '[' | '!' | '?' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | '{' | '|' | '|=' | '||' | '&&' | '}' | break | case | const | continue | defer | else | float | for | fn | pub | mut | volatile | shared | go | spawn | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | union | var | unsafe | assert | match | lock | rlock | asm | true | false | none | '$else' | typeof | offsetof | sizeof | isreftype | dump | nil)
 
 ////////// TOP LEVEL DECLARATIONS END //////////
 
@@ -241,7 +242,7 @@ Statement ::=
   | LabeledStatement
   | DeferStatement {methods=[processDeclarations]}
 
-private StatementRecover ::= !('!' | '?' | '&' | '@[' | '[' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | '{' | '|' | '|=' | '||' | '&&' | '}' | type | break | case | const | continue | defer | else | float | for | fn | pub | mut | volatile | shared | go | spawn | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | union | var | unsafe | assert | match | lock | rlock | asm | true | false | none | '$for' | '$if' | '$else' | '__global' | typeof | offsetof | sizeof | isreftype | dump | nil)
+private StatementRecover ::= !('!' | '?' | '&' | '@[' | '[' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | '{' | '|' | '|=' | '||' | '&&' | '}' | type | break | case | const | continue | defer | else | float | for | fn | pub | mut | volatile | shared | go | spawn | goto | hex | identifier | if | int | interface | oct | return | select | 'raw_string' | OPEN_QUOTE | char | struct | union | var | unsafe | assert | match | lock | rlock | asm | true | false | none | '$for' | '$if' | '$match' | '$else' | '__global' | typeof | offsetof | sizeof | isreftype | dump | nil)
 
 // attributes start
 // @[attr1]
@@ -637,6 +638,7 @@ Expression ::=
   | MatchExpression
   | SelectExpression
   | CompileTimeIfExpression
+  | CompileTimeMatchExpression
   | InExpression
   | NotInExpression
   | IsExpression
@@ -1020,6 +1022,7 @@ MatchExpression ::= match BeforeBlockExpression '{' MatchArms '}' {
   pin=1
   methods=[getArms getExpressionArms getTypeArms getElseArm withElse]
 }
+
 // <expr>[, <expr2>] { ... }
 // else { ... }
 MatchArms ::= (MatchArm | MatchElseArmClause)*
@@ -1033,6 +1036,27 @@ private MatchExpressionList ::= MatchArmExpression (',' MatchArmExpression)*
 private MatchArmExpression ::= <<typeOrExpression>>
 // else { ... }
 MatchElseArmClause ::= else Block semi {pin=1}
+
+// $match <expr> { ... }
+CompileTimeMatchExpression ::= '$match' BeforeBlockExpression '{' CompileTimeMatchArms '}' {
+  pin=1
+  methods=[getArms getExpressionArms getTypeArms getElseArm withElse]
+}
+
+// <expr>[, <expr2>] { ... }
+// $else { ... }
+CompileTimeMatchArms ::= (CompileTimeMatchArm | CompileTimeMatchElseArmClause)*
+
+CompileTimeMatchArm ::= MatchExpressionList CTBlock semi {
+  methods=[getParameterList]
+}
+
+// $else { ... }
+CompileTimeMatchElseArmClause ::= '$else' CTBlock semi {pin=1}
+
+private CTBlock ::= '{' ('}' | (<<withOff CTBlockStatements "BLOCK?" "PAR">> | (!() CTBlockStatements)) '}') {pin(".*")=1}
+private CTBlockStatements ::= CTBlockStatement*
+private CTBlockStatement ::= TopDeclaration (semi | &'}') { pin=1 recoverWhile=StatementRecover }
 
 // <expr> in <expr>
 InExpression ::= Expression in Expression {pin=2}
