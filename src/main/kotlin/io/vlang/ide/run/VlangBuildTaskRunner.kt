@@ -118,9 +118,12 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
             }
         }
 
-        if (!outputFileName.isEmpty()) {
-            commandLine.withParameters("-o", File(outputFileName).absolutePath)
+        val effectiveOutputFile = if (outputFileName.isNotEmpty()) {
+            File(outputFileName).absolutePath
+        } else {
+            File(binaryName(options)).absolutePath
         }
+        commandLine.withParameters("-o", effectiveOutputFile)
 
         val additionalArguments = ParametersListUtil.parse(options.buildArguments)
         commandLine.addParameters(additionalArguments)
@@ -128,6 +131,7 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
         val handler = VlangProcessHandler(commandLine)
         ctx.processHandler = handler
         ctx.workingDirectory = workingDir.toPath()
+        ctx.outputDirectory = File(effectiveOutputFile).parentFile?.toPath()
         handler.addProcessListener(VlangBuildAdapter(ctx, buildProgressListener))
         handler.addProcessListener(object : ProcessListener {
             override fun processTerminated(event: ProcessEvent) {
