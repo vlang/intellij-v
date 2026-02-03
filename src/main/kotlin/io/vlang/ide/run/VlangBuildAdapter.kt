@@ -81,6 +81,17 @@ class VlangBuildAdapter(
         isCanceled: Boolean,
         error: Throwable?,
     ) {
+        if (!isSuccess && !isCanceled && ctx.errors.get() == 0) {
+            val exitCode = event.exitCode
+            val message = if (exitCode == -1073741819 || exitCode == 139) {
+                "V compiler crashed (access violation, exit code $exitCode). This is a V compiler bug."
+            } else {
+                "V compiler exited with code $exitCode but produced no error output."
+            }
+            val crashEvent = OutputBuildEventImpl(ctx.buildId, message + "\n", true)
+            buildProgressListener.onEvent(ctx.buildId, crashEvent)
+        }
+
         val (status, result) = when {
             isCanceled -> "canceled" to SkippedResultImpl()
             isSuccess  -> "successful" to SuccessResultImpl()
