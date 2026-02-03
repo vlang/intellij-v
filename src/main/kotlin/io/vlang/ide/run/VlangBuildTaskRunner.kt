@@ -110,11 +110,20 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
             commandLine.addParameters("-no-parallel", "-no-retry-compilation", /*"-skip-unused"*/)
             commandLine.addParameters("-keepc")
 
-            // Debugging with TCC not working on Windows and Linux for some reasons
-            if (SystemInfo.isLinux) {
-                commandLine.withParameters("-cc", "gcc")
-            } else if (SystemInfo.isWindows) {
-                commandLine.withParameters("-cc", "msvc")
+            // Use -cc from VFLAGS or build arguments if present, otherwise fall back to platform default.
+            // Debugging with TCC not working on Windows and Linux for some reasons.
+            val vflags = options.envsMap["VFLAGS"]
+                ?: System.getenv("VFLAGS")
+                ?: ""
+            val buildArgs = options.buildArguments
+            val ccFromVflags = extractCcCompiler(vflags)
+            val ccFromArgs = extractCcCompiler(buildArgs)
+
+            when {
+                ccFromArgs != null -> { /* -cc already in build arguments, will be added later */ }
+                ccFromVflags != null -> commandLine.withParameters("-cc", ccFromVflags)
+                SystemInfo.isLinux -> commandLine.withParameters("-cc", "gcc")
+                SystemInfo.isWindows -> commandLine.withParameters("-cc", "msvc")
             }
         }
 
@@ -171,6 +180,15 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
         fun debugSymbolDir(options: VlangRunConfigurationOptions.ExpandedOptions): String {
             val name = File(options.fileName).nameWithoutExtension
             return "$name.dSYM"
+        }
+
+        /**
+         * Extracts the compiler name from a string containing "-cc <compiler>".
+         * Returns null if -cc is not found.
+         */
+        private fun extractCcCompiler(str: String): String? {
+            val regex = Regex("""-cc\s+(\S+)""")
+            return regex.find(str)?.groupValues?.get(1)
         }
     }
 }
