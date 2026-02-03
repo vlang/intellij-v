@@ -160,7 +160,8 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
                     File(options.workingDir, execFile).normalize().toString()
                 }
             } else {
-                File(options.workingDir).resolve(File(options.directory)).normalize().name
+                val dirName = File(options.workingDir).resolve(File(options.directory)).normalize().name
+                File(options.workingDir, dirName).normalize().toString()
             }
             if (SystemInfo.isWindows) {
                 return "$name.exe"
