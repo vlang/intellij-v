@@ -30,7 +30,7 @@ class VlangBuildEventsConverter(private val ctx: VlangBuildContext) : BuildOutpu
         val cleanLine = decoder.removeEscapeSequences(line)
         val kind = getMessageKind(cleanLine)
 
-        if (cleanLine.startsWith("=====")) {
+        if (isCgenErrorLine(cleanLine)) {
             val event = handleCompilerCgenError()
             messageConsumer.accept(event)
             cgenError = true
@@ -148,6 +148,19 @@ class VlangBuildEventsConverter(private val ctx: VlangBuildContext) : BuildOutpu
 
         private val MESSAGE_LINE = Regex(".*\\d+.*\\|.*") //  10 | println('hello world')
         private val MESSAGE_ERROR_LINE = Regex(".*\\|.*?~") //   | ~~~~~~~
+
+        /**
+         * Detects actual C gen errors vs informational banners from -show-c-output flag.
+         * The V compiler outputs banners like "======== Output of the C Compiler (...) ========"
+         * followed by a closing line of just "=" characters when -show-c-output is used.
+         * These should not be treated as errors.
+         */
+        private fun isCgenErrorLine(line: String): Boolean {
+            if (!line.startsWith("=====")) return false
+            if (line.contains("Output of the C Compiler")) return false
+            if (line.all { it == '=' }) return false
+            return true
+        }
 
         private fun Consumer<in BuildEvent>.acceptText(parentId: Any?, text: String) =
             accept(OutputBuildEventImpl(parentId, text, true))
