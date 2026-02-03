@@ -60,6 +60,11 @@ class VlangBuildAdapter(
         buildProgressListener.onEvent(ctx.buildId, buildStarted)
     }
 
+    fun emitMessage(text: String) {
+        val event = OutputBuildEventImpl(ctx.buildId, text, true)
+        buildProgressListener.onEvent(ctx.buildId, event)
+    }
+
     override fun processTerminated(event: ProcessEvent) {
         instantReader.closeAndGetFuture().whenComplete { _, error ->
             val isSuccess = event.exitCode == 0 && ctx.errors.get() == 0
@@ -81,6 +86,17 @@ class VlangBuildAdapter(
         isCanceled: Boolean,
         error: Throwable?,
     ) {
+        if (!isSuccess && !isCanceled && ctx.errors.get() == 0) {
+            val exitCode = event.exitCode
+            val message = if (exitCode == -1073741819 || exitCode == 139) {
+                "V compiler crashed (access violation, exit code $exitCode). This is a V compiler bug."
+            } else {
+                "V compiler exited with code $exitCode but produced no error output."
+            }
+            val crashEvent = OutputBuildEventImpl(ctx.buildId, message + "\n", true)
+            buildProgressListener.onEvent(ctx.buildId, crashEvent)
+        }
+
         val (status, result) = when {
             isCanceled -> "canceled" to SkippedResultImpl()
             isSuccess  -> "successful" to SuccessResultImpl()
@@ -97,6 +113,15 @@ class VlangBuildAdapter(
         buildProgressListener.onEvent(ctx.buildId, buildFinished)
 
         ctx.environment.notifyProcessTerminated(event.processHandler, event.exitCode)
+
+        if (isSuccess) {
+            cleanupTempObjFiles(ctx.workingDirectory.toFile())
+            ctx.outputDirectory?.toFile()?.let { outputDir ->
+                if (outputDir != ctx.workingDirectory.toFile()) {
+                    cleanupTempObjFiles(outputDir)
+                }
+            }
+        }
 
         val targetDir = VfsUtil.findFile(ctx.workingDirectory, true) ?: return
         VfsUtil.markDirtyAndRefresh(true, true, true, targetDir)
@@ -115,6 +140,22 @@ class VlangBuildAdapter(
 
         fun ExecutionEnvironment.notifyProcessTerminating(handler: ProcessHandler) =
             executionListener.processTerminating(executor.id, this, handler)
+
+        /**
+         * Cleans up temporary build artifacts left by V/MSVC compilation.
+         * Includes: *.tmp.obj (object files), *.ilk (incremental linker files)
+         */
+        private fun cleanupTempObjFiles(directory: java.io.File) {
+            directory.listFiles { file ->
+                file.isFile && (file.name.endsWith(".tmp.obj") || file.name.endsWith(".ilk"))
+            }?.forEach { file ->
+                try {
+                    file.delete()
+                } catch (_: Exception) {
+                    // Ignore deletion failures
+                }
+            }
+        }
 
         private fun createStopAction(processHandler: ProcessHandler): StopProcessAction =
             StopProcessAction("Stop", "Stop", processHandler)

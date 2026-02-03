@@ -1,6 +1,9 @@
 package io.vlang.ide.run
 
 import com.intellij.execution.configurations.LocatableRunConfigurationOptions
+import com.intellij.ide.macro.MacroManager
+import com.intellij.openapi.actionSystem.CommonDataKeys
+import com.intellij.openapi.actionSystem.impl.SimpleDataContext
 import com.intellij.openapi.components.PathMacroManager
 import com.intellij.openapi.project.Project
 import com.intellij.util.EnvironmentUtil
@@ -16,7 +19,7 @@ class VlangRunConfigurationOptions : LocatableRunConfigurationOptions() {
     private var _workingDir = string("\$PROJECT_DIR$").provideDelegate(this, "workingDir")
     private var _envs = string("").provideDelegate(this, "envs")
     private var _isPassParentEnvs = property(true).provideDelegate(this, "isPassParentEnvs")
-    private var _buildArguments = string("-g -keepc").provideDelegate(this, "buildArguments")
+    private var _buildArguments = string("").provideDelegate(this, "buildArguments")
     private var _programArguments = string("").provideDelegate(this, "programArguments")
     private var _production = property(false).provideDelegate(this, "production")
     private var _emulateTerminal = property(true).provideDelegate(this, "emulateTerminal")
@@ -97,26 +100,39 @@ class VlangRunConfigurationOptions : LocatableRunConfigurationOptions() {
         return ExpandedOptions(this, project)
     }
 
-    class ExpandedOptions(val options: VlangRunConfigurationOptions, project: Project) {
+    class ExpandedOptions(val options: VlangRunConfigurationOptions, private val project: Project) {
 
         val macroManager = PathMacroManager.getInstance(project)
+
+        private fun expandAllMacros(value: String): String {
+            val pathExpanded = macroManager.expandPath(value)
+            if (!pathExpanded.contains('$')) return pathExpanded
+            return try {
+                val dataContext = SimpleDataContext.builder()
+                    .add(CommonDataKeys.PROJECT, project)
+                    .build()
+                MacroManager.getInstance().expandMacrosInString(pathExpanded, true, dataContext) ?: pathExpanded
+            } catch (_: Exception) {
+                pathExpanded
+            }
+        }
 
         val runKind: RunKind
             get() = options.runKind
 
         val fileName: String
             get() {
-                return macroManager.expandPath(options.fileName)
+                return expandAllMacros(options.fileName)
             }
 
         val directory: String
             get() {
-                return macroManager.expandPath(options.directory)
+                return expandAllMacros(options.directory)
             }
 
         val outputFileName: String
             get() {
-                return macroManager.expandPath(options.outputFileName)
+                return expandAllMacros(options.outputFileName)
             }
 
         val runAfterBuild: Boolean
@@ -124,12 +140,12 @@ class VlangRunConfigurationOptions : LocatableRunConfigurationOptions() {
 
         val workingDir: String
             get() {
-                return macroManager.expandPath(options.workingDir)
+                return expandAllMacros(options.workingDir)
             }
 
         val envs: String
             get() {
-                return macroManager.expandPath(options.envs)
+                return expandAllMacros(options.envs)
             }
 
         val envsMap: Map<String, String>
@@ -137,12 +153,12 @@ class VlangRunConfigurationOptions : LocatableRunConfigurationOptions() {
 
         val buildArguments: String
             get() {
-                return macroManager.expandPath(options.buildArguments)
+                return expandAllMacros(options.buildArguments)
             }
 
         val programArguments: String
             get() {
-                return macroManager.expandPath(options.programArguments)
+                return expandAllMacros(options.programArguments)
             }
 
         val production: Boolean

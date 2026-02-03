@@ -100,6 +100,14 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
             .withParameters("-color")
             .withWorkDirectory(workingDir)
 
+        // Ensure VFLAGS from system environment is passed to V if not in run config
+        if (!options.envsMap.containsKey("VFLAGS")) {
+            val systemVflags = System.getenv("VFLAGS")
+            if (systemVflags != null) {
+                commandLine.withEnvironment("VFLAGS", systemVflags)
+            }
+        }
+
         if (options.production) {
             commandLine.withParameters("-prod")
         }
@@ -110,17 +118,29 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
             commandLine.addParameters("-no-parallel", "-no-retry-compilation", /*"-skip-unused"*/)
             commandLine.addParameters("-keepc")
 
-            // Debugging with TCC not working on Windows and Linux for some reasons
-            if (SystemInfo.isLinux) {
-                commandLine.withParameters("-cc", "gcc")
-            } else if (SystemInfo.isWindows) {
-                commandLine.withParameters("-cc", "msvc")
+            // Use -cc from VFLAGS or build arguments if present, otherwise fall back to platform default.
+            // Debugging with TCC not working on Windows and Linux for some reasons.
+            val vflags = options.envsMap["VFLAGS"]
+                ?: System.getenv("VFLAGS")
+                ?: ""
+            val buildArgs = options.buildArguments
+            val ccFromVflags = extractCcCompiler(vflags)
+            val ccFromArgs = extractCcCompiler(buildArgs)
+
+            when {
+                ccFromArgs != null -> { /* -cc already in build arguments, will be added later */ }
+                ccFromVflags != null -> commandLine.withParameters("-cc", ccFromVflags)
+                SystemInfo.isLinux -> commandLine.withParameters("-cc", "gcc")
+                SystemInfo.isWindows -> commandLine.withParameters("-cc", "msvc")
             }
         }
 
-        if (!outputFileName.isEmpty()) {
-            commandLine.withParameters("-o", File(outputFileName).absolutePath)
+        val effectiveOutputFile = if (outputFileName.isNotEmpty()) {
+            File(outputFileName).absolutePath
+        } else {
+            File(binaryName(options)).absolutePath
         }
+        commandLine.withParameters("-o", effectiveOutputFile)
 
         val additionalArguments = ParametersListUtil.parse(options.buildArguments)
         commandLine.addParameters(additionalArguments)
@@ -128,7 +148,9 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
         val handler = VlangProcessHandler(commandLine)
         ctx.processHandler = handler
         ctx.workingDirectory = workingDir.toPath()
-        handler.addProcessListener(VlangBuildAdapter(ctx, buildProgressListener))
+        ctx.outputDirectory = File(effectiveOutputFile).parentFile?.toPath()
+        val adapter = VlangBuildAdapter(ctx, buildProgressListener)
+        handler.addProcessListener(adapter)
         handler.addProcessListener(object : ProcessListener {
             override fun processTerminated(event: ProcessEvent) {
                 if (event.exitCode == 0) {
@@ -160,7 +182,8 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
                     File(options.workingDir, execFile).normalize().toString()
                 }
             } else {
-                File(options.workingDir).resolve(File(options.directory)).normalize().name
+                val dirName = File(options.workingDir).resolve(File(options.directory)).normalize().name
+                File(options.workingDir, dirName).normalize().toString()
             }
             if (SystemInfo.isWindows) {
                 return "$name.exe"
@@ -171,6 +194,15 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
         fun debugSymbolDir(options: VlangRunConfigurationOptions.ExpandedOptions): String {
             val name = File(options.fileName).nameWithoutExtension
             return "$name.dSYM"
+        }
+
+        /**
+         * Extracts the compiler name from a string containing "-cc <compiler>".
+         * Returns null if -cc is not found.
+         */
+        private fun extractCcCompiler(str: String): String? {
+            val regex = Regex("""-cc\s+(\S+)""")
+            return regex.find(str)?.groupValues?.get(1)
         }
     }
 }
