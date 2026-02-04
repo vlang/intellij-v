@@ -21,7 +21,7 @@ import io.vlang.debugger.lang.VlangLldbEvaluationContext
 import java.io.File
 
 open class VlangLLDBDriverConfiguration(
-    private val project: Project,
+    val project: Project,
     private val cppEnvironment: CidrToolEnvironment,
     private val isElevated: Boolean,
 ) : LLDBDriverConfiguration() {
