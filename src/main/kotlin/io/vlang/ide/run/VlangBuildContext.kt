@@ -14,6 +14,7 @@ class VlangBuildContext(
     val parentId: Any,
 ) {
     lateinit var workingDirectory: Path
+    var outputDirectory: Path? = null
 
     @Volatile
     lateinit var processHandler: ProcessHandler

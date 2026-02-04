@@ -98,6 +98,15 @@ class VlangBuildAdapter(
 
         ctx.environment.notifyProcessTerminated(event.processHandler, event.exitCode)
 
+        if (isSuccess) {
+            cleanupTempBuildArtifacts(ctx.workingDirectory.toFile())
+            ctx.outputDirectory?.toFile()?.let { outputDir ->
+                if (outputDir != ctx.workingDirectory.toFile()) {
+                    cleanupTempBuildArtifacts(outputDir)
+                }
+            }
+        }
+
         val targetDir = VfsUtil.findFile(ctx.workingDirectory, true) ?: return
         VfsUtil.markDirtyAndRefresh(true, true, true, targetDir)
     }
@@ -115,6 +124,22 @@ class VlangBuildAdapter(
 
         fun ExecutionEnvironment.notifyProcessTerminating(handler: ProcessHandler) =
             executionListener.processTerminating(executor.id, this, handler)
+
+        /**
+         * Cleans up temporary build artifacts left by V/MSVC compilation.
+         * Includes: *.tmp.obj (object files), *.ilk (incremental linker files)
+         */
+        private fun cleanupTempBuildArtifacts(directory: java.io.File) {
+            directory.listFiles { file ->
+                file.isFile && (file.name.endsWith(".tmp.obj") || file.name.endsWith(".ilk"))
+            }?.forEach { file ->
+                try {
+                    file.delete()
+                } catch (_: Exception) {
+                    // Ignore deletion failures
+                }
+            }
+        }
 
         private fun createStopAction(processHandler: ProcessHandler): StopProcessAction =
             StopProcessAction("Stop", "Stop", processHandler)
