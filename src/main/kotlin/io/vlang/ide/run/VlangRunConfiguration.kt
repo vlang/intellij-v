@@ -72,7 +72,8 @@ open class VlangRunConfiguration(project: Project, factory: ConfigurationFactory
             }
         }
 
-        if (opt.buildArguments.contains("-o") || opt.buildArguments.contains("-output")) {
+        val buildArgs = opt.buildArguments.split("\\s+".toRegex())
+        if (buildArgs.any { it == "-o" || it == "-output" }) {
             throw RuntimeConfigurationError("Output file is set in build arguments - please use 'Output file' field instead!", object : ConfigurationQuickFix {
                 override fun applyFix(dataContext: DataContext) {
                     val args = opt.buildArguments.split(" ")
