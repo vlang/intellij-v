@@ -48,7 +48,12 @@ class VlangRunConfigurationRunState(
                     }
                 } else {
                     val binName = VlangBuildTaskRunner.binaryName(options)
-                    File(workingDir, binName)
+                    val binFile = File(binName)
+                    if (binFile.isRooted) {
+                        binFile
+                    } else {
+                        File(workingDir, binName)
+                    }
                 }
                 if (!exe.exists()) {
                     throw IllegalStateException("Can't run ${exe.absolutePath}, file not found")
