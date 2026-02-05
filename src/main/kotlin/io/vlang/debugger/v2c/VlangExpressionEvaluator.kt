@@ -23,20 +23,36 @@ class VlangExpressionEvaluator : VlangVisitor() {
         val qualifier = expr.getQualifier() as? VlangTypeOwner
 
         if (qualifier != null) {
-            append("(")
-            qualifier.accept(this)
-            append(")")
-
             val resolvedQualifier = if (qualifier is VlangReferenceExpression) qualifier.resolve() else null
 
             val qualifierType = qualifier.getType(null)
+
+            val isOption = qualifierType is VlangOptionTypeEx
+            val innerType = if (isOption) (qualifierType as VlangOptionTypeEx).inner else null
+
+            if (isOption && innerType != null) {
+                // Option types in V's C backend are _option_<T> structs with a `data` field.
+                // To access a field on the inner value, we cast data to the inner type pointer
+                // and dereference: (*(InnerCType*)(qualifier).data).field
+                append("(*(${innerType.toCastCname()}*)")
+                append("(")
+                qualifier.accept(this)
+                append(")")
+                append(".data)")
+            } else {
+                append("(")
+                qualifier.accept(this)
+                append(")")
+            }
 
             val isPointer = qualifierType is VlangPointerTypeEx ||
                     // mutable parameters and receivers are always pointers
                     (resolvedQualifier is VlangParamDefinition && resolvedQualifier.isMutable()) ||
                     (resolvedQualifier is VlangReceiver && resolvedQualifier.isMutable())
 
-            if (isPointer) {
+            val innerIsPointerType = isOption && innerType is VlangPointerTypeEx
+
+            if (isPointer || innerIsPointerType) {
                 append("->")
             } else {
                 append(".")
@@ -95,17 +111,28 @@ class VlangExpressionEvaluator : VlangVisitor() {
         append("(")
 
         if (qualifier != null) {
+            val qualifierType = qualifier.getType(null)
+            val isOptionQualifier = qualifierType is VlangOptionTypeEx
+            val optionInnerType = if (isOptionQualifier) (qualifierType as VlangOptionTypeEx).inner else null
+
             if (called is VlangMethodDeclaration) {
                 val receiverByPointer = called.receiverType is VlangPointerType || called.receiver.isMutable()
-                val qualifierType = qualifier.getType(null)
-                val qualifierTypeIsPointer = qualifierType is VlangPointerTypeEx
+                val effectiveType = optionInnerType ?: qualifierType
+                val qualifierTypeIsPointer = effectiveType is VlangPointerTypeEx
 
                 if (!receiverByPointer && qualifierTypeIsPointer) {
                     append("*")
                 }
             }
 
-            qualifier.accept(this)
+            if (isOptionQualifier && optionInnerType != null) {
+                // Unwrap option: cast data field to inner type pointer and dereference
+                append("(*(${optionInnerType.toCastCname()}*)(")
+                qualifier.accept(this)
+                append(").data)")
+            } else {
+                qualifier.accept(this)
+            }
 
             if (args.isNotEmpty()) {
                 append(", ")
@@ -231,6 +258,7 @@ class VlangExpressionEvaluator : VlangVisitor() {
             is VlangPrimitiveTypeEx -> name.value
             is VlangArrayTypeEx     -> toCname()
             is VlangPointerTypeEx   -> toCname()
+            is VlangOptionTypeEx    -> toCname()
             else                    -> qualifiedName().toCname()
         }
     }
@@ -245,6 +273,11 @@ class VlangExpressionEvaluator : VlangVisitor() {
         return "$inner*"
     }
 
+    private fun VlangOptionTypeEx.toCname(): String {
+        val inner = inner?.toCname() ?: "void"
+        return "_option_$inner"
+    }
+
     private fun String.toCname(isMethod: Boolean = false): String {
         val name = removePrefix("builtin.")
         if (isMethod) {
@@ -256,6 +289,16 @@ class VlangExpressionEvaluator : VlangVisitor() {
         }
 
         return name.replace(".", "__")
+    }
+
+    /**
+     * Returns a type name suitable for LLDB expression casts.
+     * LLDB may not find user-defined types by typedef name alone,
+     * so we prepend `struct` for module-qualified types (those containing `__`).
+     */
+    private fun VlangTypeEx.toCastCname(): String {
+        val cname = toCname()
+        return if (cname.contains("__")) "struct $cname" else cname
     }
 
     private fun createTmpVar() = "tmp${tmpVarCounter++}"
