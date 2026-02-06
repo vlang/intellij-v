@@ -92,6 +92,10 @@ abstract class VlangValueRenderer {
             ValueRendererUtils.extractString(this)
                 .replace("${MARK_CHAR}S", "")
                 .replace("${MARK_CHAR}K", "")
+                .replace("${MARK_CHAR}N", "")
+                .replace("${MARK_CHAR}C", "")
+                .replace("${MARK_CHAR}V", "")
+                .replace("${MARK_CHAR}E", "")
 
         private const val MARK_CHAR = 0xFE.toChar()
     }
