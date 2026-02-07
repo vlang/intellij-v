@@ -43,8 +43,22 @@ class VlangOptionRenderer : VlangValueRenderer() {
         val address = value.llValue.address ?: return null
         val dataAddress = address.toString(16)
 
-        val data = value.evaluate("(*($cNameInnerType*)((_option_${cNameInnerType}*)0x$dataAddress)->data)")
+        // Try multiple expression variants since LLDB may not find the inner type
+        // by its typedef name in all contexts
+        val expressions = listOf(
+            "(*($cNameInnerType*)((_option_${cNameInnerType}*)0x$dataAddress)->data)",
+            "(*(struct $cNameInnerType*)((_option_${cNameInnerType}*)0x$dataAddress)->data)",
+        )
 
-        return data.withContext(value.context)
+        for (expr in expressions) {
+            val data = try {
+                value.evaluate(expr)
+            } catch (_: Exception) {
+                continue
+            }
+            return data.withContext(value.context)
+        }
+
+        return null
     }
 }

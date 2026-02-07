@@ -100,6 +100,14 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
             .withParameters("-color")
             .withWorkDirectory(workingDir)
 
+        // Ensure VFLAGS from system environment is passed to V if not in run config
+        if (!options.envsMap.containsKey("VFLAGS")) {
+            val systemVflags = System.getenv("VFLAGS")
+            if (systemVflags != null) {
+                commandLine.withEnvironment("VFLAGS", systemVflags)
+            }
+        }
+
         if (options.production) {
             commandLine.withParameters("-prod")
         }
@@ -173,7 +181,8 @@ class VlangBuildTaskRunner : ProjectTaskRunner() {
                     File(options.workingDir, execFile).normalize().toString()
                 }
             } else {
-                File(options.workingDir).resolve(File(options.directory)).normalize().name
+                val dirName = File(options.workingDir).resolve(File(options.directory)).normalize().name
+                File(options.workingDir, dirName).normalize().toString()
             }
             if (SystemInfo.isWindows) {
                 return "$name.exe"
