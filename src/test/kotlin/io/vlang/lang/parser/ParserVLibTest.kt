@@ -1,6 +1,9 @@
 package io.vlang.lang.parser
 
+import com.intellij.openapi.util.text.StringUtil
+import com.intellij.psi.PsiErrorElement
 import io.vlang.lang.VlangParserDefinition
+import io.vlang.lang.psi.VlangRecursiveVisitor
 import java.io.File
 import java.io.IOException
 import java.nio.file.Path
@@ -36,22 +39,47 @@ class ParserVLibTest : ParserTestBase("", "v", VlangParserDefinition()) {
             return
         }
 
-        val vLibDirectory = getVLibDirectory()
-        var failed = 0
-        var failed_tests = 0
+        var errorsCount = 0
+        var errorsInTestsCount = 0
+        var failedFilesCount = 0
+        var failedTestFilesCount = 0
         for (path in vLibDirectory.walk()) {
             if (path.extension == "v") {
-                println("Parsing file: $path")
+//                println("Parsing file: $path")
                 val relativePath = vLibDirectory.relativize(path).toString()
                 try {
-                    parseFile(relativePath, loadFile(relativePath))
-                    try {
-                        ensureNoErrorElements()
-                    } catch (e: AssertionError) {
-                        println("Error elements found in file: $relativePath, details: ${e.message}")
-                        failed++
+                    val text = loadFile(relativePath)
+                    val psiFile = parseFile(relativePath, text)
+                    val errors = mutableListOf<PsiErrorElement>()
+                    psiFile.accept(object : VlangRecursiveVisitor() {
+                        override fun visitErrorElement(element: PsiErrorElement) {
+                            super.visitErrorElement(element)
+                            errors.add(element)
+                        }
+                    })
+                    if (errors.isNotEmpty()) {
+                        println("=".repeat(40))
+                        println("Found ${errors.size} error(s) in file: $path")
+                        println()
+                        val lines = text.split('\n')
+                        errors.forEach { element ->
+                            val start = StringUtil.offsetToLineColumn(text, element.textRange.startOffset)
+                            val end = StringUtil.offsetToLineColumn(text, element.textRange.endOffset)
+                            val lineNumber = start.line + 1
+                            val startColumn = start.column
+                            val endColumn = if (start.line == end.line) end.column else lines[start.line].length
+
+                            println("Error: ${element.errorDescription}")
+                            println("${String.format("%6d", lineNumber)} | ${lines[start.line]}")
+                            val underline = " ".repeat(startColumn + 9) + "^".repeat(maxOf(1, endColumn - startColumn))
+                            println(underline)
+                            println()
+                        }
+                        failedFilesCount++
+                        errorsCount += errors.size
                         if (path.toString().endsWith("_test.v")) {
-                            failed_tests++
+                            failedTestFilesCount++
+                            errorsInTestsCount += errors.size
                         }
                     }
                 } catch (e: IOException) {
@@ -59,8 +87,8 @@ class ParserVLibTest : ParserTestBase("", "v", VlangParserDefinition()) {
                 }
             }
         }
-        if (failed > 0) {
-            fail("$failed files in vlib contain parsing error\n$failed_tests of tests\n${failed-failed_tests} vlib files\nSee the log above for details.")
+        if (failedFilesCount > 0) {
+            fail("$failedFilesCount files in vlib contain $errorsCount parsing errors\ntests: $failedTestFilesCount files with $errorsInTestsCount errors\n vlib: ${failedFilesCount-failedTestFilesCount} files with ${errorsCount-errorsInTestsCount} errors\nSee the log above for details.")
         }
     }
 }
