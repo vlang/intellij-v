@@ -59,7 +59,7 @@ class VlangBuiltinTypesUtil(private val project: Project) {
         }
     }
 
-    private fun builtinType(name: String): VlangType {
+    private fun builtinType(name: String): VlangType? {
         val file = VlangElementFactory.createFileFromText(
             project, """
             module builtin
@@ -67,7 +67,7 @@ class VlangBuiltinTypesUtil(private val project: Project) {
         """.trimIndent()
         )
 
-        return file.getFunctions().first().getSignature().parameters.paramDefinitionList.first().type
+        return file.getFunctions().first().getSignature()?.parameters?.paramDefinitionList?.first()?.type
     }
 
     companion object {

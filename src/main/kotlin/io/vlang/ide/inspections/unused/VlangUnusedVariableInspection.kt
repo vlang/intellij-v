@@ -21,7 +21,7 @@ class VlangUnusedVariableInspection : VlangBaseInspection() {
                 if (!needCheck(variable)) return
 
                 if (variable.isBlank()) return
-                val identifier = variable.getIdentifier()
+                val identifier = variable.getIdentifier() ?: return
                 val search = ReferencesSearch.search(variable, variable.useScope)
                 if (search.findFirst() != null) return
 

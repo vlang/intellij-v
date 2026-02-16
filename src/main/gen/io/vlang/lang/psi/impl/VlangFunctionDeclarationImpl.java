@@ -53,9 +53,9 @@ public class VlangFunctionDeclarationImpl extends VlangFunctionDeclarationWithSc
   }
 
   @Override
-  @NotNull
+  @Nullable
   public VlangSignature getSignature() {
-    return notNullChild(VlangPsiTreeUtil.getStubChildOfType(this, VlangSignature.class));
+    return VlangPsiTreeUtil.getStubChildOfType(this, VlangSignature.class);
   }
 
   @Override

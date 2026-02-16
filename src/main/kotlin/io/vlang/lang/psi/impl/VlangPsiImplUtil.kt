@@ -58,7 +58,7 @@ object VlangPsiImplUtil {
             return stub.name ?: ""
         }
 
-        return o.getIdentifier().text ?: ""
+        return o.getIdentifier()?.text ?: ""
     }
 
     @JvmStatic
@@ -104,7 +104,7 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getIdentifier(o: VlangStaticMethodDeclaration): PsiElement {
+    fun getIdentifier(o: VlangStaticMethodDeclaration): PsiElement? {
         return o.getIdentifier()
     }
 
@@ -1432,13 +1432,13 @@ object VlangPsiImplUtil {
     }
 
     @JvmStatic
-    fun getName(o: VlangReceiver): String? {
+    fun getName(o: VlangReceiver): String {
         val stub = o.stub
         if (stub != null) {
             return stub.name ?: ""
         }
 
-        return o.getIdentifier().text
+        return o.getIdentifier()?.text ?: ""
     }
 
     @JvmStatic
@@ -1596,7 +1596,7 @@ object VlangPsiImplUtil {
             val reference = expr.getReference()
             val resolved = reference.resolve()
             if (resolved is VlangFunctionDeclaration) {
-                val signature = resolved.getSignature()
+                val signature = resolved.getSignature() ?: return null
                 return processSignatureReturnType(signature, expr, resolved, false)
             }
         }
@@ -2191,7 +2191,7 @@ object VlangPsiImplUtil {
 
     @JvmStatic
     fun getName(o: VlangVarDefinition): String {
-        return o.getIdentifier().text
+        return o.getIdentifier()?.text ?: ""
     }
 
     @JvmStatic

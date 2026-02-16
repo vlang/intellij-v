@@ -53,9 +53,9 @@ public class VlangReceiverImpl extends VlangNamedElementImpl<VlangReceiverStub> 
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getIdentifier() {
-    return notNullChild(findChildByType(IDENTIFIER));
+    return findChildByType(IDENTIFIER);
   }
 
   @Override

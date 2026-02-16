@@ -195,7 +195,10 @@ open class VlangIntroduceVariableBase {
                 }
                 newOccurrences.add(occ.replace(VlangElementFactory.createReferenceExpression(project, name)))
             }
-            operation.editor.caretModel.moveToOffset(varDefinition.getIdentifier().textRange.startOffset)
+            val identifierOffset = varDefinition.getIdentifier()?.textRange?.startOffset
+            if (identifierOffset != null) {
+                operation.editor.caretModel.moveToOffset(identifierOffset)
+            }
         }
 
         operation.occurrences = newOccurrences

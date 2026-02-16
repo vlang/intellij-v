@@ -59,9 +59,9 @@ public class VlangGlobalVariableDefinitionImpl extends VlangNamedElementImpl<Vla
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getIdentifier() {
-    return notNullChild(findChildByType(IDENTIFIER));
+    return findChildByType(IDENTIFIER);
   }
 
   @Override

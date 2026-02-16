@@ -63,7 +63,7 @@ class VlangUnusedParameterInspection : VlangBaseInspection() {
                 if (search.findFirst() != null) return
 
                 holder.registerProblem(
-                    receiver.getIdentifier(),
+                    receiver.getIdentifier() ?: return,
                     "Unused receiver <code>#ref</code> #loc", ProblemHighlightType.LIKE_UNUSED_SYMBOL,
                     RENAME_TO_UNDERSCORE_FIX,
                 )

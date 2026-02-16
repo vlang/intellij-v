@@ -1,0 +1,170 @@
+V Language file
+  MODULE_CLAUSE
+    PsiElement(VlangTokenType.module)('module')
+    PsiElement(VlangTokenType.identifier)('main')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)(''type' as keyword - type alias declarations')
+  TYPE_ALIAS_DECLARATION
+    PsiElement(VlangTokenType.type)('type')
+    ALIAS_TYPE
+      PsiElement(VlangTokenType.identifier)('MyInt')
+      PsiElement(VlangTokenType.=)('=')
+      TYPE_UNION_LIST
+        TYPE
+          TYPE_MODIFIERS
+            <empty list>
+          TYPE_REFERENCE_EXPRESSION
+            PsiElement(VlangTokenType.identifier)('int')
+  TYPE_ALIAS_DECLARATION
+    PsiElement(VlangTokenType.type)('type')
+    ALIAS_TYPE
+      PsiElement(VlangTokenType.identifier)('MyString')
+      PsiElement(VlangTokenType.=)('=')
+      TYPE_UNION_LIST
+        TYPE
+          TYPE_MODIFIERS
+            <empty list>
+          TYPE_REFERENCE_EXPRESSION
+            PsiElement(VlangTokenType.identifier)('string')
+  TYPE_ALIAS_DECLARATION
+    SYMBOL_VISIBILITY
+      PsiElement(VlangTokenType.pub)('pub')
+    PsiElement(VlangTokenType.type)('type')
+    ALIAS_TYPE
+      PsiElement(VlangTokenType.identifier)('PublicAlias')
+      PsiElement(VlangTokenType.=)('=')
+      TYPE_UNION_LIST
+        TYPE
+          TYPE_MODIFIERS
+            <empty list>
+          TYPE_REFERENCE_EXPRESSION
+            PsiElement(VlangTokenType.identifier)('int')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)(''type' as identifier - struct field')
+  STRUCT_DECLARATION
+    STRUCT_TYPE
+      PsiElement(VlangTokenType.struct)('struct')
+      PsiElement(VlangTokenType.identifier)('TypeHolder')
+      PsiElement(VlangTokenType.{)('{')
+      FIELDS_GROUP
+        FIELD_DECLARATION
+          FIELD_DEFINITION
+            PsiElement(VlangTokenType.identifier)('type')
+          TYPE
+            TYPE_MODIFIERS
+              <empty list>
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(VlangTokenType.identifier)('int')
+        FIELD_DECLARATION
+          FIELD_DEFINITION
+            PsiElement(VlangTokenType.identifier)('name')
+          TYPE
+            TYPE_MODIFIERS
+              <empty list>
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(VlangTokenType.identifier)('string')
+      PsiElement(VlangTokenType.})('}')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)(''type' as identifier - qualified access')
+  FUNCTION_DECLARATION
+    PsiElement(VlangTokenType.fn)('fn')
+    PsiElement(VlangTokenType.identifier)('test_qualified_access')
+    SIGNATURE
+      PARAMETERS
+        PsiElement(VlangTokenType.()('(')
+        PsiElement(VlangTokenType.))(')')
+    BLOCK
+      PsiElement(VlangTokenType.{)('{')
+      SIMPLE_STATEMENT
+        VAR_DECLARATION
+          VAR_DEFINITION
+            VAR_MODIFIERS
+              <empty list>
+            PsiElement(VlangTokenType.identifier)('holder')
+          PsiElement(VlangTokenType.:=)(':=')
+          LITERAL_VALUE_EXPRESSION
+            TYPE
+              TYPE_MODIFIERS
+                <empty list>
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(VlangTokenType.identifier)('TypeHolder')
+            PsiElement(VlangTokenType.{)('{')
+            PsiElement(VlangTokenType.})('}')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
+            REFERENCE_EXPRESSION
+              PsiElement(VlangTokenType.identifier)('println')
+            ARGUMENT_LIST
+              PsiElement(VlangTokenType.()('(')
+              ELEMENT
+                VALUE
+                  REFERENCE_EXPRESSION
+                    REFERENCE_EXPRESSION
+                      PsiElement(VlangTokenType.identifier)('holder')
+                    PsiElement(VlangTokenType..)('.')
+                    PsiElement(VlangTokenType.identifier)('type')
+              PsiElement(VlangTokenType.))(')')
+      PsiElement(VlangTokenType.})('}')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)(''type' as identifier - function name')
+  FUNCTION_DECLARATION
+    PsiElement(VlangTokenType.fn)('fn')
+    PsiElement(VlangTokenType.identifier)('type')
+    SIGNATURE
+      PARAMETERS
+        PsiElement(VlangTokenType.()('(')
+        PsiElement(VlangTokenType.))(')')
+      RESULT
+        TYPE
+          TYPE_MODIFIERS
+            <empty list>
+          TYPE_REFERENCE_EXPRESSION
+            PsiElement(VlangTokenType.identifier)('int')
+    BLOCK
+      PsiElement(VlangTokenType.{)('{')
+      RETURN_STATEMENT
+        PsiElement(VlangTokenType.return)('return')
+        LITERAL
+          PsiElement(VlangTokenType.int)('1')
+      PsiElement(VlangTokenType.})('}')
+  PsiComment(VLANG_DOC_COMMENT)
+    PsiElement(VlangTokenType.<DOC_GAP>)('//')
+    PsiElement(VlangTokenType.<DOC_DATA>)('Multiple type aliases in sequence')
+  TYPE_ALIAS_DECLARATION
+    PsiElement(VlangTokenType.type)('type')
+    ALIAS_TYPE
+      PsiElement(VlangTokenType.identifier)('First')
+      PsiElement(VlangTokenType.=)('=')
+      TYPE_UNION_LIST
+        TYPE
+          TYPE_MODIFIERS
+            <empty list>
+          TYPE_REFERENCE_EXPRESSION
+            PsiElement(VlangTokenType.identifier)('int')
+  TYPE_ALIAS_DECLARATION
+    PsiElement(VlangTokenType.type)('type')
+    ALIAS_TYPE
+      PsiElement(VlangTokenType.identifier)('Second')
+      PsiElement(VlangTokenType.=)('=')
+      TYPE_UNION_LIST
+        TYPE
+          TYPE_MODIFIERS
+            <empty list>
+          TYPE_REFERENCE_EXPRESSION
+            PsiElement(VlangTokenType.identifier)('string')
+  TYPE_ALIAS_DECLARATION
+    PsiElement(VlangTokenType.type)('type')
+    ALIAS_TYPE
+      PsiElement(VlangTokenType.identifier)('Third')
+      PsiElement(VlangTokenType.=)('=')
+      TYPE_UNION_LIST
+        TYPE
+          TYPE_MODIFIERS
+            <empty list>
+          TYPE_REFERENCE_EXPRESSION
+            PsiElement(VlangTokenType.identifier)('bool')

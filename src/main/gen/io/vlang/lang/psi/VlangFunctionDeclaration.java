@@ -20,7 +20,7 @@ public interface VlangFunctionDeclaration extends VlangSignatureOwner, VlangFunc
   @Nullable
   VlangGenericParameters getGenericParameters();
 
-  @NotNull
+  @Nullable
   VlangSignature getSignature();
 
   @Nullable
