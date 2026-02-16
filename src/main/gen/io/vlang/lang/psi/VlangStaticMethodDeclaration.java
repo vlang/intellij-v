@@ -35,7 +35,7 @@ public interface VlangStaticMethodDeclaration extends VlangSignatureOwner, Vlang
   @NotNull
   PsiElement getFn();
 
-  @NotNull
+  @Nullable
   PsiElement getIdentifier();
 
   //WARNING: getType(...) is skipped

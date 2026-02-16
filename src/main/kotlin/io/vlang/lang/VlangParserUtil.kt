@@ -277,11 +277,94 @@ object VlangParserUtil : GeneratedParserUtilBase() {
         if (builder.tokenType == IDENTIFIER) {
             return true
         }
-        if (builder.tokenType in VlangTokenTypes.KEYWORDS.types || builder.tokenType in VlangTokenTypes.BOOL_LITERALS.types) {
+        if (builder.tokenType in VlangTokenTypes.KEYWORD_OR_IDENTIFIER.types) {
             builder.remapCurrentToken(IDENTIFIER)
             return true
         }
         return false
+    }
+
+    /**
+     * Like [remapToIdentifier] but only remaps when the keyword is followed by ':'.
+     * Used in struct literal field keys (e.g., "import: 12") to avoid
+     * permanently remapping keywords in other contexts like function arguments.
+     */
+    @JvmStatic
+    fun keyRemapToIdentifier(builder: PsiBuilder, @Suppress("UNUSED_PARAMETER") level: Int): Boolean {
+        if (builder.tokenType == IDENTIFIER) {
+            return true
+        }
+        if (builder.tokenType in VlangTokenTypes.KEYWORD_OR_IDENTIFIER.types) {
+            if (builder.lookAhead(1) == COLON) {
+                builder.remapCurrentToken(IDENTIFIER)
+                return true
+            }
+        }
+        return false
+    }
+
+    /**
+     * Like [remapToIdentifier] but handles member modifier keywords (pub, mut, __global) specially.
+     * Used in struct/interface field definitions.
+     *
+     * - __global is always excluded (fields starting with _ are not supported).
+     * - pub/mut are only remapped to identifiers when followed by a type on the SAME line
+     *   (e.g., "pub u8" → field named "pub"). When followed by a newline or another modifier,
+     *   they remain as modifier keywords (e.g., "pub\n\ta int" or "pub mut:").
+     */
+    @JvmStatic
+    fun fieldRemapToIdentifier(builder: PsiBuilder, @Suppress("UNUSED_PARAMETER") level: Int): Boolean {
+        if (builder.tokenType == IDENTIFIER) {
+            return true
+        }
+        val tokenType = builder.tokenType
+        if (tokenType == BUILTIN_GLOBAL) {
+            return false
+        }
+        if (tokenType == PUB || tokenType == MUT) {
+            // If followed by another modifier keyword, this is a modifier group (e.g., "pub mut:")
+            val nextMeaningful = builder.lookAhead(1)
+            if (nextMeaningful == PUB || nextMeaningful == MUT || nextMeaningful == BUILTIN_GLOBAL) {
+                return false
+            }
+            // If there's a newline before the next token, it's a standalone modifier
+            if (hasNewlineBeforeNextToken(builder)) {
+                return false
+            }
+            builder.remapCurrentToken(IDENTIFIER)
+            return true
+        }
+        if (tokenType in VlangTokenTypes.KEYWORD_OR_IDENTIFIER.types) {
+            builder.remapCurrentToken(IDENTIFIER)
+            return true
+        }
+        return false
+    }
+
+    /**
+     * Guard for WithoutModifiersFieldsGroup/WithoutModifiersMemberGroup.
+     * Returns false when the current token is a modifier keyword (pub, mut, __global)
+     * on its own line, preventing the parser from incorrectly treating it as a field name.
+     * In that case, UnfinishedMemberModifiers should handle it instead.
+     */
+    @JvmStatic
+    fun notStandaloneModifier(builder: PsiBuilder, @Suppress("UNUSED_PARAMETER") level: Int): Boolean {
+        val tokenType = builder.tokenType
+        if (tokenType != PUB && tokenType != MUT && tokenType != BUILTIN_GLOBAL) {
+            return true
+        }
+        // If the modifier is followed by a newline, it's on its own line → not a field
+        return !hasNewlineBeforeNextToken(builder)
+    }
+
+    private fun hasNewlineBeforeNextToken(builder: PsiBuilder): Boolean {
+        var offset = 1
+        while (true) {
+            val raw = builder.rawLookup(offset) ?: return true // EOF → treat as modifier
+            if (raw == VlangTokenTypes.NLS) return true
+            if (raw != VlangTokenTypes.WS && raw != com.intellij.psi.TokenType.WHITE_SPACE) return false
+            offset++
+        }
     }
 
     @JvmStatic

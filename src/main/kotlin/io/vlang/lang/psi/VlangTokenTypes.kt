@@ -34,6 +34,21 @@ object VlangTokenTypes {
     )
     val BOOL_LITERALS = TokenSet.create(TRUE, FALSE)
 
+    /**
+     * All keyword and boolean literal tokens that can be remapped to IDENTIFIER
+     * when used in identifier positions (struct fields, function names, variable names, etc.).
+     */
+    val KEYWORD_OR_IDENTIFIER = TokenSet.orSet(
+        TokenSet.create(TRUE, FALSE),
+        TokenSet.create(
+            BREAK, CASE, CONST, CONTINUE, STATIC, DEFER, ELSE, FOR, FN, GO, GOTO,
+            IF, IMPLEMENTS, IMPORT, INTERFACE, MODULE, IN, NOT_IN, RETURN, SELECT,
+            STRUCT, TYPE_, PUB, AS, MUT, UNSAFE, BUILTIN_GLOBAL, ASSERT, ENUM,
+            MATCH, OR, IS, NOT_IS, UNION, LOCK, RLOCK, SHARED, ASM, VOLATILE,
+            NIL, DUMP, TYPEOF, OFFSETOF, SIZEOF, ISREFTYPE, SPAWN, NONE, ATOMIC,
+        )
+    )
+
     val KEYWORDS = TokenSet.create(
         BREAK,
         CASE,

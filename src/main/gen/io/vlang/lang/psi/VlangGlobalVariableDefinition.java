@@ -23,7 +23,7 @@ public interface VlangGlobalVariableDefinition extends VlangNamedElement, StubBa
   @Nullable
   PsiElement getAssign();
 
-  @NotNull
+  @Nullable
   PsiElement getIdentifier();
 
   //WARNING: deleteDefinition(...) is skipped

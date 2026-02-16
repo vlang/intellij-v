@@ -20,7 +20,7 @@ public interface VlangReceiver extends VlangMutabilityOwner, VlangNamedElement, 
   @Nullable
   PsiElement getComma();
 
-  @NotNull
+  @Nullable
   PsiElement getIdentifier();
 
   @NotNull VlangTypeEx getTypeInner(@Nullable ResolveState context);

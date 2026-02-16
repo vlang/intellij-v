@@ -398,7 +398,7 @@ AnonymousStructType ::= struct '{' FieldsGroup* '}' {
   methods=[getFieldList getOwnFieldList]
 }
 
-StructType ::= (struct | union) identifier GenericParameters? ImplementsClause? '{'  FieldsGroup* '}' {
+StructType ::= (struct | union) <<remapToIdentifier>> identifier GenericParameters? ImplementsClause? '{'  FieldsGroup* '}' {
   pin=1
   implements="io.vlang.lang.psi.VlangFieldListOwner"
   methods=[getFieldList getOwnFieldList getEmbeddedStructs getEmbeddedStructList isUnion]
@@ -412,7 +412,7 @@ LastComma ::= ',' {
   methods=[getErrorDescription]
 }
 
-FieldsGroup ::= UnfinishedMemberModifiers | WithModifiersFieldsGroup | WithoutModifiersFieldsGroup {
+FieldsGroup ::= WithModifiersFieldsGroup | WithoutModifiersFieldsGroup | UnfinishedMemberModifiers {
   methods=[getMemberModifierList]
   implements="io.vlang.lang.psi.VlangMemberModifiersOwner"
 }
@@ -423,13 +423,13 @@ MemberModifiers ::= MemberModifier* ':' {pin=2}
 MemberModifier ::= mut | pub | '__global'
 
 private WithModifiersFieldsGroup ::= MemberModifiers semi? FieldDeclarations {pin=1}
-private WithoutModifiersFieldsGroup ::= !MemberModifiers FieldDeclarations
+private WithoutModifiersFieldsGroup ::= <<notStandaloneModifier>> !MemberModifiers FieldDeclarations
 
 private FieldDeclarations ::= FieldDeclaration+
-FieldDeclaration ::= (PlainFieldDeclaration | EmbeddedDefinition) semi?
+FieldDeclaration ::= !MemberModifiers (PlainFieldDeclaration | EmbeddedDefinition) semi?
 private PlainFieldDeclaration ::= FieldDefinition Type DefaultFieldValue? Attribute?
 DefaultFieldValue ::= '=' Expression {pin=1}
-FieldDefinition ::= identifier {
+FieldDefinition ::= <<fieldRemapToIdentifier>> identifier {
   methods=[getQualifier getQualifiedName getTypeInner isPublic isMutable isPrimary makeMutable makeImmutable getOwner]
   implements="io.vlang.lang.psi.VlangMutabilityOwner"
   stubClass="io.vlang.lang.stubs.VlangFieldDefinitionStub"
@@ -447,7 +447,7 @@ InterfaceDeclaration ::= Attributes? SymbolVisibility? InterfaceType {
   methods=[getName getIdentifier getTypeInner]
 }
 
-InterfaceType ::= interface identifier GenericParameters? '{' MembersGroup* '}' {
+InterfaceType ::= interface <<remapToIdentifier>> identifier GenericParameters? '{' MembersGroup* '}' {
   pin=1
   implements="io.vlang.lang.psi.VlangFieldListOwner"
   methods=[getFieldList getOwnFieldList getMethodList getEmbeddedInterfaces getEmbeddedInterfacesList]
@@ -459,13 +459,13 @@ MembersGroup ::= WithModifiersMembersGroup | WithoutModifiersMemberGroup {
 }
 
 private WithModifiersMembersGroup ::= MemberModifiers semi? InterfaceMembers {pin=1}
-private WithoutModifiersMemberGroup ::= !MemberModifiers InterfaceMembers
+private WithoutModifiersMemberGroup ::= <<notStandaloneModifier>> !MemberModifiers InterfaceMembers
 
 private InterfaceMembers ::= InterfaceMember+
-private InterfaceMember ::= InterfaceMethodDeclaration | FieldDeclaration | EmbeddedInterfaceDefinition
+private InterfaceMember ::= !MemberModifiers (InterfaceMethodDeclaration | FieldDeclaration | EmbeddedInterfaceDefinition)
 
 InterfaceMethodDeclaration ::= InterfaceMethodDefinition Attribute? DefaultFieldValue? semi
-InterfaceMethodDefinition ::= identifier GenericParameters? Signature {
+InterfaceMethodDefinition ::= <<fieldRemapToIdentifier>> identifier GenericParameters? Signature {
   implements="io.vlang.lang.psi.VlangSignatureOwner"
   stubClass="io.vlang.lang.stubs.VlangInterfaceMethodDefinitionStub"
   methods=[getTypeInner isPublic isMutable getOwner getQualifiedName]
@@ -483,7 +483,7 @@ EnumDeclaration ::= Attributes? SymbolVisibility? EnumType {
   methods=[getName getIdentifier getTypeInner isFlag]
 }
 
-EnumType ::= enum identifier EnumBackedTypeAs? '{' EnumFields? '}' {
+EnumType ::= enum <<remapToIdentifier>> identifier EnumBackedTypeAs? '{' EnumFields? '}' {
   pin=1
   methods=[getFieldList]
 }
@@ -506,7 +506,7 @@ TypeAliasDeclaration ::= Attributes? SymbolVisibility? 'type' AliasType {
   methods=[getIdentifier getName getTypeInner]
 }
 
-AliasType ::= identifier GenericParameters? '=' TypeUnionList {
+AliasType ::= <<remapToIdentifier>> identifier GenericParameters? '=' TypeUnionList {
   pin=2
   methods=[isAlias getAliasType]
 }
@@ -528,7 +528,7 @@ ConstDeclaration ::= Attributes? SymbolVisibility? const ( ConstDefinition | '('
 // <spec> [<spec2>]
 private ConstDefinitions ::= ConstDefinition (semi ConstDefinition)* semi? {pin=1}
 // <list> = <list>
-ConstDefinition ::= identifier '=' (<<withOff Expression "BLOCK?">> | (!() Expression)) {
+ConstDefinition ::= <<remapToIdentifier>> identifier '=' (<<withOff Expression "BLOCK?">> | (!() Expression)) {
   pin=2
   stubClass="io.vlang.lang.stubs.VlangConstDefinitionStub"
   methods=[getTypeInner isPublic isCompileTime deleteDefinition getName getSymbolVisibility]
@@ -547,7 +547,7 @@ GlobalVariableDeclaration ::= Attributes? '__global' ( GlobalVariableDefinition 
 private GlobalVariableDefinitions ::= GlobalVariableDefinition (semi GlobalVariableDefinition)* semi? {pin=1}
 // <def> = <expr>
 // <def> <type>
-GlobalVariableDefinition ::= identifier (VarModifiers Type | GlobalVariableValue) {
+GlobalVariableDefinition ::= <<remapToIdentifier>> identifier (VarModifiers Type | GlobalVariableValue) {
   pin=1
   stubClass="io.vlang.lang.stubs.VlangGlobalVariableDefinitionStub"
   methods=[deleteDefinition getName getTypeInner getSymbolVisibility]
@@ -585,7 +585,7 @@ private fnDecl ::= Attributes? SymbolVisibility? fn  {
   pin=3
 }
 
-FunctionDeclaration ::= fnDecl identifier GenericParameters? Signature BlockWithConsume? {
+FunctionDeclaration ::= fnDecl <<remapToIdentifier>> identifier GenericParameters? Signature BlockWithConsume? {
   pin=4
   stubClass="io.vlang.lang.stubs.VlangFunctionDeclarationStub"
   methods=[getName getTypeInner isDefinition isNoReturn isGeneric isCompileTime]
@@ -599,7 +599,7 @@ MethodDeclaration ::= fnDecl '(' Receiver ')' MethodName GenericParameters? Sign
   mixin="io.vlang.lang.psi.impl.VlangMethodDeclarationWithScopeHolder"
 }
 
-StaticMethodDeclaration ::= fnDecl TypeReferenceExpression '.' identifier GenericParameters? Signature BlockWithConsume? {
+StaticMethodDeclaration ::= fnDecl TypeReferenceExpression '.' <<remapToIdentifier>> identifier GenericParameters? Signature BlockWithConsume? {
   pin=4
   stubClass="io.vlang.lang.stubs.VlangStaticMethodDeclarationStub"
   methods=[getType getTypeInner getQualifiedName getName]
@@ -607,10 +607,10 @@ StaticMethodDeclaration ::= fnDecl TypeReferenceExpression '.' identifier Generi
 }
 
 // <ident> or <ops> for overload
-MethodName ::= identifier | AddOp | MulOp | RelOp
+MethodName ::= <<remapToIdentifier>> identifier | AddOp | MulOp | RelOp
 
 // [<modifiers>] <ident> <type>
-Receiver ::= VarModifiers? identifier Type ','? {
+Receiver ::= VarModifiers? <<remapToIdentifier>> identifier Type ','? {
   pin=2
   methods=[getTypeInner getName isPublic isMutable makeMutable makeImmutable takeReference]
   implements="io.vlang.lang.psi.VlangMutabilityOwner"
@@ -691,7 +691,7 @@ private ElementInner ::= Element | (!() Element) // {recoverWhile=ElementInnerRe
 Element ::= First [':' Value]  {pin(".*")=1}
 private First ::= Key | <<keyOrValueExpression>>
 Key ::= (FieldName &':') | !() Expression // nullability hack for key without reference inside
-FieldName ::= ReferenceExpression { methods=[getIdentifier getQualifier resolve] }
+FieldName ::= <<keyRemapToIdentifier>> ReferenceExpression { methods=[getIdentifier getQualifier resolve] }
 Value ::= Expression
 
 // end of type init
@@ -822,7 +822,7 @@ ParamDefinition ::= ParamWithName | ParamWithoutName {
   implements="io.vlang.lang.psi.VlangMutabilityOwner"
   methods = [isVariadic getName isPublic isMutable makeMutable makeImmutable]
 }
-private ParamWithName ::= VarModifiers? identifier '...'? Type
+private ParamWithName ::= VarModifiers? <<remapToIdentifier>> identifier '...'? Type
 private ParamWithoutName ::= VarModifiers? '...'? Type
 
 TypeListNoPin ::= Type (',' Type)* ','?
@@ -889,8 +889,8 @@ DumpCallExpr ::= dump '(' Expression ')' {pin=1 methods=[getReference] implement
 
 // just <ident> with reference
 ReferenceExpression ::= identifier { methods=[getReference getQualifier resolve getReadWriteAccess safeAccess] extends=Expression}
-left QualifiedReferenceExpression ::= semi? '.' identifier <<checkNoColonIfMap>> {elementType=ReferenceExpression}
-left SafeQualifiedReferenceExpression ::= semi? '?.' identifier {elementType=ReferenceExpression}
+left QualifiedReferenceExpression ::= semi? '.' <<remapToIdentifier>> identifier <<checkNoColonIfMap>> {elementType=ReferenceExpression}
+left SafeQualifiedReferenceExpression ::= semi? '?.' <<remapToIdentifier>> identifier {elementType=ReferenceExpression}
 
 private RightHandExprs ::= RightHandExpr*
 

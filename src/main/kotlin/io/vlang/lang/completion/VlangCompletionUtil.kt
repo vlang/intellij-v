@@ -864,8 +864,8 @@ object VlangCompletionUtil {
 
             val genericParameters = elem.genericParameters?.text ?: ""
             val signature = elem.getSignature()
-            val parameters = signature.parameters.text ?: ""
-            val result = signature.result?.text
+            val parameters = signature?.parameters?.text ?: ""
+            val result = signature?.result?.text
 
             p.tailText = parameters
             p.itemText = element.lookupString + genericParameters

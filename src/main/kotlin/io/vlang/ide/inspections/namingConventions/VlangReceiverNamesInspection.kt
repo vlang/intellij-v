@@ -27,7 +27,7 @@ class VlangReceiverNamesInspection : VlangNamingConventionInspectionBase() {
             override fun visitReceiver(receiver: VlangReceiver) {
                 val name = receiver.name
                 if (name in GENERIC_NAMES) {
-                    holder.registerProblem(receiver.getIdentifier(), "Receiver has a generic name")
+                    holder.registerProblem(receiver.getIdentifier() ?: return, "Receiver has a generic name")
                 }
             }
 
@@ -57,7 +57,7 @@ class VlangReceiverNamesInspection : VlangNamingConventionInspectionBase() {
 
             private fun registerProblem(method: VlangMethodDeclaration) {
                 val receiver = method.receiver
-                val identifier = receiver.getIdentifier()
+                val identifier = receiver.getIdentifier() ?: return
                 holder.registerProblem(
                     identifier, "Receiver names are different",
                     RenameAllReceiversFix(receiver, identifier.text)

@@ -41,9 +41,9 @@ public class VlangConstDefinitionImpl extends VlangNamedElementImpl<VlangConstDe
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getAssign() {
-    return notNullChild(findChildByType(ASSIGN));
+    return findChildByType(ASSIGN);
   }
 
   @Override

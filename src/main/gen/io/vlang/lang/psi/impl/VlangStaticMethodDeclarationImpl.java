@@ -83,9 +83,9 @@ public class VlangStaticMethodDeclarationImpl extends VlangStaticMethodDeclarati
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getIdentifier() {
-    return notNullChild(findChildByType(IDENTIFIER));
+    return findChildByType(IDENTIFIER);
   }
 
   @Override

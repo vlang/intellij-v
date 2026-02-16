@@ -54,7 +54,7 @@ class VlangUnusedFunctionInspection : VlangUnusedBaseInspection() {
                     element,
                     "Unused static method '${element.name}'",
                     ProblemHighlightType.LIKE_UNUSED_SYMBOL,
-                    element.getIdentifier().textRangeInParent,
+                    element.getIdentifier()?.textRangeInParent ?: return,
                     DELETE_STATIC_METHOD_FIX,
                 )
             }

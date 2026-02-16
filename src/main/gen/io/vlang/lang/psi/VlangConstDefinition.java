@@ -14,7 +14,7 @@ public interface VlangConstDefinition extends VlangNamedElement, StubBasedPsiEle
   @Nullable
   VlangExpression getExpression();
 
-  @NotNull
+  @Nullable
   PsiElement getAssign();
 
   @NotNull
