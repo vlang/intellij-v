@@ -16,8 +16,8 @@ import kotlin.io.path.walk
 
 class ParserVLibTest : ParserTestBase("", "v", VlangParserDefinition()) {
 
-    fun getVLibDirectory(): Path {
-        System.getenv("PATH").split(File.pathSeparator).forEach {
+    private fun findVLibDirectory(): Path? {
+        System.getenv("PATH")?.split(File.pathSeparator)?.forEach {
             val path = Path(it)
             val vPath = path.resolve("v").let { p -> if(p.isSymbolicLink()) p.toRealPath() else p }
             val vlibPath = vPath.parent.resolve("vlib")
@@ -26,11 +26,11 @@ class ParserVLibTest : ParserTestBase("", "v", VlangParserDefinition()) {
                 return vlibPath
             }
         }
-        error("V executable and vlib directory not found in PATH")
+        return null
     }
 
     override fun getTestDataPath(): String {
-        return getVLibDirectory().toString()
+        return findVLibDirectory()?.toString() ?: "src/test/resources"
     }
 
     fun `test vlib`() {
@@ -39,6 +39,8 @@ class ParserVLibTest : ParserTestBase("", "v", VlangParserDefinition()) {
             return
         }
 
+        val vLibDirectory = findVLibDirectory()
+            ?: return fail("V executable and vlib directory not found in PATH")
         var errorsCount = 0
         var errorsInTestsCount = 0
         var failedFilesCount = 0
