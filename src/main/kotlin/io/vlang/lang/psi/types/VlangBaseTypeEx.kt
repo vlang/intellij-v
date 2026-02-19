@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.UserDataHolderBase
 import com.intellij.psi.PsiElement
 import io.vlang.ide.codeInsight.VlangCodeInsightUtil
+import io.vlang.lang.VlangTypes
 import io.vlang.lang.psi.*
 import io.vlang.lang.psi.impl.VlangLangUtil
 import io.vlang.lang.psi.impl.VlangLightType.VlangGenericType
@@ -213,7 +214,24 @@ abstract class VlangBaseTypeEx(protected val anchor: PsiElement? = null) : UserD
                 is VlangResultType          -> VlangResultTypeEx(type.type?.toEx(visited), type)
                 is VlangThreadType          -> VlangThreadTypeEx(type.type?.toEx(visited) ?: VlangVoidTypeEx.INSTANCE, type)
                 is VlangSharedType          -> VlangSharedTypeEx(type.type.toEx(visited), type)
-                is VlangPointerType         -> VlangPointerTypeEx(type.type.toEx(visited), type)
+                is VlangPointerType         -> {
+                    val innerType = type.type.toEx(visited)
+                    var ampersandCount = 0
+                    var node = type.node.firstChildNode
+                    while (node != null) {
+                        when (node.elementType) {
+                            VlangTypes.BIT_AND -> ampersandCount++
+                            VlangTypes.COND_AND -> ampersandCount += 2
+                        }
+                        node = node.treeNext
+                    }
+                    if (ampersandCount == 0) ampersandCount = 1
+                    var result: VlangTypeEx = innerType
+                    repeat(ampersandCount) {
+                        result = VlangPointerTypeEx(result, type)
+                    }
+                    result
+                }
                 is VlangArrayType           -> VlangArrayTypeEx(type.type.toEx(visited), type)
                 is VlangFixedSizeArrayType  -> VlangFixedSizeArrayTypeEx(type.type.toEx(visited), type.size, type)
                 is VlangChannelType         -> VlangChannelTypeEx(type.type.toEx(visited), type)

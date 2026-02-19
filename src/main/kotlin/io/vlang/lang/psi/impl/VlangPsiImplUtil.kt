@@ -1563,6 +1563,7 @@ object VlangPsiImplUtil {
             when {
                 expr.not != null         -> return VlangPrimitiveTypeEx.BOOL
                 expr.bitAnd != null      -> return VlangPointerTypeEx(exprType, expr.expression!!)
+                expr.condAnd != null     -> return VlangPointerTypeEx(VlangPointerTypeEx(exprType, expr.expression!!), expr.expression!!)
                 expr.mul != null         -> return unwrapPointerType(exprType)
                 expr.sendChannel != null -> return unwrapChannelType(exprType)
             }
