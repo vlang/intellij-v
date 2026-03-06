@@ -90,10 +90,8 @@ class VlangFormattingService : AsyncDocumentFormattingService() {
 
         val filenameAndLine = error.substring(0, errorIndex).trim()
         val fileParts = filenameAndLine.split(":")
-        // Parse from the end to handle Windows drive-letter paths (e.g. "S:\path\file.v:10:5:")
-        // Parts from end: ["", col, line, ...path parts...]
-        val line = fileParts.getOrElse(fileParts.size - 3) { "0" }.toIntOrNull() ?: 0
-        val column = fileParts.getOrElse(fileParts.size - 2) { "0" }.toIntOrNull() ?: 0
+        val line = fileParts.getOrElse(1) { "-1" }.toIntOrNull() ?: -1
+        val column = fileParts.getOrElse(2) { "0" }.toIntOrNull() ?: 0
         val firstNewLineIndex = error.indexOf("\n")
         val errorText = error.substring(errorIndex + 6, firstNewLineIndex)
 
@@ -106,7 +104,7 @@ class VlangFormattingService : AsyncDocumentFormattingService() {
 
         val file = context.containingFile
         val document = PsiDocumentManager.getInstance(context.project).getDocument(file)
-        val lineOffset = if (line > 0) document?.getLineStartOffset(line - 1) ?: 0 else 0
+        val lineOffset = document?.getLineStartOffset(line - 1) ?: -1
         val offset = lineOffset + column
 
         var internalVfmtIndex = error.indexOf("Internal vfmt")
