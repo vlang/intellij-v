@@ -8,6 +8,8 @@ import io.vlang.lang.psi.impl.VlangLabelDefinitionImpl
 import io.vlang.lang.stubs.VlangLabelDefinitionStub
 
 class VlangLabelDefinitionStubElementType(name: String) : VlangNamedStubElementType<VlangLabelDefinitionStub, VlangLabelDefinition>(name) {
+    override fun shouldIndex() = false
+
     override fun createPsi(stub: VlangLabelDefinitionStub): VlangLabelDefinition {
         return VlangLabelDefinitionImpl(stub, this)
     }
