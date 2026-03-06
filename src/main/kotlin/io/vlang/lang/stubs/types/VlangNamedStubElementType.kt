@@ -49,7 +49,7 @@ abstract class VlangNamedStubElementType<S : VlangNamedStub<T>, T : VlangNamedEl
         }
     }
 
-    protected fun shouldIndex() = true
+    protected open fun shouldIndex() = true
 
     protected open fun getExtraIndexKeys() = emptyList<StubIndexKey<String, out VlangNamedElement>>()
 }
