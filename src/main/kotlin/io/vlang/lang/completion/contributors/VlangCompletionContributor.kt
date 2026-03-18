@@ -4,6 +4,9 @@ import com.intellij.codeInsight.completion.CompletionContributor
 import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.codeInsight.completion.CompletionResultSet
 import com.intellij.codeInsight.completion.CompletionType
+import com.intellij.openapi.components.service
+import io.vlang.lsp.VlangLspBridge
+import io.vlang.lsp.VlangLspSettings
 import io.vlang.lang.completion.VlangCompletionPatterns.cachedReferenceExpression
 import io.vlang.lang.completion.VlangCompletionPatterns.insideStatementWithLabel
 import io.vlang.lang.completion.VlangCompletionPatterns.insideStruct
@@ -40,6 +43,12 @@ class VlangCompletionContributor : CompletionContributor() {
     }
 
     override fun fillCompletionVariants(parameters: CompletionParameters, result: CompletionResultSet) {
+        val vFile = parameters.originalFile.virtualFile ?: return
+        val project = parameters.position.project
+        val lspSettings = VlangLspSettings.getInstance()
+        if (lspSettings.suppressWhenLspActive && lspSettings.suppressCompletion
+            && project.service<VlangLspBridge>().isActiveForFile(vFile, project)) return
+
         super.fillCompletionVariants(parameters, withVlangSorter(parameters, result))
     }
 }
