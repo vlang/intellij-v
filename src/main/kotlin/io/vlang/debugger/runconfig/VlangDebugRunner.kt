@@ -77,7 +77,7 @@ open class VlangDebugRunner : AsyncProgramRunner<RunnerSettings>() {
     private fun showRunContent(
         environment: ExecutionEnvironment,
         runExecutable: GeneralCommandLine,
-    ): RunContentDescriptor = VlangDebugRunnerUtils.showRunContent(environment, runExecutable)
+    ): RunContentDescriptor? = VlangDebugRunnerUtils.showRunContent(environment, runExecutable)
 
     companion object {
         const val RUNNER_ID: String = "VlangDebugRunner"
