@@ -12,6 +12,14 @@ import io.vlang.utils.parentNth
 
 class VlangRegexLanguageInjector : LanguageInjector {
     override fun getLanguagesToInject(host: PsiLanguageInjectionHost, injectionPlacesRegistrar: InjectedLanguagePlaces) {
+        try {
+            doGetLanguagesToInject(host, injectionPlacesRegistrar)
+        } catch (_: Exception) {
+            // Stub index may be stale (e.g. file modified externally); skip injection rather than crashing.
+        }
+    }
+
+    private fun doGetLanguagesToInject(host: PsiLanguageInjectionHost, injectionPlacesRegistrar: InjectedLanguagePlaces) {
         if (host !is VlangStringLiteral) return
 
         // string with interpolation
