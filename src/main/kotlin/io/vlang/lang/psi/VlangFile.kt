@@ -271,7 +271,7 @@ open class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider,
     fun getGlobalVariables(): List<VlangGlobalVariableDefinition> {
         val value = {
             if (stub != null) {
-                getChildrenByType(stub!!, VlangTypes.GLOBAL_VARIABLE_DEFINITION) { arrayOfNulls<VlangGlobalVariableDefinition>(it) }
+                getChildrenByType(stub!!, VlangTypes.GLOBAL_VARIABLE_DEFINITION) { arrayOfNulls<VlangGlobalVariableDefinition>(it) }.filterNotNull()
             } else {
                 val decls = children.filterIsInstance<VlangGlobalVariableDeclaration>()
                 decls.flatMap { it.globalVariableDefinitionList }
@@ -286,7 +286,7 @@ open class VlangFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider,
     fun getConstants(): List<VlangConstDefinition> {
         val value = {
             if (stub != null) {
-                getChildrenByType(stub!!, VlangTypes.CONST_DEFINITION) { arrayOfNulls<VlangConstDefinition>(it) }
+                getChildrenByType(stub!!, VlangTypes.CONST_DEFINITION) { arrayOfNulls<VlangConstDefinition>(it) }.filterNotNull()
             } else {
                 val decls = children.filterIsInstance<VlangConstDeclaration>()
                 decls.flatMap { it.constDefinitionList }

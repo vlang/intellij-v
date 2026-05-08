@@ -1,6 +1,6 @@
-*.v linguist-language=V text=auto eol=lf
-*.vv linguist-language=V text=auto eol=lf
-*.vsh linguist-language=V text=auto eol=lf
-*.kt text eol=lf
-*.kts text eol=lf
-*.gradle text eol=lf
+* text=auto eol=lf
+*.bat eol=crlf
+
+*.v linguist-language=V
+*.vv linguist-language=V
+*.vsh linguist-language=V
