@@ -15,7 +15,7 @@ object VlangDebugRunnerUtils {
     fun showRunContent(
         environment: ExecutionEnvironment,
         runExecutable: GeneralCommandLine,
-    ): RunContentDescriptor {
+    ): RunContentDescriptor? {
         val runParameters = VlangDebugRunParameters(
             environment.project,
             runExecutable,
@@ -26,7 +26,7 @@ object VlangDebugRunnerUtils {
         val searchScope = ExecutionSearchScopes.executionScope(project, environment.runProfile)
         val consoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(project, searchScope)
 
-        return XDebuggerManager.getInstance(environment.project)
+        XDebuggerManager.getInstance(environment.project)
             .startSession(environment, object : XDebugProcessStarter() {
                 override fun start(session: XDebugSession): XDebugProcess =
                     VlangLocalDebugProcess(runParameters, session, consoleBuilder).apply {
@@ -34,6 +34,6 @@ object VlangDebugRunnerUtils {
                         start()
                     }
             })
-            .runContentDescriptor
+        return null
     }
 }
