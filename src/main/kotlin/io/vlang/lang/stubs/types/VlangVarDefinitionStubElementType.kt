@@ -8,6 +8,8 @@ import io.vlang.lang.psi.impl.VlangVarDefinitionImpl
 import io.vlang.lang.stubs.VlangVarDefinitionStub
 
 class VlangVarDefinitionStubElementType(name: String) : VlangNamedStubElementType<VlangVarDefinitionStub, VlangVarDefinition>(name) {
+    override fun shouldIndex() = false
+
     override fun createPsi(stub: VlangVarDefinitionStub): VlangVarDefinition {
         return VlangVarDefinitionImpl(stub, this)
     }
