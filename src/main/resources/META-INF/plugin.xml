@@ -17,6 +17,7 @@ Discord Server: <a href="https://discord.gg/vlang">https://discord.gg/vlang</a><
     <depends optional="true" config-file="cidr-debugger.xml">com.intellij.modules.cidr.debugger</depends>
     <depends optional="true" config-file="idea-plugin.xml">com.intellij.java</depends>
     <depends optional="true" config-file="native-debug-support.xml">com.intellij.nativeDebug</depends>
+    <depends optional="true" config-file="vlang-lsp4ij.xml">com.redhat.devtools.lsp4ij</depends>
 
     <xi:include href="/META-INF/inspections.xml" xpointer="xpointer(/idea-plugin/*)"/>
     <xi:include href="/META-INF/intentions.xml" xpointer="xpointer(/idea-plugin/*)"/>
@@ -209,7 +210,13 @@ Discord Server: <a href="https://discord.gg/vlang">https://discord.gg/vlang</a><
                                  instance="io.vlang.configurations.VlangDebuggerSettingsConfigurable"
                                  id="io.vlang.configurations.VlangDebuggerSettingsConfigurable"
                                  dynamic="true" displayName="Debugger"/>
+        <applicationConfigurable parentId="MainVlangSettings"
+                                 instance="io.vlang.configurations.VlangLspSettingsConfigurable"
+                                 id="io.vlang.configurations.VlangLspSettingsConfigurable"
+                                 dynamic="true" displayName="Language Server (LSP4IJ)"/>
 
+        <projectService serviceInterface="io.vlang.lsp.VlangLspBridge"
+                        serviceImplementation="io.vlang.lsp.NoOpLspBridge"/>
         <projectService serviceImplementation="io.vlang.configurations.VlangProjectStructureState"/>
         <projectService serviceImplementation="io.vlang.configurations.VlangFmtSettingsState"/>
         <projectService serviceImplementation="io.vlang.lang.psi.VlangStubsManager"/>
@@ -244,6 +251,7 @@ Discord Server: <a href="https://discord.gg/vlang">https://discord.gg/vlang</a><
         <console.folding implementation="io.vlang.ide.run.VlangConsoleFolding"/>
         <consoleFilterProvider implementation="io.vlang.ide.run.VlangConsoleFilterProvider"/>
         <applicationService serviceImplementation="io.vlang.debugger.lang.VlangDebuggerState"/>
+        <applicationService serviceImplementation="io.vlang.lsp.VlangLspSettings"/>
         <runLineMarkerContributor id="VlangRunLineMarkerProvider" language="vlang"
                                   implementationClass="io.vlang.ide.run.VlangRunLineMarkerProvider"/>
         <!-- endregion Run V Configuration -->
@@ -364,6 +372,9 @@ Discord Server: <a href="https://discord.gg/vlang">https://discord.gg/vlang</a><
     <actions>
         <action id="vlang.new.file" class="io.vlang.ide.actions.CreateVlangFileAction">
             <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
+        </action>
+        <action id="vlang.lsp.status" class="io.vlang.lsp.VlangLspStatusAction">
+            <add-to-group group-id="HelpMenu" anchor="last"/>
         </action>
     </actions>
 

@@ -19,6 +19,8 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.endOffset
 import io.vlang.lang.VlangLanguage
 import io.vlang.lang.psi.VlangCallExpr
+import io.vlang.lsp.VlangLspBridge
+import io.vlang.lsp.VlangLspSettings
 import io.vlang.utils.childOfType
 import io.vlang.utils.parentNth
 import javax.swing.JPanel
@@ -50,6 +52,10 @@ class VlangChainMethodInlayHintsProvider : InlayHintsProvider<VlangChainMethodIn
             override fun collect(element: PsiElement, editor: Editor, sink: InlayHintsSink): Boolean {
                 // If the indexing process is in progress.
                 if (file.project.service<DumbService>().isDumb) return false
+                val vFile = file.virtualFile ?: return false
+                val lspSettings = VlangLspSettings.getInstance()
+                if (lspSettings.suppressWhenLspActive && lspSettings.suppressInlayHints
+                    && file.project.service<VlangLspBridge>().isActiveForFile(vFile, file.project)) return false
                 if (element !is VlangCallExpr) return true
                 if (element.expression?.childOfType<VlangCallExpr>() != null) return true
 

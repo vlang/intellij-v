@@ -3,11 +3,14 @@ package io.vlang.ide.hints
 import com.intellij.codeInsight.hints.HintInfo
 import com.intellij.codeInsight.hints.InlayInfo
 import com.intellij.codeInsight.hints.InlayParameterHintsProvider
+import com.intellij.openapi.components.service
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.startOffset
 import io.vlang.lang.VlangLanguage
 import io.vlang.lang.psi.*
+import io.vlang.lsp.VlangLspBridge
+import io.vlang.lsp.VlangLspSettings
 import kotlin.math.min
 
 @Suppress("UnstableApiUsage")
@@ -28,6 +31,10 @@ class VlangParameterNameHintsProvider : InlayParameterHintsProvider {
 
     override fun getParameterHints(element: PsiElement, file: PsiFile): MutableList<InlayInfo> {
         if (element !is VlangCallExpr) return mutableListOf()
+        val vFile = file.virtualFile ?: return mutableListOf()
+        val lspSettings = VlangLspSettings.getInstance()
+        if (lspSettings.suppressWhenLspActive && lspSettings.suppressInlayHints
+            && file.project.service<VlangLspBridge>().isActiveForFile(vFile, file.project)) return mutableListOf()
         return handleCallExpr(element)
     }
 

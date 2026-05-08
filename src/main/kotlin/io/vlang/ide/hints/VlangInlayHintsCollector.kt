@@ -17,6 +17,8 @@ import com.intellij.psi.util.startOffset
 import io.vlang.ide.codeInsight.VlangCodeInsightUtil
 import io.vlang.lang.VlangLanguage
 import io.vlang.lang.psi.*
+import io.vlang.lsp.VlangLspBridge
+import io.vlang.lsp.VlangLspSettings
 import io.vlang.lang.psi.types.VlangResultTypeEx
 import io.vlang.lang.psi.types.VlangUnknownTypeEx
 import io.vlang.utils.line
@@ -34,6 +36,10 @@ class VlangInlayHintsCollector(
     override fun collect(element: PsiElement, editor: Editor, sink: InlayHintsSink): Boolean {
         // If the indexing process is in progress.
         if (file.project.service<DumbService>().isDumb) return true
+        val vFile = file.virtualFile ?: return true
+        val lspSettings = VlangLspSettings.getInstance()
+        if (lspSettings.suppressWhenLspActive && lspSettings.suppressInlayHints
+            && file.project.service<VlangLspBridge>().isActiveForFile(vFile, file.project)) return true
 
         when {
             element is VlangRangeExpr && settings.showForRanges          -> handleRange(element)
@@ -51,6 +57,10 @@ class VlangInlayHintsCollector(
         val type = element.getTypeInner(null) ?: return
         if (type is VlangUnknownTypeEx) {
             // no need show hint if type is unknown
+            return
+        }
+        if (UNKNOWN_WORD_REGEX.containsMatchIn(type.readableName(element))) {
+            // suppress hint if the type name literally contains "unknown" (e.g. a V type named `unknown`)
             return
         }
 
@@ -139,6 +149,10 @@ class VlangInlayHintsCollector(
         val type = element.getTypeInner(null) ?: return
         if (type is VlangUnknownTypeEx) {
             // no need show hint if type is unknown
+            return
+        }
+        if (UNKNOWN_WORD_REGEX.containsMatchIn(type.readableName(element))) {
+            // suppress hint if the type name literally contains "unknown" (e.g. a V type named `unknown`)
             return
         }
 
@@ -235,4 +249,10 @@ class VlangInlayHintsCollector(
             )
         }, left = 1
     )
+
+    companion object {
+        // Matches the word "unknown" as a standalone token within a V type name,
+        // e.g. "unknown" or "map[string]unknown" but not "UnknownCDeclaration".
+        private val UNKNOWN_WORD_REGEX = Regex("""\bunknown\b""")
+    }
 }

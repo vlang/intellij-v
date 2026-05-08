@@ -4,11 +4,14 @@ import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
+import com.intellij.openapi.components.service
 import com.intellij.psi.PsiElement
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.elementType
 import io.vlang.ide.codeInsight.VlangDeprecationsUtil
 import io.vlang.ide.colors.VlangColor
+import io.vlang.lsp.VlangLspBridge
+import io.vlang.lsp.VlangLspSettings
 import io.vlang.lang.VlangTypes
 import io.vlang.lang.completion.VlangCompletionUtil
 import io.vlang.lang.psi.*
@@ -19,6 +22,10 @@ import io.vlang.lang.psi.types.VlangPrimitiveTypes
 class VlangAnnotator : Annotator {
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
         if (holder.isBatchMode) return
+        val vFile = element.containingFile?.virtualFile ?: return
+        val lspSettings = VlangLspSettings.getInstance()
+        if (lspSettings.suppressWhenLspActive && lspSettings.suppressSemanticHighlighting
+            && element.project.service<VlangLspBridge>().isActiveForFile(vFile, element.project)) return
 
         val color = highlightLeaf(element, holder) ?: return
         holder.newSilentAnnotation(HighlightSeverity.INFORMATION).textAttributes(color.textAttributesKey).create()

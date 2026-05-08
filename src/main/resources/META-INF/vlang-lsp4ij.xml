@@ -1,0 +1,7 @@
+<idea-plugin>
+    <extensions defaultExtensionNs="com.intellij">
+        <projectService serviceInterface="io.vlang.lsp.VlangLspBridge"
+                        serviceImplementation="io.vlang.lsp.Lsp4ijBridge"
+                        overrides="true"/>
+    </extensions>
+</idea-plugin>
