@@ -148,6 +148,36 @@ class VlangExpressionEvaluator : VlangVisitor() {
         append(")")
     }
 
+    override fun visitBinaryExpr(expr: VlangBinaryExpr) {
+        val left = expr.left
+        val right = expr.right ?: return
+        val op = expr.operator?.text ?: return
+
+        val leftType = left.getType(null)
+
+        // V strings are structs in C; == and != cannot use C's == on structs.
+        // string__eq() is typically static inline and unavailable to LLDB's expression
+        // evaluator, so use strcmp() on the raw .str field instead.
+        if (leftType is VlangStringTypeEx && (op == "==" || op == "!=")) {
+            append("strcmp((char*)(")
+            left.accept(this)
+            append(").str, ")
+            if (right is VlangStringLiteral) {
+                // Emit a plain C string literal — no need for a V string struct
+                append("\"${right.contents}\"")
+            } else {
+                append("(char*)(")
+                right.accept(this)
+                append(").str")
+            }
+            append(") $op 0")
+        } else {
+            left.accept(this)
+            append(" $op ")
+            right.accept(this)
+        }
+    }
+
     override fun visitElement(element: VlangElement) {
         element.value?.accept(this)
     }
