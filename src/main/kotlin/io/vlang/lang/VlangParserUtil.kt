@@ -71,7 +71,7 @@ object VlangParserUtil : GeneratedParserUtilBase() {
 //    }
 
     @JvmStatic
-    fun isModeOn(builder: PsiBuilder, @Suppress("UNUSED_PARAMETER") level: Int, mode: String?): Boolean {
+    fun isModeOn(builder: PsiBuilder, @Suppress("UNUSED") level: Int, mode: String?): Boolean {
         return getParsingModes(builder).getInt(mode) > 0
     }
 
@@ -149,23 +149,23 @@ object VlangParserUtil : GeneratedParserUtilBase() {
 
     @Suppress("UNUSED")
     @JvmStatic
-    fun isModeOff(builder: PsiBuilder, @Suppress("UNUSED_PARAMETER") level: Int, mode: String?): Boolean {
+    fun isModeOff(builder: PsiBuilder, @Suppress("UNUSED") level: Int, mode: String?): Boolean {
         return getParsingModes(builder).getInt(mode) == 0
     }
 
     @JvmStatic
-    fun isLastIs(builder: PsiBuilder, @Suppress("UNUSED_PARAMETER") level: Int, mode: String?): Boolean {
+    fun isLastIs(builder: PsiBuilder, @Suppress("UNUSED") level: Int, mode: String?): Boolean {
         return getParsingModesStack(builder).peek() == mode
     }
 
     @Suppress("UNUSED")
     @JvmStatic
-    fun isLastNotIs(builder: PsiBuilder, @Suppress("UNUSED_PARAMETER") level: Int, mode: String?): Boolean {
+    fun isLastNotIs(builder: PsiBuilder, @Suppress("UNUSED") level: Int, mode: String?): Boolean {
         return getParsingModesStack(builder).peek() != mode
     }
 
     @JvmStatic
-    fun prevIsType(builder: PsiBuilder, @Suppress("UNUSED_PARAMETER") level: Int): Boolean {
+    fun prevIsType(builder: PsiBuilder, @Suppress("UNUSED") level: Int): Boolean {
         var tokenBefore = builder.rawLookup(-1)
         if (tokenBefore == VlangTokenTypes.WS) {
             tokenBefore = builder.rawLookup(-2)
@@ -184,7 +184,7 @@ object VlangParserUtil : GeneratedParserUtilBase() {
     }
 
     @JvmStatic
-    fun prevIsNotFunType(builder: PsiBuilder, @Suppress("UNUSED_PARAMETER") level: Int): Boolean {
+    fun prevIsNotFunType(builder: PsiBuilder, @Suppress("UNUSED") level: Int): Boolean {
         val marker = builder.latestDoneMarker
         val type = marker?.tokenType
         return type !== FUNCTION_TYPE
@@ -208,7 +208,7 @@ object VlangParserUtil : GeneratedParserUtilBase() {
     }
 
     @JvmStatic
-    fun gtGt(builder: PsiBuilder, @Suppress("UNUSED_PARAMETER") level: Int): Boolean {
+    fun gtGt(builder: PsiBuilder, @Suppress("UNUSED") level: Int): Boolean {
         val marker = builder.mark()
         if (!consumeToken(builder, GREATER)) {
             marker.rollbackTo()
@@ -223,7 +223,7 @@ object VlangParserUtil : GeneratedParserUtilBase() {
     }
 
     @JvmStatic
-    fun leftBracket(builder: PsiBuilder, @Suppress("UNUSED_PARAMETER") level: Int): Boolean {
+    fun leftBracket(builder: PsiBuilder, @Suppress("UNUSED") level: Int): Boolean {
         val marker = builder.mark()
         if (!consumeToken(builder, LBRACK)) {
             marker.rollbackTo()
@@ -254,7 +254,7 @@ object VlangParserUtil : GeneratedParserUtilBase() {
     }
 
     @JvmStatic
-    fun gtGtGt(builder: PsiBuilder, @Suppress("UNUSED_PARAMETER") level: Int): Boolean {
+    fun gtGtGt(builder: PsiBuilder, @Suppress("UNUSED") level: Int): Boolean {
         val marker = builder.mark()
         if (!consumeToken(builder, GREATER)) {
             marker.rollbackTo()
@@ -273,7 +273,7 @@ object VlangParserUtil : GeneratedParserUtilBase() {
     }
 
     @JvmStatic
-    fun remapToIdentifier(builder: PsiBuilder, @Suppress("UNUSED_PARAMETER") level: Int): Boolean {
+    fun remapToIdentifier(builder: PsiBuilder, @Suppress("UNUSED") level: Int): Boolean {
         if (builder.tokenType == IDENTIFIER) {
             return true
         }
@@ -496,7 +496,7 @@ object VlangParserUtil : GeneratedParserUtilBase() {
     }
 
     @JvmStatic
-    fun enterMode(builder: PsiBuilder, @Suppress("UNUSED_PARAMETER") level: Int, mode: String): Boolean {
+    fun enterMode(builder: PsiBuilder, @Suppress("UNUSED") level: Int, mode: String): Boolean {
         val flags = getParsingModes(builder)
         flags.addTo(mode, 1)
         val stack = getParsingModesStack(builder)
@@ -504,7 +504,7 @@ object VlangParserUtil : GeneratedParserUtilBase() {
         return true
     }
 
-    private fun exitMode(builder: PsiBuilder, @Suppress("UNUSED_PARAMETER") level: Int, mode: String, safe: Boolean, all: Boolean = false): Boolean {
+    private fun exitMode(builder: PsiBuilder, @Suppress("UNUSED") level: Int, mode: String, safe: Boolean, all: Boolean = false): Boolean {
         val flags = getParsingModes(builder)
         val count = flags.getInt(mode)
         if (count == 1) {
@@ -556,7 +556,7 @@ object VlangParserUtil : GeneratedParserUtilBase() {
     }
 
     @JvmStatic
-    fun endOfLimit(builder: PsiBuilder, @Suppress("UNUSED_PARAMETER") level: Int): Boolean {
+    fun endOfLimit(builder: PsiBuilder, @Suppress("UNUSED") level: Int): Boolean {
         val tokenText = builder.tokenText
         return !(tokenText == "limit" || tokenText == "asc" || tokenText == "desc")
     }
