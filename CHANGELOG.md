@@ -2,13 +2,44 @@
 
 ## [Unreleased]
 
+### Language support
 - Add support for using keywords as identifiers in enums, structs, interfaces, functions, etc.
-- Fix inlay hints of pointer types – they did not show the correct number of ampersands. [#32](https://github.com/vlang/intellij-v/issues/32)
-- Refactor Vlang element type factory
-  - Hopefully finally fixes all 'All stub element types should be created before index initialization is complete.' exceptions
-- Add support for _count_ and _sorted_ "pseudo" params methods to array.
 - Add basic support for `defer(fn)` syntax. [#51](https://github.com/vlang/intellij-v/issues/51)
 - Add support for compile time `$match` expression. [#44](https://github.com/vlang/intellij-v/issues/44)
+- Add support for _count_ and _sorted_ "pseudo" params methods to array.
+
+### Debugger
+- Fix debugger for option-typed variables. [#65](https://github.com/vlang/intellij-v/issues/65)
+- Fix incomplete renderer mark stripping for empty strings. [#67](https://github.com/vlang/intellij-v/issues/67)
+- Fix conditional breakpoints by transpiling V expressions to C
+- Fix conditional breakpoints with string comparisons always stopping. [#78](https://github.com/vlang/intellij-v/issues/78)
+- Fix debug runner compatibility with CLion split debugger mode
+
+### Run / Build
+- Detect V compiler crashes and show helpful error message. [#58](https://github.com/vlang/intellij-v/issues/58)
+- Honor `-cc` compiler setting from VFLAGS environment variable. [#54](https://github.com/vlang/intellij-v/issues/54)
+- Explicitly pass VFLAGS from system environment to V compiler
+- Fix false 'Output file is set in build arguments' error for flags like `-showcc`
+- Fix false C backend error when using `-show-c-output` flag
+- Fix binaryName() returning a relative path for directory builds
+- Fix doubled path when running a V file with working directory set
+- Clean up temporary build artifacts after successful builds
+
+### Editor / Formatter
+- Fix inlay hints of pointer types – they did not show the correct number of ampersands. [#32](https://github.com/vlang/intellij-v/issues/32)
+- Fix vfmt error parser crash on Windows paths. [#76](https://github.com/vlang/intellij-v/issues/76)
+
+### Stability
+- Fix UpToDateStubIndexMismatch caused by missing stub version bump and unreliable block detection. [#74](https://github.com/vlang/intellij-v/issues/74)
+- Fix NPE in getConstants/getGlobalVariables when stub index contains null entries
+- Fix crash in VlangRegexLanguageInjector on stale stub index
+- LSP4IJ integration: suppress duplicate features when a V language server is active. [#80](https://github.com/vlang/intellij-v/issues/80)
+  - When [LSP4IJ](https://plugins.jetbrains.com/plugin/23257-lsp4ij) is installed and a V language server is configured, the following native plugin features are suppressed to avoid duplication: inlay hints, semantic highlighting, and diagnostics. Code completion suppression is available but off by default.
+  - Settings under **Settings → Languages & Frameworks → V → Language Server (LSP4IJ)** allow per-feature control. Each feature can be toggled individually; unchecking the master switch re-enables all native features immediately.
+  - Without LSP4IJ installed the plugin behaves exactly as before — no performance impact.
+  - Also fixes inlay hints showing `unknown` for unresolvable types in composite types such as `map[string]unknown`.
+- Refactor Vlang element type factory
+  - Hopefully finally fixes all 'All stub element types should be created before index initialization is complete.' exceptions
 
 ## [2025.2.2] - 2025-09-08
 
