@@ -1,6 +1,6 @@
 # IntelliJ V Changelog
 
-## [Unreleased]
+## [2026.1.1]
 
 ### Language support
 - Add support for using keywords as identifiers in enums, structs, interfaces, functions, etc.
