@@ -1,14 +1,18 @@
 # IntelliJ V Changelog
 
+## [Unreleased]
+
 ## [2026.1.1]
 
 ### Language support
+
 - Add support for using keywords as identifiers in enums, structs, interfaces, functions, etc.
 - Add basic support for `defer(fn)` syntax. [#51](https://github.com/vlang/intellij-v/issues/51)
 - Add support for compile time `$match` expression. [#44](https://github.com/vlang/intellij-v/issues/44)
 - Add support for _count_ and _sorted_ "pseudo" params methods to array.
 
 ### Debugger
+
 - Fix debugger for option-typed variables. [#65](https://github.com/vlang/intellij-v/issues/65)
 - Fix incomplete renderer mark stripping for empty strings. [#67](https://github.com/vlang/intellij-v/issues/67)
 - Fix conditional breakpoints by transpiling V expressions to C
@@ -16,6 +20,7 @@
 - Fix debug runner compatibility with CLion split debugger mode
 
 ### Run / Build
+
 - Detect V compiler crashes and show helpful error message. [#58](https://github.com/vlang/intellij-v/issues/58)
 - Honor `-cc` compiler setting from VFLAGS environment variable. [#54](https://github.com/vlang/intellij-v/issues/54)
 - Explicitly pass VFLAGS from system environment to V compiler
@@ -26,10 +31,12 @@
 - Clean up temporary build artifacts after successful builds
 
 ### Editor / Formatter
+
 - Fix inlay hints of pointer types – they did not show the correct number of ampersands. [#32](https://github.com/vlang/intellij-v/issues/32)
 - Fix vfmt error parser crash on Windows paths. [#76](https://github.com/vlang/intellij-v/issues/76)
 
 ### Stability
+
 - Fix UpToDateStubIndexMismatch caused by missing stub version bump and unreliable block detection. [#74](https://github.com/vlang/intellij-v/issues/74)
 - Fix NPE in getConstants/getGlobalVariables when stub index contains null entries
 - Fix crash in VlangRegexLanguageInjector on stale stub index
@@ -310,13 +317,14 @@
 - Don't show `private` keyword in quick documentation
 - Support 2023.1 EAP
 
-[Unreleased]: https://github.com/vlang/intellij-v//compare/v2025.2.2...HEAD
-[2025.2.2]: https://github.com/vlang/intellij-v//compare/v2025.2.1...v2025.2.2
-[2025.2.1]: https://github.com/vlang/intellij-v//compare/v2025.1.1...v2025.2.1
-[2025.1.1]: https://github.com/vlang/intellij-v//compare/v2024.3.1...v2025.1.1
-[2024.3.1]: https://github.com/vlang/intellij-v//compare/v0.0.1-beta.6...v2024.3.1
-[0.0.1-beta.6]: https://github.com/vlang/intellij-v//compare/v0.0.1-beta.5...v0.0.1-beta.6
-[0.0.1-beta.5]: https://github.com/vlang/intellij-v//compare/v0.0.1-beta.4...v0.0.1-beta.5
-[0.0.1-beta.4]: https://github.com/vlang/intellij-v//compare/v0.0.1-beta.3-231-EAP...v0.0.1-beta.4
-[0.0.1-beta.3-231-EAP]: https://github.com/vlang/intellij-v//compare/v0.0.1-beta.2...v0.0.1-beta.3-231-EAP
-[0.0.1-beta.2]: https://github.com/vlang/intellij-v//commits/v0.0.1-beta.2
+[Unreleased]: https://github.com/vlang/intellij-v//compare/2026.1.1...HEAD
+[2026.1.1]: https://github.com/vlang/intellij-v//compare/2025.2.2...2026.1.1
+[2025.2.2]: https://github.com/vlang/intellij-v//compare/2025.2.1...2025.2.2
+[2025.2.1]: https://github.com/vlang/intellij-v//compare/2025.1.1...2025.2.1
+[2025.1.1]: https://github.com/vlang/intellij-v//compare/2024.3.1...2025.1.1
+[2024.3.1]: https://github.com/vlang/intellij-v//compare/0.0.1-beta.6...2024.3.1
+[0.0.1-beta.6]: https://github.com/vlang/intellij-v//compare/0.0.1-beta.5...0.0.1-beta.6
+[0.0.1-beta.5]: https://github.com/vlang/intellij-v//compare/0.0.1-beta.4...0.0.1-beta.5
+[0.0.1-beta.4]: https://github.com/vlang/intellij-v//compare/0.0.1-beta.3-231-EAP...0.0.1-beta.4
+[0.0.1-beta.3-231-EAP]: https://github.com/vlang/intellij-v//compare/0.0.1-beta.2...0.0.1-beta.3-231-EAP
+[0.0.1-beta.2]: https://github.com/vlang/intellij-v//commits/0.0.1-beta.2
