@@ -2,8 +2,6 @@
 
 ## [Unreleased]
 
-## [2026.1.1]
-
 ### Language support
 
 - Add support for using keywords as identifiers in enums, structs, interfaces, functions, etc.
@@ -317,14 +315,13 @@
 - Don't show `private` keyword in quick documentation
 - Support 2023.1 EAP
 
-[Unreleased]: https://github.com/vlang/intellij-v//compare/2026.1.1...HEAD
-[2026.1.1]: https://github.com/vlang/intellij-v//compare/2025.2.2...2026.1.1
-[2025.2.2]: https://github.com/vlang/intellij-v//compare/2025.2.1...2025.2.2
-[2025.2.1]: https://github.com/vlang/intellij-v//compare/2025.1.1...2025.2.1
-[2025.1.1]: https://github.com/vlang/intellij-v//compare/2024.3.1...2025.1.1
-[2024.3.1]: https://github.com/vlang/intellij-v//compare/0.0.1-beta.6...2024.3.1
-[0.0.1-beta.6]: https://github.com/vlang/intellij-v//compare/0.0.1-beta.5...0.0.1-beta.6
-[0.0.1-beta.5]: https://github.com/vlang/intellij-v//compare/0.0.1-beta.4...0.0.1-beta.5
-[0.0.1-beta.4]: https://github.com/vlang/intellij-v//compare/0.0.1-beta.3-231-EAP...0.0.1-beta.4
-[0.0.1-beta.3-231-EAP]: https://github.com/vlang/intellij-v//compare/0.0.1-beta.2...0.0.1-beta.3-231-EAP
-[0.0.1-beta.2]: https://github.com/vlang/intellij-v//commits/0.0.1-beta.2
+[Unreleased]: https://github.com/vlang/intellij-v//compare/v2025.2.2...HEAD
+[2025.2.2]: https://github.com/vlang/intellij-v//compare/v2025.2.1...v2025.2.2
+[2025.2.1]: https://github.com/vlang/intellij-v//compare/v2025.1.1...v2025.2.1
+[2025.1.1]: https://github.com/vlang/intellij-v//compare/v2024.3.1...v2025.1.1
+[2024.3.1]: https://github.com/vlang/intellij-v//compare/v0.0.1-beta.6...v2024.3.1
+[0.0.1-beta.6]: https://github.com/vlang/intellij-v//compare/v0.0.1-beta.5...v0.0.1-beta.6
+[0.0.1-beta.5]: https://github.com/vlang/intellij-v//compare/v0.0.1-beta.4...v0.0.1-beta.5
+[0.0.1-beta.4]: https://github.com/vlang/intellij-v//compare/v0.0.1-beta.3-231-EAP...v0.0.1-beta.4
+[0.0.1-beta.3-231-EAP]: https://github.com/vlang/intellij-v//compare/v0.0.1-beta.2...v0.0.1-beta.3-231-EAP
+[0.0.1-beta.2]: https://github.com/vlang/intellij-v//commits/v0.0.1-beta.2
